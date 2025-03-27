@@ -142,7 +142,7 @@ class DummyBossBar private constructor(builder: Builder) {
         player.dataPacket(BossEventPacket(
             targetActorID = bossBarId,
             eventType = BossEventPacket.EventType.REMOVE,
-            eventData = BossEventPacket.EventType.Companion.RemoveData(),
+            eventData = null,
         ))
     }
 

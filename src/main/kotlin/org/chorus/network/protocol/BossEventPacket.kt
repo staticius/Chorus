@@ -6,7 +6,7 @@ import org.chorus.network.protocol.types.ActorUniqueID
 class BossEventPacket(
     var targetActorID: ActorUniqueID,
     var eventType: EventType,
-    val eventData: EventType.Companion.EventData,
+    val eventData: EventType.Companion.EventData?,
 ) : DataPacket(), PacketEncoder {
     enum class EventType {
         ADD,
@@ -38,8 +38,6 @@ class BossEventPacket(
             data class PlayerAddedData(
                 val playerID: ActorUniqueID,
             ) : EventData
-
-            class RemoveData: EventData
 
             data class PlayerRemovedData(
                 val playerID: ActorUniqueID,
@@ -157,7 +155,7 @@ class BossEventPacket(
                         playerID = byteBuf.readActorUniqueID()
                     )
 
-                    EventType.REMOVE -> EventType.Companion.RemoveData()
+                    EventType.REMOVE -> null
 
                     EventType.PLAYER_REMOVED -> EventType.Companion.PlayerRemovedData(
                         playerID = byteBuf.readActorUniqueID()
