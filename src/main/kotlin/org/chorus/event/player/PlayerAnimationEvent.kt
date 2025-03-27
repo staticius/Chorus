@@ -10,12 +10,19 @@ class PlayerAnimationEvent : PlayerEvent, Cancellable {
     val animationType: AnimatePacket.Action
 
     @JvmField
-    val rowingTime: Float
+    val rowingTime: Float?
 
     constructor(player: Player?, animatePacket: AnimatePacket) {
         this.player = player
         animationType = animatePacket.action
-        rowingTime = animatePacket.rowingTime
+        rowingTime = when (animationType) {
+            AnimatePacket.Action.ROW_LEFT,
+            AnimatePacket.Action.ROW_RIGHT -> {
+                val actionData = animatePacket.actionData as AnimatePacket.Action.RowingData
+                actionData.rowingTime
+            }
+            else -> null
+        }
     }
 
     @JvmOverloads

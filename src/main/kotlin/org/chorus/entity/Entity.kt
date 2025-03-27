@@ -3020,7 +3020,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         Server.broadcastPacket(players, AnimatePacket(
             action = action,
             targetUniqueID = this.getId(),
-            rowingTime = rowingTime
+            actionData = AnimatePacket.Action.RowingData(
+                rowingTime = rowingTime
+            )
         ))
     }
 

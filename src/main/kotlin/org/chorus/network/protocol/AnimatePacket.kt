@@ -1,7 +1,5 @@
 package org.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.ActorUniqueID
 
@@ -9,7 +7,7 @@ import org.chorus.network.protocol.types.ActorUniqueID
 class AnimatePacket(
     var action: Action,
     var targetUniqueID: ActorUniqueID,
-    var rowingTime: Float? = null,
+    var actionData: Action.ActionData?,
 ) : DataPacket(), PacketEncoder {
     enum class Action(val id: Int) {
         NO_ACTION(0),
@@ -21,26 +19,31 @@ class AnimatePacket(
         ROW_LEFT(129);
 
         companion object {
-            private val ID_LOOKUP: Int2ObjectMap<Action> = Int2ObjectOpenHashMap()
-
-            init {
-                for (value in entries) {
-                    ID_LOOKUP.put(value.id, value)
-                }
-            }
+            private val ID_LOOKUP: Map<Int, Action> = entries.associateBy { it.id }
 
             fun fromId(id: Int): Action {
-                return ID_LOOKUP[id]
+                return ID_LOOKUP[id] ?: throw RuntimeException("Unknown Action ID: $id")
             }
         }
+
+        interface ActionData
+        data class RowingData(
+            val rowingTime: Float
+        ) : ActionData
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(action.id)
         byteBuf.writeActorRuntimeID(this.targetUniqueID)
-        if (this.action == Action.ROW_RIGHT || this.action == Action.ROW_LEFT) {
-            byteBuf.writeFloatLE(this.rowingTime!!)
+        when (this.action) {
+            Action.ROW_LEFT,
+            Action.ROW_RIGHT -> {
+                val actionData = this.actionData as Action.RowingData
+                byteBuf.writeFloatLE(actionData.rowingTime)
+            }
+            else -> {}
         }
+
     }
 
     override fun pid(): Int {
@@ -58,9 +61,15 @@ class AnimatePacket(
             return AnimatePacket(
                 action,
                 targetUniqueID = byteBuf.readActorRuntimeID(),
-                rowingTime = if (action == Action.ROW_RIGHT || action == Action.ROW_LEFT) {
-                    byteBuf.readFloatLE()
-                } else null
+                actionData = when(action) {
+                    Action.ROW_LEFT,
+                    Action.ROW_RIGHT -> {
+                        Action.RowingData(
+                            rowingTime = byteBuf.readFloatLE()
+                        )
+                    }
+                    else -> null
+                }
             )
         }
     }
