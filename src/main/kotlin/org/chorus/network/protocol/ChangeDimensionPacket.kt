@@ -2,13 +2,6 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-/**
- * @author xtypr
- * @since 2016/1/5
- */
-
-
 class ChangeDimensionPacket : DataPacket() {
     @JvmField
     var dimension: Int = 0
@@ -28,9 +21,6 @@ class ChangeDimensionPacket : DataPacket() {
     @JvmField
     var loadingScreenId: Int? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(this.dimension)
         byteBuf.writeVector3f(this.x, this.y, this.z)
@@ -42,7 +32,7 @@ class ChangeDimensionPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CHANGE_DIMENSION_PACKET
+        return ProtocolInfo.CHANGE_DIMENSION_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

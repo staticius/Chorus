@@ -26,7 +26,7 @@ class AnimateEntityPacket : DataPacket() {
         this.blendOutTime = byteBuf.readFloatLE()
         var i = 0
         while (i < byteBuf.readUnsignedVarInt()) {
-            entityRuntimeIds.add(byteBuf.readEntityRuntimeId())
+            entityRuntimeIds.add(byteBuf.readActorRuntimeID())
             i++
         }
     }
@@ -40,7 +40,7 @@ class AnimateEntityPacket : DataPacket() {
         byteBuf.writeFloatLE(this.blendOutTime)
         byteBuf.writeUnsignedVarInt(entityRuntimeIds.size)
         for (entityRuntimeId in this.entityRuntimeIds) {
-            byteBuf.writeEntityRuntimeId(entityRuntimeId)
+            byteBuf.writeActorRuntimeID(entityRuntimeId)
         }
     }
 

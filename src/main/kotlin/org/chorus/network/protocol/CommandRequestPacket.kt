@@ -4,51 +4,28 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.CommandOriginData
 
 
-class CommandRequestPacket : DataPacket() {
-    var command: String? = null
-    var data: CommandOriginData? = null
-    var internal: Boolean = false
-
-    /**
-     * @since v567
-     */
-    var version: Int = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.command = byteBuf.readString()
-
-        val type = CommandOriginData.Origin.entries[byteBuf.readVarInt()]
-        val uuid = byteBuf.readUUID()
-        val requestId = byteBuf.readString()
-        var playerId: Long? = null
-        if (type == CommandOriginData.Origin.DEV_CONSOLE || type == CommandOriginData.Origin.TEST) {
-            playerId = byteBuf.readVarLong()
-        }
-        this.data = CommandOriginData(type, uuid, requestId, playerId)
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-    }
-
+class CommandRequestPacket(
+    var command: String,
+    var commandOrigin: CommandOriginData,
+    var isInternalSource: Boolean,
+    var version: Int,
+) : DataPacket() {
     override fun pid(): Int {
-        return ProtocolInfo.Companion.COMMAND_REQUEST_PACKET
+        return ProtocolInfo.COMMAND_REQUEST_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
-        const val TYPE_PLAYER: Int = 0
-        const val TYPE_COMMAND_BLOCK: Int = 1
-        const val TYPE_MINECART_COMMAND_BLOCK: Int = 2
-        const val TYPE_DEV_CONSOLE: Int = 3
-        const val TYPE_AUTOMATION_PLAYER: Int = 4
-        const val TYPE_CLIENT_AUTOMATION: Int = 5
-        const val TYPE_DEDICATED_SERVER: Int = 6
-        const val TYPE_ENTITY: Int = 7
-        const val TYPE_VIRTUAL: Int = 8
-        const val TYPE_GAME_ARGUMENT: Int = 9
-        const val TYPE_INTERNAL: Int = 10
+    companion object : PacketDecoder<CommandRequestPacket> {
+        override fun decode(byteBuf: HandleByteBuf): CommandRequestPacket {
+            return CommandRequestPacket(
+                command = byteBuf.readString(),
+                commandOrigin = byteBuf.readCommandOriginData(),
+                isInternalSource = byteBuf.readBoolean(),
+                version = byteBuf.readVarInt()
+            )
+        }
     }
 }

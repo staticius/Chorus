@@ -25,13 +25,13 @@ class RespawnPacket : DataPacket() {
         this.y = v.y
         this.z = v.z
         this.respawnState = byteBuf.readByte().toInt()
-        this.runtimeEntityId = byteBuf.readEntityRuntimeId()
+        this.runtimeEntityId = byteBuf.readActorRuntimeID()
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVector3f(this.x, this.y, this.z)
         byteBuf.writeByte(respawnState.toByte().toInt())
-        byteBuf.writeEntityRuntimeId(runtimeEntityId)
+        byteBuf.writeActorRuntimeID(runtimeEntityId)
     }
 
     override fun pid(): Int {

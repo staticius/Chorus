@@ -16,7 +16,7 @@ class EmotePacket : DataPacket() {
     }
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.runtimeId = byteBuf.readEntityRuntimeId()
+        this.runtimeId = byteBuf.readActorRuntimeID()
         this.emoteID = byteBuf.readString()
         this.emoteDuration = byteBuf.readUnsignedVarInt()
         this.xuid = byteBuf.readString()
@@ -25,7 +25,7 @@ class EmotePacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.runtimeId)
+        byteBuf.writeActorRuntimeID(this.runtimeId)
         byteBuf.writeString(emoteID!!)
         byteBuf.writeUnsignedVarInt(this.emoteDuration)
         byteBuf.writeString(this.xuid)

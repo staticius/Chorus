@@ -3,6 +3,7 @@ package org.chorus.entity.mob.monster
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
@@ -13,11 +14,13 @@ abstract class EntityBoss(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
 
     override fun setHealth(health: Float) {
         super.setHealth(health)
-        val pkBoss = BossEventPacket()
-        pkBoss.bossEid = this.id
-        pkBoss.type = BossEventPacket.TYPE_HEALTH_PERCENT
-        pkBoss.healthPercent = health / maxHealth
-        Server.broadcastPacket(viewers.values, pkBoss)
+        Server.broadcastPacket(getViewers().values, BossEventPacket(
+            targetActorID = this.id,
+            eventType = BossEventPacket.EventType.UPDATE_PERCENT,
+            eventData = BossEventPacket.EventType.Companion.UpdatePercentData(
+                healthPercent = health / maxHealth
+            )
+        ))
     }
 
     override fun spawnTo(player: Player) {
@@ -29,7 +32,24 @@ abstract class EntityBoss(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
 
     protected fun canBreakBlock(block: Block): Boolean {
         return when (block.id) {
-            Block.BARRIER, Block.BEDROCK, Block.COMMAND_BLOCK, Block.CHAIN_COMMAND_BLOCK, Block.REPEATING_COMMAND_BLOCK, Block.CRYING_OBSIDIAN, Block.END_STONE, Block.END_PORTAL, Block.END_PORTAL_FRAME, Block.END_GATEWAY, BlockID.FIRE, Block.IRON_BARS, Block.JIGSAW, Block.OBSIDIAN, Block.REINFORCED_DEEPSLATE, Block.RESPAWN_ANCHOR, Block.SOUL_FIRE, Block.STRUCTURE_BLOCK -> false
+            BlockID.BARRIER,
+            BlockID.BEDROCK,
+            BlockID.COMMAND_BLOCK,
+            BlockID.CHAIN_COMMAND_BLOCK,
+            BlockID.REPEATING_COMMAND_BLOCK,
+            BlockID.CRYING_OBSIDIAN,
+            BlockID.END_STONE,
+            BlockID.END_PORTAL,
+            BlockID.END_PORTAL_FRAME,
+            BlockID.END_GATEWAY,
+            BlockID.FIRE,
+            BlockID.IRON_BARS,
+            BlockID.JIGSAW,
+            BlockID.OBSIDIAN,
+            BlockID.REINFORCED_DEEPSLATE,
+            BlockID.RESPAWN_ANCHOR,
+            BlockID.SOUL_FIRE,
+            BlockID.STRUCTURE_BLOCK -> false
             else -> true
         }
     }

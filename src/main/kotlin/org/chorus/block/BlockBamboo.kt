@@ -108,9 +108,10 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
 
         if (downId == BlockID.BAMBOO_SAPLING) {
             if (player != null) {
-                val animatePacket = AnimatePacket()
-                animatePacket.action = AnimatePacket.Action.SWING_ARM
-                animatePacket.eid = player.getId()
+                val animatePacket = AnimatePacket(
+                    targetUniqueID = player.getId(),
+                    action = AnimatePacket.Action.SWING_ARM
+                )
                 level.addChunkPacket(player.position.chunkX, player.position.chunkZ, animatePacket)
             }
             bambooLeafSize = BambooLeafSize.SMALL_LEAVES

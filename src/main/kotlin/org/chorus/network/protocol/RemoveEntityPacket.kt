@@ -11,7 +11,7 @@ class RemoveEntityPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityUniqueId(this.eid)
+        byteBuf.writeActorUniqueID(this.eid)
     }
 
     override fun pid(): Int {

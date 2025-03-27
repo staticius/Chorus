@@ -9,12 +9,12 @@ class AgentAnimationPacket : DataPacket() {
 
     override fun decode(byteBuf: HandleByteBuf) {
         this.animation = byteBuf.readByte()
-        this.runtimeEntityId = byteBuf.readEntityRuntimeId()
+        this.runtimeEntityId = byteBuf.readActorRuntimeID()
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(animation.toInt())
-        byteBuf.writeEntityRuntimeId(this.runtimeEntityId)
+        byteBuf.writeActorRuntimeID(this.runtimeEntityId)
     }
 
     override fun pid(): Int {

@@ -58,7 +58,7 @@ class RakNetInterfaceTest {
                         //decode to game packet
                         val header = ByteBufVarInt.readUnsignedInt(byteBuf)
                         assert(header == ProtocolInfo.REQUEST_NETWORK_SETTINGS_PACKET)
-                        val dataPacket = Registries.PACKET[header]
+                        val dataPacket = Registries.PACKET_DECODER[header]
                         dataPacket.decode(HandleByteBuf.of(Unpooled.wrappedBuffer(byteBuf)))
                         val target = dataPacket as RequestNetworkSettingsPacket
                         assert(target.protocolVersion == ProtocolInfo.CURRENT_PROTOCOL)

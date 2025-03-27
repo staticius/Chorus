@@ -4,7 +4,6 @@ import org.chorus.PlayerHandle
 import org.chorus.Server
 import org.chorus.event.player.PlayerBlockPickEvent
 import org.chorus.inventory.HumanInventory
-import org.chorus.math.Vector3
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.BlockPickRequestPacket
 import org.chorus.network.protocol.ProtocolInfo
@@ -14,15 +13,15 @@ import org.chorus.utils.Loggable
 class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: BlockPickRequestPacket) {
         val player = playerHandle.player
-        val block = player.level!!.getBlock(pk.x, pk.y, pk.z, false)
+        val block = player.level!!.getBlock(pk.position.asVector3(), false)
         if (block.position.distanceSquared(player.position) > 1000) {
             BlockPickRequestProcessor.log.debug(playerHandle.username + ": Block pick request for a block too far away")
             return
         }
         val item = block.toItem()
 
-        if (pk.addUserData) {
-            val blockEntity = player.level!!.getBlockEntity(Vector3(pk.x.toDouble(), pk.y.toDouble(), pk.z.toDouble()))
+        if (pk.withData) {
+            val blockEntity = player.level!!.getBlockEntity(pk.position.asVector3())
             if (blockEntity != null) {
                 val nbt = blockEntity.cleanedNBT
                 if (nbt != null) {

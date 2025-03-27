@@ -20,7 +20,7 @@ class UpdateEquipmentPacket : DataPacket() {
         byteBuf.writeByte(windowId.toByte().toInt())
         byteBuf.writeByte(windowType.toByte().toInt())
         byteBuf.writeVarInt(size)
-        byteBuf.writeEntityUniqueId(this.eid)
+        byteBuf.writeActorUniqueID(this.eid)
         byteBuf.writeBytes(this.namedtag)
     }
 

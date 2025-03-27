@@ -44,7 +44,7 @@ class MovePlayerPacket : DataPacket() {
     var frame: Long = 0 //tick
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readEntityRuntimeId()
+        this.eid = byteBuf.readActorRuntimeID()
         val v = byteBuf.readVector3f()
         this.x = v.x
         this.y = v.y
@@ -54,7 +54,7 @@ class MovePlayerPacket : DataPacket() {
         this.headYaw = byteBuf.readFloatLE()
         this.mode = byteBuf.readByte().toInt()
         this.onGround = byteBuf.readBoolean()
-        this.ridingEid = byteBuf.readEntityRuntimeId()
+        this.ridingEid = byteBuf.readActorRuntimeID()
         if (this.mode == MODE_TELEPORT) {
             this.teleportationCause = byteBuf.readIntLE()
             this.entityType = byteBuf.readIntLE()
@@ -63,14 +63,14 @@ class MovePlayerPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.eid)
+        byteBuf.writeActorRuntimeID(this.eid)
         byteBuf.writeVector3f(this.x, this.y, this.z)
         byteBuf.writeFloatLE(this.pitch)
         byteBuf.writeFloatLE(this.yaw)
         byteBuf.writeFloatLE(this.headYaw)
         byteBuf.writeByte(mode.toByte().toInt())
         byteBuf.writeBoolean(this.onGround)
-        byteBuf.writeEntityRuntimeId(this.ridingEid)
+        byteBuf.writeActorRuntimeID(this.ridingEid)
         if (this.mode == MODE_TELEPORT) {
             byteBuf.writeIntLE(this.teleportationCause)
             byteBuf.writeIntLE(this.entityType)

@@ -31,7 +31,7 @@ class CommandBlockUpdatePacket : DataPacket() {
             this.isRedstoneMode = byteBuf.readBoolean()
             this.isConditional = byteBuf.readBoolean()
         } else {
-            this.minecartEid = byteBuf.readEntityRuntimeId()
+            this.minecartEid = byteBuf.readActorRuntimeID()
         }
         this.command = byteBuf.readString()
         this.lastOutput = byteBuf.readString()
@@ -50,7 +50,7 @@ class CommandBlockUpdatePacket : DataPacket() {
             byteBuf.writeBoolean(this.isRedstoneMode)
             byteBuf.writeBoolean(this.isConditional)
         } else {
-            byteBuf.writeEntityRuntimeId(this.minecartEid)
+            byteBuf.writeActorRuntimeID(this.minecartEid)
         }
         byteBuf.writeString(command!!)
         byteBuf.writeString(lastOutput!!)

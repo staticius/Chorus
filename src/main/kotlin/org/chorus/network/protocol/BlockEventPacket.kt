@@ -19,9 +19,6 @@ class BlockEventPacket : DataPacket() {
     @JvmField
     var value: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBlockVector3(this.x, this.y, this.z)
         byteBuf.writeVarInt(this.type)

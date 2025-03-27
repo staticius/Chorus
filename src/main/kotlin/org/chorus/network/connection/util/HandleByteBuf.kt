@@ -26,6 +26,7 @@ import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.stream.LittleEndianByteBufInputStreamNBTInputStream
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.StringTag
+import org.chorus.network.protocol.types.CommandOriginData
 import org.chorus.network.protocol.types.EntityLink
 import org.chorus.network.protocol.types.PlayerInputTick
 import org.chorus.network.protocol.types.PropertySyncData
@@ -792,6 +793,34 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         )
     }
 
+    fun writeCommandOriginData(commandOrigin: CommandOriginData) {
+        this.writeUnsignedVarInt(commandOrigin.commandType.ordinal)
+        this.writeUUID(commandOrigin.commandUUID)
+        this.writeString(commandOrigin.requestId)
+        when (commandOrigin.commandType) {
+            CommandOriginData.Origin.TEST, CommandOriginData.Origin.DEV_CONSOLE -> {
+                val commandData = commandOrigin.commandData as CommandOriginData.Origin.PlayerIDData
+                this.writeVarLong(commandData.playerID)
+            }
+            else -> {}
+        }
+    }
+
+    fun readCommandOriginData(): CommandOriginData {
+        val type = CommandOriginData.Origin.fromOrdinal(this.readVarInt())
+        return CommandOriginData(
+            commandType = type,
+            commandUUID = this.readUUID(),
+            requestId = this.readString(),
+            commandData = when (type) {
+                CommandOriginData.Origin.TEST, CommandOriginData.Origin.DEV_CONSOLE -> CommandOriginData.Origin.PlayerIDData(
+                    playerID = this.readVarLong()
+                )
+                else -> null
+            }
+        )
+    }
+
     fun writeImage(image: SerializedImage) {
         this.writeIntLE(image.width)
         this.writeIntLE(image.height)
@@ -1270,34 +1299,20 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         }
     }
 
-    /**
-     * Reads and returns an EntityUniqueID
-     *
-     * @return int
-     */
-    fun readEntityUniqueId(): Long {
+    fun readActorUniqueID(): Long {
         return this.readVarLong()
     }
 
-    /**
-     * Writes an EntityUniqueID
-     */
-    fun writeEntityUniqueId(eid: Long) {
-        this.writeVarLong(eid)
+    fun writeActorUniqueID(actorUniqueID: Long) {
+        this.writeVarLong(actorUniqueID)
     }
 
-    /**
-     * Reads and returns an EntityRuntimeID
-     */
-    fun readEntityRuntimeId(): Long {
+    fun readActorRuntimeID(): Long {
         return this.readUnsignedVarLong()
     }
 
-    /**
-     * Writes an EntityUniqueID
-     */
-    fun writeEntityRuntimeId(eid: Long) {
-        this.writeUnsignedVarLong(eid)
+    fun writeActorRuntimeID(actorRuntimeID: Long) {
+        this.writeUnsignedVarLong(actorRuntimeID)
     }
 
     fun readBlockFace(): BlockFace {
@@ -1309,9 +1324,9 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
     }
 
     fun writeEntityLink(link: EntityLink) {
-        writeEntityUniqueId(link.fromEntityUniqueId)
-        writeEntityUniqueId(link.toEntityUniqueId)
-        writeByte(link.type.toInt())
+        writeActorUniqueID(link.fromEntityUniqueId)
+        writeActorUniqueID(link.toEntityUniqueId)
+        writeByte(link.type.ordinal)
         writeBoolean(link.immediate)
         writeBoolean(link.riderInitiated)
         writeFloatLE(0f)
@@ -1319,8 +1334,8 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
 
     fun readEntityLink(): EntityLink {
         return EntityLink(
-            readEntityUniqueId(),
-            readEntityUniqueId(),
+            readActorUniqueID(),
+            readActorUniqueID(),
             EntityLink.Type.entries.toTypedArray()[readByte().toInt()],
             readBoolean(),
             readBoolean()

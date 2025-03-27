@@ -261,13 +261,18 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
     }
 
     override fun addBossbar(player: Player) {
-        val pkBoss = BossEventPacket()
-        pkBoss.bossEid = this.id
-        pkBoss.type = BossEventPacket.TYPE_SHOW
-        pkBoss.title = this.getName()
-        pkBoss.color = 5
-        pkBoss.healthPercent = health / maxHealth
-        player.dataPacket(pkBoss)
+        player.dataPacket(BossEventPacket(
+            targetActorID = this.id,
+            eventType = BossEventPacket.EventType.ADD,
+            eventData = BossEventPacket.EventType.Companion.AddData(
+                name = this.getName(),
+                filteredName = this.getName(),
+                color = 5,
+                healthPercent = health / maxHealth,
+                darkenScreen = 0,
+                overlay = 0
+            )
+        ))
     }
 
     override fun getExperienceDrops(): Int {

@@ -12,12 +12,9 @@ class AddPaintingPacket : DataPacket() {
     var direction: Int = 0
     var title: String? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityUniqueId(this.entityUniqueId)
-        byteBuf.writeEntityRuntimeId(this.entityRuntimeId)
+        byteBuf.writeActorUniqueID(this.entityUniqueId)
+        byteBuf.writeActorRuntimeID(this.entityRuntimeId)
 
         byteBuf.writeVector3f(this.x, this.y, this.z)
         byteBuf.writeVarInt(this.direction)

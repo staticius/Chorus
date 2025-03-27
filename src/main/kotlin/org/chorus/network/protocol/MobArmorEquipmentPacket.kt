@@ -10,7 +10,7 @@ class MobArmorEquipmentPacket : DataPacket() {
     var body: Item = Item.AIR
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readEntityRuntimeId()
+        this.eid = byteBuf.readActorRuntimeID()
         this.slots = arrayOfNulls(4)
         slots[0] = byteBuf.readSlot()
         slots[1] = byteBuf.readSlot()
@@ -20,7 +20,7 @@ class MobArmorEquipmentPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.eid)
+        byteBuf.writeActorRuntimeID(this.eid)
         byteBuf.writeSlot(slots[0])
         byteBuf.writeSlot(slots[1])
         byteBuf.writeSlot(slots[2])

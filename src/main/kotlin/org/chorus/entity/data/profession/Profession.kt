@@ -35,7 +35,7 @@ abstract class Profession(
         private val knownProfessions: HashMap<Int, Profession> = HashMap()
 
         fun registerProfession(profession: Profession) {
-            knownProfessions.put(profession.getIndex(), profession)
+            knownProfessions[profession.getIndex()] = profession
         }
 
         fun getProfessions(): HashMap<Int, Profession> {
@@ -43,7 +43,7 @@ abstract class Profession(
         }
 
         fun getProfession(index: Int): Profession? {
-            return knownProfessions.get(index)
+            return knownProfessions[index]
         }
 
         @JvmStatic

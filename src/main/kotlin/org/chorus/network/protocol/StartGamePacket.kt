@@ -130,8 +130,8 @@ class StartGamePacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityUniqueId(this.entityUniqueId)
-        byteBuf.writeEntityRuntimeId(this.entityRuntimeId)
+        byteBuf.writeActorUniqueID(this.entityUniqueId)
+        byteBuf.writeActorRuntimeID(this.entityRuntimeId)
         byteBuf.writeVarInt(this.playerGamemode)
         byteBuf.writeVector3f(this.x, this.y, this.z)
         byteBuf.writeFloatLE(this.yaw)

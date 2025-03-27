@@ -16,7 +16,7 @@ class UpdateAttributesPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.entityId)
+        byteBuf.writeActorRuntimeID(this.entityId)
 
         if (this.entries == null) {
             byteBuf.writeUnsignedVarInt(0)

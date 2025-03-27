@@ -9,7 +9,7 @@ class EntityFallPacket : DataPacket() {
     var unknown: Boolean = false
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readEntityRuntimeId()
+        this.eid = byteBuf.readActorRuntimeID()
         this.fallDistance = byteBuf.readFloatLE()
         this.unknown = byteBuf.readBoolean()
     }

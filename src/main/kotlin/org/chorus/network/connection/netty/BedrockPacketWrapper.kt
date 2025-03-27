@@ -11,8 +11,7 @@ class BedrockPacketWrapper(
     var targetSubClientId: Int,
     var packet: DataPacket?,
     var packetBuffer: ByteBuf?
-) :
-    AbstractReferenceCounted() {
+) : AbstractReferenceCounted() {
     var headerLength = 0
 
     override fun deallocate() {

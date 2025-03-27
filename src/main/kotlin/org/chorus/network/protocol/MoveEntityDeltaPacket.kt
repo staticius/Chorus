@@ -16,7 +16,7 @@ class MoveEntityDeltaPacket : DataPacket() {
     var headYaw: Float = 0f
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.runtimeEntityId = byteBuf.readEntityRuntimeId()
+        this.runtimeEntityId = byteBuf.readActorRuntimeID()
         this.flags = byteBuf.readShortLE()
         if ((flags.toInt() and FLAG_HAS_X.toInt()) != 0) {
             this.x = this.getCoordinate(byteBuf)
@@ -39,7 +39,7 @@ class MoveEntityDeltaPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.runtimeEntityId)
+        byteBuf.writeActorRuntimeID(this.runtimeEntityId)
         byteBuf.writeShortLE(flags.toInt())
         if ((flags.toInt() and FLAG_HAS_X.toInt()) != 0) {
             this.putCoordinate(byteBuf, this.x)

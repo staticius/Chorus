@@ -18,7 +18,7 @@ interface ProtocolInfo {
                 (MINECRAFT_SEMVERSION.minor shl 16) or  //minor
                 (MINECRAFT_SEMVERSION.patch shl 8) //patch
 
-        val MINECRAFT_VERSION: String = 'v'.toString() + MINECRAFT_VERSION_NETWORK
+        val MINECRAFT_VERSION: String = "v$MINECRAFT_VERSION_NETWORK"
 
         const val LOGIN_PACKET: Int = 0x01
         const val PLAY_STATUS_PACKET: Int = 0x02
@@ -53,7 +53,7 @@ interface ProtocolInfo {
         const val MOB_ARMOR_EQUIPMENT_PACKET: Int = 0x20
         const val INTERACT_PACKET: Int = 0x21
         const val BLOCK_PICK_REQUEST_PACKET: Int = 0x22
-        const val ENTITY_PICK_REQUEST_PACKET: Int = 0x23
+        const val ACTOR_PICK_REQUEST_PACKET: Int = 0x23
         const val PLAYER_ACTION_PACKET: Int = 0x24
         const val ENTITY_FALL_PACKET: Int = 0x25
         const val HURT_ARMOR_PACKET: Int = 0x26
@@ -73,8 +73,7 @@ interface ProtocolInfo {
         const val CRAFTING_DATA_PACKET: Int = 0x34
         const val CRAFTING_EVENT_PACKET: Int = 0x35
         const val GUI_DATA_PICK_ITEM_PACKET: Int = 0x36
-        const val ADVENTURE_SETTINGS_PACKET: Int = 0x37
-        const val BLOCK_ENTITY_DATA_PACKET: Int = 0x38
+        const val BLOCK_ACTOR_DATA_PACKET: Int = 0x38
         const val PLAYER_INPUT_PACKET: Int = 0x39
         const val FULL_CHUNK_DATA_PACKET: Int = 0x3a
         const val SET_COMMANDS_ENABLED_PACKET: Int = 0x3b

@@ -916,9 +916,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         addEntity.speedZ = motion.z.toFloat()
         addEntity.entityData = this.entityDataMap
 
-        addEntity.links = arrayOfNulls(passengers.size)
-        for (i in addEntity.links.indices) {
-            addEntity.links[i] = EntityLink(
+        addEntity.links = Array(passengers.size) { i ->
+            EntityLink(
                 this.getId(),
                 passengers[i].getId(),
                 if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
@@ -3001,7 +3000,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
 
-    fun playActionAnimation(action: AnimatePacket.Action?, rowingTime: Float) {
+    fun playActionAnimation(action: AnimatePacket.Action, rowingTime: Float) {
         val viewers: HashSet<Player> = HashSet(getViewers().values)
         if (this.isPlayer) viewers.add(this as Player)
         playActionAnimation(action, rowingTime, viewers)
@@ -3017,12 +3016,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
      * @param rowingTime the rowing time
      * @param players    可视玩家 Visible Player
      */
-    fun playActionAnimation(action: AnimatePacket.Action?, rowingTime: Float, players: Collection<Player>) {
-        val pk = AnimatePacket()
-        pk.action = action
-        pk.rowingTime = rowingTime
-        pk.eid = this.getId()
-        Server.broadcastPacket(players, pk)
+    fun playActionAnimation(action: AnimatePacket.Action, rowingTime: Float, players: Collection<Player>) {
+        Server.broadcastPacket(players, AnimatePacket(
+            action = action,
+            targetUniqueID = this.getId(),
+            rowingTime = rowingTime
+        ))
     }
 
     fun getLookingAngleAt(location: Vector3): Double {

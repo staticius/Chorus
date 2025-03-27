@@ -3,10 +3,10 @@ package org.chorus.network.protocol.types
 import java.util.*
 
 data class CommandOriginData(
-    val type: Origin,
-    val uuid: UUID,
+    val commandType: Origin,
+    val commandUUID: UUID,
     val requestId: String, // event
-    val playerId: Long?
+    val commandData: Origin.CommandData?
 ) {
     enum class Origin {
         PLAYER,
@@ -24,6 +24,18 @@ data class CommandOriginData(
         PRECOMPILED,
         GAME_DIRECTOR_ENTITY_SERVER,
         SCRIPT,
-        EXECUTE_CONTEXT
+        EXECUTE_CONTEXT;
+
+        interface CommandData
+
+        data class PlayerIDData(
+            val playerID: Long,
+        ) : CommandData
+
+        companion object {
+            fun fromOrdinal(ordinal: Int): Origin {
+                return entries.getOrNull(ordinal) ?: throw IllegalArgumentException("Unknown CommandOriginData Ordinal: $ordinal")
+            }
+        }
     }
 }

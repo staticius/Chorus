@@ -124,44 +124,58 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun sendShowBossBar() {
-        val pkBoss = BossEventPacket()
-        pkBoss.bossEid = bossBarId
-        pkBoss.type = BossEventPacket.TYPE_SHOW
-        pkBoss.title = text
-        pkBoss.healthPercent = this.length / 100
-        player.dataPacket(pkBoss)
+        player.dataPacket(BossEventPacket(
+            targetActorID = bossBarId,
+            eventType = BossEventPacket.EventType.ADD,
+            eventData = BossEventPacket.EventType.Companion.AddData(
+                name = text,
+                filteredName = text,
+                healthPercent = this.length / 100,
+                darkenScreen = 0,
+                color = 0,
+                overlay = 0
+            )
+        ))
     }
 
     private fun sendHideBossBar() {
-        val pkBoss = BossEventPacket()
-        pkBoss.bossEid = bossBarId
-        pkBoss.type = BossEventPacket.TYPE_HIDE
-        player.dataPacket(pkBoss)
+        player.dataPacket(BossEventPacket(
+            targetActorID = bossBarId,
+            eventType = BossEventPacket.EventType.REMOVE,
+            eventData = BossEventPacket.EventType.Companion.RemoveData(),
+        ))
     }
 
     private fun sendSetBossBarTexture() {
-        val pk = BossEventPacket()
-        pk.bossEid = this.bossBarId
-        pk.type = BossEventPacket.TYPE_TEXTURE
-        pk.color = if (color != null) color!!.ordinal else 0
-        player.dataPacket(pk)
+        player.dataPacket(BossEventPacket(
+            targetActorID = this.bossBarId,
+            eventType = BossEventPacket.EventType.UPDATE_STYLE,
+            eventData = BossEventPacket.EventType.Companion.UpdateStyleData(
+                color = if (color != null) color!!.ordinal else 0,
+                overlay = 0,
+            )
+        ))
     }
 
     private fun sendSetBossBarTitle() {
-        val pkBoss = BossEventPacket()
-        pkBoss.bossEid = bossBarId
-        pkBoss.type = BossEventPacket.TYPE_TITLE
-        pkBoss.title = text
-        pkBoss.healthPercent = this.length / 100
-        player.dataPacket(pkBoss)
+        player.dataPacket(BossEventPacket(
+            targetActorID = bossBarId,
+            eventType = BossEventPacket.EventType.UPDATE_NAME,
+            eventData = BossEventPacket.EventType.Companion.UpdateNameData(
+                name = text,
+                filteredName = text,
+            )
+        ))
     }
 
     private fun sendSetBossBarLength() {
-        val pkBoss = BossEventPacket()
-        pkBoss.bossEid = bossBarId
-        pkBoss.type = BossEventPacket.TYPE_HEALTH_PERCENT
-        pkBoss.healthPercent = this.length / 100
-        player.dataPacket(pkBoss)
+        player.dataPacket(BossEventPacket(
+            targetActorID = bossBarId,
+            eventType = BossEventPacket.EventType.UPDATE_PERCENT,
+            eventData = BossEventPacket.EventType.Companion.UpdatePercentData(
+                healthPercent = this.length / 100
+            )
+        ))
     }
 
     /**

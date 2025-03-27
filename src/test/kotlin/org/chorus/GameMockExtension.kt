@@ -136,7 +136,7 @@ class GameMockExtension : MockitoExtension() {
         init {
             Mockito.mockStatic(Server::class.java).use { serverMockedStatic ->
                 serverMockedStatic.`when`<Any> { Server.instance }.thenReturn(server)
-                Registries.PACKET.init()
+                Registries.PACKET_DECODER.init()
                 Registries.ENTITY.init()
                 Profession.init()
                 Registries.BLOCKENTITY.init()

@@ -110,7 +110,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
                 if (damager is Player && !damager.onGround) {
                     val animate: AnimatePacket = AnimatePacket()
                     animate.action = AnimatePacket.Action.CRITICAL_HIT
-                    animate.eid = getId()
+                    animate.targetUniqueID = getId()
 
                     level!!.addChunkPacket(damager.getChunkX(), damager.getChunkZ(), animate)
                     level!!.addSound(this.position, Sound.GAME_PLAYER_ATTACK_STRONG)

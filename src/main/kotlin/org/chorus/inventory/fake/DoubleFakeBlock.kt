@@ -13,7 +13,7 @@ class DoubleFakeBlock : SingleFakeBlock {
 
     constructor(block: Block, tileId: String?) : super(block, tileId)
 
-    override fun getPlacePositions(player: Player): List<Vector3?> {
+    override fun getPlacePositions(player: Player): List<Vector3> {
         val blockPosition = this.getOffset(player)
         if ((blockPosition.floorX and 1) == 1) {
             return Lists.newArrayList(blockPosition, blockPosition.east())

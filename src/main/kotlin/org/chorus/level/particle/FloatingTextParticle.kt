@@ -78,7 +78,7 @@ class FloatingTextParticle private constructor(
     }
 
     override fun encode(): Array<DataPacket> {
-        val packets = ArrayList<DataPacket>()
+        val packets = mutableListOf<DataPacket>()
 
         if (this.entityId == -1L) {
             this.entityId = 1095216660480L + ThreadLocalRandom.current().nextLong(0, 0x7fffffffL)
@@ -121,7 +121,7 @@ class FloatingTextParticle private constructor(
             packets.add(playerRemove)
         }
 
-        return packets.toArray(DataPacket.EMPTY_ARRAY)
+        return packets.toTypedArray()
     }
 
     companion object {

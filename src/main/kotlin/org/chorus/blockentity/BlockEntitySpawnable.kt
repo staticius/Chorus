@@ -3,7 +3,7 @@ package org.chorus.blockentity
 import org.chorus.Player
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.network.protocol.BlockEntityDataPacket
+import org.chorus.network.protocol.BlockActorDataPacket
 
 
 abstract class BlockEntitySpawnable(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, nbt) {
@@ -30,22 +30,15 @@ abstract class BlockEntitySpawnable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
         player.dataPacket(spawnPacket)
     }
 
-    val spawnPacket: BlockEntityDataPacket
+    val spawnPacket: BlockActorDataPacket
         get() = getSpawnPacket(null)
 
-    fun getSpawnPacket(nbt: CompoundTag?): BlockEntityDataPacket {
-        var nbt = nbt
-        if (nbt == null) {
-            nbt = this.spawnCompound
-        }
-
-        val pk = BlockEntityDataPacket()
-        pk.x = position.floorX
-        pk.y = position.floorY
-        pk.z = position.floorZ
-        pk.namedTag = nbt
-
-        return pk
+    fun getSpawnPacket(nbt: CompoundTag?): BlockActorDataPacket {
+        val nbt1 = nbt ?: this.spawnCompound
+        return BlockActorDataPacket(
+            blockPosition = position.asBlockVector3(),
+            actorDataTags = nbt1
+        )
     }
 
     open fun spawnToAll() {

@@ -5,7 +5,7 @@ object Registries {
     val POTION: PotionRegistry = PotionRegistry()
 
     @JvmField
-    val PACKET: PacketRegistry = PacketRegistry()
+    val PACKET_DECODER: PacketDecoderRegistry = PacketDecoderRegistry()
 
     @JvmField
     val ENTITY: EntityRegistry = EntityRegistry()

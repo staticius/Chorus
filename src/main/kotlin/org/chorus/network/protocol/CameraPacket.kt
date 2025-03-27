@@ -13,8 +13,8 @@ class CameraPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityUniqueId(this.cameraUniqueId)
-        byteBuf.writeEntityUniqueId(this.playerUniqueId)
+        byteBuf.writeActorUniqueID(this.cameraUniqueId)
+        byteBuf.writeActorUniqueID(this.playerUniqueId)
     }
 
     override fun pid(): Int {

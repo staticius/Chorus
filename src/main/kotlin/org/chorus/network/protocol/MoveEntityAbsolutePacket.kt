@@ -29,7 +29,7 @@ class MoveEntityAbsolutePacket : DataPacket() {
     var forceMoveLocalEntity: Boolean = false
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readEntityRuntimeId()
+        this.eid = byteBuf.readActorRuntimeID()
         val flags = byteBuf.readByte().toInt()
         onGround = (flags and 0x01) != 0
         teleport = (flags and 0x02) != 0
@@ -44,7 +44,7 @@ class MoveEntityAbsolutePacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.eid)
+        byteBuf.writeActorRuntimeID(this.eid)
         var flags: Byte = 0
         if (onGround) {
             flags = (flags.toInt() or 0x01).toByte()

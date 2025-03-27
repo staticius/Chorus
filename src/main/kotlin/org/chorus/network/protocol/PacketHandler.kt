@@ -13,8 +13,6 @@ interface PacketHandler {
 
     fun handle(pk: AddVolumeEntityPacket) {}
 
-    fun handle(pk: AdventureSettingsPacket) {}
-
     fun handle(pk: AgentActionEventPacket) {}
 
     fun handle(pk: AgentAnimationPacket) {}
@@ -31,7 +29,7 @@ interface PacketHandler {
 
     fun handle(pk: BiomeDefinitionListPacket) {}
 
-    fun handle(pk: BlockEntityDataPacket) {}
+    fun handle(pk: BlockActorDataPacket) {}
 
     fun handle(pk: BlockEventPacket) {}
 
@@ -117,7 +115,7 @@ interface PacketHandler {
 
     fun handle(pk: EntityFallPacket) {}
 
-    fun handle(pk: EntityPickRequestPacket) {}
+    fun handle(pk: ActorPickRequestPacket) {}
 
     fun handle(pk: FilterTextPacket) {}
 

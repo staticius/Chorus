@@ -9,7 +9,7 @@ import org.chorus.registry.Registries
 import org.chorus.utils.Binary
 
 
-class AddEntityPacket : DataPacket() {
+class AddEntityPacket() : DataPacket() {
     @JvmField
     var entityUniqueId: Long = 0
 
@@ -50,12 +50,9 @@ class AddEntityPacket : DataPacket() {
     var syncedProperties: PropertySyncData = PropertySyncData(intArrayOf(), floatArrayOf())
     var links: Array<EntityLink> = emptyArray()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityUniqueId(this.entityUniqueId)
-        byteBuf.writeEntityRuntimeId(this.entityRuntimeId)
+        byteBuf.writeActorUniqueID(this.entityUniqueId)
+        byteBuf.writeActorRuntimeID(this.entityRuntimeId)
         if (id == null) {
             id = Registries.ENTITY.getEntityIdentifier(type)
         }
@@ -69,11 +66,7 @@ class AddEntityPacket : DataPacket() {
         byteBuf.writeAttributeList(this.attributes.filterNotNull().toTypedArray())
         byteBuf.writeBytes(Binary.writeEntityData(this.entityData))
         byteBuf.writePropertySyncData(syncedProperties)
-        byteBuf.writeArray(links) { link: EntityLink? ->
-            byteBuf.writeEntityLink(
-                link!!
-            )
-        }
+        byteBuf.writeArray(links) { byteBuf.writeEntityLink(it) }
     }
 
     override fun pid(): Int {

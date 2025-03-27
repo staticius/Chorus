@@ -2478,10 +2478,10 @@ class Player constructor(
 
             level!!.sleepTicks = 0
 
-            val pk = AnimatePacket()
-            pk.eid = this.getId()
-            pk.action = AnimatePacket.Action.WAKE_UP
-            this.dataPacket(pk)
+            this.dataPacket(AnimatePacket(
+                targetUniqueID = this.getId(),
+                action = AnimatePacket.Action.WAKE_UP
+            ))
         }
     }
 
@@ -3225,10 +3225,9 @@ class Player constructor(
     fun setViewDistance(distance: Int) {
         this.chunkRadius = distance
 
-        val pk = ChunkRadiusUpdatedPacket()
-        pk.radius = distance
-
-        this.dataPacket(pk)
+        this.dataPacket(ChunkRadiusUpdatedPacket(
+            radius = distance
+        ))
     }
 
     /**

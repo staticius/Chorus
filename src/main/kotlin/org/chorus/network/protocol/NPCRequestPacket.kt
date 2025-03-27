@@ -11,7 +11,7 @@ class NPCRequestPacket : DataPacket() {
     var sceneName: String = ""
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.entityRuntimeId = byteBuf.readEntityRuntimeId()
+        this.entityRuntimeId = byteBuf.readActorRuntimeID()
         this.requestType =
             RequestType.entries[byteBuf.readByte().toInt()]
         this.data = byteBuf.readString()
@@ -20,7 +20,7 @@ class NPCRequestPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.entityRuntimeId)
+        byteBuf.writeActorRuntimeID(this.entityRuntimeId)
         byteBuf.writeByte(requestType.ordinal.toByte().toInt())
         byteBuf.writeString(this.data)
         byteBuf.writeByte(skinType.toByte().toInt())

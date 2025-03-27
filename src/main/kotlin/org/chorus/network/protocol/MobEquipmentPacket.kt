@@ -12,7 +12,7 @@ class MobEquipmentPacket : DataPacket() {
     var containerId: Int = 0
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readEntityRuntimeId() //EntityRuntimeID
+        this.eid = byteBuf.readActorRuntimeID() //EntityRuntimeID
         this.item = byteBuf.readSlot()
         this.slot = byteBuf.readByte().toInt()
         this.selectedSlot = byteBuf.readByte().toInt()
@@ -20,7 +20,7 @@ class MobEquipmentPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.eid) //EntityRuntimeID
+        byteBuf.writeActorRuntimeID(this.eid) //EntityRuntimeID
         byteBuf.writeSlot(this.item)
         byteBuf.writeByte(slot.toByte().toInt())
         byteBuf.writeByte(selectedSlot.toByte().toInt())

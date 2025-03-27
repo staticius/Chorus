@@ -1,32 +1,29 @@
 package org.chorus.network.protocol
 
+import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-class BlockPickRequestPacket : DataPacket() {
-    var x: Int = 0
-    var y: Int = 0
-    var z: Int = 0
-    var addUserData: Boolean = false
-    var selectedSlot: Int = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        val v = byteBuf.readSignedBlockPosition()
-        this.x = v.x
-        this.y = v.y
-        this.z = v.z
-        this.addUserData = byteBuf.readBoolean()
-        this.selectedSlot = byteBuf.readByte().toInt()
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-    }
-
+class BlockPickRequestPacket(
+    val position: BlockVector3,
+    var withData: Boolean,
+    var maxSlots: Int,
+) : DataPacket() {
     override fun pid(): Int {
-        return ProtocolInfo.Companion.BLOCK_PICK_REQUEST_PACKET
+        return ProtocolInfo.BLOCK_PICK_REQUEST_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<BlockPickRequestPacket> {
+        override fun decode(byteBuf: HandleByteBuf): BlockPickRequestPacket {
+            return BlockPickRequestPacket(
+                position = byteBuf.readSignedBlockPosition(),
+                withData = byteBuf.readBoolean(),
+                maxSlots = byteBuf.readByte().toInt()
+            )
+        }
     }
 }

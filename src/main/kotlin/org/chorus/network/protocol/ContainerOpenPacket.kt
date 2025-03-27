@@ -19,14 +19,14 @@ class ContainerOpenPacket : DataPacket() {
         this.y = v.y
         this.z = v.z
 
-        this.entityId = byteBuf.readEntityUniqueId()
+        this.entityId = byteBuf.readActorUniqueID()
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(windowId.toByte().toInt())
         byteBuf.writeByte(type.toByte().toInt())
         byteBuf.writeBlockVector3(this.x, this.y, this.z)
-        byteBuf.writeEntityUniqueId(this.entityId)
+        byteBuf.writeActorUniqueID(this.entityId)
     }
 
     override fun pid(): Int {

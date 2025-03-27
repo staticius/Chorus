@@ -12,13 +12,7 @@ import org.chorus.utils.*
 import java.awt.Color
 import java.awt.image.BufferedImage
 
-/**
- * @author CreeperFace
- * @since 5.3.2017
- */
-
-
-class ClientboundMapItemDataPacket : DataPacket() {
+class ClientboundMapItemDataPacket : DataPacket(), PacketEncoder {
     var eids: LongArray = EMPTY_LONGS
 
     var mapId: Long = 0
@@ -38,11 +32,8 @@ class ClientboundMapItemDataPacket : DataPacket() {
     var colors: IntArray = EmptyArrays.EMPTY_INTS
     var image: BufferedImage? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityUniqueId(mapId)
+        byteBuf.writeActorUniqueID(mapId)
 
         var update = 0
         if (image != null || colors.size > 0) {
@@ -63,7 +54,7 @@ class ClientboundMapItemDataPacket : DataPacket() {
         if ((update and ENTITIES_UPDATE) != 0) { //TODO: find out what these are for
             byteBuf.writeUnsignedVarInt(eids.size)
             for (eid in eids) {
-                byteBuf.writeEntityUniqueId(eid)
+                byteBuf.writeActorUniqueID(eid)
             }
         }
         if ((update and (ENTITIES_UPDATE or TEXTURE_UPDATE or DECORATIONS_UPDATE)) != 0) {
@@ -85,7 +76,7 @@ class ClientboundMapItemDataPacket : DataPacket() {
 
                     MapTrackedObject.Type.ENTITY -> {
                         byteBuf.writeIntLE(`object`.getType().ordinal())
-                        byteBuf.writeEntityUniqueId(`object`.getEntityId())
+                        byteBuf.writeActorUniqueID(`object`.getEntityId())
                     }
                 }
             }

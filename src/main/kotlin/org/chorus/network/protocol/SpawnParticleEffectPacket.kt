@@ -22,7 +22,7 @@ class SpawnParticleEffectPacket : DataPacket() {
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(dimensionId.toByte().toInt())
-        byteBuf.writeEntityUniqueId(uniqueEntityId)
+        byteBuf.writeActorUniqueID(uniqueEntityId)
         byteBuf.writeVector3f(position!!)
         byteBuf.writeString(identifier!!)
         byteBuf.writeBoolean(molangVariablesJson.isPresent)

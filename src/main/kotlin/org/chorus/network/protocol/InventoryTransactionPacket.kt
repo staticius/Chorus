@@ -68,7 +68,7 @@ class InventoryTransactionPacket : DataPacket() {
 
             TYPE_USE_ITEM_ON_ENTITY -> {
                 val useItemOnEntityData = UseItemOnEntityData(
-                    entityRuntimeId = byteBuf.readEntityRuntimeId(),
+                    entityRuntimeId = byteBuf.readActorRuntimeID(),
                     actionType = byteBuf.readUnsignedVarInt(),
                     hotbarSlot = byteBuf.readVarInt(),
                     itemInHand = byteBuf.readSlot(),
@@ -132,7 +132,7 @@ class InventoryTransactionPacket : DataPacket() {
             TYPE_USE_ITEM_ON_ENTITY -> {
                 val useItemOnEntityData = transactionData as UseItemOnEntityData
 
-                byteBuf.writeEntityRuntimeId(useItemOnEntityData.entityRuntimeId)
+                byteBuf.writeActorRuntimeID(useItemOnEntityData.entityRuntimeId)
                 byteBuf.writeUnsignedVarInt(useItemOnEntityData.actionType)
                 byteBuf.writeVarInt(useItemOnEntityData.hotbarSlot)
                 byteBuf.writeSlot(useItemOnEntityData.itemInHand)

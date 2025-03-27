@@ -16,13 +16,13 @@ class TakeItemEntityPacket : DataPacket() {
     var target: Long = 0
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.target = byteBuf.readEntityRuntimeId()
-        this.entityId = byteBuf.readEntityRuntimeId()
+        this.target = byteBuf.readActorRuntimeID()
+        this.entityId = byteBuf.readActorRuntimeID()
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.target)
-        byteBuf.writeEntityRuntimeId(this.entityId)
+        byteBuf.writeActorRuntimeID(this.target)
+        byteBuf.writeActorRuntimeID(this.entityId)
     }
 
     override fun pid(): Int {

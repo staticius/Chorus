@@ -6,7 +6,7 @@ import org.chorus.blockentity.*
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.network.protocol.BlockEntityDataPacket
+import org.chorus.network.protocol.BlockActorDataPacket
 import org.chorus.network.protocol.UpdateBlockPacket
 import java.util.function.Consumer
 
@@ -24,7 +24,7 @@ class FakeStructBlock : SingleFakeBlock(BlockStructureBlock(), BlockEntity.STRUC
 
     fun create(targetStart: BlockVector3, targetEnd: BlockVector3, player: Player) {
         createAndGetLastPositions(player).add(this.getOffset(player))
-        lastPositions[player]!!.forEach(Consumer { position: Vector3 ->
+        lastPositions[player]!!.forEach(Consumer { position ->
             val updateBlockPacket = UpdateBlockPacket()
             updateBlockPacket.blockRuntimeId = block.runtimeId
             updateBlockPacket.flags = UpdateBlockPacket.FLAG_NETWORK
@@ -33,12 +33,11 @@ class FakeStructBlock : SingleFakeBlock(BlockStructureBlock(), BlockEntity.STRUC
             updateBlockPacket.z = position.floorZ
             player.dataPacket(updateBlockPacket)
 
-            val blockEntityDataPacket = BlockEntityDataPacket()
-            blockEntityDataPacket.x = position.floorX
-            blockEntityDataPacket.y = position.floorY
-            blockEntityDataPacket.z = position.floorZ
-            blockEntityDataPacket.namedTag = this.getBlockEntityDataAt(position, targetStart, targetEnd)
-            player.dataPacket(blockEntityDataPacket)
+            val blockActorDataPacket = BlockActorDataPacket(
+                blockPosition = position.asBlockVector3(),
+                actorDataTags = this.getBlockEntityDataAt(position, targetStart, targetEnd)
+            )
+            player.dataPacket(blockActorDataPacket)
         })
     }
 

@@ -21,8 +21,8 @@ class SetEntityLinkPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityUniqueId(this.vehicleUniqueId)
-        byteBuf.writeEntityUniqueId(this.riderUniqueId)
+        byteBuf.writeActorUniqueID(this.vehicleUniqueId)
+        byteBuf.writeActorUniqueID(this.riderUniqueId)
         byteBuf.writeByte(type!!.ordinal.toByte().toInt())
         byteBuf.writeByte(immediate.toInt())
         byteBuf.writeBoolean(this.riderInitiated)

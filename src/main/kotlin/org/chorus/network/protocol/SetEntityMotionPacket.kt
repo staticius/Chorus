@@ -21,7 +21,7 @@ class SetEntityMotionPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.eid)
+        byteBuf.writeActorRuntimeID(this.eid)
         byteBuf.writeVector3f(this.motionX, this.motionY, this.motionZ)
         byteBuf.writeUnsignedVarLong(this.tick)
     }

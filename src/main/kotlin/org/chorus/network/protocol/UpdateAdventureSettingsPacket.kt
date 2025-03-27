@@ -19,10 +19,6 @@ class UpdateAdventureSettingsPacket : DataPacket() {
     @JvmField
     var autoJump: Boolean = false
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        throw UnsupportedOperationException()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBoolean(noPvM)
         byteBuf.writeBoolean(noMvP)
@@ -32,7 +28,7 @@ class UpdateAdventureSettingsPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_ADVENTURE_SETTINGS_PACKET
+        return ProtocolInfo.UPDATE_ADVENTURE_SETTINGS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

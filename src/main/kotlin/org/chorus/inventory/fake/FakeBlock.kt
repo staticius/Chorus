@@ -40,10 +40,10 @@ interface FakeBlock {
      */
     fun remove(player: Player)
 
-    fun getLastPositions(player: Player): HashSet<Vector3?>
+    fun getLastPositions(player: Player): HashSet<Vector3>
 
-    fun getPlacePositions(player: Player): List<Vector3?> {
-        return java.util.List.of(getOffset(player))
+    fun getPlacePositions(player: Player): List<Vector3> {
+        return listOf(getOffset(player))
     }
 
     /**

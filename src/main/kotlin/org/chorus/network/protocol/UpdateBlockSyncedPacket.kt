@@ -14,7 +14,7 @@ class UpdateBlockSyncedPacket : UpdateBlockPacket() {
     override fun encode(byteBuf: HandleByteBuf) {
         super.encode(byteBuf)
         byteBuf.writeUnsignedVarLong(actorUniqueId)
-        byteBuf.writeUnsignedVarLong(updateType!!.ordinal().toLong())
+        byteBuf.writeUnsignedVarLong(updateType!!.ordinal.toLong())
     }
 
     override fun pid(): Int {

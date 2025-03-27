@@ -22,7 +22,7 @@ class ClientMovementPredictionSyncPacket : DataPacket() {
         }
         actorBoundingBox = byteBuf.readVector3f()
         readMovementAttributesComponent(byteBuf)
-        actorRuntimeId = byteBuf.readEntityRuntimeId()
+        actorRuntimeId = byteBuf.readActorRuntimeID()
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
@@ -33,7 +33,7 @@ class ClientMovementPredictionSyncPacket : DataPacket() {
         byteBuf.writeUnsignedBigVarInt(flagsInt)
         byteBuf.writeVector3f(actorBoundingBox!!)
         writeMovementAttributesComponent(byteBuf)
-        byteBuf.writeEntityRuntimeId(actorRuntimeId)
+        byteBuf.writeActorRuntimeID(actorRuntimeId)
     }
 
     fun writeMovementAttributesComponent(byteBuf: HandleByteBuf) {

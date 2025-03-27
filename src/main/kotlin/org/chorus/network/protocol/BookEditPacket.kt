@@ -2,61 +2,86 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class BookEditPacket : DataPacket() {
-    var action: Action? = null
-    var inventorySlot: Int = 0
-    var pageNumber: Int = 0
-    var secondaryPageNumber: Int = 0
-
-    var text: String? = null
-    var photoName: String? = null
-
-    var title: String? = null
-    var author: String? = null
-    var xuid: String? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.action = Action.entries[byteBuf.readByte().toInt()]
-        this.inventorySlot = byteBuf.readByte().toInt()
-
-        when (this.action) {
-            Action.REPLACE_PAGE, Action.ADD_PAGE -> {
-                this.pageNumber = byteBuf.readByte().toInt()
-                this.text = byteBuf.readString()
-                this.photoName = byteBuf.readString()
-            }
-
-            Action.DELETE_PAGE -> this.pageNumber = byteBuf.readByte().toInt()
-            Action.SWAP_PAGES -> {
-                this.pageNumber = byteBuf.readByte().toInt()
-                this.secondaryPageNumber = byteBuf.readByte().toInt()
-            }
-
-            Action.SIGN_BOOK -> {
-                this.title = byteBuf.readString()
-                this.author = byteBuf.readString()
-                this.xuid = byteBuf.readString()
-            }
-        }
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-    }
-
+class BookEditPacket(
+    var action: Action,
+    var bookSlot: Byte,
+    val actionData: ActionData,
+) : DataPacket() {
     enum class Action {
         REPLACE_PAGE,
         ADD_PAGE,
         DELETE_PAGE,
         SWAP_PAGES,
-        SIGN_BOOK
+        FINALIZE
     }
 
+    interface ActionData
+    data class ReplacePageData(
+        val pageIndex: Byte,
+        val text: String,
+        val photoName: String,
+    ) : ActionData
+
+    data class AddPageData(
+        val pageIndex: Byte,
+        val text: String,
+        val photoName: String,
+    ) : ActionData
+
+    data class DeletePageData(
+        val pageIndex: Byte,
+    ) : ActionData
+
+    data class SwapPagesData(
+        val pageIndexA: Byte,
+        val pageIndexB: Byte,
+    ) : ActionData
+
+    data class FinalizeData(
+        val title: String,
+        val author: String,
+        val xuid: String,
+    ) : ActionData
+
     override fun pid(): Int {
-        return ProtocolInfo.Companion.BOOK_EDIT_PACKET
+        return ProtocolInfo.BOOK_EDIT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<BookEditPacket> {
+        override fun decode(byteBuf: HandleByteBuf): BookEditPacket {
+            val action = Action.entries[byteBuf.readByte().toInt()]
+            return BookEditPacket(
+                action = action,
+                bookSlot = byteBuf.readByte(),
+                actionData = when(action) {
+                    Action.REPLACE_PAGE -> ReplacePageData(
+                        pageIndex = byteBuf.readByte(),
+                        text = byteBuf.readString(),
+                        photoName = byteBuf.readString(),
+                    )
+                    Action.ADD_PAGE -> AddPageData(
+                        pageIndex = byteBuf.readByte(),
+                        text = byteBuf.readString(),
+                        photoName = byteBuf.readString(),
+                    )
+                    Action.DELETE_PAGE -> DeletePageData(
+                        pageIndex = byteBuf.readByte(),
+                    )
+                    Action.SWAP_PAGES -> SwapPagesData(
+                        pageIndexA = byteBuf.readByte(),
+                        pageIndexB = byteBuf.readByte(),
+                    )
+                    Action.FINALIZE -> FinalizeData(
+                        title = byteBuf.readString(),
+                        author = byteBuf.readString(),
+                        xuid = byteBuf.readString(),
+                    )
+                }
+            )
+        }
     }
 }

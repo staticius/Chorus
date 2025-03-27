@@ -3,11 +3,10 @@ package org.chorus.network.connection.netty.codec.packet
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageCodec
-import io.netty.util.internal.logging.InternalLogger
-import io.netty.util.internal.logging.InternalLoggerFactory
 import org.chorus.network.connection.netty.BedrockPacketWrapper
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.registry.Registries
+import org.chorus.utils.Loggable
 
 abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacketWrapper>() {
     @Throws(Exception::class)
@@ -40,13 +39,12 @@ abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacket
             val index = msg.readerIndex()
             this.decodeHeader(msg, wrapper)
             wrapper.headerLength = msg.readerIndex() - index
-            val dataPacket = Registries.PACKET[wrapper.packetId]
-            if (dataPacket == null) {
+            val packetDecoder = Registries.PACKET_DECODER[wrapper.packetId]
+            if (packetDecoder == null) {
                 log.info("Failed to decode packet for packetId {}", wrapper.packetId)
                 return
             }
-            dataPacket.decode(HandleByteBuf.Companion.of(msg))
-            wrapper.packet = dataPacket
+            wrapper.packet = packetDecoder.decode(HandleByteBuf.of(msg))
             out.add(wrapper.retain())
         } catch (t: Throwable) {
             log.info("Failed to decode packet", t)
@@ -60,8 +58,7 @@ abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacket
 
     abstract fun decodeHeader(buf: ByteBuf, msg: BedrockPacketWrapper)
 
-    companion object {
+    companion object : Loggable {
         const val NAME: String = "bedrock-packet-codec"
-        private val log: InternalLogger = InternalLoggerFactory.getInstance(BedrockPacketCodec::class.java)
     }
 }

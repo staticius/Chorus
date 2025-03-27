@@ -50,7 +50,7 @@ class AnimateProcessor : DataPacketProcessor<AnimatePacket>() {
         }
 
         pk1 = AnimatePacket()
-        pk1.eid = player.getId()
+        pk1.targetUniqueID = player.getId()
         pk1.action = animationEvent.animationType
         pk1.rowingTime = animationEvent.rowingTime
         Server.broadcastPacket(player.getViewers().values, pk1)

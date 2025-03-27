@@ -10,7 +10,7 @@ class PhotoInfoRequestPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityUniqueId(photoId)
+        byteBuf.writeActorUniqueID(photoId)
     }
 
     override fun pid(): Int {

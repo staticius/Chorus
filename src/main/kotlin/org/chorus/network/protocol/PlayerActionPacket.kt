@@ -17,7 +17,7 @@ class PlayerActionPacket : DataPacket() {
     var face: Int = 0
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.entityId = byteBuf.readEntityRuntimeId()
+        this.entityId = byteBuf.readActorRuntimeID()
         this.action = byteBuf.readVarInt()
         val v = byteBuf.readBlockVector3()
         this.x = v.x
@@ -28,7 +28,7 @@ class PlayerActionPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.entityId)
+        byteBuf.writeActorRuntimeID(this.entityId)
         byteBuf.writeVarInt(this.action)
         byteBuf.writeBlockVector3(this.x, this.y, this.z)
         byteBuf.writeBlockVector3((if (this.resultPosition != null) this.resultPosition else BlockVector3())!!)

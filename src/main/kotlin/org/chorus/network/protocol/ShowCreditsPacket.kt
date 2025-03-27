@@ -11,12 +11,12 @@ class ShowCreditsPacket : DataPacket() {
     var status: Int = 0
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readEntityRuntimeId()
+        this.eid = byteBuf.readActorRuntimeID()
         this.status = byteBuf.readVarInt()
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.eid)
+        byteBuf.writeActorRuntimeID(this.eid)
         byteBuf.writeVarInt(this.status)
     }
 

@@ -13,7 +13,7 @@ class MapInfoRequestPacket : DataPacket() {
     var mapId: Long = 0
 
     override fun decode(byteBuf: HandleByteBuf) {
-        mapId = byteBuf.readEntityUniqueId()
+        mapId = byteBuf.readActorUniqueID()
     }
 
     override fun encode(byteBuf: HandleByteBuf) {

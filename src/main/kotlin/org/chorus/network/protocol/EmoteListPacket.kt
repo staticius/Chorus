@@ -10,7 +10,7 @@ class EmoteListPacket : DataPacket() {
     val pieceIds: MutableList<UUID> = ObjectArrayList()
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.runtimeId = byteBuf.readEntityRuntimeId()
+        this.runtimeId = byteBuf.readActorRuntimeID()
         for (i in 0..<byteBuf.readUnsignedVarInt()) {
             val id = byteBuf.readUUID()
             pieceIds.add(id)
@@ -18,7 +18,7 @@ class EmoteListPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(runtimeId)
+        byteBuf.writeActorRuntimeID(runtimeId)
         byteBuf.writeUnsignedVarInt(pieceIds.size)
         for (id in pieceIds) {
             byteBuf.writeUUID(id)

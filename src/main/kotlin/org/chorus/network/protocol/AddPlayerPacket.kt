@@ -30,13 +30,10 @@ class AddPlayerPacket : DataPacket() {
     var deviceId: String = ""
     var buildPlatform: Int = -1
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUUID(uuid!!)
         byteBuf.writeString(username!!)
-        byteBuf.writeEntityRuntimeId(this.entityRuntimeId)
+        byteBuf.writeActorRuntimeID(this.entityRuntimeId)
         byteBuf.writeString(this.platformChatId)
         byteBuf.writeVector3f(this.x, this.y, this.z)
         byteBuf.writeVector3f(this.speedX, this.speedY, this.speedZ)

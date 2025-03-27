@@ -14,12 +14,12 @@ class InteractPacket : DataPacket() {
 
     override fun decode(byteBuf: HandleByteBuf) {
         this.action = byteBuf.readByte().toInt()
-        this.target = byteBuf.readEntityRuntimeId()
+        this.target = byteBuf.readActorRuntimeID()
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(action.toByte().toInt())
-        byteBuf.writeEntityRuntimeId(this.target)
+        byteBuf.writeActorRuntimeID(this.target)
     }
 
     override fun pid(): Int {

@@ -1,136 +1,193 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorUniqueID
 
+class BossEventPacket(
+    var targetActorID: ActorUniqueID,
+    var eventType: EventType,
+    val eventData: EventType.Companion.EventData,
+) : DataPacket(), PacketEncoder {
+    enum class EventType {
+        ADD,
+        PLAYER_ADDED,
+        REMOVE,
+        PLAYER_REMOVED,
+        UPDATE_PERCENT,
+        UPDATE_NAME,
+        UPDATE_PROPERTIES,
+        UPDATE_STYLE,
+        QUERY;
 
-/**
- * @author CreeperFace
- * @since 30. 10. 2016
- */
-
-
-class BossEventPacket : DataPacket() {
-    @JvmField
-    var bossEid: Long = 0
-
-    @JvmField
-    var type: Int = 0
-    var playerEid: Long = 0
-
-    @JvmField
-    var healthPercent: Float = 0f
-
-    @JvmField
-    var title: String = ""
-    var filteredName: String = ""
-    var darkenSky: Short = 0
-
-    @JvmField
-    var color: Int = 0
-    var overlay: Int = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.bossEid = byteBuf.readEntityUniqueId()
-        this.type = byteBuf.readUnsignedVarInt()
-        when (this.type) {
-            TYPE_REGISTER_PLAYER, TYPE_UNREGISTER_PLAYER, TYPE_QUERY -> this.playerEid = byteBuf.readEntityUniqueId()
-            TYPE_SHOW -> {
-                this.title = byteBuf.readString()
-                this.filteredName = byteBuf.readString()
-                this.healthPercent = byteBuf.readFloatLE()
-                this.darkenSky = byteBuf.readShort()
-                this.color = byteBuf.readUnsignedVarInt()
-                this.overlay = byteBuf.readUnsignedVarInt()
+        companion object {
+            fun fromOrdinal(ordinal: Int): EventType {
+                return entries.find { it.ordinal == ordinal } ?: throw RuntimeException("Unknown BossEventUpdateType Ordinal: $ordinal")
             }
 
-            TYPE_UPDATE_PROPERTIES -> {
-                this.darkenSky = byteBuf.readShort()
-                this.color = byteBuf.readUnsignedVarInt()
-                this.overlay = byteBuf.readUnsignedVarInt()
-            }
+            interface EventData
 
-            TYPE_TEXTURE -> {
-                this.color = byteBuf.readUnsignedVarInt()
-                this.overlay = byteBuf.readUnsignedVarInt()
-            }
+            data class AddData(
+                val name: String,
+                val filteredName: String,
+                val healthPercent: Float,
+                val darkenScreen: Short,
+                val color: Int,
+                val overlay: Int,
+            ) : EventData
 
-            TYPE_HEALTH_PERCENT -> this.healthPercent = byteBuf.readFloatLE()
-            TYPE_TITLE -> this.title = byteBuf.readString()
+            data class PlayerAddedData(
+                val playerID: ActorUniqueID,
+            ) : EventData
+
+            class RemoveData: EventData
+
+            data class PlayerRemovedData(
+                val playerID: ActorUniqueID,
+            ) : EventData
+
+            data class UpdatePercentData(
+                val healthPercent: Float,
+            ) : EventData
+
+            data class UpdateNameData(
+                val name: String,
+                val filteredName: String,
+            ) : EventData
+
+            data class UpdatePropertiesData(
+                val darkenScreen: Short,
+                val color: Int,
+                val overlay: Int,
+            ) : EventData
+
+            data class UpdateStyleData(
+                val color: Int,
+                val overlay: Int,
+            ) : EventData
+
+            data class QueryData(
+                val playerID: ActorUniqueID,
+            ) : EventData
         }
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityUniqueId(this.bossEid)
-        byteBuf.writeUnsignedVarInt(this.type)
-        when (this.type) {
-            TYPE_REGISTER_PLAYER, TYPE_UNREGISTER_PLAYER, TYPE_QUERY -> byteBuf.writeEntityUniqueId(
-                this.playerEid
-            )
-
-            TYPE_SHOW -> {
-                byteBuf.writeString(this.title)
-                byteBuf.writeString(this.filteredName)
-                byteBuf.writeFloatLE(this.healthPercent)
-                byteBuf.writeShort(darkenSky.toInt())
-                byteBuf.writeUnsignedVarInt(this.color)
-                byteBuf.writeUnsignedVarInt(this.overlay)
+        byteBuf.writeActorUniqueID(this.targetActorID)
+        byteBuf.writeUnsignedVarInt(this.eventType.ordinal)
+        when (this.eventType) {
+            EventType.ADD -> {
+                val eventData = this.eventData as EventType.Companion.AddData
+                byteBuf.writeString(eventData.name)
+                byteBuf.writeString(eventData.filteredName)
+                byteBuf.writeFloatLE(eventData.healthPercent)
+                byteBuf.writeShort(eventData.darkenScreen.toInt())
+                byteBuf.writeUnsignedVarInt(eventData.color)
+                byteBuf.writeUnsignedVarInt(eventData.overlay)
             }
 
-            TYPE_UNKNOWN_6 -> {
-                byteBuf.writeShort(darkenSky.toInt())
-                byteBuf.writeUnsignedVarInt(this.color)
-                byteBuf.writeUnsignedVarInt(this.overlay)
+            EventType.PLAYER_ADDED -> {
+                val eventData = this.eventData as EventType.Companion.PlayerAddedData
+                byteBuf.writeActorUniqueID(eventData.playerID)
             }
 
-            TYPE_TEXTURE -> {
-                byteBuf.writeUnsignedVarInt(this.color)
-                byteBuf.writeUnsignedVarInt(this.overlay)
+            EventType.REMOVE -> {}
+
+            EventType.PLAYER_REMOVED -> {
+                val eventData = this.eventData as EventType.Companion.PlayerRemovedData
+                byteBuf.writeActorUniqueID(eventData.playerID)
             }
 
-            TYPE_HEALTH_PERCENT -> byteBuf.writeFloatLE(this.healthPercent)
-            TYPE_TITLE -> {
-                byteBuf.writeString(this.title)
-                byteBuf.writeString(this.filteredName)
+            EventType.UPDATE_PERCENT -> {
+                val eventData = this.eventData as EventType.Companion.UpdatePercentData
+                byteBuf.writeFloatLE(eventData.healthPercent)
+            }
+
+            EventType.UPDATE_NAME -> {
+                val eventData = this.eventData as EventType.Companion.UpdateNameData
+                byteBuf.writeString(eventData.name)
+                byteBuf.writeString(eventData.filteredName)
+            }
+
+            EventType.UPDATE_PROPERTIES -> {
+                val eventData = this.eventData as EventType.Companion.UpdatePropertiesData
+                byteBuf.writeShort(eventData.darkenScreen.toInt())
+                byteBuf.writeUnsignedVarInt(eventData.color)
+                byteBuf.writeUnsignedVarInt(eventData.overlay)
+            }
+
+            EventType.UPDATE_STYLE -> {
+                val eventData = this.eventData as EventType.Companion.UpdateStyleData
+                byteBuf.writeUnsignedVarInt(eventData.color)
+                byteBuf.writeUnsignedVarInt(eventData.overlay)
+            }
+
+            EventType.QUERY -> {
+                val eventData = this.eventData as EventType.Companion.QueryData
+                byteBuf.writeActorUniqueID(eventData.playerID)
             }
         }
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.BOSS_EVENT_PACKET
+        return ProtocolInfo.BOSS_EVENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
-        /* S2C: Shows the bossbar to the player. */
-        const val TYPE_SHOW: Int = 0
+    companion object : PacketDecoder<BossEventPacket> {
+        override fun decode(byteBuf: HandleByteBuf): BossEventPacket {
+            val targetActorID = byteBuf.readActorUniqueID()
+            val eventType = EventType.fromOrdinal(byteBuf.readUnsignedVarInt())
+            return BossEventPacket(
+                targetActorID,
+                eventType,
+                eventData = when(eventType) {
+                    EventType.ADD -> EventType.Companion.AddData(
+                        name = byteBuf.readString(),
+                        filteredName = byteBuf.readString(),
+                        healthPercent = byteBuf.readFloatLE(),
+                        darkenScreen = byteBuf.readShort(),
+                        color = byteBuf.readUnsignedVarInt(),
+                        overlay = byteBuf.readUnsignedVarInt(),
+                    )
 
-        /* C2S: Registers a player to a boss fight. */
-        const val TYPE_REGISTER_PLAYER: Int = 1
-        const val TYPE_UPDATE: Int = 1
+                    EventType.PLAYER_ADDED -> EventType.Companion.PlayerAddedData(
+                        playerID = byteBuf.readActorUniqueID()
+                    )
 
-        /* S2C: Removes the bossbar from the client. */
-        const val TYPE_HIDE: Int = 2
+                    EventType.REMOVE -> EventType.Companion.RemoveData()
 
-        /* C2S: Unregisters a player from a boss fight. */
-        const val TYPE_UNREGISTER_PLAYER: Int = 3
+                    EventType.PLAYER_REMOVED -> EventType.Companion.PlayerRemovedData(
+                        playerID = byteBuf.readActorUniqueID()
+                    )
 
-        /* S2C: Sets the bar percentage. */
-        const val TYPE_HEALTH_PERCENT: Int = 4
+                    EventType.UPDATE_PERCENT -> EventType.Companion.UpdatePercentData(
+                        healthPercent = byteBuf.readFloatLE()
+                    )
 
-        /* S2C: Sets title of the bar. */
-        const val TYPE_TITLE: Int = 5
+                    EventType.UPDATE_NAME -> EventType.Companion.UpdateNameData(
+                        name = byteBuf.readString(),
+                        filteredName = byteBuf.readString(),
+                    )
 
-        /* S2C: Update a player's bossbar properties. */
-        const val TYPE_UPDATE_PROPERTIES: Int = 6
-        const val TYPE_UNKNOWN_6: Int = TYPE_UPDATE_PROPERTIES
+                    EventType.UPDATE_PROPERTIES -> EventType.Companion.UpdatePropertiesData(
+                        darkenScreen = byteBuf.readShort(),
+                        color = byteBuf.readUnsignedVarInt(),
+                        overlay = byteBuf.readUnsignedVarInt(),
+                    )
 
-        /* S2C: Sets color and overlay of the bar. */
-        const val TYPE_TEXTURE: Int = 7
+                    EventType.UPDATE_STYLE -> EventType.Companion.UpdateStyleData(
+                        color = byteBuf.readUnsignedVarInt(),
+                        overlay = byteBuf.readUnsignedVarInt(),
+                    )
 
-        /* S2C: Get a player's bossbar information. TODO: 2022/2/9 implement query packet. */
-        const val TYPE_QUERY: Int = 8
+                    EventType.QUERY -> EventType.Companion.QueryData(
+                        playerID = byteBuf.readActorUniqueID(),
+                    )
+                }
+            )
+        }
     }
 }

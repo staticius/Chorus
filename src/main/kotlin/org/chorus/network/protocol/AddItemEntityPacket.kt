@@ -19,12 +19,9 @@ class AddItemEntityPacket : DataPacket() {
     var entityData: EntityDataMap = EntityDataMap()
     var isFromFishing: Boolean = false
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityUniqueId(this.entityUniqueId)
-        byteBuf.writeEntityRuntimeId(this.entityRuntimeId)
+        byteBuf.writeActorUniqueID(this.entityUniqueId)
+        byteBuf.writeActorRuntimeID(this.entityRuntimeId)
         byteBuf.writeSlot(this.item)
         byteBuf.writeVector3f(this.x, this.y, this.z)
         byteBuf.writeVector3f(this.speedX, this.speedY, this.speedZ)

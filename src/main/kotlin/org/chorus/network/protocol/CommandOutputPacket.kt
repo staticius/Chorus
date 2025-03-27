@@ -23,12 +23,7 @@ class CommandOutputPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeUnsignedVarInt(commandOriginData!!.type.ordinal)
-        byteBuf.writeUUID(commandOriginData!!.uuid)
-        byteBuf.writeString(commandOriginData!!.requestId) // unknown
-        if (commandOriginData!!.type == CommandOriginData.Origin.DEV_CONSOLE || commandOriginData!!.type == CommandOriginData.Origin.TEST) {
-            byteBuf.writeVarLong(commandOriginData!!.playerId ?: -1) // unknown
-        }
+        byteBuf.writeCommandOriginData(commandOriginData!!)
 
         byteBuf.writeByte(type!!.ordinal.toByte().toInt())
         byteBuf.writeUnsignedVarInt(this.successCount)

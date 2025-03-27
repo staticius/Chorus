@@ -410,7 +410,7 @@ class Server internal constructor(
         log.info("Reloading Registries...")
         run {
             Registries.POTION.reload()
-            Registries.PACKET.reload()
+            Registries.PACKET_DECODER.reload()
             Registries.ENTITY.reload()
             Registries.BLOCKENTITY.reload()
             Registries.BLOCKSTATE_ITEMMETA.reload()
@@ -1875,9 +1875,8 @@ class Server internal constructor(
         this.consoleSender = ConsoleCommandSender()
 
         run {
-            //init
             Registries.POTION.init()
-            Registries.PACKET.init()
+            Registries.PACKET_DECODER.init()
             Registries.ENTITY.init()
             Registries.BLOCKENTITY.init()
             Registries.BLOCKSTATE_ITEMMETA.init()
@@ -1893,10 +1892,10 @@ class Server internal constructor(
             Registries.EFFECT.init()
             Registries.RECIPE.init()
             Profession.init()
-            val a = BlockTags.ACACIA
-            val b = ItemTags.ARROW
-            val c = BiomeTags.WARM
-            val d = BlockStateUpdaterBase.INSTANCE
+            BlockTags
+            ItemTags
+            BiomeTags
+            BlockStateUpdaterBase
             Enchantment.init()
             Attribute.init()
             BlockComposter.init()

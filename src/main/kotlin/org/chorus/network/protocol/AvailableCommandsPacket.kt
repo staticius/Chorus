@@ -15,9 +15,6 @@ class AvailableCommandsPacket : DataPacket() {
     var commands: Map<String, CommandDataVersions>? = null
     val constraints: List<CommandEnumConstraintData> = ObjectArrayList()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         val enumValuesSet: MutableSet<String> = ObjectOpenHashSet()
         val subCommandValues = SequencedHashSet<String>()
@@ -155,8 +152,8 @@ class AvailableCommandsPacket : DataPacket() {
         for (commandEnum in enums) {
             byteBuf.writeString(commandEnum.name)
 
-            byteBuf.writeUnsignedVarInt(commandEnum.getValues()!!.size)
-            for (value in commandEnum.getValues()!!) {
+            byteBuf.writeUnsignedVarInt(commandEnum.getValues().size)
+            for (value in commandEnum.getValues()) {
                 val index = values.indexOf(value)
                 Preconditions.checkArgument(index > -1, "Invalid enum value detected: $value")
                 indexWriter.accept(byteBuf, index)
@@ -242,7 +239,7 @@ class AvailableCommandsPacket : DataPacket() {
         byteBuf.writeString(enumData!!.name)
 
         val values = enumData.getValues()
-        byteBuf.writeUnsignedVarInt(values!!.size)
+        byteBuf.writeUnsignedVarInt(values.size)
         for (value in values) {
             byteBuf.writeString(value)
         }

@@ -15,38 +15,44 @@ class BookEditProcessor : DataPacketProcessor<BookEditPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: BookEditPacket) {
         val player = playerHandle.player
 
-        val oldBook = player.getInventory().getItem(pk.inventorySlot)
+        val oldBook = player.getInventory().getItem(pk.bookSlot.toInt())
         if (oldBook.id != ItemID.WRITABLE_BOOK) {
             return
-        }
-
-        if (pk.action != BookEditPacket.Action.SIGN_BOOK) {
-            if (pk.text == null || pk.text!!.length > 512) {
-                return
-            }
         }
 
         var newBook: Item = oldBook.clone()
         val success: Boolean
         when (pk.action) {
-            BookEditPacket.Action.REPLACE_PAGE -> success =
-                (newBook as ItemWritableBook).setPageText(pk.pageNumber, pk.text!!)
+            BookEditPacket.Action.REPLACE_PAGE -> {
+                val actionData = pk.actionData as BookEditPacket.ReplacePageData
+                if (actionData.text.length > 512) return
 
-            BookEditPacket.Action.ADD_PAGE -> success = (newBook as ItemWritableBook).insertPage(pk.pageNumber, pk.text!!)
-            BookEditPacket.Action.DELETE_PAGE -> success = (newBook as ItemWritableBook).deletePage(pk.pageNumber)
-            BookEditPacket.Action.SWAP_PAGES -> success =
-                (newBook as ItemWritableBook).swapPages(pk.pageNumber, pk.secondaryPageNumber)
+                success = (newBook as ItemWritableBook).setPageText(actionData.pageIndex.toInt(), actionData.text)
+            }
+            BookEditPacket.Action.ADD_PAGE -> {
+                val actionData = pk.actionData as BookEditPacket.AddPageData
+                if (actionData.text.length > 512) return
 
-            BookEditPacket.Action.SIGN_BOOK -> {
-                if (pk.title == null || pk.author == null || pk.xuid == null || pk.title!!.length > 64 || pk.author!!.length > 64 || pk.xuid!!.length > 64) {
-                    BookEditProcessor.log.debug(playerHandle.username + ": Invalid BookEditPacket action SIGN_BOOK: title/author/xuid is too long")
-                    return
-                }
+                success = (newBook as ItemWritableBook).insertPage(actionData.pageIndex.toInt(), actionData.text)
+            }
+            BookEditPacket.Action.DELETE_PAGE -> {
+                val actionData = pk.actionData as BookEditPacket.DeletePageData
+                success = (newBook as ItemWritableBook).deletePage(actionData.pageIndex.toInt())
+            }
+            BookEditPacket.Action.SWAP_PAGES -> {
+                val actionData = pk.actionData as BookEditPacket.SwapPagesData
+                success = (newBook as ItemWritableBook).swapPages(actionData.pageIndexA.toInt(), actionData.pageIndexB.toInt())
+            }
+
+            BookEditPacket.Action.FINALIZE -> {
+                val actionData = pk.actionData as BookEditPacket.FinalizeData
+                if (actionData.title.length > 64 || actionData.author.length > 64 || actionData.xuid.length > 64) return
+
                 newBook = get(ItemID.WRITTEN_BOOK, 0, 1, oldBook.compoundTag)
                 success = (newBook as ItemWrittenBook).signBook(
-                    pk.title!!,
-                    pk.author!!,
-                    pk.xuid!!,
+                    actionData.title,
+                    actionData.author,
+                    actionData.xuid,
                     ItemWrittenBook.GENERATION_ORIGINAL
                 )
             }
@@ -55,10 +61,10 @@ class BookEditProcessor : DataPacketProcessor<BookEditPacket>() {
         }
 
         if (success) {
-            val editBookEvent = PlayerEditBookEvent(player, oldBook, newBook, pk.action!!)
+            val editBookEvent = PlayerEditBookEvent(player, oldBook, newBook, pk.action)
             Server.instance.pluginManager.callEvent(editBookEvent)
             if (!editBookEvent.isCancelled) {
-                player.getInventory().setItem(pk.inventorySlot, editBookEvent.newBook)
+                player.getInventory().setItem(pk.bookSlot.toInt(), editBookEvent.newBook)
             }
         }
     }

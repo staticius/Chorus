@@ -288,14 +288,18 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
     }
 
     override fun addBossbar(player: Player) {
-        val pkBoss = BossEventPacket()
-        pkBoss.bossEid = this.id
-        pkBoss.type = BossEventPacket.TYPE_SHOW
-        pkBoss.title = this.getName()
-        pkBoss.color = 6
-        pkBoss.darkenSky = 1
-        pkBoss.healthPercent = 0f
-        player.dataPacket(pkBoss)
+        player.dataPacket(BossEventPacket(
+            targetActorID = this.id,
+            eventType = BossEventPacket.EventType.ADD,
+            eventData = BossEventPacket.EventType.Companion.AddData(
+                name = this.getName(),
+                filteredName = this.getName(),
+                color = 6,
+                darkenScreen = 1,
+                healthPercent = 0f,
+                overlay = 0
+            )
+        ))
     }
 
     override fun getOriginalName(): String {

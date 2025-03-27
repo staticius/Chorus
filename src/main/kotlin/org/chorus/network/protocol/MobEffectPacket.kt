@@ -21,7 +21,7 @@ class MobEffectPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeEntityRuntimeId(this.eid)
+        byteBuf.writeActorRuntimeID(this.eid)
         byteBuf.writeByte(eventId.toByte().toInt())
         byteBuf.writeVarInt(this.effectId)
         byteBuf.writeVarInt(this.amplifier)
