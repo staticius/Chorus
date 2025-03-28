@@ -9,10 +9,12 @@ import org.chorus.utils.*
 import java.nio.charset.StandardCharsets
 import java.util.*
 
-class LoginPacket : DataPacket() {
+class LoginPacket(
+    val protocol: Int,
+) : DataPacket() {
     var username: String? = null
     var titleId: String? = null
-    var protocol: Int = 0
+
     var clientUUID: UUID? = null
     var clientId: Long = 0
     var skin: Skin? = null
@@ -32,9 +34,6 @@ class LoginPacket : DataPacket() {
         decodeSkinData(buffer!!)
     }
 
-    override fun encode(byteBuf: HandleByteBuf) {
-    }
-
     private fun decodeChainData(binaryStream: BinaryStream) {
         val map: Map<String, List<String>> = JSONUtils.from(
             String(
@@ -45,7 +44,7 @@ class LoginPacket : DataPacket() {
         if (map.isEmpty() || !map.containsKey("chain") || map["chain"]!!.isEmpty()) return
         val chains = map["chain"]!!
         for (c in chains) {
-            val chainMap = decodeToken(c) ?: continue
+            val chainMap = decodeJWT(c) ?: continue
             if (chainMap.has("extraData")) {
                 if (chainMap.has("iat")) {
                     this.issueUnixTime = chainMap["iat"].asLong * 1000
@@ -59,7 +58,7 @@ class LoginPacket : DataPacket() {
     }
 
     private fun decodeSkinData(binaryStream: BinaryStream) {
-        val skinToken = decodeToken(String(binaryStream[binaryStream.lInt]))
+        val skinToken = decodeJWT(String(binaryStream[binaryStream.lInt]))
         if (skinToken!!.has("ClientRandomId")) this.clientId = skinToken["ClientRandomId"].asLong
 
         skin = Skin()
@@ -157,8 +156,8 @@ class LoginPacket : DataPacket() {
         }
     }
 
-    private fun decodeToken(token: String): JsonObject? {
-        val base = token.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+    private fun decodeJWT(token: String): JsonObject? {
+        val base = token.split(".").dropLastWhile { it.isEmpty() }.toTypedArray()
         if (base.size < 2) return null
         return Gson().fromJson(
             String(
@@ -171,14 +170,22 @@ class LoginPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.LOGIN_PACKET
+        return ProtocolInfo.LOGIN_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
+    companion object /*: PacketDecoder<LoginPacket>*/ {
+//        override fun decode(byteBuf: HandleByteBuf): LoginPacket {
+//            val protocol = byteBuf.readInt(),
+//            val
+//            return LoginPacket(
+//                protocol = byteBuf.readInt(),
+//            )
+//        }
+
         private fun getAnimation(element: JsonObject): SkinAnimation {
             val frames = element["Frames"].asFloat
             val type = element["Type"].asInt

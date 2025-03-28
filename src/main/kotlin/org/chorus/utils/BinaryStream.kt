@@ -110,14 +110,14 @@ class BinaryStream {
         }
 
     val lLong: Long
-        get() = Binary.readLLong(this.get(8))
+        get() = Binary.readLLong(this[8])
 
     fun putLLong(l: Long) {
         this.put(Binary.writeLLong(l))
     }
 
     val lInt: Int
-        get() = Binary.readLInt(this.get(4))
+        get() = Binary.readLInt(this[4])
 
     fun putLInt(i: Int) {
         this.put(Binary.writeLInt(i))

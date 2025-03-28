@@ -41,13 +41,13 @@ abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacket
             wrapper.headerLength = msg.readerIndex() - index
             val packetDecoder = Registries.PACKET_DECODER[wrapper.packetId]
             if (packetDecoder == null) {
-                log.info("Failed to decode packet for packetId {}", wrapper.packetId)
+                log.info("Couldn't find PacketDecoder for PacketID: ${wrapper.packetId}")
                 return
             }
             wrapper.packet = packetDecoder.decode(HandleByteBuf.of(msg))
             out.add(wrapper.retain())
         } catch (t: Throwable) {
-            log.info("Failed to decode packet", t)
+            log.info("Failed to decode PacketID: ${wrapper.packetId}; $t")
             throw t
         } finally {
             wrapper.release()

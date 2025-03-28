@@ -24,7 +24,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
             return
         }
 
-        val targetEntity = player.level!!.getEntity(pk.target)
+        val targetEntity = player.level!!.getEntity(pk.targetRuntimeID)
 
         if (targetEntity == null || !player.isAlive() || !targetEntity.isAlive()) {
             return
@@ -51,21 +51,21 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
         }
 
         when (pk.action) {
-            InteractPacket.ACTION_MOUSEOVER -> {
-                if (pk.target == 0L) {
+            InteractPacket.Action.INTERACT_UPDATE -> {
+                if (pk.targetRuntimeID == 0L) {
                     return
                 }
                 Server.instance.pluginManager.callEvent(PlayerMouseOverEntityEvent(player, targetEntity))
             }
 
-            InteractPacket.ACTION_VEHICLE_EXIT -> {
+            InteractPacket.Action.STOP_RIDING -> {
                 if (targetEntity !is EntityRideable || player.riding == null) {
                     return
                 }
                 (player.riding as EntityRideable).dismountEntity(player)
             }
 
-            InteractPacket.ACTION_OPEN_INVENTORY -> {
+            InteractPacket.Action.OPEN_INVENTORY -> {
                 if (targetEntity is EntityRideable) {
                     if (targetEntity is EntityChestBoat) {
                         player.addWindow(targetEntity.getInventory())
@@ -83,6 +83,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
                     playerHandle.inventoryOpen = player.getInventory().open(player)
                 }
             }
+            else -> {}
         }
     }
 

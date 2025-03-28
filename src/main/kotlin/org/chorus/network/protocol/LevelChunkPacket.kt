@@ -2,10 +2,6 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-(exclude = ["data"])
-
-
 class LevelChunkPacket : DataPacket() {
     @JvmField
     var chunkX: Int = 0
@@ -18,30 +14,29 @@ class LevelChunkPacket : DataPacket() {
     var cacheEnabled: Boolean = false
     var requestSubChunks: Boolean = false
     var subChunkLimit: Int = 0
-    var blobIds: LongArray
-
-    @JvmField
-    var data: ByteArray
+    lateinit var blobIds: LongArray
+    lateinit var data: ByteArray
 
     /**
      * @since v649
      */
     @JvmField
     var dimension: Int = 0
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(this.chunkX)
         byteBuf.writeVarInt(this.chunkZ)
         byteBuf.writeVarInt(this.dimension)
-        if (!this.requestSubChunks) {
+        if (this.requestSubChunks) {
+            if (this.subChunkLimit < 0) {
+                byteBuf.writeUnsignedVarInt(-1)
+            } else {
+                byteBuf.writeUnsignedVarInt(-2)
+                byteBuf.writeUnsignedVarInt(this.subChunkLimit)
+            }
+        }
+        else {
             byteBuf.writeUnsignedVarInt(this.subChunkCount)
-        } else if (this.subChunkLimit < 0) {
-            byteBuf.writeUnsignedVarInt(-1)
-        } else {
-            byteBuf.writeUnsignedVarInt(-2)
-            byteBuf.writeUnsignedVarInt(this.subChunkLimit)
         }
         byteBuf.writeBoolean(cacheEnabled)
         if (this.cacheEnabled) {
@@ -55,7 +50,7 @@ class LevelChunkPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.FULL_CHUNK_DATA_PACKET
+        return ProtocolInfo.LEVEL_CHUNK_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

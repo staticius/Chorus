@@ -20,15 +20,6 @@ class LevelEventPacket : DataPacket() {
     @JvmField
     var data: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.evid = byteBuf.readVarInt()
-        val v = byteBuf.readVector3f()
-        this.x = v.x
-        this.y = v.y
-        this.z = v.z
-        this.data = byteBuf.readVarInt()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(this.evid)
         byteBuf.writeVector3f(this.x, this.y, this.z)
@@ -36,7 +27,7 @@ class LevelEventPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.LEVEL_EVENT_PACKET
+        return ProtocolInfo.LEVEL_EVENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

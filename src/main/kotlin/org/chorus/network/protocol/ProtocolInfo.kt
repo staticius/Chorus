@@ -70,7 +70,7 @@ interface ProtocolInfo {
         // UNUSED                                           = 55
         const val BLOCK_ACTOR_DATA_PACKET                   = 56
         const val PLAYER_INPUT_PACKET                       = 57
-        const val FULL_CHUNK_DATA_PACKET                    = 58
+        const val LEVEL_CHUNK_PACKET                        = 58
         const val SET_COMMANDS_ENABLED_PACKET               = 59
         const val SET_DIFFICULTY_PACKET                     = 60
         const val CHANGE_DIMENSION_PACKET                   = 61

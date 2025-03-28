@@ -8,9 +8,6 @@ class GameRulesChangedPacket : DataPacket() {
     @JvmField
     var gameRules: GameRules? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeGameRules(gameRules!!)
     }

@@ -2,7 +2,6 @@ package org.chorus.network.protocol.types.inventory.transaction
 
 import org.chorus.item.Item
 import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.network.protocol.InventoryTransactionPacket
 
 data class NetworkInventoryAction(
     val inventorySource: InventorySource,
@@ -40,7 +39,7 @@ data class NetworkInventoryAction(
         const val SOURCE_TYPE_TRADING_INPUT_2: Int = -32
         const val SOURCE_TYPE_TRADING_USE_INPUTS: Int = -33
 
-        fun read(pk: InventoryTransactionPacket, byteBuf: HandleByteBuf): NetworkInventoryAction {
+        fun read(byteBuf: HandleByteBuf): NetworkInventoryAction {
             val type: InventorySource.Type = InventorySource.Type.byId(byteBuf.readUnsignedVarInt())
 
             val inventorySource = when (type) {
@@ -57,17 +56,6 @@ data class NetworkInventoryAction(
                 InventorySource.Type.CREATIVE -> InventorySource.fromCreativeInventory()
                 InventorySource.Type.NON_IMPLEMENTED_TODO -> {
                     val wid = byteBuf.readVarInt()
-                    when (wid) {
-                        SOURCE_TYPE_CRAFTING_RESULT, SOURCE_TYPE_CRAFTING_USE_INGREDIENT -> pk.isCraftingPart = true
-                        SOURCE_TYPE_ENCHANT_INPUT, SOURCE_TYPE_ENCHANT_OUTPUT, SOURCE_TYPE_ENCHANT_MATERIAL -> pk.isEnchantingPart =
-                            true
-
-                        SOURCE_TYPE_ANVIL_INPUT, SOURCE_TYPE_ANVIL_MATERIAL, SOURCE_TYPE_ANVIL_RESULT -> pk.isRepairItemPart =
-                            true
-
-                        SOURCE_TYPE_TRADING_INPUT_1, SOURCE_TYPE_TRADING_INPUT_2, SOURCE_TYPE_TRADING_USE_INPUTS, SOURCE_TYPE_TRADING_OUTPUT -> pk.isTradeItemPart =
-                            true
-                    }
                     InventorySource.fromNonImplementedTodo(wid)
                 }
 

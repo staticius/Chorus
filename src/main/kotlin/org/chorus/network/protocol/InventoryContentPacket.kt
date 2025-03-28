@@ -5,15 +5,11 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-
 class InventoryContentPacket : DataPacket() {
     var inventoryId: Int = 0
-    var slots: Array<Item?> = Item.EMPTY_ARRAY
+    var slots: Array<Item> = Item.EMPTY_ARRAY
     var fullContainerName: FullContainerName = FullContainerName(ContainerSlotType.ANVIL_INPUT, null)
     var storageItem: Item = Item.AIR // is air if the item is not a bundle
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarInt(this.inventoryId)
@@ -26,7 +22,7 @@ class InventoryContentPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.INVENTORY_CONTENT_PACKET
+        return ProtocolInfo.INVENTORY_CONTENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

@@ -36,27 +36,24 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         packets.clear()
 
         // Register all packets that are Client -> Server
-        this.register(ProtocolInfo.CLIENT_TO_SERVER_HANDSHAKE_PACKET, ClientToServerHandshakePacket)
-        this.register(ProtocolInfo.ANIMATE_PACKET, AnimatePacket)
-        this.register(ProtocolInfo.ANVIL_DAMAGE_PACKET, AnvilDamagePacket)
-        this.register(ProtocolInfo.BLOCK_ACTOR_DATA_PACKET, BlockActorDataPacket)
-        this.register(ProtocolInfo.BLOCK_PICK_REQUEST_PACKET, BlockPickRequestPacket)
-        this.register(ProtocolInfo.ACTOR_PICK_REQUEST_PACKET, ActorPickRequestPacket)
-        this.register(ProtocolInfo.BOOK_EDIT_PACKET, BookEditPacket)
-        this.register(ProtocolInfo.BOSS_EVENT_PACKET, BossEventPacket)
-        this.register(ProtocolInfo.CHUNK_RADIUS_UPDATED_PACKET, ChunkRadiusUpdatedPacket)
-        this.register(ProtocolInfo.COMMAND_REQUEST_PACKET, CommandRequestPacket)
-        this.register(ProtocolInfo.CONTAINER_CLOSE_PACKET, ContainerClosePacket)
 
-        this.register(ProtocolInfo.FULL_CHUNK_DATA_PACKET, LevelChunkPacket)
-        this.register(ProtocolInfo.GAME_RULES_CHANGED_PACKET, GameRulesChangedPacket)
-        this.register(ProtocolInfo.HURT_ARMOR_PACKET, HurtArmorPacket)
-        this.register(ProtocolInfo.INTERACT_PACKET, InteractPacket)
-        this.register(ProtocolInfo.INVENTORY_CONTENT_PACKET, InventoryContentPacket)
-        this.register(ProtocolInfo.INVENTORY_SLOT_PACKET, InventorySlotPacket)
-        this.register(ProtocolInfo.INVENTORY_TRANSACTION_PACKET, InventoryTransactionPacket)
-        this.register(ProtocolInfo.LEVEL_EVENT_PACKET, LevelEventPacket)
+        this.register(ProtocolInfo.CLIENT_TO_SERVER_HANDSHAKE_PACKET, ClientToServerHandshakePacket) // 4
+        this.register(ProtocolInfo.INVENTORY_TRANSACTION_PACKET, InventoryTransactionPacket) // 30
+        this.register(ProtocolInfo.INTERACT_PACKET, InteractPacket) // 33
+        this.register(ProtocolInfo.BLOCK_PICK_REQUEST_PACKET, BlockPickRequestPacket) // 34
+        this.register(ProtocolInfo.ACTOR_PICK_REQUEST_PACKET, ActorPickRequestPacket) // 35
+        this.register(ProtocolInfo.HURT_ARMOR_PACKET, HurtArmorPacket) // 38
+        this.register(ProtocolInfo.ANIMATE_PACKET, AnimatePacket) // 44
+        this.register(ProtocolInfo.CONTAINER_CLOSE_PACKET, ContainerClosePacket) // 47
+        this.register(ProtocolInfo.BLOCK_ACTOR_DATA_PACKET, BlockActorDataPacket) // 56
+        this.register(ProtocolInfo.CHUNK_RADIUS_UPDATED_PACKET, ChunkRadiusUpdatedPacket) // 70
+        this.register(ProtocolInfo.BOSS_EVENT_PACKET, BossEventPacket) // 74
+        this.register(ProtocolInfo.COMMAND_REQUEST_PACKET, CommandRequestPacket) // 77
+        this.register(ProtocolInfo.BOOK_EDIT_PACKET, BookEditPacket) // 97
+        this.register(ProtocolInfo.ANVIL_DAMAGE_PACKET, AnvilDamagePacket) // 141
+
         this.register(ProtocolInfo.LOGIN_PACKET, LoginPacket)
+
         this.register(ProtocolInfo.MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket)
         this.register(ProtocolInfo.MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket)
         this.register(ProtocolInfo.MOB_EQUIPMENT_PACKET, MobEquipmentPacket)

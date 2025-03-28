@@ -5,104 +5,37 @@ import org.chorus.network.protocol.types.LegacySetItemSlotData
 import org.chorus.network.protocol.types.inventory.transaction.*
 import org.chorus.network.protocol.types.inventory.transaction.UseItemData.PredictedResult
 import org.chorus.network.protocol.types.inventory.transaction.UseItemData.TriggerType
-import java.util.*
 
+class InventoryTransactionPacket(
+    val legacyRequestID: Int,
+    val legacySetItemSlots: List<LegacySetItemSlotData>,
+    val transactionType: TransactionType,
+    val actions: Array<NetworkInventoryAction>,
+    val transactionData: TransactionData?,
+) : DataPacket(), PacketEncoder {
 
-class InventoryTransactionPacket : DataPacket() {
-    var transactionType: Int = 0
-    var actions: Array<NetworkInventoryAction> = emptyArray()
-    var transactionData: TransactionData? = null
-    val legacySlots: MutableList<LegacySetItemSlotData> = mutableListOf()
+    enum class TransactionType {
+        NORMAL,
+        MISMATCH,
+        USE_ITEM,
+        USE_ITEM_ON_ENTITY,
+        RELEASE_ITEM;
 
-    var legacyRequestId: Int = 0
-    private var triggerType: TriggerType? = null
-    private var clientInteractPrediction: PredictedResult? = null
-
-    /**
-     * NOTE: THESE FIELDS DO NOT EXIST IN THE PROTOCOL, it's merely used for convenience for us to easily
-     * determine whether we're doing a crafting or enchanting transaction.
-     */
-    var isCraftingPart: Boolean = false
-    var isEnchantingPart: Boolean = false
-    var isRepairItemPart: Boolean = false
-    var isTradeItemPart: Boolean = false
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.legacyRequestId = byteBuf.readVarInt()
-        if (legacyRequestId != 0) {
-            val length = byteBuf.readUnsignedVarInt()
-            for (i in 0..<length) {
-                val containerId = byteBuf.readByte()
-                val slots = byteBuf.readByteArray()
-                legacySlots.add(LegacySetItemSlotData(containerId.toInt(), slots))
+        companion object {
+            fun fromOrdinal(ordinal: Int): TransactionType {
+                return entries.find { it.ordinal == ordinal } ?: throw RuntimeException("Unknown TransactionType Ordinal: $ordinal")
             }
-        }
-        //InventoryTransactionType
-        this.transactionType = byteBuf.readUnsignedVarInt()
-
-        val length = byteBuf.readUnsignedVarInt()
-        val actions: MutableCollection<NetworkInventoryAction> = ArrayDeque()
-        for (i in 0..<length) {
-            actions.add(NetworkInventoryAction.read(this, byteBuf))
-        }
-        this.actions = actions.toTypedArray()
-
-        when (this.transactionType) {
-            TYPE_NORMAL, TYPE_MISMATCH -> {}
-            TYPE_USE_ITEM -> {
-                val itemData = UseItemData(
-                    actionType = byteBuf.readUnsignedVarInt(),
-                    triggerType = TriggerType.entries[byteBuf.readUnsignedVarInt()],
-                    blockPos = byteBuf.readBlockVector3(),
-                    face = byteBuf.readBlockFace(),
-                    hotbarSlot = byteBuf.readVarInt(),
-                    itemInHand = byteBuf.readSlot(),
-                    playerPos = byteBuf.readVector3f().asVector3(),
-                    clickPos = byteBuf.readVector3f(),
-                    blockRuntimeId = byteBuf.readUnsignedVarInt(),
-                    clientInteractPrediction = PredictedResult.entries[byteBuf.readUnsignedVarInt()],
-                )
-
-                this.transactionData = itemData
-            }
-
-            TYPE_USE_ITEM_ON_ENTITY -> {
-                val useItemOnEntityData = UseItemOnEntityData(
-                    entityRuntimeId = byteBuf.readActorRuntimeID(),
-                    actionType = byteBuf.readUnsignedVarInt(),
-                    hotbarSlot = byteBuf.readVarInt(),
-                    itemInHand = byteBuf.readSlot(),
-                    playerPos = byteBuf.readVector3f().asVector3(),
-                    clickPos = byteBuf.readVector3f().asVector3(),
-                )
-
-                this.transactionData = useItemOnEntityData
-            }
-
-            TYPE_RELEASE_ITEM -> {
-                val releaseItemData = ReleaseItemData(
-                    actionType = byteBuf.readUnsignedVarInt(),
-                    hotbarSlot = byteBuf.readVarInt(),
-                    itemInHand = byteBuf.readSlot(),
-                    headRot = byteBuf.readVector3f().asVector3()
-                )
-
-                this.transactionData = releaseItemData
-            }
-
-            else -> throw RuntimeException("Unknown transaction type " + this.transactionType)
         }
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeVarInt(this.legacyRequestId)
-        byteBuf.writeUnsignedVarInt(this.transactionType)
+        byteBuf.writeVarInt(this.legacyRequestID)
+        byteBuf.writeUnsignedVarInt(this.transactionType.ordinal)
 
-        //slots array
-        if (legacyRequestId != 0) {
-            byteBuf.writeUnsignedVarInt(legacySlots.size)
-            for (slot in legacySlots) {
-                byteBuf.writeByte(slot.containerId.toByte().toInt())
+        if (legacyRequestID != 0) {
+            byteBuf.writeUnsignedVarInt(legacySetItemSlots.size)
+            for (slot in legacySetItemSlots) {
+                byteBuf.writeByte(slot.containerId)
                 byteBuf.writeByteArray(slot.slots)
             }
         }
@@ -113,8 +46,7 @@ class InventoryTransactionPacket : DataPacket() {
         }
 
         when (this.transactionType) {
-            TYPE_NORMAL, TYPE_MISMATCH -> {}
-            TYPE_USE_ITEM -> {
+            TransactionType.USE_ITEM -> {
                 val useItemData = transactionData as UseItemData
 
                 byteBuf.writeUnsignedVarInt(useItemData.actionType)
@@ -129,7 +61,7 @@ class InventoryTransactionPacket : DataPacket() {
                 byteBuf.writeUnsignedVarInt(useItemData.clientInteractPrediction.ordinal)
             }
 
-            TYPE_USE_ITEM_ON_ENTITY -> {
+            TransactionType.USE_ITEM_ON_ENTITY -> {
                 val useItemOnEntityData = transactionData as UseItemOnEntityData
 
                 byteBuf.writeActorRuntimeID(useItemOnEntityData.entityRuntimeId)
@@ -140,7 +72,7 @@ class InventoryTransactionPacket : DataPacket() {
                 byteBuf.writeVector3f(useItemOnEntityData.clickPos.asVector3f())
             }
 
-            TYPE_RELEASE_ITEM -> {
+            TransactionType.RELEASE_ITEM -> {
                 val releaseItemData = transactionData as ReleaseItemData
 
                 byteBuf.writeUnsignedVarInt(releaseItemData.actionType)
@@ -149,24 +81,73 @@ class InventoryTransactionPacket : DataPacket() {
                 byteBuf.writeVector3f(releaseItemData.headRot.asVector3f())
             }
 
-            else -> throw RuntimeException("Unknown transaction type " + this.transactionType)
+            else -> {}
         }
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.INVENTORY_TRANSACTION_PACKET
+        return ProtocolInfo.INVENTORY_TRANSACTION_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
-        const val TYPE_NORMAL: Int = 0
-        const val TYPE_MISMATCH: Int = 1
-        const val TYPE_USE_ITEM: Int = 2
-        const val TYPE_USE_ITEM_ON_ENTITY: Int = 3
-        const val TYPE_RELEASE_ITEM: Int = 4
+    companion object : PacketDecoder<InventoryTransactionPacket> {
+        override fun decode(byteBuf: HandleByteBuf): InventoryTransactionPacket {
+            val legacyRequestID: Int
+            val transactionType: TransactionType
+            return InventoryTransactionPacket(
+                legacyRequestID = byteBuf.readUnsignedVarInt()
+                    .also { legacyRequestID = it },
+                legacySetItemSlots = when (legacyRequestID != 0) {
+                    true -> List(byteBuf.readUnsignedVarInt()) {
+                        LegacySetItemSlotData(
+                            byteBuf.readByte().toInt(),
+                            byteBuf.readByteArray()
+                        )
+                    }
+                    false -> emptyList()
+                },
+                transactionType = TransactionType.fromOrdinal(byteBuf.readUnsignedVarInt())
+                    .also { transactionType = it },
+                actions = Array(byteBuf.readUnsignedVarInt()) {
+                    NetworkInventoryAction.read(byteBuf)
+                },
+                transactionData = when (transactionType) {
+                    TransactionType.USE_ITEM -> UseItemData(
+                        actionType = byteBuf.readUnsignedVarInt(),
+                        triggerType = TriggerType.entries[byteBuf.readUnsignedVarInt()],
+                        blockPos = byteBuf.readBlockVector3(),
+                        face = byteBuf.readBlockFace(),
+                        hotbarSlot = byteBuf.readVarInt(),
+                        itemInHand = byteBuf.readSlot(),
+                        playerPos = byteBuf.readVector3f().asVector3(),
+                        clickPos = byteBuf.readVector3f(),
+                        blockRuntimeId = byteBuf.readUnsignedVarInt(),
+                        clientInteractPrediction = PredictedResult.entries[byteBuf.readUnsignedVarInt()],
+                    )
+
+                    TransactionType.USE_ITEM_ON_ENTITY -> UseItemOnEntityData(
+                        entityRuntimeId = byteBuf.readActorRuntimeID(),
+                        actionType = byteBuf.readUnsignedVarInt(),
+                        hotbarSlot = byteBuf.readVarInt(),
+                        itemInHand = byteBuf.readSlot(),
+                        playerPos = byteBuf.readVector3f().asVector3(),
+                        clickPos = byteBuf.readVector3f().asVector3(),
+                    )
+
+                    TransactionType.RELEASE_ITEM -> ReleaseItemData(
+                        actionType = byteBuf.readUnsignedVarInt(),
+                        hotbarSlot = byteBuf.readVarInt(),
+                        itemInHand = byteBuf.readSlot(),
+                        headRot = byteBuf.readVector3f().asVector3()
+                    )
+
+                    else -> null
+                }
+            )
+        }
 
         const val USE_ITEM_ACTION_CLICK_BLOCK: Int = 0
         const val USE_ITEM_ACTION_CLICK_AIR: Int = 1
@@ -177,7 +158,6 @@ class InventoryTransactionPacket : DataPacket() {
 
         const val USE_ITEM_ON_ENTITY_ACTION_INTERACT: Int = 0
         const val USE_ITEM_ON_ENTITY_ACTION_ATTACK: Int = 1
-
 
         const val ACTION_MAGIC_SLOT_DROP_ITEM: Int = 0
         const val ACTION_MAGIC_SLOT_PICKUP_ITEM: Int = 1

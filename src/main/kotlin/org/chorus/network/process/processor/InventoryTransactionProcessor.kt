@@ -44,11 +44,11 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
             player.sendAllInventories()
             return
         }
-        if (pk.transactionType == InventoryTransactionPacket.TYPE_USE_ITEM) {
+        if (pk.transactionType == InventoryTransactionPacket.TransactionType.USE_ITEM) {
             handleUseItem(playerHandle, pk)
-        } else if (pk.transactionType == InventoryTransactionPacket.TYPE_USE_ITEM_ON_ENTITY) {
+        } else if (pk.transactionType == InventoryTransactionPacket.TransactionType.USE_ITEM_ON_ENTITY) {
             handleUseItemOnEntity(playerHandle, pk)
-        } else if (pk.transactionType == InventoryTransactionPacket.TYPE_RELEASE_ITEM) {
+        } else if (pk.transactionType == InventoryTransactionPacket.TransactionType.RELEASE_ITEM) {
             val releaseItemData = pk.transactionData as ReleaseItemData
             try {
                 val type = releaseItemData.actionType
@@ -79,7 +79,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
             } finally {
                 player.removeLastUseTick(releaseItemData.itemInHand.id)
             }
-        } else if (pk.transactionType == InventoryTransactionPacket.TYPE_NORMAL) {
+        } else if (pk.transactionType == InventoryTransactionPacket.TransactionType.NORMAL) {
             if (pk.actions.size == 2 && pk.actions[0].inventorySource.type == InventorySource.Type.WORLD_INTERACTION &&
                 pk.actions[0].inventorySource.flag == InventorySource.Flag.DROP_ITEM &&
                 pk.actions[1].inventorySource.type == InventorySource.Type.CONTAINER

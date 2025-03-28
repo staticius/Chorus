@@ -2,18 +2,11 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class HurtArmorPacket : DataPacket() {
-    var cause: Int = 0
-    var damage: Int = 0
-    var armorSlots: Long = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.cause = byteBuf.readVarInt()
-        this.damage = byteBuf.readVarInt()
-        this.armorSlots = byteBuf.readUnsignedVarLong()
-    }
-
+class HurtArmorPacket(
+    val cause: Int,
+    val damage: Int,
+    val armorSlots: Long,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(this.cause)
         byteBuf.writeVarInt(this.damage)
@@ -21,10 +14,20 @@ class HurtArmorPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.HURT_ARMOR_PACKET
+        return ProtocolInfo.HURT_ARMOR_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<HurtArmorPacket> {
+        override fun decode(byteBuf: HandleByteBuf): HurtArmorPacket {
+            return HurtArmorPacket(
+                cause = byteBuf.readVarInt(),
+                damage = byteBuf.readVarInt(),
+                armorSlots = byteBuf.readUnsignedVarLong()
+            )
+        }
     }
 }
