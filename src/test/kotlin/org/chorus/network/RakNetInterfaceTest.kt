@@ -61,7 +61,7 @@ class RakNetInterfaceTest {
                         val dataPacket = Registries.PACKET_DECODER[header]
                         dataPacket.decode(HandleByteBuf.of(Unpooled.wrappedBuffer(byteBuf)))
                         val target = dataPacket as RequestNetworkSettingsPacket
-                        assert(target.protocolVersion == ProtocolInfo.CURRENT_PROTOCOL)
+                        assert(target.protocolVersion == ProtocolInfo.PROTOCOL_VERSION)
                         gameMockExtension.stopNetworkTickLoop()
                     }
                 })
@@ -87,7 +87,7 @@ class RakNetInterfaceTest {
                                     buf,
                                     ProtocolInfo.REQUEST_NETWORK_SETTINGS_PACKET
                                 ) //packet header
-                                buf.writeInt(ProtocolInfo.CURRENT_PROTOCOL)
+                                buf.writeInt(ProtocolInfo.PROTOCOL_VERSION)
                                 //RequestNetworkSettingsPacket
                                 ctx.channel().writeAndFlush(RakMessage(buf))
                             }

@@ -8,13 +8,13 @@ import org.chorus.network.protocol.DataPacket
  * DataPacketManager is a static class to manage DataPacketProcessors and process DataPackets.
  */
 class DataPacketManager {
-    private val PROCESSORS = HashMap<Int, DataPacketProcessor<*>>(300)
+    private val PROCESSORS = HashMap<Int, DataPacketProcessor<out DataPacket>>(300)
 
     init {
         registerDefaultProcessors()
     }
 
-    fun registerProcessor(vararg processors: DataPacketProcessor<*>) {
+    fun registerProcessor(vararg processors: DataPacketProcessor<out DataPacket>) {
         for (processor in processors) {
             PROCESSORS[processor.packetId] = processor
         }
@@ -59,20 +59,12 @@ class DataPacketManager {
             StructureBlockUpdateProcessor(),
             TextProcessor(),
             ContainerCloseProcessor(),
-            CraftingEventProcessor(),
             BlockEntityDataProcessor(),
             SetPlayerGameTypeProcessor(),
             LecternUpdateProcessor(),
-            MapInfoRequestProcessor(),  /*
-                 * Minecraft doesn't really use this packet any more, and the client can send it and play the music it wants,
-                 * even though it's of no interest to the gameplay.
-                 * The client isn't supposed to be able to broadcast a sound to the whole server.
-                 * @Zwuiix
-                new LevelSoundEventProcessor(),
-                new LevelSoundEventProcessorV1(),
-                new LevelSoundEventProcessorV2(),
-                */
-            //new PlayerHotbarProcessor(),
+            MapInfoRequestProcessor(),
+            // LevelSoundEventProcessor(),
+            // PlayerHotbarProcessor(),
             ServerSettingsRequestProcessor(),
             RespawnProcessor(),
             BookEditProcessor(),
@@ -80,7 +72,6 @@ class DataPacketManager {
             SettingsCommandProcessor(),
             PositionTrackingDBClientRequestProcessor(),
             ShowCreditsProcessor(),
-            TickSyncProcessor(),
             RequestPermissionsProcessor(),
             RiderJumpProcessor(),
             ItemStackRequestPacketProcessor(),

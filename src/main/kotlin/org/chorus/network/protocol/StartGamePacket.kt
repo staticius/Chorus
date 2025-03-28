@@ -62,7 +62,7 @@ class StartGamePacket : DataPacket() {
     var isFromWorldTemplate: Boolean = false
     var isWorldTemplateOptionLocked: Boolean = false
     var isOnlySpawningV1Villagers: Boolean = false
-    var vanillaVersion: String = ProtocolInfo.MINECRAFT_VERSION_NETWORK
+    var vanillaVersion: String = ProtocolInfo.GAME_VERSION_NET
 
     // HACK: For now we can specify this version, since the new chunk changes are not relevant for our Anvil format.
     // However, it could be that Microsoft will prevent this in a new update.

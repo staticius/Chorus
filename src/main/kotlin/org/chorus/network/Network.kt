@@ -67,7 +67,7 @@ class Network @JvmOverloads constructor(
         server.serverID.mostSignificantBits,
         Server.getGamemodeString(server.defaultGamemode, true),
         false,
-        ProtocolInfo.CURRENT_PROTOCOL,
+        ProtocolInfo.PROTOCOL_VERSION,
         null,
         server.port,
         server.port

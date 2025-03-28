@@ -9,31 +9,31 @@ import org.chorus.network.protocol.ProtocolInfo
 class ContainerCloseProcessor : DataPacketProcessor<ContainerClosePacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: ContainerClosePacket) {
         val player = playerHandle.player
-        if (!player.spawned || pk.windowId == SpecialWindowId.PLAYER.id && !playerHandle.inventoryOpen) {
+        if (!player.spawned || pk.containerID == SpecialWindowId.PLAYER.id && !playerHandle.inventoryOpen) {
             return
         }
 
-        val inventory = player.getWindowById(pk.windowId)
+        val inventory = player.getWindowById(pk.containerID)
 
-        if (playerHandle.windowIndex.containsKey(pk.windowId)) {
-            if (pk.windowId == SpecialWindowId.PLAYER.id) {
-                playerHandle.closingWindowId = pk.windowId
+        if (playerHandle.windowIndex.containsKey(pk.containerID)) {
+            if (pk.containerID == SpecialWindowId.PLAYER.id) {
+                playerHandle.closingWindowId = pk.containerID
                 player.getInventory().close(player)
                 playerHandle.inventoryOpen = false
             } else {
-                playerHandle.removeWindow(playerHandle.windowIndex[pk.windowId]!!)
+                playerHandle.removeWindow(playerHandle.windowIndex[pk.containerID]!!)
             }
         }
 
-        if (pk.windowId == -1) {
+        if (pk.containerID == -1) {
             player.addWindow(player.craftingGrid!!, SpecialWindowId.NONE.id)
         }
         if (inventory != null) {
-            val pk2 = ContainerClosePacket()
-            pk2.wasServerInitiated = false
-            pk2.windowId = pk.windowId
-            pk2.type = inventory.type
-            player.dataPacket(pk2)
+            player.dataPacket(ContainerClosePacket(
+                containerID = pk.containerID,
+                containerType = inventory.type,
+                serverInitiatedClose = false,
+            ))
             player.resetInventory()
         }
     }

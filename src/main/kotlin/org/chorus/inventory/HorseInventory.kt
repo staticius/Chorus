@@ -68,11 +68,12 @@ class HorseInventory(holder: EntityHorse?) : BaseInventory(holder, InventoryType
     }
 
     override fun onClose(who: Player) {
-        val pk = ContainerClosePacket()
-        pk.windowId = who.getWindowId(this)
-        pk.wasServerInitiated = who.closingWindowId != pk.windowId
-        pk.type = getType()
-        who.dataPacket(pk)
+        val containerId = who.getWindowId(this)
+        who.dataPacket(ContainerClosePacket(
+            containerID = containerId,
+            containerType = type,
+            serverInitiatedClose = who.closingWindowId != containerId
+        ))
         super.onClose(who)
     }
 

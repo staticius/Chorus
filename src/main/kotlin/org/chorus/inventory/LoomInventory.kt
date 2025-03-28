@@ -21,14 +21,12 @@ class LoomInventory(blockLoom: BlockLoom?) : BaseInventory(blockLoom, InventoryT
 
     override fun onOpen(who: Player) {
         super.onOpen(who)
-        val pk = ContainerOpenPacket()
-        pk.windowId = who.getWindowId(this)
-        pk.type = getType().networkType
-        val holder = this.getHolder()
-        pk.x = holder.x.toInt()
-        pk.y = holder.y.toInt()
-        pk.z = holder.z.toInt()
-        who.dataPacket(pk)
+        who.dataPacket(ContainerOpenPacket(
+            containerID = who.getWindowId(this),
+            containerType = type.networkType,
+            position = holder.vector3.asBlockVector3(),
+            targetActorID = who.getId()
+        ))
         this.sendContents(who)
     }
 

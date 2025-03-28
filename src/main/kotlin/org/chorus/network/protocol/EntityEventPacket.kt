@@ -11,12 +11,6 @@ class EntityEventPacket : DataPacket() {
     var event: Int = 0
     var data: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readActorRuntimeID()
-        this.event = byteBuf.readByte().toInt()
-        this.data = byteBuf.readVarInt()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(this.eid)
         byteBuf.writeByte(event.toByte().toInt())
@@ -24,7 +18,7 @@ class EntityEventPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.ENTITY_EVENT_PACKET
+        return ProtocolInfo.ENTITY_EVENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

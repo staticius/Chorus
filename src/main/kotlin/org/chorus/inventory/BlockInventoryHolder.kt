@@ -4,7 +4,7 @@ import org.chorus.block.Block
 import java.util.function.Supplier
 
 interface BlockInventoryHolder : InventoryHolder {
-    fun blockInventorySupplier(): Supplier<Inventory?>
+    fun blockInventorySupplier(): Supplier<Inventory>
 
     val block: Block
         get() = this as Block

@@ -89,8 +89,6 @@ interface PacketHandler {
 
     fun handle(pk: CraftingDataPacket) {}
 
-    fun handle(pk: CraftingEventPacket) {}
-
     fun handle(pk: CreatePhotoPacket) {}
 
     fun handle(pk: CreativeContentPacket) {}
@@ -113,11 +111,7 @@ interface PacketHandler {
 
     fun handle(pk: EntityEventPacket) {}
 
-    fun handle(pk: EntityFallPacket) {}
-
     fun handle(pk: ActorPickRequestPacket) {}
-
-    fun handle(pk: FilterTextPacket) {}
 
     fun handle(pk: GUIDataPickItemPacket) {}
 
@@ -136,8 +130,6 @@ interface PacketHandler {
     fun handle(pk: InventoryTransactionPacket) {}
 
     fun handle(pk: ItemRegistryPacket) {}
-
-    fun handle(pk: ItemFrameDropItemPacket) {}
 
     fun handle(pk: ItemStackRequestPacket) {}
 
@@ -189,15 +181,11 @@ interface PacketHandler {
 
     fun handle(pk: NetworkSettingsPacket) {}
 
-    fun handle(pk: NetworkStackLatencyPacket) {}
-
     fun handle(pk: OnScreenTextureAnimationPacket) {}
 
     fun handle(pk: OpenSignPacket) {}
 
     fun handle(pk: PacketViolationWarningPacket) {}
-
-    fun handle(pk: PhotoInfoRequestPacket) {}
 
     fun handle(pk: PlaySoundPacket) {}
 
@@ -311,8 +299,6 @@ interface PacketHandler {
 
     fun handle(pk: SimulationTypePacket) {}
 
-    fun handle(pk: SpawnExperienceOrbPacket) {}
-
     fun handle(pk: SpawnParticleEffectPacket) {}
 
     fun handle(pk: StartGamePacket) {}
@@ -328,8 +314,6 @@ interface PacketHandler {
     fun handle(pk: TakeItemEntityPacket) {}
 
     fun handle(pk: TextPacket) {}
-
-    fun handle(pk: TickSyncPacket) {}
 
     fun handle(pk: TickingAreasLoadStatusPacket) {}
 

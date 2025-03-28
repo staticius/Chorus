@@ -213,7 +213,7 @@ open class Palette<V> {
         var semVersion = p.right()
 
         if (semVersion == null) {
-            semVersion = ProtocolInfo.MINECRAFT_SEMVERSION
+            semVersion = ProtocolInfo.GAME_VERSION
         }
 
         val version: Int =

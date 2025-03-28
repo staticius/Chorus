@@ -1,36 +1,34 @@
 package org.chorus.network.protocol
 
 import org.chorus.inventory.InventoryType
-import org.chorus.inventory.InventoryType.Companion.from
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class ContainerClosePacket : DataPacket() {
-    var windowId: Int = 0
-    var wasServerInitiated: Boolean = true
-
-    /**
-     * @since v685
-     */
-    var type: InventoryType? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.windowId = byteBuf.readByte().toInt()
-        this.type = from(byteBuf.readByte().toInt())
-        this.wasServerInitiated = byteBuf.readBoolean()
-    }
-
+data class ContainerClosePacket(
+    val containerID: Int,
+    val containerType: InventoryType,
+    val serverInitiatedClose: Boolean,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeByte(windowId.toByte().toInt())
-        byteBuf.writeByte(type!!.networkType.toByte().toInt())
-        byteBuf.writeBoolean(this.wasServerInitiated)
+        byteBuf.writeByte(containerID)
+        byteBuf.writeByte(containerType.networkType)
+        byteBuf.writeBoolean(this.serverInitiatedClose)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CONTAINER_CLOSE_PACKET
+        return ProtocolInfo.CONTAINER_CLOSE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<ContainerClosePacket> {
+        override fun decode(byteBuf: HandleByteBuf): ContainerClosePacket {
+            return ContainerClosePacket(
+                containerID = byteBuf.readByte().toInt(),
+                containerType = InventoryType.from(byteBuf.readByte().toInt()),
+                serverInitiatedClose = byteBuf.readBoolean()
+            )
+        }
     }
 }

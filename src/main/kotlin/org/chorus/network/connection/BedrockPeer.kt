@@ -140,7 +140,7 @@ class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessi
                     channel.pipeline().get(BedrockEncryptionDecoder::class.java) != null)
         ) { "Encryption is already enabled" }
 
-        val protocolVersion = ProtocolInfo.CURRENT_PROTOCOL
+        val protocolVersion = ProtocolInfo.PROTOCOL_VERSION
         val useCtr = protocolVersion >= 428
 
         channel.pipeline().addAfter(
@@ -168,7 +168,7 @@ class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessi
     private fun setCompression(strategy: CompressionStrategy) {
         Objects.requireNonNull(strategy, "strategy")
 
-        val needsPrefix = ProtocolInfo.CURRENT_PROTOCOL >= 649 // TODO: do not hardcode
+        val needsPrefix = ProtocolInfo.PROTOCOL_VERSION >= 649 // TODO: do not hardcode
 
         val handler = channel.pipeline()[CompressionCodec.NAME]
         if (handler == null) {

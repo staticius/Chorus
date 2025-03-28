@@ -127,7 +127,7 @@ class VersionCommand(name: String) : Command(
                     Server.instance.nukkitVersion + " (" + Server.instance.gitCommit + ")",
                     Server.instance.apiVersion,
                     Server.instance.version,
-                    ProtocolInfo.CURRENT_PROTOCOL.toString()
+                    ProtocolInfo.PROTOCOL_VERSION.toString()
                 )
             )
         } else {

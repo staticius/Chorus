@@ -2,12 +2,9 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
 data class AddBehaviorTreePacket(
     val behaviorTreeJSON: String
 ) : DataPacket(), PacketEncoder {
-    override fun decode(byteBuf: HandleByteBuf) {}
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeString(behaviorTreeJSON)
     }

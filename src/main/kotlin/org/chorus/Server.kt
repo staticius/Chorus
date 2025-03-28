@@ -1618,7 +1618,7 @@ class Server internal constructor(
         get() = Chorus.CODENAME
 
     val version: String
-        get() = ProtocolInfo.MINECRAFT_VERSION
+        get() = ProtocolInfo.GAME_VERSION_STR
 
     val apiVersion: String
         get() = Chorus.API_VERSION

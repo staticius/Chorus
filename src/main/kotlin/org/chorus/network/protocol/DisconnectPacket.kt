@@ -13,13 +13,6 @@ class DisconnectPacket : DataPacket() {
     var message: String = ""
     private var filteredMessage = ""
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.reason = DisconnectFailReason.entries[byteBuf.readVarInt()]
-        this.hideDisconnectionScreen = byteBuf.readBoolean()
-        this.message = byteBuf.readString()
-        this.filteredMessage = byteBuf.readString()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(reason.ordinal)
         byteBuf.writeBoolean(this.hideDisconnectionScreen)

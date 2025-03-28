@@ -25,19 +25,17 @@ class CraftingTableInventory(table: BlockCraftingTable?) : BaseInventory(table, 
 
     override fun onOpen(who: Player) {
         super.onOpen(who)
-        val pk = ContainerOpenPacket()
-        pk.windowId = who.getWindowId(this)
-        pk.type = getType().networkType
-        val holder = this.holder
-        pk.x = holder.vector3.x.toInt()
-        pk.y = holder.vector3.y.toInt()
-        pk.z = holder.vector3.z.toInt()
-        who.dataPacket(pk)
+        who.dataPacket(ContainerOpenPacket(
+            containerID = who.getWindowId(this),
+            containerType = type.networkType,
+            position = holder.vector3.asBlockVector3(),
+            targetActorID = who.getId()
+        ))
         this.sendContents(who)
     }
 
-    override var holder: InventoryHolder?
-        get() = super.getHolder() as BlockCraftingTable
+    override var holder: InventoryHolder
+        get() = super.holder as BlockCraftingTable
         set(holder) {
             super.holder = holder
         }

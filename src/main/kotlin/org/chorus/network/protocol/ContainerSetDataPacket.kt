@@ -8,9 +8,6 @@ class ContainerSetDataPacket : DataPacket() {
     var property: Int = 0
     var value: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(windowId.toByte().toInt())
         byteBuf.writeVarInt(this.property)

@@ -5,7 +5,6 @@ import org.chorus.item.Item
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.utils.Binary
 
-
 class AddItemEntityPacket : DataPacket() {
     var entityUniqueId: Long = 0
     var entityRuntimeId: Long = 0

@@ -117,20 +117,12 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
     override fun onOpen(who: Player) {
         if (who.isOp && who.isCreative) {
             viewers.add(who)
-            val pk = ContainerOpenPacket()
-            pk.windowId = who.getWindowId(this)
-            pk.type = type.networkType
-            val holder: InventoryHolder = this.getHolder()
-            if (holder != null) {
-                pk.x = holder.vector3.floorX
-                pk.y = holder.vector3.floorY
-                pk.z = holder.vector3.floorZ
-            } else {
-                pk.z = 0
-                pk.y = pk.z
-                pk.x = pk.y
-            }
-            who.dataPacket(pk)
+            who.dataPacket(ContainerOpenPacket(
+                containerID = who.getWindowId(this),
+                containerType = type.networkType,
+                position = holder.vector3.asBlockVector3(),
+                targetActorID = who.getId()
+            ))
         }
     }
 
@@ -155,11 +147,12 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
     }
 
     override fun onClose(who: Player) {
-        val pk = ContainerClosePacket()
-        pk.windowId = who.getWindowId(this)
-        pk.wasServerInitiated = who.closingWindowId != pk.windowId
-        pk.type = type
-        who.dataPacket(pk)
+        val containerId = who.getWindowId(this)
+        who.dataPacket(ContainerClosePacket(
+            containerID = containerId,
+            containerType = type,
+            serverInitiatedClose = who.closingWindowId != containerId
+        ))
         viewers.remove(who)
     }
 

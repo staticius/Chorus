@@ -12,13 +12,13 @@ import org.chorus.network.protocol.types.PacketCompressionAlgorithm
 class SessionStartHandler(session: BedrockSession) : BedrockSessionPacketHandler(session) {
     override fun handle(pk: RequestNetworkSettingsPacket) {
         val protocol = pk.protocolVersion
-        if (protocol != ProtocolInfo.CURRENT_PROTOCOL) {
+        if (protocol != ProtocolInfo.PROTOCOL_VERSION) {
             session.sendPlayStatus(
-                if (protocol < ProtocolInfo.CURRENT_PROTOCOL) PlayStatusPacket.LOGIN_FAILED_CLIENT else PlayStatusPacket.LOGIN_FAILED_SERVER,
+                if (protocol < ProtocolInfo.PROTOCOL_VERSION) PlayStatusPacket.LOGIN_FAILED_CLIENT else PlayStatusPacket.LOGIN_FAILED_SERVER,
                 true
             )
             val message =
-                if (protocol < ProtocolInfo.CURRENT_PROTOCOL) "disconnectionScreen.outdatedClient" else "disconnectionScreen.outdatedServer"
+                if (protocol < ProtocolInfo.PROTOCOL_VERSION) "disconnectionScreen.outdatedClient" else "disconnectionScreen.outdatedServer"
             session.close(message)
             return
         }

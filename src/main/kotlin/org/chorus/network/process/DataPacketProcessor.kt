@@ -17,5 +17,5 @@ abstract class DataPacketProcessor<T : DataPacket> {
     abstract val packetId: Int
 
     val protocol: Int
-        get() = ProtocolInfo.CURRENT_PROTOCOL
+        get() = ProtocolInfo.PROTOCOL_VERSION
 }

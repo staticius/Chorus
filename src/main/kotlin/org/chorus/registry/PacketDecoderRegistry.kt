@@ -46,15 +46,8 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.BOSS_EVENT_PACKET, BossEventPacket)
         this.register(ProtocolInfo.CHUNK_RADIUS_UPDATED_PACKET, ChunkRadiusUpdatedPacket)
         this.register(ProtocolInfo.COMMAND_REQUEST_PACKET, CommandRequestPacket)
-
         this.register(ProtocolInfo.CONTAINER_CLOSE_PACKET, ContainerClosePacket)
-        this.register(ProtocolInfo.CONTAINER_OPEN_PACKET, ContainerOpenPacket)
-        this.register(ProtocolInfo.CONTAINER_SET_DATA_PACKET, ContainerSetDataPacket)
-        this.register(ProtocolInfo.CRAFTING_DATA_PACKET, CraftingDataPacket)
-        this.register(ProtocolInfo.CRAFTING_EVENT_PACKET, CraftingEventPacket)
-        this.register(ProtocolInfo.DISCONNECT_PACKET, DisconnectPacket)
-        this.register(ProtocolInfo.ENTITY_EVENT_PACKET, EntityEventPacket)
-        this.register(ProtocolInfo.ENTITY_FALL_PACKET, EntityFallPacket)
+
         this.register(ProtocolInfo.FULL_CHUNK_DATA_PACKET, LevelChunkPacket)
         this.register(ProtocolInfo.GAME_RULES_CHANGED_PACKET, GameRulesChangedPacket)
         this.register(ProtocolInfo.HURT_ARMOR_PACKET, HurtArmorPacket)
@@ -62,7 +55,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.INVENTORY_CONTENT_PACKET, InventoryContentPacket)
         this.register(ProtocolInfo.INVENTORY_SLOT_PACKET, InventorySlotPacket)
         this.register(ProtocolInfo.INVENTORY_TRANSACTION_PACKET, InventoryTransactionPacket)
-        this.register(ProtocolInfo.ITEM_FRAME_DROP_ITEM_PACKET, ItemFrameDropItemPacket)
         this.register(ProtocolInfo.LEVEL_EVENT_PACKET, LevelEventPacket)
         this.register(ProtocolInfo.LOGIN_PACKET, LoginPacket)
         this.register(ProtocolInfo.MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket)
@@ -102,7 +94,7 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.SERVER_SETTINGS_REQUEST_PACKET, ServerSettingsRequestPacket)
         this.register(ProtocolInfo.SERVER_SETTINGS_RESPONSE_PACKET, ServerSettingsResponsePacket)
         this.register(ProtocolInfo.SHOW_CREDITS_PACKET, ShowCreditsPacket)
-        this.register(ProtocolInfo.SPAWN_EXPERIENCE_ORB_PACKET, SpawnExperienceOrbPacket)
+
         this.register(ProtocolInfo.START_GAME_PACKET, StartGamePacket)
         this.register(ProtocolInfo.TAKE_ITEM_ENTITY_PACKET, TakeItemEntityPacket)
         this.register(ProtocolInfo.TEXT_PACKET, TextPacket)
@@ -115,7 +107,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
             ProtocolInfo.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET,
             SetLocalPlayerAsInitializedPacket
         )
-        this.register(ProtocolInfo.NETWORK_STACK_LATENCY_PACKET, NetworkStackLatencyPacket)
         this.register(ProtocolInfo.UPDATE_SOFT_ENUM_PACKET, UpdateSoftEnumPacket)
         this.register(
             ProtocolInfo.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET,
@@ -151,13 +142,11 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
             PositionTrackingDBServerBroadcastPacket
         )
         this.register(ProtocolInfo.UPDATE_PLAYER_GAME_TYPE_PACKET, UpdatePlayerGameTypePacket)
-        this.register(ProtocolInfo.FILTER_TEXT_PACKET, FilterTextPacket)
         this.register(ProtocolInfo.TOAST_REQUEST_PACKET, ToastRequestPacket)
         this.register(ProtocolInfo.ITEM_REGISTRY_PACKET, ItemRegistryPacket)
         this.register(ProtocolInfo.ADD_VOLUME_ENTITY_PACKET, AddVolumeEntityPacket)
         this.register(ProtocolInfo.REMOVE_VOLUME_ENTITY_PACKET, RemoveVolumeEntityPacket)
         this.register(ProtocolInfo.SYNC_ENTITY_PROPERTY_PACKET, SyncEntityPropertyPacket)
-        this.register(ProtocolInfo.TICK_SYNC_PACKET, TickSyncPacket)
         this.register(ProtocolInfo.ANIMATE_ENTITY_PACKET, AnimateEntityPacket)
         this.register(ProtocolInfo.NPC_DIALOGUE_PACKET, NPCDialoguePacket)
         this.register(ProtocolInfo.NPC_REQUEST_PACKET, NPCRequestPacket)
@@ -183,7 +172,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.UPDATE_BLOCK_SYNCED_PACKET, UpdateBlockSyncedPacket)
         this.register(ProtocolInfo.EDU_URI_RESOURCE_PACKET, EduUriResourcePacket)
         this.register(ProtocolInfo.CREATE_PHOTO_PACKET, CreatePhotoPacket)
-        this.register(ProtocolInfo.PHOTO_INFO_REQUEST_PACKET, PhotoInfoRequestPacket)
         this.register(ProtocolInfo.LESSON_PROGRESS_PACKET, LessonProgressPacket)
         this.register(ProtocolInfo.REQUEST_ABILITY_PACKET, RequestAbilityPacket)
         this.register(ProtocolInfo.UPDATE_ABILITIES_PACKET, UpdateAbilitiesPacket)

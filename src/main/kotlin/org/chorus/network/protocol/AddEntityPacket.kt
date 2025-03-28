@@ -8,7 +8,6 @@ import org.chorus.network.protocol.types.PropertySyncData
 import org.chorus.registry.Registries
 import org.chorus.utils.Binary
 
-
 class AddEntityPacket() : DataPacket() {
     @JvmField
     var entityUniqueId: Long = 0

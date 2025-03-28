@@ -2,7 +2,6 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
 class AddPaintingPacket : DataPacket() {
     var entityUniqueId: Long = 0
     var entityRuntimeId: Long = 0
@@ -22,7 +21,7 @@ class AddPaintingPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.ADD_PAINTING_PACKET
+        return ProtocolInfo.ADD_PAINTING_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

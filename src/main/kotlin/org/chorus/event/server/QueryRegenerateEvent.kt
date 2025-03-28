@@ -38,7 +38,7 @@ class QueryRegenerateEvent @JvmOverloads constructor(server: Server, var timeout
             )
         this.playerList = server.onlinePlayers.values.toArray(Player.EMPTY_ARRAY)
         this.gameType = if ((server.gamemode and 0x01) == 0) "SMP" else "CMP"
-        this.version = ProtocolInfo.MINECRAFT_VERSION_NETWORK
+        this.version = ProtocolInfo.GAME_VERSION_NET
         this.server_engine = server.name + " " + server.nukkitVersion + " (" + server.gitCommit + ")"
         this.world = if (server.defaultLevel == null) "unknown" else server.defaultLevel.name
         this.playerCount = playerList.size

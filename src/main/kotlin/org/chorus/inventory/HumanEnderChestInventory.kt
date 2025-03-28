@@ -45,14 +45,13 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
         if (enderChest == null) {
             return
         }
-        val containerOpenPacket = ContainerOpenPacket()
-        containerOpenPacket.windowId = who.getWindowId(this)
-        containerOpenPacket.type = type.networkType
-        containerOpenPacket.x = enderChest!!.x.toInt()
-        containerOpenPacket.y = enderChest!!.y.toInt()
-        containerOpenPacket.z = enderChest!!.z.toInt()
         super.onOpen(who)
-        who.dataPacket(containerOpenPacket)
+        who.dataPacket(ContainerOpenPacket(
+            containerID = who.getWindowId(this),
+            containerType = type.networkType,
+            position = holder.vector3.asBlockVector3(),
+            targetActorID = who.getId()
+        ))
         this.sendContents(who)
 
         val blockEventPacket = BlockEventPacket()
@@ -87,11 +86,12 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
             return
         }
 
-        val containerClosePacket = ContainerClosePacket()
-        containerClosePacket.windowId = who.getWindowId(this)
-        containerClosePacket.wasServerInitiated = who.closingWindowId != containerClosePacket.windowId
-        containerClosePacket.type = type
-        who.dataPacket(containerClosePacket)
+        val containerId = who.getWindowId(this)
+        who.dataPacket(ContainerClosePacket(
+            containerID = containerId,
+            containerType = type,
+            serverInitiatedClose = who.closingWindowId != containerId
+        ))
 
         val blockEventPacket = BlockEventPacket()
         blockEventPacket.x = enderChest!!.x.toInt()

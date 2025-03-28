@@ -84,19 +84,15 @@ class FakeInventory @JvmOverloads constructor(
         player.fakeInventoryOpen = true
         fakeBlock.create(player, this.title)
         player.level!!.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
-            val packet = ContainerOpenPacket()
-            packet.windowId = player.getWindowId(this)
-            packet.type = getType().networkType
-
-            val first =
-                fakeBlock.getLastPositions(player).stream().findFirst()
+            val first = fakeBlock.getLastPositions(player).stream().findFirst()
             if (first.isPresent) {
                 val position = first.get()
-                packet.x = position.floorX
-                packet.y = position.floorY
-                packet.z = position.floorZ
-                player.dataPacket(packet)
-
+                player.dataPacket(ContainerOpenPacket(
+                    containerID = player.getWindowId(this),
+                    containerType = type.networkType,
+                    position = position.vector3.asBlockVector3(),
+                    targetActorID = player.getId()
+                ))
                 super.onOpen(player)
                 this.sendContents(player)
             } else {
@@ -106,11 +102,12 @@ class FakeInventory @JvmOverloads constructor(
     }
 
     override fun onClose(player: Player) {
-        val packet = ContainerClosePacket()
-        packet.windowId = player.getWindowId(this)
-        packet.wasServerInitiated = player.closingWindowId != packet.windowId
-        packet.type = getType()
-        player.dataPacket(packet)
+        val containerId = player.getWindowId(this)
+        player.dataPacket(ContainerClosePacket(
+            containerID = containerId,
+            containerType = type,
+            serverInitiatedClose = player.closingWindowId != containerId
+        ))
         player.level!!.scheduler.scheduleDelayedTask(
             InternalPlugin.INSTANCE,
             {

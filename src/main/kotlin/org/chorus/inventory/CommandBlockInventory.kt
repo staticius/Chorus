@@ -6,11 +6,13 @@ import org.chorus.blockentity.BlockEntityCommandBlock
 import org.chorus.blockentity.BlockEntityNameable
 import org.chorus.event.inventory.InventoryOpenEvent
 import org.chorus.item.Item
+import org.chorus.math.BlockVector3
+import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 import org.chorus.network.protocol.ContainerClosePacket
 import org.chorus.network.protocol.ContainerOpenPacket
 
-//implement the command block's ui
+// Implement the command block's ui
 class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inventory,
     BlockEntityInventoryNameable {
     override val viewers: MutableSet<Player> = HashSet()
@@ -32,8 +34,8 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
         return false
     }
 
-    override fun addItem(vararg slots: Item): Array<Item?> {
-        return arrayOfNulls(0)
+    override fun addItem(vararg slots: Item): Array<Item> {
+        return emptyArray()
     }
 
     override fun canAddItem(item: Item): Boolean {
@@ -106,8 +108,8 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override val isEmpty: Boolean
         get() = true
 
-    override fun getViewers(): Set<Player?> {
-        return emptySet<Player>()
+    override fun getViewers(): Set<Player> {
+        return emptySet()
     }
 
     override val type: InventoryType
@@ -120,20 +122,12 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override fun onOpen(who: Player) {
         if (who.isOp && who.isCreative) {
             viewers.add(who)
-            val pk = ContainerOpenPacket()
-            pk.windowId = who.getWindowId(this)
-            pk.type = type.networkType
-            val holder: InventoryHolder = this.getHolder()
-            if (holder is Vector3) {
-                pk.x = holder.floorX
-                pk.y = holder.floorY
-                pk.z = holder.floorZ
-            } else {
-                pk.z = 0
-                pk.y = pk.z
-                pk.x = pk.y
-            }
-            who.dataPacket(pk)
+            who.dataPacket(ContainerOpenPacket(
+                containerID = who.getWindowId(this),
+                containerType = type.networkType,
+                position = holder.vector3.asBlockVector3(),
+                targetActorID = who.getId()
+            ))
         }
     }
 
@@ -157,11 +151,12 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     }
 
     override fun onClose(who: Player) {
-        val pk = ContainerClosePacket()
-        pk.windowId = who.getWindowId(this)
-        pk.wasServerInitiated = who.closingWindowId != pk.windowId
-        pk.type = type
-        who.dataPacket(pk)
+        val containerId = who.getWindowId(this)
+        who.dataPacket(ContainerClosePacket(
+            containerID = containerId,
+            containerType = type,
+            serverInitiatedClose = who.closingWindowId != containerId
+        ))
         viewers.remove(who)
     }
 

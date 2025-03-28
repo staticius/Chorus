@@ -1,8 +1,6 @@
 package org.chorus.inventory
 
-
-@RequiredArgsConstructor
-enum class InventoryType {
+enum class InventoryType(val networkType: Int) {
     NONE(-9),
     INVENTORY(-1),
     CONTAINER(0),
@@ -40,37 +38,13 @@ enum class InventoryType {
     JIGSAW_EDITOR(32),
     SMITHING_TABLE(33),
     CHEST_BOAT(34),
-
-    /**
-     * @since v630
-     */
     DECORATED_POT(35),
-
-    /**
-     * @since v630
-     */
     CRAFTER(36);
 
-    val networkType: Int = 0
-
     companion object {
-        val VALUES: Array<InventoryType>
-
-        init {
-            val types = entries.toTypedArray()
-            val arrayLength = types[types.size - 1].networkType + 9 + 1
-            VALUES = arrayOfNulls(arrayLength)
-
-            for (type in types) {
-                VALUES[type.networkType + 9] = type
-            }
-        }
-
         @JvmStatic
         fun from(id: Int): InventoryType {
-            val type = VALUES[id + 9]
-            requireNotNull(type) { "Unknown InventoryType: $id" }
-            return type
+            return entries.find { it.networkType == id } ?: throw RuntimeException("Unknown InventoryType: $id")
         }
     }
 }

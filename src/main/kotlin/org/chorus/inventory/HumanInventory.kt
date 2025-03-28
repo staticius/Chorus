@@ -663,23 +663,22 @@ class HumanInventory(human: IHuman) //9+27+4
     override fun onOpen(who: Player) {
         super.onOpen(who)
         if (who.spawned) {
-            val pk = ContainerOpenPacket()
-            pk.windowId = who.getWindowId(this)
-            pk.type = getType().networkType
-            pk.x = who.position.floorX
-            pk.y = who.position.floorY
-            pk.z = who.position.floorZ
-            pk.entityId = who.getId()
-            who.dataPacket(pk)
+            who.dataPacket(ContainerOpenPacket(
+                containerID = who.getWindowId(this),
+                containerType = type.networkType,
+                position = who.vector3.asBlockVector3(),
+                targetActorID = who.getId()
+            ))
         }
     }
 
     override fun onClose(who: Player) {
-        val pk = ContainerClosePacket()
-        pk.windowId = who.getWindowId(this)
-        pk.wasServerInitiated = who.closingWindowId != pk.windowId
-        pk.type = getType()
-        who.dataPacket(pk)
+        val containerId = who.getWindowId(this)
+        who.dataPacket(ContainerClosePacket(
+            containerID = containerId,
+            containerType = type,
+            serverInitiatedClose = who.closingWindowId != containerId
+        ))
         // player can never stop viewing their own inventory
         if (who !== holder) {
             super.onClose(who)

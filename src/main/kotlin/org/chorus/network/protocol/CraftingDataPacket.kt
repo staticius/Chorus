@@ -8,7 +8,6 @@ import org.chorus.recipe.descriptor.DefaultDescriptor
 
 import java.util.*
 
-
 class CraftingDataPacket : DataPacket() {
     private val entries: MutableList<Recipe> = ArrayList()
     private val brewingEntries: List<BrewingRecipe> = ArrayList()
@@ -16,9 +15,6 @@ class CraftingDataPacket : DataPacket() {
 
     @JvmField
     var cleanRecipes: Boolean = false
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarInt(entries.size)
