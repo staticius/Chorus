@@ -165,7 +165,7 @@ class GhastShootExecutor(
     }
 
     private fun startShootSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.id)
+        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
         entity.setDataFlag(EntityFlag.CHARGED, true)
         entity.setDataProperty(EntityDataTypes.Companion.CHARGE_AMOUNT, 0x1)
         entity.level!!.addLevelEvent(entity.position, LevelEventPacket.EVENT_SOUND_GHAST_WARNING)

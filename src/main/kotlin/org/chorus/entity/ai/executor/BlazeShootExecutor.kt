@@ -174,7 +174,7 @@ class BlazeShootExecutor(
     }
 
     private fun startOnFire(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.TARGET_EID, target!!.getId())
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, target!!.getRuntimeID())
         entity.setDataFlag(EntityFlag.CHARGED, true)
     }
 

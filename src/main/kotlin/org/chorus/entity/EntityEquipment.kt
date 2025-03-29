@@ -175,7 +175,7 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
         when (index) {
             MAIN_HAND, OFF_HAND -> {
                 val packet: MobEquipmentPacket = MobEquipmentPacket()
-                packet.eid = entity.getId()
+                packet.eid = entity.getRuntimeID()
                 packet.slot = index - 4
                 packet.selectedSlot = 0
                 packet.item = this.getItem(index)
@@ -184,7 +184,7 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
 
             HEAD, CHEST, LEGS, FEET -> {
                 val packet: MobArmorEquipmentPacket = MobArmorEquipmentPacket()
-                packet.eid = entity.getId()
+                packet.eid = entity.getRuntimeID()
                 packet.slots = getArmor().toTypedArray()
                 player.dataPacket(packet)
             }

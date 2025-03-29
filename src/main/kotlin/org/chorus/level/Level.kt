@@ -3530,15 +3530,15 @@ class Level(
         }
 
         if (entity is Player) {
-            players.remove(entity.getId())
+            players.remove(entity.getRuntimeID())
             playerWeatherShowMap.remove(entity.getName())
             this.checkSleep()
         } else {
             entity.close()
         }
 
-        entities.remove(entity.getId())
-        updateEntities.remove(entity.getId())
+        entities.remove(entity.getRuntimeID())
+        updateEntities.remove(entity.getRuntimeID())
     }
 
     fun addEntity(entity: Entity) {
@@ -3547,10 +3547,10 @@ class Level(
         }
 
         if (entity is Player) {
-            players.put(entity.getId(), entity)
+            players.put(entity.getRuntimeID(), entity)
             playerWeatherShowMap.put(entity.getName(), 0)
         }
-        entities.put(entity.getId(), entity)
+        entities.put(entity.getRuntimeID(), entity)
     }
 
     fun addBlockEntity(blockEntity: BlockEntity) {

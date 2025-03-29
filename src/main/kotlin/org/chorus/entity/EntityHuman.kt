@@ -62,7 +62,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
         this.skin = skin
     }
 
-    override fun getUniqueId(): UUID {
+    fun getUniqueID(): Long {
         return uuid
     }
 
@@ -129,7 +129,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
 
     override fun moveDelta() {
         val pk: MovePlayerPacket = MovePlayerPacket()
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.x = position.x.toFloat()
         pk.y = position.y.toFloat()
         pk.z = position.z.toFloat()
@@ -137,7 +137,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
         pk.headYaw = headYaw.toFloat()
         pk.pitch = rotation.pitch.toFloat()
         if (this.riding != null) {
-            pk.ridingEid = riding!!.getId()
+            pk.ridingEid = riding!!.getRuntimeID()
             pk.mode = MovePlayerPacket.MODE_PITCH
         }
 
@@ -151,23 +151,23 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             check(skin.isValid()) { this.javaClass.getSimpleName() + " must have a valid skin set" }
 
             if (this is Player) Server.instance.updatePlayerListData(
-                this.getUniqueId(),
-                this.getId(), this.getDisplayName(),
+                this.getUniqueID(),
+                this.getRuntimeID(), this.getDisplayName(),
                 this.skin, this.loginChainData.xuid, arrayOf(player)
             )
             else Server.instance.updatePlayerListData(
-                this.getUniqueId(),
-                this.getId(),
+                this.getUniqueID(),
+                this.getRuntimeID(),
                 this.getName(),
                 this.skin,
                 arrayOf(player)
             )
 
             val pk: AddPlayerPacket = AddPlayerPacket()
-            pk.uuid = this.getUniqueId()
+            pk.uuid = this.getUniqueID()
             pk.username = this.getName()
-            pk.entityUniqueId = this.getId()
-            pk.entityRuntimeId = this.getId()
+            pk.entityUniqueId = this.getRuntimeID()
+            pk.entityRuntimeId = this.getRuntimeID()
             pk.x = position.x.toFloat()
             pk.y = position.y.toFloat()
             pk.z = position.z.toFloat()
@@ -185,8 +185,8 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
 
             if (this.riding != null) {
                 val pkk: SetEntityLinkPacket = SetEntityLinkPacket()
-                pkk.vehicleUniqueId = riding!!.getId()
-                pkk.riderUniqueId = this.getId()
+                pkk.vehicleUniqueId = riding!!.getRuntimeID()
+                pkk.riderUniqueId = this.getRuntimeID()
                 pkk.type = EntityLink.Type.RIDER
                 pkk.immediate = 1
 
@@ -194,7 +194,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             }
 
             if (this !is Player) {
-                Server.instance.removePlayerListData(this.getUniqueId(), player)
+                Server.instance.removePlayerListData(this.getUniqueID(), player)
             }
         }
     }
@@ -202,7 +202,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     override fun despawnFrom(player: Player) {
         if (hasSpawned.containsKey(player.loaderId)) {
             val pk: RemoveEntityPacket = RemoveEntityPacket()
-            pk.eid = this.getId()
+            pk.eid = this.getRuntimeID()
             player.dataPacket(pk)
             hasSpawned.remove(player.loaderId)
         }

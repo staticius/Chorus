@@ -209,7 +209,7 @@ open class MeleeAttackExecutor(
 
     protected fun playAttackAnimation(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.id
+        pk.eid = entity.runtimeId
         pk.event = EntityEventPacket.ARM_SWING
         Server.broadcastPacket(entity.viewers.values, pk)
     }

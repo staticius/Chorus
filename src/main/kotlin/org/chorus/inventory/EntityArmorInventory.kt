@@ -60,7 +60,7 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
 
     override fun sendSlot(index: Int, player: Player) {
         val mobArmorEquipmentPacket = MobArmorEquipmentPacket()
-        mobArmorEquipmentPacket.eid = entity.getId()
+        mobArmorEquipmentPacket.eid = entity.getRuntimeID()
         mobArmorEquipmentPacket.slots = arrayOf(
             this.helmet,
             chestplate,
@@ -92,7 +92,7 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
 
     override fun sendContents(player: Player) {
         val mobArmorEquipmentPacket = MobArmorEquipmentPacket()
-        mobArmorEquipmentPacket.eid = entity.getId()
+        mobArmorEquipmentPacket.eid = entity.getRuntimeID()
         mobArmorEquipmentPacket.slots = arrayOf(
             this.helmet,
             chestplate,

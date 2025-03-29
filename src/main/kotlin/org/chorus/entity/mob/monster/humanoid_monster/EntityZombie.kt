@@ -218,8 +218,8 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         if (item!!.isArmor || item.isTool) {
                             if (entity.equip(item)) {
                                 val pk = TakeItemEntityPacket()
-                                pk.entityId = entity.id
-                                pk.target = i.getId()
+                                pk.entityId = entity.runtimeId
+                                pk.target = i.getRuntimeID()
                                 Server.broadcastPacket(entity.viewers.values, pk)
                                 i.close()
                             }

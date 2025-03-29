@@ -121,7 +121,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
                 containerID = who.getWindowId(this),
                 containerType = type.networkType,
                 position = holder.vector3.asBlockVector3(),
-                targetActorID = who.getId()
+                targetActorID = who.getRuntimeID()
             ))
         }
     }

@@ -369,8 +369,8 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         }
                         if (pickup) {
                             val pk = TakeItemEntityPacket()
-                            pk.entityId = entity.id
-                            pk.target = i.getId()
+                            pk.entityId = entity.runtimeId
+                            pk.target = i.getRuntimeID()
                             Server.broadcastPacket(entity.viewers.values, pk)
                             i.close()
                         }
@@ -414,7 +414,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage!!.get(memory).id)
+            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage!!.get(memory).runtimeId)
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(
                 entity.position,

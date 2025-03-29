@@ -28,7 +28,7 @@ class TradeInventory(holder: EntityVillagerV2?) : BaseInventory(holder, Inventor
     override fun onOpen(who: Player) {
         super.onOpen(who)
         val villager = this.getHolder()
-        villager.setTradingPlayer(who.getId())
+        villager.setTradingPlayer(who.getRuntimeID())
         villager.updateTrades(who)
     }
 

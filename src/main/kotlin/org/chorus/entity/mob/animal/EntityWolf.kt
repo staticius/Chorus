@@ -245,7 +245,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                 player.inventory.decreaseCount(player.inventory.heldItemIndex)
                 if (Utils.rand(1, 3) == 3) {
                     val packet = EntityEventPacket()
-                    packet.eid = this.getId()
+                    packet.eid = this.getRuntimeID()
                     packet.event = EntityEventPacket.TAME_SUCCESS
                     player.dataPacket(packet)
 
@@ -260,7 +260,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                     return true
                 } else {
                     val packet = EntityEventPacket()
-                    packet.eid = this.getId()
+                    packet.eid = this.getRuntimeID()
                     packet.event = EntityEventPacket.TAME_FAIL
                     player.dataPacket(packet)
                 }

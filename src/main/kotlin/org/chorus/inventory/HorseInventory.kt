@@ -2,7 +2,6 @@ package org.chorus.inventory
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.Entity.getId
 import org.chorus.entity.Entity.setDataFlag
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.animal.EntityHorse

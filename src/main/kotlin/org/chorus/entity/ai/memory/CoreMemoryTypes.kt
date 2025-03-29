@@ -326,7 +326,7 @@ interface CoreMemoryTypes {
                             entity.setDataFlag(EntityFlag.TAMED, true)
                             val owner = Server.instance.getPlayerExact(data)
                             if (owner != null && owner.isOnline) {
-                                entity.setDataProperty(EntityDataTypes.OWNER_EID, owner.uniqueId)
+                                entity.setDataProperty(EntityDataTypes.OWNER_EID, owner.getUniqueID)
                             }
                         }
                     }

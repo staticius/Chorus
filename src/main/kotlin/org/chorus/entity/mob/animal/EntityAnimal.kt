@@ -34,7 +34,7 @@ abstract class EntityAnimal(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk,
     protected fun sendBreedingAnimation(item: Item) {
         val pk = EntityEventPacket()
         pk.event = EntityEventPacket.EATING_ITEM
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.data = item.fullId
         Server.broadcastPacket(this.viewers.values, pk)
     }

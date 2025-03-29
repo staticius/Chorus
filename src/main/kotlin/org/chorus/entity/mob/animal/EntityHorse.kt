@@ -24,7 +24,6 @@ import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestFeedingPlayerSensor
 import org.chorus.entity.ai.sensor.NearestPlayerSensor
-import org.chorus.entity.custom.CustomEntity
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.effect.*
@@ -151,7 +150,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
                 .setValue(if (health > 0) (if (health < maxHealth) health else maxHealth.toFloat()) else 0f)
             val pk = UpdateAttributesPacket()
             pk.entries = arrayOf(attr)
-            pk.entityId = this.getId()
+            pk.entityId = this.getRuntimeID()
             Server.broadcastPacket(this.viewers.values.toTypedArray(), pk)
         }
     }
@@ -165,7 +164,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         if (this.isAlive) {
             val pk = UpdateAttributesPacket()
             pk.entries = arrayOf(attr)
-            pk.entityId = this.getId()
+            pk.entityId = this.getRuntimeID()
             Server.broadcastPacket(this.viewers.values.toTypedArray(), pk)
         }
     }
@@ -455,7 +454,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
             .setValue(if (health > 0) (if (health < maxHealth) health else maxHealth.toFloat()) else 0f)
         val pk = UpdateAttributesPacket()
         pk.entries = arrayOf(attr)
-        pk.entityId = this.getId()
+        pk.entityId = this.getRuntimeID()
         player.dataPacket(pk)
     }
 
@@ -491,33 +490,28 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun createAddEntityPacket(): DataPacket {
-        val addEntity = AddEntityPacket()
-        addEntity.type = this.networkId
-        addEntity.entityUniqueId = this.getId()
-        if (this is CustomEntity) {
-            addEntity.id = this.getIdentifier()
-        }
-        addEntity.entityRuntimeId = this.getId()
-        addEntity.yaw = rotation.yaw.toFloat()
-        addEntity.headYaw = rotation.yaw.toFloat()
-        addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.x.toFloat()
-        addEntity.y = position.y.toFloat() + this.baseOffset
-        addEntity.z = position.z.toFloat()
-        addEntity.speedX = motion.x.toFloat()
-        addEntity.speedY = motion.y.toFloat()
-        addEntity.speedZ = motion.z.toFloat()
-        addEntity.entityData = this.entityDataMap
-        addEntity.attributes = attributeMap!!.values.toArray<Attribute>(Attribute.Companion.EMPTY_ARRAY)
-        addEntity.links = arrayOfNulls(passengers.size)
-        for (i in addEntity.links.indices) {
-            addEntity.links[i] = EntityLink(
-                this.getId(),
-                passengers[i].id, if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER, false, false
-            )
-        }
-
-        return addEntity
+        return AddEntityPacket(
+            targetActorID = this.uniqueId,
+            targetRuntimeID = this.runtimeId,
+            actorType = this.getIdentifier(),
+            position = this.position.asVector3f().add(0f, this.getBaseOffset(), 0f),
+            velocity = this.motion.asVector3f(),
+            rotation = this.rotation.asVector2f(),
+            yHeadRotation = this.rotation.yaw.toFloat(),
+            yBodyRotation = this.rotation.yaw.toFloat(),
+            attributeList = this.attributes.values.toTypedArray(),
+            actorData = this.entityDataMap,
+            syncedProperties = this.propertySyncData(),
+            actorLinks = Array(passengers.size) { i ->
+                EntityLink(
+                    this.getRuntimeID(),
+                    passengers[i].getRuntimeID(),
+                    if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
+                    immediate = false,
+                    riderInitiated = false
+                )
+            }
+        )
     }
 
     override fun isBreedingItem(item: Item): Boolean {

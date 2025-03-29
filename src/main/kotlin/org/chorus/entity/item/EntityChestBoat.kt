@@ -44,37 +44,6 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
         return false
     }
 
-    override fun createAddEntityPacket(): DataPacket {
-        val addEntity: AddEntityPacket = AddEntityPacket()
-        addEntity.type = 0
-        addEntity.id = "minecraft:chest_boat"
-        addEntity.entityUniqueId = this.getId()
-        addEntity.entityRuntimeId = this.getId()
-        addEntity.yaw = rotation.yaw.toFloat()
-        addEntity.headYaw = rotation.yaw.toFloat()
-        addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.x.toFloat()
-        addEntity.y = position.y.toFloat() + getBaseOffset()
-        addEntity.z = position.z.toFloat()
-        addEntity.speedX = motion.x.toFloat()
-        addEntity.speedY = motion.y.toFloat()
-        addEntity.speedZ = motion.z.toFloat()
-        addEntity.entityData = this.entityDataMap
-
-        addEntity.links = arrayOfNulls(passengers.size)
-        for (i in addEntity.links.indices) {
-            addEntity.links.get(i) = EntityLink(
-                this.getId(),
-                passengers.get(i).getId(),
-                if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
-                false,
-                false
-            )
-        }
-
-        return addEntity
-    }
-
     override fun getInteractButtonText(player: Player): String {
         if (player.isSneaking()) {
             return "action.interact.opencontainer"

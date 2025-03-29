@@ -2,34 +2,33 @@ package org.chorus.network.protocol
 
 import org.chorus.entity.data.EntityDataMap
 import org.chorus.item.Item
+import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorRuntimeID
+import org.chorus.network.protocol.types.ActorUniqueID
 import org.chorus.utils.Binary
 
-class AddItemEntityPacket : DataPacket() {
-    var entityUniqueId: Long = 0
-    var entityRuntimeId: Long = 0
-    var item: Item? = null
-    var x: Float = 0f
-    var y: Float = 0f
-    var z: Float = 0f
-    var speedX: Float = 0f
-    var speedY: Float = 0f
-    var speedZ: Float = 0f
-    var entityData: EntityDataMap = EntityDataMap()
-    var isFromFishing: Boolean = false
-
+data class AddItemEntityPacket(
+    val targetActorID: ActorUniqueID,
+    val targetRuntimeID: ActorRuntimeID,
+    val item: Item,
+    val position: Vector3f,
+    val velocity: Vector3f,
+    val entityData: EntityDataMap,
+    val fromFishing: Boolean,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeActorUniqueID(this.entityUniqueId)
-        byteBuf.writeActorRuntimeID(this.entityRuntimeId)
+        byteBuf.writeActorUniqueID(this.targetActorID)
+        byteBuf.writeActorRuntimeID(this.targetRuntimeID)
         byteBuf.writeSlot(this.item)
-        byteBuf.writeVector3f(this.x, this.y, this.z)
-        byteBuf.writeVector3f(this.speedX, this.speedY, this.speedZ)
-        byteBuf.writeBytes(Binary.writeEntityData(entityData))
-        byteBuf.writeBoolean(this.isFromFishing)
+        byteBuf.writeVector3f(this.position)
+        byteBuf.writeVector3f(this.velocity)
+        byteBuf.writeBytes(Binary.writeEntityData(this.entityData))
+        byteBuf.writeBoolean(this.fromFishing)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.ADD_ITEM_ENTITY_PACKET
+        return ProtocolInfo.ADD_ITEM_ENTITY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

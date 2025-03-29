@@ -236,7 +236,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
     private fun setPose(pose: Int) {
         entityDataMap.put(EntityDataTypes.Companion.ARMOR_STAND_POSE_INDEX, pose)
         val setEntityDataPacket: SetEntityDataPacket = SetEntityDataPacket()
-        setEntityDataPacket.eid = this.getId()
+        setEntityDataPacket.eid = this.getRuntimeID()
         setEntityDataPacket.entityData = this.getEntityDataMap()
         Server.instance.onlinePlayers.values.forEach(Consumer { all: Player ->
             all.dataPacket(

@@ -13,12 +13,12 @@ class EmoteProcessor : DataPacketProcessor<EmotePacket>() {
         if (!playerHandle.player.spawned) {
             return
         }
-        if (pk.runtimeId != playerHandle.player.getId()) {
+        if (pk.runtimeId != playerHandle.player.getRuntimeID()) {
             EmoteProcessor.log.warn(
                 "{} sent EmotePacket with invalid entity id: {} != {}",
                 playerHandle.username,
                 pk.runtimeId,
-                playerHandle.player.getId()
+                playerHandle.player.getRuntimeID()
             )
             return
         }

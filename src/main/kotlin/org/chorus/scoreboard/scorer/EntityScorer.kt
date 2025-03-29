@@ -10,32 +10,32 @@ import java.util.*
 
 
 class EntityScorer : IScorer {
-    val entityUuid: UUID
+    val uniqueID: Long
 
     constructor(uuid: UUID) {
-        this.entityUuid = uuid
+        this.uniqueID = uuid
     }
 
     constructor(entity: Entity) {
-        this.entityUuid = entity.getUniqueId()
+        this.uniqueID = entity.uniqueId
     }
 
     override val scorerType: ScorerType
         get() = ScorerType.ENTITY
 
     override fun hashCode(): Int {
-        return entityUuid.hashCode()
+        return uniqueID.hashCode()
     }
 
     override fun equals(other: Any?): Boolean {
         if (other is EntityScorer) {
-            return entityUuid == other.entityUuid
+            return uniqueID == other.uniqueID
         }
         return false
     }
 
     override val name: String
-        get() = entityUuid.toString()
+        get() = uniqueID.toString()
 
     override fun toNetworkInfo(scoreboard: IScoreboard, line: IScoreboardLine): ScoreInfo {
         return ScoreInfo(
@@ -43,7 +43,7 @@ class EntityScorer : IScorer {
             scoreboard.objectiveName,
             line.score,
             ScorerType.ENTITY,
-            entityUuid.mostSignificantBits
+            uniqueID
         )
     }
 }

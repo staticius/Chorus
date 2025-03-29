@@ -25,6 +25,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.AddEntityPacket
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.EntityEventPacket
+import org.chorus.network.protocol.types.EntityLink
 import java.util.concurrent.*
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -175,17 +176,17 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
         val viewers: Collection<Player> = getViewers().values
 
         val pk: EntityEventPacket = EntityEventPacket()
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.event = EntityEventPacket.FISH_HOOK_HOOK
         Server.broadcastPacket(viewers, pk)
 
         val bubblePk: EntityEventPacket = EntityEventPacket()
-        bubblePk.eid = this.getId()
+        bubblePk.eid = this.getRuntimeID()
         bubblePk.event = EntityEventPacket.FISH_HOOK_BUBBLE
         Server.broadcastPacket(viewers, bubblePk)
 
         val teasePk: EntityEventPacket = EntityEventPacket()
-        teasePk.eid = this.getId()
+        teasePk.eid = this.getRuntimeID()
         teasePk.event = EntityEventPacket.FISH_HOOK_TEASE
         Server.broadcastPacket(viewers, teasePk)
 
@@ -279,26 +280,31 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
     }
 
     override fun createAddEntityPacket(): DataPacket {
-        val pk: AddEntityPacket = AddEntityPacket()
-        pk.entityRuntimeId = this.getId()
-        pk.entityUniqueId = this.getId()
-        pk.type = getNetworkId()
-        pk.x = position.x.toFloat()
-        pk.y = position.y.toFloat()
-        pk.z = position.z.toFloat()
-        pk.speedX = motion.x.toFloat()
-        pk.speedY = motion.y.toFloat()
-        pk.speedZ = motion.z.toFloat()
-        pk.yaw = rotation.yaw.toFloat()
-        pk.pitch = rotation.pitch.toFloat()
-
-        var ownerId: Long = -1
-        if (this.shootingEntity != null) {
-            ownerId = shootingEntity!!.getId()
-        }
-        entityDataMap.put(EntityDataTypes.Companion.OWNER_EID, ownerId)
-        pk.entityData = entityDataMap
-        return pk
+        return AddEntityPacket(
+            targetActorID = this.uniqueId,
+            targetRuntimeID = this.runtimeId,
+            actorType = this.getIdentifier(),
+            position = this.position.asVector3f(),
+            velocity = this.motion.asVector3f(),
+            rotation = this.rotation.asVector2f(),
+            yHeadRotation = this.rotation.yaw.toFloat(),
+            yBodyRotation = this.rotation.yaw.toFloat(),
+            attributeList = this.attributes.values.toTypedArray(),
+            actorData = run {
+                this.entityDataMap[EntityDataTypes.OWNER_EID] = shootingEntity?.getRuntimeID() ?: -1
+                this.entityDataMap
+            },
+            syncedProperties = this.propertySyncData(),
+            actorLinks = Array(passengers.size) { i ->
+                EntityLink(
+                    this.getRuntimeID(),
+                    passengers[i].getRuntimeID(),
+                    if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
+                    immediate = false,
+                    riderInitiated = false
+                )
+            }
+        )
     }
 
 
@@ -314,7 +320,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
         }
 
         if (entity.attack(ev)) {
-            this.setTarget(entity.getId())
+            this.setTarget(entity.getRuntimeID())
         }
     }
 

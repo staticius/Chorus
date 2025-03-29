@@ -81,7 +81,7 @@ class ShulkerAttackExecutor : IBehaviorExecutor {
         if (entity is EntityShulker) {
             entity.setPeeking(40)
             val target = entity.getMemoryStorage().get(target)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target.id)
+            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target.runtimeId)
         }
     }
 

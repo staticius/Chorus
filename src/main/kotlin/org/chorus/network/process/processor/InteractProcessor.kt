@@ -76,7 +76,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
                             return
                         }
                     }
-                } else if (targetEntity.getId() != player.getId()) {
+                } else if (targetEntity.getRuntimeID() != player.getRuntimeID()) {
                     return
                 }
                 if (!playerHandle.inventoryOpen) {

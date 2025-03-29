@@ -46,7 +46,7 @@ class EatGrassExecutor(protected var duration: Int) : IBehaviorExecutor {
 
     protected fun playEatGrassAnimation(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.id
+        pk.eid = entity.runtimeId
         pk.event = EntityEventPacket.EAT_GRASS_ANIMATION
         Server.broadcastPacket(entity.viewers.values, pk)
     }

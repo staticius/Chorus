@@ -14,6 +14,10 @@ class Rotator2 @JvmOverloads constructor(@JvmField var pitch: Double = 0.0, @Jvm
     val floorY: Int
         get() = kotlin.math.floor(this.yaw).toInt()
 
+    fun asVector2f(): Vector2f {
+        return Vector2f(this.pitch.toFloat(), this.yaw.toFloat())
+    }
+
     fun add(x: Double): Rotator2 {
         return this.add(x, 0.0)
     }

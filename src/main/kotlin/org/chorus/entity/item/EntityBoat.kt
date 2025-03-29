@@ -22,13 +22,9 @@ import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.types.EntityLink
 import kotlin.math.*
 
-/**
- * @author yescallop
- * @since 2016/2/13
- */
 open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.BOAT
+        return EntityID.BOAT
     }
 
     private val ignoreCollision: MutableSet<Entity> = HashSet(2)
@@ -121,34 +117,28 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
     }
 
     override fun createAddEntityPacket(): DataPacket {
-        val addEntity: AddEntityPacket = AddEntityPacket()
-        addEntity.type = 0
-        addEntity.id = "minecraft:boat"
-        addEntity.entityUniqueId = this.getId()
-        addEntity.entityRuntimeId = this.getId()
-        addEntity.yaw = rotation.yaw.toFloat()
-        addEntity.headYaw = rotation.yaw.toFloat()
-        addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.x.toFloat()
-        addEntity.y = position.y.toFloat() + getBaseOffset()
-        addEntity.z = position.z.toFloat()
-        addEntity.speedX = motion.x.toFloat()
-        addEntity.speedY = motion.y.toFloat()
-        addEntity.speedZ = motion.z.toFloat()
-        addEntity.entityData = this.entityDataMap
-
-        addEntity.links = arrayOfNulls(passengers.size)
-        for (i in addEntity.links.indices) {
-            addEntity.links.get(i) = EntityLink(
-                this.getId(),
-                passengers.get(i).getId(),
-                if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
-                false,
-                false
-            )
-        }
-
-        return addEntity
+        return AddEntityPacket(
+            targetActorID = this.uniqueId,
+            targetRuntimeID = this.runtimeId,
+            actorType = this.getIdentifier(),
+            position = this.position.asVector3f().add(0f, this.getBaseOffset(), 0f),
+            velocity = this.motion.asVector3f(),
+            rotation = this.rotation.asVector2f(),
+            yHeadRotation = this.rotation.yaw.toFloat(),
+            yBodyRotation = this.rotation.yaw.toFloat(),
+            attributeList = this.attributes.values.toTypedArray(),
+            actorData = this.entityDataMap,
+            syncedProperties = this.propertySyncData(),
+            actorLinks = Array(passengers.size) { i ->
+                EntityLink(
+                    this.getRuntimeID(),
+                    passengers[i].getRuntimeID(),
+                    if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
+                    immediate = false,
+                    riderInitiated = false
+                )
+            }
+        )
     }
 
     override fun onUpdate(currentTick: Int): Boolean {

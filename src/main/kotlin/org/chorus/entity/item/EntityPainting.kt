@@ -103,15 +103,13 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
     }
 
     public override fun createAddEntityPacket(): DataPacket {
-        val addPainting: AddPaintingPacket = AddPaintingPacket()
-        addPainting.entityUniqueId = this.getId()
-        addPainting.entityRuntimeId = this.getId()
-        addPainting.x = position.x.toFloat()
-        addPainting.y = position.y.toFloat()
-        addPainting.z = position.z.toFloat()
-        addPainting.direction = getDirection().horizontalIndex
-        addPainting.title = namedTag!!.getString("Motive")
-        return addPainting
+        return AddPaintingPacket(
+            targetActorID = this.uniqueId,
+            targetRuntimeID = this.runtimeId,
+            position = this.position.asVector3f(),
+            direction = this.getDirection().horizontalIndex,
+            motif = namedTag!!.getString("Motive"),
+        )
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {

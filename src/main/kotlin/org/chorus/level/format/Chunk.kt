@@ -433,14 +433,14 @@ class Chunk : IChunk {
     }
 
     override fun addEntity(entity: Entity) {
-        entities[entity.getId()] = entity
+        entities[entity.getRuntimeID()] = entity
         if (entity !is Player && this.isInit) {
             this.setChanged()
         }
     }
 
     override fun removeEntity(entity: Entity) {
-        entities.remove(entity.getId())
+        entities.remove(entity.getRuntimeID())
         if (entity !is Player && this.isInit) {
             this.setChanged()
         }

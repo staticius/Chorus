@@ -237,7 +237,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
         val signChangeEvent = SignChangeEvent(this.block, player, lines)
 
-        if (!namedTag.contains(TAG_LOCKED_FOR_EDITING_BY) || player.id != this.editorEntityRuntimeId) {
+        if (!namedTag.contains(TAG_LOCKED_FOR_EDITING_BY) || player.runtimeId != this.editorEntityRuntimeId) {
             signChangeEvent.setCancelled()
         }
 

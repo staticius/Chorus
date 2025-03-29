@@ -163,7 +163,7 @@ class BreezeShootExecutor(
     }
 
     private fun startShootSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.id)
+        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
         entity.level!!.addSound(entity.position, Sound.MOB_BREEZE_CHARGE)
     }
 

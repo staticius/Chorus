@@ -193,7 +193,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
                 riding.setCurrentSpeed(inputY)
             }
         } else if (riding is EntityBoat && pk.inputData.contains(AuthInputAction.IN_CLIENT_PREDICTED_IN_VEHICLE)) {
-            if (riding.getId() == pk.predictedVehicle && riding.isControlling(player)) {
+            if (riding.getRuntimeID() == pk.predictedVehicle && riding.isControlling(player)) {
                 if (check(clientLoc, player)) {
                     val offsetLoc = clientLoc.add(0.0, playerHandle.baseOffset.toDouble(), 0.0)
                     riding.onInput(offsetLoc)

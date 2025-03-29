@@ -154,7 +154,7 @@ class HumanInventory(human: IHuman) //9+27+4
         for (player in players) {
             pk.eid = holder.getEntity().getId()
             if (player == this.holder) {
-                pk.eid = player.getId()
+                pk.eid = player.getRuntimeID()
                 this.sendSlot(this.heldItemIndex, player)
             }
 
@@ -667,7 +667,7 @@ class HumanInventory(human: IHuman) //9+27+4
                 containerID = who.getWindowId(this),
                 containerType = type.networkType,
                 position = who.vector3.asBlockVector3(),
-                targetActorID = who.getId()
+                targetActorID = who.getRuntimeID()
             ))
         }
     }

@@ -26,14 +26,10 @@ import org.chorus.network.protocol.AddEntityPacket
 import org.chorus.registry.Registries
 import java.util.concurrent.*
 
-/**
- * @author PetteriM1
- * @author GoodLucky777
- */
 class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityAbstractArrow(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.THROWN_TRIDENT
+        return EntityID.THROWN_TRIDENT
     }
 
     var alreadyCollided: Boolean = false
@@ -228,26 +224,6 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         return hasUpdate
     }
 
-    override fun spawnTo(player: Player) {
-        val pk: AddEntityPacket = AddEntityPacket()
-        pk.type = Registries.ENTITY.getEntityNetworkId(EntityID.Companion.THROWN_TRIDENT)
-        pk.entityUniqueId = this.getId()
-        pk.entityRuntimeId = this.getId()
-        pk.x = position.x.toFloat()
-        pk.y = position.y.toFloat()
-        pk.z = position.z.toFloat()
-        pk.speedX = motion.x.toFloat()
-        pk.speedY = motion.y.toFloat()
-        pk.speedZ = motion.z.toFloat()
-        pk.yaw = rotation.yaw.toFloat()
-        pk.pitch = rotation.pitch.toFloat()
-        pk.entityData = this.entityDataMap
-        player.dataPacket(pk)
-
-        super.spawnTo(player)
-    }
-
-
     override fun onCollideWithEntity(entity: Entity) {
         if (this.noClip || this.closed) {
             return
@@ -425,7 +401,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
 
     fun setTridentRope(tridentRope: Boolean) {
         if (tridentRope) {
-            this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, shootingEntity!!.getId())
+            this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, shootingEntity!!.getRuntimeID())
         } else {
             this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, -1)
         }

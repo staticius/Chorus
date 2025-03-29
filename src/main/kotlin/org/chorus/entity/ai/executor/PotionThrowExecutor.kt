@@ -159,7 +159,7 @@ class PotionThrowExecutor(
     }
 
     private fun startShootSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.id)
+        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
     }
 
     private fun endShootSequence(entity: Entity) {

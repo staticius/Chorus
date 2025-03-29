@@ -48,7 +48,7 @@ class EntityEvocationFang(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
     override fun spawnTo(player: Player) {
         super.spawnTo(player)
         val pk = EntityEventPacket()
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.data = 0
         pk.event = EntityEventPacket.ARM_SWING
         player.dataPacket(pk)

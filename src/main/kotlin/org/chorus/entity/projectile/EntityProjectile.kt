@@ -18,7 +18,6 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import java.util.*
 import java.util.concurrent.*
-import java.util.function.Function
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.sqrt
@@ -43,7 +42,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
 
     init {
         if (shootingEntity != null) {
-            this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, shootingEntity!!.getId())
+            this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, shootingEntity!!.getRuntimeID())
         }
     }
 

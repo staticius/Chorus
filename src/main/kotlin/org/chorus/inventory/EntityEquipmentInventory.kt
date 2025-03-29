@@ -21,7 +21,7 @@ class EntityEquipmentInventory(holder: InventoryHolder) :
 
     override fun sendSlot(index: Int, player: Player) {
         val mobEquipmentPacket = MobEquipmentPacket()
-        mobEquipmentPacket.eid = entity.getId()
+        mobEquipmentPacket.eid = entity.getRuntimeID()
         mobEquipmentPacket.selectedSlot = index
         mobEquipmentPacket.slot =
             mobEquipmentPacket.selectedSlot //todo check inventorySlot and hotbarSlot for MobEquipmentPacket

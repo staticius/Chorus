@@ -17,17 +17,14 @@ import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.EntityEventPacket
 import kotlin.math.abs
 
-/**
- * @author MagicDroidX
- */
 class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ITEM
+        return EntityID.ITEM
     }
 
     protected var owner: String? = null
     protected var thrower: String? = null
-    var item: Item? = null
+    lateinit var item: Item
     protected var pickupDelay: Int = 0
 
     override fun getWidth(): Float {
@@ -143,7 +140,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
                         entity.close()
                         getItem()!!.setCount(newAmount)
                         val packet: EntityEventPacket = EntityEventPacket()
-                        packet.eid = getId()
+                        packet.eid = getRuntimeID()
                         packet.data = newAmount
                         packet.event = EntityEventPacket.MERGE_ITEMS
                         Server.broadcastPacket(getViewers().values, packet)
@@ -288,13 +285,10 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         if (this.hasCustomName()) {
             return getNameTag()
         }
-        if (item == null) {
-            return getOriginalName()
-        }
-        return item!!.count.toString() + "x " + item!!.getDisplayName()
+        return item.count.toString() + "x " + item.displayName
     }
 
-    fun getItem(): Item? {
+    fun getItem(): Item {
         return item
     }
 
@@ -327,18 +321,15 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
     }
 
     public override fun createAddEntityPacket(): DataPacket {
-        val addEntity: AddItemEntityPacket = AddItemEntityPacket()
-        addEntity.entityUniqueId = this.getId()
-        addEntity.entityRuntimeId = this.getId()
-        addEntity.x = position.x.toFloat()
-        addEntity.y = position.y.toFloat() + this.getBaseOffset()
-        addEntity.z = position.z.toFloat()
-        addEntity.speedX = motion.x.toFloat()
-        addEntity.speedY = motion.y.toFloat()
-        addEntity.speedZ = motion.z.toFloat()
-        addEntity.entityData = this.entityDataMap
-        addEntity.item = this.getItem()
-        return addEntity
+        return AddItemEntityPacket(
+            targetActorID = this.uniqueId,
+            targetRuntimeID = this.runtimeId,
+            position = this.position.asVector3f(),
+            velocity = this.motion.asVector3f(),
+            item = this.getItem(),
+            entityData = this.entityDataMap,
+            fromFishing = false
+        )
     }
 
     override fun doesTriggerPressurePlate(): Boolean {

@@ -57,7 +57,7 @@ class PlayerScorer : IScorer {
             scoreboard.objectiveName,
             line.score,
             ScorerType.PLAYER,
-            Server.instance.getPlayer(uuid).get().getId()
+            Server.instance.getPlayer(uuid).get().getRuntimeID()
         ) else null
     }
 }

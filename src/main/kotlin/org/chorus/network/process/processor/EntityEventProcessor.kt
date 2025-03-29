@@ -15,7 +15,7 @@ class EntityEventProcessor : DataPacketProcessor<EntityEventPacket>() {
         }
 
         if (pk.event == EntityEventPacket.EATING_ITEM) {
-            if (pk.data == 0 || pk.eid != player.getId()) {
+            if (pk.data == 0 || pk.eid != player.getRuntimeID()) {
                 return
             }
 
@@ -26,13 +26,13 @@ class EntityEventProcessor : DataPacketProcessor<EntityEventPacket>() {
                 return
             }
 
-            pk.eid = player.getId()
+            pk.eid = player.getRuntimeID()
             pk.data = predictedData
 
             player.dataPacket(pk)
             Server.broadcastPacket(player.getViewers().values, pk)
         } else if (pk.event == EntityEventPacket.ENCHANT) {
-            if (pk.eid != player.getId()) {
+            if (pk.eid != player.getRuntimeID()) {
                 return
             }
         }

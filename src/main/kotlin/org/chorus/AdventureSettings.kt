@@ -135,7 +135,7 @@ class AdventureSettings : Cloneable {
 
     fun sendAbilities(players: Collection<Player>) {
         val packet = UpdateAbilitiesPacket()
-        packet.entityId = player.getId()
+        packet.entityId = player.getRuntimeID()
         packet.commandPermission = commandPermission
         packet.playerPermission = playerPermission
 

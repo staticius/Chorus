@@ -83,7 +83,7 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
     protected fun createEntityTargetTag(entity: Entity): CompoundTag {
         return CompoundTag()
             .putString("type", "actor")
-            .putLong("uniqueID", entity.getId())
+            .putLong("uniqueID", entity.getRuntimeID())
             .putInt("attachPos", 3) //todo: check the use of this value :)
     }
 

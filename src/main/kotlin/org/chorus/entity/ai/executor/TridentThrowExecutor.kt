@@ -173,7 +173,7 @@ class TridentThrowExecutor(
     }
 
     private fun playTridentAnimation(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.id)
+        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
         entity.setDataFlag(EntityFlag.FACING_TARGET_TO_RANGE_ATTACK)
     }
 

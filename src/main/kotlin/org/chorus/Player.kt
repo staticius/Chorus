@@ -739,7 +739,7 @@ class Player constructor(
 
         val playerActionPacket = PlayerActionPacket()
         playerActionPacket.action = PlayerActionPacket.ACTION_DIMENSION_CHANGE_ACK
-        playerActionPacket.entityId = this.getId()
+        playerActionPacket.entityId = this.getRuntimeID()
         this.dataPacket(playerActionPacket)
     }
 
@@ -1363,7 +1363,7 @@ class Player constructor(
         var oldPlayer: Player? = null
         for (p in ArrayList<Player>(Server.instance.onlinePlayers.values)) {
             if (p !== this && p.getName()
-                    .equals(this.getName(), ignoreCase = true) || this.getUniqueId() == p.getUniqueId()
+                    .equals(this.getName(), ignoreCase = true) || this.getUniqueID() == p.getUniqueID()
             ) {
                 oldPlayer = p
                 break
@@ -1432,7 +1432,7 @@ class Player constructor(
 
         nbt.putLong("lastPlayed", System.currentTimeMillis() / 1000)
 
-        val uuid = getUniqueId()
+        val uuid = getUniqueID()
         nbt.putLong("UUIDLeast", uuid.leastSignificantBits)
         nbt.putLong("UUIDMost", uuid.mostSignificantBits)
 
@@ -1516,7 +1516,7 @@ class Player constructor(
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
                 this.address,
                 port.toString(),
-                getId().toString(),
+                getRuntimeID().toString(),
                 this.level!!.getName(),
                 round(position.x).toString(),
                 round(position.y).toString(),
@@ -1931,7 +1931,7 @@ class Player constructor(
                 //发送旁观者的游戏模式给对方，使得对方客户端正确渲染玩家实体
                 val pk = UpdatePlayerGameTypePacket()
                 pk.gameType = GameType.SPECTATOR
-                pk.entityId = this.getId()
+                pk.entityId = this.getRuntimeID()
                 player.dataPacket(pk)
             }
         }
@@ -1946,7 +1946,7 @@ class Player constructor(
      * @return 是否可以看到该玩家<br></br>Whether the player can be seen
      */
     fun canSee(player: Player): Boolean {
-        return !hiddenPlayers.containsKey(player.getUniqueId())
+        return !hiddenPlayers.containsKey(player.getUniqueID())
     }
 
     /**
@@ -1961,7 +1961,7 @@ class Player constructor(
         if (this === player) {
             return
         }
-        hiddenPlayers[player.getUniqueId()] = player
+        hiddenPlayers[player.getUniqueID()] = player
         player.despawnFrom(this)
     }
 
@@ -1977,7 +1977,7 @@ class Player constructor(
         if (this === player) {
             return
         }
-        hiddenPlayers.remove(player.getUniqueId())
+        hiddenPlayers.remove(player.getUniqueID())
         if (player.isOnline) {
             player.spawnTo(this)
         }
@@ -2134,7 +2134,7 @@ class Player constructor(
         this.displayName = displayName
         if (this.spawned) {
             Server.instance.updatePlayerListData(
-                getUniqueId(), this.getId(), this.getDisplayName(),
+                getUniqueID(), this.getRuntimeID(), this.getDisplayName(),
                 getSkin(),
                 loginChainData.xuid
             )
@@ -2146,7 +2146,7 @@ class Player constructor(
         if (this.spawned) {
 //            this.Server.instance.updatePlayerListData(this.getUniqueId(), this.getId(), this.getDisplayName(), skin, this.getLoginChainData().getXUID());
             val skinPacket = PlayerSkinPacket()
-            skinPacket.uuid = this.getUniqueId()
+            skinPacket.uuid = this.getUniqueID()
             skinPacket.skin = this.getSkin()
             skinPacket.newSkinName = getSkin().getSkinId()
             skinPacket.oldSkinName = ""
@@ -2479,7 +2479,7 @@ class Player constructor(
             level!!.sleepTicks = 0
 
             this.dataPacket(AnimatePacket(
-                targetUniqueID = this.getId(),
+                targetUniqueID = this.getRuntimeID(),
                 action = AnimatePacket.Action.WAKE_UP
             ))
         }
@@ -2590,7 +2590,7 @@ class Player constructor(
             val pk = UpdatePlayerGameTypePacket()
             val networkGamemode = toNetworkGamemode(gamemode)
             pk.gameType = from(networkGamemode)
-            pk.entityId = this.getId()
+            pk.entityId = this.getRuntimeID()
             val players: HashSet<Player> =
                 Sets.newHashSet<Player>(Server.instance.onlinePlayers.values)
             //不向自身发送UpdatePlayerGameTypePacket，我们将使用SetPlayerGameTypePacket
@@ -2714,7 +2714,7 @@ class Player constructor(
             if (this.chunk != null) {
                 this.addMotion(this.motion.x, this.motion.y, this.motion.z) //Send to others
                 val pk = SetEntityMotionPacket()
-                pk.eid = this.getId()
+                pk.eid = this.getRuntimeID()
                 pk.motionX = motion.x.toFloat()
                 pk.motionY = motion.y.toFloat()
                 pk.motionZ = motion.z.toFloat()
@@ -2737,7 +2737,7 @@ class Player constructor(
      */
     fun sendAttributes() {
         val pk = UpdateAttributesPacket()
-        pk.entityId = this.getId()
+        pk.entityId = this.getRuntimeID()
         pk.entries = arrayOf(
             getAttribute(Attribute.MAX_HEALTH)
                 .setMaxValue(getMaxHealth().toFloat())
@@ -3264,7 +3264,7 @@ class Player constructor(
             pk.messages.addAll(container.messages)
             pk.commandOriginData = CommandOriginData(
                 CommandOriginData.Origin.PLAYER,
-                getUniqueId(), "", null
+                getUniqueID(), "", null
             ) //Only players can effect
             pk.type = CommandOutputType.ALL_OUTPUT //Useless
             pk.successCount = container.successCount //Useless,maybe used for server-client interaction
@@ -3988,7 +3988,7 @@ class Player constructor(
             pk.y = pos.position.y.toFloat()
             pk.z = pos.position.z.toFloat()
             pk.respawnState = RespawnPacket.STATE_SEARCHING_FOR_SPAWN
-            pk.runtimeEntityId = this.getId()
+            pk.runtimeEntityId = this.getRuntimeID()
             this.dataPacket(pk)
         }
     }
@@ -4005,7 +4005,7 @@ class Player constructor(
         if (this.spawned) {
             val pk = UpdateAttributesPacket()
             pk.entries = arrayOf(attribute)
-            pk.entityId = this.getId()
+            pk.entityId = this.getRuntimeID()
             this.dataPacket(pk)
         }
     }
@@ -4020,7 +4020,7 @@ class Player constructor(
         if (this.spawned) {
             val pk = UpdateAttributesPacket()
             pk.entries = arrayOf(attribute)
-            pk.entityId = this.getId()
+            pk.entityId = this.getRuntimeID()
             this.dataPacket(pk)
         }
     }
@@ -4185,14 +4185,14 @@ class Player constructor(
     override fun syncAttribute(attribute: Attribute) {
         val pk = UpdateAttributesPacket()
         pk.entries = arrayOf(attribute)
-        pk.entityId = this.getId()
+        pk.entityId = this.getRuntimeID()
         this.dataPacket(pk)
     }
 
     override fun syncAttributes() {
         val pk = UpdateAttributesPacket()
         pk.entries = attributes.values.stream().filter { obj: Attribute -> obj.isSyncable() }.toList().toTypedArray()
-        pk.entityId = this.getId()
+        pk.entityId = this.getRuntimeID()
         this.dataPacket(pk)
     }
 
@@ -4282,7 +4282,7 @@ class Player constructor(
                     this.lastBeAttackEntity = source.damager
                 }
                 val pk = EntityEventPacket()
-                pk.eid = this.getId()
+                pk.eid = this.getRuntimeID()
                 pk.event = EntityEventPacket.HURT_ANIMATION
                 this.dataPacket(pk)
             }
@@ -4375,7 +4375,7 @@ class Player constructor(
         targets: Array<Player>? = null
     ) {
         val pk = MovePlayerPacket()
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.x = pos.x.toFloat()
         pk.y = (pos.y + this.getEyeHeight()).toFloat()
         pk.z = pos.z.toFloat()
@@ -4385,7 +4385,7 @@ class Player constructor(
         pk.mode = mode
         pk.onGround = this.onGround
         if (this.riding != null) {
-            pk.ridingEid = riding!!.getId()
+            pk.ridingEid = riding!!.getRuntimeID()
             pk.mode = MovePlayerPacket.MODE_PITCH
         }
 
@@ -5066,8 +5066,8 @@ class Player constructor(
                 }
 
                 val pk = TakeItemEntityPacket()
-                pk.entityId = this.getId()
-                pk.target = entity.getId()
+                pk.entityId = this.getRuntimeID()
+                pk.target = entity.getRuntimeID()
                 Server.Companion.broadcastPacket(entity.getViewers().values, pk)
                 this.dataPacket(pk)
 
@@ -5110,8 +5110,8 @@ class Player constructor(
                 }
 
                 val pk = TakeItemEntityPacket()
-                pk.entityId = this.getId()
-                pk.target = entity.getId()
+                pk.entityId = this.getRuntimeID()
+                pk.target = entity.getRuntimeID()
                 Server.Companion.broadcastPacket(entity.getViewers().values, pk)
                 this.dataPacket(pk)
 
@@ -5147,8 +5147,8 @@ class Player constructor(
                         }
 
                         val pk = TakeItemEntityPacket()
-                        pk.entityId = this.getId()
-                        pk.target = entity.getId()
+                        pk.entityId = this.getRuntimeID()
+                        pk.target = entity.getRuntimeID()
                         Server.Companion.broadcastPacket(entity.getViewers().values, pk)
                         this.dataPacket(pk)
 
@@ -5205,7 +5205,7 @@ class Player constructor(
 
     override fun hashCode(): Int {
         if ((this.hash == 0) || (this.hash == 485)) {
-            this.hash = (485 + (if (getUniqueId() != null) getUniqueId().hashCode() else 0))
+            this.hash = (485 + (if (getUniqueID() != null) getUniqueID().hashCode() else 0))
         }
 
         return this.hash
@@ -5215,7 +5215,7 @@ class Player constructor(
         if (obj !is Player) {
             return false
         }
-        return this.getUniqueId() == obj.getUniqueId() && this.getId() == obj.getId()
+        return this.getUniqueID() == obj.getUniqueID() && this.getRuntimeID() == obj.getRuntimeID()
     }
 
     /**
@@ -5410,7 +5410,7 @@ class Player constructor(
         this.showingCredits = showingCredits
         if (showingCredits) {
             val pk = ShowCreditsPacket()
-            pk.eid = this.getId()
+            pk.eid = this.getRuntimeID()
             pk.status = ShowCreditsPacket.STATUS_START_CREDITS
             this.dataPacket(pk)
         }
@@ -5559,7 +5559,7 @@ class Player constructor(
             val blockEntity = level!!.getBlockEntity(position)
             if (blockEntity is BlockEntitySign) {
                 if (blockEntity.editorEntityRuntimeId == -1L) {
-                    blockEntity.editorEntityRuntimeId = this.getId()
+                    blockEntity.editorEntityRuntimeId = this.getRuntimeID()
                     val openSignPacket = OpenSignPacket()
                     openSignPacket.position = position.asBlockVector3()
                     openSignPacket.frontSide = frontSide

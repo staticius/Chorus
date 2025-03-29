@@ -91,7 +91,7 @@ class FakeInventory @JvmOverloads constructor(
                     containerID = player.getWindowId(this),
                     containerType = type.networkType,
                     position = position.vector3.asBlockVector3(),
-                    targetActorID = player.getId()
+                    targetActorID = player.getRuntimeID()
                 ))
                 super.onOpen(player)
                 this.sendContents(player)

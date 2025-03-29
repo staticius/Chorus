@@ -1,23 +1,23 @@
 package org.chorus.network.protocol
 
+import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorRuntimeID
+import org.chorus.network.protocol.types.ActorUniqueID
 
-class AddPaintingPacket : DataPacket() {
-    var entityUniqueId: Long = 0
-    var entityRuntimeId: Long = 0
-    var x: Float = 0f
-    var y: Float = 0f
-    var z: Float = 0f
-    var direction: Int = 0
-    var title: String? = null
-
+data class AddPaintingPacket(
+    val targetActorID: ActorUniqueID,
+    val targetRuntimeID: ActorRuntimeID,
+    val position: Vector3f,
+    val direction: Int,
+    val motif: String,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeActorUniqueID(this.entityUniqueId)
-        byteBuf.writeActorRuntimeID(this.entityRuntimeId)
-
-        byteBuf.writeVector3f(this.x, this.y, this.z)
+        byteBuf.writeActorUniqueID(this.targetActorID)
+        byteBuf.writeActorRuntimeID(this.targetRuntimeID)
+        byteBuf.writeVector3f(this.position)
         byteBuf.writeVarInt(this.direction)
-        byteBuf.writeString(title!!)
+        byteBuf.writeString(this.motif)
     }
 
     override fun pid(): Int {

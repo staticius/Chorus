@@ -1,7 +1,6 @@
 package org.chorus.inventory
 
 import org.chorus.Player
-import org.chorus.entity.Entity.getId
 import org.chorus.entity.IHuman
 import org.chorus.entity.IHuman.getEntity
 import org.chorus.item.*

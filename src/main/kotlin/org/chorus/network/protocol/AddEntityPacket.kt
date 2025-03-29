@@ -2,77 +2,87 @@ package org.chorus.network.protocol
 
 import org.chorus.entity.Attribute
 import org.chorus.entity.data.EntityDataMap
+import org.chorus.math.Vector2f
+import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorRuntimeID
+import org.chorus.network.protocol.types.ActorUniqueID
 import org.chorus.network.protocol.types.EntityLink
 import org.chorus.network.protocol.types.PropertySyncData
-import org.chorus.registry.Registries
 import org.chorus.utils.Binary
 
-class AddEntityPacket() : DataPacket() {
-    @JvmField
-    var entityUniqueId: Long = 0
-
-    @JvmField
-    var entityRuntimeId: Long = 0
-
-    @JvmField
-    var type: Int = 0
-    var id: String? = null
-
-    @JvmField
-    var x: Float = 0f
-
-    @JvmField
-    var y: Float = 0f
-
-    @JvmField
-    var z: Float = 0f
-
-    @JvmField
-    var speedX: Float = 0f
-
-    @JvmField
-    var speedY: Float = 0f
-
-    @JvmField
-    var speedZ: Float = 0f
-    var yaw: Float = 0f
-    var pitch: Float = 0f
-    var headYaw: Float = 0f
-
-    // todo: check what's the usage of this
-    var bodyYaw: Float = -1f
-    var attributes: Array<Attribute?> = Attribute.EMPTY_ARRAY
-
-    @JvmField
-    var entityData: EntityDataMap = EntityDataMap()
-    var syncedProperties: PropertySyncData = PropertySyncData(intArrayOf(), floatArrayOf())
-    var links: Array<EntityLink> = emptyArray()
-
+data class AddEntityPacket(
+    val targetActorID: ActorUniqueID,
+    val targetRuntimeID: ActorRuntimeID,
+    val actorType: String,
+    val position: Vector3f,
+    val velocity: Vector3f,
+    val rotation: Vector2f,
+    val yHeadRotation: Float,
+    val yBodyRotation: Float,
+    val attributeList: Array<Attribute>,
+    val actorData: EntityDataMap,
+    val syncedProperties: PropertySyncData,
+    val actorLinks: Array<EntityLink>
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeActorUniqueID(this.entityUniqueId)
-        byteBuf.writeActorRuntimeID(this.entityRuntimeId)
-        if (id == null) {
-            id = Registries.ENTITY.getEntityIdentifier(type)
-        }
-        byteBuf.writeString(id!!)
-        byteBuf.writeVector3f(this.x, this.y, this.z)
-        byteBuf.writeVector3f(this.speedX, this.speedY, this.speedZ)
-        byteBuf.writeFloatLE(this.pitch)
-        byteBuf.writeFloatLE(this.yaw)
-        byteBuf.writeFloatLE(this.headYaw)
-        byteBuf.writeFloatLE(if (this.bodyYaw != -1f) this.bodyYaw else this.yaw)
-        byteBuf.writeAttributeList(this.attributes.filterNotNull().toTypedArray())
-        byteBuf.writeBytes(Binary.writeEntityData(this.entityData))
-        byteBuf.writePropertySyncData(syncedProperties)
-        byteBuf.writeArray(links) { byteBuf.writeEntityLink(it) }
+        byteBuf.writeActorUniqueID(this.targetActorID)
+        byteBuf.writeActorRuntimeID(this.targetRuntimeID)
+        byteBuf.writeString(this.actorType)
+        byteBuf.writeVector3f(this.position)
+        byteBuf.writeVector3f(this.velocity)
+        byteBuf.writeVector2f(this.rotation)
+        byteBuf.writeFloatLE(this.yHeadRotation)
+        byteBuf.writeFloatLE(this.yBodyRotation)
+        byteBuf.writeAttributeList(this.attributeList)
+        byteBuf.writeBytes(Binary.writeEntityData(this.actorData))
+        byteBuf.writePropertySyncData(this.syncedProperties)
+        byteBuf.writeArray(this.actorLinks) { byteBuf.writeEntityLink(it) }
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.ADD_ENTITY_PACKET
+        return ProtocolInfo.ADD_ENTITY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AddEntityPacket
+
+        if (targetActorID != other.targetActorID) return false
+        if (targetRuntimeID != other.targetRuntimeID) return false
+        if (yHeadRotation != other.yHeadRotation) return false
+        if (yBodyRotation != other.yBodyRotation) return false
+        if (actorType != other.actorType) return false
+        if (position != other.position) return false
+        if (velocity != other.velocity) return false
+        if (rotation != other.rotation) return false
+        if (!attributeList.contentEquals(other.attributeList)) return false
+        if (actorData != other.actorData) return false
+        if (syncedProperties != other.syncedProperties) return false
+        if (!actorLinks.contentEquals(other.actorLinks)) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = targetActorID.hashCode()
+        result = 31 * result + targetRuntimeID.hashCode()
+        result = 31 * result + yHeadRotation.hashCode()
+        result = 31 * result + yBodyRotation.hashCode()
+        result = 31 * result + actorType.hashCode()
+        result = 31 * result + position.hashCode()
+        result = 31 * result + velocity.hashCode()
+        result = 31 * result + rotation.hashCode()
+        result = 31 * result + attributeList.contentHashCode()
+        result = 31 * result + actorData.hashCode()
+        result = 31 * result + syncedProperties.hashCode()
+        result = 31 * result + actorLinks.contentHashCode()
+        return result
     }
 }

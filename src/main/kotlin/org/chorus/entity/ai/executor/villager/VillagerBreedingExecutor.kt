@@ -84,14 +84,14 @@ class VillagerBreedingExecutor(entityClass: Class<*>, findingRangeSquared: Int, 
 
     protected fun sendInLoveParticles(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.id
+        pk.eid = entity.runtimeId
         pk.event = EntityEventPacket.LOVE_PARTICLES
         Server.broadcastPacket(entity.viewers.values, pk)
     }
 
     protected fun sendAngryParticles(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.id
+        pk.eid = entity.runtimeId
         pk.event = EntityEventPacket.VILLAGER_ANGRY
         Server.broadcastPacket(entity.viewers.values, pk)
     }

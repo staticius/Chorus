@@ -65,7 +65,7 @@ class AddPlayerPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.ADD_PLAYER_PACKET
+        return ProtocolInfo.ADD_PLAYER_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

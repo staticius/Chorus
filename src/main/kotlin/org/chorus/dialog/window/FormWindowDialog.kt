@@ -66,7 +66,7 @@ class FormWindowDialog @JvmOverloads constructor(
     }
 
     val entityId: Long
-        get() = bindEntity!!.getId()
+        get() = bindEntity!!.getRuntimeID()
 
     fun addHandler(handler: FormDialogHandler) {
         handlers.add(handler)

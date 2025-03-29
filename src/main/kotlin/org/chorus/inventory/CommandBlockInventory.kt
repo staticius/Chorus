@@ -6,9 +6,6 @@ import org.chorus.blockentity.BlockEntityCommandBlock
 import org.chorus.blockentity.BlockEntityNameable
 import org.chorus.event.inventory.InventoryOpenEvent
 import org.chorus.item.Item
-import org.chorus.math.BlockVector3
-import org.chorus.math.IVector3
-import org.chorus.math.Vector3
 import org.chorus.network.protocol.ContainerClosePacket
 import org.chorus.network.protocol.ContainerOpenPacket
 
@@ -126,7 +123,7 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
                 containerID = who.getWindowId(this),
                 containerType = type.networkType,
                 position = holder.vector3.asBlockVector3(),
-                targetActorID = who.getId()
+                targetActorID = who.getRuntimeID()
             ))
         }
     }

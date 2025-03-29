@@ -5,13 +5,13 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.blockentity.BlockEntityPistonArm
-import org.chorus.entity.custom.CustomEntity
 import org.chorus.entity.data.*
 import org.chorus.entity.data.property.*
 import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 import org.chorus.entity.item.EntityItem
 import org.chorus.entity.mob.EntityArmorStand
+import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.EntityBoss
 import org.chorus.entity.mob.monster.EntityEnderDragon
 import org.chorus.entity.projectile.EntityProjectile
@@ -59,6 +59,7 @@ import java.util.concurrent.atomic.AtomicLong
 import java.util.function.Consumer
 import kotlin.concurrent.Volatile
 import kotlin.math.*
+import kotlin.random.Random
 
 /**
  * @author MagicDroidX
@@ -210,19 +211,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     var closed: Boolean = false
     var noClip: Boolean = false
 
-    /**
-     * spawned by server
-     *
-     *
-     * player's UUID is sent by client,so this value cannot be used in Player
-     */
-    protected lateinit var entityUniqueId: UUID
 
-    /**
-     * runtime id (changed after you restart the server)
-     */
     @Volatile
-    protected var id: Long = 0
+    protected var runtimeId: Long = 0
     protected var lastDamageCause: EntityDamageEvent? = null
 
     @JvmField
@@ -364,11 +355,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     protected open fun initEntity() {
         if (this !is Player) {
             if (namedTag!!.contains(TAG_UNIQUE_ID)) {
-                val uid: Long = namedTag!!.getLong(TAG_UNIQUE_ID)
-                this.entityUniqueId = UUID(0L, uid)
+                this.uniqueId = namedTag!!.getLong(TAG_UNIQUE_ID)
             } else {
-                val fullUuid: UUID = UUID.randomUUID()
-                this.entityUniqueId = UUID(0L, fullUuid.leastSignificantBits)
+                this.uniqueId = Random.nextLong()
             }
         }
 
@@ -404,7 +393,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         if (chunk.provider.level == null) {
             throw ChunkException("Invalid garbage Chunk given to Entity")
         }
-        this.id = entityCount.getAndIncrement()
+        this.runtimeId = entityCount.getAndIncrement()
         this.justCreated = true
         this.namedTag = nbt
         this.chunk = chunk
@@ -657,7 +646,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
             if (this is Player) {
                 val packet = MobEffectPacket()
-                packet.eid = player.getId()
+                packet.eid = player.getRuntimeID()
                 packet.effectId = effect.getId()
                 packet.eventId = MobEffectPacket.EVENT_REMOVE.toInt()
                 player.dataPacket(packet)
@@ -700,7 +689,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
         if (this is Player) {
             val packet = MobEffectPacket()
-            packet.eid = player.getId()
+            packet.eid = player.getRuntimeID()
             packet.effectId = effect.getId()
             packet.amplifier = effect.getAmplifier()
             packet.particles = effect.isVisible()
@@ -799,13 +788,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                 namedTag!!.remove(TAG_CUSTOM_NAME)
                 namedTag!!.remove(TAG_CUSTOM_NAME_VISIBLE)
             }
-            if (this.entityUniqueId == null) {
-                val fullUuid: UUID = UUID.randomUUID()
-                this.entityUniqueId = UUID(0L, fullUuid.leastSignificantBits)
-            }
             namedTag!!.putLong(
                 TAG_UNIQUE_ID,
-                entityUniqueId.leastSignificantBits
+                this.uniqueId
             )
         }
 
@@ -888,8 +873,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             riding!!.spawnTo(player)
 
             val pkk = SetEntityLinkPacket()
-            pkk.vehicleUniqueId = riding!!.getId()
-            pkk.riderUniqueId = this.getId()
+            pkk.vehicleUniqueId = riding!!.getRuntimeID()
+            pkk.riderUniqueId = this.getRuntimeID()
             pkk.type = EntityLink.Type.RIDER
             pkk.immediate = 1
 
@@ -898,35 +883,31 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     protected open fun createAddEntityPacket(): DataPacket {
-        val addEntity = AddEntityPacket()
-        addEntity.type = this.getNetworkId()
-        addEntity.entityUniqueId = this.getId()
-        if (this is CustomEntity) {
-            addEntity.id = this.getIdentifier()
-        }
-        addEntity.entityRuntimeId = this.getId()
-        addEntity.yaw = rotation.yaw.toFloat()
-        addEntity.headYaw = rotation.yaw.toFloat()
-        addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.x.toFloat()
-        addEntity.y = position.y.toFloat() + this.getBaseOffset()
-        addEntity.z = position.z.toFloat()
-        addEntity.speedX = motion.x.toFloat()
-        addEntity.speedY = motion.y.toFloat()
-        addEntity.speedZ = motion.z.toFloat()
-        addEntity.entityData = this.entityDataMap
-
-        addEntity.links = Array(passengers.size) { i ->
-            EntityLink(
-                this.getId(),
-                passengers[i].getId(),
-                if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
-                immediate = false,
-                riderInitiated = false
-            )
-        }
-
-        return addEntity
+        return AddEntityPacket(
+            targetActorID = this.uniqueId,
+            targetRuntimeID = this.runtimeId,
+            actorType = this.getIdentifier(),
+            position = this.position.asVector3f(),
+            velocity = this.motion.asVector3f(),
+            rotation = this.rotation.asVector2f(),
+            yHeadRotation = when (this) {
+                is EntityMob -> this.headYaw.toFloat()
+                else -> this.rotation.yaw.toFloat()
+            },
+            yBodyRotation = this.rotation.yaw.toFloat(),
+            attributeList = this.attributes.values.toTypedArray(),
+            actorData = this.entityDataMap,
+            syncedProperties = this.propertySyncData(),
+            actorLinks = Array(passengers.size) { i ->
+                EntityLink(
+                    this.getRuntimeID(),
+                    passengers[i].getRuntimeID(),
+                    if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
+                    immediate = false,
+                    riderInitiated = false
+                )
+            }
+        )
     }
 
     fun getViewers(): Map<Int, Player> {
@@ -936,7 +917,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     fun sendPotionEffects(player: Player) {
         for (effect: Effect in effects.values) {
             val packet = MobEffectPacket()
-            packet.eid = this.getId()
+            packet.eid = this.getRuntimeID()
             packet.effectId = effect.getId()
             packet.amplifier = effect.getAmplifier()
             packet.particles = effect.isVisible()
@@ -949,7 +930,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     @JvmOverloads
     fun sendData(player: Player, data: EntityDataMap? = null) {
         val pk = SetEntityDataPacket()
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.entityData = data ?: this.entityDataMap
         pk.syncedProperties = this.propertySyncData()
 
@@ -959,7 +940,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     @JvmOverloads
     fun sendData(players: Array<Player>, data: EntityDataMap? = null) {
         val pk = SetEntityDataPacket()
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.entityData = data ?: this.entityDataMap
         pk.syncedProperties = this.propertySyncData()
 
@@ -977,7 +958,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     open fun despawnFrom(player: Player) {
         if (hasSpawned.containsKey(player.loaderId)) {
             val pk = RemoveEntityPacket()
-            pk.eid = this.getId()
+            pk.eid = this.getRuntimeID()
             player.dataPacket(pk)
             hasSpawned.remove(player.loaderId)
         }
@@ -1067,7 +1048,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                     )
 
                     val pk = EntityEventPacket()
-                    pk.eid = this.getId()
+                    pk.eid = this.getRuntimeID()
                     pk.event = EntityEventPacket.CONSUME_TOTEM
                     player.dataPacket(pk)
 
@@ -1500,7 +1481,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
      */
     open fun moveDelta() {
         val pk = MoveEntityDeltaPacket()
-        pk.runtimeEntityId = this.getId()
+        pk.runtimeEntityId = this.getRuntimeID()
         if (prevPosition.x != position.x) {
             pk.x = position.x.toFloat()
             pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_HAS_X.toInt()).toShort()
@@ -1537,7 +1518,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
      */
     fun addMotion(motionX: Double, motionY: Double, motionZ: Double) {
         val pk = SetEntityMotionPacket()
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.motionX = motionX.toFloat()
         pk.motionY = motionY.toFloat()
         pk.motionZ = motionZ.toFloat()
@@ -1548,7 +1529,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     protected fun broadcastMovement(tp: Boolean) {
         val pk = MoveEntityAbsolutePacket()
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.x = position.x
         pk.y = position.y + this.getBaseOffset()
         pk.z = position.z
@@ -1677,8 +1658,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     protected fun broadcastLinkPacket(rider: Entity, type: EntityLink.Type) {
         val pk = SetEntityLinkPacket()
-        pk.vehicleUniqueId = getId() // To what?
-        pk.riderUniqueId = rider.getId() // From who?
+        pk.vehicleUniqueId = getRuntimeID() // To what?
+        pk.riderUniqueId = rider.getRuntimeID() // From who?
         pk.type = type
         pk.riderInitiated = type != EntityLink.Type.REMOVE
         Server.broadcastPacket(hasSpawned.values, pk)
@@ -1716,7 +1697,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     fun scheduleUpdate() {
-        level!!.updateEntities.put(this.getId(), this)
+        level!!.updateEntities.put(this.getRuntimeID(), this)
     }
 
     fun isOnFire(): Boolean {
@@ -1743,7 +1724,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     open fun syncAttribute(attribute: Attribute) {
         val pk = UpdateAttributesPacket()
         pk.entries = arrayOf(attribute)
-        pk.entityId = this.getId()
+        pk.entityId = this.getRuntimeID()
         Server.broadcastPacket(getViewers().values, pk)
     }
 
@@ -1751,7 +1732,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         val pk = UpdateAttributesPacket()
         pk.entries =
             attributes.values.stream().filter { obj: Attribute -> obj.isSyncable() }.toList().toTypedArray()
-        pk.entityId = this.getId()
+        pk.entityId = this.getRuntimeID()
         Server.broadcastPacket(getViewers().values, pk)
     }
 
@@ -2625,16 +2606,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     /**
      * return runtime id (changed after restart the server),the id is incremental number
      */
-    fun getId(): Long {
-        return this.id
-    }
-
-
-    /**
-     * Gets unique id(UUID)
-     */
-    open fun getUniqueId(): UUID {
-        return this.entityUniqueId
+    fun getRuntimeID(): Long {
+        return this.runtimeId
     }
 
     fun respawnToAll() {
@@ -2858,12 +2831,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         if (javaClass != other.javaClass) {
             return false
         }
-        return this.getId() == (other as Entity).getId()
+        return this.getRuntimeID() == (other as Entity).getRuntimeID()
     }
 
     override fun hashCode(): Int {
         var hash = 7
-        hash = (29 * hash + this.getId()).toInt()
+        hash = (29 * hash + this.getRuntimeID()).toInt()
         return hash
     }
 
@@ -2995,7 +2968,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     fun playAnimation(animation: Animation, players: Collection<Player>) {
         val pk = AnimateEntityPacket()
         pk.parseFromAnimation(animation)
-        pk.entityRuntimeIds.add(this.getId())
+        pk.entityRuntimeIds.add(this.getRuntimeID())
         Server.broadcastPacket(players, pk)
     }
 
@@ -3019,7 +2992,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     fun playActionAnimation(action: AnimatePacket.Action, rowingTime: Float, players: Collection<Player>) {
         Server.broadcastPacket(players, AnimatePacket(
             action = action,
-            targetUniqueID = this.getId(),
+            targetUniqueID = this.getRuntimeID(),
             actionData = AnimatePacket.Action.RowingData(
                 rowingTime = rowingTime
             )
@@ -3136,8 +3109,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         }
     }
 
-
-    private fun propertySyncData(): PropertySyncData {
+    fun propertySyncData(): PropertySyncData {
         val intValues: Collection<Int> = intProperties.values
         val intArray = IntArray(intValues.size)
         var i = 0
@@ -3400,7 +3372,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         fun playAnimationOnEntities(animation: Animation, entities: Collection<Entity>, players: Collection<Player>) {
             val pk = AnimateEntityPacket()
             pk.parseFromAnimation(animation)
-            entities.forEach(Consumer { entity: Entity -> pk.entityRuntimeIds.add(entity.getId()) })
+            entities.forEach(Consumer { entity: Entity -> pk.entityRuntimeIds.add(entity.getRuntimeID()) })
             Server.broadcastPacket(players, pk)
         }
 

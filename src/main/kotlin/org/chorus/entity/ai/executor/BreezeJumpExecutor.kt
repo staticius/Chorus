@@ -50,7 +50,7 @@ class BreezeJumpExecutor : EntityControl, IBehaviorExecutor {
         entity.setMotion(motion!!)
         entity.setDataFlag(EntityFlag.JUMP_GOAL_JUMP, false)
         val pk = EntityEventPacket()
-        pk.eid = entity.id
+        pk.eid = entity.runtimeId
         pk.event = EntityEventPacket.DUST_PARTICLES
         Server.broadcastPacket(entity.viewers.values, pk)
     }

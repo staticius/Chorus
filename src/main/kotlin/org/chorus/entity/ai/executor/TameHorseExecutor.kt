@@ -103,14 +103,14 @@ class TameHorseExecutor @JvmOverloads constructor(
                 val horse = entity as EntityHorse
                 horse.ownerName = horse.memoryStorage.get<String>(CoreMemoryTypes.Companion.RIDER_NAME)
                 val packet = EntityEventPacket()
-                packet.eid = horse.id
+                packet.eid = horse.runtimeId
                 packet.event = EntityEventPacket.TAME_SUCCESS
                 val player = horse.rider as Player? ?: return false
                 player.dataPacket(packet)
             } else {
                 val horse = entity as EntityHorse
                 val packet = EntityEventPacket()
-                packet.eid = horse.id
+                packet.eid = horse.runtimeId
                 packet.event = EntityEventPacket.TAME_FAIL
                 val player = horse.rider as Player? ?: return false
                 player.dataPacket(packet)

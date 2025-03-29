@@ -117,8 +117,8 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         val server: Server = Server.instance
         val startPk = StartGamePacket()
 
-        startPk.entityUniqueId = player!!.getId()
-        startPk.entityRuntimeId = player.getId()
+        startPk.entityUniqueId = player!!.getRuntimeID()
+        startPk.entityRuntimeId = player.getRuntimeID()
         startPk.playerGamemode = Player.toNetworkGamemode(player.gamemode)
 
         startPk.x = player.position.x.toFloat()

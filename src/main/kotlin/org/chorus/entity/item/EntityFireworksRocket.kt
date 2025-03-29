@@ -129,7 +129,7 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
                 val pk: EntityEventPacket = EntityEventPacket()
                 pk.data = 0
                 pk.event = EntityEventPacket.FIREWORK_EXPLOSION
-                pk.eid = this.getId()
+                pk.eid = this.getRuntimeID()
 
                 level!!.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_LARGE_BLAST, -1, getNetworkId())
 

@@ -6,8 +6,10 @@ import org.chorus.entity.Attribute.Companion.getAttribute
 import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataMap
 import org.chorus.entity.data.EntityDataTypes
+import org.chorus.math.Vector2f
+import org.chorus.math.Vector3f
 import org.chorus.network.protocol.*
-import org.chorus.registry.Registries
+import org.chorus.network.protocol.types.PropertySyncData
 import java.util.concurrent.ThreadLocalRandom
 
 class DummyBossBar private constructor(builder: Builder) {
@@ -91,26 +93,29 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun createBossEntity() {
-        val pkAdd = AddEntityPacket()
-
-        pkAdd.type = Registries.ENTITY.getEntityNetworkId(EntityID.CREEPER)!!
-        pkAdd.entityUniqueId = bossBarId
-        pkAdd.entityRuntimeId = bossBarId
-        pkAdd.x = player.position.x.toFloat()
-        pkAdd.y = -74f // Below the bedrock
-        pkAdd.z = player.position.z.toFloat()
-        pkAdd.speedX = 0f
-        pkAdd.speedY = 0f
-        pkAdd.speedZ = 0f
-        val entityDataMap = EntityDataMap()
-        entityDataMap.getOrCreateFlags()
-        entityDataMap[EntityDataTypes.AIR_SUPPLY] = 400
-        entityDataMap[EntityDataTypes.AIR_SUPPLY_MAX] = 400
-        entityDataMap[EntityDataTypes.LEASH_HOLDER] = -1
-        entityDataMap[EntityDataTypes.NAME] = text
-        entityDataMap[EntityDataTypes.SCALE] = 0
-        pkAdd.entityData = entityDataMap
-        player.dataPacket(pkAdd)
+        player.dataPacket(AddEntityPacket(
+            targetActorID = this.bossBarId,
+            targetRuntimeID = this.bossBarId,
+            actorType = EntityID.CREEPER,
+            position = player.position.asVector3f().setY(-74f),
+            velocity = Vector3f(),
+            rotation = Vector2f(),
+            yHeadRotation = 0f,
+            yBodyRotation = 0f,
+            attributeList = emptyArray(),
+            actorData = run {
+                val entityDataMap = EntityDataMap()
+                entityDataMap.getOrCreateFlags()
+                entityDataMap[EntityDataTypes.AIR_SUPPLY] = 400
+                entityDataMap[EntityDataTypes.AIR_SUPPLY_MAX] = 400
+                entityDataMap[EntityDataTypes.LEASH_HOLDER] = -1
+                entityDataMap[EntityDataTypes.NAME] = text
+                entityDataMap[EntityDataTypes.SCALE] = 0
+                entityDataMap
+            },
+            syncedProperties = PropertySyncData(intArrayOf(), floatArrayOf()),
+            actorLinks = emptyArray()
+        ))
     }
 
     private fun sendAttributes() {

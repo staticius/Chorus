@@ -100,7 +100,7 @@ class JSONScoreboardStorage(path: String) : IScoreboardStorage {
             line["scorerType"] = e.scorer.scorerType.name
             line["name"] = when (e.scorer.scorerType) {
                 ScorerType.PLAYER -> (e.scorer as PlayerScorer).uuid.toString()
-                ScorerType.ENTITY -> (e.scorer as EntityScorer).entityUuid.toString()
+                ScorerType.ENTITY -> (e.scorer as EntityScorer).uniqueID.toString()
                 ScorerType.FAKE -> (e.scorer as FakeScorer).name
                 else -> null
             }!!

@@ -157,7 +157,7 @@ interface IHuman : InventoryHolder {
             }
             this.setUniqueId(
                 Utils.dataToUUID(
-                    java.lang.String.valueOf(human.getId()).getBytes(StandardCharsets.UTF_8),
+                    java.lang.String.valueOf(human.getRuntimeID()).getBytes(StandardCharsets.UTF_8),
                     getSkin().getSkinData().data, human.getNameTag().getBytes(StandardCharsets.UTF_8)
                 )
             )

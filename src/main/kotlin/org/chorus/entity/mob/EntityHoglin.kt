@@ -182,7 +182,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
     protected fun sendBreedingAnimation(item: Item) {
         val pk: EntityEventPacket = EntityEventPacket()
         pk.event = EntityEventPacket.EATING_ITEM
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.data = item.getFullId()
         Server.broadcastPacket(getViewers().values, pk)
     }
@@ -213,7 +213,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
             super.onStart(entity)
             entity.setDataProperty(
                 EntityDataTypes.Companion.TARGET_EID,
-                entity.getMemoryStorage()!!.get(memory).getId()
+                entity.getMemoryStorage()!!.get(memory).getRuntimeID()
             )
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(

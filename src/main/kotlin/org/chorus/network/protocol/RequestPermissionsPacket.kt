@@ -2,7 +2,6 @@ package org.chorus.network.protocol
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.Entity.getId
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.PlayerAbility
 import org.chorus.network.protocol.types.PlayerPermission

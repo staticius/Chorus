@@ -32,7 +32,7 @@ class InLoveExecutor(protected var duration: Int) : IBehaviorExecutor {
 
     protected fun sendLoveParticle(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.id
+        pk.eid = entity.runtimeId
         pk.event = EntityEventPacket.LOVE_PARTICLES
         Server.broadcastPacket(entity.viewers.values, pk)
     }

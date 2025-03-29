@@ -592,7 +592,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 if (source.damager is Player) {
                     addGossip(player.getLoginChainData().getXUID(), Gossip.MINOR_NEGATIVE, 25)
                     val pk = EntityEventPacket()
-                    pk.eid = getId()
+                    pk.eid = getRuntimeID()
                     pk.event = EntityEventPacket.VILLAGER_ANGRY
                     Server.broadcastPacket(viewers.values, pk)
                 }
@@ -848,8 +848,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         val pk1 = UpdateTradePacket()
         pk1.containerId = player.getWindowId(getTradeInventory()!!).toByte()
         pk1.tradeTier = getTradeTier()
-        pk1.traderUniqueEntityId = getId()
-        pk1.playerUniqueEntityId = player.id
+        pk1.traderUniqueEntityId = getRuntimeID()
+        pk1.playerUniqueEntityId = player.runtimeId
         pk1.displayName = getDisplayName()
         val tierExpRequirements = ListTag<CompoundTag>()
         var i = 0
@@ -984,8 +984,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                         val slice = InventorySlice(getInventory(), 1, getInventory().size)
                         if (slice.canAddItem(item)) {
                             val pk = TakeItemEntityPacket()
-                            pk.entityId = this.getId()
-                            pk.target = i.getId()
+                            pk.entityId = this.getRuntimeID()
+                            pk.target = i.getRuntimeID()
                             Server.broadcastPacket(viewers.values, pk)
                             slice.addItem(item)
                             i.close()

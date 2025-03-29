@@ -16,13 +16,11 @@ import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus.event.player.*
 import org.chorus.item.*
-import org.chorus.item.Item.Companion.get
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.GameRule
 import org.chorus.level.Sound
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
-import org.chorus.math.Vector3
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.InventoryTransactionPacket
 import org.chorus.network.protocol.ProtocolInfo
@@ -162,7 +160,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 if (target is Player && !player.adventureSettings[AdventureSettings.Type.ATTACK_PLAYERS]
                     || target !is Player && !player.adventureSettings[AdventureSettings.Type.ATTACK_MOBS]
                 ) return
-                if (target.getId() == player.getId()) {
+                if (target.getRuntimeID() == player.getRuntimeID()) {
                     val event = PlayerHackDetectedEvent(player, PlayerHackDetectedEvent.HackType.INVALID_PVP)
                     Server.instance.pluginManager.callEvent(event)
 

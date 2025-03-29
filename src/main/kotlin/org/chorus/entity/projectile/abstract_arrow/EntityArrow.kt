@@ -141,7 +141,7 @@ class EntityArrow @JvmOverloads constructor(
     override fun addHitEffect() {
         level!!.addSound(this.position, Sound.RANDOM_BOWHIT)
         val packet: EntityEventPacket = EntityEventPacket()
-        packet.eid = getId()
+        packet.eid = getRuntimeID()
         packet.event = EntityEventPacket.ARROW_SHAKE
         packet.data = 7 // TODO Magic value. I have no idea why we have to set it to 7 here...
         Server.broadcastPacket(hasSpawned.values, packet)

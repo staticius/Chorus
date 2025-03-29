@@ -26,7 +26,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
             return
         }
 
-        pk.entityId = player.getId()
+        pk.entityId = player.getRuntimeID()
         val pos = Vector3(pk.x.toDouble(), pk.y.toDouble(), pk.z.toDouble())
         val face = fromIndex(pk.face)
 

@@ -15,7 +15,7 @@ abstract class EntityBoss(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
     override fun setHealth(health: Float) {
         super.setHealth(health)
         Server.broadcastPacket(getViewers().values, BossEventPacket(
-            targetActorID = this.id,
+            targetActorID = this.runtimeId,
             eventType = BossEventPacket.EventType.UPDATE_PERCENT,
             eventData = BossEventPacket.EventType.Companion.UpdatePercentData(
                 healthPercent = health / maxHealth

@@ -64,7 +64,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         super.setHealth(health)
         if (this.isAlive() && !wasAlive) {
             val pk = EntityEventPacket()
-            pk.eid = this.getId()
+            pk.eid = this.getRuntimeID()
             pk.event = EntityEventPacket.RESPAWN
             Server.broadcastPacket(hasSpawned.values, pk)
         }
@@ -110,7 +110,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
                 if (damager is Player && !damager.onGround) {
                     val animate = AnimatePacket(
                         action = AnimatePacket.Action.CRITICAL_HIT,
-                        targetUniqueID = getId()
+                        targetUniqueID = getRuntimeID()
                     )
 
                     level!!.addChunkPacket(damager.getChunkX(), damager.getChunkZ(), animate)
@@ -129,7 +129,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             }
 
             val pk: EntityEventPacket = EntityEventPacket()
-            pk.eid = this.getId()
+            pk.eid = this.getRuntimeID()
             pk.event =
                 if (this.getHealth() <= 0) EntityEventPacket.DEATH_ANIMATION else EntityEventPacket.HURT_ANIMATION
             Server.broadcastPacket(hasSpawned.values, pk)

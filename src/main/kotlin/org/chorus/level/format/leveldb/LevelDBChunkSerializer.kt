@@ -338,7 +338,7 @@ class LevelDBChunkSerializer private constructor() {
                     if ((e !is Player) && !e.closed && e.canBeSavedWithChunk()) {
                         e.saveNBT()
 
-                        val entityUUID = e.getUniqueId().leastSignificantBits
+                        val entityUUID = e.uniqueId
 
                         bufStream.write(
                             ByteBuffer

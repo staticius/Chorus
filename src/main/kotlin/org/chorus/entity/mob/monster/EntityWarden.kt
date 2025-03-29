@@ -218,7 +218,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
         this.waitForVibration = false
         this.lastDetectTime = level!!.tick
         val pk = EntityEventPacket()
-        pk.eid = this.getId()
+        pk.eid = this.getRuntimeID()
         pk.event = EntityEventPacket.VIBRATION_DETECTED
         Server.broadcastPacket(this.viewers.values, pk)
 

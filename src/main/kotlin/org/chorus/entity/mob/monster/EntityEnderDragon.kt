@@ -37,6 +37,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.*
+import org.chorus.network.protocol.types.EntityLink
 import org.chorus.plugin.InternalPlugin
 import java.util.*
 import java.util.Set
@@ -103,24 +104,33 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
     }
 
     override fun createAddEntityPacket(): DataPacket {
-        val addEntity = AddEntityPacket()
-        addEntity.type = this.networkId
-        addEntity.entityUniqueId = this.getId()
-        addEntity.entityRuntimeId = this.getId()
-        addEntity.yaw = rotation.yaw.toFloat()
-        addEntity.headYaw = rotation.yaw.toFloat()
-        addEntity.pitch = rotation.pitch.toFloat()
-        addEntity.x = position.x.toFloat()
-        addEntity.y = position.y.toFloat()
-        addEntity.z = position.z.toFloat()
-        addEntity.speedX = motion.x.toFloat()
-        addEntity.speedY = motion.y.toFloat()
-        addEntity.speedZ = motion.z.toFloat()
-        addEntity.entityData = this.entityDataMap
-        addEntity.attributes = arrayOf<Attribute>(
-            Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH).setMaxValue(200f).setValue(200f)
+        return AddEntityPacket(
+            targetActorID = this.uniqueId,
+            targetRuntimeID = this.runtimeId,
+            actorType = this.getIdentifier(),
+            position = this.position.asVector3f(),
+            velocity = this.motion.asVector3f(),
+            rotation = this.rotation.asVector2f(),
+            yHeadRotation = this.rotation.yaw.toFloat(),
+            yBodyRotation = this.rotation.yaw.toFloat(),
+            attributeList = run {
+                this.attributes.values.add(
+                    Attribute.getAttribute(Attribute.MAX_HEALTH).setMaxValue(200f).setValue(200f)
+                )
+                this.attributes.values.toTypedArray()
+            },
+            actorData = this.entityDataMap,
+            syncedProperties = this.propertySyncData(),
+            actorLinks = Array(passengers.size) { i ->
+                EntityLink(
+                    this.getRuntimeID(),
+                    passengers[i].getRuntimeID(),
+                    if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
+                    immediate = false,
+                    riderInitiated = false
+                )
+            }
         )
-        return addEntity
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
@@ -180,7 +190,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
             )
             val packet = EntityEventPacket()
             packet.event = EntityEventPacket.ENDER_DRAGON_DEATH
-            packet.eid = getId()
+            packet.eid = getRuntimeID()
             Server.broadcastPacket(viewers.values, packet)
             isImmobile = true
         } else {
@@ -262,7 +272,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
 
     override fun addBossbar(player: Player) {
         player.dataPacket(BossEventPacket(
-            targetActorID = this.id,
+            targetActorID = this.runtimeId,
             eventType = BossEventPacket.EventType.ADD,
             eventData = BossEventPacket.EventType.Companion.AddData(
                 name = this.getName(),
