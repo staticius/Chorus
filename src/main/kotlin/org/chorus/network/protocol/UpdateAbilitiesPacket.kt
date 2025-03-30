@@ -33,24 +33,15 @@ class UpdateAbilitiesPacket : DataPacket() {
         byteBuf.writeArray(
             this.abilityLayers
         ) { byteBuf: HandleByteBuf, abilityLayer: AbilityLayer ->
-            this.writeAbilityLayer(
+            writeAbilityLayer(
                 byteBuf,
                 abilityLayer
             )
         }
     }
 
-    private fun writeAbilityLayer(byteBuf: HandleByteBuf, abilityLayer: AbilityLayer) {
-        byteBuf.writeShortLE(abilityLayer.layerType.ordinal)
-        byteBuf.writeIntLE(getAbilitiesNumber(abilityLayer.abilitiesSet))
-        byteBuf.writeIntLE(getAbilitiesNumber(abilityLayer.abilityValues))
-        byteBuf.writeFloatLE(abilityLayer.flySpeed)
-        byteBuf.writeFloatLE(abilityLayer.verticalFlySpeed)
-        byteBuf.writeFloatLE(abilityLayer.walkSpeed)
-    }
-
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_ABILITIES_PACKET
+        return ProtocolInfo.UPDATE_ABILITIES_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
@@ -97,6 +88,15 @@ class UpdateAbilitiesPacket : DataPacket() {
                 number = number or FLAGS_TO_BITS.getOrDefault(ability, 0)
             }
             return number
+        }
+
+        fun writeAbilityLayer(byteBuf: HandleByteBuf, abilityLayer: AbilityLayer) {
+            byteBuf.writeShortLE(abilityLayer.layerType.ordinal)
+            byteBuf.writeIntLE(getAbilitiesNumber(abilityLayer.abilitiesSet))
+            byteBuf.writeIntLE(getAbilitiesNumber(abilityLayer.abilityValues))
+            byteBuf.writeFloatLE(abilityLayer.flySpeed)
+            byteBuf.writeFloatLE(abilityLayer.verticalFlySpeed)
+            byteBuf.writeFloatLE(abilityLayer.walkSpeed)
         }
     }
 }

@@ -900,8 +900,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             syncedProperties = this.propertySyncData(),
             actorLinks = Array(passengers.size) { i ->
                 EntityLink(
-                    this.getRuntimeID(),
-                    passengers[i].getRuntimeID(),
+                    this.uniqueId,
+                    passengers[i].uniqueId,
                     if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
                     immediate = false,
                     riderInitiated = false

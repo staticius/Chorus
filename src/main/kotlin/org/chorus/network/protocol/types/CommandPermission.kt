@@ -1,9 +1,10 @@
 package org.chorus.network.protocol.types
 
 enum class CommandPermission {
-    NORMAL,
-    OPERATOR,
+    ANY,
+    GAME_DIRECTOR,
+    ADMIN,
     HOST,
-    AUTOMATION,
-    ADMIN
+    OWNER,
+    INTERNAL
 }

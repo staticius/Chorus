@@ -16,7 +16,7 @@ import org.chorus.network.protocol.AddPlayerPacket
 import org.chorus.network.protocol.MovePlayerPacket
 import org.chorus.network.protocol.RemoveEntityPacket
 import org.chorus.network.protocol.SetEntityLinkPacket
-import org.chorus.network.protocol.types.EntityLink
+import org.chorus.network.protocol.types.*
 import java.util.*
 
 
@@ -163,22 +163,37 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
                 arrayOf(player)
             )
 
-            val pk: AddPlayerPacket = AddPlayerPacket()
-            pk.uuid = this.getUniqueID()
-            pk.username = this.getName()
-            pk.entityUniqueId = this.getRuntimeID()
-            pk.entityRuntimeId = this.getRuntimeID()
-            pk.x = position.x.toFloat()
-            pk.y = position.y.toFloat()
-            pk.z = position.z.toFloat()
-            pk.speedX = motion.x.toFloat()
-            pk.speedY = motion.y.toFloat()
-            pk.speedZ = motion.z.toFloat()
-            pk.yaw = rotation.yaw.toFloat()
-            pk.pitch = rotation.pitch.toFloat()
-            pk.item = getInventory().itemInHand
-            pk.entityData = this.entityDataMap
-            player.dataPacket(pk)
+            player.dataPacket(AddPlayerPacket(
+                uuid = this.uuid,
+                playerName = this.getName(),
+                targetRuntimeID = this.getRuntimeID(),
+                platformChatID = "", // TODO: platformChatID
+                position = this.position.asVector3f(),
+                velocity = this.motion.asVector3f(),
+                rotation = this.rotation.asVector2f(),
+                yHeadRotation = this.headYaw.toFloat(),
+                carriedItem = this.itemInHand,
+                playerGameType = Server.instance.gamemode,
+                entityDataMap = this.entityDataMap,
+                abilitiesData = SerializedAbilitiesData(
+                    this.getUniqueID(),
+                    PlayerPermission.VISITOR,
+                    CommandPermission.ANY,
+                    emptyArray() // TODO: AbilityLayers
+                ),
+                actorLinks = Array(this.passengers.size) { i ->
+                    EntityLink(
+                        this.getUniqueID(),
+                        this.passengers[i].uniqueId,
+                        if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
+                        immediate = false,
+                        riderInitiated = false
+                    )
+                },
+                syncedProperties = this.propertySyncData(),
+                buildPlatform = Platform.UNKNOWN, // TODO: buildPlatform
+                deviceID = "" // TODO: DeviceID
+            ))
 
             inventory.sendArmorContents(player)
             offhandInventory!!.sendContents(player)

@@ -45,7 +45,7 @@ class AdventureSettings : Cloneable {
             set(Type.OPERATOR, player.isOp)
             set(Type.TELEPORT, player.isOp)
 
-            commandPermission = if (player.isOp) CommandPermission.OPERATOR else CommandPermission.NORMAL
+            commandPermission = if (player.isOp) CommandPermission.GAME_DIRECTOR else CommandPermission.ANY
             playerPermission = if (player.isOp) PlayerPermission.OPERATOR else PlayerPermission.MEMBER
         } else {
             readNBT(nbt)
@@ -122,7 +122,7 @@ class AdventureSettings : Cloneable {
         set(Type.OPERATOR, op)
         set(Type.TELEPORT, op)
 
-        commandPermission = if (op) CommandPermission.OPERATOR else CommandPermission.NORMAL
+        commandPermission = if (op) CommandPermission.GAME_DIRECTOR else CommandPermission.ANY
 
         //Don't override customization/guest status
         if (op && playerPermission != PlayerPermission.OPERATOR) {
