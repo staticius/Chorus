@@ -1060,15 +1060,15 @@ class Server internal constructor(
 
         players[socketAddress] = player
         if (this.sendUsageTicker > 0) {
-            uniquePlayers.add(player.getUniqueID())
+            uniquePlayers.add(player.getUUID())
         }
     }
 
     @ApiStatus.Internal
     fun addOnlinePlayer(player: Player) {
-        playerList[player.getUniqueID()] = player
+        playerList[player.getUUID()] = player
         this.updatePlayerListData(
-            player.getUniqueID(),
+            player.getUUID(),
             player.getRuntimeID(),
             player.getDisplayName(),
             player.getSkin(),
@@ -1080,14 +1080,14 @@ class Server internal constructor(
 
     @ApiStatus.Internal
     fun removeOnlinePlayer(player: Player) {
-        if (playerList.containsKey(player.getUniqueID())) {
-            playerList.remove(player.getUniqueID())
+        if (playerList.containsKey(player.getUUID())) {
+            playerList.remove(player.getUUID())
 
             val pk = PlayerListPacket()
             pk.type = PlayerListPacket.TYPE_REMOVE
             pk.entries = arrayOf(
                 PlayerListPacket.Entry(
-                    player.getUniqueID()
+                    player.getUUID()
                 )
             )
 
@@ -1215,7 +1215,7 @@ class Server internal constructor(
         pk.entries = playerList.values.stream()
             .map { p: Player ->
                 PlayerListPacket.Entry(
-                    p.getUniqueID(),
+                    p.getUUID(),
                     p.getRuntimeID(),
                     p.getDisplayName(),
                     p.getSkin(),
