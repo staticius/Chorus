@@ -2,8 +2,7 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class CameraShakePacket(
+data class CameraShakePacket(
     val intensity: Float,
     val seconds: Float,
     val shakeType: CameraShakeType,

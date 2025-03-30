@@ -7,7 +7,6 @@ import org.chorus.network.protocol.types.camera.aimassist.CameraAimAssist
 import org.chorus.network.protocol.types.camera.aimassist.CameraPresetAimAssist
 import org.chorus.utils.OptionalValue
 
-
 data class CameraPresetsPacket(
     val presets: MutableList<CameraPreset>
 ) : DataPacket(), PacketEncoder {

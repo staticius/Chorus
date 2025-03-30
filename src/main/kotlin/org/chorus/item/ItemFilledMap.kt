@@ -7,12 +7,14 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.ClientboundMapItemDataPacket
 import org.chorus.plugin.InternalPlugin
+import org.chorus.utils.Utils
 
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import java.util.*
 import javax.imageio.ImageIO
 
 
@@ -103,16 +105,30 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         // don't load the image from NBT if it has been done before.
         val image = if (this.image != null) this.image else loadImageFromNBT()
 
-        val pk = ClientboundMapItemDataPacket()
-        pk.eids = longArrayOf(mapId)
-        pk.mapId = mapId
-        pk.update = 2
-        pk.scale = (scale - 1).toByte()
-        pk.width = 128
-        pk.height = 128
-        pk.offsetX = 0
-        pk.offsetZ = 0
-        pk.image = image
+        val pk = ClientboundMapItemDataPacket(
+            mapID = mapId,
+            typeFlags = setOf(ClientboundMapItemDataPacket.Type.TEXTURE_UPDATE),
+            mapOrigin = BlockVector3(),
+            isLockedMap = false,
+            dimension = 0,
+            scale = (scale - 1).toByte(),
+            textureUpdateData = ClientboundMapItemDataPacket.TextureUpdateData(
+                textureWidth = 128,
+                textureHeight = 128,
+                xTexCoordinate = 0,
+                yTexCoordinate = 0,
+                pixels = when (image != null) {
+                    true -> {
+                        List(128 * 128) { i ->
+                            val x = i and 127
+                            val y = i shr 7
+                            Utils.toABGR(image.getRGB(x, y)).toInt()
+                        }
+                    }
+                    false -> listOf()
+                }
+            )
+        )
 
         player.dataPacket(pk)
         player.level!!.scheduler.scheduleDelayedTask(

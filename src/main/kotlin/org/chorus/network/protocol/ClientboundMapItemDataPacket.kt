@@ -1,150 +1,195 @@
 package org.chorus.network.protocol
 
-import io.netty.util.internal.EmptyArrays
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import org.chorus.math.*
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
 import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.utils.*
+import org.chorus.network.protocol.types.ActorUniqueID
+import org.chorus.network.protocol.types.Rotation
 import java.awt.Color
-import java.awt.image.BufferedImage
 
-class ClientboundMapItemDataPacket : DataPacket(), PacketEncoder {
-    var eids: LongArray = EMPTY_LONGS
+data class ClientboundMapItemDataPacket(
+    val mapID: ActorUniqueID,
+    val typeFlags: Set<Type>,
+    val dimension: Byte,
+    val isLockedMap: Boolean,
+    val mapOrigin: BlockVector3,
+    val scale: Byte? = null,
+    val creationData: CreationData? = null,
+    val decorationUpdateData: DecorationUpdateData? = null,
+    val textureUpdateData: TextureUpdateData? = null,
+) : DataPacket(), PacketEncoder {
+    enum class Type(val bit: Int) {
+        INVALID(0),
+        TEXTURE_UPDATE(1 shl 1),
+        DECORATION_UPDATE(1 shl 2),
+        CREATION(1 shl 3);
+    }
 
-    var mapId: Long = 0
-    var update: Int = 0
-    var scale: Byte = 0
-    var isLocked: Boolean = false
-    var width: Int = 0
-    var height: Int = 0
-    var offsetX: Int = 0
-    var offsetZ: Int = 0
+    data class CreationData(
+        val mapIDList: List<ActorUniqueID>,
+    )
 
-    var dimensionId: Byte = 0
-    var origin: BlockVector3 = BlockVector3()
+    data class DecorationUpdateData(
+        val actorIDs: List<MapItemTrackedActor>,
+        val decorationList: List<MapDecoration>,
+    )
 
-    val trackedObjects: List<MapTrackedObject> = ObjectArrayList()
-    var decorators: Array<MapDecorator?> = MapDecorator.EMPTY_ARRAY
-    var colors: IntArray = EmptyArrays.EMPTY_INTS
-    var image: BufferedImage? = null
+    data class TextureUpdateData(
+        val textureWidth: Int,
+        val textureHeight: Int,
+        val xTexCoordinate: Int,
+        val yTexCoordinate: Int,
+        val pixels: List<Int>
+    )
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeActorUniqueID(mapId)
+        byteBuf.writeActorUniqueID(this.mapID)
+        byteBuf.writeUnsignedVarInt(run {
+            var bitField = 0
+            this.typeFlags.forEach {
+                bitField = bitField or it.bit
+            }
+            bitField
+        })
+        byteBuf.writeByte(this.dimension.toInt())
+        byteBuf.writeBoolean(this.isLockedMap)
+        byteBuf.writeBlockVector3(this.mapOrigin)
 
-        var update = 0
-        if (image != null || colors.size > 0) {
-            update = update or TEXTURE_UPDATE
-        }
-        if (decorators.size > 0 || !trackedObjects.isEmpty()) {
-            update = update or DECORATIONS_UPDATE
-        }
-        if (eids.size > 0) {
-            update = update or ENTITIES_UPDATE
-        }
+        if (this.typeFlags.contains(Type.CREATION)) {
+            val creationData = this.creationData as CreationData
 
-        byteBuf.writeUnsignedVarInt(update)
-        byteBuf.writeByte(dimensionId.toInt())
-        byteBuf.writeBoolean(this.isLocked)
-        byteBuf.writeBlockVector3(this.origin)
-
-        if ((update and ENTITIES_UPDATE) != 0) { //TODO: find out what these are for
-            byteBuf.writeUnsignedVarInt(eids.size)
-            for (eid in eids) {
-                byteBuf.writeActorUniqueID(eid)
+            byteBuf.writeArray(creationData.mapIDList) { buf, id ->
+                buf.writeActorUniqueID(id)
             }
         }
-        if ((update and (ENTITIES_UPDATE or TEXTURE_UPDATE or DECORATIONS_UPDATE)) != 0) {
+
+        if (this.typeFlags.any { it in setOf(Type.CREATION, Type.TEXTURE_UPDATE, Type.DECORATION_UPDATE) }) {
+            val scale = this.scale as Byte
+
             byteBuf.writeByte(scale.toInt())
         }
 
-        if ((update and DECORATIONS_UPDATE) != 0) {
-            byteBuf.writeUnsignedVarInt(trackedObjects.size())
-            for (`object` in this.trackedObjects) {
-                when (`object`.getType()) {
-                    MapTrackedObject.Type.BLOCK -> {
-                        byteBuf.writeIntLE(`object`.getType().ordinal())
-                        byteBuf.writeBlockVector3(
-                            `object`.getPosition().floorX,
-                            `object`.getPosition().floorY,
-                            `object`.getPosition().floorZ
-                        )
+        if (this.typeFlags.contains(Type.DECORATION_UPDATE)) {
+            val decorationUpdateData = this.decorationUpdateData as DecorationUpdateData
+
+            byteBuf.writeArray(decorationUpdateData.actorIDs) { buf, value ->
+                buf.writeIntLE(value.type.ordinal)
+                when (value.type) {
+                    MapItemTrackedActor.Type.BLOCK -> {
+                        val data = value.data as MapItemTrackedActor.BlockData
+
+                        buf.writeBlockVector3(data.blockPosition)
                     }
 
-                    MapTrackedObject.Type.ENTITY -> {
-                        byteBuf.writeIntLE(`object`.getType().ordinal())
-                        byteBuf.writeActorUniqueID(`object`.getEntityId())
+                    MapItemTrackedActor.Type.ENTITY -> {
+                        val data = value.data as MapItemTrackedActor.EntityData
+
+                        buf.writeActorUniqueID(data.uniqueID)
                     }
                 }
             }
 
-            byteBuf.writeUnsignedVarInt(decorators.size)
-            for (decorator in decorators) {
-                byteBuf.writeByte(decorator.rotation.toInt())
-                byteBuf.writeByte(decorator.icon.toInt())
-                byteBuf.writeByte(decorator.offsetX.toInt())
-                byteBuf.writeByte(decorator.offsetZ.toInt())
-                byteBuf.writeString(decorator.label!!)
-                byteBuf.writeVarInt(decorator.color!!.rgb)
+            byteBuf.writeArray(decorationUpdateData.decorationList) { buf, value ->
+                buf.writeByte(value.type.id.toInt())
+                buf.writeByte(value.rotation.id.toInt())
+                buf.writeByte(value.x.toInt())
+                buf.writeByte(value.y.toInt())
+                buf.writeString(value.label)
+                buf.writeUnsignedVarInt(value.color.rgb)
             }
         }
 
-        if ((update and TEXTURE_UPDATE) != 0) {
-            byteBuf.writeVarInt(width)
-            byteBuf.writeVarInt(height)
-            byteBuf.writeVarInt(offsetX)
-            byteBuf.writeVarInt(offsetZ)
+        if (this.typeFlags.contains(Type.TEXTURE_UPDATE)) {
+            val textureUpdateData = this.textureUpdateData as TextureUpdateData
 
-            if (image != null) {
-                byteBuf.writeUnsignedVarInt(width * height)
-                for (y in 0..<width) {
-                    for (x in 0..<height) {
-                        byteBuf.writeUnsignedVarInt(Utils.toABGR(image!!.getRGB(x, y)).toInt())
-                    }
-                }
+            byteBuf.writeVarInt(textureUpdateData.textureWidth)
+            byteBuf.writeVarInt(textureUpdateData.textureHeight)
+            byteBuf.writeVarInt(textureUpdateData.xTexCoordinate)
+            byteBuf.writeVarInt(textureUpdateData.yTexCoordinate)
 
-                image!!.flush()
-            } else if (colors.size > 0) {
-                byteBuf.writeUnsignedVarInt(colors.size)
-                for (color in colors) {
-                    byteBuf.writeUnsignedVarInt(color)
-                }
+            byteBuf.writeArray(textureUpdateData.pixels) { buf, pixel ->
+                buf.writeUnsignedVarInt(pixel)
             }
         }
     }
 
-    class MapDecorator {
-        var rotation: Byte = 0
-        var icon: Byte = 0
-        var offsetX: Byte = 0
-        var offsetZ: Byte = 0
-        var label: String? = null
-        var color: Color? = null
+    class MapDecoration(
+        val type: Type,
+        val rotation: Rotation,
+        val x: Byte,
+        val y: Byte,
+        val label: String,
+        val color: Color,
+    ) {
+        enum class Type(val id: Byte) {
+            MARKER_WHITE(0),
+            MARKER_GREEN(1),
+            MARKER_RED(2),
+            MARKER_BLUE(3),
+            X_WHITE(4),
+            TRIANGLE_RED(5),
+            SQUARE_WHITE(6),
+            MARKER_SIGN(7),
+            MARKER_PINK(8),
+            MARKER_ORANGE(9),
+            MARKER_YELLOW(10),
+            MARKER_TEAL(11),
+            TRIANGLE_GREEN(12),
+            SMALL_SQUARE_WHITE(13),
+            MANSION(14),
+            MONUMENT(15),
+            NO_DRAW(16),
+            VILLAGE_DESERT(17),
+            VILLAGE_PLAINS(18),
+            VILLAGE_SAVANNA(19),
+            VILLAGE_SNOWY(20),
+            VILLAGE_TAIGA(21),
+            JUNGLE_TEMPLE(22),
+            WITCH_HUT(23),
+            TRIAL_CHAMBERS(24);
 
-        companion object {
-            val EMPTY_ARRAY: Array<MapDecorator?> = arrayOfNulls(0)
+            companion object {
+                val PLAYER = MARKER_WHITE
+                val PLAYER_OFF_MAP = SQUARE_WHITE
+                val PLAYER_OFF_LIMITS = SMALL_SQUARE_WHITE
+                val PLAYER_HIDDEN = NO_DRAW
+                val ITEM_FRAME = MARKER_GREEN
+            }
         }
     }
 
 
-    class MapTrackedObject {
-        private val type: Type
-        private var entityId: Long = 0
-        private var position: Vector3? = null
+    class MapItemTrackedActor(
+        val type: Type,
+        val data: Data,
+    ) {
+        constructor(entityId: Long) : this(
+            Type.ENTITY,
+            EntityData(
+                uniqueID = entityId
+            )
+        )
 
-        constructor(entityId: Long) {
-            this.type = Type.ENTITY
-            this.entityId = entityId
-        }
-
-        constructor(position: Vector3?) {
-            this.type = Type.BLOCK
-            this.position = position
-        }
+        constructor(position: Vector3) : this(
+            Type.BLOCK,
+            BlockData(
+                blockPosition = position.asBlockVector3()
+            )
+        )
 
         enum class Type {
             ENTITY,
             BLOCK
         }
+
+        interface Data
+        data class EntityData(
+            val uniqueID: ActorUniqueID
+        ) : Data
+
+        data class BlockData(
+            val blockPosition: BlockVector3,
+        ) : Data
     }
 
     override fun pid(): Int {
@@ -153,13 +198,5 @@ class ClientboundMapItemDataPacket : DataPacket(), PacketEncoder {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
-    }
-
-    companion object {
-        val EMPTY_LONGS: LongArray = LongArray(0)
-
-        const val TEXTURE_UPDATE: Int = 0x02
-        const val DECORATIONS_UPDATE: Int = 0x04
-        const val ENTITIES_UPDATE: Int = 0x08
     }
 }
