@@ -43,7 +43,7 @@ class CommandOutputPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.COMMAND_OUTPUT_PACKET
+        return ProtocolInfo.COMMAND_OUTPUT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

@@ -82,7 +82,7 @@ interface ICommandBlock : CommandSender, InventoryHolder {
     companion object {
         const val CURRENT_VERSION: Int = 10
 
-        //TODO: enum
+        // TODO: enum
         const val MODE_NORMAL: Int = 0
         const val MODE_REPEATING: Int = 1
         const val MODE_CHAIN: Int = 2

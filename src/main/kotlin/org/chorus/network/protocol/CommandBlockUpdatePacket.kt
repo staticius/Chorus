@@ -1,71 +1,92 @@
 package org.chorus.network.protocol
 
+import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorRuntimeID
+import org.chorus.network.protocol.types.CommandBlockMode
 
+data class CommandBlockUpdatePacket(
+    val isBlock: Boolean,
+    val commandBlockHolderData: CommandBlockHolderData,
+    val command: String,
+    val lastOutput: String,
+    val name: String,
+    val filteredName: String,
+    val trackOutput: Boolean,
+    val tickDelay: Int,
+    val shouldExecuteOnFirstTick: Boolean,
+) : DataPacket(), PacketEncoder {
+    interface CommandBlockHolderData
 
-class CommandBlockUpdatePacket : DataPacket() {
-    var isBlock: Boolean = false
-    var x: Int = 0
-    var y: Int = 0
-    var z: Int = 0
-    var commandBlockMode: Int = 0
-    var isRedstoneMode: Boolean = false
-    var isConditional: Boolean = false
-    var minecartEid: Long = 0
-    var command: String? = null
-    var lastOutput: String? = null
-    var name: String? = null
-    private var filteredName: String? = null
-    var shouldTrackOutput: Boolean = false
-    var tickDelay: Int = 0
-    var executingOnFirstTick: Boolean = false
+    data class CommandBlockActorData(
+        val targetRuntimeID: ActorRuntimeID
+    ) : CommandBlockHolderData
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.isBlock = byteBuf.readBoolean()
-        if (this.isBlock) {
-            val v = byteBuf.readBlockVector3()
-            this.x = v.x
-            this.y = v.y
-            this.z = v.z
-            this.commandBlockMode = byteBuf.readUnsignedVarInt()
-            this.isRedstoneMode = byteBuf.readBoolean()
-            this.isConditional = byteBuf.readBoolean()
-        } else {
-            this.minecartEid = byteBuf.readActorRuntimeID()
-        }
-        this.command = byteBuf.readString()
-        this.lastOutput = byteBuf.readString()
-        this.name = byteBuf.readString()
-        this.filteredName = byteBuf.readString()
-        this.shouldTrackOutput = byteBuf.readBoolean()
-        this.tickDelay = byteBuf.readIntLE()
-        this.executingOnFirstTick = byteBuf.readBoolean()
-    }
+    data class CommandBlockData(
+        val blockPosition: BlockVector3,
+        val commandBlockMode: CommandBlockMode,
+        val redstoneMode: Boolean,
+        val isConditional: Boolean,
+    ) : CommandBlockHolderData
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBoolean(this.isBlock)
-        if (this.isBlock) {
-            byteBuf.writeBlockVector3(this.x, this.y, this.z)
-            byteBuf.writeUnsignedVarInt(this.commandBlockMode)
-            byteBuf.writeBoolean(this.isRedstoneMode)
-            byteBuf.writeBoolean(this.isConditional)
-        } else {
-            byteBuf.writeActorRuntimeID(this.minecartEid)
+        when (this.isBlock) {
+            true -> {
+                val commandBlockData = this.commandBlockHolderData as CommandBlockData
+
+                byteBuf.writeBlockVector3(commandBlockData.blockPosition)
+                byteBuf.writeUnsignedVarInt(commandBlockData.commandBlockMode.ordinal)
+                byteBuf.writeBoolean(commandBlockData.redstoneMode)
+                byteBuf.writeBoolean(commandBlockData.isConditional)
+            }
+            false -> {
+                val commandBlockActorData = this.commandBlockHolderData as CommandBlockActorData
+
+                byteBuf.writeActorRuntimeID(commandBlockActorData.targetRuntimeID)
+            }
         }
-        byteBuf.writeString(command!!)
-        byteBuf.writeString(lastOutput!!)
-        byteBuf.writeString(name!!)
-        byteBuf.writeString(filteredName!!)
-        byteBuf.writeBoolean(this.shouldTrackOutput)
+        byteBuf.writeString(this.command)
+        byteBuf.writeString(this.lastOutput)
+        byteBuf.writeString(this.name)
+        byteBuf.writeString(this.filteredName)
+        byteBuf.writeBoolean(this.trackOutput)
         byteBuf.writeIntLE(this.tickDelay)
-        byteBuf.writeBoolean(this.executingOnFirstTick)
+        byteBuf.writeBoolean(this.shouldExecuteOnFirstTick)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.COMMAND_BLOCK_UPDATE_PACKET
+        return ProtocolInfo.COMMAND_BLOCK_UPDATE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<CommandBlockUpdatePacket> {
+        override fun decode(byteBuf: HandleByteBuf): CommandBlockUpdatePacket {
+            val isBlock: Boolean
+            return CommandBlockUpdatePacket(
+                isBlock = byteBuf.readBoolean().also { isBlock = it },
+                commandBlockHolderData = when (isBlock) {
+                    true -> CommandBlockData(
+                        blockPosition = byteBuf.readBlockVector3(),
+                        commandBlockMode = CommandBlockMode.entries[byteBuf.readUnsignedVarInt()],
+                        redstoneMode = byteBuf.readBoolean(),
+                        isConditional = byteBuf.readBoolean(),
+                    )
+                    false -> CommandBlockActorData(
+                        targetRuntimeID = byteBuf.readActorRuntimeID(),
+                    )
+                },
+                command = byteBuf.readString(),
+                lastOutput = byteBuf.readString(),
+                name = byteBuf.readString(),
+                filteredName = byteBuf.readString(),
+                trackOutput = byteBuf.readBoolean(),
+                tickDelay = byteBuf.readIntLE(),
+                shouldExecuteOnFirstTick = byteBuf.readBoolean()
+            )
+        }
     }
 }

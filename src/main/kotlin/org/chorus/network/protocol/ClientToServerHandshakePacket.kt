@@ -2,7 +2,6 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
 class ClientToServerHandshakePacket : DataPacket() {
     override fun pid(): Int {
         return ProtocolInfo.CLIENT_TO_SERVER_HANDSHAKE_PACKET

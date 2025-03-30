@@ -2,34 +2,35 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.CodeBuilderCategoryType
+import org.chorus.network.protocol.types.CodeBuilderCodeStatus
 import org.chorus.network.protocol.types.CodeBuilderOperationType
 
-
-//EDU exclusive
-
-
-class CodeBuilderSourcePacket : DataPacket() {
-    var operation: CodeBuilderOperationType? = null
-    var category: CodeBuilderCategoryType? = null
-    var value: String? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.operation = CodeBuilderOperationType.entries[byteBuf.readByte().toInt()]
-        this.category = CodeBuilderCategoryType.entries[byteBuf.readByte().toInt()]
-        this.value = byteBuf.readString()
-    }
-
+data class CodeBuilderSourcePacket(
+    val operation: CodeBuilderOperationType,
+    val category: CodeBuilderCategoryType,
+    val codeStatus: CodeBuilderCodeStatus,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeByte(operation!!.ordinal().toByte().toInt())
-        byteBuf.writeByte(category!!.ordinal().toByte().toInt())
-        byteBuf.writeString(value!!)
+        byteBuf.writeByte(operation.ordinal)
+        byteBuf.writeByte(category.ordinal)
+        byteBuf.writeByte(codeStatus.ordinal)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CODE_BUILDER_SOURCE_PACKET
+        return ProtocolInfo.CODE_BUILDER_SOURCE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<CodeBuilderSourcePacket> {
+        override fun decode(byteBuf: HandleByteBuf): CodeBuilderSourcePacket {
+            return CodeBuilderSourcePacket(
+                operation = CodeBuilderOperationType.entries[byteBuf.readByte().toInt()],
+                category = CodeBuilderCategoryType.entries[byteBuf.readByte().toInt()],
+                codeStatus = CodeBuilderCodeStatus.entries[byteBuf.readByte().toInt()],
+            )
+        }
     }
 }

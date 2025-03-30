@@ -1,83 +1,60 @@
 package org.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import org.chorus.entity.data.EntityFlag
 import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorUniqueID
 import java.math.BigInteger
 
-
-class ClientMovementPredictionSyncPacket : DataPacket() {
-    private val flags: MutableSet<EntityFlag> = ObjectOpenHashSet()
-    private var actorBoundingBox: Vector3f? = null
-    private var movementAttributesComponent: MovementAttributesComponent? = null
-    private var actorRuntimeId: Long = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        val flagsInt = byteBuf.readUnsignedBigVarInt(EntityFlag.entries.size)
-        for (flag in EntityFlag.entries) {
-            if (flagsInt.testBit(flag.ordinal())) {
-                flags.add(flag)
-            }
-        }
-        actorBoundingBox = byteBuf.readVector3f()
-        readMovementAttributesComponent(byteBuf)
-        actorRuntimeId = byteBuf.readActorRuntimeID()
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-        var flagsInt = BigInteger.ZERO
-        for (flag in flags) {
-            flagsInt = flagsInt.setBit(flag.ordinal())
-        }
-        byteBuf.writeUnsignedBigVarInt(flagsInt)
-        byteBuf.writeVector3f(actorBoundingBox!!)
-        writeMovementAttributesComponent(byteBuf)
-        byteBuf.writeActorRuntimeID(actorRuntimeId)
-    }
-
-    fun writeMovementAttributesComponent(byteBuf: HandleByteBuf) {
-        byteBuf.writeFloatLE(getMovementAttributesComponent().movementSpeed)
-        byteBuf.writeFloatLE(getMovementAttributesComponent().underwaterMovementSpeed)
-        byteBuf.writeFloatLE(getMovementAttributesComponent().lavaMovementSpeed)
-        byteBuf.writeFloatLE(getMovementAttributesComponent().jumpStrength)
-        byteBuf.writeFloatLE(getMovementAttributesComponent().health)
-        byteBuf.writeFloatLE(getMovementAttributesComponent().hunger)
-    }
-
-    fun readMovementAttributesComponent(byteBuf: HandleByteBuf) {
-        movementAttributesComponent = MovementAttributesComponent(
-            byteBuf.readFloatLE(),
-            byteBuf.readFloatLE(),
-            byteBuf.readFloatLE(),
-            byteBuf.readFloatLE(),
-            byteBuf.readFloatLE(),
-            byteBuf.readFloatLE()
-        )
-    }
-
-    @JvmRecord
+data class ClientMovementPredictionSyncPacket(
+    val flags: MutableSet<EntityFlag>,
+    val actorBoundingBox: Vector3f,
+    val movementAttributesComponent: MovementAttributesComponent,
+    val actorUniqueID: ActorUniqueID,
+    val actorFlyingState: Boolean,
+) : DataPacket() {
     data class MovementAttributesComponent(
-        movementSpeed: Float,
-        underwaterMovementSpeed: Float,
-        lavaMovementSpeed: Float,
-        jumpStrength: Float,
-        health: Float,
-        hunger: Float
-    ) {
-        val movementSpeed: Float = movementSpeed
-        val underwaterMovementSpeed: Float = underwaterMovementSpeed
-        val lavaMovementSpeed: Float = lavaMovementSpeed
-        val jumpStrength: Float = jumpStrength
-        val health: Float = health
-        val hunger: Float = hunger
-    }
+        val movementSpeed: Float,
+        val underwaterMovementSpeed: Float,
+        val lavaMovementSpeed: Float,
+        val jumpStrength: Float,
+        val health: Float,
+        val hunger: Float
+    )
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CLIENT_MOVEMENT_PREDICTION_SYNC_PACKET
+        return ProtocolInfo.CLIENT_MOVEMENT_PREDICTION_SYNC_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<ClientMovementPredictionSyncPacket> {
+        override fun decode(byteBuf: HandleByteBuf): ClientMovementPredictionSyncPacket {
+            return ClientMovementPredictionSyncPacket(
+                flags = run {
+                    val flagBits = byteBuf.readUnsignedBigVarInt(EntityFlag.entries.size)
+                    EntityFlag.entries.filter {
+                        flagBits.testBit(it.ordinal)
+                    }.toMutableSet()
+                },
+                actorBoundingBox = byteBuf.readVector3f(),
+                movementAttributesComponent = readMovementAttributesComponent(byteBuf),
+                actorUniqueID = byteBuf.readActorUniqueID(),
+                actorFlyingState = byteBuf.readBoolean(),
+            )
+        }
+
+        private fun readMovementAttributesComponent(byteBuf: HandleByteBuf): MovementAttributesComponent {
+            return MovementAttributesComponent(
+                movementSpeed = byteBuf.readFloatLE(),
+                underwaterMovementSpeed = byteBuf.readFloatLE(),
+                lavaMovementSpeed = byteBuf.readFloatLE(),
+                jumpStrength = byteBuf.readFloatLE(),
+                health = byteBuf.readFloatLE(),
+                hunger = byteBuf.readFloatLE()
+            )
+        }
     }
 }
