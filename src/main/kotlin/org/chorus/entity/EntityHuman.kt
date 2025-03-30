@@ -58,15 +58,15 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
         return skin
     }
 
+    override fun getUUID(): UUID {
+        return uuid
+    }
+
     override fun setSkin(skin: Skin) {
         this.skin = skin
     }
 
-    fun getUniqueID(): Long {
-        return uuid
-    }
-
-    override fun setUniqueId(uuid: UUID) {
+    override fun setUUID(uuid: UUID) {
         this.uuid = uuid
     }
 
@@ -151,12 +151,12 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             check(skin.isValid()) { this.javaClass.getSimpleName() + " must have a valid skin set" }
 
             if (this is Player) Server.instance.updatePlayerListData(
-                this.getUniqueID(),
+                this.getUUID(),
                 this.getRuntimeID(), this.getDisplayName(),
                 this.skin, this.loginChainData.xuid, arrayOf(player)
             )
             else Server.instance.updatePlayerListData(
-                this.getUniqueID(),
+                this.getUUID(),
                 this.getRuntimeID(),
                 this.getName(),
                 this.skin,
@@ -209,7 +209,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             }
 
             if (this !is Player) {
-                Server.instance.removePlayerListData(this.getUniqueID(), player)
+                Server.instance.removePlayerListData(this.getUUID(), player)
             }
         }
     }

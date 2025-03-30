@@ -2610,6 +2610,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return this.runtimeId
     }
 
+    fun getUniqueID(): Long {
+        return this.uniqueId
+    }
+
     fun respawnToAll() {
         val players: Array<Player> = hasSpawned.values.toTypedArray()
         hasSpawned.clear()

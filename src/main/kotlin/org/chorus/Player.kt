@@ -17,6 +17,7 @@ import org.chorus.blockentity.BlockEntitySign
 import org.chorus.blockentity.BlockEntitySpawnable
 import org.chorus.camera.data.CameraPreset.Companion.presets
 import org.chorus.command.CommandSender
+import org.chorus.command.utils.RawText
 import org.chorus.config.ServerPropertiesKeys
 import org.chorus.dialog.window.FormWindowDialog
 import org.chorus.entity.*
@@ -106,7 +107,7 @@ import kotlin.math.*
 /**
  * Game player object, representing the controlled character
  */
-class Player constructor(
+class Player(
     val session: BedrockSession,
     val playerInfo: PlayerInfo
 ) :
@@ -1350,12 +1351,12 @@ class Player constructor(
      * 处理LOGIN_PACKET中执行
      */
     fun processLogin() {
-        if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_USERS)) {
-            Server.instance.pluginManager.subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+        if (this.hasPermission(Server.BROADCAST_CHANNEL_USERS)) {
+            Server.instance.pluginManager.subscribeToPermission(Server.BROADCAST_CHANNEL_USERS, this)
         }
-        if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE)) {
+        if (this.hasPermission(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)) {
             Server.instance.pluginManager.subscribeToPermission(
-                Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
+                Server.BROADCAST_CHANNEL_ADMINISTRATIVE,
                 this
             )
         }
@@ -1432,7 +1433,7 @@ class Player constructor(
 
         nbt.putLong("lastPlayed", System.currentTimeMillis() / 1000)
 
-        val uuid = getUniqueID()
+        val uuid = getUUID()
         nbt.putLong("UUIDLeast", uuid.leastSignificantBits)
         nbt.putLong("UUIDMost", uuid.mostSignificantBits)
 
@@ -1946,7 +1947,7 @@ class Player constructor(
      * @return 是否可以看到该玩家<br></br>Whether the player can be seen
      */
     fun canSee(player: Player): Boolean {
-        return !hiddenPlayers.containsKey(player.getUniqueID())
+        return !hiddenPlayers.containsKey(player.getUUID())
     }
 
     /**
@@ -1961,7 +1962,7 @@ class Player constructor(
         if (this === player) {
             return
         }
-        hiddenPlayers[player.getUniqueID()] = player
+        hiddenPlayers[player.getUUID()] = player
         player.despawnFrom(this)
     }
 
@@ -1977,7 +1978,7 @@ class Player constructor(
         if (this === player) {
             return
         }
-        hiddenPlayers.remove(player.getUniqueID())
+        hiddenPlayers.remove(player.getUUID())
         if (player.isOnline) {
             player.spawnTo(this)
         }
@@ -2050,9 +2051,9 @@ class Player constructor(
     }
 
     override fun recalculatePermissions() {
-        Server.instance.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+        Server.instance.pluginManager.unsubscribeFromPermission(Server.BROADCAST_CHANNEL_USERS, this)
         Server.instance.pluginManager.unsubscribeFromPermission(
-            Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
+            Server.BROADCAST_CHANNEL_ADMINISTRATIVE,
             this
         )
 
@@ -2062,13 +2063,13 @@ class Player constructor(
 
         perm!!.recalculatePermissions()
 
-        if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_USERS)) {
-            Server.instance.pluginManager.subscribeToPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
+        if (this.hasPermission(Server.BROADCAST_CHANNEL_USERS)) {
+            Server.instance.pluginManager.subscribeToPermission(Server.BROADCAST_CHANNEL_USERS, this)
         }
 
-        if (this.hasPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE)) {
+        if (this.hasPermission(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)) {
             Server.instance.pluginManager.subscribeToPermission(
-                Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE,
+                Server.BROADCAST_CHANNEL_ADMINISTRATIVE,
                 this
             )
         }
@@ -2134,7 +2135,7 @@ class Player constructor(
         this.displayName = displayName
         if (this.spawned) {
             Server.instance.updatePlayerListData(
-                getUniqueID(), this.getRuntimeID(), this.getDisplayName(),
+                getUUID(), this.getRuntimeID(), this.getDisplayName(),
                 getSkin(),
                 loginChainData.xuid
             )
@@ -2146,11 +2147,11 @@ class Player constructor(
         if (this.spawned) {
 //            this.Server.instance.updatePlayerListData(this.getUniqueId(), this.getId(), this.getDisplayName(), skin, this.getLoginChainData().getXUID());
             val skinPacket = PlayerSkinPacket()
-            skinPacket.uuid = this.getUniqueID()
+            skinPacket.uuid = this.getUUID()
             skinPacket.skin = this.getSkin()
             skinPacket.newSkinName = getSkin().getSkinId()
             skinPacket.oldSkinName = ""
-            Server.Companion.broadcastPacket(Server.instance.onlinePlayers.values, skinPacket)
+            Server.broadcastPacket(Server.instance.onlinePlayers.values, skinPacket)
         }
     }
 
@@ -2480,7 +2481,8 @@ class Player constructor(
 
             this.dataPacket(AnimatePacket(
                 targetUniqueID = this.getRuntimeID(),
-                action = AnimatePacket.Action.WAKE_UP
+                action = AnimatePacket.Action.WAKE_UP,
+                actionData = null,
             ))
         }
     }
@@ -2597,7 +2599,7 @@ class Player constructor(
             players.remove(this)
             //我们需要给所有玩家发送此包，来使玩家客户端能正确渲染玩家实体
             //eg: 观察者模式玩家对于gm 0 1 2的玩家不可见
-            Server.Companion.broadcastPacket(players, pk)
+            Server.broadcastPacket(players, pk)
             //对于自身，我们使用SetPlayerGameTypePacket来确保与WaterDog的兼容
             val pk2 = SetPlayerGameTypePacket()
             pk2.gamemode = networkGamemode
@@ -3264,7 +3266,7 @@ class Player constructor(
             pk.messages.addAll(container.messages)
             pk.commandOriginData = CommandOriginData(
                 CommandOriginData.Origin.PLAYER,
-                getUniqueID(), "", null
+                getUUID(), "", null
             ) //Only players can effect
             pk.type = CommandOutputType.ALL_OUTPUT //Useless
             pk.successCount = container.successCount //Useless,maybe used for server-client interaction
@@ -3280,7 +3282,7 @@ class Player constructor(
      *
      * @param text JSON文本<br></br>Json text
      */
-    fun sendRawTextMessage(text: org.chorus.command.utils.RawText) {
+    fun sendRawTextMessage(text: RawText) {
         val pk = TextPacket()
         pk.type = TextPacket.TYPE_OBJECT
         pk.message = text.toRawText()
@@ -3423,7 +3425,7 @@ class Player constructor(
      *
      * @param text JSON文本<br></br>JSON text
      */
-    fun setRawTextSubTitle(text: org.chorus.command.utils.RawText) {
+    fun setRawTextSubTitle(text: RawText) {
         val pk = SetTitlePacket()
         pk.type = SetTitlePacket.TYPE_SUBTITLE_JSON
         pk.text = text.toRawText()
@@ -3457,7 +3459,7 @@ class Player constructor(
      *
      * @param text JSON文本<br></br>JSON text
      */
-    fun setRawTextTitle(text: org.chorus.command.utils.RawText) {
+    fun setRawTextTitle(text: RawText) {
         val pk = SetTitlePacket()
         pk.type = SetTitlePacket.TYPE_TITLE_JSON
         pk.text = text.toRawText()
@@ -3529,7 +3531,7 @@ class Player constructor(
      *
      * @see .setRawTextActionBar
      */
-    fun setRawTextActionBar(text: org.chorus.command.utils.RawText) {
+    fun setRawTextActionBar(text: RawText) {
         this.setRawTextActionBar(text, 1, 0, 1)
     }
 
@@ -3544,7 +3546,7 @@ class Player constructor(
      * @param duration 持续时间
      * @param fadeout  淡出时间
      */
-    fun setRawTextActionBar(text: org.chorus.command.utils.RawText, fadein: Int, duration: Int, fadeout: Int) {
+    fun setRawTextActionBar(text: RawText, fadein: Int, duration: Int, fadeout: Int) {
         val pk = SetTitlePacket()
         pk.type = SetTitlePacket.TYPE_ACTIONBAR_JSON
         pk.text = text.toRawText()
@@ -3654,8 +3656,8 @@ class Player constructor(
         //remove player from players map
         Server.instance.removePlayer(this)
 
-        Server.instance.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_USERS, this)
-        Server.instance.pluginManager.unsubscribeFromPermission(Server.Companion.BROADCAST_CHANNEL_ADMINISTRATIVE, this)
+        Server.instance.pluginManager.unsubscribeFromPermission(Server.BROADCAST_CHANNEL_USERS, this)
+        Server.instance.pluginManager.unsubscribeFromPermission(Server.BROADCAST_CHANNEL_ADMINISTRATIVE, this)
         // broadcast disconnection message
         if (ev != null && (this.getName() != "") && this.spawned && (ev!!.quitMessage.toString() != "")) {
             Server.instance.broadcastMessage(ev!!.quitMessage!!)
@@ -4390,7 +4392,7 @@ class Player constructor(
         }
 
         if (targets != null) {
-            Server.Companion.broadcastPacket(targets, pk)
+            Server.broadcastPacket(targets, pk)
         } else {
             this.dataPacket(pk)
         }
@@ -5068,7 +5070,7 @@ class Player constructor(
                 val pk = TakeItemEntityPacket()
                 pk.entityId = this.getRuntimeID()
                 pk.target = entity.getRuntimeID()
-                Server.Companion.broadcastPacket(entity.getViewers().values, pk)
+                Server.broadcastPacket(entity.getViewers().values, pk)
                 this.dataPacket(pk)
 
                 if (!this.isCreative) {
@@ -5112,7 +5114,7 @@ class Player constructor(
                 val pk = TakeItemEntityPacket()
                 pk.entityId = this.getRuntimeID()
                 pk.target = entity.getRuntimeID()
-                Server.Companion.broadcastPacket(entity.getViewers().values, pk)
+                Server.broadcastPacket(entity.getViewers().values, pk)
                 this.dataPacket(pk)
 
                 if (!entity.isCreative()) {
@@ -5149,7 +5151,7 @@ class Player constructor(
                         val pk = TakeItemEntityPacket()
                         pk.entityId = this.getRuntimeID()
                         pk.target = entity.getRuntimeID()
-                        Server.Companion.broadcastPacket(entity.getViewers().values, pk)
+                        Server.broadcastPacket(entity.getViewers().values, pk)
                         this.dataPacket(pk)
 
                         this.inventory.addItem(item.clone())

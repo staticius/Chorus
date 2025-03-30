@@ -155,7 +155,7 @@ interface IHuman : InventoryHolder {
             if (this.getSkin() == null) {
                 this.setSkin(Skin())
             }
-            this.setUniqueId(
+            this.setUUID(
                 Utils.dataToUUID(
                     java.lang.String.valueOf(human.getRuntimeID()).getBytes(StandardCharsets.UTF_8),
                     getSkin().getSkinData().data, human.getNameTag().getBytes(StandardCharsets.UTF_8)
@@ -312,9 +312,9 @@ interface IHuman : InventoryHolder {
 
     fun getSkin(): Skin
 
-    fun getUniqueId(): UUID
+    fun getUUID(): UUID
 
-    fun setUniqueId(uuid: UUID)
+    fun setUUID(uuid: UUID)
 
     fun setInventories(inventory: Array<Inventory>)
 
