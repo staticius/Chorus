@@ -3,7 +3,7 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.ActorUniqueID
 
-class BossEventPacket(
+data class BossEventPacket(
     var targetActorID: ActorUniqueID,
     var eventType: EventType,
     val eventData: EventType.Companion.EventData?,
@@ -136,11 +136,10 @@ class BossEventPacket(
 
     companion object : PacketDecoder<BossEventPacket> {
         override fun decode(byteBuf: HandleByteBuf): BossEventPacket {
-            val targetActorID = byteBuf.readActorUniqueID()
-            val eventType = EventType.fromOrdinal(byteBuf.readUnsignedVarInt())
+            val eventType: EventType
             return BossEventPacket(
-                targetActorID,
-                eventType,
+                targetActorID = byteBuf.readActorUniqueID(),
+                eventType = EventType.fromOrdinal(byteBuf.readUnsignedVarInt()).also { eventType = it  },
                 eventData = when(eventType) {
                     EventType.ADD -> EventType.Companion.AddData(
                         name = byteBuf.readString(),

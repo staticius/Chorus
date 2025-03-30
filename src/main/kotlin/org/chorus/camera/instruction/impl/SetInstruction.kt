@@ -7,7 +7,7 @@ import org.chorus.math.Vector2f
 import org.chorus.math.Vector3f
 import org.chorus.utils.OptionalValue
 
-data class SetInstruction (
+data class SetInstruction(
     val ease: Ease? = null,
     val pos: Vector3f? = null,
     val rot: Vector2f? = null,

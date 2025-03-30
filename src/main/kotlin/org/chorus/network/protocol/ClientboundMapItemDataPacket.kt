@@ -3,10 +3,6 @@ package org.chorus.network.protocol
 import io.netty.util.internal.EmptyArrays
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.math.*
-import org.chorus.math.Vector3.floorX
-import org.chorus.math.Vector3.floorY
-import org.chorus.math.Vector3.floorZ
-import org.chorus.nbt.tag.ListTag.size
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.utils.*
 import java.awt.Color
@@ -152,7 +148,7 @@ class ClientboundMapItemDataPacket : DataPacket(), PacketEncoder {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CLIENTBOUND_MAP_ITEM_DATA_PACKET
+        return ProtocolInfo.CLIENTBOUND_MAP_ITEM_DATA_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

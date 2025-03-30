@@ -221,7 +221,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
     }
 
     override fun createAddEntityPacket(): DataPacket {
-        return AddEntityPacket(
+        return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
             actorType = this.getIdentifier(),

@@ -1,32 +1,21 @@
 package org.chorus.network.protocol
 
+import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class BlockEventPacket : DataPacket() {
-    @JvmField
-    var x: Int = 0
-
-    @JvmField
-    var y: Int = 0
-
-    @JvmField
-    var z: Int = 0
-
-    @JvmField
-    var type: Int = 0
-
-    @JvmField
-    var value: Int = 0
-
+data class BlockEventPacket(
+    val blockPosition: BlockVector3,
+    val eventType: Int,
+    val eventValue: Int,
+) : DataPacket() {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeBlockVector3(this.x, this.y, this.z)
-        byteBuf.writeVarInt(this.type)
-        byteBuf.writeVarInt(this.value)
+        byteBuf.writeBlockVector3(this.blockPosition)
+        byteBuf.writeVarInt(this.eventType)
+        byteBuf.writeVarInt(this.eventValue)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.BLOCK_EVENT_PACKET
+        return ProtocolInfo.BLOCK_EVENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

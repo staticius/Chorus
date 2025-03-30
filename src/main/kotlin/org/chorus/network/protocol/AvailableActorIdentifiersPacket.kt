@@ -3,15 +3,15 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.registry.Registries
 
-data class BiomeDefinitionListPacket(
-    val biomeDefinitionData: ByteArray,
+data class AvailableActorIdentifiersPacket(
+    val tag: ByteArray,
 ) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeBytes(biomeDefinitionData)
+        byteBuf.writeBytes(tag)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.BIOME_DEFINITION_LIST_PACKET
+        return ProtocolInfo.AVAILABLE_ACTOR_IDENTIFIERS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
@@ -22,12 +22,14 @@ data class BiomeDefinitionListPacket(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as BiomeDefinitionListPacket
+        other as AvailableActorIdentifiersPacket
 
-        return biomeDefinitionData.contentEquals(other.biomeDefinitionData)
+        return tag.contentEquals(other.tag)
     }
 
     override fun hashCode(): Int {
-        return biomeDefinitionData.contentHashCode()
+        return tag.contentHashCode()
     }
 }
+
+

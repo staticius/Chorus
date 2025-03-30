@@ -93,7 +93,7 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun createBossEntity() {
-        player.dataPacket(AddEntityPacket(
+        player.dataPacket(AddActorPacket(
             targetActorID = this.bossBarId,
             targetRuntimeID = this.bossBarId,
             actorType = EntityID.CREEPER,

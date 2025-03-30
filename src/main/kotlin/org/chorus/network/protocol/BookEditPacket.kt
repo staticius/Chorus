@@ -2,7 +2,7 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-class BookEditPacket(
+data class BookEditPacket(
     var action: Action,
     var bookSlot: Byte,
     val actionData: ActionData,
@@ -53,9 +53,9 @@ class BookEditPacket(
 
     companion object : PacketDecoder<BookEditPacket> {
         override fun decode(byteBuf: HandleByteBuf): BookEditPacket {
-            val action = Action.entries[byteBuf.readByte().toInt()]
+            val action: Action
             return BookEditPacket(
-                action = action,
+                action = Action.entries[byteBuf.readByte().toInt()].also { action = it },
                 bookSlot = byteBuf.readByte(),
                 actionData = when(action) {
                     Action.REPLACE_PAGE -> ReplacePageData(

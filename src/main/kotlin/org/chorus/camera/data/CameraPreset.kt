@@ -37,16 +37,16 @@ class CameraPreset @JvmOverloads constructor(
     aimAssist: CameraPresetAimAssist? = null
 ) {
     val inheritFrom = inheritFrom ?: ""
-    val snapToTarget: OptionalValue<Boolean?> = OptionalValue.ofNullable(snapToTarget)
-    val continueTargeting: OptionalValue<Boolean?> =
+    val snapToTarget: OptionalValue<Boolean> = OptionalValue.ofNullable(snapToTarget)
+    val continueTargeting: OptionalValue<Boolean> =
         OptionalValue.ofNullable(continueTargeting)
 
-    val blockListeningRadius: OptionalValue<Float?> =
+    val blockListeningRadius: OptionalValue<Float> =
         OptionalValue.ofNullable(blockListeningRadius)
-    val playEffect: OptionalValue<Boolean?> = OptionalValue.ofNullable(playEffect)
-    val alignTargetAndCameraForward: OptionalValue<Boolean?> =
+    val playEffect: OptionalValue<Boolean> = OptionalValue.ofNullable(playEffect)
+    val alignTargetAndCameraForward: OptionalValue<Boolean> =
         OptionalValue.ofNullable(alignTargetAndCameraForward)
-    val aimAssist: OptionalValue<CameraPresetAimAssist?> =
+    val aimAssist: OptionalValue<CameraPresetAimAssist> =
         OptionalValue.ofNullable(aimAssist)
 
 

@@ -1,24 +1,19 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorUniqueID
 
-
-class CameraPacket : DataPacket() {
-    var cameraUniqueId: Long = 0
-    var playerUniqueId: Long = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.cameraUniqueId = byteBuf.readVarLong()
-        this.playerUniqueId = byteBuf.readVarLong()
-    }
-
+data class CameraPacket(
+    val cameraID: ActorUniqueID,
+    val targetPlayerID: ActorUniqueID,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeActorUniqueID(this.cameraUniqueId)
-        byteBuf.writeActorUniqueID(this.playerUniqueId)
+        byteBuf.writeActorUniqueID(this.cameraID)
+        byteBuf.writeActorUniqueID(this.targetPlayerID)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CAMERA_PACKET
+        return ProtocolInfo.CAMERA_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

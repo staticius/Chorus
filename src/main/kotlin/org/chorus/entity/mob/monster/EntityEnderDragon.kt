@@ -104,7 +104,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
     }
 
     override fun createAddEntityPacket(): DataPacket {
-        return AddEntityPacket(
+        return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
             actorType = this.getIdentifier(),

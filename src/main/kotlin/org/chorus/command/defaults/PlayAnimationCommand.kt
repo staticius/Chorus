@@ -36,26 +36,26 @@ class PlayAnimationCommand(name: String) : VanillaCommand(name, "commands.playan
             log.addNoTargetMatch().output()
             return 0
         }
-        val animationBuilder = AnimateEntityPacket.Animation()
-        val animation = list.getResult<String>(1)
-        animationBuilder.animation = (animation)
-        // optional
-        if (list.hasResult(2)) {
-            val nextState = list.getResult<String>(2)!!
-            animationBuilder.nextState = (nextState)
-        }
-        if (list.hasResult(3)) {
-            val blendOutTime = list.getResult<Float>(3)!!
-            animationBuilder.blendOutTime = (blendOutTime)
-        }
-        if (list.hasResult(4)) {
-            val stopExpression = list.getResult<String>(4)!!
-            animationBuilder.stopExpression = (stopExpression)
-        }
-        if (list.hasResult(5)) {
-            val controller = list.getResult<String>(5)!!
-            animationBuilder.controller = (controller)
-        }
+        val animationBuilder = AnimateEntityPacket.Animation(
+            animation = list.getResult(1)!!,
+            nextState = when (list.hasResult(2)) {
+                true -> list.getResult(2)!!
+                else -> AnimateEntityPacket.Animation.DEFAULT_NEXT_STATE
+            },
+            blendOutTime = when (list.hasResult(2)) {
+                true -> list.getResult(2)!!
+                else -> AnimateEntityPacket.Animation.DEFAULT_BLEND_OUT_TIME
+            },
+            stopExpression = when (list.hasResult(2)) {
+                true -> list.getResult(2)!!
+                else -> AnimateEntityPacket.Animation.DEFAULT_STOP_EXPRESSION
+            },
+            controller = when (list.hasResult(2)) {
+                true -> list.getResult(2)!!
+                else -> AnimateEntityPacket.Animation.DEFAULT_CONTROLLER
+            },
+            stopExpressionVersion = AnimateEntityPacket.Animation.DEFAULT_STOP_EXPRESSION_VERSION
+        )
         // send animation
         Entity.playAnimationOnEntities(animationBuilder, entities)
         log.addSuccess("commands.playanimation.success").output()

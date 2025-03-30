@@ -40,7 +40,7 @@ import org.chorus.math.*
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
-import org.chorus.network.protocol.AddEntityPacket
+import org.chorus.network.protocol.AddActorPacket
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.network.protocol.UpdateAttributesPacket
@@ -490,7 +490,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun createAddEntityPacket(): DataPacket {
-        return AddEntityPacket(
+        return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
             actorType = this.getIdentifier(),

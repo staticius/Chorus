@@ -54,12 +54,11 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
         ))
         this.sendContents(who)
 
-        val blockEventPacket = BlockEventPacket()
-        blockEventPacket.x = enderChest!!.x.toInt()
-        blockEventPacket.y = enderChest!!.y.toInt()
-        blockEventPacket.z = enderChest!!.z.toInt()
-        blockEventPacket.type = 1
-        blockEventPacket.value = 2
+        val blockEventPacket = BlockEventPacket(
+            blockPosition = enderChest!!.position.asBlockVector3(),
+            eventType = 1,
+            eventValue = 2,
+        )
 
         val level = who.level
         if (level != null) {
@@ -93,12 +92,11 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
             serverInitiatedClose = who.closingWindowId != containerId
         ))
 
-        val blockEventPacket = BlockEventPacket()
-        blockEventPacket.x = enderChest!!.x.toInt()
-        blockEventPacket.y = enderChest!!.y.toInt()
-        blockEventPacket.z = enderChest!!.z.toInt()
-        blockEventPacket.type = 1
-        blockEventPacket.value = 0
+        val blockEventPacket = BlockEventPacket(
+            blockPosition = enderChest!!.position.asBlockVector3(),
+            eventType = 1,
+            eventValue = 0,
+        )
 
         val level = who.level
         if (level != null) {

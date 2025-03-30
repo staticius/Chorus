@@ -16,7 +16,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.math.*
 import org.chorus.math.AxisAlignedBB.BBConsumer
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.network.protocol.AddEntityPacket
+import org.chorus.network.protocol.AddActorPacket
 import org.chorus.network.protocol.AnimatePacket
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.types.EntityLink
@@ -117,7 +117,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
     }
 
     override fun createAddEntityPacket(): DataPacket {
-        return AddEntityPacket(
+        return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
             actorType = this.getIdentifier(),

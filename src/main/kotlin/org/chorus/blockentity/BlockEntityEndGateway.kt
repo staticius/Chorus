@@ -213,12 +213,11 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
             return
         }
 
-        val pk = BlockEventPacket()
-        pk.x = position.floorX
-        pk.y = position.floorY
-        pk.z = position.floorZ
-        pk.type = 1
-        pk.value = eventData
+        val pk = BlockEventPacket(
+            blockPosition = this.position.asBlockVector3(),
+            eventType = 1,
+            eventValue = eventData,
+        )
         level.addChunkPacket(position.chunkX, position.chunkZ, pk)
     }
 

@@ -22,8 +22,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.DoubleTag
 import org.chorus.nbt.tag.IntTag
 import org.chorus.nbt.tag.ListTag
-import org.chorus.network.protocol.AddEntityPacket
-import org.chorus.registry.Registries
 import java.util.concurrent.*
 
 class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :

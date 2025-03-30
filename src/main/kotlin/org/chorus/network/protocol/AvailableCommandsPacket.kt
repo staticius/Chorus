@@ -10,7 +10,6 @@ import org.chorus.utils.SequencedHashSet
 import org.chorus.utils.Utils
 import java.util.function.ObjIntConsumer
 
-
 class AvailableCommandsPacket : DataPacket() {
     var commands: Map<String, CommandDataVersions>? = null
     val constraints: List<CommandEnumConstraintData> = ObjectArrayList()
@@ -27,7 +26,7 @@ class AvailableCommandsPacket : DataPacket() {
         for ((_, value1) in commands!!) {
             val data = value1.versions[0]
             if (data.aliases != null) {
-                enumValuesSet.addAll(data.aliases!!.getValues()!!)
+                enumValuesSet.addAll(data.aliases!!.getValues())
                 enumsSet.add(data.aliases!!)
             }
 
@@ -246,7 +245,7 @@ class AvailableCommandsPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.AVAILABLE_COMMANDS_PACKET
+        return ProtocolInfo.AVAILABLE_COMMANDS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

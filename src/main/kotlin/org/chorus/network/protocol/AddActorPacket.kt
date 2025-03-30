@@ -11,7 +11,7 @@ import org.chorus.network.protocol.types.EntityLink
 import org.chorus.network.protocol.types.PropertySyncData
 import org.chorus.utils.Binary
 
-data class AddEntityPacket(
+data class AddActorPacket(
     val targetActorID: ActorUniqueID,
     val targetRuntimeID: ActorRuntimeID,
     val actorType: String,
@@ -41,7 +41,7 @@ data class AddEntityPacket(
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.ADD_ENTITY_PACKET
+        return ProtocolInfo.ADD_ACTOR_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
@@ -52,7 +52,7 @@ data class AddEntityPacket(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as AddEntityPacket
+        other as AddActorPacket
 
         if (targetActorID != other.targetActorID) return false
         if (targetRuntimeID != other.targetRuntimeID) return false

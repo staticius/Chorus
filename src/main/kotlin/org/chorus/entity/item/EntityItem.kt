@@ -12,7 +12,7 @@ import org.chorus.item.*
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.network.protocol.AddItemEntityPacket
+import org.chorus.network.protocol.AddItemActorPacket
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.EntityEventPacket
 import kotlin.math.abs
@@ -321,7 +321,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
     }
 
     public override fun createAddEntityPacket(): DataPacket {
-        return AddItemEntityPacket(
+        return AddItemActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
             position = this.position.asVector3f(),

@@ -53,7 +53,9 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         player!!.dataPacket(itemRegistryPacket)
 
         SpawnResponseHandler.log.debug("Sending actor identifiers")
-        player.dataPacket(AvailableEntityIdentifiersPacket())
+        player.dataPacket(AvailableActorIdentifiersPacket(
+            Registries.ENTITY.tag
+        ))
 
         // 注册实体属性
         // Register entity attributes
@@ -63,7 +65,9 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         }
 
         SpawnResponseHandler.log.debug("Sending biome definitions")
-        player.dataPacket(BiomeDefinitionListPacket())
+        player.dataPacket(BiomeDefinitionListPacket(
+            Registries.BIOME.biomeDefinitionListPacketData
+        ))
 
         SpawnResponseHandler.log.debug("Sending attributes")
         player.syncAttributes()

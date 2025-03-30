@@ -45,8 +45,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.HURT_ARMOR_PACKET, HurtArmorPacket) // 38
         this.register(ProtocolInfo.ANIMATE_PACKET, AnimatePacket) // 44
         this.register(ProtocolInfo.CONTAINER_CLOSE_PACKET, ContainerClosePacket) // 47
-        this.register(ProtocolInfo.BLOCK_ACTOR_DATA_PACKET, BlockActorDataPacket) // 56
-        this.register(ProtocolInfo.CHUNK_RADIUS_UPDATED_PACKET, ChunkRadiusUpdatedPacket) // 70
         this.register(ProtocolInfo.BOSS_EVENT_PACKET, BossEventPacket) // 74
         this.register(ProtocolInfo.COMMAND_REQUEST_PACKET, CommandRequestPacket) // 77
         this.register(ProtocolInfo.BOOK_EDIT_PACKET, BookEditPacket) // 97
@@ -109,7 +107,7 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
             ProtocolInfo.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET,
             NetworkChunkPublisherUpdatePacket
         )
-        this.register(ProtocolInfo.AVAILABLE_ENTITY_IDENTIFIERS_PACKET, AvailableEntityIdentifiersPacket)
+        this.register(ProtocolInfo.AVAILABLE_ACTOR_IDENTIFIERS_PACKET, AvailableActorIdentifiersPacket)
         this.register(ProtocolInfo.SPAWN_PARTICLE_EFFECT_PACKET, SpawnParticleEffectPacket)
         this.register(ProtocolInfo.BIOME_DEFINITION_LIST_PACKET, BiomeDefinitionListPacket)
         this.register(ProtocolInfo.LEVEL_SOUND_EVENT_PACKET, LevelSoundEventPacket)

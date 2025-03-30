@@ -1,13 +1,12 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.network.protocol.types.ActorUniqueID
+import org.chorus.network.protocol.types.ActorRuntimeID
 
-
-class AnimatePacket(
-    var action: Action,
-    var targetUniqueID: ActorUniqueID,
-    var actionData: Action.ActionData?,
+data class AnimatePacket(
+    val action: Action,
+    val targetRuntimeID: ActorRuntimeID,
+    val actionData: Action.ActionData?,
 ) : DataPacket(), PacketEncoder {
     enum class Action(val id: Int) {
         NO_ACTION(0),
@@ -34,7 +33,7 @@ class AnimatePacket(
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(action.id)
-        byteBuf.writeActorRuntimeID(this.targetUniqueID)
+        byteBuf.writeActorRuntimeID(this.targetRuntimeID)
         when (this.action) {
             Action.ROW_LEFT,
             Action.ROW_RIGHT -> {
@@ -56,18 +55,15 @@ class AnimatePacket(
 
     companion object : PacketDecoder<AnimatePacket> {
         override fun decode(byteBuf: HandleByteBuf): AnimatePacket {
-            val action = Action.fromId(byteBuf.readVarInt())
-
+            val action: Action
             return AnimatePacket(
-                action,
-                targetUniqueID = byteBuf.readActorRuntimeID(),
+                action = Action.fromId(byteBuf.readVarInt()).also { action = it },
+                targetRuntimeID = byteBuf.readActorRuntimeID(),
                 actionData = when(action) {
                     Action.ROW_LEFT,
-                    Action.ROW_RIGHT -> {
-                        Action.RowingData(
-                            rowingTime = byteBuf.readFloatLE()
-                        )
-                    }
+                    Action.ROW_RIGHT -> Action.RowingData(
+                        rowingTime = byteBuf.readFloatLE()
+                    )
                     else -> null
                 }
             )

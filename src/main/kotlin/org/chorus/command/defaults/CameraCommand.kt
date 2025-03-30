@@ -168,7 +168,7 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
         }
         val playerNames =
             players.stream().map { obj: Player -> obj.getName() }.reduce { a: String, b: String -> "$a $b" }.orElse("")
-        val pk: CameraInstructionPacket = CameraInstructionPacket()
+        val pk = CameraInstructionPacket()
         val senderLocation = sender.getTransform()
         when (result.key) {
             "clear" -> {
@@ -206,7 +206,7 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             }
 
             "set-rot" -> {
-                val preset = getPreset(list[2]!!.get()!!)
+                val preset = getPreset(list[2].get()!!)
                 if (preset == null) {
                     log.addError("commands.camera.invalid-preset").output()
                     return 0

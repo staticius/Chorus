@@ -1,30 +1,13 @@
 package org.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.camera.aimassist.*
-import org.chorus.utils.OptionalValue
-import java.util.function.BiConsumer
 
-class CameraAimAssistPresetsPacket : DataPacket() {
-    private val categories: MutableList<CameraAimAssistCategories> = ObjectArrayList()
-    private val presets: MutableList<CameraAimAssistPreset> = ObjectArrayList()
-    private var cameraAimAssistPresetsPacketOperation: CameraAimAssistPresetsPacketOperation? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        categories.addAll(
-            byteBuf.readArray(
-                    CameraAimAssistCategories::class.java
-            ) { this.readCategories(byteBuf) }
-        )
-        presets.addAll(
-            byteBuf.readArray(
-                CameraAimAssistPreset::class.java
-            ) { this.readPreset(byteBuf) }
-        )
-        this.cameraAimAssistPresetsPacketOperation = CameraAimAssistPresetsPacketOperation.VALUES[byteBuf.readByte().toInt()]
-    }
-
+data class CameraAimAssistPresetsPacket(
+    val categories: MutableList<CameraAimAssistCategories>,
+    val presets: MutableList<CameraAimAssistPreset>,
+    val operation: CameraAimAssistPresetsPacketOperation,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeArray(categories) { buf, categories ->
             this.writeCategories(
@@ -38,7 +21,7 @@ class CameraAimAssistPresetsPacket : DataPacket() {
                 preset
             )
         }
-        byteBuf.writeByte(cameraAimAssistPresetsPacketOperation!!.ordinal)
+        byteBuf.writeByte(operation.ordinal)
     }
 
     private fun writeCategories(byteBuf: HandleByteBuf, categories: CameraAimAssistCategories) {
@@ -94,65 +77,6 @@ class CameraAimAssistPresetsPacket : DataPacket() {
     private fun writeItemSetting(byteBuf: HandleByteBuf, itemSetting: Map.Entry<String, String>) {
         byteBuf.writeString(itemSetting.key)
         byteBuf.writeString(itemSetting.value)
-    }
-
-    private fun readCategories(byteBuf: HandleByteBuf): CameraAimAssistCategories {
-        return CameraAimAssistCategories(
-            identifier = byteBuf.readString(),
-            categories = List(byteBuf.readUnsignedVarInt()) {
-                readCategory(byteBuf)
-            }
-        )
-    }
-
-    private fun readCategory(byteBuf: HandleByteBuf): CameraAimAssistCategory {
-        return CameraAimAssistCategory(
-            name = byteBuf.readString(),
-            priorities = readPriorities(byteBuf),
-        )
-    }
-
-    private fun readPriorities(byteBuf: HandleByteBuf): CameraAimAssistCategoryPriorities {
-        return CameraAimAssistCategoryPriorities(
-            entities = List(byteBuf.readUnsignedVarInt()) {
-                readPriority(byteBuf).let {
-                    it.key to it.value
-                }
-            }.toMap(),
-            blocks = List(byteBuf.readUnsignedVarInt()) {
-                readPriority(byteBuf).let {
-                    it.key to it.value
-                }
-            }.toMap()
-        )
-    }
-
-    private fun readPriority(byteBuf: HandleByteBuf): Map.Entry<String, Int> {
-        return java.util.Map.entry(byteBuf.readString(), byteBuf.readIntLE())
-    }
-
-    private fun readPreset(byteBuf: HandleByteBuf): CameraAimAssistPreset {
-        return CameraAimAssistPreset(
-            identifier = byteBuf.readString(),
-            categories = byteBuf.readString(),
-            exclusionList = byteBuf.readArray(
-                String::class.java,
-            ) { obj: HandleByteBuf -> obj.readString() }.toList(),
-            liquidTargetingList = byteBuf.readArray(
-                String::class.java,
-            ) { obj: HandleByteBuf -> obj.readString() }.toList(),
-            itemSettings = List(byteBuf.readUnsignedVarInt()) {
-                readItemSetting(byteBuf).let {
-                    it.key to it.value
-                }
-            }.toMap(),
-            defaultItemSettings = OptionalValue.ofNullable(byteBuf.readOptional(null) { byteBuf.readString() }),
-            handSettings = OptionalValue.ofNullable(byteBuf.readOptional(null) { byteBuf.readString() })
-        )
-    }
-
-    private fun readItemSetting(byteBuf: HandleByteBuf): Map.Entry<String, String> {
-        return java.util.Map.entry(byteBuf.readString(), byteBuf.readString())
     }
 
     override fun pid(): Int {

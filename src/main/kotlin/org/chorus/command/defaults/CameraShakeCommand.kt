@@ -52,31 +52,32 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
                 val intensity = list.getResult<Float>(2)!!
                 val second = list.getResult<Float>(3)!!
                 val type = list.getResult<String>(4)
-                val shakeType: CameraShakePacket.CameraShakeType? = when (type) {
+                val shakeType = when (type) {
                     "positional" -> CameraShakePacket.CameraShakeType.POSITIONAL
                     "rotational" -> CameraShakePacket.CameraShakeType.ROTATIONAL
-                    else -> null
+                    else -> throw RuntimeException("Unknown CameraShakeType: $type")
                 }
-                val packet = CameraShakePacket()
-                packet.intensity = intensity
-                packet.duration = second
-                packet.shakeType = shakeType
-                packet.shakeAction = CameraShakePacket.CameraShakeAction.ADD
+                val packet = CameraShakePacket(
+                    intensity = intensity,
+                    seconds = second,
+                    shakeType = shakeType,
+                    shakeAction = CameraShakePacket.CameraShakeAction.ADD
+                )
                 players.forEach(Consumer { player: Player -> player.dataPacket(packet) })
                 log.addSuccess("commands.screenshake.success", players_str).output()
                 return 1
             }
 
             "stop" -> {
-                val players_str = players.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(" "))
-                val packet = CameraShakePacket()
-                packet.shakeAction = CameraShakePacket.CameraShakeAction.STOP
-                // avoid NPE
-                packet.intensity = -1f
-                packet.duration = -1f
-                packet.shakeType = CameraShakePacket.CameraShakeType.POSITIONAL
+                val playersStr = players.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(" "))
+                val packet = CameraShakePacket(
+                    intensity = -1f,
+                    seconds = -1f,
+                    shakeType = CameraShakePacket.CameraShakeType.POSITIONAL,
+                    shakeAction = CameraShakePacket.CameraShakeAction.STOP
+                )
                 players.forEach(Consumer { player: Player -> player.dataPacket(packet) })
-                log.addSuccess("commands.screenshake.successStop", players_str).output()
+                log.addSuccess("commands.screenshake.successStop", playersStr).output()
                 return 1
             }
 

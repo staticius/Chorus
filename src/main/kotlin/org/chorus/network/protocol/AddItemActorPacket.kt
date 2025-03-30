@@ -8,7 +8,7 @@ import org.chorus.network.protocol.types.ActorRuntimeID
 import org.chorus.network.protocol.types.ActorUniqueID
 import org.chorus.utils.Binary
 
-data class AddItemEntityPacket(
+data class AddItemActorPacket(
     val targetActorID: ActorUniqueID,
     val targetRuntimeID: ActorRuntimeID,
     val item: Item,
@@ -28,7 +28,7 @@ data class AddItemEntityPacket(
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.ADD_ITEM_ENTITY_PACKET
+        return ProtocolInfo.ADD_ITEM_ACTOR_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

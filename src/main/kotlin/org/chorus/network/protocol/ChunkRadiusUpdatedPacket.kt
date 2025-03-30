@@ -2,9 +2,8 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class ChunkRadiusUpdatedPacket(
-    var radius: Int
+data class ChunkRadiusUpdatedPacket(
+    val radius: Int
 ) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(this.radius)
@@ -16,13 +15,5 @@ class ChunkRadiusUpdatedPacket(
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
-    }
-
-    companion object : PacketDecoder<ChunkRadiusUpdatedPacket> {
-        override fun decode(byteBuf: HandleByteBuf): ChunkRadiusUpdatedPacket {
-            return ChunkRadiusUpdatedPacket(
-                radius = byteBuf.readVarInt()
-            )
-        }
     }
 }

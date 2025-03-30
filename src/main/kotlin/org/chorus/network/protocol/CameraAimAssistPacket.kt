@@ -3,42 +3,13 @@ package org.chorus.network.protocol
 import org.chorus.math.Vector2f
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class CameraAimAssistPacket : DataPacket() {
-    private var presetId: String? = null
-    private var viewAngle: Vector2f? = null
-    private var distance = 0f
-    private var targetMode: TargetMode? = null
-    private var action: Action? = null
-
-    override fun pid(): Int {
-        return ProtocolInfo.Companion.CAMERA_AIM_ASSIST_PACKET
-    }
-
-    @Suppress("unused")
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.setPresetId(byteBuf.readString())
-        this.setViewAngle(byteBuf.readVector2f())
-        this.setDistance(byteBuf.readFloatLE())
-        this.setTargetMode(TargetMode.entries[byteBuf.readUnsignedByte().toInt()])
-        this.setAction(
-            Action.entries[byteBuf.readUnsignedByte()
-                .toInt()]
-        )
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeString(presetId!!)
-        byteBuf.writeVector2f(this.getViewAngle())
-        byteBuf.writeFloatLE(this.getDistance())
-        byteBuf.writeByte(this.getTargetMode().ordinal)
-        byteBuf.writeByte(this.getAction().ordinal)
-    }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
-
+data class CameraAimAssistPacket(
+    val presetId: String,
+    val viewAngle: Vector2f,
+    val distance: Float,
+    val targetMode: TargetMode,
+    val action: Action,
+) : DataPacket(), PacketEncoder {
     enum class TargetMode {
         ANGLE,
         DISTANCE,
@@ -49,5 +20,33 @@ class CameraAimAssistPacket : DataPacket() {
         SET,
         CLEAR,
         COUNT
+    }
+
+    override fun encode(byteBuf: HandleByteBuf) {
+        byteBuf.writeString(this.presetId)
+        byteBuf.writeVector2f(this.viewAngle)
+        byteBuf.writeFloatLE(this.distance)
+        byteBuf.writeByte(this.targetMode.ordinal)
+        byteBuf.writeByte(this.action.ordinal)
+    }
+
+    override fun pid(): Int {
+        return ProtocolInfo.CAMERA_AIM_ASSIST_PACKET
+    }
+
+    override fun handle(handler: PacketHandler) {
+        handler.handle(this)
+    }
+
+    companion object : PacketDecoder<CameraAimAssistPacket> {
+        override fun decode(byteBuf: HandleByteBuf): CameraAimAssistPacket {
+            return CameraAimAssistPacket(
+                presetId = byteBuf.readString(),
+                viewAngle = byteBuf.readVector2f(),
+                distance = byteBuf.readFloatLE(),
+                targetMode = TargetMode.entries[byteBuf.readUnsignedByte().toInt()],
+                action = Action.entries[byteBuf.readUnsignedByte().toInt()]
+            )
+        }
     }
 }

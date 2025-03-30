@@ -1,46 +1,32 @@
 package org.chorus.network.protocol
 
+import org.chorus.math.BlockVector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class AddVolumeEntityPacket : DataPacket() {
-    var id: Int = 0
-    var data: CompoundTag? = null
-
-    /**
-     * @since v465
-     */
-    var engineVersion: String? = null
-
-    /**
-     * @since v485
-     */
-    var identifier: String? = null
-
-    /**
-     * @since v485
-     */
-    var instanceName: String? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        id = byteBuf.readUnsignedVarInt()
-        data = byteBuf.readTag()
-        engineVersion = byteBuf.readString()
-        identifier = byteBuf.readString()
-        instanceName = byteBuf.readString()
-    }
-
+data class AddVolumeEntityPacket(
+    val entityNetworkID: Int,
+    val components: CompoundTag,
+    val jsonIdentifier: String,
+    val instanceName: String,
+    val minBounds: BlockVector3,
+    val maxBounds: BlockVector3,
+    val dimensionType: Int,
+    val engineVersion: String,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeUnsignedVarInt(Integer.toUnsignedLong(id).toInt())
-        byteBuf.writeTag(data!!)
-        byteBuf.writeString(engineVersion!!)
-        byteBuf.writeString(identifier!!)
-        byteBuf.writeString(instanceName!!)
+        byteBuf.writeUnsignedVarInt(entityNetworkID)
+        byteBuf.writeTag(components)
+        byteBuf.writeString(jsonIdentifier)
+        byteBuf.writeString(instanceName)
+        byteBuf.writeBlockVector3(minBounds)
+        byteBuf.writeBlockVector3(maxBounds)
+        byteBuf.writeVarInt(dimensionType)
+        byteBuf.writeString(engineVersion)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.ADD_VOLUME_ENTITY_PACKET
+        return ProtocolInfo.ADD_VOLUME_ENTITY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

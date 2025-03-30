@@ -1,13 +1,11 @@
 package org.chorus.network.protocol
 
+import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class AnvilDamagePacket(
-    var damage: Int,
-    var x: Int,
-    var y: Int,
-    var z: Int,
+data class AnvilDamagePacket(
+    val damageAmount: Byte,
+    val blockPosition: BlockVector3,
 ) : DataPacket() {
     override fun pid(): Int {
         return ProtocolInfo.ANVIL_DAMAGE_PACKET
@@ -19,14 +17,9 @@ class AnvilDamagePacket(
 
     companion object : PacketDecoder<AnvilDamagePacket> {
         override fun decode(byteBuf: HandleByteBuf): AnvilDamagePacket {
-            val damage = byteBuf.readByte().toInt()
-            val vec = byteBuf.readBlockVector3()
-
             return AnvilDamagePacket(
-                damage,
-                x = vec.x,
-                y = vec.y,
-                z = vec.z,
+                damageAmount = byteBuf.readByte(),
+                blockPosition = byteBuf.readBlockVector3()
             )
         }
     }

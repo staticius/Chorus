@@ -883,7 +883,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     protected open fun createAddEntityPacket(): DataPacket {
-        return AddEntityPacket(
+        return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
             actorType = this.getIdentifier(),
@@ -2970,9 +2970,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
      * @param players   可视玩家 Visible Player
      */
     fun playAnimation(animation: Animation, players: Collection<Player>) {
-        val pk = AnimateEntityPacket()
-        pk.parseFromAnimation(animation)
-        pk.entityRuntimeIds.add(this.getRuntimeID())
+        val pk = AnimateEntityPacket.fromAnimation(animation)
+        pk.runtimeIDs.add(this.getRuntimeID())
         Server.broadcastPacket(players, pk)
     }
 
@@ -2996,7 +2995,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     fun playActionAnimation(action: AnimatePacket.Action, rowingTime: Float, players: Collection<Player>) {
         Server.broadcastPacket(players, AnimatePacket(
             action = action,
-            targetUniqueID = this.getRuntimeID(),
+            targetRuntimeID = this.getRuntimeID(),
             actionData = AnimatePacket.Action.RowingData(
                 rowingTime = rowingTime
             )
@@ -3374,9 +3373,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
          * @param players   可视玩家 Visible Player
          */
         fun playAnimationOnEntities(animation: Animation, entities: Collection<Entity>, players: Collection<Player>) {
-            val pk = AnimateEntityPacket()
-            pk.parseFromAnimation(animation)
-            entities.forEach(Consumer { entity: Entity -> pk.entityRuntimeIds.add(entity.getRuntimeID()) })
+            val pk = AnimateEntityPacket.fromAnimation(animation)
+            entities.forEach(Consumer { entity: Entity -> pk.runtimeIDs.add(entity.getRuntimeID()) })
             Server.broadcastPacket(players, pk)
         }
 

@@ -3,8 +3,7 @@ package org.chorus.network.protocol
 import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class BlockPickRequestPacket(
+data class BlockPickRequestPacket(
     val position: BlockVector3,
     var withData: Boolean,
     var maxSlots: Int,

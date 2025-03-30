@@ -3,31 +3,17 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 
 
-class CameraShakePacket : DataPacket() {
-    @JvmField
-    var intensity: Float = 0f
-
-    @JvmField
-    var duration: Float = 0f
-
-    @JvmField
-    var shakeType: CameraShakeType? = null
-
-    @JvmField
-    var shakeAction: CameraShakeAction? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.intensity = byteBuf.readFloatLE()
-        this.duration = byteBuf.readFloatLE()
-        this.shakeType = CameraShakeType.entries[byteBuf.readByte().toInt()]
-        this.shakeAction = CameraShakeAction.entries[byteBuf.readByte().toInt()]
-    }
-
+class CameraShakePacket(
+    val intensity: Float,
+    val seconds: Float,
+    val shakeType: CameraShakeType,
+    val shakeAction: CameraShakeAction,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeFloatLE(this.intensity)
-        byteBuf.writeFloatLE(this.duration)
-        byteBuf.writeByte(shakeType!!.ordinal.toByte().toInt())
-        byteBuf.writeByte(shakeAction!!.ordinal.toByte().toInt())
+        byteBuf.writeFloatLE(this.seconds)
+        byteBuf.writeByte(shakeType.ordinal)
+        byteBuf.writeByte(shakeAction.ordinal)
     }
 
     enum class CameraShakeAction {
@@ -41,7 +27,7 @@ class CameraShakePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CAMERA_SHAKE_PACKET
+        return ProtocolInfo.CAMERA_SHAKE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

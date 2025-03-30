@@ -1,34 +1,19 @@
 package org.chorus.network.protocol
 
+import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
 
-class ChangeDimensionPacket : DataPacket() {
-    @JvmField
-    var dimension: Int = 0
-
-    @JvmField
-    var x: Float = 0f
-
-    @JvmField
-    var y: Float = 0f
-
-    @JvmField
-    var z: Float = 0f
-
-    @JvmField
-    var respawn: Boolean = false
-
-    @JvmField
-    var loadingScreenId: Int? = null
-
+data class ChangeDimensionPacket(
+    val dimension: Int,
+    val position: Vector3f,
+    val respawn: Boolean,
+    val loadingScreenID: Int? = null,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(this.dimension)
-        byteBuf.writeVector3f(this.x, this.y, this.z)
+        byteBuf.writeVector3f(this.position)
         byteBuf.writeBoolean(this.respawn)
-        byteBuf.writeBoolean(this.loadingScreenId != null)
-        if (this.loadingScreenId != null) {
-            byteBuf.writeIntLE(loadingScreenId!!)
-        }
+        byteBuf.writeNotNull(this.loadingScreenID) { byteBuf.writeIntLE(it) }
     }
 
     override fun pid(): Int {

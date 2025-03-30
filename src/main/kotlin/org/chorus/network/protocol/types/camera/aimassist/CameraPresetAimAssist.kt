@@ -6,6 +6,6 @@ import org.chorus.utils.OptionalValue
 data class CameraPresetAimAssist(
     var presetId: OptionalValue<String>,
     var targetMode: OptionalValue<CameraAimAssist>,
-    private val angle: OptionalValue<Vector2f>,
-    private val distance: OptionalValue<Float>,
+    val angle: OptionalValue<Vector2f>,
+    val distance: OptionalValue<Float>,
 )

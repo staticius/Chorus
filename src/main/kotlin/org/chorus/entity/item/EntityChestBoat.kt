@@ -10,9 +10,6 @@ import org.chorus.math.*
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
-import org.chorus.network.protocol.AddEntityPacket
-import org.chorus.network.protocol.DataPacket
-import org.chorus.network.protocol.types.EntityLink
 
 class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt), InventoryHolder {
     override fun getIdentifier(): String {

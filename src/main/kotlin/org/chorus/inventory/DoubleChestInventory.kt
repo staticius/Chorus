@@ -46,8 +46,8 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
         }
     }
 
-    override var holder: InventoryHolder?
-        get() = leftSide.getHolder()
+    override var holder: InventoryHolder
+        get() = leftSide.holder
         set(holder) {
             super.holder = holder
         }
@@ -116,12 +116,11 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
         rightSide.viewers.add(who)
 
         if (getViewers().size == 1) {
-            val pk1 = BlockEventPacket()
-            pk1.x = leftSide.getHolder().x.toInt()
-            pk1.y = leftSide.getHolder().y.toInt()
-            pk1.z = leftSide.getHolder().z.toInt()
-            pk1.type = 1
-            pk1.value = 2
+            val pk1 = BlockEventPacket(
+                blockPosition = leftSide.holder.vector3.asBlockVector3(),
+                eventType = 1,
+                eventValue = 2,
+            )
             var level = leftSide.getHolder().getLevel()
             if (level != null) {
                 level.addSound(leftSide.getHolder().position.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTOPEN)
@@ -131,12 +130,11 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
                 )
             }
 
-            val pk2 = BlockEventPacket()
-            pk2.x = rightSide.getHolder().x.toInt()
-            pk2.y = rightSide.getHolder().y.toInt()
-            pk2.z = rightSide.getHolder().z.toInt()
-            pk2.type = 1
-            pk2.value = 2
+            val pk2 = BlockEventPacket(
+                blockPosition = rightSide.holder.vector3.asBlockVector3(),
+                eventType = 1,
+                eventValue = 2,
+            )
 
             level = rightSide.getHolder().getLevel()
             if (level != null) {
@@ -151,12 +149,11 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
 
     override fun onClose(who: Player) {
         if (getViewers().size == 1) {
-            val pk1 = BlockEventPacket()
-            pk1.x = rightSide.getHolder().x.toInt()
-            pk1.y = rightSide.getHolder().y.toInt()
-            pk1.z = rightSide.getHolder().z.toInt()
-            pk1.type = 1
-            pk1.value = 0
+            val pk1 = BlockEventPacket(
+                blockPosition = rightSide.holder.vector3.asBlockVector3(),
+                eventType = 1,
+                eventValue = 0,
+            )
 
             var level = rightSide.getHolder().getLevel()
             if (level != null) {
@@ -167,12 +164,11 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
                 )
             }
 
-            val pk2 = BlockEventPacket()
-            pk2.x = leftSide.getHolder().x.toInt()
-            pk2.y = leftSide.getHolder().y.toInt()
-            pk2.z = leftSide.getHolder().z.toInt()
-            pk2.type = 1
-            pk2.value = 0
+            val pk2 = BlockEventPacket(
+                blockPosition = leftSide.holder.vector3.asBlockVector3(),
+                eventType = 1,
+                eventValue = 0,
+            )
 
             level = leftSide.getHolder().getLevel()
             if (level != null) {

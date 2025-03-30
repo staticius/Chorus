@@ -85,7 +85,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
 
     val biomeDefinitionListPacketData: ByteArray
         get() {
-            //todo Figure out the mapping of custom biomes
+            // TODO: Figure out the mapping of custom biomes
             try {
                 BiomeRegistry::class.java.classLoader.getResourceAsStream("biome_definitions.nbt")
                     .use { resourceAsStream ->

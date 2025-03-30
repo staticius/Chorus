@@ -1,46 +1,34 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorUniqueID
 
-
-/**
- * Server-bound packet to change the properties of a mob.
- *
- * @since v503
- */
-
-
-class ChangeMobPropertyPacket : DataPacket() {
-    var uniqueEntityId: Long = 0
-    var property: String? = null
-    var boolValue: Boolean = false
-    var stringValue: String? = null
-    var intValue: Int = 0
-    var floatValue: Float = 0f
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.uniqueEntityId = byteBuf.readLong()
-        this.property = byteBuf.readString()
-        this.boolValue = byteBuf.readBoolean()
-        this.stringValue = byteBuf.readString()
-        this.intValue = byteBuf.readVarInt()
-        this.floatValue = byteBuf.readFloatLE()
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeLong(this.uniqueEntityId)
-        byteBuf.writeString(property!!)
-        byteBuf.writeBoolean(this.boolValue)
-        byteBuf.writeString(stringValue!!)
-        byteBuf.writeVarInt(this.intValue)
-        byteBuf.writeFloatLE(this.floatValue)
-    }
-
+data class ChangeMobPropertyPacket(
+    val actorID: ActorUniqueID,
+    val propertyName: String,
+    val boolComponentValue: Boolean,
+    val stringComponentValue: String,
+    val intComponentValue: Int,
+    val floatComponentValue: Float,
+) : DataPacket() {
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CHANGE_MOB_PROPERTY_PACKET
+        return ProtocolInfo.CHANGE_MOB_PROPERTY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<ChangeMobPropertyPacket> {
+        override fun decode(byteBuf: HandleByteBuf): ChangeMobPropertyPacket {
+            return ChangeMobPropertyPacket(
+                actorID = byteBuf.readActorUniqueID(),
+                propertyName = byteBuf.readString(),
+                boolComponentValue = byteBuf.readBoolean(),
+                stringComponentValue = byteBuf.readString(),
+                intComponentValue = byteBuf.readInt(),
+                floatComponentValue = byteBuf.readFloatLE(),
+            )
+        }
     }
 }

@@ -726,15 +726,12 @@ class Player(
 
     //todo a lot on dimension
     private fun setDimension(dimension: Int) {
-        val pk = ChangeDimensionPacket()
-        pk.dimension = dimension
-        pk.x = position.x.toFloat()
-        pk.y = position.y.toFloat()
-        pk.z = position.z.toFloat()
-        pk.respawn = false
-        pk.loadingScreenId = loadingScreenId++
-
-        this.dataPacket(pk)
+        this.dataPacket(ChangeDimensionPacket(
+            dimension = dimension,
+            position = position.asVector3f(),
+            respawn = false,
+            loadingScreenID = loadingScreenId++
+        ))
 
         level!!.sendChunks(this)
 
@@ -2480,7 +2477,7 @@ class Player(
             level!!.sleepTicks = 0
 
             this.dataPacket(AnimatePacket(
-                targetUniqueID = this.getRuntimeID(),
+                targetRuntimeID = this.getRuntimeID(),
                 action = AnimatePacket.Action.WAKE_UP,
                 actionData = null,
             ))
@@ -2772,9 +2769,9 @@ class Player(
      * Send camera presets to cilent
      */
     fun sendCameraPresets() {
-        val pk = CameraPresetsPacket()
-        pk.presets.addAll(presets.values)
-        dataPacket(pk)
+        dataPacket(CameraPresetsPacket(
+            presets = presets.values.toMutableList()
+        ))
     }
 
     override fun getHeight(): Float {
@@ -4963,20 +4960,15 @@ class Player(
             this.dataPacket(gameRulesChanged)
 
             if (level.dimension == this.level!!.dimension) {
-                val packet = ChangeDimensionPacket()
-                packet.x = 0.0f
-                packet.y = 0.0f
-                packet.z = 0.0f
-                packet.respawn = false
-                packet.loadingScreenId = loadingScreenId++
-
-                if (this.level!!.dimension == Level.DIMENSION_NETHER) {
-                    packet.dimension = Level.DIMENSION_OVERWORLD
-                } else {
-                    packet.dimension = Level.DIMENSION_NETHER
-                }
-
-                this.dataPacket(packet)
+                this.dataPacket(ChangeDimensionPacket(
+                    dimension = when (this.level!!.dimension) {
+                        Level.DIMENSION_NETHER -> Level.DIMENSION_OVERWORLD
+                        else -> Level.DIMENSION_NETHER
+                    },
+                    position = Vector3f(),
+                    respawn = false,
+                    loadingScreenID = loadingScreenId++
+                ))
             }
 
             this.setDimension(level.dimension)
@@ -5458,13 +5450,13 @@ class Player(
      * @param shakeType   the shake type
      * @param shakeAction the shake action
      */
-    fun shakeCamera(intensity: Float, duration: Float, shakeType: CameraShakeType?, shakeAction: CameraShakeAction?) {
-        val packet = CameraShakePacket()
-        packet.intensity = intensity
-        packet.duration = duration
-        packet.shakeType = shakeType
-        packet.shakeAction = shakeAction
-        this.dataPacket(packet)
+    fun shakeCamera(intensity: Float, duration: Float, shakeType: CameraShakeType, shakeAction: CameraShakeAction) {
+        this.dataPacket(CameraShakePacket(
+            intensity = intensity,
+            seconds = duration,
+            shakeType = shakeType,
+            shakeAction = shakeAction
+        ))
     }
 
     /**

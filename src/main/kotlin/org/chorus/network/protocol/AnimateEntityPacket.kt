@@ -1,74 +1,37 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorRuntimeID
 
-
-/**
- * @author IWareQ
- */
-
-
-class AnimateEntityPacket : DataPacket() {
-    var animation: String? = null
-    var nextState: String? = null
-    var stopExpression: String? = null
-    var stopExpressionVersion: Int = 0
-    var controller: String? = null
-    var blendOutTime: Float = 0f
-    var entityRuntimeIds: MutableList<Long> = ArrayList()
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.animation = byteBuf.readString()
-        this.nextState = byteBuf.readString()
-        this.stopExpression = byteBuf.readString()
-        this.stopExpressionVersion = byteBuf.readInt()
-        this.controller = byteBuf.readString()
-        this.blendOutTime = byteBuf.readFloatLE()
-        var i = 0
-        while (i < byteBuf.readUnsignedVarInt()) {
-            entityRuntimeIds.add(byteBuf.readActorRuntimeID())
-            i++
-        }
-    }
-
+data class AnimateEntityPacket(
+    val animation: String,
+    val nextState: String,
+    val stopExpression: String,
+    val stopExpressionVersion: Int,
+    val controller: String,
+    val blendOutTime: Float,
+    val runtimeIDs: MutableList<ActorRuntimeID>,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeString(animation!!)
-        byteBuf.writeString(nextState!!)
-        byteBuf.writeString(stopExpression!!)
+        byteBuf.writeString(this.animation)
+        byteBuf.writeString(this.nextState)
+        byteBuf.writeString(this.stopExpression)
         byteBuf.writeInt(this.stopExpressionVersion)
-        byteBuf.writeString(controller!!)
+        byteBuf.writeString(this.controller)
         byteBuf.writeFloatLE(this.blendOutTime)
-        byteBuf.writeUnsignedVarInt(entityRuntimeIds.size)
-        for (entityRuntimeId in this.entityRuntimeIds) {
-            byteBuf.writeActorRuntimeID(entityRuntimeId)
+        byteBuf.writeArray(this.runtimeIDs.toTypedArray()) {
+            byteBuf.writeActorRuntimeID(it)
         }
     }
 
-    /**
-     * 从 [Animation] 对象中解析数据并写入到包
-     */
-    fun parseFromAnimation(ani: Animation) {
-        this.animation = ani.animation
-        this.nextState = ani.nextState
-        this.blendOutTime = ani.blendOutTime
-        this.stopExpression = ani.stopExpression
-        this.controller = ani.controller
-        this.stopExpressionVersion = ani.stopExpressionVersion
-    }
-
-    /**
-     * 包含一个实体动画的信息的记录类<br></br>
-     * 用于[org.chorus.network.protocol.AnimateEntityPacket]网络包
-     */
-
-    class Animation {
-        var animation: String? = null
-        var nextState: String = DEFAULT_NEXT_STATE
-        var blendOutTime: Float = DEFAULT_BLEND_OUT_TIME
-        var stopExpression: String = DEFAULT_STOP_EXPRESSION
-        var controller: String = DEFAULT_CONTROLLER
-        var stopExpressionVersion: Int = DEFAULT_STOP_EXPRESSION_VERSION
-
+    data class Animation(
+        val animation: String,
+        val nextState: String,
+        val stopExpression: String,
+        val stopExpressionVersion: Int,
+        val controller: String,
+        val blendOutTime: Float,
+    ) {
         companion object {
             const val DEFAULT_BLEND_OUT_TIME: Float = 0.0f
             const val DEFAULT_STOP_EXPRESSION: String = "query.any_animation_finished"
@@ -79,10 +42,24 @@ class AnimateEntityPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.ANIMATE_ENTITY_PACKET
+        return ProtocolInfo.ANIMATE_ENTITY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object {
+        fun fromAnimation(ani: Animation): AnimateEntityPacket {
+            return AnimateEntityPacket(
+                animation = ani.animation,
+                nextState = ani.nextState,
+                blendOutTime = ani.blendOutTime,
+                stopExpression = ani.stopExpression,
+                controller = ani.controller,
+                stopExpressionVersion = ani.stopExpressionVersion,
+                runtimeIDs = mutableListOf()
+            )
+        }
     }
 }

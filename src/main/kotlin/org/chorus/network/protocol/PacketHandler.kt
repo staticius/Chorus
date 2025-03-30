@@ -3,9 +3,9 @@ package org.chorus.network.protocol
 interface PacketHandler {
     fun handle(pk: AddBehaviorTreePacket) {}
 
-    fun handle(pk: AddEntityPacket) {}
+    fun handle(pk: AddActorPacket) {}
 
-    fun handle(pk: AddItemEntityPacket) {}
+    fun handle(pk: AddItemActorPacket) {}
 
     fun handle(pk: AddPaintingPacket) {}
 
@@ -25,7 +25,7 @@ interface PacketHandler {
 
     fun handle(pk: AvailableCommandsPacket) {}
 
-    fun handle(pk: AvailableEntityIdentifiersPacket) {}
+    fun handle(pk: AvailableActorIdentifiersPacket) {}
 
     fun handle(pk: BiomeDefinitionListPacket) {}
 

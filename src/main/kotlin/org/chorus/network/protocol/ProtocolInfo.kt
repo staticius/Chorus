@@ -25,9 +25,9 @@ interface ProtocolInfo {
         const val SET_TIME_PACKET                           = 10
         const val START_GAME_PACKET                         = 11
         const val ADD_PLAYER_PACKET                         = 12
-        const val ADD_ENTITY_PACKET                         = 13
+        const val ADD_ACTOR_PACKET                         = 13
         const val REMOVE_ENTITY_PACKET                      = 14
-        const val ADD_ITEM_ENTITY_PACKET                    = 15
+        const val ADD_ITEM_ACTOR_PACKET                    = 15
         const val SERVER_POST_MOVE_POSITION                 = 16
         const val TAKE_ITEM_ENTITY_PACKET                   = 17
         const val MOVE_ENTITY_ABSOLUTE_PACKET               = 18
@@ -131,7 +131,7 @@ interface ProtocolInfo {
         // UNUSED                                           = 116
         // UNUSED                                           = 117
         const val SPAWN_PARTICLE_EFFECT_PACKET              = 118
-        const val AVAILABLE_ENTITY_IDENTIFIERS_PACKET       = 119
+        const val AVAILABLE_ACTOR_IDENTIFIERS_PACKET       = 119
         // UNUSED                                           = 120
         const val NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET     = 121
         const val BIOME_DEFINITION_LIST_PACKET              = 122
@@ -191,10 +191,10 @@ interface ProtocolInfo {
         const val PLAYER_START_ITEM_COOL_DOWN_PACKET        = 176
         const val SCRIPT_MESSAGE_PACKET                     = 177
         const val CODE_BUILDER_SOURCE_PACKET                = 178
-        const val AGENT_ACTION_EVENT_PACKET                 = 179
-        const val CHANGE_MOB_PROPERTY_PACKET                = 180
-        const val DIMENSION_DATA_PACKET                     = 181
-        const val TICKING_AREAS_LOAD_STATUS_PACKET          = 182
+        const val TICKING_AREAS_LOAD_STATUS_PACKET          = 179
+        const val DIMENSION_DATA_PACKET                     = 180
+        const val AGENT_ACTION_EVENT_PACKET                 = 181
+        const val CHANGE_MOB_PROPERTY_PACKET                = 182
         const val LESSON_PROGRESS_PACKET                    = 183
         const val REQUEST_ABILITY_PACKET                    = 184
         const val REQUEST_PERMISSIONS_PACKET                = 185

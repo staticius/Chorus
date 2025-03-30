@@ -12,7 +12,7 @@ import org.chorus.tags.BlockTags
  * @author PetteriM1
  */
 class ShulkerBoxInventory(box: BlockEntityShulkerBox?) : ContainerInventory(box, InventoryType.CONTAINER, 27) {
-    override var holder: InventoryHolder?
+    override var holder: InventoryHolder
         get() = holder as BlockEntityShulkerBox
         set(holder) {
             super.holder = holder
@@ -29,12 +29,11 @@ class ShulkerBoxInventory(box: BlockEntityShulkerBox?) : ContainerInventory(box,
         super.onOpen(who)
 
         if (getViewers().size == 1) {
-            val pk = BlockEventPacket()
-            pk.x = holder.vector3.x.toInt()
-            pk.y = holder.vector3.y.toInt()
-            pk.z = holder.vector3.z.toInt()
-            pk.type = 1
-            pk.value = 2
+            val pk = BlockEventPacket(
+                blockPosition = holder.vector3.asBlockVector3(),
+                eventType = 1,
+                eventValue = 2,
+            )
 
             val level = holder.level
             if (level != null) {
@@ -49,12 +48,11 @@ class ShulkerBoxInventory(box: BlockEntityShulkerBox?) : ContainerInventory(box,
 
     override fun onClose(who: Player) {
         if (getViewers().size == 1) {
-            val pk = BlockEventPacket()
-            pk.x = holder.vector3.x.toInt()
-            pk.y = holder.vector3.y.toInt()
-            pk.z = holder.vector3.z.toInt()
-            pk.type = 1
-            pk.value = 0
+            val pk = BlockEventPacket(
+                blockPosition = holder.vector3.asBlockVector3(),
+                eventType = 1,
+                eventValue = 0,
+            )
 
             val level = holder.level
             if (level != null) {

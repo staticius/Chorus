@@ -1,24 +1,19 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorRuntimeID
 
-
-class AgentAnimationPacket : DataPacket() {
-    var animation: Byte = 0
-    var runtimeEntityId: Long = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.animation = byteBuf.readByte()
-        this.runtimeEntityId = byteBuf.readActorRuntimeID()
-    }
-
+data class AgentAnimationPacket(
+    val animation: Byte,
+    val runtimeID: ActorRuntimeID,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(animation.toInt())
-        byteBuf.writeActorRuntimeID(this.runtimeEntityId)
+        byteBuf.writeActorRuntimeID(this.runtimeID)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.AGENT_ANIMATION
+        return ProtocolInfo.AGENT_ANIMATION
     }
 
     override fun handle(handler: PacketHandler) {

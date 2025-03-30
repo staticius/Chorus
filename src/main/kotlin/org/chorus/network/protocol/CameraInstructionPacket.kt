@@ -8,21 +8,17 @@ import org.chorus.camera.instruction.impl.FadeInstruction
 import org.chorus.camera.instruction.impl.SetInstruction
 import org.chorus.camera.instruction.impl.TargetInstruction
 import org.chorus.network.connection.util.HandleByteBuf
-import org.chorus.utils.OptionalBoolean
 import java.awt.Color
 
-class CameraInstructionPacket : DataPacket() {
-    var setInstruction: SetInstruction? = null
-    var fadeInstruction: FadeInstruction? = null
-    var clearInstruction: ClearInstruction? = null
-    private var targetInstruction: TargetInstruction? = null
-    private val removeTarget: OptionalBoolean = OptionalBoolean.empty()
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
+data class CameraInstructionPacket(
+    var set: SetInstruction? = null,
+    var clear: ClearInstruction? = null,
+    var fade: FadeInstruction? = null,
+    var target: TargetInstruction? = null,
+    var removeTarget: Boolean? = null,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeNotNull(setInstruction) { s ->
+        byteBuf.writeNotNull(set) { s ->
             byteBuf.writeIntLE(s.preset!!.getId())
             byteBuf.writeNotNull(s.ease) { e -> this.writeEase(byteBuf, e) }
             byteBuf.writeNotNull(s.pos, byteBuf::writeVector3f)
@@ -33,34 +29,27 @@ class CameraInstructionPacket : DataPacket() {
             byteBuf.writeOptional(s.defaultPreset) { value -> byteBuf.writeBoolean(value) }
         }
 
-        if (clearInstruction == null) {
-            byteBuf.writeBoolean(false)
-        } else {
-            byteBuf.writeBoolean(true) // optional.isPresent
-            byteBuf.writeBoolean(true) // actual data
-        }
+        byteBuf.writeNotNull(clear) { byteBuf.writeBoolean(true) }
 
-        byteBuf.writeNotNull(fadeInstruction) { f ->
+        byteBuf.writeNotNull(fade) { f ->
             byteBuf.writeNotNull(f.time) { t -> this.writeTimeData(byteBuf, t) }
             byteBuf.writeNotNull(f.color) { c -> this.writeColor(byteBuf, c) }
         }
 
-        byteBuf.writeNotNull(targetInstruction) { target ->
+        byteBuf.writeNotNull(target) { target ->
             byteBuf.writeNotNull(target.targetCenterOffset, byteBuf::writeVector3f)
             byteBuf.writeLongLE(target.uniqueEntityId)
         }
 
-        byteBuf.writeOptional(
-            removeTarget.toOptionalValue()
-        ) { value: Boolean? -> byteBuf.writeBoolean(value!!) }
+        byteBuf.writeNotNull(removeTarget) { byteBuf.writeBoolean(it) }
     }
 
     fun setInstruction(instruction: CameraInstruction) {
         when (instruction) {
-            is SetInstruction -> this.setInstruction = instruction
-            is FadeInstruction -> this.fadeInstruction = instruction
-            is ClearInstruction -> this.clearInstruction = instruction
-            is TargetInstruction -> this.targetInstruction = instruction
+            is SetInstruction -> this.set = instruction
+            is FadeInstruction -> this.fade = instruction
+            is ClearInstruction -> this.clear = instruction
+            is TargetInstruction -> this.target = instruction
         }
     }
 
@@ -82,7 +71,7 @@ class CameraInstructionPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CAMERA_INSTRUCTION_PACKET
+        return ProtocolInfo.CAMERA_INSTRUCTION_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
