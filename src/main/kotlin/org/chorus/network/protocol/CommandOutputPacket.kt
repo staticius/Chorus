@@ -5,40 +5,33 @@ import org.chorus.network.protocol.types.CommandOriginData
 import org.chorus.network.protocol.types.CommandOutputMessage
 import org.chorus.network.protocol.types.CommandOutputType
 
-class CommandOutputPacket : DataPacket() {
-    @JvmField
-    val messages: MutableList<CommandOutputMessage> = mutableListOf()
-
-    @JvmField
-    var commandOriginData: CommandOriginData? = null
-
-    @JvmField
-    var type: CommandOutputType? = null
-
-    @JvmField
-    var successCount: Int = 0
-    var data: String? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
+data class CommandOutputPacket(
+    val originData: CommandOriginData,
+    val outputType: CommandOutputType,
+    val successCount: Int,
+    val outputMessages: List<CommandOutputMessage>,
+    val dataSet: String? = null,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeCommandOriginData(commandOriginData!!)
+        byteBuf.writeCommandOriginData(this.originData)
 
-        byteBuf.writeByte(type!!.ordinal.toByte().toInt())
+        byteBuf.writeByte(this.outputType.ordinal)
         byteBuf.writeUnsignedVarInt(this.successCount)
-
-        byteBuf.writeUnsignedVarInt(messages.size)
-        for (msg in messages) {
-            byteBuf.writeBoolean(msg.internal)
-            byteBuf.writeString(msg.messageId)
-            byteBuf.writeUnsignedVarInt(msg.parameters.size)
-            for (param in msg.parameters) {
-                byteBuf.writeString(param)
+        byteBuf.writeArray(outputMessages) { buf, msg ->
+            buf.writeBoolean(msg.internal)
+            buf.writeString(msg.messageId)
+            buf.writeArray(msg.parameters.toList()) { buf1, param ->
+                buf1.writeString(param)
             }
         }
-        if (this.type == CommandOutputType.DATA_SET) {
-            byteBuf.writeString(data!!) // unknown
+
+        when (this.outputType) {
+            CommandOutputType.DATA_SET -> {
+                val dataSet = this.dataSet as String
+                byteBuf.writeString(dataSet)
+            }
+
+            else -> {}
         }
     }
 

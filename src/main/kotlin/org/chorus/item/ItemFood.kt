@@ -54,7 +54,7 @@ abstract class ItemFood : Item {
 
         if (this.onEaten(player)) {
             player.foodData.addFood(this)
-            player.completeUsingItem(this.runtimeId, CompletedUsingItemPacket.ACTION_EAT)
+            player.completeUsingItem(this.runtimeId.toShort(), CompletedUsingItemPacket.ItemUseMethod.EAT)
 
             if (player.isAdventure || player.isSurvival) {
                 --this.count

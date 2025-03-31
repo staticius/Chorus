@@ -3259,14 +3259,15 @@ class Player(
 
     override fun sendCommandOutput(container: CommandOutputContainer) {
         if (level!!.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
-            val pk = CommandOutputPacket()
-            pk.messages.addAll(container.messages)
-            pk.commandOriginData = CommandOriginData(
-                CommandOriginData.Origin.PLAYER,
-                getUUID(), "", null
-            ) //Only players can effect
-            pk.type = CommandOutputType.ALL_OUTPUT //Useless
-            pk.successCount = container.successCount //Useless,maybe used for server-client interaction
+            val pk = CommandOutputPacket(
+                originData = CommandOriginData(
+                    CommandOriginData.Origin.PLAYER,
+                    getUUID(), "", null
+                ),
+                outputType = CommandOutputType.ALL_OUTPUT,
+                successCount = container.successCount,
+                outputMessages = container.messages,
+            )
             this.dataPacket(pk)
         }
     }
@@ -5387,11 +5388,11 @@ class Player(
     }
 
 
-    fun completeUsingItem(itemId: Int, action: Int) {
-        val pk = CompletedUsingItemPacket()
-        pk.itemId = itemId
-        pk.action = action
-        this.dataPacket(pk)
+    fun completeUsingItem(itemId: Short, action: CompletedUsingItemPacket.ItemUseMethod) {
+        this.dataPacket(CompletedUsingItemPacket(
+            itemID = itemId,
+            itemUseMethod = action
+        ))
     }
 
 

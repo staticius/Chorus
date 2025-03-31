@@ -2,24 +2,38 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class CompletedUsingItemPacket : DataPacket() {
-    @JvmField
-    var itemId: Int = 0
-
-    @JvmField
-    var action: Int = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
+data class CompletedUsingItemPacket(
+    val itemID: Short,
+    val itemUseMethod: ItemUseMethod,
+) : DataPacket(), PacketEncoder {
+    enum class ItemUseMethod(val id: Int) {
+        UNKNOWN(-1),
+        EQUIP_ARMOR(0),
+        EAT(1),
+        ATTACK(2),
+        CONSUME(3),
+        THROW(4),
+        SHOOT(5),
+        PLACE(6),
+        FILL_BOTTLE(7),
+        FILL_BUCKET(8),
+        POUR_BUCKET(9),
+        USE_TOOL(10),
+        INTERACT(11),
+        RETRIEVED(12),
+        DYED(13),
+        TRADED(14),
+        BRUSHING_COMPLETED(15),
+        OPENED_VAULT(16)
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeShortLE(itemId)
-        byteBuf.writeIntLE(action)
+        byteBuf.writeShortLE(this.itemID.toInt())
+        byteBuf.writeIntLE(this.itemUseMethod.id)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.COMPLETED_USING_ITEM_PACKET
+        return ProtocolInfo.COMPLETED_USING_ITEM_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
@@ -27,22 +41,6 @@ class CompletedUsingItemPacket : DataPacket() {
     }
 
     companion object {
-        const val ACTION_UNKNOWN: Int = -1
-        const val ACTION_EQUIP_ARMOR: Int = 0
         const val ACTION_EAT: Int = 1
-        const val ACTION_ATTACK: Int = 2
-        const val ACTION_CONSUME: Int = 3
-        const val ACTION_THROW: Int = 4
-        const val ACTION_SHOOT: Int = 5
-        const val ACTION_PLACE: Int = 6
-        const val ACTION_FILL_BOTTLE: Int = 7
-        const val ACTION_FILL_BUCKET: Int = 8
-        const val ACTION_POUR_BUCKET: Int = 9
-        const val ACTION_USE_TOOL: Int = 10
-        const val ACTION_INTERACT: Int = 11
-        const val ACTION_RETRIEVE: Int = 12
-        const val ACTION_DYED: Int = 13
-        const val ACTION_TRADED: Int = 14
-        const val ACTION_BRUSHING_COMPLETED: Int = 15
     }
 }

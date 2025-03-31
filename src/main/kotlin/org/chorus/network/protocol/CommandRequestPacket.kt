@@ -3,12 +3,11 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.CommandOriginData
 
-
-class CommandRequestPacket(
-    var command: String,
-    var commandOrigin: CommandOriginData,
-    var isInternalSource: Boolean,
-    var version: Int,
+data class CommandRequestPacket(
+    val command: String,
+    val commandOrigin: CommandOriginData,
+    val isInternalSource: Boolean,
+    val version: Int,
 ) : DataPacket() {
     override fun pid(): Int {
         return ProtocolInfo.COMMAND_REQUEST_PACKET
