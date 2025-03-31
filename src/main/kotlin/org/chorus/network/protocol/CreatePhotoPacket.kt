@@ -2,23 +2,19 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class CreatePhotoPacket : DataPacket() {
-    var id: Long = 0
-    var photoName: String? = null
-    var photoItemName: String? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
+data class CreatePhotoPacket(
+    val rawID: Long,
+    val photoName: String,
+    val photoItemName: String,
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeLongLE(id)
-        byteBuf.writeString(photoName!!)
-        byteBuf.writeString(photoItemName!!)
+        byteBuf.writeLongLE(this.rawID)
+        byteBuf.writeString(this.photoName)
+        byteBuf.writeString(this.photoItemName)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CREATE_PHOTO_PACKET
+        return ProtocolInfo.CREATE_PHOTO_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

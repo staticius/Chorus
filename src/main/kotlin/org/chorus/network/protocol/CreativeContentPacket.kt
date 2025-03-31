@@ -1,26 +1,20 @@
 package org.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
 import org.chorus.registry.CreativeItemRegistry
 import org.chorus.registry.Registries
-import java.util.function.BiConsumer
 
-
-class CreativeContentPacket : DataPacket() {
-    private val groups: List<CreativeItemGroup> = ObjectArrayList()
-    private val contents: List<CreativeItemData> = ObjectArrayList()
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
+data class CreativeContentPacket(
+    val groups: List<CreativeItemGroup> = CreativeItemRegistry.creativeGroups.toList(),
+    val writeEntries: List<CreativeItemData> = CreativeItemRegistry.creativeItemData.toList()
+) : DataPacket() {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeArray(CreativeItemRegistry.creativeGroups) { buf, group ->
+        byteBuf.writeArray(this.groups) { buf, group ->
             this.writeGroup(buf, group)
         }
-        byteBuf.writeArray(CreativeItemRegistry.creativeItemData) { buf, data ->
+        byteBuf.writeArray(this.writeEntries) { buf, data ->
             this.writeItem(buf, data)
         }
     }

@@ -5,13 +5,10 @@ import org.chorus.recipe.descriptor.ItemDescriptor
 
 
 interface Recipe {
-    @JvmField
     val recipeId: String
 
-    @JvmField
     val results: List<Item>
 
-    @JvmField
     val ingredients: List<ItemDescriptor>
 
     fun match(input: Input): Boolean
@@ -25,6 +22,5 @@ interface Recipe {
         return true
     }
 
-    @JvmField
     val type: RecipeType
 }

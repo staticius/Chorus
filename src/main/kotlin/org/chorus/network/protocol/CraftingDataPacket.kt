@@ -1,6 +1,7 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.MaterialReducerDataEntry
 import org.chorus.network.protocol.types.RecipeUnlockingRequirement
 import org.chorus.network.protocol.types.RecipeUnlockingRequirement.UnlockingContext
 import org.chorus.recipe.*
@@ -8,7 +9,12 @@ import org.chorus.recipe.descriptor.DefaultDescriptor
 
 import java.util.*
 
-class CraftingDataPacket : DataPacket() {
+data class CraftingDataPacket(
+    val craftingEntries: List<Recipe>,
+    val potionMixes: List<BrewingRecipe>,
+    val containerMixes: List<ContainerRecipe>,
+    val materialReducers: List<MaterialReducerDataEntry>
+) : DataPacket() {
     private val entries: MutableList<Recipe> = ArrayList()
     private val brewingEntries: List<BrewingRecipe> = ArrayList()
     private val containerEntries: List<ContainerRecipe> = ArrayList()
@@ -17,6 +23,10 @@ class CraftingDataPacket : DataPacket() {
     var cleanRecipes: Boolean = false
 
     override fun encode(byteBuf: HandleByteBuf) {
+        byteBuf.writeArray(craftingEntries) { buf, entry ->
+
+        }
+
         byteBuf.writeUnsignedVarInt(entries.size)
 
         var recipeNetworkId = 1
@@ -47,7 +57,7 @@ class CraftingDataPacket : DataPacket() {
                     }
                     byteBuf.writeUnsignedVarInt(1)
                     byteBuf.writeSlot(shapeless.result, true)
-                    byteBuf.writeUUID(shapeless.uuid)
+                    byteBuf.writeUUID(shapeless.uUID)
                     when (recipe.type) {
                         RecipeType.CARTOGRAPHY -> byteBuf.writeString(CRAFTING_TAG_CARTOGRAPHY_TABLE)
                         RecipeType.SHAPELESS, RecipeType.USER_DATA_SHAPELESS_RECIPE -> byteBuf.writeString(
@@ -108,7 +118,11 @@ class CraftingDataPacket : DataPacket() {
                     byteBuf.writeUnsignedVarInt(recipeNetworkId++)
                 }
 
-                RecipeType.FURNACE, RecipeType.SMOKER, RecipeType.BLAST_FURNACE, RecipeType.CAMPFIRE, RecipeType.SOUL_CAMPFIRE -> {
+                RecipeType.FURNACE,
+                RecipeType.SMOKER,
+                RecipeType.BLAST_FURNACE,
+                RecipeType.CAMPFIRE,
+                RecipeType.SOUL_CAMPFIRE -> {
                     val smelting = recipe as SmeltingRecipe
                     val input = smelting.input.toItem()
                     byteBuf.writeVarInt(input.runtimeId)
@@ -122,8 +136,10 @@ class CraftingDataPacket : DataPacket() {
                         RecipeType.BLAST_FURNACE -> byteBuf.writeString(CRAFTING_TAG_BLAST_FURNACE)
                         RecipeType.CAMPFIRE -> byteBuf.writeString(CRAFTING_TAG_CAMPFIRE)
                         RecipeType.SOUL_CAMPFIRE -> byteBuf.writeString(CRAFTING_TAG_SOUL_CAMPFIRE)
+                        else -> {}
                     }
                 }
+                else -> {}
             }
         }
 
@@ -188,7 +204,7 @@ class CraftingDataPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CRAFTING_DATA_PACKET
+        return ProtocolInfo.CRAFTING_DATA_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
