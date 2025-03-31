@@ -17,7 +17,7 @@ import kotlin.math.sqrt
  * todo: 有待解耦
  */
 open class WalkController : IController {
-    protected var currentJumpCoolDown: Int = 0
+    protected open var currentJumpCoolDown: Int = 0
 
     private fun canJump(block: Block): Boolean {
         return if (block.isSolid) true
@@ -28,14 +28,14 @@ open class WalkController : IController {
     override fun control(entity: EntityMob): Boolean {
         currentJumpCoolDown++
 
-        if (currentJumpCoolDown > JUMP_COOL_DOWN && !entity.isOnGround && !entity.isTouchingWater) {
+        if (currentJumpCoolDown > JUMP_COOL_DOWN && !entity.isOnGround() && !entity.isTouchingWater()) {
             return false
         }
 
         if (entity.hasMoveDirection() && !entity.isShouldUpdateMoveDirection) {
             //clone防止异步导致的NPE
-            val direction = entity.moveDirectionEnd.clone()
-            val speed = entity.movementSpeed
+            val direction = entity.moveDirectionEnd!!.clone()
+            val speed = entity.getMovementSpeed()
             if (entity.motion.x * entity.motion.x + entity.motion.z * entity.motion.z > speed * speed * 0.4756) {
                 entity.setDataFlag(EntityFlag.MOVING, false)
                 return false
@@ -54,21 +54,21 @@ open class WalkController : IController {
             val dx = relativeVector.x * k
             val dz = relativeVector.z * k
             var dy = 0.0
-            val target = entity.level!!.getBlock(entity.moveDirectionStart)
+            val target = entity.level!!.getBlock(entity.moveDirectionStart!!)
             if (target.down().isSolid && relativeVector.y > 0 && collidesBlocks(
                     entity,
                     dx,
                     0.0,
                     dz
-                ) && currentJumpCoolDown > JUMP_COOL_DOWN || (entity.isTouchingWater && !(target is BlockLiquid || target.level
+                ) && currentJumpCoolDown > JUMP_COOL_DOWN || (entity.isTouchingWater() && !(target is BlockLiquid || target.level
                     .getBlock(target.position, 1) is BlockLiquid) && target.down().isSolid)
             ) {
                 //note: 从对BDS的抓包信息来看，台阶的碰撞箱在服务端和半砖一样，高度都为0.5
                 val collisionBlocks = entity.level!!.getTickCachedCollisionBlocks(
-                    entity.offsetBoundingBox.getOffsetBoundingBox(dx, dy, dz), false, false
+                    entity.offsetBoundingBox.getOffsetBoundingBox(dx, dy, dz), targetFirst = false, ignoreCollidesCheck = false
                 ) { block: Block -> this.canJump(block) }
                 //计算出需要向上移动的高度
-                val maxY = Arrays.stream(collisionBlocks).map { b: Block -> b.collisionBoundingBox.maxY }
+                val maxY = Arrays.stream(collisionBlocks).map { b: Block -> b.collisionBoundingBox!!.maxY }
                     .max { obj: Double, anotherDouble: Double? ->
                         obj.compareTo(
                             anotherDouble!!
@@ -98,9 +98,9 @@ open class WalkController : IController {
 
     protected fun collidesBlocks(entity: EntityMob, dx: Double, dy: Double, dz: Double): Boolean {
         return entity.level!!.getTickCachedCollisionBlocks(
-            entity.offsetBoundingBox.getOffsetBoundingBox(dx, dy, dz), true,
-            false
-        ) { block: Block -> this.canJump(block) }.size > 0
+            entity.offsetBoundingBox.getOffsetBoundingBox(dx, dy, dz), targetFirst = true,
+            ignoreCollidesCheck = false
+        ) { block: Block -> this.canJump(block) }.isNotEmpty()
     }
 
     companion object {

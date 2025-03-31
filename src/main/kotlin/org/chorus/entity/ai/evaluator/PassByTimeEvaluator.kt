@@ -20,14 +20,14 @@ class PassByTimeEvaluator
  * @param minPassByTimeRange the min pass by time range
  * @param maxPassByTimeRange the max pass by time range
  */ @JvmOverloads constructor(
-    protected var timedMemory: MemoryType<Int?>,
+    protected var timedMemory: MemoryType<Int>,
     protected var minPassByTimeRange: Int,
     protected var maxPassByTimeRange: Int = Int.MAX_VALUE
 ) :
     IBehaviorEvaluator {
     override fun evaluate(entity: EntityMob): Boolean {
-        val time = entity.memoryStorage!!.get(timedMemory)
+        val time = entity.memoryStorage[timedMemory]
         val passByTime = entity.level!!.tick - time
-        return passByTime >= minPassByTimeRange && passByTime <= maxPassByTimeRange
+        return passByTime in minPassByTimeRange..maxPassByTimeRange
     }
 }

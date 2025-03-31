@@ -13,14 +13,8 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.LevelSoundEventPacket
 
-
-/**
- * @author PikyCZ
- */
 class EntityEvocationFang(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable {
-
-
-    private val evocationIllager: EntityEvocationIllager? = null
+    var evocationIllager: EntityEvocationIllager? = null
 
     override fun getIdentifier(): String {
         return EntityID.EVOCATION_FANG

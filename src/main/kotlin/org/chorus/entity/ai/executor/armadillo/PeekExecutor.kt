@@ -18,15 +18,15 @@ class PeekExecutor : EntityControl, IBehaviorExecutor {
         return false
     }
 
-    override fun onStart(entity: EntityMob?) {
+    override fun onStart(entity: EntityMob) {
         this.tick = 0
     }
 
     override fun onStop(entity: EntityMob) {
         if (entity is EntityArmadillo) {
             if (!RollupEvaluator().evaluate(entity)) {
-                entity.rollState = RollState.ROLLED_UP_UNROLLING
-            } else entity.rollState = RollState.ROLLED_UP
+                entity.setRollState(RollState.ROLLED_UP_UNROLLING)
+            } else entity.setRollState(RollState.ROLLED_UP)
         }
     }
 

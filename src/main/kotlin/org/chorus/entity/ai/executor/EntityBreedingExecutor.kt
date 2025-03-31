@@ -4,7 +4,7 @@ import org.chorus.entity.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 
-open class EntityBreedingExecutor<T : EntityMob?>(
+open class EntityBreedingExecutor<T : EntityMob>(
     protected var entityClass: Class<T>,
     protected var findingRangeSquared: Int,
     protected var duration: Int,
@@ -72,16 +72,16 @@ open class EntityBreedingExecutor<T : EntityMob?>(
         entity2!!.memoryStorage!!.set<Entity>(CoreMemoryTypes.Companion.ENTITY_SPOUSE, entity1)
     }
 
-    protected open fun clearData(entity: T?) {
-        entity!!.memoryStorage!!.clear(CoreMemoryTypes.Companion.ENTITY_SPOUSE)
+    protected open fun clearData(entity: T) {
+        entity.memoryStorage.clear(CoreMemoryTypes.Companion.ENTITY_SPOUSE)
         //clear move target
         entity.moveTarget = null
         //clear look target
         entity.lookTarget = null
         //reset move speed
-        entity.movementSpeed = 0.1f
+        entity.setMovementSpeed(0.1f)
         //interrupt in love status
-        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE, false)
+        entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE] = false
     }
 
     protected fun updateMove(entity1: T, entity2: T?) {

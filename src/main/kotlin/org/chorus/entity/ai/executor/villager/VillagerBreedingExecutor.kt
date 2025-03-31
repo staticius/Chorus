@@ -10,18 +10,18 @@ import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.network.protocol.EntityEventPacket
 import java.util.*
 
-class VillagerBreedingExecutor(entityClass: Class<*>, findingRangeSquared: Int, duration: Int, moveSpeed: Float) :
-    EntityBreedingExecutor<Any?>(entityClass, findingRangeSquared, duration, moveSpeed) {
+class VillagerBreedingExecutor(entityClass: Class<EntityMob>, findingRangeSquared: Int, duration: Int, moveSpeed: Float) :
+    EntityBreedingExecutor<EntityMob>(entityClass, findingRangeSquared, duration, moveSpeed) {
     override fun onStart(entity: EntityMob) {
         super.onStart(entity)
         finded = true
-        another = entity.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ENTITY_SPOUSE) as EntityMob
+        another = entity.memoryStorage[CoreMemoryTypes.ENTITY_SPOUSE] as EntityMob
     }
 
     override fun onStop(entity: EntityMob) {
         clearData(entity)
         if (another != null) {
-            clearData(another)
+            clearData(another!!)
         }
     }
 
@@ -37,13 +37,13 @@ class VillagerBreedingExecutor(entityClass: Class<*>, findingRangeSquared: Int, 
         for (x in -range..range) {
             for (z in -range..range) {
                 for (y in -lookY..lookY) {
-                    val lookTransform = entity.transform.add(x.toDouble(), y.toDouble(), z.toDouble())
+                    val lookTransform = entity.getTransform().add(x.toDouble(), y.toDouble(), z.toDouble())
                     val lookBlock = lookTransform.levelBlock
                     if (lookBlock is BlockBed) {
-                        if (!lookBlock.isHeadPiece && Arrays.stream<Entity>(entity.level!!.entities)
-                                .noneMatch { entity1: Entity ->
-                                    entity1 is EntityVillagerV2 && entity1.memoryStorage!!
-                                        .notEmpty(CoreMemoryTypes.Companion.OCCUPIED_BED) && entity1.bed == lookBlock
+                        if (!lookBlock.isHeadPiece && (entity.level!!.entities).values
+                                .none { entity1: Entity ->
+                                    entity1 is EntityVillagerV2 && entity1.memoryStorage
+                                        .notEmpty(CoreMemoryTypes.OCCUPIED_BED) && entity1.getBed() == lookBlock
                                 }
                         ) {
                             block = lookBlock.footPart
@@ -54,45 +54,45 @@ class VillagerBreedingExecutor(entityClass: Class<*>, findingRangeSquared: Int, 
         }
         if (block == null) {
             sendAngryParticles(entity)
-            sendAngryParticles(another)
+            sendAngryParticles(another!!)
             return
         } else {
             sendInLoveParticles(entity)
-            sendInLoveParticles(another)
+            sendInLoveParticles(another!!)
         }
 
-        val baby = Entity.Companion.createEntity(entity.networkId, entity.locator) as EntityVillagerV2
+        val baby = Entity.Companion.createEntity(entity.getNetworkId(), entity.getLocator()) as EntityVillagerV2
         baby.setBaby(true)
         //防止小屁孩去生baby
-        baby.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_IN_LOVE_TIME, entity.level!!.tick)
-        baby.memoryStorage!!.set<Entity>(CoreMemoryTypes.Companion.PARENT, entity)
+        baby.memoryStorage[CoreMemoryTypes.LAST_IN_LOVE_TIME] = entity.level!!.tick
+        baby.memoryStorage[CoreMemoryTypes.PARENT] = entity
         baby.spawnToAll()
     }
 
     override fun clearData(entity: EntityMob) {
-        entity.memoryStorage!!.clear(CoreMemoryTypes.Companion.ENTITY_SPOUSE)
+        entity.memoryStorage.clear(CoreMemoryTypes.ENTITY_SPOUSE)
         //clear move target
         entity.moveTarget = null
         //clear look target
         entity.lookTarget = null
         //reset move speed
-        entity.movementSpeed = 0.1f
+        entity.setMovementSpeed(0.1f)
         //interrupt in love status
-        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.WILLING, false)
-        entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_IN_LOVE_TIME, entity.level!!.tick)
+        entity.memoryStorage[CoreMemoryTypes.WILLING] = false
+        entity.memoryStorage[CoreMemoryTypes.LAST_IN_LOVE_TIME] = entity.level!!.tick
     }
 
     protected fun sendInLoveParticles(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.runtimeId
+        pk.eid = entity.getRuntimeID()
         pk.event = EntityEventPacket.LOVE_PARTICLES
-        Server.broadcastPacket(entity.viewers.values, pk)
+        Server.broadcastPacket(entity.getViewers().values, pk)
     }
 
     protected fun sendAngryParticles(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.runtimeId
+        pk.eid = entity.getRuntimeID()
         pk.event = EntityEventPacket.VILLAGER_ANGRY
-        Server.broadcastPacket(entity.viewers.values, pk)
+        Server.broadcastPacket(entity.getViewers().values, pk)
     }
 }

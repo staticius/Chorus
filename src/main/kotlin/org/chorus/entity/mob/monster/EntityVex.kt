@@ -38,16 +38,13 @@ import java.util.Set
 import java.util.concurrent.*
 import java.util.function.Function
 
-/**
- * @author PikyCZ
- */
 class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.VEX
+        return EntityID.VEX
     }
 
 
-    private val illager: EntityEvocationIllager? = null
+    var illager: EntityEvocationIllager? = null
     private val start_damage_timer = ThreadLocalRandom.current().nextInt(30, 120)
 
 

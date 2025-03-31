@@ -19,8 +19,7 @@ class StrafeExecutor : EntityControl, IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {
         if (fired) return false
 
-        val player =
-            entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
+        val player = entity.memoryStorage[CoreMemoryTypes.NEAREST_PLAYER]!!
         setLookTarget(entity, player.position)
         setRouteTarget(entity, player.position)
 
@@ -31,7 +30,7 @@ class StrafeExecutor : EntityControl, IBehaviorExecutor {
                 player.position.z - entity.position.z
             ).normalize()
 
-            val fireballTransform = entity.transform.add(toPlayerVector.multiply(5.0))
+            val fireballTransform = entity.getTransform().add(toPlayerVector.multiply(5.0))
             val yaw = BVector3.getYawFromVector(toPlayerVector)
             val pitch = BVector3.getPitchFromVector(toPlayerVector)
             val nbt = CompoundTag()
@@ -53,12 +52,12 @@ class StrafeExecutor : EntityControl, IBehaviorExecutor {
                         .add(FloatTag(0f))
                 )
 
-            val projectile: Entity = Entity.Companion.createEntity(
-                EntityID.Companion.DRAGON_FIREBALL,
+            val projectile = Entity.createEntity(
+                EntityID.DRAGON_FIREBALL,
                 entity.level!!.getChunk(entity.position.chunkX, entity.position.chunkZ),
                 nbt
             )
-            projectile.spawnToAll()
+            projectile?.spawnToAll()
             this.fired = true
             return false
         }
@@ -67,15 +66,15 @@ class StrafeExecutor : EntityControl, IBehaviorExecutor {
 
 
     override fun onStart(entity: EntityMob) {
-        val player = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
+        val player = entity.memoryStorage[CoreMemoryTypes.NEAREST_PLAYER]!!
         setLookTarget(entity, player.position)
         setRouteTarget(entity, player.position)
         this.fired = false
     }
 
     override fun onStop(entity: EntityMob) {
-        entity.isEnablePitch = false
-        entity.memoryStorage!!.clear(CoreMemoryTypes.Companion.LAST_ENDER_CRYSTAL_DESTROY)
+        entity.setEnablePitch(false)
+        entity.memoryStorage.clear(CoreMemoryTypes.LAST_ENDER_CRYSTAL_DESTROY)
     }
 
     override fun onInterrupt(entity: EntityMob) {

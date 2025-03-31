@@ -12,7 +12,7 @@ class SpaceMoveController : IController {
     override fun control(entity: EntityMob): Boolean {
         if (entity.hasMoveDirection() && !entity.isShouldUpdateMoveDirection) {
             val direction = entity.moveDirectionEnd
-            val speed = entity.movementSpeed
+            val speed = entity.getMovementSpeed()
             if (entity.motion.x * entity.motion.x + entity.motion.y * entity.motion.y + entity.motion.z * entity.motion.z > speed * speed * 0.4756) {
                 return false
             }

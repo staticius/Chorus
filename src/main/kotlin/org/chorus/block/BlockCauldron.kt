@@ -226,7 +226,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
 
                     if (cauldron.isCustomColor()) {
                         val compoundTag = if (item.hasCompoundTag()) item.namedTag else CompoundTag()
-                        compoundTag!!.putInt("customColor", cauldron.customColor!!.rGB)
+                        compoundTag!!.putInt("customColor", cauldron.customColor!!.rgb)
                         item.setCompoundTag(compoundTag)
                         player!!.getInventory().setItemInHand(item)
                         setFillLevel(

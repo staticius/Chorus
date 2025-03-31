@@ -22,7 +22,7 @@ class PerchingExecutor : EntityControl, IBehaviorExecutor {
         if (entity.position.distance(target) <= 1) {
             if (stayTick == -1) stayTick = 0
             if (stayTick == 25) {
-                entity.viewers.values.stream()
+                entity.getViewers().values.stream()
                     .filter { player: Player -> player.position.distance(Vector3(0.0, 64.0, 0.0)) <= 20 }.findAny()
                     .ifPresent { player: Player ->
                         removeRouteTarget(entity)
@@ -32,24 +32,24 @@ class PerchingExecutor : EntityControl, IBehaviorExecutor {
                             player.position.y - entity.position.y,
                             player.position.z - entity.position.z
                         ).normalize()
-                        val transform = entity.transform.add(toPlayerVector.multiply(10.0))
+                        val transform = entity.getTransform().add(toPlayerVector.multiply(10.0))
                         transform.position.y =
                             (transform.level.getHighestBlockAt(transform.position.toHorizontal()) + 1).toDouble()
                         val areaEffectCloud = Entity.Companion.createEntity(
-                            EntityID.Companion.AREA_EFFECT_CLOUD, transform.chunk,
+                            EntityID.AREA_EFFECT_CLOUD, transform.chunk,
                             CompoundTag().putList(
-                                "Pos", ListTag<Tag>()
+                                "Pos", ListTag<FloatTag>()
                                     .add(FloatTag(transform.position.x))
                                     .add(FloatTag(transform.position.y))
                                     .add(FloatTag(transform.position.z))
                             )
                                 .putList(
-                                    "Rotation", ListTag<Tag>()
+                                    "Rotation", ListTag<FloatTag>()
                                         .add(FloatTag(0f))
                                         .add(FloatTag(0f))
                                 )
                                 .putList(
-                                    "Motion", ListTag<Tag>()
+                                    "Motion", ListTag<FloatTag>()
                                         .add(FloatTag(0f))
                                         .add(FloatTag(0f))
                                         .add(FloatTag(0f))
@@ -62,9 +62,7 @@ class PerchingExecutor : EntityControl, IBehaviorExecutor {
                                 .putFloat("RadiusPerTick", 0f)
                         ) as EntityAreaEffectCloud
 
-                        val effects: List<Effect?> =
-                            PotionType.Companion.get(PotionType.Companion.HARMING.id)
-                                .getEffects(false)
+                        val effects = PotionType.get(PotionType.HARMING.id).getEffects(false)
                         for (effect in effects) {
                             if (effect != null && areaEffectCloud != null) {
                                 areaEffectCloud.cloudEffects!!.add(effect.setVisible(false).setAmbient(false))
@@ -88,15 +86,15 @@ class PerchingExecutor : EntityControl, IBehaviorExecutor {
 
 
     override fun onStart(entity: EntityMob) {
-        val player = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
+        val player = entity.memoryStorage[CoreMemoryTypes.NEAREST_PLAYER]!!
         setLookTarget(entity, player.position)
         setRouteTarget(entity, player.position)
         stayTick = -1
     }
 
     override fun onStop(entity: EntityMob) {
-        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.FORCE_PERCHING, false)
-        entity.isEnablePitch = false
+        entity.memoryStorage[CoreMemoryTypes.FORCE_PERCHING] = false
+        entity.setEnablePitch(false)
     }
 
     override fun onInterrupt(entity: EntityMob) {

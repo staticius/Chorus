@@ -8,19 +8,19 @@ import org.chorus.entity.mob.EntityMob
  * Provide some utility method encapsulation
  */
 interface LogicalUtils {
-    fun any(evaluators: Set<IBehaviorEvaluator?>): IBehaviorEvaluator {
+    fun any(evaluators: Set<IBehaviorEvaluator>): IBehaviorEvaluator {
         return AnyMatchEvaluator(evaluators)
     }
 
-    fun any(vararg evaluators: IBehaviorEvaluator?): IBehaviorEvaluator {
+    fun any(vararg evaluators: IBehaviorEvaluator): IBehaviorEvaluator {
         return AnyMatchEvaluator(*evaluators)
     }
 
-    fun all(evaluators: Set<IBehaviorEvaluator?>): IBehaviorEvaluator {
+    fun all(evaluators: Set<IBehaviorEvaluator>): IBehaviorEvaluator {
         return AllMatchEvaluator(evaluators)
     }
 
-    fun all(vararg evaluators: IBehaviorEvaluator?): IBehaviorEvaluator {
+    fun all(vararg evaluators: IBehaviorEvaluator): IBehaviorEvaluator {
         return AllMatchEvaluator(*evaluators)
     }
 
@@ -29,6 +29,6 @@ interface LogicalUtils {
     }
 
     fun none(): IBehaviorEvaluator {
-        return IBehaviorEvaluator { entity: EntityMob? -> true }
+        return IBehaviorEvaluator { true }
     }
 }

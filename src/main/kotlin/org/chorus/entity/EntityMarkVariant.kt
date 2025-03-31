@@ -8,22 +8,22 @@ import org.chorus.utils.*
  */
 interface EntityMarkVariant : EntityComponent {
     fun getMarkVariant(): Int {
-        return getMemoryStorage().get<Int>(CoreMemoryTypes.Companion.MARK_VARIANT)
+        return getMemoryStorage()[CoreMemoryTypes.MARK_VARIANT]
     }
 
     fun setMarkVariant(variant: Int) {
-        getMemoryStorage().set<Int>(CoreMemoryTypes.Companion.MARK_VARIANT, variant)
+        getMemoryStorage()[CoreMemoryTypes.MARK_VARIANT] = variant
     }
 
     fun hasMarkVariant(): Boolean {
-        return getMemoryStorage().notEmpty(CoreMemoryTypes.Companion.MARK_VARIANT)
+        return getMemoryStorage().notEmpty(CoreMemoryTypes.MARK_VARIANT)
     }
 
     /**
      * 随机一个变种值
      */
     fun randomMarkVariant(): Int {
-        return getAllMarkVariant().get(Utils.rand(0, getAllMarkVariant().length - 1))
+        return getAllMarkVariant()[Utils.rand(0, getAllMarkVariant().size - 1)]
     }
 
     /**

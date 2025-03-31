@@ -8,7 +8,7 @@ import org.chorus.entity.mob.EntityMob
  *
  * This interface abstracts a Behavior Evaluator that <br></br> decides whether to activate the Actuator bound to it
  */
-interface IBehaviorEvaluator {
+fun interface IBehaviorEvaluator {
     /**
      * 是否需要激活与其绑定的执行器
      *

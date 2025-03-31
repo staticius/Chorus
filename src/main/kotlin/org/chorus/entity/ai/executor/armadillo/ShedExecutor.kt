@@ -14,11 +14,8 @@ class ShedExecutor : EntityControl, IBehaviorExecutor {
     }
 
     override fun onStart(entity: EntityMob) {
-        entity.level!!.dropItem(entity.position, Item.get(Item.ARMADILLO_SCUTE))
+        entity.level!!.dropItem(entity.position, Item.get(ItemID.ARMADILLO_SCUTE))
         entity.level!!.addSound(entity.position, Sound.MOB_ARMADILLO_SCUTE_DROP)
-        entity.memoryStorage!!.set<Int>(
-            CoreMemoryTypes.Companion.NEXT_SHED,
-            entity.level!!.tick + Utils.rand(6000, 10800)
-        )
+        entity.memoryStorage[CoreMemoryTypes.NEXT_SHED] = entity.level!!.tick + Utils.rand(6000, 10800)
     }
 }

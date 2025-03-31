@@ -1,6 +1,5 @@
 package org.chorus.entity.ai.executor.enderdragon
 
-import org.chorus.entity.*
 import org.chorus.entity.ai.executor.EntityControl
 import org.chorus.entity.ai.executor.IBehaviorExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
@@ -11,13 +10,12 @@ import org.chorus.entity.mob.monster.EntityEnderDragon
 import org.chorus.math.*
 import org.chorus.utils.*
 
-import java.util.*
 import kotlin.math.cos
 import kotlin.math.sin
 
 
 class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标位置
-    protected var memory: MemoryType<out Vector3?>?,
+    protected var memory: MemoryType<out Vector3>,
     protected var speed: Float,
     protected var updateRouteImmediatelyWhenTargetChange: Boolean,
     private val size: Int,
@@ -33,7 +31,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
     private val ticks = 0
 
 
-    constructor(memory: MemoryType<out Vector3?>?, speed: Float, size: Int, sections: Int, circles: Int) : this(
+    constructor(memory: MemoryType<out Vector3>, speed: Float, size: Int, sections: Int, circles: Int) : this(
         memory,
         speed,
         false,
@@ -43,20 +41,20 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
     )
 
     override fun execute(entity: EntityMob): Boolean {
-        if (entity.isEnablePitch) entity.isEnablePitch = false
+        if (entity.isEnablePitch()) entity.setEnablePitch(false)
         if (needUpdateTarget(entity)) {
             circleLoc++
             val target = next(entity)
             lastLocation = target
-            if (entity.movementSpeed != speed) entity.movementSpeed = speed
-            entity.behaviorGroup!!.isForceUpdateRoute = updateRouteImmediatelyWhenTargetChange
+            if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed)
+            entity.getBehaviorGroup().setForceUpdateRoute(updateRouteImmediatelyWhenTargetChange)
         }
         setRouteTarget(entity, lastLocation)
         setLookTarget(entity, lastLocation)
         return circleLoc < circles
     }
 
-    override fun onStart(entity: EntityMob?) {
+    override fun onStart(entity: EntityMob) {
         startLoc = Utils.rand(0, sections)
         circleLoc = 0
     }
@@ -68,12 +66,12 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
     override fun onStop(entity: EntityMob) {
         stop(entity)
         if (entity is EntityEnderDragon) {
-            if (Utils.rand(0, 3 + Arrays.stream<Entity>(entity.level!!.entities).filter { entity1: Entity ->
-                    entity1 is EntityEnderCrystal && entity1.position.toHorizontal().distance(
+            if (Utils.rand(0, 3 + entity.level!!.entities.values.count {
+                    it is EntityEnderCrystal && it.position.toHorizontal().distance(
                         Vector2.ZERO
                     ) < 128
-                }.count().toInt()) < 1) {
-                entity.getMemoryStorage()!!.set<Boolean>(CoreMemoryTypes.Companion.FORCE_PERCHING, true)
+                }) < 1) {
+                entity.getMemoryStorage()[CoreMemoryTypes.FORCE_PERCHING] = true
             }
         }
     }
@@ -81,20 +79,20 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
     protected fun stop(entity: EntityMob) {
         removeRouteTarget(entity)
         removeLookTarget(entity)
-        entity.isEnablePitch = true
+        entity.setEnablePitch(true)
     }
 
     protected fun needUpdateTarget(entity: EntityMob): Boolean {
         entity.recalculateBoundingBox(false)
-        return lastLocation == null || entity.getBoundingBox().grow(10.0, 10.0, 10.0).isVectorInside(lastLocation)
+        return lastLocation == null || entity.getBoundingBox().grow(10.0, 10.0, 10.0).isVectorInside(lastLocation!!)
     }
 
     protected fun next(entity: EntityMob): Vector3 {
-        val origin = entity.behaviorGroup!!.memoryStorage!![memory]
+        val origin = entity.getBehaviorGroup().getMemoryStorage()[memory]
         val angleIncrement = 360.0 / sections
         val angle = Math.toRadians(((circleLoc + startLoc) * angleIncrement))
-        val particleX = origin!!.getX() + cos(angle) * size
-        val particleZ = origin!!.getZ() + sin(angle) * size
-        return Vector3(particleX, origin!!.y + Utils.rand(-5, 7), particleZ)
+        val particleX = origin.x + cos(angle) * size
+        val particleZ = origin.z + sin(angle) * size
+        return Vector3(particleX, origin.y + Utils.rand(-5, 7), particleZ)
     }
 }

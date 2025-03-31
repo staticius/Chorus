@@ -69,7 +69,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     var targetCaptainID: Long? = null
     var targetID: Long = 0L
     var tradeExperience: Int? = null
-    var tradeTier: Int? = null
+    open var tradeTier: Int? = null
     var wantsToBeJockey: Boolean? = null
 
     @JvmField

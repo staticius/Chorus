@@ -8,8 +8,8 @@ import org.chorus.entity.mob.EntityMob
  */
 class LiftController : IController {
     override fun control(entity: EntityMob): Boolean {
-        //add lift force
-        if (entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.ENABLE_LIFT_FORCE)) entity.motion.y += entity.gravity.toDouble()
+        // add lift force
+        if (entity.memoryStorage[CoreMemoryTypes.ENABLE_LIFT_FORCE]) entity.motion.y += entity.getGravity().toDouble()
         return true
     }
 }

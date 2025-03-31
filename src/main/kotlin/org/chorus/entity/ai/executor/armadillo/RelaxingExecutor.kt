@@ -15,7 +15,7 @@ class RelaxingExecutor : EntityControl, IBehaviorExecutor {
         removeLookTarget(entity)
         removeRouteTarget(entity)
         if (entity is EntityArmadillo) {
-            entity.rollState = RollState.ROLLED_UP_RELAXING
+            entity.setRollState(RollState.ROLLED_UP_RELAXING)
         }
     }
 }

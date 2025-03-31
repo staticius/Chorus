@@ -22,13 +22,13 @@ class RollUpExecutor : EntityControl, IBehaviorExecutor {
         removeLookTarget(entity)
         removeRouteTarget(entity)
         if (entity is EntityArmadillo) {
-            entity.rollState = RollState.ROLLED_UP
+            entity.setRollState(RollState.ROLLED_UP)
         }
     }
 
     override fun onStop(entity: EntityMob) {
         if (entity is EntityArmadillo) {
-            entity.rollState = RollState.ROLLED_UP_PEEKING
+            entity.setRollState(RollState.ROLLED_UP_PEEKING)
         }
     }
 

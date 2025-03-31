@@ -6,7 +6,7 @@ import org.chorus.network.protocol.types.ActorRuntimeID
 data class AnimatePacket(
     val action: Action,
     val targetRuntimeID: ActorRuntimeID,
-    val actionData: Action.ActionData?,
+    val actionData: Action.ActionData? = null,
 ) : DataPacket(), PacketEncoder {
     enum class Action(val id: Int) {
         NO_ACTION(0),

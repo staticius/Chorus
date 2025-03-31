@@ -28,8 +28,8 @@ class HoppingController(moveCooldown: Int) : WalkController() {
         currentJumpCoolDown++
         if (entity.hasMoveDirection() && !entity.isShouldUpdateMoveDirection && currentJumpCoolDown > moveCooldown) {
             //clone防止异步导致的NPE
-            val direction = entity.moveDirectionEnd.clone()
-            val speed = entity.movementSpeed
+            val direction = entity.moveDirectionEnd!!.clone()
+            val speed = entity.getMovementSpeed()
             if (entity.motion.x * entity.motion.x + entity.motion.z * entity.motion.z > speed * speed * 0.4756) {
                 entity.setDataFlag(EntityFlag.MOVING, false)
                 return false
@@ -48,7 +48,7 @@ class HoppingController(moveCooldown: Int) : WalkController() {
             val dx = relativeVector.x * k
             val dz = relativeVector.z * k
             var dy = 0.0
-            if (entity.isOnGround) {
+            if (entity.isOnGround()) {
                 val diffY = entity.getScale().toDouble()
                 dy += entity.getJumpingMotion(diffY)
                 val jumpSound =

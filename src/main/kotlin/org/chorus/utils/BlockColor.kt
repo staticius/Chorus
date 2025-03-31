@@ -41,10 +41,10 @@ class BlockColor {
         return "BlockColor[r=" + this.red + ",g=" + this.green + ",b=" + this.blue + ",a=" + this.alpha + "]"
     }
 
-    val rGB: Int
+    val rgb: Int
         get() = (this.red shl 16 or (this.green shl 8) or this.blue) and 0xffffff
 
-    val aRGB: Int
+    val argb: Int
         get() = this.alpha shl 24 or (this.red shl 16) or (this.green shl 8) or this.blue
 
     fun toAwtColor(): Color {

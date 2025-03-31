@@ -19,10 +19,11 @@ class SleepExecutor : EntityControl, IBehaviorExecutor {
     override fun onStart(entity: EntityMob) {
         removeRouteTarget(entity)
         removeLookTarget(entity)
-        if (entity.memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.OCCUPIED_BED)) {
-            if (entity.memoryStorage!!.get<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED) is BlockBed) {
-                val head: BlockBed = bed.getHeadPart()
-                val foot: BlockBed = bed.getFootPart()
+        if (entity.memoryStorage.notEmpty(CoreMemoryTypes.OCCUPIED_BED)) {
+            val bed = entity.memoryStorage[CoreMemoryTypes.OCCUPIED_BED]
+            if (bed is BlockBed) {
+                val head = bed.headPart!!
+                val foot = bed.footPart!!
 
                 val sleepingTransform = Transform(foot.locator).add(
                     when (head.blockFace) {
@@ -33,7 +34,7 @@ class SleepExecutor : EntityControl, IBehaviorExecutor {
                         else -> Vector3.ZERO
                     }
                 )
-                sleepingTransform.setYaw(BVector3.getYawFromVector(head.blockFace.opposite.unitVector))
+                sleepingTransform.setYaw(BVector3.getYawFromVector(head.blockFace.getOpposite().unitVector))
                 sleepingTransform.setHeadYaw(sleepingTransform.yaw)
                 entity.teleport(sleepingTransform)
                 entity.respawnToAll()

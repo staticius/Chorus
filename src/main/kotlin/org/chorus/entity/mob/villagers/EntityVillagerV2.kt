@@ -68,12 +68,11 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         return tradeNetId
     }
 
-    fun getRecipes(): ListTag<CompoundTag?> {
-        return ListTag<CompoundTag?>(
+    fun getRecipes(): ListTag<CompoundTag> {
+        return ListTag(
             Tag.TAG_COMPOUND.toInt(),
             TradeRecipeBuildUtils.RECIPE_MAP.entries.stream()
-                .filter { t: Map.Entry<Int, CompoundTag?> -> getTradeNetIds().contains(t.key) }.toList().stream()
-                .map<CompoundTag?> { java.util.Map.Entry.value }.toList()
+                .filter { t -> getTradeNetIds().contains(t.key) }.map { it.value }.toList()
         )
     }
 
@@ -81,13 +80,13 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     protected var tradeInventory: TradeInventory? = null
 
-    private var inventory: Inventory = null
+    override var inventory: Inventory = null
 
     protected var canTrade: Boolean? = null
 
     protected var displayName: String? = null
 
-    override var tradeTier: Int = 0
+    override var tradeTier: Int? = 0
 
     protected var maxTradeTier: Int = 0
 

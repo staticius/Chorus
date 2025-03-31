@@ -34,9 +34,9 @@ class WeightedMultiBehavior : AbstractBehavior {
 
     protected var currentBehavior: IBehavior? = null
 
-    constructor(priority: Int, vararg behaviors: IBehavior?) {
+    constructor(priority: Int, vararg behaviors: IBehavior) {
         this.priority = priority
-        this.behaviors = java.util.Set.of(*behaviors)
+        this.behaviors = setOf(*behaviors)
     }
 
     constructor(priority: Int, behaviors: Set<IBehavior>) {
@@ -44,13 +44,13 @@ class WeightedMultiBehavior : AbstractBehavior {
         this.behaviors = behaviors
     }
 
-    override fun evaluate(entity: EntityMob?): Boolean {
+    override fun evaluate(entity: EntityMob): Boolean {
         val result = evaluateBehaviors(entity)
         if (result.isEmpty()) {
             return false
         }
         if (result.size == 1) {
-            setCurrentBehavior(result.iterator().next())
+            currentBehavior = (result.iterator().next())
             return true
         }
         //根据Weight选取一个行为
@@ -62,7 +62,7 @@ class WeightedMultiBehavior : AbstractBehavior {
         for (behavior in result) {
             random -= behavior.weight
             if (random <= 0) {
-                setCurrentBehavior(behavior)
+                currentBehavior = (behavior)
                 return true
             }
         }
@@ -81,15 +81,15 @@ class WeightedMultiBehavior : AbstractBehavior {
             return
         }
         currentBehavior!!.onInterrupt(entity)
-        currentBehavior.setBehaviorState(BehaviorState.STOP)
+        currentBehavior!!.behaviorState = (BehaviorState.STOP)
     }
 
-    override fun onStart(entity: EntityMob?) {
+    override fun onStart(entity: EntityMob) {
         if (currentBehavior == null) {
             return
         }
-        currentBehavior!!.onStart(entity!!)
-        currentBehavior.setBehaviorState(BehaviorState.ACTIVE)
+        currentBehavior!!.onStart(entity)
+        currentBehavior!!.behaviorState = (BehaviorState.ACTIVE)
     }
 
     override fun onStop(entity: EntityMob) {
@@ -97,7 +97,7 @@ class WeightedMultiBehavior : AbstractBehavior {
             return
         }
         currentBehavior!!.onStop(entity)
-        currentBehavior.setBehaviorState(BehaviorState.STOP)
+        currentBehavior!!.behaviorState = (BehaviorState.STOP)
     }
 
     /**

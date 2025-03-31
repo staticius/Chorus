@@ -33,8 +33,8 @@ class VexSummonExecutor : FangLineExecutor() {
         }
         if (tick >= CAST_DURATION) {
             val tick = entity.level!!.tick
-            entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_SUMMON, tick)
-            entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, tick)
+            entity.memoryStorage[CoreMemoryTypes.LAST_ATTACK_SUMMON] = tick
+            entity.memoryStorage[CoreMemoryTypes.LAST_ATTACK_TIME] = tick
             return false
         } else return true
     }
@@ -42,14 +42,14 @@ class VexSummonExecutor : FangLineExecutor() {
     override fun startSpell(entity: EntityMob) {
         tick = 0
         entity.level!!.addSound(entity.position, Sound.MOB_EVOCATION_ILLAGER_PREPARE_SUMMON)
-        entity.setDataProperty(EntityDataTypes.Companion.EVOKER_SPELL_CASTING_COLOR, BlockColor.WHITE_BLOCK_COLOR.argb)
-        entity.memoryStorage!!.set<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC, SPELL.SUMMON)
+        entity.setDataProperty(EntityDataTypes.EVOKER_SPELL_CASTING_COLOR, BlockColor.WHITE_BLOCK_COLOR.argb)
+        entity.memoryStorage[CoreMemoryTypes.LAST_MAGIC] = SPELL.SUMMON
         entity.setDataFlag(EntityFlag.CASTING)
     }
 
     protected fun summon(entity: EntityMob) {
         if (!entity.getDataFlag(EntityFlag.CASTING)) return
-        val vexTransform = entity.transform
+        val vexTransform = entity.getTransform()
         vexTransform.position.x += ThreadLocalRandom.current().nextFloat(2f).toDouble()
         vexTransform.position.y += ThreadLocalRandom.current().nextFloat(2f).toDouble()
         vexTransform.position.z += ThreadLocalRandom.current().nextFloat(2f).toDouble()
@@ -72,15 +72,15 @@ class VexSummonExecutor : FangLineExecutor() {
                     .add(FloatTag(0f))
             )
 
-        val vexEntity: Entity = Entity.Companion.createEntity(
-            EntityID.Companion.VEX,
+        val vexEntity = Entity.Companion.createEntity(
+            EntityID.VEX,
             entity.level!!.getChunk(entity.position.chunkX, entity.position.chunkZ),
             nbt
         )
         if (vexEntity is EntityVex) {
             vexEntity.illager = entity as EntityEvocationIllager
         }
-        if (vexEntity != null) vexEntity.spawnToAll()
+        vexEntity?.spawnToAll()
     }
 
     companion object {

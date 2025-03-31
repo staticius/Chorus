@@ -5,6 +5,6 @@ import org.chorus.entity.mob.EntityMob
 
 class MemoryCheckEmptyEvaluator(protected var type: MemoryType<*>) : IBehaviorEvaluator {
     override fun evaluate(entity: EntityMob): Boolean {
-        return entity.behaviorGroup!!.memoryStorage!!.isEmpty(type)
+        return entity.getBehaviorGroup().getMemoryStorage().isEmpty(type)
     }
 }

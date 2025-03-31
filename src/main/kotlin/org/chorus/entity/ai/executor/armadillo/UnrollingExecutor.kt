@@ -17,13 +17,13 @@ class UnrollingExecutor : EntityControl, IBehaviorExecutor {
         return false
     }
 
-    override fun onStart(entity: EntityMob?) {
+    override fun onStart(entity: EntityMob) {
         this.tick = 0
     }
 
     override fun onStop(entity: EntityMob) {
         if (entity is EntityArmadillo) {
-            entity.rollState = RollState.UNROLLED
+            entity.setRollState(RollState.UNROLLED)
         }
     }
 

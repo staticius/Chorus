@@ -67,25 +67,25 @@ interface IHuman : InventoryHolder {
                 }
                 if (skinTag.contains("SkinResourcePatch")) {
                     newSkin.setSkinResourcePatch(
-                        kotlin.String(
+                        String(
                             skinTag.getByteArray("SkinResourcePatch"),
                             StandardCharsets.UTF_8
                         )
                     )
                 }
                 if (skinTag.contains("GeometryData")) {
-                    newSkin.setGeometryData(kotlin.String(skinTag.getByteArray("GeometryData"), StandardCharsets.UTF_8))
+                    newSkin.setGeometryData(String(skinTag.getByteArray("GeometryData"), StandardCharsets.UTF_8))
                 }
                 if (skinTag.contains("SkinAnimationData")) {
                     newSkin.setAnimationData(
-                        kotlin.String(
+                        String(
                             skinTag.getByteArray("SkinAnimationData"),
                             StandardCharsets.UTF_8
                         )
                     )
                 } else if (skinTag.contains("AnimationData")) { // backwards compatible
                     newSkin.setAnimationData(
-                        kotlin.String(
+                        String(
                             skinTag.getByteArray("AnimationData"),
                             StandardCharsets.UTF_8
                         )
@@ -102,7 +102,7 @@ interface IHuman : InventoryHolder {
                 }
                 if (skinTag.contains("AnimatedImageData")) {
                     val list: ListTag<CompoundTag> = skinTag.getList("AnimatedImageData", CompoundTag::class.java)
-                    for (animationTag: CompoundTag in list.getAll()) {
+                    for (animationTag: CompoundTag in list.all) {
                         val frames: Float = animationTag.getFloat("Frames")
                         val type: Int = animationTag.getInt("Type")
                         val image: ByteArray = animationTag.getByteArray("Image")
@@ -121,7 +121,7 @@ interface IHuman : InventoryHolder {
                 }
                 if (skinTag.contains("PersonaPieces")) {
                     val pieces: ListTag<CompoundTag> = skinTag.getList("PersonaPieces", CompoundTag::class.java)
-                    for (piece: CompoundTag in pieces.getAll()) {
+                    for (piece: CompoundTag in pieces.all) {
                         newSkin.getPersonaPieces().add(
                             PersonaPiece(
                                 piece.getString("PieceId"),
@@ -135,11 +135,11 @@ interface IHuman : InventoryHolder {
                 }
                 if (skinTag.contains("PieceTintColors")) {
                     val tintColors: ListTag<CompoundTag> = skinTag.getList("PieceTintColors", CompoundTag::class.java)
-                    for (tintColor: CompoundTag in tintColors.getAll()) {
+                    for (tintColor: CompoundTag in tintColors.all) {
                         newSkin.getTintColors().add(
                             PersonaPieceTint(
                                 tintColor.getString("PieceType"),
-                                tintColor.getList("Colors", StringTag::class.java).getAll().stream()
+                                tintColor.getList("Colors", StringTag::class.java).all.stream()
                                     .map(Function { stringTag: StringTag -> stringTag.data })
                                     .collect(Collectors.toList())
                             )
@@ -157,8 +157,8 @@ interface IHuman : InventoryHolder {
             }
             this.setUUID(
                 Utils.dataToUUID(
-                    java.lang.String.valueOf(human.getRuntimeID()).getBytes(StandardCharsets.UTF_8),
-                    getSkin().getSkinData().data, human.getNameTag().getBytes(StandardCharsets.UTF_8)
+                    human.getRuntimeID().toString().toByteArray(StandardCharsets.UTF_8),
+                    getSkin().getSkinData().data, human.getNameTag().toByteArray(StandardCharsets.UTF_8)
                 )
             )
         }
@@ -175,10 +175,10 @@ interface IHuman : InventoryHolder {
             getInventory().setHeldItemSlot(human.namedTag!!.getInt("SelectedInventorySlot").coerceIn(0, 8))
         }
 
-        if (human.namedTag!!.contains("Inventory") && human.namedTag!!.get("Inventory") is ListTag<*>) {
+        if (human.namedTag!!.contains("Inventory") && human.namedTag!!["Inventory"] is ListTag<*>) {
             val inventory: HumanInventory = this.getInventory()
             val inventoryList: ListTag<CompoundTag> = human.namedTag!!.getList("Inventory", CompoundTag::class.java)
-            for (item: CompoundTag in inventoryList.getAll()) {
+            for (item: CompoundTag in inventoryList.all) {
                 val slot: Int = item.getByte("Slot").toInt()
                 inventory.setItem(slot, NBTIO.getItemHelper(item)) //inventory 0-39
             }
@@ -188,9 +188,9 @@ interface IHuman : InventoryHolder {
             val offHand: CompoundTag = human.namedTag!!.getCompound("OffInventory")
             offhandInventory!!.setItem(0, NBTIO.getItemHelper(offHand)) //offinventory index 0
         }
-        if (human.namedTag!!.contains("EnderItems") && human.namedTag!!.get("EnderItems") is ListTag<*>) {
+        if (human.namedTag!!.contains("EnderItems") && human.namedTag!!["EnderItems"] is ListTag<*>) {
             val inventoryList: ListTag<CompoundTag> = human.namedTag!!.getList("EnderItems", CompoundTag::class.java)
-            for (item: CompoundTag in inventoryList.getAll()) { //enderItems index 0-26
+            for (item: CompoundTag in inventoryList.all) { //enderItems index 0-26
                 (human as EntityHumanType).getEnderChestInventory()!!
                     .setItem(item.getByte("Slot").toInt(), NBTIO.getItemHelper(item))
             }
@@ -199,16 +199,16 @@ interface IHuman : InventoryHolder {
 
     fun saveHumanEntity(human: Entity) {
         //EntityHumanType
-        var inventoryTag: ListTag<CompoundTag?>? = null
+        val inventoryTag: ListTag<CompoundTag>?
         if (this.getInventory() != null) {
             inventoryTag = ListTag()
             human.namedTag!!.putList("Inventory", inventoryTag)
 
-            for (entry: Map.Entry<Int?, Item?> in getInventory().getContents().entrySet()) {
-                inventoryTag.add(NBTIO.putItemHelper(entry.getValue(), entry.getKey()))
+            for (entry in getInventory().contents.entries) {
+                inventoryTag.add(NBTIO.putItemHelper(entry.value, entry.key))
             }
 
-            human.namedTag!!.putInt("SelectedInventorySlot", getInventory().getHeldItemIndex())
+            human.namedTag!!.putInt("SelectedInventorySlot", getInventory().heldItemIndex)
         }
 
         if (this.getOffhandInventory() != null) {
@@ -221,7 +221,7 @@ interface IHuman : InventoryHolder {
             val enderItems: ListTag<CompoundTag> = human.namedTag!!.getList("EnderItems", CompoundTag::class.java)
             for (slot in 0..<getEnderChestInventory()!!.size) {
                 val item: Item = getEnderChestInventory()!!.getItem(slot)
-                if (!item.isNull()) {
+                if (!item.isNothing) {
                     enderItems.add(NBTIO.putItemHelper(item, slot))
                 }
             }
@@ -235,14 +235,14 @@ interface IHuman : InventoryHolder {
                 .putByteArray("Data", skin.getSkinData().data)
                 .putInt("SkinImageWidth", skin.getSkinData().width)
                 .putInt("SkinImageHeight", skin.getSkinData().height)
-                .putString("ModelId", skin.getSkinId()!!)
+                .putString("ModelId", skin.getSkinId())
                 .putString("CapeId", skin.getCapeId())
                 .putByteArray("CapeData", skin.getCapeData().data)
                 .putInt("CapeImageWidth", skin.getCapeData().width)
                 .putInt("CapeImageHeight", skin.getCapeData().height)
-                .putByteArray("SkinResourcePatch", skin.getSkinResourcePatch().getBytes(StandardCharsets.UTF_8))
-                .putByteArray("GeometryData", skin.getGeometryData().getBytes(StandardCharsets.UTF_8))
-                .putByteArray("SkinAnimationData", skin.getAnimationData().getBytes(StandardCharsets.UTF_8))
+                .putByteArray("SkinResourcePatch", skin.getSkinResourcePatch().toByteArray(StandardCharsets.UTF_8))
+                .putByteArray("GeometryData", skin.getGeometryData().toByteArray(StandardCharsets.UTF_8))
+                .putByteArray("SkinAnimationData", skin.getAnimationData().toByteArray(StandardCharsets.UTF_8))
                 .putBoolean("PremiumSkin", skin.isPremium())
                 .putBoolean("PersonaSkin", skin.isPersona())
                 .putBoolean("CapeOnClassicSkin", skin.isCapeOnClassic())
@@ -250,10 +250,10 @@ interface IHuman : InventoryHolder {
                 .putString("SkinColor", skin.getSkinColor()!!)
                 .putBoolean("IsTrustedSkin", skin.isTrusted())
 
-            val animations: List<SkinAnimation?> = skin.getAnimations()
-            if (!animations.isEmpty()) {
+            val animations = skin.getAnimations()
+            if (animations.isNotEmpty()) {
                 val animationsTag: ListTag<CompoundTag> = ListTag()
-                for (animation: SkinAnimation in animations) {
+                for (animation in animations) {
                     animationsTag.add(
                         CompoundTag()
                             .putFloat("Frames", animation.frames)
@@ -267,8 +267,8 @@ interface IHuman : InventoryHolder {
                 skinTag.putList("AnimatedImageData", animationsTag)
             }
 
-            val personaPieces: List<PersonaPiece?> = skin.getPersonaPieces()
-            if (!personaPieces.isEmpty()) {
+            val personaPieces = skin.getPersonaPieces()
+            if (personaPieces.isNotEmpty()) {
                 val piecesTag: ListTag<CompoundTag> = ListTag()
                 for (piece: PersonaPiece in personaPieces) {
                     piecesTag.add(
@@ -281,16 +281,16 @@ interface IHuman : InventoryHolder {
                 }
                 skinTag.putList("PersonaPieces", piecesTag)
             }
-            val tints: List<PersonaPieceTint?> = skin.getTintColors()
-            if (!tints.isEmpty()) {
+            val tints = skin.getTintColors()
+            if (tints.isNotEmpty()) {
                 val tintsTag: ListTag<CompoundTag> = ListTag()
                 for (tint: PersonaPieceTint in tints) {
                     val colors: ListTag<StringTag> = ListTag()
-                    colors.setAll(tint.colors.stream().map(Function { data: String? ->
+                    colors.all = (tint.colors.stream().map { data: String? ->
                         StringTag(
                             data!!
                         )
-                    }).collect(Collectors.toList()))
+                    }.collect(Collectors.toList()))
                     tintsTag.add(
                         CompoundTag()
                             .putString("PieceType", tint.pieceType)
@@ -300,8 +300,8 @@ interface IHuman : InventoryHolder {
                 skinTag.putList("PieceTintColors", tintsTag)
             }
 
-            if (skin.getPlayFabId()!!.isNotEmpty()) {
-                skinTag.putString("PlayFabId", skin.getPlayFabId()!!)
+            if (skin.getPlayFabId().isNotEmpty()) {
+                skinTag.putString("PlayFabId", skin.getPlayFabId())
             }
 
             human.namedTag!!.putCompound("Skin", skinTag)
@@ -318,13 +318,13 @@ interface IHuman : InventoryHolder {
 
     fun setInventories(inventory: Array<Inventory>)
 
-    override fun getInventory(): HumanInventory
+    fun getInventory(): HumanInventory
 
     fun getOffhandInventory(): HumanOffHandInventory?
 
     fun getEnderChestInventory(): HumanEnderChestInventory?
 
-    override fun getLevel(): Level
+    fun getLevel(): Level
 
     fun getEntity(): Entity {
         return this as Entity
