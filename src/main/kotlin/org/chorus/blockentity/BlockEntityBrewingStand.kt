@@ -267,34 +267,37 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     }
 
     protected fun sendFuel() {
-        for (p in inventory!!.viewers) {
-            val windowId = p.getWindowId(inventory!!)
+        for (p in inventory.viewers) {
+            val windowId = p.getWindowId(inventory)
             if (windowId > 0) {
-                val pk1 = ContainerSetDataPacket()
-                pk1.windowId = windowId
-                pk1.property = ContainerSetDataPacket.PROPERTY_BREWING_STAND_FUEL_AMOUNT
-                pk1.value = this.fuel
+                val pk1 = ContainerSetDataPacket(
+                    containerID = windowId.toByte(),
+                    property = ContainerSetDataPacket.PROPERTY_BREWING_STAND_FUEL_AMOUNT,
+                    value = this.fuel
+                )
                 p.dataPacket(pk1)
 
-                val pk2 = ContainerSetDataPacket()
-                pk2.windowId = windowId
-                pk2.property = ContainerSetDataPacket.PROPERTY_BREWING_STAND_FUEL_TOTAL
-                pk2.value = this.fuelTotal
+                val pk2 = ContainerSetDataPacket(
+                    containerID = windowId.toByte(),
+                    property = ContainerSetDataPacket.PROPERTY_BREWING_STAND_FUEL_TOTAL,
+                    value = this.fuelTotal
+                )
                 p.dataPacket(pk2)
             }
         }
     }
 
     protected fun sendBrewTime() {
-        val pk = ContainerSetDataPacket()
-        pk.property = ContainerSetDataPacket.PROPERTY_BREWING_STAND_BREW_TIME
-        pk.value = brewTime
 
-        for (p in inventory!!.viewers) {
-            val windowId = p.getWindowId(inventory!!)
+
+        for (p in inventory.viewers) {
+            val windowId = p.getWindowId(inventory)
             if (windowId > 0) {
-                pk.windowId = windowId
-
+                val pk = ContainerSetDataPacket(
+                    containerID = windowId.toByte(),
+                    property = ContainerSetDataPacket.PROPERTY_BREWING_STAND_BREW_TIME,
+                    value = brewTime,
+                )
                 p.dataPacket(pk)
             }
         }

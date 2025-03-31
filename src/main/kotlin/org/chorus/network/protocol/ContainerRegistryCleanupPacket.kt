@@ -1,29 +1,19 @@
 package org.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.inventory.FullContainerName
-import java.util.function.Consumer
 
-
-class ContainerRegistryCleanupPacket : DataPacket() {
-    private val removedContainers: List<FullContainerName> = ObjectArrayList()
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
+data class ContainerRegistryCleanupPacket(
+    val removedContainers: List<FullContainerName>
+) : DataPacket(), PacketEncoder {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeArray<FullContainerName>(
-            this.getRemovedContainers(),
-            Consumer<FullContainerName> { fullContainerName: FullContainerName? ->
-                byteBuf.writeFullContainerName(
-                    fullContainerName!!
-                )
-            })
+        byteBuf.writeArray(this.removedContainers) { fullContainerName ->
+            byteBuf.writeFullContainerName(fullContainerName)
+        }
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CONTAINER_REGISTRY_CLEANUP_PACKET
+        return ProtocolInfo.CONTAINER_REGISTRY_CLEANUP_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

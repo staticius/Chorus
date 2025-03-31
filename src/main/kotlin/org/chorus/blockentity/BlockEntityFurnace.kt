@@ -336,16 +336,18 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         for (player in inventory.viewers) {
             val windowId = player.getWindowId(this.inventory)
             if (windowId > 0) {
-                var pk = ContainerSetDataPacket()
-                pk.windowId = windowId
-                pk.property = ContainerSetDataPacket.PROPERTY_FURNACE_TICK_COUNT
-                pk.value = cookTime
+                var pk = ContainerSetDataPacket(
+                    containerID = windowId.toByte(),
+                    property = ContainerSetDataPacket.PROPERTY_FURNACE_TICK_COUNT,
+                    value = cookTime,
+                )
                 player.dataPacket(pk)
 
-                pk = ContainerSetDataPacket()
-                pk.windowId = windowId
-                pk.property = ContainerSetDataPacket.PROPERTY_FURNACE_LIT_TIME
-                pk.value = burnDuration
+                pk = ContainerSetDataPacket(
+                    containerID = windowId.toByte(),
+                    property = ContainerSetDataPacket.PROPERTY_FURNACE_LIT_TIME,
+                    value = burnDuration,
+                )
                 player.dataPacket(pk)
             }
         }

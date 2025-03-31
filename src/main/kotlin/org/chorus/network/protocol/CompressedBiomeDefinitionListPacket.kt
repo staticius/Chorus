@@ -3,9 +3,9 @@ package org.chorus.network.protocol
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-class CompressedBiomeDefinitionListPacket : DataPacket() {
-    var definitions: CompoundTag? = null
+data class CompressedBiomeDefinitionListPacket(
+    val definitions: CompoundTag
+) : DataPacket() {
     override fun encode(byteBuf: HandleByteBuf) {
         //TODO: Implement
     }
@@ -14,7 +14,7 @@ class CompressedBiomeDefinitionListPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.COMPRESSED_BIOME_DEFINITIONS_LIST
+        return ProtocolInfo.COMPRESSED_BIOME_DEFINITIONS_LIST
     }
 
     override fun handle(handler: PacketHandler) {
