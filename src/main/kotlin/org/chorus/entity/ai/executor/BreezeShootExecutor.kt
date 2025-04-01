@@ -44,14 +44,15 @@ class BreezeShootExecutor(
         if (tick2 == 0) {
             tick1++
         }
-        if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (!entity.isEnablePitch()) entity.setEnablePitch(true)
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
+        val newTarget = entity.behaviorGroup.memoryStorage[memory]
         if (this.target == null) target = newTarget
 
-        if (!target!!.isAlive) return false
+        if (!target!!.isAlive()) return false
         else if (target is Player) {
-            if (target.isCreative() || target.isSpectator() || !target.isOnline() || (entity.level!!.name != target.level.name)) {
+            val player = target as Player
+            if (player.isCreative || player.isSpectator || !player.isOnline || (entity.level!!.name != player.level!!.name)) {
                 return false
             }
         }
@@ -95,7 +96,7 @@ class BreezeShootExecutor(
         removeRouteTarget(entity)
         removeLookTarget(entity)
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         endShootSequence(entity)
@@ -106,7 +107,7 @@ class BreezeShootExecutor(
         removeRouteTarget(entity)
         removeLookTarget(entity)
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         endShootSequence(entity)
@@ -116,8 +117,8 @@ class BreezeShootExecutor(
     protected fun shootWindcharge(entity: EntityMob) {
         val fireballTransform = entity.transform
         val directionVector =
-            entity.directionVector.multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
-        fireballTransform.setY(entity.position.y + entity.eyeHeight + directionVector.getY())
+            entity.getDirectionVector().multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
+        fireballTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.y)
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
@@ -142,7 +143,7 @@ class BreezeShootExecutor(
         val f = min((p * p + p * 2) / 3, 1.0) * 3
 
         val projectile: Entity = Entity.Companion.createEntity(
-            EntityID.Companion.BREEZE_WIND_CHARGE_PROJECTILE,
+            EntityID.BREEZE_WIND_CHARGE_PROJECTILE,
             entity.level!!.getChunk(entity.position.chunkX, entity.position.chunkZ),
             nbt
         )
@@ -163,7 +164,7 @@ class BreezeShootExecutor(
     }
 
     private fun startShootSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
+        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
         entity.level!!.addSound(entity.position, Sound.MOB_BREEZE_CHARGE)
     }
 

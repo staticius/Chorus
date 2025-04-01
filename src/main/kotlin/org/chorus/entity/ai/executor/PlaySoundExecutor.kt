@@ -17,7 +17,7 @@ class PlaySoundExecutor(private val sound: Sound) : IBehaviorExecutor {
         val volume =
             if (minVolume == maxVolume) minVolume else ThreadLocalRandom.current().nextFloat(minVolume, maxVolume)
         val pitch = if (minPitch == maxPitch) minPitch else ThreadLocalRandom.current().nextFloat(minPitch, maxPitch)
-        entity.locator.getLevel().addSound(entity.position, sound, volume, pitch)
+        entity.locator.level.addSound(entity.position, sound, volume, pitch)
         return false
     }
 }

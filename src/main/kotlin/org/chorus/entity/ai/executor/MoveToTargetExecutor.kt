@@ -7,7 +7,7 @@ import org.chorus.math.Vector3
 
 
 open class MoveToTargetExecutor @JvmOverloads constructor(//指示执行器应该从哪个Memory获取目标位置
-    protected var memory: MemoryType<out IVector3?>?,
+    protected var memory: MemoryType<out IVector3>,
     protected var speed: Float,
     protected var updateRouteImmediatelyWhenTargetChange: Boolean = false,
     maxFollowRange: Float = -1f,
@@ -32,11 +32,11 @@ open class MoveToTargetExecutor @JvmOverloads constructor(//指示执行器应�
 
     override fun execute(entity: EntityMob): Boolean {
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) {
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) {
             return false
         }
         //获取目标位置（这个clone很重要）
-        val target = entity.behaviorGroup!!.memoryStorage!![memory].getVector3()
+        val target = entity.behaviorGroup.memoryStorage[memory].vector3
 
         //        if (target instanceof Locator locator && !locator.level.getName().equals(entity.level.getName()))
 //            return false;
@@ -59,7 +59,7 @@ open class MoveToTargetExecutor @JvmOverloads constructor(//指示执行器应�
         if (updateRouteImmediatelyWhenTargetChange) {
             val floor = target.floor()
 
-            if (oldTarget == null || oldTarget == floor) entity.behaviorGroup!!.isForceUpdateRoute = true
+            if (oldTarget == null || oldTarget == floor) entity.behaviorGroup.isForceUpdateRoute = true
 
             oldTarget = floor
         }
@@ -76,7 +76,7 @@ open class MoveToTargetExecutor @JvmOverloads constructor(//指示执行器应�
         //重置速度
         entity.movementSpeed = 0.1f
         entity.isEnablePitch = false
-        if (clearDataWhenLose) entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+        if (clearDataWhenLose) entity.behaviorGroup.memoryStorage.clear(memory)
     }
 
     override fun onStop(entity: EntityMob) {
@@ -86,6 +86,6 @@ open class MoveToTargetExecutor @JvmOverloads constructor(//指示执行器应�
         //重置速度
         entity.movementSpeed = 0.1f
         entity.isEnablePitch = false
-        if (clearDataWhenLose) entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+        if (clearDataWhenLose) entity.behaviorGroup.memoryStorage.clear(memory)
     }
 }

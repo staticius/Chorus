@@ -7,19 +7,19 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  * 记忆存储器标准实现
  */
-class MemoryStorage(@field:Getter override var entity: EntityMob) : IMemoryStorage {
+class MemoryStorage(override var entity: EntityMob) : IMemoryStorage {
     protected var memoryMap: MutableMap<MemoryType<*>, Any> = ConcurrentHashMap()
 
-    override fun <D> put(type: MemoryType<D>, data: D?) {
+    override fun <D> set(type: MemoryType<D>, data: D) {
         val codec = type.codec
         codec?.init(data, entity)
         memoryMap[type] = data ?: EMPTY_VALUE
     }
 
-    override fun <D> get(type: MemoryType<D>): D? {
+    override fun <D> get(type: MemoryType<D>): D {
         if (!memoryMap.containsKey(type)) {
-            var data = type.decode(getEntity())
-            if (data == null) data = type.defaultData
+            var data = type.decode(entity)
+            if (data == null) data = type.getDefaultData()
             set(type, data)
         }
         val value: D

@@ -8,7 +8,6 @@ import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.network.protocol.EntityEventPacket
-import java.util.*
 
 class VillagerBreedingExecutor(entityClass: Class<EntityMob>, findingRangeSquared: Int, duration: Int, moveSpeed: Float) :
     EntityBreedingExecutor<EntityMob>(entityClass, findingRangeSquared, duration, moveSpeed) {
@@ -61,7 +60,7 @@ class VillagerBreedingExecutor(entityClass: Class<EntityMob>, findingRangeSquare
             sendInLoveParticles(another!!)
         }
 
-        val baby = Entity.Companion.createEntity(entity.getNetworkId(), entity.getLocator()) as EntityVillagerV2
+        val baby = Entity.Companion.createEntity(entity.getNetworkID(), entity.getLocator()) as EntityVillagerV2
         baby.setBaby(true)
         //防止小屁孩去生baby
         baby.memoryStorage[CoreMemoryTypes.LAST_IN_LOVE_TIME] = entity.level!!.tick

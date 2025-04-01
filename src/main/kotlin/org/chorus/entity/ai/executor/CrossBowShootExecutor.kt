@@ -52,13 +52,14 @@ class CrossBowShootExecutor(
             tick1++
         }
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
+        val newTarget = entity.behaviorGroup.memoryStorage[memory]
         if (this.target == null) target = newTarget
         //some check
-        if (!target!!.isAlive) return false
+        if (!target!!.isAlive()) return false
         else if (target is Player) {
-            if (target.isCreative() || target.isSpectator() || !target.isOnline() || (entity.level!!.name != target.level.name)) {
+            val player = target as Player
+            if (player.isCreative || player.isSpectator || !player.isOnline || (entity.level!!.name != player.level!!.name)) {
                 return false
             }
         }
@@ -109,7 +110,7 @@ class CrossBowShootExecutor(
         //重置速度
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         stopBowAnimation(entity)
@@ -120,9 +121,9 @@ class CrossBowShootExecutor(
         removeRouteTarget(entity)
         removeLookTarget(entity)
         //重置速度
-        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
+        entity.movementSpeed = EntityLiving.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         stopBowAnimation(entity)
@@ -142,7 +143,7 @@ class CrossBowShootExecutor(
             .putList(
                 "Pos", ListTag<FloatTag>()
                     .add(FloatTag(entity.position.x))
-                    .add(FloatTag(entity.position.y + entity.currentHeight / 2 + 0.2f))
+                    .add(FloatTag(entity.position.y + entity.getCurrentHeight() / 2 + 0.2f))
                     .add(FloatTag(entity.position.z))
             )
             .putList(
@@ -163,20 +164,20 @@ class CrossBowShootExecutor(
         val f = min((p * p + p * 2) / 3, 1.0) * 3
 
         val arrow = Entity.Companion.createEntity(
-            EntityID.Companion.ARROW,
+            EntityID.ARROW,
             entity.chunk!!, nbt, entity, f == 2.0
         ) as EntityArrow
         if (arrow == null) {
             return
         }
-        arrow.pickupMode = EntityProjectile.Companion.PICKUP_NONE
+        arrow.pickupMode = EntityProjectile.PICKUP_NONE
 
         val entityShootBowEvent = EntityShootBowEvent(entity, bow, arrow, f)
         Server.instance.pluginManager.callEvent(entityShootBowEvent)
         if (entityShootBowEvent.isCancelled) {
-            entityShootBowEvent.projectile.kill()
+            entityShootBowEvent.getProjectile().kill()
         } else {
-            entityShootBowEvent.projectile.setMotion(
+            entityShootBowEvent.getProjectile().setMotion(
                 entityShootBowEvent.projectile.getMotion().multiply(entityShootBowEvent.force)
             )
             if (entityShootBowEvent.projectile != null) {
@@ -195,7 +196,7 @@ class CrossBowShootExecutor(
     private fun playBowAnimation(entity: Entity, chargeAmount: Int) {
         if (chargeAmount == 0) {
             entity.level!!.addSound(entity.position, Sound.CROSSBOW_LOADING_START)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
+            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
             entity.setDataFlag(EntityFlag.USING_ITEM)
         } else entity.setDataProperty(EntityDataTypes.Companion.CHARGE_AMOUNT, chargeAmount * 2)
         if (chargeAmount == 30) entity.level!!.addSound(entity.position, Sound.CROSSBOW_LOADING_MIDDLE)

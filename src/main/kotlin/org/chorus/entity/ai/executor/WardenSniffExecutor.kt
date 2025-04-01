@@ -38,7 +38,7 @@ class WardenSniffExecutor(//gt
 
     protected fun sniff(entity: EntityMob) {
         if (entity !is EntityWarden) return
-        for (other in entity.level!!.entities) {
+        for (other in entity.level!!.entities.values) {
             if (!entity.isValidAngerEntity(other, true)) continue
             entity.addEntityAngerValue(other, this.angerAddition)
         }

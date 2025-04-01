@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.EntityMob
@@ -10,7 +10,7 @@ import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus.level.Sound
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.network.protocol.EntityEventPacket
 import java.util.*
 
@@ -26,13 +26,13 @@ class WardenMeleeAttackExecutor(
 
     override fun execute(entity: EntityMob): Boolean {
         attackTick++
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
         if (entity.movementSpeed != speed) entity.movementSpeed = speed
         //获取目标位置（这个clone很重要）
-        val target = entity.behaviorGroup!!.memoryStorage!![memory]
-        if (!target!!.isAlive) return false
+        val target = entity.behaviorGroup.memoryStorage[memory]
+        if (!target!!.isAlive()) return false
         this.coolDown = calCoolDown(entity, target)
-        val clonedTarget = target!!.position.clone()
+        val clonedTarget = target.position.clone()
         //更新寻路target
         setRouteTarget(entity, clonedTarget)
         //更新视线target
@@ -40,11 +40,11 @@ class WardenMeleeAttackExecutor(
 
         val floor = clonedTarget.floor()
 
-        if (oldTarget == null || oldTarget != floor) entity.behaviorGroup!!.isForceUpdateRoute = true
+        if (oldTarget == null || oldTarget != floor) entity.behaviorGroup.isForceUpdateRoute = true
 
         oldTarget = floor
 
-        if (entity.position.distanceSquared(target!!.position) <= 4 && attackTick > coolDown) {
+        if (entity.position.distanceSquared(target.position) <= 4 && attackTick > coolDown) {
             val damages: MutableMap<DamageModifier, Float> = EnumMap(
                 DamageModifier::class.java
             )
@@ -52,15 +52,15 @@ class WardenMeleeAttackExecutor(
 
             val ev = EntityDamageByEntityEvent(
                 entity,
-                target!!, DamageCause.ENTITY_ATTACK, damages, 0.6f, null
+                target, DamageCause.ENTITY_ATTACK, damages, 0.6f, null
             )
 
             ev.isBreakShield = true
-            target!!.attack(ev)
+            target.attack(ev)
             playAttackAnimation(entity)
-            entity.level!!.addSound(target!!.position, Sound.MOB_WARDEN_ATTACK)
+            entity.level!!.addSound(target.position, Sound.MOB_WARDEN_ATTACK)
             attackTick = 0
-            return target!!.isUndead
+            return target.isUndead()
         }
         return true
     }
@@ -68,7 +68,7 @@ class WardenMeleeAttackExecutor(
     protected fun calCoolDown(entity: EntityMob, target: Entity?): Int {
         if (entity is EntityWarden) {
             val anger =
-                entity.getMemoryStorage()!!.get<MutableMap<Entity?, Int>>(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)
+                entity.getMemoryStorage()[CoreMemoryTypes.WARDEN_ANGER_VALUE]!!
                     .getOrDefault(target, 0)
             return if (anger >= 145) 18 else 36
         } else {
@@ -98,7 +98,7 @@ class WardenMeleeAttackExecutor(
 
     protected fun playAttackAnimation(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.runtimeId
+        pk.eid = entity.getRuntimeID()
         pk.event = EntityEventPacket.ARM_SWING
         Server.broadcastPacket(entity.viewers.values, pk)
     }

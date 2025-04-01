@@ -1,6 +1,5 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
@@ -13,8 +12,8 @@ class WardenViolentAnimationExecutor(protected var duration: Int) : IBehaviorExe
         if (currentTick > duration) return false
         else {
             //更新视线target
-            if (entity.memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) entity.lookTarget =
-                entity.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET).position
+            if (entity.memoryStorage.notEmpty(CoreMemoryTypes.ATTACK_TARGET)) entity.lookTarget =
+                entity.memoryStorage[CoreMemoryTypes.ATTACK_TARGET]?.position
             return true
         }
     }
@@ -26,7 +25,7 @@ class WardenViolentAnimationExecutor(protected var duration: Int) : IBehaviorExe
     }
 
     override fun onStart(entity: EntityMob) {
-        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.IS_ATTACK_TARGET_CHANGED, false)
+        entity.memoryStorage[CoreMemoryTypes.IS_ATTACK_TARGET_CHANGED] = false
         entity.moveTarget = null
 
         entity.setDataFlag(EntityFlag.ROARING, true)

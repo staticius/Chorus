@@ -51,6 +51,12 @@ interface EntityControlUtils {
         memoryStorage[CoreMemoryTypes.ENABLE_PITCH] = enablePitch
     }
 
+    var isEnablePitch: Boolean
+        get() = memoryStorage[CoreMemoryTypes.ENABLE_PITCH]
+        set(enablePitch) {
+            memoryStorage[CoreMemoryTypes.ENABLE_PITCH] = enablePitch
+        }
+
     //    Unused
     //
     //

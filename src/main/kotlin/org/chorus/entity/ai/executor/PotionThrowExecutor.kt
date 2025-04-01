@@ -44,13 +44,14 @@ class PotionThrowExecutor(
             tick1++
         }
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
+        val newTarget = entity.behaviorGroup.memoryStorage[memory]
         if (this.target == null) target = newTarget
 
-        if (!target!!.isAlive) return false
+        if (!target!!.isAlive()) return false
         else if (target is Player) {
-            if (target.isCreative() || target.isSpectator() || !target.isOnline() || (entity.level!!.name != target.level.name)) {
+            val player = target as Player
+            if (player.isCreative || player.isSpectator || !player.isOnline || (entity.level!!.name != player.level!!.name)) {
                 return false
             }
         }
@@ -95,7 +96,7 @@ class PotionThrowExecutor(
         removeLookTarget(entity)
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         endShootSequence(entity)
@@ -107,7 +108,7 @@ class PotionThrowExecutor(
         removeLookTarget(entity)
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         endShootSequence(entity)
@@ -117,7 +118,7 @@ class PotionThrowExecutor(
     protected fun throwPotion(entity: EntityMob) {
         val potionTransform = entity.transform
         val directionVector = entity.directionVector
-        potionTransform.setY(entity.position.y + entity.eyeHeight + directionVector!!.getY())
+        potionTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.y)
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
@@ -139,7 +140,7 @@ class PotionThrowExecutor(
             .putInt("PotionId", getPotionEffect(entity))
 
         val projectile: Entity = Entity.Companion.createEntity(
-            EntityID.Companion.SPLASH_POTION,
+            EntityID.SPLASH_POTION,
             entity.level!!.getChunk(entity.position.chunkX, entity.position.chunkZ),
             nbt
         )
@@ -159,7 +160,7 @@ class PotionThrowExecutor(
     }
 
     private fun startShootSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
+        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
     }
 
     private fun endShootSequence(entity: Entity) {
@@ -168,8 +169,8 @@ class PotionThrowExecutor(
 
     fun getPotionEffect(entity: Entity): Int {
         if (entity is EntityMob) {
-            if (entity.memoryStorage!!.notEmpty(memory)) {
-                val target = entity.memoryStorage!![memory]
+            if (entity.memoryStorage.notEmpty(memory)) {
+                val target = entity.memoryStorage[memory]!!
                 val distance = target.position.distance(entity.position)
                 if (distance > 8 && !target.hasEffect(EffectType.SLOWNESS)) {
                     return 17 //SLOWNESS

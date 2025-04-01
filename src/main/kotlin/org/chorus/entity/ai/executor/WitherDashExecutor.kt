@@ -7,7 +7,7 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.math.IVector3
 
 class WitherDashExecutor(
-    memory: MemoryType<out IVector3?>?,
+    memory: MemoryType<out IVector3>,
     speed: Float,
     updateRouteImmediatelyWhenTargetChange: Boolean,
     maxFollowRange: Float,
@@ -18,7 +18,7 @@ class WitherDashExecutor(
 
     override fun onStart(entity: EntityMob) {
         super.onStart(entity)
-        entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_DASH, entity.level!!.tick)
+        entity.memoryStorage[CoreMemoryTypes.LAST_ATTACK_DASH] = entity.level!!.tick
         entity.setDataFlag(EntityFlag.CAN_DASH)
     }
 

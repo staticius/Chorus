@@ -2,7 +2,9 @@ package org.chorus.entity.ai.executor
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
@@ -14,7 +16,7 @@ import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
@@ -49,13 +51,14 @@ class TridentThrowExecutor(
             tick1++
         }
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
+        val newTarget = entity.behaviorGroup.memoryStorage[memory]
         if (this.target == null) target = newTarget
         //some check
-        if (!target!!.isAlive) return false
+        if (!target!!.isAlive()) return false
         else if (target is Player) {
-            if (target.isCreative() || target.isSpectator() || !target.isOnline() || (entity.level!!.name != target.level.name)) {
+            val player = target as Player
+            if (player.isCreative || player.isSpectator || !player.isOnline || (entity.level!!.name != player.level!!.name)) {
                 return false
             }
         }
@@ -101,7 +104,7 @@ class TridentThrowExecutor(
         //重置速度
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         stopTridentAnimation(entity)
@@ -114,7 +117,7 @@ class TridentThrowExecutor(
         //重置速度
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         stopTridentAnimation(entity)
@@ -126,7 +129,7 @@ class TridentThrowExecutor(
         val fireballTransform = entity.transform
         val directionVector =
             entity.directionVector.multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
-        fireballTransform.setY(entity.position.y + entity.eyeHeight + directionVector.getY())
+        fireballTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.y)
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
@@ -151,7 +154,7 @@ class TridentThrowExecutor(
         val f = min((p * p + p * 2) / 3, 1.0) * 3
 
         val projectile: Entity = Entity.Companion.createEntity(
-            EntityID.Companion.THROWN_TRIDENT,
+            EntityID.THROWN_TRIDENT,
             entity.level!!.getChunk(entity.position.chunkX, entity.position.chunkZ),
             nbt
         )
@@ -173,7 +176,7 @@ class TridentThrowExecutor(
     }
 
     private fun playTridentAnimation(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
+        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
         entity.setDataFlag(EntityFlag.FACING_TARGET_TO_RANGE_ATTACK)
     }
 

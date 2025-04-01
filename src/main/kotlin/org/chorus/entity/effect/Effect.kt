@@ -123,15 +123,15 @@ abstract class Effect @JvmOverloads constructor(
 
     companion object {
         @JvmStatic
-        fun get(type: EffectType): Effect? {
-            return Registries.EFFECT.get(type)
+        fun get(type: EffectType): Effect {
+            return Registries.EFFECT.get(type) ?: throw RuntimeException("Unknown EffectType: $type")
         }
 
-        fun get(id: String): Effect? {
+        fun get(id: String): Effect {
             return get(EffectType.get(id))
         }
 
-        fun get(id: Int): Effect? {
+        fun get(id: Int): Effect {
             return get(EffectType.get(id))
         }
     }

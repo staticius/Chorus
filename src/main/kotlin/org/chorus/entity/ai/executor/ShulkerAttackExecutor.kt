@@ -1,6 +1,7 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
@@ -9,21 +10,21 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.EntityShulker
 import org.chorus.entity.projectile.EntityShulkerBullet
 import org.chorus.level.Sound
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
-import org.chorus.utils.*
+import org.chorus.utils.Utils
 
+class ShulkerAttackExecutor(
+    protected val target: MemoryType<out Entity>
+) : IBehaviorExecutor {
 
-@RequiredArgsConstructor
-class ShulkerAttackExecutor : IBehaviorExecutor {
-    protected val target: MemoryType<out Entity?>? = null
     private var tick = 0
     private var nextAttack = 0
 
     override fun execute(entity: EntityMob): Boolean {
-        val target = entity.memoryStorage!!.get(target)
+        val target = entity.memoryStorage[target]
         tick++
         if (tick > nextAttack) {
             tick = 0
@@ -55,23 +56,22 @@ class ShulkerAttackExecutor : IBehaviorExecutor {
                 )
 
 
-            val bulletEntity: Entity = Entity.Companion.createEntity(
-                EntityID.Companion.SHULKER_BULLET,
+            val bulletEntity = Entity.createEntity(
+                EntityID.SHULKER_BULLET,
                 entity.level!!.getChunk(entity.position.chunkX, entity.position.chunkZ),
                 nbt
             )
 
             if (bulletEntity is EntityShulkerBullet) {
-                bulletEntity.memoryStorage!!
-                    .set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, target)
+                bulletEntity.memoryStorage[CoreMemoryTypes.ATTACK_TARGET] = target
             }
-            bulletEntity.spawnToAll()
+            bulletEntity?.spawnToAll()
             entity.level!!.addSound(entity.position, Sound.MOB_SHULKER_SHOOT)
         }
         return AllMatchEvaluator(
             EntityCheckEvaluator(this.target),
             DistanceEvaluator(this.target, 16.0),
-            NotMatchEvaluator(PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME, 0, 60))
+            NotMatchEvaluator(PassByTimeEvaluator(CoreMemoryTypes.LAST_BE_ATTACKED_TIME, 0, 60))
         ).evaluate(entity)
     }
 
@@ -80,14 +80,14 @@ class ShulkerAttackExecutor : IBehaviorExecutor {
         nextAttack = 0
         if (entity is EntityShulker) {
             entity.setPeeking(40)
-            val target = entity.getMemoryStorage().get(target)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target.runtimeId)
+            val target = entity.getMemoryStorage()[target]
+            entity.setDataProperty(EntityDataTypes.TARGET_EID, target.getRuntimeID())
         }
     }
 
     override fun onStop(entity: EntityMob) {
         if (entity is EntityShulker) {
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0)
+            entity.setDataProperty(EntityDataTypes.TARGET_EID, 0)
             entity.setPeeking(0)
         }
     }

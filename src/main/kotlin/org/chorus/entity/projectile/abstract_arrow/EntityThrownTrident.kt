@@ -38,7 +38,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
 
     protected var drag: Float = 0.01f
 
-    protected var pickupMode: Int = 0
+    var pickupMode: Int = 0
     private var collisionPos: Vector3? = null
     private var stuckToBlockPos: BlockVector3? = null
     private var favoredSlot: Int = 0

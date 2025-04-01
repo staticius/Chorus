@@ -187,7 +187,7 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
         return armor
     }
 
-    override fun getNetworkId(): Int {
+    override fun getNetworkID(): Int {
         return IHuman.NETWORK_ID
     }
 

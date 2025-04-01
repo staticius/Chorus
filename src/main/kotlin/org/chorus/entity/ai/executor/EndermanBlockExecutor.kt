@@ -10,7 +10,7 @@ import java.util.*
 class EndermanBlockExecutor : IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {
         if (entity is EntityEnderman) {
-            if (entity.getItemInHand().isNull) {
+            if (entity.itemInHand.isNothing) {
                 val optionalBlock = Arrays.stream(
                     entity.level!!.getCollisionBlocks(
                         entity.getBoundingBox().grow(3.7, 0.0, 3.7)
@@ -19,11 +19,11 @@ class EndermanBlockExecutor : IBehaviorExecutor {
                 if (optionalBlock.isPresent) {
                     val block = optionalBlock.get()
                     entity.setItemInHand(block.toItem())
-                    entity.setDataProperty(EntityDataTypes.Companion.CARRY_BLOCK_STATE, block)
+                    entity.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, block)
                     entity.level!!.setBlock(block.position, Block.get(BlockID.AIR))
                 }
             } else {
-                if (entity.getItemInHand().isBlock) {
+                if (entity.itemInHand.isBlock()) {
                     val optionalBlock = Arrays.stream(
                         entity.level!!.getCollisionBlocks(
                             entity.getBoundingBox().addCoord(0.7, -1.0, 0.7)
@@ -31,9 +31,9 @@ class EndermanBlockExecutor : IBehaviorExecutor {
                     ).filter { block: Block -> block.isSolid && block.up().canBeReplaced() }.findAny()
                     if (optionalBlock.isPresent) {
                         val block = optionalBlock.get()
-                        block.level.setBlock(block.up().position, entity.getItemInHand().block)
+                        block.level.setBlock(block.up().position, entity.itemInHand.getBlock())
                         entity.setItemInHand(Item.AIR)
-                        entity.setDataProperty(EntityDataTypes.Companion.CARRY_BLOCK_STATE, Item.AIR.block)
+                        entity.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, Item.AIR.getBlock())
                     }
                 }
             }

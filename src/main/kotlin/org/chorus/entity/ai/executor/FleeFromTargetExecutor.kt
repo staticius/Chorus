@@ -4,7 +4,8 @@ import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.EntityMob
-import org.chorus.math.*
+import org.chorus.math.IVector3
+import org.chorus.math.Vector3
 
 
 open class FleeFromTargetExecutor @JvmOverloads constructor(//指示执行器应该从哪个Memory获取目标位置
@@ -20,11 +21,11 @@ open class FleeFromTargetExecutor @JvmOverloads constructor(//指示执行器应
 
     override fun execute(entity: EntityMob): Boolean {
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) {
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) {
             return false
         }
 
-        val target = entity.behaviorGroup!!.memoryStorage!![memory].getVector3()
+        val target = entity.behaviorGroup.memoryStorage[memory]!!.vector3
         val moveTarget = target.add(
             Vector3(
                 entity.position.x - target.x,
@@ -41,13 +42,13 @@ open class FleeFromTargetExecutor @JvmOverloads constructor(//指示执行器应
         setRouteTarget(entity, moveTarget)
         setLookTarget(entity, moveTarget)
 
-        //This gives the Evoker enough time to turn around before attacking.
-        entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, entity.level!!.tick)
+        // This gives the Evoker enough time to turn around before attacking.
+        entity.memoryStorage[CoreMemoryTypes.LAST_ATTACK_TIME] = entity.level!!.tick
 
         if (updateRouteImmediatelyWhenTargetChange) {
             val floor = target.floor()
 
-            if (oldTarget == null || oldTarget == floor) entity.behaviorGroup!!.isForceUpdateRoute = true
+            if (oldTarget == null || oldTarget == floor) entity.behaviorGroup.isForceUpdateRoute = true
 
             oldTarget = floor
         }
@@ -62,7 +63,7 @@ open class FleeFromTargetExecutor @JvmOverloads constructor(//指示执行器应
         removeLookTarget(entity)
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         entity.isEnablePitch = false
-        if (clearDataWhenLose) entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+        if (clearDataWhenLose) entity.behaviorGroup.memoryStorage.clear(memory)
     }
 
     override fun onStop(entity: EntityMob) {
@@ -70,6 +71,6 @@ open class FleeFromTargetExecutor @JvmOverloads constructor(//指示执行器应
         removeLookTarget(entity)
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         entity.isEnablePitch = false
-        if (clearDataWhenLose) entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+        if (clearDataWhenLose) entity.behaviorGroup.memoryStorage.clear(memory)
     }
 }

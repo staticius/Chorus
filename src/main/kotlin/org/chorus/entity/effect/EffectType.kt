@@ -2,16 +2,16 @@ package org.chorus.entity.effect
 
 import org.chorus.registry.Registries
 
-/**
- * @author MEFRREEX
- */
-@JvmRecord
 data class EffectType(@JvmField val stringId: String, @JvmField val id: Int) {
-    override fun equals(obj: Any?): Boolean {
-        if (obj is EffectType) {
-            return obj.stringId == this.stringId && obj.id == this.id
+    override fun equals(other: Any?): Boolean {
+        if (other is EffectType) {
+            return other.stringId == this.stringId && other.id == this.id
         }
         return false
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
     }
 
     companion object {
@@ -103,12 +103,12 @@ data class EffectType(@JvmField val stringId: String, @JvmField val id: Int) {
         @JvmField
         val DARKNESS: EffectType = EffectType("darkness", 30)
 
-        fun get(stringId: String?): EffectType {
-            return Registries.EFFECT.getType(stringId)
+        fun get(stringId: String): EffectType {
+            return Registries.EFFECT.getType(stringId) ?: throw RuntimeException("Unknown stringId: $stringId")
         }
 
         fun get(id: Int): EffectType {
-            return Registries.EFFECT.getType(id)
+            return Registries.EFFECT.getType(id) ?: throw RuntimeException("Unknown id: $id")
         }
     }
 }

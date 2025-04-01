@@ -2,18 +2,20 @@ package org.chorus.entity.ai.executor
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityCanAttack
+import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
 import org.chorus.entity.mob.EntityMob
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus.inventory.EntityInventoryHolder
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.network.protocol.EntityEventPacket
 import java.util.*
 
@@ -24,7 +26,7 @@ import java.util.*
  * Universal melee attack actuator.
  */
 open class MeleeAttackExecutor(
-    protected var memory: MemoryType<out Entity?>?,
+    protected var memory: MemoryType<out Entity>,
     protected var speed: Float,
     maxSenseRange: Int,
     protected var clearDataWhenLose: Boolean,
@@ -61,10 +63,10 @@ open class MeleeAttackExecutor(
      *
      * Give target potion effect
      */
-    protected var effects: Array<Effect> = effects
+    protected var effects: Array<Effect> = effects.toList().toTypedArray()
 
     constructor(
-        memory: MemoryType<out Entity?>?,
+        memory: MemoryType<out Entity>,
         speed: Float,
         maxSenseRange: Int,
         clearDataWhenLose: Boolean,
@@ -72,18 +74,18 @@ open class MeleeAttackExecutor(
     ) : this(memory, speed, maxSenseRange, clearDataWhenLose, coolDown, 2.5f)
 
     constructor(
-        memory: MemoryType<out Entity?>?,
+        memory: MemoryType<out Entity>,
         speed: Float,
         maxSenseRange: Int,
         clearDataWhenLose: Boolean,
         coolDown: Int,
-        vararg effects: Effect?
+        vararg effects: Effect
     ) : this(memory, speed, maxSenseRange, clearDataWhenLose, coolDown, 2.5f, *effects)
 
     override fun execute(entity: EntityMob): Boolean {
         attackTick++
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
+        val newTarget = entity.behaviorGroup.memoryStorage[memory]
 
         //first is null
         if (this.target == null) {
@@ -94,21 +96,22 @@ open class MeleeAttackExecutor(
         }
 
         //some check
-        if (!target!!.isAlive) return false
+        if (!target!!.isAlive()) return false
         else if (entity.position.distanceSquared(target!!.position) > maxSenseRangeSquared) return false
         else if (target is Player) {
-            if (target.isCreative() || target.isSpectator() || !target.isOnline() || (entity.level!!.name != target.level.name)) {
+            val player = target as Player
+            if (player.isCreative || player.isSpectator || !player.isOnline || (entity.level!!.name != player.level!!.name)) {
                 return false
             }
         }
 
 
         //update target and look target
-        if (target!!.locator != newTarget!!.locator) {
+        if (target!!.locator != newTarget.locator) {
             target = newTarget
         }
-        if (this.lookTarget != newTarget!!.transform) {
-            lookTarget = newTarget!!.transform.position
+        if (this.lookTarget != newTarget.vector3) {
+            lookTarget = newTarget.transform.position
         }
 
         //set some motion control
@@ -119,7 +122,7 @@ open class MeleeAttackExecutor(
         setLookTarget(entity, lookTarget!!.clone())
 
         val floor = target!!.position.floor()
-        if (oldTarget == null || oldTarget != floor) entity.behaviorGroup!!.isForceUpdateRoute = true
+        if (oldTarget == null || oldTarget != floor) entity.behaviorGroup.isForceUpdateRoute = true
         oldTarget = floor
 
         //attack logic
@@ -128,14 +131,14 @@ open class MeleeAttackExecutor(
 
             var defaultDamage = 0f
             if (entity is EntityCanAttack) {
-                defaultDamage = entity.getDiffHandDamage(Server.instance.difficulty)
+                defaultDamage = entity.getDiffHandDamage(Server.instance.getDifficulty())
             }
             var itemDamage = item.getAttackDamage(entity) + defaultDamage
 
             val enchantments = item.enchantments
             if (item.applyEnchantments()) {
                 for (enchantment in enchantments) {
-                    itemDamage += enchantment.getDamageBonus(target, entity).toFloat()
+                    itemDamage += enchantment.getDamageBonus(target!!, entity).toFloat()
                 }
             }
 
@@ -170,9 +173,8 @@ open class MeleeAttackExecutor(
                 }
 
                 playAttackAnimation(entity)
-                entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, entity.level!!.tick)
-                entity.memoryStorage!!
-                    .set<Entity>(CoreMemoryTypes.Companion.LAST_ATTACK_ENTITY, target)
+                entity.memoryStorage[CoreMemoryTypes.LAST_ATTACK_TIME] = entity.level!!.tick
+                entity.memoryStorage[CoreMemoryTypes.LAST_ATTACK_ENTITY] = target!!
                 attackTick = 0
             }
 
@@ -187,7 +189,7 @@ open class MeleeAttackExecutor(
         //重置速度
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         this.target = null
@@ -200,7 +202,7 @@ open class MeleeAttackExecutor(
         //重置速度
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         this.target = null
@@ -209,7 +211,7 @@ open class MeleeAttackExecutor(
 
     protected fun playAttackAnimation(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.runtimeId
+        pk.eid = entity.getRuntimeID()
         pk.event = EntityEventPacket.ARM_SWING
         Server.broadcastPacket(entity.viewers.values, pk)
     }

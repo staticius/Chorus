@@ -14,7 +14,22 @@ class EntityShootBowEvent(shooter: EntityLiving?, bow: Item, projectile: EntityP
     EntityEvent(), Cancellable {
     val bow: Item
 
-    private var projectile: EntityProjectile
+    var projectile: EntityProjectile = projectile
+        set(value) {
+            if (value !== field) {
+                if (field.getViewers().isEmpty()) {
+                    field.kill()
+                    field.close()
+                }
+                field = projectile
+            }
+        }
+
+    override var entity: Entity?
+        get() = entity as EntityLiving
+        set(entity) {
+            super.entity = entity
+        }
 
     @JvmField
     var force: Double
@@ -25,12 +40,6 @@ class EntityShootBowEvent(shooter: EntityLiving?, bow: Item, projectile: EntityP
         this.projectile = projectile
         this.force = force
     }
-
-    override var entity: Entity?
-        get() = entity as EntityLiving
-        set(entity) {
-            super.entity = entity
-        }
 
     fun getProjectile(): EntityProjectile {
         return this.projectile

@@ -31,7 +31,11 @@ import kotlin.math.sqrt
 abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt), EntityDamageable {
     protected open var attackTime: Short = 0
     protected var invisible: Boolean = false
-    protected var movementSpeed: Float = DEFAULT_SPEED
+    var movementSpeed: Float = DEFAULT_SPEED
+        get() = getMovementSpeed()
+        set(value) {
+            field = round(value.toDouble()).toFloat()
+        }
     protected var turtleTicks: Int = 0
     private var attackTimeByShieldKb: Boolean = false
     private var attackTimeBefore: Short = 0

@@ -93,7 +93,7 @@ class TameHorseExecutor @JvmOverloads constructor(
             //更新视线target
             setLookTarget(entity, target)
             currentTargetCalTick = 0
-            entity.behaviorGroup!!.isForceUpdateRoute = calNextTargetImmediately
+            entity.behaviorGroup.isForceUpdateRoute = calNextTargetImmediately
         }
         if (durationTick <= runningTime || runningTime == -1) return true
         else {
@@ -101,21 +101,21 @@ class TameHorseExecutor @JvmOverloads constructor(
             durationTick = 0
             if (Utils.rand(0, 100) <= tameProbability) {
                 val horse = entity as EntityHorse
-                horse.ownerName = horse.memoryStorage.get<String>(CoreMemoryTypes.Companion.RIDER_NAME)
+                horse.setOwnerName(horse.memoryStorage.get<String>(CoreMemoryTypes.Companion.RIDER_NAME))
                 val packet = EntityEventPacket()
-                packet.eid = horse.runtimeId
+                packet.eid = horse.getRuntimeID()
                 packet.event = EntityEventPacket.TAME_SUCCESS
-                val player = horse.rider as Player? ?: return false
+                val player = horse.getRider() as Player? ?: return false
                 player.dataPacket(packet)
             } else {
                 val horse = entity as EntityHorse
                 val packet = EntityEventPacket()
-                packet.eid = horse.runtimeId
+                packet.eid = horse.getRuntimeID()
                 packet.event = EntityEventPacket.TAME_FAIL
-                val player = horse.rider as Player? ?: return false
+                val player = horse.getRider() as Player? ?: return false
                 player.dataPacket(packet)
                 horse.playTameFailAnimation()
-                horse.dismountEntity(horse.rider!!)
+                horse.dismountEntity(horse.getRider()!!)
                 tick1++
                 return true
             }
@@ -128,8 +128,8 @@ class TameHorseExecutor @JvmOverloads constructor(
         tick1 = 0
     }
 
-    override fun onStart(entity: EntityMob?) {
-        super.onStart(entity!!)
+    override fun onStart(entity: EntityMob) {
+        super.onStart(entity)
         tick1 = 0
     }
 }

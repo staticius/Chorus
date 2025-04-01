@@ -9,8 +9,6 @@ import java.util.concurrent.*
 import kotlin.math.floor
 import kotlin.math.min
 
-@RequiredArgsConstructor
-
 class TeleportExecutor : IBehaviorExecutor {
     var maxDistance: Int = 0
     var minDistance: Int = 0
@@ -22,8 +20,8 @@ class TeleportExecutor : IBehaviorExecutor {
         val dz = locator.position.z + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance
         val pos = Vector3(floor(dx), (floor(locator.position.y + 0.1).toInt() + maxDistance).toDouble(), floor(dz))
         for (y in min(
-            locator.level.maxHeight.toDouble(),
-            pos.y.toInt().toDouble()
+            locator.level.maxHeight,
+            pos.y.toInt()
         ) downTo locator.level.minHeight + 1) {
             val block = locator.level.getBlock(dx.toInt(), y, dz.toInt())
             if (block.isSolid) {

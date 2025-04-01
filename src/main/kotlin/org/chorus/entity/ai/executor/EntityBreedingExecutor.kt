@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 
@@ -19,7 +19,7 @@ open class EntityBreedingExecutor<T : EntityMob>(
         if (entityClass.isInstance(uncasted)) {
             val entity = entityClass.cast(uncasted)
             if (shouldFindingSpouse(entity)) {
-                if (!entity!!.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE)) return false
+                if (!entity!!.memoryStorage[CoreMemoryTypes.IS_IN_LOVE]!!) return false
                 another = getNearestInLove(entity)
                 if (another == null) return true
                 setSpouse(entity, another!!)
@@ -38,7 +38,7 @@ open class EntityBreedingExecutor<T : EntityMob>(
                 if (currentTick > duration) {
                     bear(entity)
                     clearData(entity)
-                    clearData(another)
+                    clearData(another!!)
 
                     currentTick = 0
                     finded = false
@@ -61,15 +61,15 @@ open class EntityBreedingExecutor<T : EntityMob>(
         finded = false
         entity.isEnablePitch = false
         if (another != null) {
-            clearData(another)
+            clearData(another!!)
             another!!.isEnablePitch = false
             another = null
         }
     }
 
     protected fun setSpouse(entity1: T, entity2: T) {
-        entity1!!.memoryStorage!!.set<Entity>(CoreMemoryTypes.Companion.ENTITY_SPOUSE, entity2)
-        entity2!!.memoryStorage!!.set<Entity>(CoreMemoryTypes.Companion.ENTITY_SPOUSE, entity1)
+        entity1.memoryStorage[CoreMemoryTypes.ENTITY_SPOUSE] = entity2
+        entity2.memoryStorage[CoreMemoryTypes.ENTITY_SPOUSE] = entity1
     }
 
     protected open fun clearData(entity: T) {
@@ -85,7 +85,7 @@ open class EntityBreedingExecutor<T : EntityMob>(
     }
 
     protected fun updateMove(entity1: T, entity2: T?) {
-        if (!entity1!!.isEnablePitch) entity1.isEnablePitch = true
+        if (!entity1.isEnablePitch) entity1.isEnablePitch = true
         if (!entity2!!.isEnablePitch) entity2.isEnablePitch = true
 
         //已经挨在一起了就不用更新路径了
@@ -106,20 +106,20 @@ open class EntityBreedingExecutor<T : EntityMob>(
 
         //在下一gt立即更新路径
         //Immediately update the path on the next gt
-        entity1.behaviorGroup!!.isForceUpdateRoute = true
-        entity2.behaviorGroup!!.isForceUpdateRoute = true
+        entity1.behaviorGroup.isForceUpdateRoute = true
+        entity2.behaviorGroup.isForceUpdateRoute = true
     }
 
     protected fun getNearestInLove(entity: EntityMob): T? {
         val entities = entity.level!!.entities
         var maxDistanceSquared = -1.0
         var nearestInLove: T? = null
-        for (e in entities) {
+        for (e in entities.values) {
             val newDistance = e.position.distanceSquared(entity.position)
             if (e != entity && entityClass.isInstance(e)) {
                 val another = e as T
-                if (!another!!.isBaby() && another.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) && another.memoryStorage!!
-                        .isEmpty(CoreMemoryTypes.Companion.ENTITY_SPOUSE) && (maxDistanceSquared == -1.0 || newDistance < maxDistanceSquared)
+                if (!another.isBaby() && another.memoryStorage[CoreMemoryTypes.IS_IN_LOVE]!! && another.memoryStorage
+                        .isEmpty(CoreMemoryTypes.ENTITY_SPOUSE) && (maxDistanceSquared == -1.0 || newDistance < maxDistanceSquared)
                 ) {
                     maxDistanceSquared = newDistance
                     nearestInLove = another
@@ -130,15 +130,15 @@ open class EntityBreedingExecutor<T : EntityMob>(
     }
 
     protected fun shouldFindingSpouse(entity: T): Boolean {
-        return entity!!.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.ENTITY_SPOUSE)
+        return entity.memoryStorage.isEmpty(CoreMemoryTypes.ENTITY_SPOUSE)
     }
 
     protected open fun bear(entity: T) {
-        val baby: T? = Entity.Companion.createEntity(entity!!.networkId, entity!!.locator) as T
-        baby!!.setBaby(true)
+        val baby: T = Entity.createEntity(entity.getNetworkID(), entity.locator) as T
+        baby.setBaby(true)
         //防止小屁孩去生baby
-        baby.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_IN_LOVE_TIME, entity!!.level!!.tick)
-        baby.memoryStorage!!.set<Entity>(CoreMemoryTypes.Companion.PARENT, entity)
+        baby.memoryStorage[CoreMemoryTypes.LAST_IN_LOVE_TIME] = entity.level!!.tick
+        baby.memoryStorage[CoreMemoryTypes.PARENT] = entity
         baby.spawnToAll()
     }
 }

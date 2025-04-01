@@ -42,13 +42,14 @@ class SnowGolemShootExecutor(
             tick1++
         }
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
+        val newTarget = entity.behaviorGroup.memoryStorage[memory]
         if (this.target == null) target = newTarget
 
-        if (!target!!.isAlive) return false
+        if (!target!!.isAlive()) return false
         else if (target is Player) {
-            if (target.isCreative() || target.isSpectator() || !target.isOnline() || (entity.level!!.name != target.level.name)) {
+            val player = target as Player
+            if (player.isCreative || player.isSpectator || !player.isOnline || (entity.level!!.name != player.level!!.name)) {
                 return false
             }
         }
@@ -88,7 +89,7 @@ class SnowGolemShootExecutor(
         removeLookTarget(entity)
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         this.target = null
@@ -99,7 +100,7 @@ class SnowGolemShootExecutor(
         removeLookTarget(entity)
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         this.target = null
@@ -109,7 +110,7 @@ class SnowGolemShootExecutor(
         val fireballTransform = entity.transform
         val directionVector =
             entity.directionVector.multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
-        fireballTransform.setY(entity.position.y + entity.eyeHeight + directionVector.getY())
+        fireballTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.y)
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
@@ -129,12 +130,11 @@ class SnowGolemShootExecutor(
                     .add(FloatTag(-entity.rotation.pitch.toFloat()))
             )
 
-        val projectile: Entity = Entity.Companion.createEntity(
-            EntityID.Companion.SNOWBALL,
+        val projectile: Entity = Entity.createEntity(
+            EntityID.SNOWBALL,
             entity.level!!.getChunk(entity.position.chunkX, entity.position.chunkZ),
             nbt
-        )
-            ?: return
+        ) ?: return
 
         if (projectile is EntitySnowball) {
             projectile.shootingEntity = entity

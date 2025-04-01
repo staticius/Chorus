@@ -27,14 +27,14 @@ class BreezeJumpExecutor : EntityControl, IBehaviorExecutor {
     }
 
     override fun onStop(entity: EntityMob) {
-        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
-        entity.isEnablePitch = false
+        entity.setMovementSpeed(EntityLiving.Companion.DEFAULT_SPEED)
+        entity.setEnablePitch(false)
         stopSequence(entity)
     }
 
     override fun onInterrupt(entity: EntityMob) {
-        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
-        entity.isEnablePitch = false
+        entity.setMovementSpeed(EntityLiving.Companion.DEFAULT_SPEED)
+        entity.setEnablePitch(false)
         stopSequence(entity)
     }
 
@@ -45,13 +45,13 @@ class BreezeJumpExecutor : EntityControl, IBehaviorExecutor {
 
     private fun stopSequence(entity: Entity) {
         val random = ThreadLocalRandom.current()
-        val motion = entity.directionVector
-        motion!!.y = 0.6 + random.nextDouble(0.5)
-        entity.setMotion(motion!!)
+        val motion = entity.getDirectionVector()
+        motion.y = 0.6 + random.nextDouble(0.5)
+        entity.setMotion(motion)
         entity.setDataFlag(EntityFlag.JUMP_GOAL_JUMP, false)
         val pk = EntityEventPacket()
-        pk.eid = entity.runtimeId
+        pk.eid = entity.getRuntimeID()
         pk.event = EntityEventPacket.DUST_PARTICLES
-        Server.broadcastPacket(entity.viewers.values, pk)
+        Server.broadcastPacket(entity.getViewers().values, pk)
     }
 }

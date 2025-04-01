@@ -1,6 +1,5 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.Player
 import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
@@ -23,8 +22,7 @@ class WolfAttackExecutor
  * @param maxSenseRange     最大获取攻击目标范围
  * @param clearDataWhenLose 失去目标时清空记忆
  * @param coolDown          攻击冷却时间(单位tick)
- */
-    (memory: MemoryType<out Entity?>?, speed: Float, maxSenseRange: Int, clearDataWhenLose: Boolean, coolDown: Int) :
+ */(memory: MemoryType<out Entity>, speed: Float, maxSenseRange: Int, clearDataWhenLose: Boolean, coolDown: Int) :
     MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
     override fun execute(entity: EntityMob): Boolean {
         val wolf = entity as EntityWolf
@@ -35,7 +33,7 @@ class WolfAttackExecutor
 
         if (entity.getMemoryStorage().notEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
             if (!entity.isEnablePitch()) entity.setEnablePitch(true)
-            val vector3 = entity.getMemoryStorage().get<Player>(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)
+            val vector3 = entity.getMemoryStorage()[CoreMemoryTypes.NEAREST_FEEDING_PLAYER]
             if (vector3 != null) {
                 this.lookTarget = vector3.position.clone()
                 entity.setDataFlag(EntityFlag.INTERESTED, true)

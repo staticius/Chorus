@@ -1,14 +1,18 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockMagma
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
+import org.chorus.entity.effect.PotionType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.EntityMonster
 import org.chorus.event.entity.EntityDamageByEntityEvent
-import org.chorus.event.entity.EntityDamageEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemPotion
 import org.chorus.plugin.InternalPlugin
 import java.util.*
 import java.util.function.Consumer
@@ -75,17 +79,17 @@ class UsePotionExecutor
         if (entity is EntityMonster) {
             val item = entity.itemInHand
             if (item is ItemPotion) {
-                PotionType.Companion.get(item.getDamage()).getEffects(false)!!
-                    .forEach(Consumer<Effect?> { effect: Effect? -> entity.addEffect(effect) })
+                PotionType.Companion.get(item.damage).getEffects(false)
+                    .forEach(Consumer { effect -> entity.addEffect(effect) })
             }
             entity.setItemInHand(Item.AIR)
         }
     }
 
     fun getPotion(entity: Entity): Item {
-        if (entity.isInsideOfWater && !entity.hasEffect(EffectType.WATER_BREATHING)) {
+        if (entity.isInsideOfWater() && !entity.hasEffect(EffectType.WATER_BREATHING)) {
             return ItemPotion.fromPotion(PotionType.Companion.WATER_BREATHING)
-        } else if (!entity.hasEffect(EffectType.FIRE_RESISTANCE) && (entity.isOnFire || Arrays.stream<Block>(
+        } else if (!entity.hasEffect(EffectType.FIRE_RESISTANCE) && (entity.isOnFire() || Arrays.stream<Block>(
                 entity.level!!.getCollisionBlocks(
                     entity.getBoundingBox().getOffsetBoundingBox(0.0, -1.0, 0.0)
                 )
@@ -95,8 +99,8 @@ class UsePotionExecutor
         } else if (entity.health < entity.maxHealth) {
             return ItemPotion.fromPotion(PotionType.Companion.HEALING)
         } else if (entity is EntityMob) {
-            if (entity.memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.BE_ATTACKED_EVENT)) {
-                val event = entity.memoryStorage!!.get<EntityDamageEvent>(CoreMemoryTypes.Companion.BE_ATTACKED_EVENT)
+            if (entity.memoryStorage.notEmpty(CoreMemoryTypes.Companion.BE_ATTACKED_EVENT)) {
+                val event = entity.memoryStorage.get(CoreMemoryTypes.BE_ATTACKED_EVENT)
                 if (event is EntityDamageByEntityEvent) {
                     if (event.damager.position.distance(entity.position) > 11) {
                         return ItemPotion.fromPotion(PotionType.Companion.SWIFTNESS)

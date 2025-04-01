@@ -1,7 +1,8 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.EntityMob
@@ -20,7 +21,7 @@ class WitherShootExecutor(protected var targetMemory: MemoryType<out Entity?>) :
     protected var tick: Int = 0
 
     override fun execute(entity: EntityMob): Boolean {
-        val target = entity.memoryStorage!![targetMemory]
+        val target = entity.memoryStorage[targetMemory]!!
         tick++
         if (tick <= 40) {
             if (tick % 10 == 0) {
@@ -30,7 +31,7 @@ class WitherShootExecutor(protected var targetMemory: MemoryType<out Entity?>) :
             setLookTarget(entity, target.position)
             return true
         } else {
-            entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, entity.level!!.tick)
+            entity.memoryStorage.set(CoreMemoryTypes.LAST_ATTACK_TIME, entity.level!!.tick)
             return false
         }
     }
@@ -64,8 +65,8 @@ class WitherShootExecutor(protected var targetMemory: MemoryType<out Entity?>) :
             )
             .putDouble("damage", 2.0)
 
-        val projectile: Entity = Entity.Companion.createEntity(
-            if (charged) EntityID.Companion.WITHER_SKULL_DANGEROUS else EntityID.Companion.WITHER_SKULL,
+        val projectile = Entity.createEntity(
+            if (charged) EntityID.WITHER_SKULL_DANGEROUS else EntityID.WITHER_SKULL,
             entity.level!!.getChunk(entity.position.chunkX, entity.position.chunkZ),
             nbt
         )

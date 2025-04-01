@@ -52,25 +52,26 @@ class BowShootExecutor(
         if (tick2 == 0) {
             tick1++
         }
-        if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (!entity.isEnablePitch()) entity.setEnablePitch(true)
+        if (entity.getBehaviorGroup().getMemoryStorage().isEmpty(memory)) return false
+        val newTarget = entity.getBehaviorGroup().getMemoryStorage()[memory]
         if (this.target == null) target = newTarget
         //some check
-        if (!target!!.isAlive) return false
+        if (!target!!.isAlive()) return false
         else if (target is Player) {
-            if (target.isCreative() || target.isSpectator() || !target.isOnline() || (entity.level!!.name != target.level.name)) {
+            val player = target as Player
+            if (player.isCreative || player.isSpectator || !player.isOnline || (entity.level!!.name != player.level!!.name)) {
                 return false
             }
         }
 
-        if (target!!.locator != newTarget!!.locator) {
+        if (target!!.getLocator() != newTarget!!.getLocator()) {
             //更新目标
             target = newTarget
         }
 
-        if (entity.movementSpeed != speed) entity.movementSpeed = speed
-        val clone = target!!.transform
+        if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed)
+        val clone = target!!.getTransform()
 
         if (entity.position.distanceSquared(target!!.position) > maxShootDistanceSquared) {
             //更新寻路target
@@ -95,7 +96,7 @@ class BowShootExecutor(
                     bowShoot(tool, entity)
                     stopBowAnimation(entity)
                     tick2 = 0
-                    return target!!.health != 0f
+                    return target!!.getHealth() != 0f
                 }
             }
         }
@@ -106,11 +107,11 @@ class BowShootExecutor(
         removeRouteTarget(entity)
         removeLookTarget(entity)
         //重置速度
-        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
+        entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.getBehaviorGroup().getMemoryStorage().clear(memory)
         }
-        entity.isEnablePitch = false
+        entity.setEnablePitch(false)
         stopBowAnimation(entity)
         this.target = null
     }
@@ -119,11 +120,11 @@ class BowShootExecutor(
         removeRouteTarget(entity)
         removeLookTarget(entity)
         //重置速度
-        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
+        entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.getBehaviorGroup().getMemoryStorage().clear(memory)
         }
-        entity.isEnablePitch = false
+        entity.setEnablePitch(false)
         stopBowAnimation(entity)
         this.target = null
     }
@@ -142,7 +143,7 @@ class BowShootExecutor(
             .putList(
                 "Pos", ListTag<FloatTag>()
                     .add(FloatTag(entity.position.x))
-                    .add(FloatTag(entity.position.y + entity.currentHeight / 2 + 0.2f))
+                    .add(FloatTag(entity.position.y + entity.getCurrentHeight() / 2 + 0.2f))
                     .add(FloatTag(entity.position.z))
             )
             .putList(
@@ -162,10 +163,10 @@ class BowShootExecutor(
         val p = pullBowTick.toDouble() / 20
         val f = min((p * p + p * 2) / 3, 1.0) * 3
 
-        val arrow = Entity.Companion.createEntity(
-            EntityID.Companion.ARROW,
+        val arrow = Entity.createEntity(
+            EntityID.ARROW,
             entity.chunk!!, nbt, entity, f == 2.0
-        ) as EntityArrow
+        ) as EntityArrow?
 
         if (arrow == null) {
             return
@@ -174,16 +175,16 @@ class BowShootExecutor(
         val entityShootBowEvent = EntityShootBowEvent(entity, bow, arrow, f)
         Server.instance.pluginManager.callEvent(entityShootBowEvent)
         if (entityShootBowEvent.isCancelled) {
-            entityShootBowEvent.projectile.kill()
+            entityShootBowEvent.getProjectile().kill()
         } else {
-            entityShootBowEvent.projectile.setMotion(
-                entityShootBowEvent.projectile.getMotion().multiply(entityShootBowEvent.force)
+            entityShootBowEvent.getProjectile().setMotion(
+                entityShootBowEvent.getProjectile().getMotion().multiply(entityShootBowEvent.force)
             )
             val infinityEnchant = bow.getEnchantment(Enchantment.ID_BOW_INFINITY)
             val infinity = infinityEnchant != null && infinityEnchant.level > 0
-            val projectile: EntityProjectile
-            if (infinity && (entityShootBowEvent.projectile.also { projectile = it }) is EntityArrow) {
-                (projectile as EntityArrow).pickupMode = EntityProjectile.Companion.PICKUP_CREATIVE
+            val projectile: EntityProjectile = entityShootBowEvent.getProjectile()
+            if (infinity && projectile is EntityArrow) {
+                projectile.setPickupMode(EntityProjectile.Companion.PICKUP_CREATIVE)
             }
 
             for (enc in bow.enchantments) {
@@ -192,13 +193,13 @@ class BowShootExecutor(
                 }
             }
 
-            if (entityShootBowEvent.projectile != null) {
-                val projectev = ProjectileLaunchEvent(entityShootBowEvent.projectile, entity)
+            if (entityShootBowEvent.getProjectile() != null) {
+                val projectev = ProjectileLaunchEvent(entityShootBowEvent.getProjectile(), entity)
                 Server.instance.pluginManager.callEvent(projectev)
                 if (projectev.isCancelled) {
-                    entityShootBowEvent.projectile.kill()
+                    entityShootBowEvent.getProjectile().kill()
                 } else {
-                    entityShootBowEvent.projectile.spawnToAll()
+                    entityShootBowEvent.getProjectile().spawnToAll()
                     entity.level!!.addSound(entity.position, Sound.RANDOM_BOW)
                 }
             }
@@ -206,12 +207,12 @@ class BowShootExecutor(
     }
 
     private fun playBowAnimation(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, target!!.getRuntimeID())
         entity.setDataFlag(EntityFlag.FACING_TARGET_TO_RANGE_ATTACK)
     }
 
     private fun stopBowAnimation(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
         entity.setDataFlag(EntityFlag.FACING_TARGET_TO_RANGE_ATTACK, false)
     }
 }

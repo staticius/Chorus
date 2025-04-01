@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.EntityCanAttack
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
@@ -9,7 +9,8 @@ import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus.level.Sound
-import org.chorus.math.*
+import org.chorus.math.Vector3
+import org.chorus.math.Vector3f
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventGenericPacket
 import org.chorus.network.protocol.LevelEventPacket
@@ -21,17 +22,17 @@ class WardenRangedAttackExecutor(protected var chargingTime: Int, protected var 
 
     override fun execute(entity: EntityMob): Boolean {
         currentTick++
-        if (entity.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) return false
+        if (entity.memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) return false
         if (currentTick == this.chargingTime) {
-            val target = entity.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
+            val target = entity.memoryStorage.get(CoreMemoryTypes.ATTACK_TARGET)!!
 
-            if (!target.isAlive) return false
+            if (!target.isAlive()) return false
 
             //particle
             sendAttackParticle(
                 entity,
                 entity.position.add(0.0, 1.5),
-                target.position.add(0.0, (target.height / 2).toDouble())
+                target.position.add(0.0, (target.getHeight() / 2).toDouble())
             )
 
             //sound
@@ -53,7 +54,7 @@ class WardenRangedAttackExecutor(protected var chargingTime: Int, protected var 
 
             var damage = 0f
             if (entity is EntityCanAttack) {
-                damage = entity.getDiffHandDamage(Server.instance.difficulty)
+                damage = entity.getDiffHandDamage(Server.instance.getDifficulty())
             }
             damages[DamageModifier.BASE] = damage
 
@@ -68,7 +69,7 @@ class WardenRangedAttackExecutor(protected var chargingTime: Int, protected var 
         if (currentTick > this.totalRunningTime) {
             return false
         } else {
-            val target = entity.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
+            val target = entity.memoryStorage.get(CoreMemoryTypes.ATTACK_TARGET)!!
             //更新视线target
             entity.lookTarget = target.position.clone()
             entity.moveTarget = target.position.clone()

@@ -1,13 +1,13 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.Player
 import org.chorus.block.BlockID
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityOwnable
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
-import org.chorus.math.*
-import java.util.concurrent.*
+import org.chorus.math.Vector3
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * 实体移动到主人身边.(只对实现了接口 [EntityOwnable][org.chorus.entity.EntityOwnable] 的实体有效)
@@ -42,11 +42,11 @@ class EntityMoveToOwnerExecutor @JvmOverloads constructor(
             val player = entity.owner ?: return false
 
             //获取目的地位置（这个clone很重要）
-            val target = player.clone() as Player
+            val target = player
             if (target.position.distanceSquared(entity.position) <= minFollowRangeSquared) return false
 
             //不允许跨世界
-            if (target.level.name != entity.level!!.name) return false
+            if (target.level!!.name != entity.level!!.name) return false
 
             if (entity.locator.position.floor() == oldTarget) return false
 
@@ -57,14 +57,14 @@ class EntityMoveToOwnerExecutor @JvmOverloads constructor(
                 //更新视线target
                 setLookTarget(entity, target.position)
 
-                if (entity.getMemoryStorage().notEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
+                if (entity.getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)) {
                     entity.setDataFlag(EntityFlag.INTERESTED, true)
                 }
 
                 if (updateRouteImmediatelyWhenTargetChange) {
                     val floor = target.position.floor()
 
-                    if (oldTarget == null || oldTarget == floor) entity.behaviorGroup!!.isForceUpdateRoute = true
+                    if (oldTarget == null || oldTarget == floor) entity.behaviorGroup.isForceUpdateRoute = true
 
                     oldTarget = floor
                 }
@@ -88,7 +88,7 @@ class EntityMoveToOwnerExecutor @JvmOverloads constructor(
         //重置速度
         entity.movementSpeed = 1.2f
         entity.isEnablePitch = false
-        if (entity.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
+        if (entity.memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
             entity.setDataFlag(EntityFlag.INTERESTED, false)
         }
         oldTarget = null
@@ -101,7 +101,7 @@ class EntityMoveToOwnerExecutor @JvmOverloads constructor(
         //重置速度
         entity.movementSpeed = 1.2f
         entity.isEnablePitch = false
-        if (entity.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
+        if (entity.memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
             entity.setDataFlag(EntityFlag.INTERESTED, false)
         }
         oldTarget = null

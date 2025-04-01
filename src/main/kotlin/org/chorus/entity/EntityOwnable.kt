@@ -4,37 +4,33 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 
-/**
- * 实现这个接口的实体可以被驯服
- *
- * @author BeYkeRYkt (Nukkit Project)
- */
 interface EntityOwnable : EntityComponent {
     fun getOwnerName(): String? {
-        return getMemoryStorage().get<String>(CoreMemoryTypes.Companion.OWNER_NAME)
+        return getMemoryStorage()[CoreMemoryTypes.OWNER_NAME]
     }
 
-    fun setOwnerName(playerName: String?) {
-        getMemoryStorage().set<String>(CoreMemoryTypes.Companion.OWNER_NAME, playerName)
+    fun setOwnerName(playerName: String) {
+        getMemoryStorage()[CoreMemoryTypes.OWNER_NAME] = playerName
     }
 
     fun getOwner(): Player? {
-        var owner: Player? = getMemoryStorage().get<Player>(CoreMemoryTypes.Companion.OWNER)
-        if (owner != null && owner.isOnline()) return owner
+        var owner: Player? = getMemoryStorage()[CoreMemoryTypes.OWNER]
+        if (owner != null && owner.isOnline) return owner
         else {
-            val ownerName: String? = getOwnerName()
-            if (ownerName == null) return null
+            val ownerName: String = getOwnerName() ?: return null
             owner = Server.instance.getPlayerExact(ownerName)
         }
         return owner
     }
 
-    @JvmOverloads
+    val owner: Player?
+        get() = getOwner()
+
     fun hasOwner(checkOnline: Boolean = true): Boolean {
-        if (checkOnline) {
-            return getOwner() != null
+        return if (checkOnline) {
+            getOwner() != null
         } else {
-            return getOwnerName() != null
+            getOwnerName() != null
         }
     }
 }

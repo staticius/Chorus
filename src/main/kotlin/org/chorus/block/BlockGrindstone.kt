@@ -145,7 +145,7 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
         return (id != BlockID.AIR) && (id != BlockID.BUBBLE_COLUMN) && (support !is BlockLiquid)
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val blockFace = blockFace
         val south = this.isConnectedTo(BlockFace.SOUTH, attachmentType, blockFace)
         val north = this.isConnectedTo(BlockFace.NORTH, attachmentType, blockFace)
@@ -190,13 +190,13 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
             if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
                 return false
             }
-            player.addWindow(inventory!!)
+            player.addWindow(inventory)
         }
         return true
     }
 
-    override fun blockInventorySupplier(): Supplier<Inventory?> {
-        return Supplier<Inventory?> { GrindstoneInventory(this) }
+    override fun blockInventorySupplier(): Supplier<Inventory> {
+        return Supplier { GrindstoneInventory(this) }
     }
 
     override val properties: BlockProperties

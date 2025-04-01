@@ -47,7 +47,7 @@ class BlockCartographyTable @JvmOverloads constructor(blockstate: BlockState = C
         return true
     }
 
-    override fun blockInventorySupplier(): Supplier<Inventory?> {
+    override fun blockInventorySupplier(): Supplier<Inventory> {
         return Supplier { CartographyTableInventory(this) }
     }
 

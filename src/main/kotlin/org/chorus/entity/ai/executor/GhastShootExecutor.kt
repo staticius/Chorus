@@ -46,13 +46,14 @@ class GhastShootExecutor(
             tick1++
         }
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
+        val newTarget = entity.behaviorGroup.memoryStorage[memory]
         if (this.target == null) target = newTarget
 
-        if (!target!!.isAlive) return false
+        if (!target!!.isAlive()) return false
         else if (target is Player) {
-            if (target.isCreative() || target.isSpectator() || !target.isOnline() || (entity.level!!.name != target.level.name)) {
+            val player = target as Player
+            if (player.isCreative || player.isSpectator || !player.isOnline || (entity.level!!.name != player.level!!.name)) {
                 return false
             }
         }
@@ -97,7 +98,7 @@ class GhastShootExecutor(
         removeLookTarget(entity)
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         endShootSequence(entity)
@@ -109,7 +110,7 @@ class GhastShootExecutor(
         removeLookTarget(entity)
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         endShootSequence(entity)
@@ -120,7 +121,7 @@ class GhastShootExecutor(
         val fireballTransform = entity.transform
         val directionVector =
             entity.directionVector.multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
-        fireballTransform.setY(entity.position.y + entity.eyeHeight + directionVector.getY())
+        fireballTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.y)
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()
@@ -144,8 +145,8 @@ class GhastShootExecutor(
         val p = 1.0
         val f = min((p * p + p * 2) / 3, 1.0) * 3
 
-        val projectile: Entity = Entity.Companion.createEntity(
-            EntityID.Companion.FIREBALL,
+        val projectile: Entity = Entity.createEntity(
+            EntityID.FIREBALL,
             entity.level!!.getChunk(entity.position.chunkX, entity.position.chunkZ),
             nbt
         )
@@ -165,7 +166,7 @@ class GhastShootExecutor(
     }
 
     private fun startShootSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
+        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
         entity.setDataFlag(EntityFlag.CHARGED, true)
         entity.setDataProperty(EntityDataTypes.Companion.CHARGE_AMOUNT, 0x1)
         entity.level!!.addLevelEvent(entity.position, LevelEventPacket.EVENT_SOUND_GHAST_WARNING)

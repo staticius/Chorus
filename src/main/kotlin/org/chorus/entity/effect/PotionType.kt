@@ -5,10 +5,6 @@ import org.chorus.entity.Entity
 import org.chorus.event.potion.PotionApplyEvent
 import org.chorus.registry.Registries
 
-/**
- * @author MEFRREEX
- */
-@JvmRecord
 data class PotionType(
     @JvmField val name: String?,
     @JvmField val stringId: String,
@@ -18,7 +14,7 @@ data class PotionType(
 ) {
     constructor(name: String?, stringId: String, id: Int, effects: PotionEffects) : this(name, stringId, id, 1, effects)
 
-    fun getEffects(splash: Boolean): List<Effect?> {
+    fun getEffects(splash: Boolean): List<Effect> {
         return effects.getEffects(splash)
     }
 

@@ -24,11 +24,11 @@ class EatGrassExecutor(protected var duration: Int) : IBehaviorExecutor {
                 if (entity.transform.levelBlock.id == BlockID.TALL_GRASS) {
                     entity.level!!.setBlock(entity.position, Block.get(BlockID.AIR))
                 } else {
-                    entity.level!!.setBlock(entity.position.add(0.0, -1.0, 0.0), Block.get(Block.DIRT))
+                    entity.level!!.setBlock(entity.position.add(0.0, -1.0, 0.0), Block.get(BlockID.DIRT))
                 }
             }
             if (entity is EntitySheep) {
-                if (entity.isSheared) {
+                if (entity.isSheared()) {
                     entity.growWool()
                     return false
                 }
@@ -46,7 +46,7 @@ class EatGrassExecutor(protected var duration: Int) : IBehaviorExecutor {
 
     protected fun playEatGrassAnimation(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.runtimeId
+        pk.eid = entity.getRuntimeID()
         pk.event = EntityEventPacket.EAT_GRASS_ANIMATION
         Server.broadcastPacket(entity.viewers.values, pk)
     }

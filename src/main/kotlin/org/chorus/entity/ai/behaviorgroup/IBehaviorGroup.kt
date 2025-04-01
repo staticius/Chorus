@@ -18,6 +18,8 @@ import org.chorus.entity.mob.EntityMob
  * Note: Core behavior refers to the behavior that will not be affected by the priority of the behavior, and its activation status only depends on its own evaluator
  */
 interface IBehaviorGroup {
+    val memoryStorage: IMemoryStorage
+
     /**
      * 调用行为组内部的所有行为[IBehavior]的评估器[org.chorus.entity.ai.evaluator.IBehaviorEvaluator]
      *
@@ -142,6 +144,8 @@ interface IBehaviorGroup {
      * @param forceUpdateRoute 立即更新路径
      */
     fun setForceUpdateRoute(forceUpdateRoute: Boolean)
+
+    var isForceUpdateRoute: Boolean
 
     /**
      * 当 EntityAI.checkDebugOption(BEHAVIOR) == true 时此方法每1gt调用一次，用于debug模式相关内容的刷新

@@ -15,13 +15,13 @@ class SleepOnOwnerBedExecutor : IBehaviorExecutor {
         if (entity.position.distanceSquared(owner!!.position) <= 4) {
             setSleeping(entity, true)
         }
-        return owner!!.isSleeping
+        return owner.isSleeping()
     }
 
     override fun onStart(entity: EntityMob) {
         val owner = (entity as EntityOwnable).owner
         entity.moveTarget = owner!!.position
-        entity.lookTarget = owner!!.position
+        entity.lookTarget = owner.position
     }
 
     override fun onInterrupt(entity: EntityMob) {

@@ -15,7 +15,7 @@ class EntitySpawnEvent(entity: Entity) : EntityEvent(), Cancellable {
 
     init {
         this.entity = entity
-        this.type = entity.getNetworkId()
+        this.type = entity.getNetworkID()
     }
 
     val position: Locator

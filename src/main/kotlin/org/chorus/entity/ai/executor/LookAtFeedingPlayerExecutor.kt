@@ -1,6 +1,5 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.Player
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
@@ -16,7 +15,7 @@ import org.chorus.entity.mob.EntityMob
 class LookAtFeedingPlayerExecutor : EntityControl, IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        val vector3 = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)
+        val vector3 = entity.memoryStorage[CoreMemoryTypes.NEAREST_FEEDING_PLAYER]
         if (vector3 != null) {
             setLookTarget(entity, vector3.position)
             entity.setDataFlag(EntityFlag.INTERESTED, true)
@@ -26,7 +25,7 @@ class LookAtFeedingPlayerExecutor : EntityControl, IBehaviorExecutor {
 
     override fun onInterrupt(entity: EntityMob) {
         entity.isEnablePitch = false
-        if (entity.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
+        if (entity.memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
             entity.setDataFlag(EntityFlag.INTERESTED, false)
         }
         removeLookTarget(entity)
@@ -34,7 +33,7 @@ class LookAtFeedingPlayerExecutor : EntityControl, IBehaviorExecutor {
 
     override fun onStop(entity: EntityMob) {
         entity.isEnablePitch = false
-        if (entity.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
+        if (entity.memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
             entity.setDataFlag(EntityFlag.INTERESTED, false)
         }
         removeLookTarget(entity)

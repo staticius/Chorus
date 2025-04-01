@@ -2,7 +2,8 @@ package org.chorus.entity.ai.executor
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.mob.EntityMob
@@ -38,13 +39,14 @@ class GuardianAttackExecutor(
             tick1++
         }
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup!!.memoryStorage!![memory]
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
+        val newTarget = entity.behaviorGroup.memoryStorage[memory]
         if (this.target == null) target = newTarget
 
-        if (!target!!.isAlive) return false
+        if (!target!!.isAlive()) return false
         else if (target is Player) {
-            if (target.isCreative() || target.isSpectator() || !target.isOnline() || (entity.level!!.name != target.level.name)) {
+            val player = target as Player
+            if (player.isCreative || player.isSpectator || !player.isOnline || (entity.level!!.name != player.level!!.name)) {
                 return false
             }
         }
@@ -67,15 +69,15 @@ class GuardianAttackExecutor(
         } else if (tick2 != 0) {
             tick2++
             if (tick2 > attackDelay) {
-                if (entity.getDataProperty<Long>(EntityDataTypes.Companion.TARGET_EID, 0L) == target!!.runtimeId) {
+                if (entity.getDataProperty<Long>(EntityDataTypes.Companion.TARGET_EID, 0L) == target!!.getRuntimeID()) {
                     val event = EntityDamageByEntityEvent(
                         entity,
                         target!!,
                         DamageCause.ENTITY_ATTACK,
-                        (entity as EntityMonster).getDiffHandDamage(Server.instance.difficulty)
+                        (entity as EntityMonster).getDiffHandDamage(Server.instance.getDifficulty())
                     )
                     target!!.attack(event)
-                    if (Server.instance.difficulty >= 2) {
+                    if (Server.instance.getDifficulty() >= 2) {
                         val event2 = EntityDamageByEntityEvent(
                             entity,
                             target!!, DamageCause.MAGIC, 1f
@@ -95,7 +97,7 @@ class GuardianAttackExecutor(
         removeLookTarget(entity)
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         endSequence(entity)
@@ -106,7 +108,7 @@ class GuardianAttackExecutor(
         removeLookTarget(entity)
         entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
         if (clearDataWhenLose) {
-            entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.isEnablePitch = false
         endSequence(entity)
@@ -114,7 +116,7 @@ class GuardianAttackExecutor(
     }
 
     private fun startSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.runtimeId)
+        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
         entity.level!!.addLevelSoundEvent(
             entity.position,
             LevelSoundEventPacket.SOUND_MOB_WARNING,
@@ -129,7 +131,7 @@ class GuardianAttackExecutor(
         entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
         val pk = EntityEventPacket()
         pk.event = EntityEventPacket.GUARDIAN_ATTACK_ANIMATION
-        pk.eid = entity.runtimeId
+        pk.eid = entity.getRuntimeID()
         pk.data = 0
         Server.broadcastPacket(entity.viewers.values, pk)
     }

@@ -1,6 +1,7 @@
 package org.chorus.entity.mob.monster
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.entity.*
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior

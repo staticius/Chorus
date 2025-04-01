@@ -40,13 +40,13 @@ class BlockCraftingTable @JvmOverloads constructor(blockState: BlockState = Comp
             if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
                 return false
             }
-            player.addWindow(inventory!!)
+            player.addWindow(inventory)
         }
         return true
     }
 
-    override fun blockInventorySupplier(): Supplier<Inventory?> {
-        return Supplier<Inventory?> { CraftingTableInventory(this) }
+    override fun blockInventorySupplier(): Supplier<Inventory> {
+        return Supplier { CraftingTableInventory(this) }
     }
 
     override val properties: BlockProperties

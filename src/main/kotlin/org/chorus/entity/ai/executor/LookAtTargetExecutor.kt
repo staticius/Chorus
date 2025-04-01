@@ -13,7 +13,7 @@ class LookAtTargetExecutor(//指示执行器应该从哪个Memory获取目标位
     override fun execute(entity: EntityMob): Boolean {
         currentTick++
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        val vector3Memory = entity.memoryStorage!![memory]
+        val vector3Memory = entity.memoryStorage[memory]
         if (vector3Memory != null) {
             setLookTarget(entity, vector3Memory.vector3)
         }

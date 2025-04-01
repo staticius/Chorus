@@ -111,19 +111,17 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
         return 0
     }
 
-    override fun onInteract(player: Player?, item: Item, clickedPos: Vector3): Boolean {
-        if (player != null) {
-            if (item.isNull()) {
-                setOwnerName(null)
-                setItemInHand(Item.AIR)
-            } else {
-                setOwnerName(player.getName())
-                val itemInHand: Item = player.getInventory().getItemInHand().clone().clearNamedTag()
-                itemInHand.setCount(1)
-                setItemInHand(itemInHand)
-            }
-            updateMemory()
+    override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
+        if (item.isNothing) {
+            setOwnerName("")
+            setItemInHand(Item.AIR)
+        } else {
+            setOwnerName(player.getName())
+            val itemInHand: Item = player.getInventory().itemInHand.clone().clearNamedTag()
+            itemInHand.setCount(1)
+            setItemInHand(itemInHand)
         }
+        updateMemory()
         return super.onInteract(player!!, item, clickedPos)
     }
 

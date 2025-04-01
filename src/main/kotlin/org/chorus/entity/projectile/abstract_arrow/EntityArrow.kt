@@ -23,10 +23,10 @@ class EntityArrow @JvmOverloads constructor(
 ) :
     EntityAbstractArrow(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ARROW
+        return EntityID.ARROW
     }
 
-    protected var pickupMode: Int = 0
+    var pickupMode: Int = 0
 
     protected var item: ItemArrow? = null
 

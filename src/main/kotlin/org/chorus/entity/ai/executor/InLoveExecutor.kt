@@ -10,13 +10,13 @@ class InLoveExecutor(protected var duration: Int) : IBehaviorExecutor {
 
     override fun execute(entity: EntityMob): Boolean {
         if (currentTick == 0) {
-            entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_IN_LOVE_TIME, entity.level!!.tick)
-            entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE, true)
+            entity.memoryStorage[CoreMemoryTypes.LAST_IN_LOVE_TIME] = entity.level!!.tick
+            entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE] = true
         }
         currentTick++
-        if (currentTick > duration || !entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) /*interrupt by other*/) {
+        if (currentTick > duration || !entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE]!! /*interrupt by other*/) {
             currentTick = 0
-            entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE, false)
+            entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE] = false
             return false
         }
         if (currentTick % 10 == 0) {
@@ -26,13 +26,13 @@ class InLoveExecutor(protected var duration: Int) : IBehaviorExecutor {
     }
 
     override fun onInterrupt(entity: EntityMob) {
-        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE, false)
+        entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE] = false
         currentTick = 0
     }
 
     protected fun sendLoveParticle(entity: EntityMob) {
         val pk = EntityEventPacket()
-        pk.eid = entity.runtimeId
+        pk.eid = entity.getRuntimeID()
         pk.event = EntityEventPacket.LOVE_PARTICLES
         Server.broadcastPacket(entity.viewers.values, pk)
     }

@@ -114,7 +114,7 @@ class BehaviorGroup(
      * 记忆存储器
      */
     //此参数用于错开各个实体路径更新的时间，避免在1gt内提交过多路径更新任务
-    val memoryStorage: IMemoryStorage = MemoryStorage(entity)
+    override val memoryStorage: IMemoryStorage = MemoryStorage(entity)
 
     override fun getMemoryStorage(): IMemoryStorage {
         return memoryStorage
@@ -127,14 +127,14 @@ class BehaviorGroup(
 
     private var blockChangeCache: Long = 0
 
-    private var forceUpdateRoute: Boolean = false
+    override var isForceUpdateRoute: Boolean = false
 
     override fun setForceUpdateRoute(forceUpdateRoute: Boolean) {
-        this.forceUpdateRoute = forceUpdateRoute
+        this.isForceUpdateRoute = forceUpdateRoute
     }
 
     override fun isForceUpdateRoute(): Boolean {
-        return forceUpdateRoute
+        return isForceUpdateRoute
     }
 
     init {

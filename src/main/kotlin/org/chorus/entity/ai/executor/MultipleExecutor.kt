@@ -1,6 +1,7 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.entity.mob.EntityMob
+import org.chorus.utils.Loggable
 
 import java.util.concurrent.*
 
@@ -12,8 +13,8 @@ class MultipleExecutor : IBehaviorExecutor {
         this.executors = executors
     }
 
-    constructor(vararg executors: IBehaviorExecutor?) {
-        this.executors = java.util.Set.of(*executors)
+    constructor(vararg executors: IBehaviorExecutor) {
+        this.executors = setOf(*executors)
     }
 
     override fun execute(entity: EntityMob): Boolean {
@@ -27,8 +28,8 @@ class MultipleExecutor : IBehaviorExecutor {
                     if (t != null) {
                         MultipleExecutor.log.error("阶段执行过程中存在异常：", t)
                     }
-                }.thenApply<Boolean> { v: Void? ->
-                    tasks.stream().map<Boolean> { task: CompletableFuture<*> ->
+                }.thenApply {
+                    tasks.stream().map { task: CompletableFuture<*> ->
                         try {
                             return@map task.get() as Boolean
                         } catch (e: InterruptedException) {
@@ -45,4 +46,5 @@ class MultipleExecutor : IBehaviorExecutor {
         }
     }
 
+    companion object : Loggable
 }

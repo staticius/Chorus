@@ -219,8 +219,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     @JvmField
     protected var age: Int = 0
 
-    @JvmField
-    protected var health: Float = 20f
+    var health: Float = 20f
+        protected set
 
     @JvmField
     protected var absorption: Float = 0f
@@ -914,6 +914,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return hasSpawned
     }
 
+    val viewers: Map<Int, Player>
+        get() = this.hasSpawned
+
     fun sendPotionEffects(player: Player) {
         for (effect: Effect in effects.values) {
             val packet = MobEffectPacket()
@@ -1089,7 +1092,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return this.age
     }
 
-    open fun getNetworkId(): Int {
+    open fun getNetworkID(): Int {
         return Registries.ENTITY.getEntityNetworkId(getIdentifier())!!
     }
 
@@ -1550,6 +1553,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return Vector3(x, y, z).normalize()
     }
 
+    val directionVector: Vector3
+        get() = getDirectionVector()
+
     fun getDirectionPlane(): Vector2 {
         return (Vector2(
             (-cos(Math.toRadians(rotation.yaw) - Math.PI / 2)).toFloat().toDouble(), (-sin(
@@ -1958,12 +1964,18 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         )
     }
 
+    val transform: Transform
+        get() = getTransform()
+
     fun getLocator(): Locator {
         return Locator(
             position.x, position.y, position.z,
             level!!
         )
     }
+
+    val locator: Locator
+        get() = getLocator()
 
     fun isTouchingWater(): Boolean {
         return hasWaterAt(0f) || hasWaterAt(this.getEyeHeight())

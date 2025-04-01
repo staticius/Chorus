@@ -1,18 +1,18 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.entity.*
+import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.EntityMob
-import org.chorus.level.*
-import org.chorus.math.*
-
+import org.chorus.level.Transform
+import org.chorus.math.IVector3
+import org.chorus.math.Vector3
 import kotlin.math.cos
 import kotlin.math.sin
 
 
 class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应该从哪个Memory获取目标位置
-    protected var memory: MemoryType<out IVector3?>,
+    protected var memory: MemoryType<out IVector3>,
     protected var speed: Float,
     protected var updateRouteImmediatelyWhenTargetChange: Boolean = false,
     protected var clearDataWhenLose: Boolean = false
@@ -28,12 +28,12 @@ class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应�
 
     override fun execute(entity: EntityMob): Boolean {
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        if (entity.behaviorGroup!!.memoryStorage!!.isEmpty(memory)) {
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) {
             return false
         }
-        val target = entity.behaviorGroup!!.memoryStorage!![memory].getVector3()
+        val target = entity.behaviorGroup.memoryStorage[memory].vector3
         val origin =
-            entity.behaviorGroup!!.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.LAST_ATTACK_ENTITY).transform.add(
+            entity.behaviorGroup.memoryStorage[CoreMemoryTypes.LAST_ATTACK_ENTITY].transform.add(
                 0.0,
                 24.0,
                 0.0
@@ -52,7 +52,7 @@ class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应�
         if (updateRouteImmediatelyWhenTargetChange) {
             val floor = target.floor()
 
-            if (oldTarget == null || oldTarget == floor) entity.behaviorGroup!!.isForceUpdateRoute = true
+            if (oldTarget == null || oldTarget == floor) entity.behaviorGroup.setForceUpdateRoute(true)
 
             oldTarget = floor
         }
@@ -63,23 +63,23 @@ class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应�
     }
 
     override fun onStart(entity: EntityMob) {
-        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, false)
+        entity.memoryStorage[CoreMemoryTypes.ENABLE_PITCH] = false
     }
 
     override fun onInterrupt(entity: EntityMob) {
-        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
-        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, true)
+        entity.movementSpeed = EntityLiving.DEFAULT_SPEED
+        entity.memoryStorage[CoreMemoryTypes.ENABLE_PITCH] = true
         entity.isEnablePitch = false
-        if (clearDataWhenLose) entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+        if (clearDataWhenLose) entity.behaviorGroup.memoryStorage.clear(memory)
         circleLoc++
         circleLoc %= 8
     }
 
     override fun onStop(entity: EntityMob) {
-        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
-        entity.memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.ENABLE_PITCH, true)
+        entity.movementSpeed = EntityLiving.DEFAULT_SPEED
+        entity.memoryStorage[CoreMemoryTypes.ENABLE_PITCH] = true
         entity.isEnablePitch = false
-        if (clearDataWhenLose) entity.behaviorGroup!!.memoryStorage!!.clear(memory)
+        if (clearDataWhenLose) entity.behaviorGroup.memoryStorage.clear(memory)
         circleLoc++
         circleLoc %= 8
     }

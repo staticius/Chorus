@@ -15,14 +15,14 @@ import org.chorus.level.particle.HugeExplodeSeedParticle
 class EntityExplosionExecutor @JvmOverloads constructor(
     protected var explodeTime: Int,
     protected var explodeForce: Int,
-    protected var flagMemory: MemoryType<Boolean?>? = null
+    protected var flagMemory: MemoryType<Boolean>? = null
 ) :
     IBehaviorExecutor {
     protected var currentTick: Int = 0
 
     override fun execute(entity: EntityMob): Boolean {
         //check flag
-        if (flagMemory != null && entity.memoryStorage!!.compareDataTo(flagMemory, false)) {
+        if (flagMemory != null && entity.memoryStorage!!.compareDataTo(flagMemory!!, false)) {
             return false
         }
 
@@ -51,7 +51,7 @@ class EntityExplosionExecutor @JvmOverloads constructor(
     protected fun explode(entity: EntityMob) {
         val ev = EntityExplosionPrimeEvent(
             entity,
-            (if (entity is EntityCreeper) if (entity.isPowered) explodeForce * 2 else explodeForce else explodeForce).toDouble()
+            (if (entity is EntityCreeper) if (entity.isPowered()) explodeForce * 2 else explodeForce else explodeForce).toDouble()
         )
 
         if (!entity.level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {

@@ -24,7 +24,7 @@ class PiglinTradeExecutor : EntityControl, IBehaviorExecutor {
             return true
         } else {
             if (entity is EntityMonster) {
-                val offhand = entity.getItemInOffhand()
+                val offhand = entity.itemInOffhand
                 if (offhand is ItemGoldIngot && !entity.isBaby()) {
                     entity.equipment.decreaseCount(EntityEquipment.Companion.OFF_HAND)
                     val motion = entity.getDirectionVector().multiply(0.4)
@@ -44,9 +44,9 @@ class PiglinTradeExecutor : EntityControl, IBehaviorExecutor {
 
     override fun onStop(entity: EntityMob) {
         if (entity is EntityMonster) {
-            clearOffhand(entity, entity.getItemInOffhand())
+            clearOffhand(entity, entity.itemInHand)
         }
-        entity.movementSpeed = EntityLiving.Companion.DEFAULT_SPEED
+        entity.movementSpeed = EntityLiving.DEFAULT_SPEED
         entity.isEnablePitch = false
         entity.setDataFlag(EntityFlag.ADMIRING, false)
     }
@@ -56,96 +56,96 @@ class PiglinTradeExecutor : EntityControl, IBehaviorExecutor {
             val item: Item
             val random = ThreadLocalRandom.current().nextInt(459)
             if (random < 5) {
-                item = Item.get(Item.ENCHANTED_BOOK)
+                item = Item.get(ItemID.ENCHANTED_BOOK)
                 item.addEnchantment(
                     Enchantment.get(Enchantment.ID_SOUL_SPEED)
                         .setLevel(ThreadLocalRandom.current().nextInt(1, 3))
                 )
             } else if (random < 13) {
-                item = Item.get(Item.IRON_BOOTS)
+                item = Item.get(ItemID.IRON_BOOTS)
                 item.addEnchantment(
                     Enchantment.get(Enchantment.ID_SOUL_SPEED)
                         .setLevel(ThreadLocalRandom.current().nextInt(1, 3))
                 )
             } else if (random < 21) {
                 item = Item.get(
-                    Item.SPLASH_POTION,
+                    ItemID.SPLASH_POTION,
                     EffectType.FIRE_RESISTANCE.id
                 )
             } else if (random < 29) {
                 item = Item.get(
-                    Item.POTION,
+                    ItemID.POTION,
                     EffectType.FIRE_RESISTANCE.id
                 )
             } else if (random < 39) {
-                item = Item.get(Item.POTION)
+                item = Item.get(ItemID.POTION)
             } else if (random < 49) {
                 item = Item.get(
-                    Item.IRON_NUGGET,
+                    ItemID.IRON_NUGGET,
                     0,
                     ThreadLocalRandom.current().nextInt(10, 37)
                 )
             } else if (random < 59) {
                 item = Item.get(
-                    Item.ENDER_PEARL,
+                    ItemID.ENDER_PEARL,
                     0,
                     ThreadLocalRandom.current().nextInt(2, 5)
                 )
             } else if (random < 79) {
                 item = Item.get(
-                    Item.STRING,
+                    ItemID.STRING,
                     0,
                     ThreadLocalRandom.current().nextInt(3, 10)
                 )
             } else if (random < 99) {
                 item = Item.get(
-                    Item.QUARTZ,
+                    ItemID.QUARTZ,
                     0,
                     ThreadLocalRandom.current().nextInt(5, 13)
                 )
             } else if (random < 139) {
-                item = Item.get(Block.OBSIDIAN)
+                item = Item.get(BlockID.OBSIDIAN)
             } else if (random < 179) {
                 item = Item.get(
-                    Block.CRYING_OBSIDIAN,
+                    BlockID.CRYING_OBSIDIAN,
                     0,
                     ThreadLocalRandom.current().nextInt(1, 4)
                 )
             } else if (random < 219) {
-                item = Item.get(Item.FIRE_CHARGE)
+                item = Item.get(ItemID.FIRE_CHARGE)
             } else if (random < 259) {
                 item = Item.get(
-                    Item.LEATHER,
+                    ItemID.LEATHER,
                     0,
                     ThreadLocalRandom.current().nextInt(2, 5)
                 )
             } else if (random < 299) {
                 item = Item.get(
-                    Block.SOUL_SAND,
+                    BlockID.SOUL_SAND,
                     0,
                     ThreadLocalRandom.current().nextInt(2, 9)
                 )
             } else if (random < 339) {
                 item = Item.get(
-                    Item.NETHERBRICK,
+                    ItemID.NETHERBRICK,
                     0,
                     ThreadLocalRandom.current().nextInt(2, 9)
                 )
             } else if (random < 379) {
                 item = Item.get(
-                    Item.ARROW,
+                    ItemID.ARROW,
                     0,
                     ThreadLocalRandom.current().nextInt(6, 12)
                 )
             } else if (random < 419) {
                 item = Item.get(
-                    Block.GRAVEL,
+                    BlockID.GRAVEL,
                     0,
                     ThreadLocalRandom.current().nextInt(8, 17)
                 )
             } else {
                 item = Item.get(
-                    Block.BLACKSTONE,
+                    BlockID.BLACKSTONE,
                     0,
                     ThreadLocalRandom.current().nextInt(8, 17)
                 )
@@ -157,9 +157,9 @@ class PiglinTradeExecutor : EntityControl, IBehaviorExecutor {
         onStop(entity)
     }
 
-    fun clearOffhand(mob: EntityMonster, item: Item?) {
+    private fun clearOffhand(mob: EntityMonster, item: Item) {
         mob.level!!.dropItem(mob.position, item) // TODO
-        mob.equipment.clear(EntityEquipment.Companion.OFF_HAND)
+        mob.equipment.clear(EntityEquipment.OFF_HAND)
     }
 }
 

@@ -379,7 +379,8 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         return 5
     }
 
-    protected lateinit var behaviorGroup: IBehaviorGroup
+    lateinit var behaviorGroup: IBehaviorGroup
+        private set
 
     /**
      * 是否为活跃实体，如果实体不活跃，就应当降低AI运行频率
