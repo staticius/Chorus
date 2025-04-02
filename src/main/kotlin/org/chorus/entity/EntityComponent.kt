@@ -14,6 +14,6 @@ interface EntityComponent {
     fun getMemoryStorage(): IMemoryStorage
 
     fun asEntity(): Entity? {
-        return getMemoryStorage().getEntity()
+        return getMemoryStorage().entity
     }
 }

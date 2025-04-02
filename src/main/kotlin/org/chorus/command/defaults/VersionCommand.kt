@@ -140,7 +140,7 @@ class VersionCommand(name: String) : Command(
             if (exactPlugin[0] == null) {
                 pluginName = StringBuilder(pluginName.toString().lowercase())
                 val finalPluginName = pluginName.toString()
-                Server.instance.pluginManager.plugins.forEach { (s: String?, p: Plugin?) ->
+                Server.instance.pluginManager.plugins.forEach { (s, p) ->
                     if (s.lowercase().contains(finalPluginName)) {
                         exactPlugin[0] = p
                         found[0] = true

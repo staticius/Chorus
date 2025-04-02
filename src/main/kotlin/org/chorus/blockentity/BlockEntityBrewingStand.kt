@@ -26,7 +26,7 @@ import org.chorus.registry.Registries
 class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     RecipeInventoryHolder,
     BlockEntityInventoryHolder {
-    override lateinit var inventory: Inventory
+    override lateinit var inventory: BrewingInventory
 
     var brewTime: Int = 0
     var fuelTotal: Int = 0
@@ -204,7 +204,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
 
         if (mixed) {
-            val ingredient = inventory!!.ingredient
+            val ingredient = inventory.ingredient
             ingredient.count--
             inventory!!.ingredient = ingredient
 

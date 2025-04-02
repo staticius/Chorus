@@ -22,6 +22,5 @@ interface RecipeInventoryHolder : InventoryHolder {
      *
      * @return 产物视图 the result view of the inventory holder's inventory
      */
-    @JvmField
     val productView: Inventory?
 }

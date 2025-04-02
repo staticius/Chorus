@@ -12,7 +12,7 @@ import org.chorus.nbt.tag.ListTag
 
 abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
-    override var inventory: Inventory = null
+    override lateinit var inventory: EjectableInventory
 
 
     protected abstract fun createInventory(): EjectableInventory
@@ -73,7 +73,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
     }
 
     open fun getInventory(): EjectableInventory {
-        return inventory!!
+        return inventory
     }
 
     override val spawnCompound: CompoundTag

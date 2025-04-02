@@ -80,7 +80,7 @@ class BlockLoom @JvmOverloads constructor(blockState: BlockState = Companion.pro
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION, face.horizontalIndex)
         }
 
-    override fun blockInventorySupplier(): Supplier<Inventory?> {
+    override fun blockInventorySupplier(): Supplier<Inventory> {
         return Supplier { LoomInventory(this) }
     }
 

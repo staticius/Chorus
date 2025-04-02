@@ -17,9 +17,8 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
         this.entity = holder as Entity
     }
 
-    override fun getSize(): Int {
-        return 6
-    }
+    override val size: Int
+        get() = 6
 
     fun getEntity(): Entity {
         return entity
@@ -27,7 +26,7 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
 
     override fun getViewers(): Set<Player> {
         val viewers: MutableSet<Player> = HashSet(this.viewers)
-        viewers.addAll(entity.getViewers().values())
+        viewers.addAll(entity.getViewers().values)
         return viewers
     }
 
@@ -43,24 +42,24 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
         return this.getItem(OFF_HAND)
     }
 
-    fun setMainHand(item: Item?): Boolean {
+    fun setMainHand(item: Item): Boolean {
         return this.setMainHand(item, true)
     }
 
-    fun setMainHand(item: Item?, send: Boolean): Boolean {
+    fun setMainHand(item: Item, send: Boolean): Boolean {
         return this.setItem(MAIN_HAND, item, send)
     }
 
-    fun setOffHand(item: Item?): Boolean {
+    fun setOffHand(item: Item): Boolean {
         return this.setOffHand(item, true)
     }
 
-    fun setOffHand(item: Item?, send: Boolean): Boolean {
+    fun setOffHand(item: Item, send: Boolean): Boolean {
         return this.setItem(OFF_HAND, item, send)
     }
 
     fun getArmor(): List<Item> {
-        val armor: List<Item> = ArrayList()
+        val armor = mutableListOf<Item>()
         armor.add(HEAD, this.getHead())
         armor.add(CHEST, this.getChest())
         armor.add(LEGS, this.getLegs())
@@ -89,42 +88,42 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
     }
 
     fun setArmor(items: List<Item>, send: Boolean): Boolean {
-        val head: Boolean = this.setHead(items.get(HEAD), send)
-        val chest: Boolean = this.setChest(items.get(CHEST), send)
-        val legs: Boolean = this.setLegs(items.get(LEGS), send)
-        val feet: Boolean = this.setFeet(items.get(FEET), send)
+        val head: Boolean = this.setHead(items[HEAD], send)
+        val chest: Boolean = this.setChest(items[CHEST], send)
+        val legs: Boolean = this.setLegs(items[LEGS], send)
+        val feet: Boolean = this.setFeet(items[FEET], send)
         return head && chest && legs && feet
     }
 
-    fun setHead(item: Item?): Boolean {
+    fun setHead(item: Item): Boolean {
         return this.setHead(item, true)
     }
 
-    fun setHead(item: Item?, send: Boolean): Boolean {
+    fun setHead(item: Item, send: Boolean): Boolean {
         return this.setItem(HEAD, item, send)
     }
 
-    fun setChest(item: Item?): Boolean {
+    fun setChest(item: Item): Boolean {
         return this.setChest(item, true)
     }
 
-    fun setChest(item: Item?, send: Boolean): Boolean {
+    fun setChest(item: Item, send: Boolean): Boolean {
         return this.setItem(CHEST, item, send)
     }
 
-    fun setLegs(item: Item?): Boolean {
+    fun setLegs(item: Item): Boolean {
         return this.setLegs(item, true)
     }
 
-    fun setLegs(item: Item?, send: Boolean): Boolean {
+    fun setLegs(item: Item, send: Boolean): Boolean {
         return this.setItem(LEGS, item, send)
     }
 
-    fun setFeet(item: Item?): Boolean {
+    fun setFeet(item: Item): Boolean {
         return this.setFeet(item, true)
     }
 
-    fun setFeet(item: Item?, send: Boolean): Boolean {
+    fun setFeet(item: Item, send: Boolean): Boolean {
         return this.setItem(FEET, item, send)
     }
 
@@ -133,31 +132,31 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
     }
 
     fun equip(item: Item): Boolean {
-        if (item.isHelmet()) {
-            if (item.getTier() > getHead().getTier()) {
+        if (item.isHelmet) {
+            if (item.tier > getHead().tier) {
                 entity.level!!.dropItem(entity.position, getHead())
                 this.setHead(item)
                 return true
             }
-        } else if (item.isChestplate()) {
-            if (item.getTier() > getChest().getTier()) {
+        } else if (item.isChestplate) {
+            if (item.tier > getChest().tier) {
                 entity.level!!.dropItem(entity.position, getChest())
                 this.setChest(item)
                 return true
             }
-        } else if (item.isLeggings()) {
-            if (item.getTier() > getLegs().getTier()) {
+        } else if (item.isLeggings) {
+            if (item.tier > getLegs().tier) {
                 entity.level!!.dropItem(entity.position, getLegs())
                 this.setLegs(item)
                 return true
             }
-        } else if (item.isBoots()) {
-            if (item.getTier() > getFeet().getTier()) {
+        } else if (item.isBoots) {
+            if (item.tier > getFeet().tier) {
                 entity.level!!.dropItem(entity.position, getFeet())
                 this.setFeet(item)
                 return true
             }
-        } else if (item.getTier() > getMainHand().getTier()) {
+        } else if (item.tier > getMainHand().tier) {
             entity.level!!.dropItem(entity.position, getMainHand())
             this.setMainHand(item)
             return true
@@ -174,7 +173,7 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
     override fun sendSlot(index: Int, player: Player) {
         when (index) {
             MAIN_HAND, OFF_HAND -> {
-                val packet: MobEquipmentPacket = MobEquipmentPacket()
+                val packet = MobEquipmentPacket()
                 packet.eid = entity.getRuntimeID()
                 packet.slot = index - 4
                 packet.selectedSlot = 0
@@ -183,27 +182,27 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
             }
 
             HEAD, CHEST, LEGS, FEET -> {
-                val packet: MobArmorEquipmentPacket = MobArmorEquipmentPacket()
+                val packet = MobArmorEquipmentPacket()
                 packet.eid = entity.getRuntimeID()
                 packet.slots = getArmor().toTypedArray()
                 player.dataPacket(packet)
             }
 
-            else -> throw IllegalStateException("Unexpected value: " + index)
+            else -> throw IllegalStateException("Unexpected value: $index")
         }
     }
 
-    override fun sendContents(target: Player) {
-        this.sendSlot(HEAD, target)
-        this.sendSlot(CHEST, target)
-        this.sendSlot(LEGS, target)
-        this.sendSlot(FEET, target)
-        this.sendSlot(MAIN_HAND, target)
-        this.sendSlot(OFF_HAND, target)
+    override fun sendContents(player: Player) {
+        this.sendSlot(HEAD, player)
+        this.sendSlot(CHEST, player)
+        this.sendSlot(LEGS, player)
+        this.sendSlot(FEET, player)
+        this.sendSlot(MAIN_HAND, player)
+        this.sendSlot(OFF_HAND, player)
     }
 
-    override fun sendContents(vararg target: Player) {
-        for (player: Player in target) {
+    override fun sendContents(vararg players: Player) {
+        for (player: Player in players) {
             this.sendContents(player)
         }
     }

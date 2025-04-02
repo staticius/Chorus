@@ -207,7 +207,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
             when (slotType) {
                 "slot.weapon.mainhand" -> {
                     if (entity is Player) {
-                        val old = entity.inventory.getItemInHand()
+                        val old = entity.inventory.itemInHand
                         if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue

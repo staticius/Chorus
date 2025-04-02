@@ -1427,16 +1427,16 @@ class Level(
     }
 
     fun scanBlocks(bb: AxisAlignedBB, condition: BiPredicate<BlockVector3?, BlockState?>): List<Block> {
-        val min = BlockVector3(
+        val min = Vector3(
             floor(bb.minX),
             floor(bb.minY),
             floor(bb.minZ)
-        )
-        val max = BlockVector3(
+        ).asBlockVector3()
+        val max = Vector3(
             floor(bb.maxX),
             floor(bb.maxY),
             floor(bb.maxZ)
-        )
+        ).asBlockVector3()
         val minChunk: ChunkVector2 = min.chunkVector
         val maxChunk: ChunkVector2 = max.chunkVector
         return IntStream.rangeClosed(minChunk.x, maxChunk.x)
@@ -1496,12 +1496,12 @@ class Level(
         ignoreCollidesCheck: Boolean,
         condition: Predicate<Block>
     ): Array<Block> {
-        val minX = floor(bb.minX)
-        val minY = floor(bb.minY)
-        val minZ = floor(bb.minZ)
-        val maxX = ceil(bb.maxX)
-        val maxY = ceil(bb.maxY)
-        val maxZ = ceil(bb.maxZ)
+        val minX = floor(bb.minX).toInt()
+        val minY = floor(bb.minY).toInt()
+        val minZ = floor(bb.minZ).toInt()
+        val maxX = ceil(bb.maxX).toInt()
+        val maxY = ceil(bb.maxY).toInt()
+        val maxZ = ceil(bb.maxZ).toInt()
 
         val collides: MutableList<Block> = ArrayList()
 
@@ -1572,12 +1572,12 @@ class Level(
         ignoreCollidesCheck: Boolean,
         condition: Predicate<Block>
     ): Array<Block> {
-        val minX = floor(bb.minX)
-        val minY = floor(bb.minY)
-        val minZ = floor(bb.minZ)
-        val maxX = ceil(bb.maxX)
-        val maxY = ceil(bb.maxY)
-        val maxZ = ceil(bb.maxZ)
+        val minX = floor(bb.minX).toInt()
+        val minY = floor(bb.minY).toInt()
+        val minZ = floor(bb.minZ).toInt()
+        val maxX = ceil(bb.maxX).toInt()
+        val maxY = ceil(bb.maxY).toInt()
+        val maxZ = ceil(bb.maxZ).toInt()
 
         val collides: MutableList<Block> = ArrayList()
 
@@ -1634,12 +1634,12 @@ class Level(
         entities: Boolean,
         solidEntities: Boolean
     ): Array<AxisAlignedBB> {
-        val minX = floor(bb.minX)
-        val minY = floor(bb.minY)
-        val minZ = floor(bb.minZ)
-        val maxX = ceil(bb.maxX)
-        val maxY = ceil(bb.maxY)
-        val maxZ = ceil(bb.maxZ)
+        val minX = floor(bb.minX).toInt()
+        val minY = floor(bb.minY).toInt()
+        val minZ = floor(bb.minZ).toInt()
+        val maxX = ceil(bb.maxX).toInt()
+        val maxY = ceil(bb.maxY).toInt()
+        val maxZ = ceil(bb.maxZ).toInt()
 
         val collides: MutableList<AxisAlignedBB> = ArrayList<AxisAlignedBB>()
 
@@ -1676,12 +1676,12 @@ class Level(
         entities: Boolean,
         solidEntities: Boolean
     ): List<AxisAlignedBB> {
-        val minX = floor(bb.minX)
-        val minY = floor(bb.minY)
-        val minZ = floor(bb.minZ)
-        val maxX = ceil(bb.maxX)
-        val maxY = ceil(bb.maxY)
-        val maxZ = ceil(bb.maxZ)
+        val minX = floor(bb.minX).toInt()
+        val minY = floor(bb.minY).toInt()
+        val minZ = floor(bb.minZ).toInt()
+        val maxX = ceil(bb.maxX).toInt()
+        val maxY = ceil(bb.maxY).toInt()
+        val maxZ = ceil(bb.maxZ).toInt()
 
         val collides: MutableList<AxisAlignedBB> = ArrayList<AxisAlignedBB>()
 
@@ -2914,10 +2914,10 @@ class Level(
         val result: MutableList<Entity> = mutableListOf()
 
         if (entity == null || entity.canCollide()) {
-            val minX = floor((bb.minX - 2) / 16)
-            val maxX = ceil((bb.maxX + 2) / 16)
-            val minZ = floor((bb.minZ - 2) / 16)
-            val maxZ = ceil((bb.maxZ + 2) / 16)
+            val minX = floor((bb.minX - 2) / 16).toInt()
+            val maxX = ceil((bb.maxX + 2) / 16).toInt()
+            val minZ = floor((bb.minZ - 2) / 16).toInt()
+            val maxZ = ceil((bb.maxZ + 2) / 16).toInt()
 
             for (x in minX..maxX) {
                 for (z in minZ..maxZ) {
@@ -2937,10 +2937,10 @@ class Level(
 
     fun streamCollidingEntities(bb: AxisAlignedBB, entity: Entity?): Stream<Entity> {
         if (entity == null || entity.canCollide()) {
-            val minX = floor((bb.minX - 2) / 16)
-            val maxX = ceil((bb.maxX + 2) / 16)
-            val minZ = floor((bb.minZ - 2) / 16)
-            val maxZ = ceil((bb.maxZ + 2) / 16)
+            val minX = floor((bb.minX - 2) / 16).toInt()
+            val maxX = ceil((bb.maxX + 2) / 16).toInt()
+            val minZ = floor((bb.minZ - 2) / 16).toInt()
+            val maxZ = ceil((bb.maxZ + 2) / 16).toInt()
 
             val allEntities: MutableList<Entity> = mutableListOf()
 
@@ -4322,10 +4322,10 @@ class Level(
         if (bb.maxY < (if (isOverWorld) -64 else 0) || bb.minY >= (if (isOverWorld) 320 else 256)) {
             return false
         }
-        val minX = floor(bb.minX) shr 4
-        val minZ = floor(bb.minZ) shr 4
-        val maxX = floor(bb.maxX) shr 4
-        val maxZ = floor(bb.maxZ) shr 4
+        val minX = floor(bb.minX).toInt() shr 4
+        val minZ = floor(bb.minZ).toInt() shr 4
+        val maxX = floor(bb.maxX).toInt() shr 4
+        val maxZ = floor(bb.maxZ).toInt() shr 4
 
         for (x in minX..maxX) {
             for (z in minZ..maxZ) {

@@ -10,7 +10,7 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.animal.EntityBee
 
 class BeeAttackExecutor(
-    memory: MemoryType<out Entity?>?,
+    memory: MemoryType<out Entity>,
     speed: Float,
     maxSenseRange: Int,
     clearDataWhenLose: Boolean,

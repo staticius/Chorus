@@ -241,12 +241,12 @@ abstract class BaseInventory(
         val itemSlots: MutableList<Item> = ArrayList()
         for (slot in slots) {
             if (!slot.isNothing) {
-                //todo: clone only if necessary
+                // Todo: clone only if necessary
                 itemSlots.add(slot.clone())
             }
         }
 
-        //使用FastUtils的IntArrayList提高性能
+        // improve performance using FastUtils IntArrayList
         val emptySlots: IntList = IntArrayList(this.size)
 
         for (i in 0..<this.size) {
@@ -442,9 +442,8 @@ abstract class BaseInventory(
 
     override fun sendContents(vararg players: Player) {
         val pk = InventoryContentPacket()
-        pk.slots = arrayOfNulls(this.size)
-        for (i in 0..<this.size) {
-            pk.slots[i] = this.getUnclonedItem(i)
+        pk.slots = Array(this.size) { i ->
+            this.getUnclonedItem(i)
         }
 
         for (player in players) {

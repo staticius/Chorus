@@ -21,9 +21,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
     }
 
     override fun requireContainerInventory(): ContainerInventory {
-        return Objects.requireNonNullElseGet(
-            this.inventory
-        ) { ChestInventory(this) }
+        return this.inventory as ContainerInventory
     }
 
     override fun close() {
