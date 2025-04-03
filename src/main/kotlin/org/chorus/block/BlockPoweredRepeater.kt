@@ -15,13 +15,17 @@ class BlockPoweredRepeater @JvmOverloads constructor(blockstate: BlockState = Co
         return this
     }
 
-    override fun getUnpowered(): Block {
-        val blockUnpoweredRepeater = BlockUnpoweredRepeater()
-        return blockUnpoweredRepeater.setPropertyValues(blockState.blockPropertyValues)
-    }
+    override val unpowered
+        get(): Block {
+            val blockUnpoweredRepeater = BlockUnpoweredRepeater()
+            return blockUnpoweredRepeater.setPropertyValues(blockState.blockPropertyValues!!)
+        }
 
     override val lightLevel: Int
         get() = 7
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -29,6 +33,5 @@ class BlockPoweredRepeater @JvmOverloads constructor(blockstate: BlockState = Co
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.REPEATER_DELAY
         )
-
     }
 }

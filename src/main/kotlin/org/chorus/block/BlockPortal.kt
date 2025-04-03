@@ -72,11 +72,13 @@ class BlockPortal @JvmOverloads constructor(blockstate: BlockState = Companion.p
     override var blockFace: BlockFace
         get() = fromHorizontalIndex(blockState.specialValue().toInt() and 0x07)
         set(blockFace) {
-            super.blockFace = blockFace
+            throw UnsupportedOperationException()
         }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PORTAL, CommonBlockProperties.PORTAL_AXIS)
-
     }
 }

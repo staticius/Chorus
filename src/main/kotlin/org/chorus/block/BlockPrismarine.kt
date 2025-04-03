@@ -26,13 +26,13 @@ open class BlockPrismarine : BlockSolid {
 
     var prismarineBlockType: PrismarineBlockType
         get() = when (this) {
-            -> PrismarineBlockType.BRICKS
-            -> PrismarineBlockType.DARK
+            is BlockPrismarineBricks -> PrismarineBlockType.BRICKS
+            is BlockDarkPrismarine -> PrismarineBlockType.DARK
             else -> PrismarineBlockType.DEFAULT
         }
         set(prismarineBlockType) {
             this.blockState = when (prismarineBlockType) {
-                PrismarineBlockType.BRICKS -> BlockPrismarineBricks.Companion.PROPERTIES.getDefaultState()
+                PrismarineBlockType.BRICKS -> BlockPrismarineBricks.properties.defaultState
                 PrismarineBlockType.DARK -> BlockDarkPrismarine.properties.defaultState
                 PrismarineBlockType.DEFAULT -> Companion.properties.defaultState
             }
@@ -45,10 +45,10 @@ open class BlockPrismarine : BlockSolid {
         return false
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return when (this.prismarineBlockType) {
             PrismarineBlockType.BRICKS -> ItemBlock(
-                BlockPrismarineBricks.Companion.PROPERTIES.getDefaultState().toBlock()
+                BlockPrismarineBricks.properties.defaultState.toBlock()
             )
 
             PrismarineBlockType.DARK -> ItemBlock(BlockDarkPrismarine.properties.defaultState.toBlock())
@@ -56,8 +56,10 @@ open class BlockPrismarine : BlockSolid {
         }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PRISMARINE)
-
     }
 }

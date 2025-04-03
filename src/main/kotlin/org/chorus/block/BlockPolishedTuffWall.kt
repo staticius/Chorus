@@ -24,6 +24,9 @@ class BlockPolishedTuffWall @JvmOverloads constructor(blockstate: BlockState = C
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.POLISHED_TUFF_WALL,
@@ -33,6 +36,5 @@ class BlockPolishedTuffWall @JvmOverloads constructor(blockstate: BlockState = C
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

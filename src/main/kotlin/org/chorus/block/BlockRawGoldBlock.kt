@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-class BlockRawGoldBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockRawGoldBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockRaw(blockstate) {
     override val name: String
         get() = "Block of Raw Gold"
@@ -10,8 +10,10 @@ class BlockRawGoldBlock @JvmOverloads constructor(blockstate: BlockState = Compa
     override val toolTier: Int
         get() = ItemTool.TIER_IRON
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RAW_GOLD_BLOCK)
-
     }
 }

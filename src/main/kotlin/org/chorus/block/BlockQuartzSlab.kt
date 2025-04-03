@@ -22,9 +22,11 @@ class BlockQuartzSlab(blockState: BlockState) : BlockSlab(blockState, BlockID.QU
         return this.id == slab.id
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.QUARTZ_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

@@ -28,7 +28,7 @@ open class BlockPumpkin : BlockSolid, Faceable, Natural {
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
@@ -94,17 +94,19 @@ open class BlockPumpkin : BlockSolid, Faceable, Natural {
     override var blockFace: BlockFace
         get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
-        )]
+        )]!!
         set(face) {
             this.setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]!!
             )
         }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PUMPKIN, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-
     }
 }

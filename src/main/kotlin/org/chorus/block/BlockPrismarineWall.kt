@@ -23,6 +23,9 @@ class BlockPrismarineWall @JvmOverloads constructor(blockstate: BlockState = Com
         return ItemBlock(properties.defaultState.toBlock())
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.PRISMARINE_WALL,
@@ -32,6 +35,5 @@ class BlockPrismarineWall @JvmOverloads constructor(blockstate: BlockState = Com
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

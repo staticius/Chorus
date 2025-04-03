@@ -22,9 +22,11 @@ class BlockPrismarineSlab(blockState: BlockState) : BlockSlab(blockState, BlockI
         return slab.id == this.id
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PRISMARINE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

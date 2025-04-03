@@ -32,9 +32,11 @@ class BlockPolishedTuffSlab @JvmOverloads constructor(blockstate: BlockState = C
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.POLISHED_TUFF_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

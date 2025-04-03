@@ -360,14 +360,14 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
         setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.ACTIVE, active)
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
     override var blockFace: BlockFace
         get() = fromHorizontalIndex(blockState.specialValue().toInt() and 0x07)
         set(blockFace) {
-            super.blockFace = blockFace
+            throw UnsupportedOperationException()
         }
 
     override fun breaksWhenMoved(): Boolean {

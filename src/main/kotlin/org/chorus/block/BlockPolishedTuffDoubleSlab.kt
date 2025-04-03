@@ -8,11 +8,9 @@ class BlockPolishedTuffDoubleSlab @JvmOverloads constructor(blockstate: BlockSta
     override val name: String
         get() = "Polished Tuff Double Slab"
 
-    override val slabName: String
-        get() = "Polished Tuff"
+    override fun getSlabName() = "Polished Tuff"
 
-    override val singleSlab: BlockState
-        get() = BlockPolishedTuffSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockPolishedTuffSlab.properties.defaultState
 
     override val resistance: Double
         get() = 6.0
@@ -30,9 +28,11 @@ class BlockPolishedTuffDoubleSlab @JvmOverloads constructor(blockstate: BlockSta
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.POLISHED_TUFF_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

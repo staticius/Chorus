@@ -15,6 +15,9 @@ class BlockPoweredComparator @JvmOverloads constructor(blockstate: BlockState = 
         return this
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.POWERED_COMPARATOR,
@@ -22,6 +25,5 @@ class BlockPoweredComparator @JvmOverloads constructor(blockstate: BlockState = 
             CommonBlockProperties.OUTPUT_LIT_BIT,
             CommonBlockProperties.OUTPUT_SUBTRACT_BIT
         )
-
     }
 }

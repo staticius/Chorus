@@ -5,8 +5,10 @@ class BlockPolishedTuff @JvmOverloads constructor(blockstate: BlockState = Compa
     override val name: String
         get() = "Polished Tuff"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.POLISHED_TUFF)
-
     }
 }

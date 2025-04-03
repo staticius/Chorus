@@ -48,8 +48,10 @@ class BlockPotatoes @JvmOverloads constructor(blockstate: BlockState = Companion
         }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.POTATOES, CommonBlockProperties.GROWTH)
-
     }
 }

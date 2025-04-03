@@ -5,18 +5,18 @@ import org.chorus.item.ItemTool
 
 class BlockPrismarineDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
-    override val slabName: String
-        get() = "Prismarine"
+    override fun getSlabName() = "Prismarine"
 
-    override val singleSlab: BlockState
-        get() = BlockPrismarineSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockPrismarineSlab.properties.defaultState
 
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PRISMARINE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }
