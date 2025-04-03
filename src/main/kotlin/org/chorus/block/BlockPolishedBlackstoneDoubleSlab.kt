@@ -5,8 +5,7 @@ import org.chorus.item.ItemTool
 
 open class BlockPolishedBlackstoneDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
-    override val slabName: String
-        get() = "Polished Blackstone"
+    override fun getSlabName() = "Polished Blackstone"
 
     override fun canHarvestWithHand(): Boolean {
         return false
@@ -21,12 +20,13 @@ open class BlockPolishedBlackstoneDoubleSlab @JvmOverloads constructor(blockstat
     override val resistance: Double
         get() = 6.0
 
-    override val singleSlab: BlockState?
-        get() = BlockPolishedBlackstoneSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockPolishedBlackstoneSlab.properties.defaultState
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.POLISHED_BLACKSTONE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

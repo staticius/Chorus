@@ -12,8 +12,10 @@ class BlockPitcherPlant @JvmOverloads constructor(blockstate: BlockState = Compa
     override val name: String
         get() = "Pitcher Plant"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PITCHER_PLANT, CommonBlockProperties.UPPER_BLOCK_BIT)
-
     }
 }

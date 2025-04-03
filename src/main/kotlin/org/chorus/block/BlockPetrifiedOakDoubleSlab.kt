@@ -3,15 +3,15 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 class BlockPetrifiedOakDoubleSlab(blockstate: BlockState) : BlockDoubleWoodenSlab(blockstate) {
-    override val slabName: String
-        get() = "Petrified Oak"
+    override fun getSlabName() = "Petrified Oak"
 
-    override val singleSlab: BlockState
-        get() = BlockPetrifiedOakSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockPetrifiedOakSlab.properties.defaultState
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PETRIFIED_OAK_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

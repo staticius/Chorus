@@ -5,7 +5,7 @@ import org.chorus.item.Item.Companion.get
 import org.chorus.item.ItemID
 import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.utils.ChorusRandom.nextInt
+import org.chorus.utils.ChorusRandom
 
 class BlockNetherGoldOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockGoldOre(blockstate) {
@@ -26,28 +26,28 @@ class BlockNetherGoldOre @JvmOverloads constructor(blockstate: BlockState = Comp
             fortune = enchantment.level
         }
 
-        val nukkitRandom: NukkitRandom = NukkitRandom()
-        var count: Int = nukkitRandom.nextInt(2, 6)
+        val random = ChorusRandom()
+        var count: Int = random.nextInt(2, 6)
         when (fortune) {
             0 -> {
                 // Does nothing
             }
 
             1 -> {
-                if (nukkitRandom.nextInt(0, 2) == 0) {
+                if (random.nextInt(0, 2) == 0) {
                     count *= 2
                 }
             }
 
             2 -> {
-                if (nukkitRandom.nextInt(0, 1) == 0) {
-                    count *= nukkitRandom.nextInt(2, 3)
+                if (random.nextInt(0, 1) == 0) {
+                    count *= random.nextInt(2, 3)
                 }
             }
 
             else -> {
-                if (nukkitRandom.nextInt(0, 4) < 3) {
-                    count *= nukkitRandom.nextInt(2, 4)
+                if (random.nextInt(0, 4) < 3) {
+                    count *= random.nextInt(2, 4)
                 }
             }
         }
@@ -55,9 +55,8 @@ class BlockNetherGoldOre @JvmOverloads constructor(blockstate: BlockState = Comp
         return arrayOf(get(ItemID.GOLD_NUGGET, 0, count))
     }
 
-    override fun getRawMaterial(): String {
-        return ItemID.GOLD_NUGGET
-    }
+    override val rawMaterial: String
+        get() = ItemID.GOLD_NUGGET
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHER_GOLD_ORE)

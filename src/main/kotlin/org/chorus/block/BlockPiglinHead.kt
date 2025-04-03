@@ -19,8 +19,10 @@ class BlockPiglinHead(blockState: BlockState) : BlockHead(blockState), ItemHead 
         return ItemPiglinHead()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PIGLIN_HEAD, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

@@ -5,9 +5,13 @@ import org.chorus.block.property.enums.OxidizationLevel
 
 class BlockOxidizedCopperDoor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCopperDoorBase(blockstate) {
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.OXIDIZED
-    }
+    override val oxidizationLevel
+        get(): OxidizationLevel {
+            return OxidizationLevel.OXIDIZED
+        }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -17,6 +21,5 @@ class BlockOxidizedCopperDoor @JvmOverloads constructor(blockstate: BlockState =
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-
     }
 }

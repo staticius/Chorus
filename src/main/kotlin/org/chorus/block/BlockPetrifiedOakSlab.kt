@@ -22,9 +22,11 @@ class BlockPetrifiedOakSlab(blockState: BlockState) : BlockSlab(blockState, Bloc
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PETRIFIED_OAK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

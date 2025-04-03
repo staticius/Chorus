@@ -4,10 +4,11 @@ import org.chorus.Player
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
-import org.chorus.level.generator.`object`.BlockManager.applySubChunkUpdate
-import org.chorus.level.generator.`object`.ObjectNyliumVegetation.growVegetation
+import org.chorus.level.generator.`object`.BlockManager
+import org.chorus.level.generator.`object`.ObjectNyliumVegetation
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
+import org.chorus.utils.ChorusRandom
 
 abstract class BlockNylium(blockState: BlockState) : BlockSolid(blockState), Natural {
     override val toolType: Int
@@ -50,8 +51,8 @@ abstract class BlockNylium(blockState: BlockState) : BlockSolid(blockState), Nat
     }
 
     fun grow(): Boolean {
-        val blockManager: BlockManager = BlockManager(this.level)
-        ObjectNyliumVegetation.growVegetation(blockManager, this.position, NukkitRandom())
+        val blockManager = BlockManager(this.level)
+        ObjectNyliumVegetation.growVegetation(blockManager, this.position, ChorusRandom())
         blockManager.applySubChunkUpdate()
         return true
     }

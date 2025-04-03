@@ -10,11 +10,15 @@ open class BlockOxidizedCutCopperSlab : BlockCutCopperSlab {
         BlockID.OXIDIZED_DOUBLE_CUT_COPPER_SLAB
     )
 
-    protected constructor(blockstate: BlockState, doubleSlabId: String?) : super(blockstate, doubleSlabId)
+    protected constructor(blockstate: BlockState, doubleSlabId: String) : super(blockstate, doubleSlabId)
 
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.OXIDIZED
-    }
+    override val oxidizationLevel
+        get(): OxidizationLevel {
+            return OxidizationLevel.OXIDIZED
+        }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =

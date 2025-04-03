@@ -7,9 +7,11 @@ class BlockOakSlab(blockstate: BlockState) : BlockWoodenSlab(blockstate, BlockID
         return "Oak"
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.OAK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

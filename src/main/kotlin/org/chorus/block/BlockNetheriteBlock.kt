@@ -29,8 +29,10 @@ class BlockNetheriteBlock : BlockSolid {
     override val isLavaResistant: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHERITE_BLOCK)
-
     }
 }

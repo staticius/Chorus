@@ -6,11 +6,11 @@ import kotlin.math.floor
 class ChunkPosition(val x: Int, val y: Int, val z: Int) {
     constructor(vec3d: Vector3) : this(floor(vec3d.x).toInt(), floor(vec3d.y).toInt(), floor(vec3d.z).toInt())
 
-    override fun equals(`object`: Any?): Boolean {
-        return if (`object` !is ChunkPosition) {
+    override fun equals(other: Any?): Boolean {
+        return if (other !is ChunkPosition) {
             false
         } else {
-            `object`.x == this.x && `object`.y == this.y && `object`.z == this.z
+            other.x == this.x && other.y == this.y && other.z == this.z
         }
     }
 

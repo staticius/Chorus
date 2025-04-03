@@ -5,14 +5,15 @@ import org.chorus.item.ItemTool
 
 class BlockNetherBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
-    override val slabName: String
-        get() = "Nether Brick"
+    override fun getSlabName() = "Nether Brick"
 
-    override val singleSlab: BlockState
-        get() = BlockNetherBrickSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockNetherBrickSlab.properties.defaultState
 
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =

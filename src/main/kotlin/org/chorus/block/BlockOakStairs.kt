@@ -7,12 +7,14 @@ class BlockOakStairs @JvmOverloads constructor(blockstate: BlockState = Companio
     override val name: String
         get() = "Oak Wood Stairs"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.OAK_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

@@ -5,8 +5,7 @@ import org.chorus.item.ItemTool
 
 class BlockPolishedDeepslateDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
-    override val slabName: String
-        get() = "Polished Deepslate"
+    override fun getSlabName() = "Polished Deepslate"
 
     override val hardness: Double
         get() = 3.5
@@ -24,12 +23,13 @@ class BlockPolishedDeepslateDoubleSlab @JvmOverloads constructor(blockstate: Blo
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
-    override val singleSlab: BlockState
-        get() = BlockPolishedDeepslateSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockPolishedDeepslateSlab.properties.defaultState
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.POLISHED_DEEPSLATE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

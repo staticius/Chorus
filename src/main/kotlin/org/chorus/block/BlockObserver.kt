@@ -94,7 +94,7 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState = Companion
     override fun onNeighborChange(side: BlockFace) {
         val server = Server.instance
         val blockFace = blockFace
-        if (!server.settings.levelSettings().enableRedstone() || side != blockFace || level.isUpdateScheduled(
+        if (!server.settings.levelSettings.enableRedstone || side != blockFace || level.isUpdateScheduled(
                 this.position,
                 this
             )
@@ -142,12 +142,14 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState = Companion
             )
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.OBSERVER,
             CommonBlockProperties.MINECRAFT_FACING_DIRECTION,
             CommonBlockProperties.POWERED_BIT
         )
-
     }
 }

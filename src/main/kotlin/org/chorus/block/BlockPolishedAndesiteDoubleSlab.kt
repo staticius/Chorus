@@ -5,18 +5,18 @@ import org.chorus.item.ItemTool
 
 class BlockPolishedAndesiteDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
-    override val slabName: String
-        get() = "Polished Andesite"
+    override fun getSlabName() = "Polished Andesite"
 
-    override val singleSlab: BlockState
-        get() = BlockPolishedAndesiteSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockPolishedAndesiteSlab.properties.defaultState
 
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.POLISHED_ANDESITE_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

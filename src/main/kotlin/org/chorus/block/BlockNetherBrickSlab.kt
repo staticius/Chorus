@@ -22,9 +22,11 @@ class BlockNetherBrickSlab(blockState: BlockState) : BlockSlab(blockState, Block
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.NETHER_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
 import org.chorus.tags.BlockTags
@@ -31,7 +31,7 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState = Compani
         if (player != null) {
             setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[player.getHorizontalFacing().getOpposite()]
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[player.getHorizontalFacing().getOpposite()]!!
             )
         }
 
@@ -67,7 +67,7 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState = Compani
             return true
         }
 
-        if (item.BlockID.== BlockID . PINK_PETALS && getPropertyValue < Int, IntPropertyType>(CommonBlockProperties.GROWTH) < 3) {
+        if (item.blockId == BlockID.PINK_PETALS && getPropertyValue(CommonBlockProperties.GROWTH) < 3) {
             setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.GROWTH, getPropertyValue<Int, IntPropertyType>(
                     CommonBlockProperties.GROWTH
@@ -80,6 +80,9 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState = Compani
 
         return false
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(

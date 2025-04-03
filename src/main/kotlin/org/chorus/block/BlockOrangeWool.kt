@@ -10,8 +10,10 @@ class BlockOrangeWool @JvmOverloads constructor(blockstate: BlockState = Compani
         return DyeColor.ORANGE
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.ORANGE_WOOL, Set.of(BlockTags.PNX_WOOL))
-
     }
 }

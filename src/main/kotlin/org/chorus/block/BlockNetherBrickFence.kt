@@ -29,8 +29,10 @@ class BlockNetherBrickFence @JvmOverloads constructor(blockstate: BlockState = C
     override val burnAbility: Int
         get() = 0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHER_BRICK_FENCE)
-
     }
 }

@@ -29,9 +29,11 @@ class BlockPolishedDeepslateSlab @JvmOverloads constructor(blockstate: BlockStat
         return id == slab.id
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.POLISHED_DEEPSLATE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

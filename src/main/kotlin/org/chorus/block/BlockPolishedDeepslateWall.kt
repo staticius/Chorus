@@ -17,6 +17,9 @@ class BlockPolishedDeepslateWall @JvmOverloads constructor(blockstate: BlockStat
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.POLISHED_DEEPSLATE_WALL,
@@ -26,6 +29,5 @@ class BlockPolishedDeepslateWall @JvmOverloads constructor(blockstate: BlockStat
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

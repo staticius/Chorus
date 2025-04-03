@@ -78,13 +78,15 @@ open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockSt
         return false
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(get(BlockID.AIR))
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PISTON_ARM_COLLISION, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

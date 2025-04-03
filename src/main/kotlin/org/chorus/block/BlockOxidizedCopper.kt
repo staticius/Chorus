@@ -7,12 +7,15 @@ open class BlockOxidizedCopper @JvmOverloads constructor(blockstate: BlockState 
     override val name: String
         get() = "Oxidized Copper"
 
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.OXIDIZED
-    }
+    override val oxidizationLevel
+        get(): OxidizationLevel {
+            return OxidizationLevel.OXIDIZED
+        }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.OXIDIZED_COPPER)
-
     }
 }

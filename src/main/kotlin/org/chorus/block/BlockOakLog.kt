@@ -8,8 +8,10 @@ class BlockOakLog @JvmOverloads constructor(blockstate: BlockState = Companion.p
         return BlockStrippedOakLog.properties.defaultState
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.OAK_LOG, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

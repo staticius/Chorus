@@ -7,12 +7,14 @@ class BlockPolishedBlackstoneButton @JvmOverloads constructor(blockstate: BlockS
     override val name: String
         get() = "Polished Blackstone Button"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.POLISHED_BLACKSTONE_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-
     }
 }

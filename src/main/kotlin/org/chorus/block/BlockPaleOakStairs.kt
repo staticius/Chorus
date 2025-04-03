@@ -7,12 +7,14 @@ class BlockPaleOakStairs @JvmOverloads constructor(blockstate: BlockState = Comp
     override val name: String
         get() = "Pale Oak Wood Stairs"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.PALE_OAK_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

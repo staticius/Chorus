@@ -7,6 +7,7 @@ import org.chorus.block.property.enums.CauldronLiquid
 import org.chorus.block.property.enums.DripstoneThickness
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.entity.Entity
+import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.block.BlockFallEvent
 import org.chorus.event.block.CauldronFilledByDrippingLiquidEvent
@@ -30,7 +31,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
             setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HANGING, value)
         }
 
-    var thickness: DripstoneThickness?
+    var thickness: DripstoneThickness
         get() = getPropertyValue(CommonBlockProperties.DRIPSTONE_THICKNESS)
         set(value) {
             setPropertyValue(
@@ -108,9 +109,9 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
     }
 
     override fun place(
-        item: Item?,
+        item: Item,
         block: Block,
-        target: Block?,
+        target: Block,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -195,7 +196,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
             val length = getPointedDripStoneLength(x, y, z, false)
             if (length > 0) {
                 val downBlock = down()
-                for (i in 0..length - 1) {
+                for (i in 0..<length) {
                     level.setBlock(downBlock.down(i).position, get(BlockID.AIR), false, false)
                 }
                 for (i in length - 1 downTo 0) {
@@ -207,7 +208,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
             val length = getPointedDripStoneLength(x, y, z, true)
             if (length > 0) {
                 val upBlock = up()
-                for (i in 0..length - 1) {
+                for (i in 0..<length) {
                     level.setBlock(upBlock.up(i).position, get(BlockID.AIR), false, false)
                 }
                 for (i in length - 1 downTo 0) {
@@ -224,7 +225,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
                 CommonBlockProperties.HANGING
             )
         ) {
-            val jumpBoost = if (entity.hasEffect(EffectType.JUMP_BOOST)) get(EffectType.JUMP_BOOST).getLevel() else 0
+            val jumpBoost = if (entity.hasEffect(EffectType.JUMP_BOOST)) Effect.get(EffectType.JUMP_BOOST).getLevel() else 0
             val damage = (fallDistance - jumpBoost) * 2 - 2
             if (damage > 0) entity.attack(EntityDamageEvent(entity, EntityDamageEvent.DamageCause.FALL, damage))
         }
@@ -366,12 +367,14 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
         }
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.POINTED_DRIPSTONE,
             CommonBlockProperties.DRIPSTONE_THICKNESS,
             CommonBlockProperties.HANGING
         )
-
     }
 }

@@ -8,9 +8,11 @@ class BlockPitcherCrop @JvmOverloads constructor(blockstate: BlockState = Compan
     override val name: String
         get() = "Pitcher Crop"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PITCHER_CROP, CommonBlockProperties.GROWTH, CommonBlockProperties.UPPER_BLOCK_BIT)
-
     }
 }

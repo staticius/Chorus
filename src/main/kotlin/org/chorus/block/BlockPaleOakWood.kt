@@ -8,8 +8,10 @@ class BlockPaleOakWood(blockstate: BlockState) : BlockWood(blockstate) {
         return WoodType.PALE_OAK
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PALE_OAK_WOOD, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

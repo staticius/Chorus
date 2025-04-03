@@ -14,8 +14,10 @@ class BlockPackedMud : BlockSolid {
     override val resistance: Double
         get() = 3.0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PACKED_MUD)
-
     }
 }

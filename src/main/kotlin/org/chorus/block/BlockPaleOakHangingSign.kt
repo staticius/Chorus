@@ -8,6 +8,9 @@ class BlockPaleOakHangingSign @JvmOverloads constructor(blockstate: BlockState =
     override val name: String
         get() = "Pale Oak Hanging Sign"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.PALE_OAK_HANGING_SIGN,
@@ -16,6 +19,5 @@ class BlockPaleOakHangingSign @JvmOverloads constructor(blockstate: BlockState =
             CommonBlockProperties.GROUND_SIGN_DIRECTION,
             CommonBlockProperties.HANGING
         )
-
     }
 }

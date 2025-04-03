@@ -5,12 +5,14 @@ import org.chorus.block.property.enums.WoodType
 import org.chorus.item.Item
 
 class BlockPaleOakLeaves(blockstate: BlockState) : BlockLeaves(blockstate) {
-    override val type: WoodType
-        get() = WoodType.PALE_OAK
+    override fun getType() = WoodType.PALE_OAK
 
     override fun toSapling(): Item {
         return Item.get(BlockID.PALE_OAK_SAPLING)
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -18,6 +20,5 @@ class BlockPaleOakLeaves(blockstate: BlockState) : BlockLeaves(blockstate) {
             CommonBlockProperties.PERSISTENT_BIT,
             CommonBlockProperties.UPDATE_BIT
         )
-
     }
 }

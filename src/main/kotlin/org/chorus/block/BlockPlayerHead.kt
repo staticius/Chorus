@@ -18,8 +18,10 @@ class BlockPlayerHead(blockState: BlockState) : BlockHead(blockState) {
         return ItemPlayerHead()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PLAYER_HEAD, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

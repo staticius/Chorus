@@ -24,6 +24,9 @@ open class BlockPolishedBlackstoneWall @JvmOverloads constructor(blockstate: Blo
     override val resistance: Double
         get() = 6.0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.POLISHED_BLACKSTONE_WALL,
@@ -33,6 +36,5 @@ open class BlockPolishedBlackstoneWall @JvmOverloads constructor(blockstate: Blo
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

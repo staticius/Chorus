@@ -10,16 +10,18 @@ class BlockPaleOakStandingSign @JvmOverloads constructor(blockstate: BlockState 
     }
 
     override fun getWallSignId(): String {
-        return BlockPaleOakWallSign.Companion.PROPERTIES.getIdentifier()
+        return BlockPaleOakWallSign.properties.identifier
     }
 
     override fun toItem(): Item {
         return ItemPaleOakSign()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PALE_OAK_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
-
     }
 }

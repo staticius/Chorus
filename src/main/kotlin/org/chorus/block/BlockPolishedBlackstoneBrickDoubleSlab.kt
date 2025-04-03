@@ -4,20 +4,20 @@ import org.chorus.block.property.CommonBlockProperties
 
 class BlockPolishedBlackstoneBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockPolishedBlackstoneDoubleSlab(blockstate) {
-    override val slabName: String
-        get() = "Polished Blackstone Brick"
+    override fun getSlabName() = "Polished Blackstone Brick"
 
     override val hardness: Double
         get() = 2.0
 
-    override val singleSlab: BlockState
-        get() = BlockPolishedBlackstoneBrickSlab.Companion.PROPERTIES.getDefaultState()
+    override fun getSingleSlab() = BlockPolishedBlackstoneBrickSlab.properties.defaultState
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB,
             CommonBlockProperties.MINECRAFT_VERTICAL_HALF
         )
-
     }
 }

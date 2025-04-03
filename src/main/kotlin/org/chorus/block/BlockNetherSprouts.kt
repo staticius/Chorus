@@ -17,8 +17,10 @@ class BlockNetherSprouts @JvmOverloads constructor(blockstate: BlockState = Comp
     override val burnChance: Int
         get() = 5
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHER_SPROUTS)
-
     }
 }

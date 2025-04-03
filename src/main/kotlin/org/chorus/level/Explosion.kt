@@ -4,7 +4,9 @@ import it.unimi.dsi.fastutil.longs.LongArraySet
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
+import org.chorus.block.BlockTNT
 import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityShulkerBox
 import org.chorus.entity.Entity
@@ -19,13 +21,16 @@ import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityExplodeEvent
 import org.chorus.inventory.InventoryHolder
 import org.chorus.item.ItemBlock
-import org.chorus.math.*
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventPacket
-import org.chorus.utils.*
+import org.chorus.utils.Hash
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.collections.LinkedHashSet
+import kotlin.math.ceil
 import kotlin.math.floor
 
 class Explosion protected constructor(private val source: Locator, size: Double, private val what: Any) {
@@ -208,11 +213,11 @@ class Explosion protected constructor(private val source: Locator, size: Double,
 
         val explosionSize = this.size * 2.0
         val minX = floor(this.source.position.x - explosionSize - 1)
-        val maxX = ceil(this.source.position.x + explosionSize + 1).toDouble()
+        val maxX = ceil(this.source.position.x + explosionSize + 1)
         val minY = floor(this.source.position.y - explosionSize - 1)
-        val maxY = ceil(this.source.position.y + explosionSize + 1).toDouble()
+        val maxY = ceil(this.source.position.y + explosionSize + 1)
         val minZ = floor(this.source.position.z - explosionSize - 1)
-        val maxZ = ceil(this.source.position.z + explosionSize + 1).toDouble()
+        val maxZ = ceil(this.source.position.z + explosionSize + 1)
 
         val explosionBB: AxisAlignedBB = SimpleAxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ)
         val list = level.getNearbyEntities(explosionBB, if (what is Entity) what else null)
@@ -231,21 +236,25 @@ class Explosion protected constructor(private val source: Locator, size: Double,
 
                 when (what) {
                     is Entity -> {
-                        entity.attack(EntityDamageByEntityEvent(
-                            what,
-                            entity,
-                            EntityDamageEvent.DamageCause.ENTITY_EXPLOSION,
-                            damage
-                        ))
+                        entity.attack(
+                            EntityDamageByEntityEvent(
+                                what,
+                                entity,
+                                EntityDamageEvent.DamageCause.ENTITY_EXPLOSION,
+                                damage
+                            )
+                        )
                     }
 
                     is Block -> {
-                        entity.attack(EntityDamageByBlockEvent(
-                            what,
-                            entity,
-                            EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
-                            damage
-                        ))
+                        entity.attack(
+                            EntityDamageByBlockEvent(
+                                what,
+                                entity,
+                                EntityDamageEvent.DamageCause.BLOCK_EXPLOSION,
+                                damage
+                            )
+                        )
                     }
 
                     else -> {
@@ -262,7 +271,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
             }
         }
 
-        val air: ItemBlock = ItemBlock(Block.get(BlockID.AIR))
+        val air = ItemBlock(Block.get(BlockID.AIR))
         var container: BlockEntity?
         val smokePositions = if (affectedBlocks.isEmpty()) Collections.emptyList() else ObjectArrayList<Vector3>()
         val random = ThreadLocalRandom.current()
@@ -273,12 +282,12 @@ class Explosion protected constructor(private val source: Locator, size: Double,
             } else if ((block.level.getBlockEntity(block.position).also { container = it }) is InventoryHolder) {
                 if (container is BlockEntityShulkerBox) {
                     level.dropItem(block.position.add(0.5, 0.5, 0.5), block.toItem())
-                    (container as InventoryHolder).inventory!!.clearAll()
+                    (container as InventoryHolder).inventory.clearAll()
                 } else {
-                    for (drop in (container as InventoryHolder).inventory!!.contents.values) {
+                    for (drop in (container as InventoryHolder).inventory.contents.values) {
                         level.dropItem(block.position.add(0.5, 0.5, 0.5), drop)
                     }
-                    (container as InventoryHolder).inventory!!.clearAll()
+                    (container as InventoryHolder).inventory.clearAll()
                 }
             } else if (random.nextDouble() * 100 < yield) {
                 for (drop in block.getDrops(air)) {
@@ -312,14 +321,14 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                     var ev: BlockUpdateEvent = BlockUpdateEvent(level.getBlock(sideBlock))
                     Server.instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
-                        ev.getBlock()?.onUpdate(Level.BLOCK_UPDATE_NORMAL)
+                        ev.getBlock().onUpdate(Level.BLOCK_UPDATE_NORMAL)
                     }
                     val layer1 = level.getBlock(sideBlock, 1)
                     if (!layer1.isAir) {
                         ev = BlockUpdateEvent(layer1)
                         Server.instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
-                            ev.getBlock()?.onUpdate(Level.Companion.BLOCK_UPDATE_NORMAL)
+                            ev.getBlock().onUpdate(Level.Companion.BLOCK_UPDATE_NORMAL)
                         }
                     }
                     updateBlocks.add(index)

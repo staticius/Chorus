@@ -7,8 +7,10 @@ class BlockOchreFroglight @JvmOverloads constructor(blockState: BlockState = Com
     override val name: String
         get() = "Ochre Froglight"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.OCHRE_FROGLIGHT, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

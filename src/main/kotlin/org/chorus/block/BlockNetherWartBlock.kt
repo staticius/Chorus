@@ -16,8 +16,10 @@ class BlockNetherWartBlock @JvmOverloads constructor(blockstate: BlockState = Co
     override val toolType: Int
         get() = ItemTool.TYPE_HOE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHER_WART_BLOCK)
-
     }
 }

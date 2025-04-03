@@ -19,7 +19,7 @@ abstract class BlockOre(blockState: BlockState) : BlockSolid(blockState) {
             amount = 1 + ThreadLocalRandom.current().nextInt(amount)
         }
 
-        val fortuneLevel = clamp(item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING), 0, 3)
+        val fortuneLevel = item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING).coerceIn(0, 3)
         if (fortuneLevel > 0) {
             val increase = ThreadLocalRandom.current().nextInt((multiplier * fortuneLevel).toInt() + 1)
             amount += increase
