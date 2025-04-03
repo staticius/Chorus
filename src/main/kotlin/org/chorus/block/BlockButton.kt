@@ -32,16 +32,16 @@ abstract class BlockButton(meta: BlockState) : BlockFlowable(meta), RedstoneComp
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!BlockLever.isSupportValid(target, face)) {
+        if (!BlockLever.isSupportValid(target!!, face)) {
             return false
         }
 

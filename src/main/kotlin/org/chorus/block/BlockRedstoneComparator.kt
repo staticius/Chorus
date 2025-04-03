@@ -170,9 +170,9 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) : BlockRedstoneDi
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

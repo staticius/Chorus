@@ -179,9 +179,9 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -223,7 +223,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
 
         var thisBed: BlockEntityBed? = null
         try {
-            thisBed = createBlockEntity(CompoundTag().putByte("color", item.damage))
+            thisBed = createBlockEntity(CompoundTag().putByte("color", item!!.damage))
             val nextBlock = next.levelBlock as BlockEntityHolder<*>?
             nextBlock!!.createBlockEntity(CompoundTag().putByte("color", item.damage))
         } catch (e: Exception) {

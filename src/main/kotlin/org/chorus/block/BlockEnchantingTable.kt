@@ -47,9 +47,9 @@ class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState = Co
         get() = ItemTool.TIER_WOODEN
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -58,7 +58,7 @@ class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState = Co
     ): Boolean {
         val nbt = CompoundTag()
 
-        if (item.hasCustomName()) {
+        if (item!!.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
 

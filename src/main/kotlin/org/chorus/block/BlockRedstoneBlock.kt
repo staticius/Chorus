@@ -24,9 +24,9 @@ class BlockRedstoneBlock @JvmOverloads constructor(blockstate: BlockState = Comp
         get() = ItemTool.TIER_WOODEN
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

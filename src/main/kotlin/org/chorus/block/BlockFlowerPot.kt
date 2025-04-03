@@ -40,9 +40,9 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -54,7 +54,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
         }
 
         val nbt = CompoundTag()
-        if (item.hasCustomBlockData()) {
+        if (item!!.hasCustomBlockData()) {
             for ((key, value) in item.customBlockData!!.entrySet) {
                 nbt.put(key, value)
             }

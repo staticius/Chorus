@@ -104,9 +104,9 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -115,7 +115,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
     ): Boolean {
         var target1 = target
         var face1 = face
-        if (target1.canBeReplaced()) {
+        if (target1!!.canBeReplaced()) {
             target1 = target1.down()
             face1 = BlockFace.UP
         }

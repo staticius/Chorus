@@ -28,9 +28,9 @@ class BlockHayBlock @JvmOverloads constructor(blockstate: BlockState = Companion
         get() = ItemTool.TYPE_HOE
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

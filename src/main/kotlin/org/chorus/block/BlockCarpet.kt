@@ -38,9 +38,9 @@ abstract class BlockCarpet(blockState: BlockState) : BlockFlowable(blockState) {
         }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

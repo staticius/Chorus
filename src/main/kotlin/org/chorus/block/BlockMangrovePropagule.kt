@@ -23,9 +23,9 @@ class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState = 
         get() = "Mangrove Propaugle"
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

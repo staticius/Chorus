@@ -38,9 +38,9 @@ abstract class BlockCopperGrateBase(blockState: BlockState) : BlockFlowable(bloc
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

@@ -95,9 +95,9 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

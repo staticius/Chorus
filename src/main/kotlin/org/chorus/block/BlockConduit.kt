@@ -34,16 +34,16 @@ class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit> {
         get() = 15.0
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
         fz: Double,
         player: Player?
     ): Boolean {
-        if (item.isBlock() && item.blockId == BlockID.CONDUIT && target.id == BlockID.CONDUIT) {
+        if (item!!.isBlock() && item.blockId == BlockID.CONDUIT && target!!.id == BlockID.CONDUIT) {
             return false
         }
 

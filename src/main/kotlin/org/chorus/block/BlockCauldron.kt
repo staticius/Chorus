@@ -569,9 +569,9 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -582,7 +582,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
             .putShort("PotionId", -1)
             .putByte("SplashPotion", 0)
 
-        if (item.hasCustomBlockData()) {
+        if (item!!.hasCustomBlockData()) {
             val customData = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)

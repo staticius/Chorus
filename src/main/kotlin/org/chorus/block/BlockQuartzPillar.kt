@@ -8,9 +8,9 @@ import org.chorus.math.BlockFace
 class BlockQuartzPillar @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
     BlockQuartzBlock(blockstate) {
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

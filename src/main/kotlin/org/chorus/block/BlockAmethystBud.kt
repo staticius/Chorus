@@ -49,16 +49,16 @@ abstract class BlockAmethystBud(blockState: BlockState) : BlockTransparent(block
         }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!target.isSolid) {
+        if (!target!!.isSolid) {
             return false
         }
 

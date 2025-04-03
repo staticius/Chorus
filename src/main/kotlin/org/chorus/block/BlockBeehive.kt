@@ -47,9 +47,9 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState = Compa
         get() = 3.0
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -62,7 +62,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState = Compa
             player.getDirection().getOpposite()
         }
 
-        val honeyLevel = (if (item.hasCustomBlockData()) item.customBlockData!!.getByte("HoneyLevel") else 0).toInt()
+        val honeyLevel = (if (item!!.hasCustomBlockData()) item.customBlockData!!.getByte("HoneyLevel") else 0).toInt()
         this.honeyLevel = honeyLevel
         val beehive = BlockEntityHolder.setBlockAndCreateEntity(
             this,

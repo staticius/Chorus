@@ -122,9 +122,9 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState = Companion.p
         }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -141,7 +141,7 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState = Companion.p
                 return true
             }
         }
-        if (face.horizontalIndex == -1 || !isSupportValid(target, face)) {
+        if (face.horizontalIndex == -1 || !isSupportValid(target!!, face)) {
             return false
         }
         //不设置damage是因为level#useItemOn中有逻辑设置

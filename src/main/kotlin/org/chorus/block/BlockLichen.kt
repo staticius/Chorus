@@ -40,16 +40,16 @@ abstract class BlockLichen(blockState: BlockState) : BlockTransparent(blockState
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!target.isSolid && target is BlockLichen) {
+        if (!target!!.isSolid && target is BlockLichen) {
             return false
         }
 

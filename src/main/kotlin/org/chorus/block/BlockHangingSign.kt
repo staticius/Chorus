@@ -60,9 +60,9 @@ abstract class BlockHangingSign(blockState: BlockState) : BlockSignBase(blockSta
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -109,7 +109,7 @@ abstract class BlockHangingSign(blockState: BlockState) : BlockSignBase(blockSta
             this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face1.rotateY().index)
             level.setBlock(block.position, this, true)
         }
-        if (item.hasCustomBlockData()) {
+        if (item!!.hasCustomBlockData()) {
             for ((key, value) in item.customBlockData!!.entrySet) {
                 nbt.put(key, value)
             }

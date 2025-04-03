@@ -26,9 +26,9 @@ open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = 
         get() = ItemTool.TYPE_PICKAXE
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

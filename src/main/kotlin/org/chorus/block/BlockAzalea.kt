@@ -82,9 +82,9 @@ open class BlockAzalea @JvmOverloads constructor(blockstate: BlockState = Compan
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

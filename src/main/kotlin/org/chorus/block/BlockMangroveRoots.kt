@@ -25,9 +25,9 @@ class BlockMangroveRoots : BlockTransparent {
         get() = 5
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

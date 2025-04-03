@@ -22,9 +22,9 @@ class BlockPurpurPillar @JvmOverloads constructor(blockstate: BlockState = Compa
         get() = ItemTool.TYPE_PICKAXE
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

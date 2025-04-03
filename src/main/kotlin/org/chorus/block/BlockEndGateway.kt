@@ -23,9 +23,9 @@ class BlockEndGateway : BlockSolid, BlockEntityHolder<BlockEntityEndGateway> {
     override fun getBlockEntityType(): String = BlockEntityID.END_GATEWAY
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

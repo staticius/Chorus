@@ -39,9 +39,9 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState = Compa
         get() = 1
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -57,7 +57,7 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState = Compa
             .putInt("y", position.y.toInt())
             .putInt("z", position.z.toInt())
 
-        if (item.hasCustomName()) {
+        if (item!!.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
 

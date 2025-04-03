@@ -50,9 +50,9 @@ abstract class BlockHead(blockState: BlockState) : BlockTransparent(blockState),
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -67,7 +67,7 @@ abstract class BlockHead(blockState: BlockState) : BlockTransparent(blockState),
 
         blockFace = face
         val nbt = CompoundTag()
-            .putByte("SkullType", item.damage)
+            .putByte("SkullType", item!!.damage)
             .putByte("Rot", floor((player.rotation.yaw * 16 / 360) + 0.5).toInt() and 0x0f)
         if (item.hasCustomBlockData()) {
             for ((key, value) in item.customBlockData!!.entrySet) {

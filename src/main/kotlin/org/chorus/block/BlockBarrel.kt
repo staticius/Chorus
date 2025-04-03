@@ -31,9 +31,9 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState = Companion.p
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -60,7 +60,7 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState = Companion.p
 
         val nbt = CompoundTag().putList("Items", ListTag<Tag<*>>())
 
-        if (item.hasCustomName()) {
+        if (item!!.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
 

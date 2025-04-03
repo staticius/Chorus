@@ -72,9 +72,9 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -109,7 +109,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
         try {
             val nbt = CompoundTag()
 
-            if (item.hasCustomBlockData()) {
+            if (item!!.hasCustomBlockData()) {
                 val customData: Map<String, Tag<*>> = item.customBlockData!!.getTags()
                 for ((key, value) in customData) {
                     nbt.put(key, value)

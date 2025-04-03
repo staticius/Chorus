@@ -18,9 +18,9 @@ class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState = Compa
         get() = "Trapped Chest"
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

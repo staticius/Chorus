@@ -22,9 +22,9 @@ class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntity
         get() = "Decorated Pot"
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -36,7 +36,7 @@ class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntity
         nbt.putString("id", BlockEntityID.DECORATED_POT)
         nbt.putByte("isMovable", 1)
 
-        if (item.namedTag != null) {
+        if (item!!.namedTag != null) {
             val customData = item.namedTag!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)

@@ -15,9 +15,9 @@ open class BlockCandle @JvmOverloads constructor(blockstate: BlockState = Compan
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -25,7 +25,7 @@ open class BlockCandle @JvmOverloads constructor(blockstate: BlockState = Compan
         player: Player?
     ): Boolean {
         var target1 = target
-        if (target1.id == BlockID.CAKE && target1.isDefaultState) { //必须是完整的蛋糕才能插蜡烛
+        if (target1!!.id == BlockID.CAKE && target1.isDefaultState) { //必须是完整的蛋糕才能插蜡烛
             target1.level.setBlock(target1.position, toCakeForm(), direct = true, update = true)
             return true
         }

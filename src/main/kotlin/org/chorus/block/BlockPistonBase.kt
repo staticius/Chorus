@@ -1,6 +1,5 @@
 package org.chorus.block
 
-import com.google.common.collect.Lists
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
@@ -47,9 +46,9 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
         get() = 1
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

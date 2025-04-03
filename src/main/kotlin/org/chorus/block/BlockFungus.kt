@@ -10,9 +10,9 @@ import org.chorus.math.BlockFace
 abstract class BlockFungus(blockState: BlockState) : BlockFlowable(blockState), FlowerPotBlock,
     Natural {
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

@@ -88,9 +88,9 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
      * @return `true` if the block was properly place. The implementation is responsible for reverting any partial change.
      */
     open fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

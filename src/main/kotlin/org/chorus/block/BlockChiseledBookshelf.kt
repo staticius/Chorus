@@ -30,9 +30,9 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockState: BlockState = 
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -41,7 +41,7 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockState: BlockState = 
     ): Boolean {
         blockFace = player?.getHorizontalFacing()?.getOpposite() ?: BlockFace.SOUTH
         val nbt = CompoundTag()
-        if (item.hasCustomName()) {
+        if (item!!.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
         if (item.hasCustomBlockData()) {

@@ -134,9 +134,9 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState = Compani
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -145,7 +145,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState = Compani
     ): Boolean {
         var target1 = target
         var face1 = face
-        if ((!(target1.isSolid || target1 is BlockWallBase) && target1 != block || target1 is BlockFrame || (block.isSolid && !block.canBeReplaced()))) {
+        if ((!(target1!!.isSolid || target1 is BlockWallBase) && target1 != block || target1 is BlockFrame || (block.isSolid && !block.canBeReplaced()))) {
             return false
         }
 
@@ -158,7 +158,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState = Compani
         }
 
         blockFace = face1
-        isStoringMap = item.id == ItemID.FILLED_MAP
+        isStoringMap = item!!.id == ItemID.FILLED_MAP
         val nbt = CompoundTag()
             .putByte("ItemRotation", 0)
             .putFloat("ItemDropChance", 1.0f)

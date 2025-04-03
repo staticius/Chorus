@@ -70,9 +70,9 @@ abstract class BlockCoralFan(blockstate: BlockState) : BlockFlowable(blockstate)
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -95,7 +95,7 @@ abstract class BlockCoralFan(blockstate: BlockState) : BlockFlowable(blockstate)
             level.setBlock(this.position, 1, BlockFlowingWater(), direct = true, update = false)
         }
 
-        if (!target.isSolid || target.id == BlockID.MAGMA || target.id == BlockID.SOUL_SAND) {
+        if (!target!!.isSolid || target.id == BlockID.MAGMA || target.id == BlockID.SOUL_SAND) {
             return false
         }
 

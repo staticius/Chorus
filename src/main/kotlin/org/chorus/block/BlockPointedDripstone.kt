@@ -109,9 +109,9 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -247,7 +247,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
         level.setBlock(x, y, z, this, true, true)
     }
 
-    protected fun setBlockThicknessStateAt(x: Int, y: Int, z: Int, hanging: Boolean, thickness: DripstoneThickness?) {
+    protected fun setBlockThicknessStateAt(x: Int, y: Int, z: Int, hanging: Boolean, thickness: DripstoneThickness) {
         this.setPropertyValue(CommonBlockProperties.DRIPSTONE_THICKNESS, thickness)
         this.setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.HANGING, hanging)
         val blockState = blockState

@@ -36,9 +36,9 @@ abstract class BlockConcretePowder(blockState: BlockState) : BlockFallable(block
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         b: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

@@ -70,9 +70,9 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
         }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

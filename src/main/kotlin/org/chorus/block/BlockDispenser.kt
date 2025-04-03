@@ -96,9 +96,9 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
     }
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
@@ -123,7 +123,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
 
         val nbt = CompoundTag().putList("Items", ListTag<Tag<*>>())
 
-        if (item.hasCustomName()) {
+        if (item!!.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
 

@@ -23,9 +23,9 @@ abstract class BlockGlazedTerracotta(blockState: BlockState) : BlockSolid(blockS
         get() = ItemTool.TIER_WOODEN
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

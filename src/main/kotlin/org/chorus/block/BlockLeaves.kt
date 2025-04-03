@@ -38,9 +38,9 @@ abstract class BlockLeaves(blockState: BlockState) : BlockTransparent(blockState
         get() = 60
 
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,

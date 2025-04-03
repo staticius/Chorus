@@ -96,9 +96,9 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
 
     //Information from http://minecraft.wiki/w/Rail
     override fun place(
-        item: Item,
+        item: Item?,
         block: Block,
-        target: Block,
+        target: Block?,
         face: BlockFace,
         fx: Double,
         fy: Double,
