@@ -1,6 +1,7 @@
 package org.chorus.blockentity
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.Block
 import org.chorus.block.BlockFlowable
 import org.chorus.block.BlockID
@@ -87,7 +88,7 @@ class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
             this.delay = 0
             var nearbyEntities = 0
             var playerInRange = false
-            for (entity in level.entities) {
+            for (entity in level.entities.values) {
                 if (!playerInRange && entity is Player && !entity.isSpectator) {
                     if (entity.position.distance(this.position) <= this.requiredPlayerRange) {
                         playerInRange = true
@@ -126,7 +127,7 @@ class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
                     val ent = Entity.createEntity(entityIdentifier!!, pos)
                     if (ent != null) {
                         val ev = CreatureSpawnEvent(
-                            ent.networkId,
+                            ent.getNetworkID(),
                             pos,
                             CompoundTag(),
                             CreatureSpawnEvent.SpawnReason.SPAWNER
@@ -169,10 +170,10 @@ class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
         )
         namedTag.putShort(TAG_SPAWN_COUNT, spawnCount.toInt())
         if (this.spawnData != null) {
-            namedTag.putCompound(TAG_SPAWN_DATA, this.spawnData)
+            namedTag.putCompound(TAG_SPAWN_DATA, this.spawnData!!)
         }
         if (this.spawnPotentials != null) {
-            namedTag.putList(TAG_SPAWN_POTENTIALS, this.spawnPotentials)
+            namedTag.putList(TAG_SPAWN_POTENTIALS, this.spawnPotentials!!)
         }
         namedTag.putShort(TAG_SPAWN_RANGE, spawnRange.toInt())
     }
@@ -182,11 +183,11 @@ class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
             position.floorX,
             position.floorY,
             position.floorZ
-        ) == Block.MOB_SPAWNER
+        ) == BlockID.MOB_SPAWNER
 
     override val spawnCompound: CompoundTag
         get() = super.spawnCompound
-            .putString(TAG_ENTITY_IDENTIFIER, this.entityIdentifier)
+            .putString(TAG_ENTITY_IDENTIFIER, this.entityIdentifier!!)
 
     var spawnEntityType: String?
         get() = this.entityIdentifier

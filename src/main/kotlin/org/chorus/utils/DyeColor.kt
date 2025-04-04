@@ -9,9 +9,9 @@ enum class DyeColor(
      * Uses black_dye instead of ink_sac, white_dye instead of bone_meal, and so on.
      */
     val itemDyeMeta: Int, val colorName: String,
-    val dyeName: String, blockColor: BlockColor?,
-    @JvmField val leatherColor: BlockColor? = blockColor,
-    val signColor: BlockColor? = blockColor
+    val dyeName: String, blockColor: BlockColor,
+    @JvmField val leatherColor: BlockColor = blockColor,
+    val signColor: BlockColor = blockColor
 ) {
     BLACK(
         0,
@@ -171,15 +171,15 @@ enum class DyeColor(
     val dyeData: Int = dyeColorMeta
 
     val woolData: Int = woolColorMeta
-    val color: BlockColor? = blockColor
+    val color: BlockColor = blockColor
 
 
     constructor(
         dyeColorMeta: Int,
         woolColorMeta: Int,
         colorName: String,
-        blockColor: BlockColor?,
-        signColor: BlockColor?
+        blockColor: BlockColor,
+        signColor: BlockColor
     ) : this(
         dyeColorMeta, woolColorMeta, woolColorMeta, colorName,
         "$colorName Dye", blockColor, signColor, blockColor
@@ -190,7 +190,7 @@ enum class DyeColor(
         woolColorMeta: Int,
         itemDyeMeta: Int,
         colorName: String,
-        blockColor: BlockColor?
+        blockColor: BlockColor
     ) : this(
         dyeColorMeta, woolColorMeta, itemDyeMeta, colorName,
         "$colorName Dye", blockColor, blockColor, blockColor
@@ -201,9 +201,9 @@ enum class DyeColor(
         woolColorMeta: Int,
         itemDyeMeta: Int,
         colorName: String,
-        blockColor: BlockColor?,
-        leatherColor: BlockColor?,
-        signColor: BlockColor?
+        blockColor: BlockColor,
+        leatherColor: BlockColor,
+        signColor: BlockColor
     ) : this(
         dyeColorMeta, woolColorMeta, itemDyeMeta, colorName,
         "$colorName Dye", blockColor, leatherColor, signColor

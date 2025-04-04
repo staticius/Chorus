@@ -28,7 +28,7 @@ abstract class BlockEntitySpawnableContainer(chunk: IChunk, nbt: CompoundTag) : 
         val list = namedTag.getList("Items") as ListTag<CompoundTag>
         for (compound in list.all) {
             val item = NBTIO.getItemHelper(compound)
-            inventory.setItemInternal(compound.getByte("Slot").toInt(), item)
+            (inventory as ContainerInventory).setItemInternal(compound.getByte("Slot").toInt(), item)
         }
     }
 

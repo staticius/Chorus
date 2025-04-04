@@ -10,7 +10,7 @@ open class BlockWeatheredCutCopperSlab : BlockCutCopperSlab {
         BlockID.WEATHERED_DOUBLE_CUT_COPPER_SLAB
     )
 
-    protected constructor(blockstate: BlockState, doubleSlab: String?) : super(blockstate, doubleSlab)
+    protected constructor(blockstate: BlockState, doubleSlab: String) : super(blockstate, doubleSlab)
 
     override val oxidizationLevel
         get(): OxidizationLevel {

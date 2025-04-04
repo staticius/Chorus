@@ -1,6 +1,7 @@
 package org.chorus.blockentity
 
 import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
@@ -16,7 +17,7 @@ class BlockEntityMusic(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, nbt
     }
 
     override val isBlockEntityValid: Boolean
-        get() = this.block.id === Block.NOTEBLOCK
+        get() = this.block.id === BlockID.NOTEBLOCK
 
     fun changePitch() {
         namedTag.putByte("note", (namedTag.getByte("note") + 1) % 25)

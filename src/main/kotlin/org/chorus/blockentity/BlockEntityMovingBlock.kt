@@ -87,7 +87,7 @@ class BlockEntityMovingBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
         }
 
     fun moveCollidedEntities(piston: BlockEntityPistonArm, moveDirection: BlockFace) {
-        var bb: AxisAlignedBB? = movingBlock!!.boundingBox ?: return
+        var bb = movingBlock!!.boundingBox ?: return
         bb = bb.getOffsetBoundingBox(
             position.x + (piston.progress * moveDirection.xOffset) - moveDirection.xOffset,
             position.y + (piston.progress * moveDirection.yOffset) - moveDirection.yOffset,
@@ -98,4 +98,6 @@ class BlockEntityMovingBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
 
     override val isBlockEntityValid: Boolean
         get() = this.block.id === BlockID.MOVING_BLOCK
+
+    companion object : Loggable
 }

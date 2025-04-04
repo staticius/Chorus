@@ -1,5 +1,6 @@
 package org.chorus.blockentity
 
+import org.chorus.Server
 import org.chorus.block.BlockID
 import org.chorus.block.BlockSculkSensor
 import org.chorus.level.format.IChunk
@@ -10,9 +11,6 @@ import org.chorus.nbt.tag.CompoundTag
 import kotlin.math.floor
 import kotlin.math.max
 
-/**
- * @author Kevims KCodeYT
- */
 class BlockEntitySculkSensor(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, nbt),
     VibrationListener {
     var lastActiveTime: Int = level.tick
@@ -49,13 +47,13 @@ class BlockEntitySculkSensor(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chun
     override val isBlockEntityValid: Boolean
         get() = levelBlock.id === BlockID.SCULK_SENSOR
 
-    override fun getListenerVector(): Vector3 {
-        return position.floor().add(0.5, 0.5, 0.5)
-    }
+    override val listenerVector
+        get(): Vector3 {
+            return position.floor().add(0.5, 0.5, 0.5)
+        }
 
     override fun onVibrationOccur(event: VibrationEvent): Boolean {
-        if (this.isBlockEntityValid && Server.instance.settings.levelSettings()
-                .enableRedstone() && (level.getBlock(event.source) !is BlockSculkSensor)
+        if (this.isBlockEntityValid && Server.instance.settings.levelSettings.enableRedstone && (level.getBlock(event.source) !is BlockSculkSensor)
         ) {
             val canBeActive = (level.tick - lastActiveTime) > 40 && !waitForVibration
             if (canBeActive) waitForVibration = true
@@ -66,8 +64,7 @@ class BlockEntitySculkSensor(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chun
     }
 
     override fun onVibrationArrive(event: VibrationEvent) {
-        if (this.level != null && this.isBlockEntityValid && Server.instance.settings.levelSettings()
-                .enableRedstone()
+        if (this.level != null && this.isBlockEntityValid && Server.instance.settings.levelSettings.enableRedstone
         ) {
             this.lastVibrationEvent = event
             this.updateLastActiveTime()
@@ -82,9 +79,10 @@ class BlockEntitySculkSensor(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chun
         }
     }
 
-    override fun getListenRange(): Double {
-        return 8.0
-    }
+    override val listenRange
+        get(): Double {
+            return 8.0
+        }
 
     protected fun updateLastActiveTime() {
         this.lastActiveTime = level.tick

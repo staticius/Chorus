@@ -1,6 +1,5 @@
 package org.chorus.blockentity
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
@@ -23,7 +22,7 @@ import kotlin.math.min
 
 
 class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
-    var facing: BlockFace? = null
+    lateinit var facing: BlockFace
     var extending: Boolean = false
     var sticky: Boolean = false
 
@@ -32,7 +31,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     var newState: Byte = 1
 
-    var attachedBlocks: MutableList<BlockVector3>? = null
+    lateinit var attachedBlocks: MutableList<BlockVector3>
 
     @JvmField
     var powered: Boolean = false
@@ -47,16 +46,16 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             return
         }
 
-        val pushDirection = if (this.extending) facing else facing!!.opposite
+        val pushDirection = if (this.extending) facing!! else facing!!.getOpposite()
         for (pos in attachedBlocks!!) {
             val blockEntity = level.getBlockEntity(pos.getSide(pushDirection))
             if (blockEntity is BlockEntityMovingBlock) blockEntity.moveCollidedEntities(
                 this,
-                pushDirection!!
+                pushDirection
             )
         }
         val bb = SimpleAxisAlignedBB(0.0, 0.0, 0.0, 1.0, 1.0, 1.0).getOffsetBoundingBox(
-            position.x + (pushDirection!!.xOffset * progress),
+            position.x + (pushDirection.xOffset * progress),
             position.y + (pushDirection.yOffset * progress),
             position.z + (pushDirection.zOffset * progress) //带动站在移动方块上的实体
         ).addCoord(0.0, if (pushDirection.axis.isHorizontal) 0.25 else 0.0, 0.0)
@@ -93,7 +92,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
      * @param extending      A boolean indicating whether is extending
      * @param attachedBlocks A list of BlockVector3 representing the blocks attached to the moving block.
      */
-    fun preMove(extending: Boolean, attachedBlocks: MutableList<BlockVector3>?) {
+    fun preMove(extending: Boolean, attachedBlocks: MutableList<BlockVector3>) {
         this.finished = false // Initialize movement as unfinished
         this.extending = extending // Set the extending status
         this.progress = (if (extending) 0 else 1).toFloat()
@@ -138,7 +137,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             //结束推动
             this.newState = (if (extending) 2 else 0).toByte()
             this.state = this.newState
-            val pushDirection = if (this.extending) facing else facing!!.opposite
+            val pushDirection = if (this.extending) facing!! else facing!!.getOpposite()
             val redstoneUpdateList = ArrayList<BlockVector3>()
             for (pos in attachedBlocks!!) {
                 redstoneUpdateList.add(pos)
@@ -212,7 +211,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             if (block is Faceable) this.facing = block.blockFace
             else this.facing = BlockFace.NORTH
         }
-        attachedBlocks = ObjectArrayList()
+        attachedBlocks = mutableListOf<BlockVector3>()
         if (namedTag.contains("AttachedBlocks")) {
             val blocks = namedTag.getList("AttachedBlocks", IntTag::class.java)
             if (blocks != null && blocks.size() > 0) {
@@ -228,7 +227,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
                     i += 3
                 }
             }
-        } else namedTag.putList("AttachedBlocks", ListTag())
+        } else namedTag.putList("AttachedBlocks", ListTag<Tag<*>>())
     }
 
     override fun saveNBT() {

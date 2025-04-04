@@ -144,7 +144,7 @@ class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
             .putByte(IStructBlock.Companion.TAG_ANIMATION_MODE, animationMode!!.ordinal)
             .putFloat(IStructBlock.Companion.TAG_ANIMATION_SECONDS, this.animationSeconds)
             .putInt(IStructBlock.Companion.TAG_DATA, data!!.ordinal)
-            .putString(IStructBlock.Companion.TAG_DATA_FIELD, this.dataField)
+            .putString(IStructBlock.Companion.TAG_DATA_FIELD, this.dataField!!)
             .putBoolean(IStructBlock.Companion.TAG_IGNORE_ENTITIES, ignoreEntities)
             .putBoolean(IStructBlock.Companion.TAG_INCLUDE_PLAYERS, includePlayers)
             .putFloat(IStructBlock.Companion.TAG_INTEGRITY, integrity)
@@ -155,7 +155,7 @@ class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
             .putByte(IStructBlock.Companion.TAG_ROTATION, rotation!!.ordinal)
             .putLong(IStructBlock.Companion.TAG_SEED, seed)
             .putBoolean(IStructBlock.Companion.TAG_SHOW_BOUNDING_BOX, showBoundingBox)
-            .putString(IStructBlock.Companion.TAG_STRUCTURE_NAME, structureName)
+            .putString(IStructBlock.Companion.TAG_STRUCTURE_NAME, structureName!!)
             .putInt(IStructBlock.Companion.TAG_X_STRUCTURE_OFFSET, offset!!.x)
             .putInt(IStructBlock.Companion.TAG_Y_STRUCTURE_OFFSET, offset!!.y)
             .putInt(IStructBlock.Companion.TAG_Z_STRUCTURE_OFFSET, offset!!.z)
@@ -200,7 +200,7 @@ class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
     override var name: String?
         get() = if (this.hasName()) namedTag.getString(IStructBlock.Companion.TAG_CUSTOM_NAME) else BlockEntityID.Companion.STRUCTURE_BLOCK
         set(name) {
-            if (Strings.isNullOrEmpty(name)) {
+            if (name.isNullOrEmpty()) {
                 namedTag.remove(IStructBlock.Companion.TAG_CUSTOM_NAME)
             } else {
                 namedTag.putString(IStructBlock.Companion.TAG_CUSTOM_NAME, name)
@@ -211,9 +211,10 @@ class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
         return namedTag.contains(IStructBlock.Companion.TAG_CUSTOM_NAME)
     }
 
-    override fun getInventory(): Inventory {
-        return structBlockInventory
-    }
+    override val inventory
+        get(): Inventory {
+            return structBlockInventory
+        }
 
     override fun close() {
         if (!closed) {
@@ -230,16 +231,16 @@ class BlockEntityStructBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
         this.animationSeconds = editorData.settings.animationSeconds
         this.data = editorData.type
         this.dataField = editorData.dataField
-        this.ignoreEntities = editorData.settings.isIgnoringEntities
-        this.includePlayers = editorData.isIncludingPlayers
+        this.ignoreEntities = editorData.settings.ignoringEntities
+        this.includePlayers = editorData.includingPlayers
         this.integrity = editorData.settings.integrityValue
         this.isPowered = packet.powered
         this.mirror = editorData.settings.mirror
         this.redstoneSaveMode = editorData.redstoneSaveMode
-        this.removeBlocks = editorData.settings.isIgnoringBlocks
+        this.removeBlocks = editorData.settings.ignoringBlocks
         this.rotation = editorData.settings.rotation
         this.seed = editorData.settings.integritySeed.toLong()
-        this.showBoundingBox = editorData.isBoundingBoxVisible
+        this.showBoundingBox = editorData.boundingBoxVisible
         this.structureName = editorData.name
         this.offset = editorData.settings.offset
         this.size = editorData.settings.size

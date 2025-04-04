@@ -6,16 +6,19 @@ import org.chorus.block.BlockStandingSign
 import org.chorus.event.block.SignChangeEvent
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
+import org.chorus.utils.BlockColor
+import org.chorus.utils.DyeColor
+import org.chorus.utils.StringUtils
+import org.chorus.utils.TextFormat
 import kotlin.math.min
 
 
 open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
-    private var frontText: Array<String?>?
-    private var backText: Array<String?>?
+    private lateinit var frontText: Array<String?>
+    private lateinit var backText: Array<String?>
 
     init {
-        movable = true
+        isMovable = true
     }
 
     override fun loadNBT() {
@@ -25,7 +28,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         if (namedTag.containsCompound(TAG_FRONT_TEXT)) {
             getLines(true)
         } else {
-            frontText!![0] = ""
+            frontText[0] = ""
             namedTag.putCompound(
                 TAG_FRONT_TEXT,
                 CompoundTag().putString(TAG_TEXT_BLOB, java.lang.String.join("\n", *arrayOf("")))
@@ -34,7 +37,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         if (namedTag.containsCompound(TAG_BACK_TEXT)) {
             getLines(false)
         } else {
-            backText!![0] = ""
+            backText[0] = ""
             namedTag.putCompound(
                 TAG_BACK_TEXT,
                 CompoundTag().putString(TAG_TEXT_BLOB, java.lang.String.join("\n", *arrayOf("")))
@@ -43,10 +46,10 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
         // Check old text to sanitize
         if (frontText != null) {
-            sanitizeText(frontText!!)
+            sanitizeText(frontText)
         }
         if (backText != null) {
-            sanitizeText(backText!!)
+            sanitizeText(backText)
         }
         if (!namedTag.getCompound(TAG_FRONT_TEXT).containsInt(TAG_TEXT_COLOR)) {
             this.setColor(true, DyeColor.BLACK.signColor)
@@ -112,14 +115,14 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
     fun setText(front: Boolean, vararg lines: String?): Boolean {
         if (front) {
             for (i in 0..3) {
-                if (i < lines.size) frontText!![i] = lines[i]
-                else frontText!![i] = ""
+                if (i < lines.size) frontText[i] = lines[i]
+                else frontText[i] = ""
             }
             namedTag.getCompound(TAG_FRONT_TEXT).putString(TAG_TEXT_BLOB, StringUtils.joinNotNull("\n", *lines))
         } else {
             for (i in 0..3) {
-                if (i < lines.size) backText!![i] = lines[i]
-                else backText!![i] = ""
+                if (i < lines.size) backText[i] = lines[i]
+                else backText[i] = ""
             }
             namedTag.getCompound(TAG_BACK_TEXT).putString(TAG_TEXT_BLOB, StringUtils.joinNotNull("\n", *lines))
         }
@@ -133,7 +136,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
     val text: Array<String?>?
         get() = getText(true)
 
-    fun getText(front: Boolean): Array<String?>? {
+    fun getText(front: Boolean): Array<String?> {
         return if (front) frontText else backText
     }
 
@@ -142,9 +145,9 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     fun isEmpty(front: Boolean): Boolean {
         return if (front) {
-            (frontText!![0] == null || frontText!![0]!!.isEmpty()) && frontText!![1] == null && frontText!![2] == null && frontText!![3] == null
+            (frontText[0] == null || frontText[0]!!.isEmpty()) && frontText[1] == null && frontText[2] == null && frontText[3] == null
         } else {
-            (backText!![0] == null || backText!![0]!!.isEmpty()) && backText!![1] == null && backText!![2] == null && backText!![3] == null
+            (backText[0] == null || backText[0]!!.isEmpty()) && backText[1] == null && backText[2] == null && backText[3] == null
         }
     }
 
@@ -227,7 +230,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         }
 
         val lines = arrayOfNulls<String>(4)
-        val splitLines = if (player.isOpenSignFront)
+        val splitLines = if (player.isOpenSignFront!!)
             nbt.getCompound(TAG_FRONT_TEXT).getString(TAG_TEXT_BLOB).split("\n".toRegex(), limit = 4)
                 .toTypedArray() else
             nbt.getCompound(TAG_BACK_TEXT).getString(TAG_TEXT_BLOB).split("\n".toRegex(), limit = 4).toTypedArray()
@@ -237,20 +240,20 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
         val signChangeEvent = SignChangeEvent(this.block, player, lines)
 
-        if (!namedTag.contains(TAG_LOCKED_FOR_EDITING_BY) || player.runtimeId != this.editorEntityRuntimeId) {
+        if (!namedTag.contains(TAG_LOCKED_FOR_EDITING_BY) || player.getRuntimeID() != this.editorEntityRuntimeId) {
             signChangeEvent.setCancelled()
         }
 
         if (player.removeFormat) {
             for (i in lines.indices) {
-                lines[i] = TextFormat.clean(lines[i])
+                lines[i] = TextFormat.clean(lines[i]!!)
             }
         }
 
         Server.instance.pluginManager.callEvent(signChangeEvent)
 
         if (!signChangeEvent.isCancelled && player.isOpenSignFront != null) {
-            this.setText(player.isOpenSignFront, *signChangeEvent.lines)
+            this.setText(player.isOpenSignFront!!, *signChangeEvent.lines)
             this.editorEntityRuntimeId = null
             player.isOpenSignFront = null
             return true
@@ -290,23 +293,23 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             )
             .putBoolean(TAG_LEGACY_BUG_RESOLVE, true)
             .putByte(TAG_WAXED, 0)
-            .putLong(TAG_LOCKED_FOR_EDITING_BY, editorEntityRuntimeId)
+            .putLong(TAG_LOCKED_FOR_EDITING_BY, editorEntityRuntimeId!!)
 
     //读取指定面的NBT到Sign对象字段
     private fun getLines(front: Boolean) {
         if (front) {
             val lines = namedTag.getCompound(TAG_FRONT_TEXT).getString(TAG_TEXT_BLOB).split("\n".toRegex(), limit = 4)
                 .toTypedArray()
-            for (i in frontText!!.indices) {
-                if (i < lines.size) frontText!![i] = lines[i]
-                else frontText!![i] = ""
+            for (i in frontText.indices) {
+                if (i < lines.size) frontText[i] = lines[i]
+                else frontText[i] = ""
             }
         } else {
             val lines = namedTag.getCompound(TAG_BACK_TEXT).getString(TAG_TEXT_BLOB).split("\n".toRegex(), limit = 4)
                 .toTypedArray()
-            for (i in backText!!.indices) {
-                if (i < lines.size) backText!![i] = lines[i]
-                else backText!![i] = ""
+            for (i in backText.indices) {
+                if (i < lines.size) backText[i] = lines[i]
+                else backText[i] = ""
             }
         }
     }
@@ -315,9 +318,9 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
     private fun updateLegacyCompoundTag() {
         if (namedTag.contains(TAG_TEXT_BLOB)) {
             val lines = namedTag.getString(TAG_TEXT_BLOB).split("\n".toRegex(), limit = 4).toTypedArray()
-            for (i in frontText!!.indices) {
-                if (i < lines.size) frontText!![i] = lines[i]
-                else frontText!![i] = ""
+            for (i in frontText.indices) {
+                if (i < lines.size) frontText[i] = lines[i]
+                else frontText[i] = ""
             }
             namedTag.getCompound(TAG_FRONT_TEXT).putString(TAG_TEXT_BLOB, StringUtils.joinNotNull("\n", *frontText))
             namedTag.remove(TAG_TEXT_BLOB)
@@ -327,7 +330,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
                 val key = TAG_TEXT_BLOB + i
                 if (namedTag.contains(key)) {
                     val line = namedTag.getString(key)
-                    frontText!![i - 1] = line
+                    frontText[i - 1] = line
                     namedTag.remove(key)
                     count++
                 }

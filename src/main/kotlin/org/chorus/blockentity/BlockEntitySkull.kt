@@ -4,10 +4,6 @@ import org.chorus.block.BlockHead
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author Snake1999
- * @since 2016/2/3
- */
 class BlockEntitySkull(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     private var mouthMoving = false
 
@@ -92,8 +88,8 @@ class BlockEntitySkull(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(c
 
     override val spawnCompound: CompoundTag
         get() = super.spawnCompound
-            .put("SkullType", namedTag["SkullType"])
-            .put("Rot", namedTag["Rot"])
+            .put("SkullType", namedTag["SkullType"]!!)
+            .put("Rot", namedTag["Rot"]!!)
             .putBoolean("MouthMoving", this.mouthMoving)
             .putInt("MouthTickCount", mouthTickCount)
 }

@@ -8,7 +8,7 @@ import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 
 class BlockEntityGlowItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntityItemFrame(chunk, nbt) {
-    override var name: String
+    override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Glow Item Frame"
         set(name) {
             super.name = name

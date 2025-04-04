@@ -1,6 +1,7 @@
 package org.chorus.blockentity
 
 import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.item.Item
 import org.chorus.item.ItemMusicDisc
 import org.chorus.level.format.IChunk
@@ -12,7 +13,7 @@ import java.util.*
 
 
 class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
-    private var recordItem: Item? = null
+    private var recordItem: Item = Item.AIR
 
     override fun loadNBT() {
         super.loadNBT()
@@ -25,7 +26,7 @@ class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
 
     override val isBlockEntityValid: Boolean
         get() = level
-            .getBlockIdAt(floorX, floorY, floorZ) === Block.JUKEBOX
+            .getBlockIdAt(floorX, floorY, floorZ) === BlockID.JUKEBOX
 
     fun setRecordItem(recordItem: Item) {
         Objects.requireNonNull(recordItem, "Record item cannot be null")
@@ -39,8 +40,9 @@ class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
 
     fun play() {
         if (recordItem is ItemMusicDisc) {
+            val disc = recordItem as ItemMusicDisc
             val packet = PlaySoundPacket()
-            packet.name = recordItem.soundId
+            packet.name = disc.soundId
             packet.volume = 1f
             packet.pitch = 1f
             packet.x = position.floorX
@@ -53,11 +55,12 @@ class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
         }
     }
 
-    //TODO: Transfer the stop sound to the new sound method
+    // TODO: Transfer the stop sound to the new sound method
     fun stop() {
         if (recordItem is ItemMusicDisc) {
+            val disc = recordItem as ItemMusicDisc
             val packet = StopSoundPacket()
-            packet.name = recordItem.soundId
+            packet.name = disc.soundId
             packet.stopAll = false
             level.addChunkPacket(
                 position.floorX shr 4,

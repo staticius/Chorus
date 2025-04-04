@@ -15,10 +15,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventPacket
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author Pub4Game
- * @since 03.07.2016
- */
 open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     override fun loadNBT() {
         super.loadNBT()

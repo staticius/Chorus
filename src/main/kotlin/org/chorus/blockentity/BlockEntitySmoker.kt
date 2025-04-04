@@ -17,10 +17,10 @@ class BlockEntitySmoker(chunk: IChunk, nbt: CompoundTag) : BlockEntityFurnace(ch
         get() = BlockEntityID.Companion.SMOKER
 
     override val idleBlockId: String
-        get() = Block.SMOKER
+        get() = BlockID.SMOKER
 
     override val burningBlockId: String
-        get() = Block.LIT_SMOKER
+        get() = BlockID.LIT_SMOKER
 
     override fun createInventory(): SmeltingInventory {
         return SmokerInventory(this)

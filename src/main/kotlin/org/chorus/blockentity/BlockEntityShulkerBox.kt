@@ -9,16 +9,13 @@ import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
 
-/**
- * @author PetteriM1
- */
 class BlockEntityShulkerBox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
     var realInventory: ShulkerBoxInventory? = null
         protected set
 
     init {
-        movable = true
+        isMovable = true
     }
 
     override fun loadNBT() {
@@ -103,9 +100,10 @@ class BlockEntityShulkerBox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
         }
     }
 
-    override fun getInventory(): BaseInventory {
-        return realInventory!!
-    }
+    override val inventory
+        get(): BaseInventory {
+            return realInventory!!
+        }
 
     override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Shulker Box"
@@ -138,7 +136,7 @@ class BlockEntityShulkerBox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
                     .putByte("facing", namedTag.getByte("facing").toInt())
 
             if (this.hasName()) {
-                c.put("CustomName", namedTag["CustomName"])
+                c.put("CustomName", namedTag["CustomName"]!!)
             }
 
             return c

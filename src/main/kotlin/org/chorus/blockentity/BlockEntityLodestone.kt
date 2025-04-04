@@ -5,18 +5,15 @@ import org.chorus.Server
 import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
+import org.chorus.utils.Loggable
 import java.io.IOException
 import java.util.*
-
-/**
- * @author joserobjr
- */
 
 class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     override fun loadNBT() {
         super.loadNBT()
         if (namedTag.containsInt("trackingHandler")) {
-            namedTag.put("trackingHandle", namedTag.removeAndGet("trackingHandler"))
+            namedTag.put("trackingHandle", namedTag.removeAndGet("trackingHandler")!!)
         }
     }
 
@@ -31,7 +28,7 @@ class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
     @Throws(IOException::class)
     fun requestTrackingHandler(): Int {
         val opt = trackingHandler
-        val positionTrackingService = Server.instance.positionTrackingService
+        val positionTrackingService = Server.instance.getPositionTrackingService()
         val floor = this.clone()
         if (opt.isPresent) {
             val handler = opt.asInt
@@ -51,7 +48,7 @@ class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     override fun onBreak(isSilkTouch: Boolean) {
         val handlers: IntList
-        val positionTrackingService = Server.instance.positionTrackingService
+        val positionTrackingService = Server.instance.getPositionTrackingService()
         try {
             handlers = positionTrackingService.findTrackingHandlers(this)
             if (handlers.isEmpty()) {
@@ -75,4 +72,6 @@ class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             }
         }
     }
+
+    companion object : Loggable
 }

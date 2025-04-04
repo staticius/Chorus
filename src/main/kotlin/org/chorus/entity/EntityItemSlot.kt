@@ -25,14 +25,14 @@ class EntityItemSlot {
                 TAG_CAN_DESTROY,
                 StringTag::class.java
             )
-            this.canDestroy = canDestroy.getAll().stream().map(Function { obj: StringTag -> obj.parseValue() }).toList()
+            this.canDestroy = canDestroy.all.stream().map(Function { obj: StringTag -> obj.parseValue() }).toList()
         }
         if (nbt.contains(TAG_CAN_PLACE_ON)) {
             val canPlaceOn: ListTag<StringTag> = nbt.getList(
                 TAG_CAN_PLACE_ON,
                 StringTag::class.java
             )
-            this.canPlaceOn = canPlaceOn.getAll().stream().map(Function { obj: StringTag -> obj.parseValue() }).toList()
+            this.canPlaceOn = canPlaceOn.all.stream().map(Function { obj: StringTag -> obj.parseValue() }).toList()
         }
         this.count = nbt.getByte(TAG_COUNT)
         this.damage = nbt.getShort(TAG_DAMAGE)
@@ -45,7 +45,7 @@ class EntityItemSlot {
         val nbt: CompoundTag = CompoundTag()
         nbt.putByte(TAG_SLOT, slot.toInt())
         if (this.block != null) {
-            nbt.putCompound(TAG_BLOCK, this.block)
+            nbt.putCompound(TAG_BLOCK, this.block!!)
         }
         if (this.canDestroy != null) {
             val canDestroy: List<StringTag> = canDestroy!!.stream().map(
@@ -61,7 +61,7 @@ class EntityItemSlot {
         nbt.putShort(TAG_DAMAGE, damage.toInt())
         nbt.putString(TAG_NAME, this.name)
         if (this.tag != null) {
-            nbt.putCompound(TAG_TAG, this.tag)
+            nbt.putCompound(TAG_TAG, this.tag!!)
         }
         nbt.putBoolean(TAG_WAS_PICKED_UP, this.wasPickedUp)
         return nbt
