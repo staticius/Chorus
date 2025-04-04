@@ -9,14 +9,12 @@ import org.chorus.level.*
  *
  *
  * This interface represents the monster entity of the undead class
- *
- * @author MagicDroidX (Nukkit Project)
  */
 interface EntitySmite {
     fun burn(entity: Entity) {
-        if (entity.level!!.dimension == Level.DIMENSION_OVERWORLD && entity.level!!.isDaytime() && !entity.level!!.isRaining() && (!entity.hasEffect(
+        if (entity.level!!.dimension == Level.DIMENSION_OVERWORLD && entity.level!!.isDaytime && !entity.level!!.isRaining && (!entity.hasEffect(
                 EffectType.FIRE_RESISTANCE
-            ) || (entity is EntityInventoryHolder && entity.getHelmet().isNull()))
+            ) || (entity is EntityInventoryHolder && entity.helmet.isNothing))
             && !entity.isInsideOfWater() && !entity.isUnderBlock() && !entity.isOnFire()
         ) {
             entity.setOnFire(1)

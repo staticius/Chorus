@@ -130,7 +130,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(bloc
             return false
         }
 
-        player.addWindow(box.getInventory())
+        player.addWindow(box.inventory)
         return true
     }
 
@@ -142,7 +142,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(bloc
         get() {
             val be = blockEntity ?: return 0
 
-            return calculateRedstone(be.getInventory())
+            return calculateRedstone(be.inventory)
         }
 
     override fun breaksWhenMoved(): Boolean {

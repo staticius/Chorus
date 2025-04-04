@@ -37,7 +37,7 @@ class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState = Com
             if (player.isCreative && player.isOp) {
                 val tile = this.getOrCreateBlockEntity()
                 tile.spawnTo(player)
-                player.addWindow(tile.getInventory())
+                player.addWindow(tile.inventory)
             }
         }
         return true

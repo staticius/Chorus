@@ -23,7 +23,7 @@ interface EntityVariant : EntityComponent {
      * 随机一个变种值
      */
     fun randomVariant(): Int {
-        return getAllVariant().get(Utils.rand(0, getAllVariant().length - 1))
+        return getAllVariant()[Utils.rand(0, getAllVariant().size - 1)]
     }
 
     /**

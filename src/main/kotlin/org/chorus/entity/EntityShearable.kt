@@ -18,7 +18,8 @@ interface EntityShearable : EntityComponent {
      * @return 此次操作是否有效。若有效，将会减少物品耐久 true if shearing succeeded.
      */
     fun shear(): Boolean {
-        if (this.isSheared() || (asEntity() is EntityAgeable && age.isBaby())) {
+        val entity = asEntity()
+        if (this.isSheared() || (entity is EntityAgeable && entity.isBaby())) {
             return false
         }
         this.setIsSheared(true)
