@@ -1,12 +1,17 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.OxidizationLevel
 
 open class BlockWeatheredCutCopperStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCutCopperStairs(blockstate) {
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.WEATHERED
-    }
+    override val oxidizationLevel
+        get(): OxidizationLevel {
+            return OxidizationLevel.WEATHERED
+        }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(

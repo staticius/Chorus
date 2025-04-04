@@ -4,9 +4,11 @@ import org.chorus.block.property.CommonBlockProperties
 
 class BlockWaxedWeatheredCutCopperStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWeatheredCutCopperStairs(blockstate) {
-    override fun isWaxed(): Boolean {
-        return true
-    }
+    override val isWaxed: Boolean
+        get() = true
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -14,6 +16,5 @@ class BlockWaxedWeatheredCutCopperStairs @JvmOverloads constructor(blockstate: B
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

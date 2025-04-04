@@ -10,7 +10,7 @@ class BlockMangroveStandingSign @JvmOverloads constructor(blockstate: BlockState
         return BlockMangroveWallSign.properties.identifier
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemMangroveSign()
     }
 

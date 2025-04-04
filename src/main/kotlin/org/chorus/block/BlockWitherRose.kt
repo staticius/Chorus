@@ -1,7 +1,10 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.entity.Entity
+import org.chorus.entity.EntityLiving
+import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 import org.chorus.item.Item
 import org.chorus.math.AxisAlignedBB
@@ -27,7 +30,7 @@ class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState = Compani
     override fun onEntityCollide(entity: Entity) {
         if (Server.instance.getDifficulty() != 0 && entity is EntityLiving) {
             if (!entity.invulnerable && !entity.hasEffect(EffectType.WITHER) && (entity !is Player || !entity.isCreative && !entity.isSpectator)) {
-                val effect = get(EffectType.WITHER)
+                val effect = Effect.get(EffectType.WITHER)
                 effect.setDuration(40)
                 effect.setAmplifier(1)
                 entity.addEffect(effect)
@@ -43,8 +46,10 @@ class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState = Compani
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WITHER_ROSE)
-
     }
 }

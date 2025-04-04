@@ -5,8 +5,7 @@ import org.chorus.item.ItemTool
 
 class BlockTuffSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSlab(blockstate, BlockID.TUFF_DOUBLE_SLAB) {
-    override val slabName: String
-        get() = "Tuff"
+    override fun getSlabName() = "Tuff"
 
     override fun isSameType(slab: BlockSlab): Boolean {
         return id == slab.id
@@ -28,9 +27,11 @@ class BlockTuffSlab @JvmOverloads constructor(blockstate: BlockState = Companion
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.TUFF_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

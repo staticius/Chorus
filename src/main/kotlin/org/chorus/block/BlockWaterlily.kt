@@ -2,14 +2,11 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 
-/**
- * @author xtypr
- * @since 2015/12/1
- */
 class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
@@ -59,7 +56,7 @@ class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = Companio
         fz: Double,
         player: Player?
     ): Boolean {
-        if (target is BlockFlowingWater || target.getLevelBlockAtLayer(1) is BlockFlowingWater) {
+        if (target is BlockFlowingWater || target!!.getLevelBlockAtLayer(1) is BlockFlowingWater) {
             val up = target.up()
             if (up.isAir) {
                 level.setBlock(up.position, this, true, true)
@@ -83,7 +80,7 @@ class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = Companio
         return 0
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this, 0)
     }
 
@@ -95,8 +92,10 @@ class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = Companio
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WATERLILY)
-
     }
 }

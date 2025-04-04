@@ -1,6 +1,7 @@
 package org.chorus.blockentity
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.Block
 import org.chorus.block.BlockFrame
 import org.chorus.block.BlockID
@@ -33,7 +34,7 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
         level.updateComparatorOutputLevel(this.position)
     }
 
-    override var name: String
+    override var name: String?
         get() = "Item Frame"
         set(name) {
             super.name = name
@@ -50,7 +51,7 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
             this.setDirty()
         }
 
-    var item: Item?
+    var item: Item
         get() {
             val NBTTag = namedTag.getCompound("Item")
             return NBTIO.getItemHelper(NBTTag)
@@ -59,7 +60,7 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
             this.setItem(item, true)
         }
 
-    fun setItem(item: Item?, setChanged: Boolean) {
+    fun setItem(item: Item, setChanged: Boolean) {
         namedTag.putCompound("Item", NBTIO.putItemHelper(item))
         if (setChanged) {
             this.setDirty()
@@ -94,8 +95,8 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
                     itemTag.putShort("Damage", networkDamage)
                     itemTag.putString("Name", namespacedId)
                 }
-                if (item.isBlock) {
-                    itemTag.putCompound("Block", item.blockUnsafe.blockState.blockStateTag)
+                if (item.isBlock()) {
+                    itemTag.putCompound("Block", item.blockUnsafe!!.blockState.blockStateTag)
                 }
                 tag.putCompound("Item", itemTag)
                     .putByte("ItemRotation", this.itemRotation)

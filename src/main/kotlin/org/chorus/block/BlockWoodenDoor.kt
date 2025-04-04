@@ -17,6 +17,9 @@ open class BlockWoodenDoor @JvmOverloads constructor(blockstate: BlockState = Co
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.WOODEN_DOOR,
@@ -25,6 +28,5 @@ open class BlockWoodenDoor @JvmOverloads constructor(blockstate: BlockState = Co
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-
     }
 }

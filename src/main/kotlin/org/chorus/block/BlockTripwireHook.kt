@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.block.property.type.IntPropertyType
@@ -16,7 +17,7 @@ import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 
-class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion.properties.defaultState) :
+class BlockTripwireHook @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
     BlockTransparent(state), RedstoneComponent {
     override val name: String
         get() = "Tripwire Hook"
@@ -197,7 +198,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
     val direction: Int
         get() = this.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)
 
-    var isAttached: Boolean
+    var isAttached: Boolean = false
         get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.ATTACHED_BIT)
         set(isAttached) {
             if (field == isAttached) {
@@ -219,7 +220,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
             )
         }
 
-    var isPowered: Boolean
+    var isPowered: Boolean = false
         get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT)
         set(isPowered) {
             if (field == isPowered) {
@@ -282,6 +283,9 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         /** Includes 40 tripwire and both tripwire hooks  */
         const val MAX_TRIPWIRE_CIRCUIT_LENGTH: Int = 42
@@ -290,6 +294,5 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
             BlockID.TRIPWIRE_HOOK,
             CommonBlockProperties.DIRECTION, CommonBlockProperties.ATTACHED_BIT, CommonBlockProperties.POWERED_BIT
         )
-
     }
 }

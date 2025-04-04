@@ -2,9 +2,6 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-/**
- * @author GoodLucky777
- */
 open class BlockTuff : BlockSolid {
     constructor() : super(Companion.properties.defaultState)
 
@@ -29,8 +26,10 @@ open class BlockTuff : BlockSolid {
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TUFF)
-
     }
 }

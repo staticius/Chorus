@@ -7,12 +7,14 @@ class BlockWarpedStairs @JvmOverloads constructor(blockstate: BlockState = Compa
     override val name: String
         get() = "Warped Wood Stairs"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.WARPED_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

@@ -20,6 +20,7 @@ abstract class BlockWood(blockstate: BlockState) : BlockLog(blockstate) {
             WoodType.DARK_OAK -> BlockID.STRIPPED_DARK_OAK_WOOD
             WoodType.PALE_OAK -> BlockID.STRIPPED_PALE_OAK_WOOD
             WoodType.CHERRY -> BlockID.STRIPPED_CHERRY_WOOD
+            WoodType.MANGROVE -> BlockID.STRIPPED_MANGROVE_WOOD
         }
         return Registries.BLOCK.getBlockProperties(strippedId)
             .getBlockState(CommonBlockProperties.PILLAR_AXIS, pillarAxis)

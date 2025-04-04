@@ -4,15 +4,13 @@ import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
+import org.chorus.item.ItemWheatSeeds
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
-/**
- * @author xtypr
- * @since 2015/12/2
- */
 class BlockWheat @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCrops(blockstate) {
     override val name: String
@@ -21,7 +19,7 @@ class BlockWheat @JvmOverloads constructor(blockstate: BlockState = Companion.pr
     override fun getDrops(item: Item): Array<Item> {
         // https://minecraft.wiki/w/Fortune#Seeds
         if (!isFullyGrown) {
-            return arrayOf<Item?>(ItemWheatSeeds())
+            return arrayOf(ItemWheatSeeds())
         }
 
         val random = ThreadLocalRandom.current()
@@ -39,9 +37,9 @@ class BlockWheat @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         }
 
         return if (count > 0) {
-            arrayOf<Item?>(toItem(), get(ItemID.WHEAT_SEEDS, 0, count))
+            arrayOf(toItem(), get(ItemID.WHEAT_SEEDS, 0, count))
         } else {
-            arrayOf<Item?>(toItem())
+            arrayOf(toItem())
         }
     }
 
@@ -55,12 +53,14 @@ class BlockWheat @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         fz: Double,
         player: Player?
     ): Boolean {
-        if (item.id == BlockID.WHEAT) return false
+        if (item?.id == BlockID.WHEAT) return false
         return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WHEAT, CommonBlockProperties.GROWTH)
-
     }
 }

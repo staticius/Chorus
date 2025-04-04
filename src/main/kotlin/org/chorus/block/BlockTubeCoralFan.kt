@@ -10,12 +10,13 @@ class BlockTubeCoralFan : BlockCoralFan {
     override val name: String
         get() = "Tube Coral Fan"
 
-    override val deadCoralFan: Block
-        get() = BlockDeadTubeCoralFan()
+    override fun getDeadCoralFan() = BlockDeadTubeCoralFan()
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.TUBE_CORAL_FAN, CommonBlockProperties.CORAL_FAN_DIRECTION)
-
     }
 }

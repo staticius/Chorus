@@ -9,10 +9,6 @@ import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.utils.Faceable
 
-/**
- * @author xtypr
- * @since 2015/12/2
- */
 open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate), Faceable {
     override val name: String
@@ -58,7 +54,7 @@ open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Compani
         fz: Double,
         player: Player?
     ): Boolean {
-        var target = target
+        var target = target!!
         var face = face
         if (target.canBeReplaced()) {
             target = target.down()
@@ -76,17 +72,16 @@ open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Compani
     }
 
     override var blockFace: BlockFace
-        get() = torchAttachment!!.torchDirection
+        get() = torchAttachment.torchDirection!!
         /**
          * Sets the direction that the flame is pointing.
          */
         set(face) {
             val torchAttachment = TorchFacingDirection.getByTorchDirection(face)
-            requireNotNull(torchAttachment) { "The give BlockFace can't be mapped to TorchFace" }
             this.torchAttachment = torchAttachment
         }
 
-    var torchAttachment: TorchFacingDirection?
+    var torchAttachment: TorchFacingDirection
         get() = getPropertyValue(CommonBlockProperties.TORCH_FACING_DIRECTION)
         set(face) {
             setPropertyValue(
@@ -95,8 +90,10 @@ open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Compani
             )
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TORCH, CommonBlockProperties.TORCH_FACING_DIRECTION)
-
     }
 }

@@ -1,19 +1,23 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.OxidizationLevel
 
 class BlockWaxedOxidizedCopperBulb @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCopperBulbBase(blockstate) {
-    override fun getOxidizationLevel(): OxidizationLevel {
-        return OxidizationLevel.OXIDIZED
-    }
+    override val oxidizationLevel
+        get(): OxidizationLevel {
+            return OxidizationLevel.OXIDIZED
+        }
 
-    override fun isWaxed(): Boolean {
-        return true
-    }
+    override val isWaxed: Boolean
+        get() = true
 
     override val lightLevel: Int
         get() = if (lit) 4 else 0
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -21,6 +25,5 @@ class BlockWaxedOxidizedCopperBulb @JvmOverloads constructor(blockstate: BlockSt
             CommonBlockProperties.LIT,
             CommonBlockProperties.POWERED_BIT
         )
-
     }
 }

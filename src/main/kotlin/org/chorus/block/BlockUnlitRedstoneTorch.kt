@@ -1,5 +1,6 @@
 package org.chorus.block
 
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.event.redstone.RedstoneUpdateEvent
 import org.chorus.item.*
@@ -79,9 +80,11 @@ class BlockUnlitRedstoneTorch @JvmOverloads constructor(blockstate: BlockState =
         return 2
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.UNLIT_REDSTONE_TORCH, CommonBlockProperties.TORCH_FACING_DIRECTION)
-
     }
 }

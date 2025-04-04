@@ -25,16 +25,16 @@ class BlockWallBanner @JvmOverloads constructor(blockstate: BlockState = Compani
         return 0
     }
 
-    override var blockFace: BlockFace?
+    override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
         }
 
-    override var direction: CompassRoseDirection?
-        get() = blockFace!!.compassRoseDirection
+    override var direction: CompassRoseDirection
+        get() = blockFace.compassRoseDirection!!
         set(direction) {
-            blockFace = direction!!.closestBlockFace
+            blockFace = direction.closestBlockFace
         }
 
     companion object {

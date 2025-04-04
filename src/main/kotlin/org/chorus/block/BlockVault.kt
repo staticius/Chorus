@@ -3,6 +3,9 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 class BlockVault(blockstate: BlockState) : Block(blockstate) {
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.VAULT,
@@ -10,6 +13,5 @@ class BlockVault(blockstate: BlockState) : Block(blockstate) {
             CommonBlockProperties.OMINOUS,
             CommonBlockProperties.VAULT_STATE
         )
-
     }
 }

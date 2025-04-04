@@ -233,9 +233,9 @@ abstract class BlockVinesNether
      * @return Empty if the target could not be reached. The position of the target if it was found.
      */
     fun findVine(base: Boolean): Optional<Locator> {
-        var supportFace: BlockFace? = growthDirection
+        var supportFace = growthDirection
         if (base) {
-            supportFace = supportFace!!.getOpposite()
+            supportFace = supportFace.getOpposite()
         }
         var result = locator
         val id = id
@@ -306,7 +306,7 @@ abstract class BlockVinesNether
         // 
         // They always drop a single weeping vine when broken with shears or a tool enchanted with Silk Touch.
 
-        val enchantmentLevel: Int
+        var enchantmentLevel = 0
         if (item.isShears || (item.getEnchantmentLevel(Enchantment.ID_FORTUNE_DIGGING)
                 .also { enchantmentLevel = it }) >= 3
         ) {

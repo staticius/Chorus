@@ -2,12 +2,12 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 
 class BlockWarpedSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSlab(blockstate, BlockID.WARPED_DOUBLE_SLAB) {
-    override val slabName: String
-        get() = "Warped"
+    override fun getSlabName() = "Warped"
 
     override fun canHarvestWithHand(): Boolean {
         return true
@@ -26,13 +26,15 @@ class BlockWarpedSlab @JvmOverloads constructor(blockstate: BlockState = Compani
     override val resistance: Double
         get() = 3.0
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(this)
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WARPED_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

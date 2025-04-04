@@ -8,12 +8,13 @@ import org.chorus.nbt.tag.LinkedCompoundTag
 import org.chorus.nbt.tag.TreeMapCompoundTag
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.utils.HashUtils
+import org.jetbrains.annotations.UnmodifiableView
 
 class BlockStateImpl(
     override val identifier: String,
     val blockHash: Int,
     private val inSpecialValue: Short,
-    override val blockPropertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>,
+    override val blockPropertyValues: @UnmodifiableView MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>,
     override val blockStateTag: CompoundTagView
 ) : BlockState {
     constructor(

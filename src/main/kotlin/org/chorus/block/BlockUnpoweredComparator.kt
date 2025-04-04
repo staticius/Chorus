@@ -10,6 +10,9 @@ class BlockUnpoweredComparator @JvmOverloads constructor(blockstate: BlockState 
     override val unpowered: BlockRedstoneComparator
         get() = this
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.UNPOWERED_COMPARATOR,
@@ -17,6 +20,5 @@ class BlockUnpoweredComparator @JvmOverloads constructor(blockstate: BlockState 
             CommonBlockProperties.OUTPUT_LIT_BIT,
             CommonBlockProperties.OUTPUT_SUBTRACT_BIT
         )
-
     }
 }

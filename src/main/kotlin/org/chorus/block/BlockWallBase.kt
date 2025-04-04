@@ -180,7 +180,7 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
         }
     }
 
-    fun setConnection(blockFace: BlockFace, type: WallConnectionType?): Boolean {
+    fun setConnection(blockFace: BlockFace, type: WallConnectionType): Boolean {
         return when (blockFace) {
             BlockFace.NORTH -> {
                 setPropertyValue(CommonBlockProperties.WALL_CONNECTION_TYPE_NORTH, type)

@@ -8,8 +8,7 @@ class BlockWarpedWartBlock @JvmOverloads constructor(blockstate: BlockState = Co
         get() = "Warped Wart Block"
 
     override val toolType: Int
-        // TODO Fix it in https://github.com/PowerNukkit/PowerNukkit/pull/370, the same for BlockNetherWartBlock
-        get() = ItemTool.TYPE_HANDS_ONLY //TODO Correct type is hoe
+        get() = ItemTool.TYPE_HOE
 
     override val resistance: Double
         get() = 1.0
@@ -17,8 +16,10 @@ class BlockWarpedWartBlock @JvmOverloads constructor(blockstate: BlockState = Co
     override val hardness: Double
         get() = 1.0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_WART_BLOCK)
-
     }
 }

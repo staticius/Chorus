@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.CrackedState
 import org.chorus.block.property.enums.TurtleEggCount
@@ -37,7 +38,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
     override val name: String
         get() = "Turtle Egg"
 
-    var cracks: CrackedState?
+    var cracks: CrackedState
         get() = getPropertyValue(CommonBlockProperties.CRACKED_STATE)
         set(cracks) {
             setPropertyValue(
@@ -52,7 +53,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
     override val resistance: Double
         get() = 2.5
 
-    var eggCount: TurtleEggCount?
+    var eggCount: TurtleEggCount
         get() = getPropertyValue(CommonBlockProperties.TURTLE_EGG_COUNT)
         set(eggCount) {
             setPropertyValue(
@@ -73,7 +74,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.getBlock() != null && item.BlockID.== BlockID . TURTLE_EGG &&(player == null || !player.isSneaking())) {
+        if (item.getBlock() != null && item.blockId == BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
             val eggCount = eggCount!!
             if (eggCount == TurtleEggCount.FOUR_EGG) {
                 return false
@@ -195,7 +196,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
                 level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK)
 
                 val creatureSpawnEvent = CreatureSpawnEvent(
-                    Registries.ENTITY.getEntityNetworkId(EntityID.TURTLE),
+                    Registries.ENTITY.getEntityNetworkId(EntityID.TURTLE)!!,
                     add(
                         0.3 + i * 0.2,
                         0.0,
@@ -262,9 +263,9 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
         return ItemBlock(BlockTurtleEgg())
     }
 
-    override fun onBreak(item: Item): Boolean {
+    override fun onBreak(item: Item?): Boolean {
         val eggCount = eggCount!!
-        if (item.getEnchantment(Enchantment.ID_SILK_TOUCH) == null) {
+        if (item!!.getEnchantment(Enchantment.ID_SILK_TOUCH) == null) {
             level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK)
         }
         if (eggCount == TurtleEggCount.ONE_EGG) {
@@ -326,12 +327,14 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
         return super.clone() as BlockTurtleEgg
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.TURTLE_EGG,
             CommonBlockProperties.CRACKED_STATE,
             CommonBlockProperties.TURTLE_EGG_COUNT
         )
-
     }
 }

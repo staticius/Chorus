@@ -7,9 +7,6 @@ import org.chorus.item.Item.Companion.get
 import org.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 class BlockTallGrass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoublePlant(blockstate) {
     override val doublePlantType: DoublePlantType
@@ -26,7 +23,7 @@ class BlockTallGrass @JvmOverloads constructor(blockstate: BlockState = Companio
 
     override fun getDrops(item: Item): Array<Item> {
         // https://minecraft.wiki/w/Fortune#Grass_and_ferns
-        val drops: MutableList<Item?> = ArrayList(2)
+        val drops: MutableList<Item> = ArrayList(2)
         if (item.isShears) {
             drops.add(toItem())
         }
@@ -45,8 +42,10 @@ class BlockTallGrass @JvmOverloads constructor(blockstate: BlockState = Companio
     override val toolType: Int
         get() = ItemTool.TYPE_SHEARS
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TALL_GRASS, CommonBlockProperties.UPPER_BLOCK_BIT)
-
     }
 }

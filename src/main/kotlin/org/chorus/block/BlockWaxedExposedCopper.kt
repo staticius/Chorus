@@ -5,12 +5,13 @@ class BlockWaxedExposedCopper @JvmOverloads constructor(blockstate: BlockState =
     override val name: String
         get() = "Waxed Exposed Copper"
 
-    override fun isWaxed(): Boolean {
-        return true
-    }
+    override val isWaxed: Boolean
+        get() = true
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WAXED_EXPOSED_COPPER)
-
     }
 }

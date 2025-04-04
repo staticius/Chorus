@@ -4,6 +4,7 @@ import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityChest
+import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.*
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
@@ -51,25 +52,25 @@ class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState = Compa
 
         level.setBlock(block.position, this, true, true)
         val nbt = CompoundTag()
-            .putList("Items", ListTag<Tag?>())
-            .putString("id", BlockEntity.CHEST)
+            .putList("Items", ListTag<Tag<*>>())
+            .putString("id", BlockEntityID.CHEST)
             .putInt("x", position.x.toInt())
             .putInt("y", position.y.toInt())
             .putInt("z", position.z.toInt())
 
-        if (item.hasCustomName()) {
+        if (item!!.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag?> = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
         }
 
         val blockEntity = BlockEntity.createBlockEntity(
-            BlockEntity.CHEST,
+            BlockEntityID.CHEST,
             level.getChunk(
                 position.x.toInt() shr 4,
                 position.z.toInt() shr 4
@@ -105,9 +106,11 @@ class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState = Compa
     override val isPowerSource: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.TRAPPED_CHEST, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-
     }
 }

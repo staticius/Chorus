@@ -3,6 +3,7 @@ package org.chorus.block
 import com.google.common.collect.Sets
 import org.chorus.AdventureSettings
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.block.property.type.BooleanPropertyType
@@ -22,12 +23,7 @@ import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
 
-/**
- * @author Pub4Game
- * @since 26.12.2015
- */
-open class BlockTrapdoor  //</editor-fold>
-@JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockTrapdoor @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockState), RedstoneComponent, Faceable {
     override val name: String
         get() = "Oak Trapdoor"
@@ -112,8 +108,8 @@ open class BlockTrapdoor  //</editor-fold>
 
     var manualOverride: Boolean
         get() = manualOverrides.contains(this.locator)
-        set(val) {
-            if (`val`) {
+        set(value) {
+            if (value) {
                 manualOverrides.add(this.locator)
             } else {
                 manualOverrides.remove(this.locator)
@@ -171,7 +167,7 @@ open class BlockTrapdoor  //</editor-fold>
         return this.setOpen(player!!, !this.isOpen)
     }
 
-    fun setOpen(player: Player, open: Boolean): Boolean {
+    fun setOpen(player: Player?, open: Boolean): Boolean {
         var player = player
         if (open == this.isOpen) {
             return false
@@ -236,13 +232,16 @@ open class BlockTrapdoor  //</editor-fold>
         }
 
     override var blockFace: BlockFace
-        get() = CommonPropertyMap.EWSN_DIRECTION.inverse()[getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)]
+        get() = CommonPropertyMap.EWSN_DIRECTION.inverse()[getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.DIRECTION)]!!
         set(face) {
             setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.DIRECTION,
-                CommonPropertyMap.EWSN_DIRECTION[face]
+                CommonPropertyMap.EWSN_DIRECTION[face]!!
             )
         }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(

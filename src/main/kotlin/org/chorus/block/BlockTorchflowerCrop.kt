@@ -83,7 +83,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Co
             }
         } else if (type == Level.BLOCK_UPDATE_RANDOM) {
             if (ThreadLocalRandom.current()
-                    .nextInt(2) == 1 && level.getFullLight(this.position) >= getMinimumLightLevel()
+                    .nextInt(2) == 1 && level.getFullLight(this.position) >= MIN_LIGHT_LEVEL
             ) {
                 val growth = growth
                 if (growth == 1) {
@@ -118,8 +118,10 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Co
         return 0
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TORCHFLOWER_CROP, CommonBlockProperties.GROWTH)
-
     }
 }

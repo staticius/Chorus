@@ -540,16 +540,16 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
         return getEntityClass(RID2ID[id] ?: return null)
     }
 
-    fun getEntityNetworkId(entityID: String): Int? {
-        return ID2RID[entityID]
+    fun getEntityNetworkId(entityID: String): Int {
+        return ID2RID[entityID] ?: throw RuntimeException("Unknown EntityID: $entityID")
     }
 
-    fun getEntityIdentifier(networkID: Int): String? {
-        return RID2ID[networkID]
+    fun getEntityIdentifier(networkID: Int): String {
+        return RID2ID[networkID] ?: throw RuntimeException("Unknown NetworkID: $networkID")
     }
 
-    fun getEntityDefinition(id: String): EntityDefinition? {
-        return DEFINITIONS[id]
+    fun getEntityDefinition(id: String): EntityDefinition {
+        return DEFINITIONS[id] ?: throw RuntimeException("Unknown EntityID: $id")
     }
 
     val customEntityDefinitions: @UnmodifiableView MutableList<EntityDefinition>

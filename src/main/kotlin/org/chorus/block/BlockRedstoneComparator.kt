@@ -17,7 +17,6 @@ import org.chorus.nbt.tag.Tag
 import org.chorus.network.protocol.LevelEventPacket
 import org.chorus.utils.Loggable
 import org.chorus.utils.RedstoneComponent
-import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 import kotlin.math.max
 
 abstract class BlockRedstoneComparator(blockstate: BlockState) : BlockRedstoneDiode(blockstate),

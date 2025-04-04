@@ -13,9 +13,11 @@ class BlockWarpedPressurePlate @JvmOverloads constructor(blockstate: BlockState 
     override val burnAbility: Int
         get() = 0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WARPED_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
-
     }
 }

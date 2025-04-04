@@ -40,7 +40,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(bloc
 
     open fun getShulkerBox(): Item = ItemBlock(this)
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         val item = getShulkerBox()
 
         val tile = blockEntity ?: return item
@@ -86,7 +86,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(bloc
     ): Boolean {
         val nbt = CompoundTag().putByte("facing", face.index)
 
-        if (item.hasCustomName()) {
+        if (item!!.hasCustomName()) {
             nbt.putString("CustomName", item.customName)
         }
 
@@ -99,7 +99,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(bloc
 
         // This code gets executed when the player has copied the shulker box in creative mode
         if (item.hasCustomBlockData()) {
-            val customData: Map<String?, Tag<*>?> = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.getTags()
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }

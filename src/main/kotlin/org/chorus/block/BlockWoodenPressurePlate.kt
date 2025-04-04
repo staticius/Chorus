@@ -34,9 +34,11 @@ open class BlockWoodenPressurePlate @JvmOverloads constructor(blockstate: BlockS
         return 0
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WOODEN_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
-
     }
 }

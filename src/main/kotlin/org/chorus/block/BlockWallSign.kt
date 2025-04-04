@@ -7,17 +7,11 @@ import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.math.CompassRoseDirection
 
-/**
- * @author Pub4Game
- * @since 26.12.2015
- */
-open class BlockWallSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockWallSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockStandingSign(blockState) {
-    override val wallSignId: String
-        get() = id
+    override fun getWallSignId() = id
 
-    override val standingSignId: String?
-        get() = BlockID.STANDING_SIGN
+    override fun getStandingSignId() = BlockID.STANDING_SIGN
 
     override val name: String
         get() = "Wall Sign"
@@ -38,14 +32,17 @@ open class BlockWallSign @JvmOverloads constructor(blockstate: BlockState = Comp
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
-    override var getSignDirection: CompassRoseDirection?
-        get() = blockFace.compassRoseDirection
-        set(direction) {
-            blockFace = direction!!.closestBlockFace
-        }
+    override fun getSignDirection(): CompassRoseDirection = blockFace.compassRoseDirection!!
+
+    override fun setSignDirection(direction: CompassRoseDirection): Block {
+        blockFace = direction.closestBlockFace
+        return this
+    }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

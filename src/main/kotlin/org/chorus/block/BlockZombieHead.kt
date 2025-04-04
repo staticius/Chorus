@@ -18,8 +18,10 @@ class BlockZombieHead(blockState: BlockState) : BlockHead(blockState) {
         return ItemZombieHead()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.ZOMBIE_HEAD, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

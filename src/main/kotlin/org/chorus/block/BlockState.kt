@@ -18,7 +18,7 @@ interface BlockState {
 
     fun unsignedBlockStateHash(): Long
 
-    val blockPropertyValues: @UnmodifiableView MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>?
+    val blockPropertyValues: @UnmodifiableView MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>
 
     val blockStateTag: @UnmodifiableView CompoundTagView
 

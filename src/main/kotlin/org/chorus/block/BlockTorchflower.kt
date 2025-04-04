@@ -20,8 +20,10 @@ class BlockTorchflower @JvmOverloads constructor(blockstate: BlockState = Compan
     override val name: String
         get() = "Torchflower"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.TORCHFLOWER)
-
     }
 }

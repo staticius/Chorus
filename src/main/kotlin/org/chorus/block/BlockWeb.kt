@@ -2,6 +2,7 @@ package org.chorus.block
 
 import org.chorus.entity.Entity
 import org.chorus.item.Item
+import org.chorus.item.ItemString
 import org.chorus.item.ItemTool
 
 class BlockWeb @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
@@ -24,11 +25,11 @@ class BlockWeb @JvmOverloads constructor(blockstate: BlockState = Companion.prop
 
     override fun getDrops(item: Item): Array<Item> {
         return if (item.isShears) {
-            arrayOf<Item?>(
+            arrayOf(
                 this.toItem()
             )
         } else if (item.isSword) {
-            arrayOf<Item?>(
+            arrayOf(
                 ItemString()
             )
         } else {
@@ -44,8 +45,10 @@ class BlockWeb @JvmOverloads constructor(blockstate: BlockState = Companion.prop
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WEB)
-
     }
 }

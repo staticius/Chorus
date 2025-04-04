@@ -6,8 +6,7 @@ import org.chorus.item.ItemTool
 
 class BlockWarpedDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
-    override val slabName: String
-        get() = "Warped"
+    override fun getSlabName() = "Warped"
 
     override fun isCorrectTool(item: Item): Boolean {
         return true
@@ -28,12 +27,13 @@ class BlockWarpedDoubleSlab @JvmOverloads constructor(blockstate: BlockState = C
     override val burnAbility: Int
         get() = 0
 
-    override val singleSlab: BlockState
-        get() = BlockWarpedSlab.Companion.properties.defaultState
+    override fun getSingleSlab() = BlockWarpedSlab.properties.defaultState
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WARPED_DOUBLE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

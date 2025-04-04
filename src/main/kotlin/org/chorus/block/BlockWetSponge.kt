@@ -2,12 +2,15 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
+import org.chorus.level.particle.CloudParticle
 import org.chorus.math.BlockFace
+import org.chorus.network.protocol.LevelEventPacket
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockWetSponge @JvmOverloads constructor(state: BlockState? = Companion.properties.defaultState) :
+class BlockWetSponge @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
     BlockSolid(state) {
     override val hardness: Double
         get() = 0.6
@@ -44,12 +47,14 @@ class BlockWetSponge @JvmOverloads constructor(state: BlockState? = Companion.pr
         return true
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemBlock(BlockWetSponge())
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WET_SPONGE)
-
     }
 }

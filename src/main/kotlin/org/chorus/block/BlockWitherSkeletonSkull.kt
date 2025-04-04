@@ -2,8 +2,9 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.entity.mob.monster.EntityWither.Companion.checkAndSpawnWither
+import org.chorus.entity.mob.monster.EntityWither
 import org.chorus.item.Item
+import org.chorus.item.ItemWitherSkeletonSkull
 import org.chorus.math.BlockFace
 
 class BlockWitherSkeletonSkull(blockState: BlockState) : BlockHead(blockState) {
@@ -33,13 +34,15 @@ class BlockWitherSkeletonSkull(blockState: BlockState) : BlockHead(blockState) {
         return false
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemWitherSkeletonSkull()
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WITHER_SKELETON_SKULL, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

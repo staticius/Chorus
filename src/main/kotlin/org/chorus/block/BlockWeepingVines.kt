@@ -19,11 +19,13 @@ class BlockWeepingVines @JvmOverloads constructor(blockstate: BlockState = Compa
         }
 
     override val maxVineAge: Int
-        get() = CommonBlockProperties.WEEPING_VINES_AGE.getMax()
+        get() = CommonBlockProperties.WEEPING_VINES_AGE.max
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.WEEPING_VINES, CommonBlockProperties.WEEPING_VINES_AGE)
-
     }
 }

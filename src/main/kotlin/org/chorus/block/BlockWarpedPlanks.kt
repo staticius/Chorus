@@ -16,8 +16,10 @@ class BlockWarpedPlanks @JvmOverloads constructor(blockstate: BlockState = Compa
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_PLANKS)
-
     }
 }

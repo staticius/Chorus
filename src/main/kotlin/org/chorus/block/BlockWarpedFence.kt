@@ -11,8 +11,10 @@ class BlockWarpedFence @JvmOverloads constructor(blockstate: BlockState = Compan
     override val burnAbility: Int
         get() = 0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_FENCE)
-
     }
 }

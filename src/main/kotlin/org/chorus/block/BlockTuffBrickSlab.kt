@@ -5,8 +5,7 @@ import org.chorus.item.ItemTool
 
 class BlockTuffBrickSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSlab(blockstate, BlockID.TUFF_BRICK_DOUBLE_SLAB) {
-    override val slabName: String
-        get() = "Tuff Brick"
+    override fun getSlabName() = "Tuff Brick"
 
     override val name: String
         get() = "Tuff Brick Slab"
@@ -31,9 +30,11 @@ class BlockTuffBrickSlab @JvmOverloads constructor(blockstate: BlockState = Comp
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.TUFF_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

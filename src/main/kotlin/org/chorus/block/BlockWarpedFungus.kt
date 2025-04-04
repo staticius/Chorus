@@ -1,11 +1,11 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.event.Event.isCancelled
-import org.chorus.event.level.StructureGrowEvent.blockList
-import org.chorus.level.generator.`object`.BlockManager.applySubChunkUpdate
-import org.chorus.level.generator.`object`.BlockManager.blocks
-import org.chorus.level.generator.`object`.legacytree.LegacyNetherTree.placeObject
+import org.chorus.Server
+import org.chorus.event.level.StructureGrowEvent
+import org.chorus.level.generator.`object`.BlockManager
+import org.chorus.level.generator.`object`.legacytree.LegacyWarpedTree
+import org.chorus.utils.ChorusRandom
 
 class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFungus(blockstate) {
@@ -14,9 +14,9 @@ class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState = Compa
     override val name: String
         get() = "Warped Fungus"
 
-    override fun canGrowOn(support: Block): Boolean {
-        if (support.id == BlockID.WARPED_NYLIUM) {
-            for (i in 1..feature.getTreeHeight()) {
+    override fun canGrowOn(support: Block?): Boolean {
+        if (support!!.id == BlockID.WARPED_NYLIUM) {
+            for (i in 1..feature.treeHeight) {
                 if (!up(i).isAir) {
                     return false
                 }
@@ -27,11 +27,11 @@ class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState = Compa
     }
 
     override fun grow(cause: Player?): Boolean {
-        val nukkitRandom: NukkitRandom = NukkitRandom()
+        val random = ChorusRandom()
         val blockManager: BlockManager = BlockManager(this.level)
         feature.placeObject(
             blockManager,
-            position.floorX, position.floorY, position.floorZ, nukkitRandom
+            position.floorX, position.floorY, position.floorZ, random
         )
         val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
         Server.instance.pluginManager.callEvent(ev)
@@ -42,8 +42,10 @@ class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState = Compa
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WARPED_FUNGUS)
-
     }
 }

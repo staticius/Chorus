@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.entity.Entity
@@ -17,10 +18,6 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author Pub4Game
- * @since 15.01.2016
- */
 class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
@@ -130,7 +127,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
         fz: Double,
         player: Player?
     ): Boolean {
-        if ((block.id != BlockID.VINE) && target.isSolid && face.horizontalIndex != -1) {
+        if ((block.id != BlockID.VINE) && target!!.isSolid && face.horizontalIndex != -1) {
             this.setPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.VINE_DIRECTION_BITS, getMetaFromFace(
                     face.getOpposite()
@@ -333,6 +330,9 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
     override fun canSilkTouch(): Boolean {
         return true
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.VINE, CommonBlockProperties.VINE_DIRECTION_BITS)

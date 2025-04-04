@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.entity.Entity
@@ -11,7 +12,7 @@ import org.chorus.level.vibration.VibrationType
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 
-class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.properties.defaultState) :
+class BlockTripWire @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
     BlockTransparent(state) {
     override val name: String
         get() = "Tripwire"
@@ -43,7 +44,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
     override val itemId: String
         get() = ItemID.STRING
 
-    var isPowered: Boolean
+    var isPowered: Boolean = false
         get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT)
         set(isPowered) {
             if (field == isPowered) {
@@ -55,7 +56,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
             )
         }
 
-    var isAttached: Boolean
+    var isAttached: Boolean = false
         get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.ATTACHED_BIT)
         set(isAttached) {
             if (field == isAttached) {
@@ -67,7 +68,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
             )
         }
 
-    var isSuspended: Boolean
+    var isSuspended: Boolean = false
         get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.SUSPENDED_BIT)
         set(isSuspended) {
             if (field == isSuspended) {
@@ -79,7 +80,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
             )
         }
 
-    var isDisarmed: Boolean
+    var isDisarmed: Boolean = false
         get() = this.getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.DISARMED_BIT)
         set(isDisarmed) {
             if (field == isDisarmed) {
@@ -215,6 +216,9 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
         return this
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.TRIP_WIRE,
@@ -223,6 +227,5 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.pro
             CommonBlockProperties.ATTACHED_BIT,
             CommonBlockProperties.DISARMED_BIT
         )
-
     }
 }
