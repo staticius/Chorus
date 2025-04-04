@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockRedSandstoneStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockRedSandstoneStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockStairs(blockstate) {
     override val name: String
         get() = "Red Sandstone Stairs"
@@ -24,12 +24,14 @@ class BlockRedSandstoneStairs @JvmOverloads constructor(blockstate: BlockState =
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.RED_SANDSTONE_STAIRS,
             CommonBlockProperties.UPSIDE_DOWN_BIT,
             CommonBlockProperties.WEIRDO_DIRECTION
         )
-
     }
 }

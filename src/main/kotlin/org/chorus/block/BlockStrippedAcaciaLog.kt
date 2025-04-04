@@ -3,19 +3,21 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
 
-class BlockStrippedAcaciaLog @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockStrippedAcaciaLog @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWoodStripped(blockstate) {
     override fun getWoodType(): WoodType {
         return WoodType.ACACIA
     }
 
     override fun getStrippedState(): BlockState {
-        return Companion.properties.getDefaultState()
+        return Companion.properties.defaultState
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STRIPPED_ACACIA_LOG, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

@@ -34,7 +34,7 @@ class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState = Compa
         return if (isActive()) 15 else 0
     }
 
-    override fun getStrongPower(side: BlockFace?): Int {
+    override fun getStrongPower(side: BlockFace): Int {
         return if (isActive()) (if (side == BlockFace.UP) 15 else 0) else 0
     }
 

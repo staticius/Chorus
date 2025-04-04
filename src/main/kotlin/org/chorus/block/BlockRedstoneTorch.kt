@@ -1,17 +1,15 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.event.Event.isCancelled
+import org.chorus.event.redstone.RedstoneUpdateEvent
 import org.chorus.item.Item
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
-import org.chorus.utils.RedstoneComponent.updateAllAroundRedstone
+import org.chorus.utils.RedstoneComponent
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
-class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTorch(blockstate), RedstoneComponent {
     override val name: String
         get() = "Redstone Torch"
@@ -44,11 +42,11 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
         return true
     }
 
-    override fun getWeakPower(side: BlockFace): Int {
-        return if (blockFace != side) 15 else 0
+    override fun getWeakPower(face: BlockFace): Int {
+        return if (blockFace != face) 15 else 0
     }
 
-    override fun getStrongPower(side: BlockFace?): Int {
+    override fun getStrongPower(side: BlockFace): Int {
         return if (side == BlockFace.DOWN) this.getWeakPower(side) else 0
     }
 
@@ -72,7 +70,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
             if (type == Level.BLOCK_UPDATE_NORMAL || type == Level.BLOCK_UPDATE_REDSTONE) {
                 level.scheduleUpdate(this, tickRate())
             } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
-                val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
+                val ev = RedstoneUpdateEvent(this)
                 Server.instance.pluginManager.callEvent(ev)
 
                 if (ev.isCancelled) {
@@ -123,9 +121,11 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
         return 2
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.REDSTONE_TORCH, CommonBlockProperties.TORCH_FACING_DIRECTION)
-
     }
 }

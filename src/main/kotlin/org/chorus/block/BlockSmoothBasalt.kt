@@ -2,20 +2,19 @@ package org.chorus.block
 
 import org.chorus.math.BlockFace
 
-class BlockSmoothBasalt @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
+class BlockSmoothBasalt @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockBasalt(blockState) {
     override val name: String
         get() = "Smooth Basalt"
 
     override var pillarAxis: BlockFace.Axis
-        get() =// ignore
-            null
-        set(axis) {
-            // ignore
-        }
+        get() = throw UnsupportedOperationException()
+        set(axis) = throw UnsupportedOperationException()
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SMOOTH_BASALT)
-
     }
 }

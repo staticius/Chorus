@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.ItemTool
 
-class BlockStonecutter @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockStonecutter @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Stonecutter"
@@ -26,8 +26,10 @@ class BlockStonecutter @JvmOverloads constructor(blockstate: BlockState = Compan
     override val waterloggingLevel: Int
         get() = 1
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.STONECUTTER)
-
     }
 }

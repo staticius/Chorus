@@ -8,9 +8,11 @@ class BlockStrippedBirchWood(blockstate: BlockState) : BlockWoodStripped(blockst
         return WoodType.BIRCH
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STRIPPED_BIRCH_WOOD, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

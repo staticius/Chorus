@@ -155,7 +155,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         return false
     }
 
-    open fun afterRemoval(newBlock: Block?, update: Boolean) {
+    open fun afterRemoval(newBlock: Block, update: Boolean) {
     }
 
     open val isSoulSpeedCompatible: Boolean
@@ -914,7 +914,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
      * @param side the side
      * @return the strong power
      */
-    open fun getStrongPower(side: BlockFace?): Int {
+    open fun getStrongPower(side: BlockFace): Int {
         return 0
     }
 

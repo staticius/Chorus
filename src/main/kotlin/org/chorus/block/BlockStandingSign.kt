@@ -43,7 +43,7 @@ open class BlockStandingSign @JvmOverloads constructor(blockstate: BlockState = 
         return 0
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemOakSign()
     }
 
@@ -84,7 +84,7 @@ open class BlockStandingSign @JvmOverloads constructor(blockstate: BlockState = 
             wall.setPropertyValue(CommonBlockProperties.FACING_DIRECTION, face.index)
             level.setBlock(block.position, wall, true)
         }
-        if (item.hasCustomBlockData()) {
+        if (item!!.hasCustomBlockData()) {
             for ((key, value) in item.customBlockData!!.entrySet) {
                 nbt.put(key, value)
             }

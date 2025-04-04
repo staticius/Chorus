@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockWaxedWeatheredChiseledCopper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockWaxedWeatheredChiseledCopper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockChiseledCopperBase(blockstate) {
     override fun getOxidizationLevel(): OxidizationLevel {
         return OxidizationLevel.WEATHERED

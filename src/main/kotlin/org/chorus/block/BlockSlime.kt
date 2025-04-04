@@ -2,12 +2,8 @@ package org.chorus.block
 
 import org.chorus.math.BlockFace
 
-/**
- * @author Pub4Game
- * @since 21.02.2016
- */
 class BlockSlime : BlockTransparent {
-    constructor() : super(Companion.properties.getDefaultState())
+    constructor() : super(Companion.properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 
@@ -34,8 +30,10 @@ class BlockSlime : BlockTransparent {
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SLIME)
-
     }
 }

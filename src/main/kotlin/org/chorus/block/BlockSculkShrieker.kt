@@ -2,10 +2,13 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
+import org.chorus.blockentity.BlockEntityID
+import org.chorus.blockentity.BlockEntitySculkShrieker
 import org.chorus.item.ItemTool
+import org.chorus.math.AxisAlignedBB
 
-class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
-    BlockFlowable(blockstate), BlockEntityHolder<BlockEntitySculkShrieker?> {
+class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+    BlockFlowable(blockstate), BlockEntityHolder<BlockEntitySculkShrieker> {
     override val name: String
         get() = "Sculk Shrieker"
 
@@ -26,34 +29,34 @@ class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState = Comp
     override val toolType: Int
         get() = ItemTool.TYPE_HOE
 
-    override val blockEntityClass: Class<out Any>
-        get() = BlockEntitySculkShrieker::class.java
+    override fun getBlockEntityClass() = BlockEntitySculkShrieker::class.java
 
-    override fun getBlockEntityType(): String {
-        return BlockEntity.SCULK_SHRIEKER
+    override fun getBlockEntityType() = BlockEntityID.SCULK_SHRIEKER
 
-        override fun canPassThrough(): Boolean {
-            return false
-        }
+    override fun canPassThrough(): Boolean {
+        return false
+    }
 
-        override fun breaksWhenMoved(): Boolean {
-            return false
-        }
+    override fun breaksWhenMoved(): Boolean {
+        return false
+    }
 
-        override fun canBeFlowedInto(): Boolean {
-            return false
-        }
+    override fun canBeFlowedInto(): Boolean {
+        return false
+    }
 
-        override fun recalculateBoundingBox(): AxisAlignedBB {
-            return this
-        }
+    override fun recalculateBoundingBox(): AxisAlignedBB {
+        return this
+    }
 
-        override val waterloggingLevel: Int
+    override val waterloggingLevel: Int
         get() = 1
 
-        companion object {
-            val properties: BlockProperties =
-                BlockProperties(BlockID.SCULK_SHRIEKER, CommonBlockProperties.ACTIVE, CommonBlockProperties.CAN_SUMMON)
+    override val properties: BlockProperties
+        get() = Companion.properties
 
-        }
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.SCULK_SHRIEKER, CommonBlockProperties.ACTIVE, CommonBlockProperties.CAN_SUMMON)
     }
+}

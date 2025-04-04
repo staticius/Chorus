@@ -2,13 +2,14 @@ package org.chorus.block
 
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
 import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockRedstoneOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+open class BlockRedstoneOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockOre(blockstate) {
     override val toolTier: Int
         get() = ItemTool.TIER_IRON
@@ -25,8 +26,8 @@ open class BlockRedstoneOre @JvmOverloads constructor(blockstate: BlockState = C
                 count += Random().nextInt(fortune.level + 1)
             }
 
-            return arrayOf<Item?>(
-                get(Item.REDSTONE, 0, count)
+            return arrayOf(
+                get(ItemID.REDSTONE, 0, count)
             )
         } else {
             return Item.EMPTY_ARRAY
@@ -54,8 +55,10 @@ open class BlockRedstoneOre @JvmOverloads constructor(blockstate: BlockState = C
     override val dropExp: Int
         get() = ThreadLocalRandom.current().nextInt(1, 6)
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_ORE)
-
     }
 }

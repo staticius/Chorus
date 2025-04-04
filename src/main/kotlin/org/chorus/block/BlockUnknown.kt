@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.*
 
 
-class BlockUnknown @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockUnknown @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     Block(null) {
     init {
         this.blockState = blockstate

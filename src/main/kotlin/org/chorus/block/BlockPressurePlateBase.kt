@@ -194,7 +194,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
         return redstonePower
     }
 
-    override fun getStrongPower(side: BlockFace?): Int {
+    override fun getStrongPower(side: BlockFace): Int {
         return if (side == BlockFace.UP) redstonePower else 0
     }
 

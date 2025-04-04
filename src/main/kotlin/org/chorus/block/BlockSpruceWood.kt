@@ -8,8 +8,10 @@ class BlockSpruceWood(blockstate: BlockState) : BlockWood(blockstate) {
         return WoodType.SPRUCE
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SPRUCE_WOOD, CommonBlockProperties.PILLAR_AXIS)
-
     }
 }

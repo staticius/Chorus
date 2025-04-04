@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockWaxedExposedCopperGrate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockWaxedExposedCopperGrate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCopperGrateBase(blockstate) {
     override fun getOxidizationLevel(): OxidizationLevel {
         return OxidizationLevel.EXPOSED

@@ -2,11 +2,12 @@ package org.chorus.block
 
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
-class BlockSeaLantern @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSeaLantern @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Sea Lantern"
@@ -28,15 +29,17 @@ class BlockSeaLantern @JvmOverloads constructor(blockstate: BlockState = Compani
         // The amount is capped at 5, so Fortune III simply increases the chance of getting 5 crystals.
         val count = min(5.0, (2 + ThreadLocalRandom.current().nextInt(1 + fortuneLevel)).toDouble()).toInt()
 
-        return arrayOf<Item?>(get(ItemID.PRISMARINE_CRYSTALS, 0, count))
+        return arrayOf(get(ItemID.PRISMARINE_CRYSTALS, 0, count))
     }
 
     override fun canSilkTouch(): Boolean {
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SEA_LANTERN)
-
     }
 }

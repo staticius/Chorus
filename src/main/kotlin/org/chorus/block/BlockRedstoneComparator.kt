@@ -1,6 +1,7 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.block.property.enums.MinecraftCardinalDirection
@@ -10,7 +11,12 @@ import org.chorus.blockentity.BlockEntityID
 import org.chorus.item.*
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
+import org.chorus.network.protocol.LevelEventPacket
+import org.chorus.utils.Loggable
+import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 import kotlin.math.max
 
@@ -39,10 +45,10 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) : BlockRedstoneDi
 
     override val unpowered: Block
         get() = get(BlockID.UNPOWERED_COMPARATOR)
-            .setPropertyValues(blockState.blockPropertyValues) as BlockRedstoneComparator
+            .setPropertyValues(blockState.blockPropertyValues!!) as BlockRedstoneComparator
 
     public override fun getPowered(): BlockRedstoneComparator {
-        return get(BlockID.POWERED_COMPARATOR).setPropertyValues(blockState.blockPropertyValues) as BlockRedstoneComparator
+        return get(BlockID.POWERED_COMPARATOR).setPropertyValues(blockState.blockPropertyValues!!) as BlockRedstoneComparator
     }
 
     override val redstoneSignal: Int
@@ -159,7 +165,7 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) : BlockRedstoneDi
                 level.setBlock(this.position, unpowered, true, false)
                 level.updateComparatorOutputLevelSelective(this.position, true)
             } else if (!isPowered && shouldBePowered) {
-                level.setBlock(this.position, powered, true, false)
+                level.setBlock(this.position, getPowered(), true, false)
                 level.updateComparatorOutputLevelSelective(this.position, true)
             }
 
@@ -186,7 +192,7 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) : BlockRedstoneDi
         }
 
         try {
-            createBlockEntity(CompoundTag().putList("Items", ListTag<Tag>()))
+            createBlockEntity(CompoundTag().putList("Items", ListTag<Tag<*>>()))
         } catch (e: Exception) {
             BlockRedstoneComparator.log.warn(
                 "Failed to create the block entity {} at {}",
@@ -207,7 +213,7 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) : BlockRedstoneDi
         return this.isPowered || getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.OUTPUT_LIT_BIT)
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemComparator()
     }
 
@@ -215,4 +221,6 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) : BlockRedstoneDi
         COMPARE,
         SUBTRACT
     }
+
+    companion object : Loggable
 }

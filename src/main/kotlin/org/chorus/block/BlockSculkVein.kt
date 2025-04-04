@@ -3,14 +3,16 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 
-class BlockSculkVein @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSculkVein @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockLichen(blockstate) {
     override val name: String
         get() = "Sculk Vein"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SCULK_VEIN, CommonBlockProperties.MULTI_FACE_DIRECTION_BITS)
-
     }
 }

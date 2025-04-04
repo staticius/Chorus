@@ -4,13 +4,11 @@ import org.chorus.Player
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
-import org.chorus.level.Locator.x
-import org.chorus.level.Locator.y
-import org.chorus.level.Locator.z
 import org.chorus.math.BlockFace
+import org.chorus.network.protocol.LevelEventPacket
 import java.util.*
 
-class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
+class BlockSponge @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
     BlockSolid(state) {
     override val hardness: Double
         get() = 0.6
@@ -39,7 +37,7 @@ class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.prope
         ) {
             level.setBlock(block.position, BlockWetSponge(), true, true)
 
-            val packet: LevelEventPacket = LevelEventPacket()
+            val packet = LevelEventPacket()
             packet.evid = LevelEventPacket.EVENT_PARTICLE_DESTROY_BLOCK
             packet.x = block.x.toFloat() + 0.5f
             packet.y = block.y.toFloat() + 1f
@@ -65,9 +63,9 @@ class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.prope
 
         entries.add(Entry(block, 0))
 
-        var entry: Entry
+        var entry: Entry? = entries.poll()
         var waterRemoved = 0
-        while (waterRemoved < 64 && (entries.poll().also { entry = it }) != null) {
+        while (waterRemoved < 64 && entry != null) {
             for (face in BlockFace.entries) {
                 val layer0 = entry.block.getSideAtLayer(0, face)
                 val layer1 = layer0.getLevelBlockAtLayer(1)
@@ -77,7 +75,7 @@ class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.prope
                         layer0.position.floorX,
                         layer0.position.floorY,
                         layer0.position.floorZ,
-                        BlockAir.properties.getDefaultState()
+                        BlockAir.properties.defaultState
                     )
                     level.updateAround(layer0.position)
                     waterRemoved++
@@ -96,7 +94,7 @@ class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.prope
                         layer1.position.floorY,
                         layer1.position.floorZ,
                         1,
-                        BlockAir.properties.getDefaultState()
+                        BlockAir.properties.defaultState
                     )
                     level.updateAround(layer1.position)
                     waterRemoved++
@@ -105,15 +103,18 @@ class BlockSponge @JvmOverloads constructor(state: BlockState? = Companion.prope
                     }
                 }
             }
+            entry = entries.poll()
         }
 
         return waterRemoved > 0
     }
 
-    @JvmRecord
     private data class Entry(val block: Block, val distance: Int)
+
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SPONGE)
-
     }
 }

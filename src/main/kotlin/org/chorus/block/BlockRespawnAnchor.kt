@@ -1,42 +1,22 @@
-/*
- * https://PowerNukkit.org - The Nukkit you know but Powerful!
- * Copyright (C) 2020  José Roberto de Araújo Júnior
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.event.Event.isCancelled
-import org.chorus.event.block.BlockExplosionPrimeEvent.isBlockBreaking
-import org.chorus.event.block.BlockExplosionPrimeEvent.isIncendiary
+import org.chorus.event.block.BlockExplosionPrimeEvent
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
-import org.chorus.level.Explosion.explodeA
-import org.chorus.level.Explosion.explodeB
+import org.chorus.lang.TranslationContainer
+import org.chorus.level.Explosion
+import org.chorus.level.GameRule
 import org.chorus.level.Level
+import org.chorus.level.Sound
 import org.chorus.math.BlockFace
+import org.chorus.network.protocol.types.SpawnPointType
 import org.chorus.utils.TextFormat
 
-/**
- * @author joserobjr
- * @since 2020-10-06
- */
 class BlockRespawnAnchor : Block {
-    constructor() : super(Companion.properties.getDefaultState())
+    constructor() : super(Companion.properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 
@@ -52,7 +32,7 @@ class BlockRespawnAnchor : Block {
         fz: Float
     ): Boolean {
         val charge = charge
-        if (item.BlockID.== BlockID . GLOWSTONE && charge < CommonBlockProperties . RESPAWN_ANCHOR_CHARGE . getMax ()) {
+        if (item.blockId == BlockID.GLOWSTONE && charge < CommonBlockProperties.RESPAWN_ANCHOR_CHARGE.max) {
             if (player == null || !player.isCreative) {
                 item.count--
             }
@@ -82,7 +62,7 @@ class BlockRespawnAnchor : Block {
             return true
         }
 
-        if (player.spawn.left() == this) {
+        if (player.spawn.first == this) {
             return false
         }
         player.setSpawn(this, SpawnPointType.BLOCK)
@@ -92,14 +72,14 @@ class BlockRespawnAnchor : Block {
     }
 
     fun explode(player: Player?) {
-        val event: BlockExplosionPrimeEvent = BlockExplosionPrimeEvent(this, player, 5.0)
+        val event = BlockExplosionPrimeEvent(this, player, 5.0)
         event.isIncendiary = true
         if (event.isCancelled) {
             return
         }
 
         level.setBlock(this.position, get(BlockID.AIR))
-        val explosion: Explosion = Explosion(this, event.force, this)
+        val explosion = Explosion(this, event.force, this)
         explosion.fireChance = event.fireChance
         if (event.isBlockBreaking) {
             explosion.explodeA()
@@ -168,9 +148,11 @@ class BlockRespawnAnchor : Block {
         return Item.EMPTY_ARRAY
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.RESPAWN_ANCHOR, CommonBlockProperties.RESPAWN_ANCHOR_CHARGE)
-
     }
 }

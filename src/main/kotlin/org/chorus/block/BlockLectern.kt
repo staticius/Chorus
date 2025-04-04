@@ -151,7 +151,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState = Companion.
         return if (isActivated) 15 else 0
     }
 
-    override fun getStrongPower(side: BlockFace?): Int {
+    override fun getStrongPower(side: BlockFace): Int {
         return if (side == BlockFace.DOWN) this.getWeakPower(side) else 0
     }
 

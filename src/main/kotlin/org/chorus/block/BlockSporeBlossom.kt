@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-class BlockSporeBlossom @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSporeBlossom @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Spore Blossom"
@@ -19,7 +19,7 @@ class BlockSporeBlossom @JvmOverloads constructor(blockstate: BlockState = Compa
         fz: Double,
         player: Player?
     ): Boolean {
-        if (target.isSolid && face == BlockFace.DOWN) {
+        if (target!!.isSolid && face == BlockFace.DOWN) {
             return super.place(item, block, target, face, fx, fy, fz, player)
         }
         return false
@@ -34,8 +34,10 @@ class BlockSporeBlossom @JvmOverloads constructor(blockstate: BlockState = Compa
     override val resistance: Double
         get() = 0.0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SPORE_BLOSSOM)
-
     }
 }

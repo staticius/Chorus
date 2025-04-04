@@ -1,18 +1,25 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.Server.Companion.instance
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
 import org.chorus.entity.Entity
-import org.chorus.event.Event.isCancelled
+import org.chorus.event.block.BlockGrowEvent
+import org.chorus.event.block.BlockHarvestEvent
+import org.chorus.event.entity.EntityDamageByBlockEvent
+import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.item.Item
+import org.chorus.item.ItemSweetBerries
 import org.chorus.level.Level
+import org.chorus.level.Sound
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
+import org.chorus.tags.BlockTags
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Sweet Berry Bush"
@@ -47,7 +54,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
                 block.setGrowth(3)
             }
             val ev: BlockGrowEvent = BlockGrowEvent(this, block)
-            instance.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
 
             if (ev.isCancelled) {
                 return false
@@ -130,7 +137,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
         fz: Double,
         player: Player?
     ): Boolean {
-        if (target.id == BlockID.SWEET_BERRY_BUSH || !block.isAir) {
+        if (target!!.id == BlockID.SWEET_BERRY_BUSH || !block.isAir) {
             return false
         }
         if (isSupportValid(down())) {
@@ -168,7 +175,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
             }
         }
 
-        return arrayOf<Item?>(ItemSweetBerries(0, amount))
+        return arrayOf(ItemSweetBerries(0, amount))
     }
 
     val growth: Int
@@ -178,12 +185,15 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
         return setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.GROWTH, growth)
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemSweetBerries()
     }
 
     override val isFertilizable: Boolean
         get() = true
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SWEET_BERRY_BUSH, CommonBlockProperties.GROWTH)

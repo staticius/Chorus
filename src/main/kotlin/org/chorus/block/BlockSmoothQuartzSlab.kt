@@ -4,8 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
 class BlockSmoothQuartzSlab(blockState: BlockState) : BlockSlab(blockState, BlockID.SMOOTH_QUARTZ_DOUBLE_SLAB) {
-    override val slabName: String
-        get() = "Smooth Quartz"
+    override fun getSlabName() = "Smooth Quartz"
 
     override fun canHarvestWithHand(): Boolean {
         return false
@@ -21,9 +20,11 @@ class BlockSmoothQuartzSlab(blockState: BlockState) : BlockSlab(blockState, Bloc
         return this.id == slab.id
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SMOOTH_QUARTZ_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

@@ -2,15 +2,16 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.SeaGrassType
+import org.chorus.block.property.type.EnumPropertyType
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
-import org.chorus.utils.BlockColor.equals
 
-class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Seagrass"
@@ -27,7 +28,7 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion
     ): Boolean {
         val down = down()
         val layer1Block = block.getLevelBlockAtLayer(1)
-        val waterDamage: Int
+        var waterDamage = 0
         if (down.isSolid && (down.id != BlockID.MAGMA) && (down.id != BlockID.SOUL_SAND) &&
             (layer1Block is BlockFlowingWater && ((layer1Block.liquidDepth.also {
                 waterDamage = it
@@ -50,7 +51,7 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion
                     .also {
                         damage =
                             it.toInt()
-                    }) != 0 && damage != 8))
+                    }).toInt() != 0 && damage != 8))
             ) {
                 level.useBreakOn(this.position)
                 return Level.BLOCK_UPDATE_NORMAL
@@ -150,8 +151,10 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion
     override val isFertilizable: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SEAGRASS, CommonBlockProperties.SEA_GRASS_TYPE)
-
     }
 }

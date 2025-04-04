@@ -52,7 +52,7 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState = Companion
     override val isPowerSource: Boolean
         get() = true
 
-    override fun getStrongPower(side: BlockFace?): Int {
+    override fun getStrongPower(side: BlockFace): Int {
         return if (isPowered && side == blockFace) 15 else 0
     }
 

@@ -12,7 +12,7 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
 import kotlin.math.min
 
-class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockChest(blockstate) {
     override val name: String
         get() = "Trapped Chest"
@@ -98,7 +98,7 @@ class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState = Compa
         return min(playerCount.toDouble(), 15.0).toInt()
     }
 
-    override fun getStrongPower(side: BlockFace?): Int {
+    override fun getStrongPower(side: BlockFace): Int {
         return if (side == BlockFace.UP) this.getWeakPower(side) else 0
     }
 

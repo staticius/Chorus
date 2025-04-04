@@ -3,10 +3,9 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockSmoothRedSandstoneSlab(blockState: BlockState?) :
+class BlockSmoothRedSandstoneSlab(blockState: BlockState) :
     BlockSlab(blockState, BlockID.SMOOTH_RED_SANDSTONE_DOUBLE_SLAB) {
-    override val slabName: String
-        get() = "Smooth Red Sandstone"
+    override fun getSlabName() = "Smooth Red Sandstone"
 
     override fun canHarvestWithHand(): Boolean {
         return false
@@ -22,9 +21,11 @@ class BlockSmoothRedSandstoneSlab(blockState: BlockState?) :
         return slab.id == this.id
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SMOOTH_RED_SANDSTONE_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

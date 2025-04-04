@@ -2,10 +2,13 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockSpruceDoor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSpruceDoor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWoodenDoor(blockstate) {
     override val name: String
         get() = "Spruce Door Block"
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -15,6 +18,5 @@ class BlockSpruceDoor @JvmOverloads constructor(blockstate: BlockState = Compani
             CommonBlockProperties.UPPER_BLOCK_BIT,
             CommonBlockProperties.DOOR_HINGE_BIT
         )
-
     }
 }

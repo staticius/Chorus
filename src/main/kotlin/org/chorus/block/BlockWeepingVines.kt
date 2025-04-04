@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.math.BlockFace
 
-class BlockWeepingVines @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockWeepingVines @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockVinesNether(blockstate) {
     override val name: String
         get() = "Weeping Vines"

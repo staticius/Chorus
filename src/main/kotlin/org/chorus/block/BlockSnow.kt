@@ -2,11 +2,12 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.item.Item
+import org.chorus.item.ItemSnowball
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 
 class BlockSnow : BlockSolid {
-    constructor() : super(Companion.properties.getDefaultState())
+    constructor() : super(Companion.properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 
@@ -24,9 +25,7 @@ class BlockSnow : BlockSolid {
 
     override fun getDrops(item: Item): Array<Item> {
         return if (item.isShovel && item.tier >= ItemTool.TIER_WOODEN) {
-            arrayOf<Item?>(
-                ItemSnowball(0, 4)
-            )
+            arrayOf(ItemSnowball(0, 4))
         } else {
             Item.EMPTY_ARRAY
         }
@@ -60,8 +59,10 @@ class BlockSnow : BlockSolid {
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SNOW)
-
     }
 }

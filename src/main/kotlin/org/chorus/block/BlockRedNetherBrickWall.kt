@@ -5,7 +5,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 
-class BlockRedNetherBrickWall @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockRedNetherBrickWall @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWallBase(blockstate) {
     override val name: String
         get() = "Red Nether Brick Wall"
@@ -17,8 +17,11 @@ class BlockRedNetherBrickWall @JvmOverloads constructor(blockstate: BlockState =
         get() = ItemTool.TIER_WOODEN
 
     override fun toItem(): Item {
-        return ItemBlock(properties.getDefaultState().toBlock())
+        return ItemBlock(properties.defaultState.toBlock())
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -29,6 +32,5 @@ class BlockRedNetherBrickWall @JvmOverloads constructor(blockstate: BlockState =
             CommonBlockProperties.WALL_CONNECTION_TYPE_WEST,
             CommonBlockProperties.WALL_POST_BIT
         )
-
     }
 }

@@ -11,7 +11,7 @@ import org.chorus.level.vibration.VibrationType
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 
-class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
+class BlockTripWire @JvmOverloads constructor(state: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(state) {
     override val name: String
         get() = "Tripwire"

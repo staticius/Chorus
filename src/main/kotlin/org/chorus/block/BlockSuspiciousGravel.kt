@@ -2,13 +2,16 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.entity.item.EntityFallingBlock
 import org.chorus.event.player.PlayerInteractEvent
 import org.chorus.item.Item
+import org.chorus.level.Sound
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
-import org.chorus.nbt.tag.CompoundTag.putBoolean
+import org.chorus.nbt.tag.CompoundTag
 
-class BlockSuspiciousGravel @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSuspiciousGravel @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFallable(blockstate) {
     override val name: String
         get() = "Suspicious Gravel"
@@ -40,7 +43,7 @@ class BlockSuspiciousGravel @JvmOverloads constructor(blockstate: BlockState = C
             level.addSound(this.position, Sound.HIT_SUSPICIOUS_GRAVEL)
             level.setBlock(this.position, this)
         } else {
-            level.setBlock(this.position, BlockGravel.properties.getDefaultState().toBlock())
+            level.setBlock(this.position, BlockGravel.properties.defaultState.toBlock())
             level.addSound(this.position, Sound.BREAK_SUSPICIOUS_GRAVEL)
         }
         super.onTouch(vector, item, face, fx, fy, fz, player, action)
@@ -50,12 +53,14 @@ class BlockSuspiciousGravel @JvmOverloads constructor(blockstate: BlockState = C
         return arrayOf(Item.AIR)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.SUSPICIOUS_GRAVEL,
             CommonBlockProperties.HANGING,
             CommonBlockProperties.BRUSHED_PROGRESS
         )
-
     }
 }

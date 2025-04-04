@@ -1,16 +1,11 @@
 package org.chorus.block
 
-import org.chorus.block.Block.waterloggingLevel
 import org.chorus.entity.Entity
-import org.chorus.event.Event.isCancelled
+import org.chorus.event.block.BlockFormEvent
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
 
-/**
- * @author Pub4Game
- * @since 27.12.2015
- */
-class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Soul Sand"
@@ -46,7 +41,7 @@ class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState = Companion
         if (type == Level.BLOCK_UPDATE_NORMAL) {
             val up = up()
             if (up is BlockFlowingWater && (up.liquidDepth == 0 || up.liquidDepth == 8)) {
-                val event: BlockFormEvent = BlockFormEvent(up, BlockBubbleColumn())
+                val event = BlockFormEvent(up, BlockBubbleColumn())
                 if (!event.isCancelled) {
                     if (event.newState.waterloggingLevel > 0) {
                         level.setBlock(up.position, 1, BlockFlowingWater(), true, false)
@@ -58,8 +53,10 @@ class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState = Companion
         return 0
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SOUL_SAND)
-
     }
 }

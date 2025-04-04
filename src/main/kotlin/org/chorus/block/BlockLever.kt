@@ -146,7 +146,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         return if (isPowerOn) 15 else 0
     }
 
-    override fun getStrongPower(side: BlockFace?): Int {
+    override fun getStrongPower(side: BlockFace): Int {
         return if (!isPowerOn) 0 else if (leverOrientation.facing == side) 15 else 0
     }
 

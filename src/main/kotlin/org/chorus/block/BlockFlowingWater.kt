@@ -27,7 +27,7 @@ open class BlockFlowingWater @JvmOverloads constructor(blockstate: BlockState = 
         return ret
     }
 
-    override fun afterRemoval(newBlock: Block?, update: Boolean) {
+    override fun afterRemoval(newBlock: Block, update: Boolean) {
         if (!update) {
             return
         }

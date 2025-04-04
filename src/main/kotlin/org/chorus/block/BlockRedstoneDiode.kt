@@ -1,22 +1,23 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.Block.Companion.get
 import org.chorus.block.BlockLever.Companion.isSupportValid
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.event.Event.isCancelled
+import org.chorus.block.property.CommonPropertyMap
+import org.chorus.block.property.enums.MinecraftCardinalDirection
+import org.chorus.event.redstone.RedstoneUpdateEvent
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.math.Vector3
 import org.chorus.utils.Faceable
-import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
-import org.chorus.utils.RedstoneComponent.updateAllAroundRedstone
-import org.chorus.utils.RedstoneComponent.updateAroundRedstone
+import org.chorus.utils.RedstoneComponent
 import kotlin.math.max
-
 
 abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blockstate),
     RedstoneComponent, Faceable {
@@ -103,7 +104,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
                 return Level.BLOCK_UPDATE_NORMAL
             } else if (Server.instance.settings.levelSettings.enableRedstone) {
                 // Redstone event
-                val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
+                val ev = RedstoneUpdateEvent(this)
                 Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return 0
@@ -155,7 +156,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
             val block = level.getBlock(pos)
             return max(
                 power.toDouble(),
-                (if (block.id == Block.REDSTONE_WIRE) block.blockState.specialValue() else 0).toDouble()
+                (if (block.id == BlockID.REDSTONE_WIRE) block.blockState.specialValue() else 0).toDouble()
             ).toInt()
         }
     }
@@ -175,7 +176,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
 
     protected fun getPowerOnSide(pos: Vector3, side: BlockFace?): Int {
         val block = level.getBlock(pos)
-        return if (isAlternateInput(block)) (if (block.id == Block.REDSTONE_BLOCK) 15 else (if (block.id == Block.REDSTONE_WIRE)
+        return if (isAlternateInput(block)) (if (block.id == BlockID.REDSTONE_BLOCK) 15 else (if (block.id == BlockID.REDSTONE_WIRE)
             block.blockState.specialValue()
                 .toInt()
         else
@@ -214,12 +215,12 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
     protected open val redstoneSignal: Int
         get() = 15
 
-    override fun getStrongPower(side: BlockFace?): Int {
+    override fun getStrongPower(side: BlockFace): Int {
         return getWeakPower(side)
     }
 
-    override fun getWeakPower(side: BlockFace): Int {
-        return if (!this.isPowered()) 0 else (if (facing == side) redstoneSignal else 0)
+    override fun getWeakPower(face: BlockFace): Int {
+        return if (!this.isPowered()) 0 else (if (facing == face) redstoneSignal else 0)
     }
 
     override fun canBeActivated(): Boolean {
@@ -246,15 +247,13 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
     }
 
     override var blockFace: BlockFace
-        get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
-            getPropertyValue<MinecraftCardinalDirection, org.chorus.block.property.type.EnumPropertyType<MinecraftCardinalDirection>>(
-                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
-            )
-        )
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )]!!
         set(face) {
-            setPropertyValue<MinecraftCardinalDirection, org.chorus.block.property.type.EnumPropertyType<MinecraftCardinalDirection>>(
+            setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face)
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]!!
             )
         }
 

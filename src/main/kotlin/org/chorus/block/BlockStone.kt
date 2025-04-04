@@ -4,7 +4,7 @@ import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
 
-class BlockStone @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
+class BlockStone @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockState) {
     override val hardness: Double
         get() = 1.5
@@ -30,8 +30,10 @@ class BlockStone @JvmOverloads constructor(blockState: BlockState = Companion.pr
         return arrayOf(get(BlockID.COBBLESTONE).toItem())
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.STONE)
-
     }
 }

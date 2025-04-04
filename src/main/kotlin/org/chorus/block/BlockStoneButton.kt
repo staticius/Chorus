@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-open class BlockStoneButton @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+open class BlockStoneButton @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockButton(blockstate) {
     override val name: String
         get() = "Stone Button"
@@ -18,12 +18,14 @@ open class BlockStoneButton @JvmOverloads constructor(blockstate: BlockState = C
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.STONE_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-
     }
 }

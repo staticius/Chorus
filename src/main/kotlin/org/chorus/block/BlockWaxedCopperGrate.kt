@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockWaxedCopperGrate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockWaxedCopperGrate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCopperGrateBase(blockstate) {
     override val oxidizationLevel: OxidizationLevel
         get() = OxidizationLevel.UNAFFECTED

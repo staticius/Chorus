@@ -11,7 +11,7 @@ import org.chorus.math.CompassRoseDirection
  * @author Pub4Game
  * @since 26.12.2015
  */
-open class BlockWallSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
+open class BlockWallSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockStandingSign(blockState) {
     override val wallSignId: String
         get() = id

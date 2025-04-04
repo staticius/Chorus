@@ -5,10 +5,7 @@ import org.chorus.item.Item
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
-/**
- * @author good777LUCKY
- */
-class BlockStructureVoid @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockStructureVoid @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Structure Void"
@@ -43,8 +40,10 @@ class BlockStructureVoid @JvmOverloads constructor(blockstate: BlockState = Comp
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.STRUCTURE_VOID)
-
     }
 }

@@ -3,31 +3,32 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.Block.Companion.get
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonPropertyMap
+import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.block.property.type.EnumPropertyType
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
 import org.chorus.item.ItemTool
 import org.chorus.level.Locator
+import org.chorus.level.ParticleEffect
 import org.chorus.math.BlockFace
-import org.chorus.registry.BiomeRegistry.get
-import org.chorus.registry.BlockRegistry.get
-import org.chorus.utils.ChorusRandom.nextInt
+import org.chorus.utils.ChorusRandom
+import org.chorus.utils.Faceable
 
-class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate), Faceable {
     override val name: String
         get() = "Small Dripleaf"
 
-    var blockFace: BlockFace?
-        get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
-            getPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
-                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
-            )
-        )
+    override var blockFace: BlockFace
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )]!!
         set(face) {
-            setPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+            setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(face)
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[face]!!
             )
         }
 
@@ -78,9 +79,9 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState =
         }
     }
 
-    override fun onBreak(item: Item): Boolean {
+    override fun onBreak(item: Item?): Boolean {
         level.setBlock(this.position, BlockAir(), true, true)
-        if (item.isShears) level.dropItem(this.position, toItem())
+        if (item!!.isShears) level.dropItem(this.position, toItem())
         if (getSide(BlockFace.UP).id == BlockID.SMALL_DRIPLEAF_BLOCK) {
             level.getBlock(getSide(BlockFace.UP).position).onBreak(null)
         }
@@ -111,7 +112,7 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState =
         fz: Float
     ): Boolean {
         if (item.isFertilizer) {
-            val random: NukkitRandom = NukkitRandom()
+            val random = ChorusRandom()
             val height: Int = random.nextInt(4) + 2
 
             val blockBigDripleafDown = BlockBigDripleaf()
@@ -160,12 +161,14 @@ class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState =
     override val isFertilizable: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.SMALL_DRIPLEAF_BLOCK,
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.UPPER_BLOCK_BIT
         )
-
     }
 }

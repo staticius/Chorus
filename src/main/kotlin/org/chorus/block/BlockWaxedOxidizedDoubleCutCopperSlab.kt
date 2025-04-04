@@ -2,10 +2,10 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockWaxedOxidizedDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockWaxedOxidizedDoubleCutCopperSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockOxidizedDoubleCutCopperSlab(blockstate) {
     override val singleSlab: BlockState
-        get() = BlockWaxedOxidizedCutCopperSlab.Companion.PROPERTIES.getDefaultState()
+        get() = BlockWaxedOxidizedCutCopperSlab.Companion.properties.defaultState
 
     override fun isWaxed(): Boolean {
         return true

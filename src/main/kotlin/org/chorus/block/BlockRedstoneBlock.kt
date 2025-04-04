@@ -4,9 +4,10 @@ import org.chorus.Player
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
+import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-class BlockRedstoneBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockRedstoneBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), RedstoneComponent {
     override val resistance: Double
         get() = 10.0
@@ -61,8 +62,10 @@ class BlockRedstoneBlock @JvmOverloads constructor(blockstate: BlockState = Comp
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_BLOCK)
-
     }
 }

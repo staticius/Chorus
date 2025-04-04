@@ -2,10 +2,13 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockRepeatingCommandBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockRepeatingCommandBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCommandBlock(blockstate) {
     override val name: String
         get() = "Repeating Command Block"
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -13,6 +16,5 @@ class BlockRepeatingCommandBlock @JvmOverloads constructor(blockstate: BlockStat
             CommonBlockProperties.CONDITIONAL_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-
     }
 }

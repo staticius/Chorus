@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-open class BlockWoodenPressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+open class BlockWoodenPressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockPressurePlateBase(blockstate) {
     init {
         this.onPitch = 0.8f

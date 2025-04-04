@@ -2,35 +2,39 @@ package org.chorus.block
 
 import com.google.common.base.Preconditions
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.entity.Entity
-import org.chorus.event.Event.isCancelled
+import org.chorus.entity.EntityLiving
+import org.chorus.event.block.BlockFadeEvent
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.math.Vector3
+import org.chorus.network.protocol.UpdateBlockPacket
+import org.chorus.plugin.InternalPlugin
+import org.chorus.registry.BiomeRegistry
 import org.chorus.registry.Registries
+import org.chorus.tags.BiomeTags
 import java.util.*
 import java.util.stream.Stream
 import kotlin.math.min
 
-/**
- * @author xtypr, joserobjr
- * @since 2015/12/6
- */
-class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFallable(blockstate) {
     override val name: String
         get() = "Top Snow"
 
     var snowHeight: Int
-        get() = getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HEIGHT)
+        get() = getPropertyValue(CommonBlockProperties.HEIGHT)
         set(snowHeight) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HEIGHT, snowHeight)
+            setPropertyValue(CommonBlockProperties.HEIGHT, snowHeight)
         }
 
     var isCovered: Boolean
@@ -50,7 +54,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
         if (snowHeight < 3) {
             return null
         }
-        if (snowHeight == 3 || snowHeight == CommonBlockProperties.HEIGHT.getMax()) {
+        if (snowHeight == 3 || snowHeight == CommonBlockProperties.HEIGHT.max) {
             return this
         }
         return SimpleAxisAlignedBB(
@@ -74,7 +78,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
         get() = ItemTool.TYPE_SHOVEL
 
     override fun canBeReplaced(): Boolean {
-        return snowHeight < CommonBlockProperties.HEIGHT.getMax()
+        return snowHeight < CommonBlockProperties.HEIGHT.max
     }
 
     override fun place(
@@ -90,19 +94,19 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
         val increment = Stream.of<Block>(target, block)
             .filter { b: Block -> b.id == BlockID.SNOW_LAYER }
             .map<BlockSnowLayer> { obj: Block? -> BlockSnowLayer::class.java.cast(obj) }
-            .filter { b: BlockSnowLayer -> b.snowHeight < CommonBlockProperties.HEIGHT.getMax() }
+            .filter { b: BlockSnowLayer -> b.snowHeight < CommonBlockProperties.HEIGHT.max }
             .findFirst()
 
         if (increment.isPresent) {
             val other = increment.get()
-            if (Arrays.stream<Entity?>(
-                    level.getCollidingEntities(
-                        SimpleAxisAlignedBB(
-                            other.position.x, other.position.y, other.position.z,
-                            other.position.x + 1, other.position.y + 1, other.position.z + 1
-                        )
+            if (
+                level.getCollidingEntities(
+                    SimpleAxisAlignedBB(
+                        other.position.x, other.position.y, other.position.z,
+                        other.position.x + 1, other.position.y + 1, other.position.z + 1
                     )
-                ).anyMatch { e: Entity? -> e is EntityLiving }
+                ).stream()
+                .anyMatch { e: Entity? -> e is EntityLiving }
             ) {
                 return false
             }
@@ -174,12 +178,12 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
     override fun onUpdate(type: Int): Int {
         super.onUpdate(type)
         if (type == Level.BLOCK_UPDATE_RANDOM) {
-            val biomeDefinition: BiomeDefinition? = Registries.BIOME.get(
+            val biomeDefinition = Registries.BIOME.get(
                 level.getBiomeId(
                     floorX,
                     position.floorY, floorZ
                 )
-            )
+            )!!
             if (biomeDefinition.tags.contains(BiomeTags.WARM) || level.getBlockLightAt(floorX, floorY, floorZ) >= 10) {
                 melt()
                 return Level.BLOCK_UPDATE_RANDOM
@@ -199,7 +203,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
     fun melt(layers: Int = 2): Boolean {
         Preconditions.checkArgument(layers > 0, "Layers must be positive, got {}", layers)
         var toMelt: Block = this
-        while (toMelt.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HEIGHT) === CommonBlockProperties.HEIGHT.getMax()) {
+        while (toMelt.getPropertyValue(CommonBlockProperties.HEIGHT) === CommonBlockProperties.HEIGHT.max) {
             val up = toMelt.up()
             if (up.id != BlockID.SNOW_LAYER) {
                 break
@@ -208,11 +212,11 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
             toMelt = up
         }
 
-        val snowHeight = toMelt.getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.HEIGHT) - layers
+        val snowHeight = toMelt.getPropertyValue(CommonBlockProperties.HEIGHT) - layers
         val newState = if (snowHeight < 0) get(BlockID.AIR) else get(
             blockState.setPropertyValue(Companion.properties, CommonBlockProperties.HEIGHT, snowHeight)
         )
-        val event: BlockFadeEvent = BlockFadeEvent(toMelt, newState)
+        val event = BlockFadeEvent(toMelt, newState)
         Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
             return false
@@ -232,7 +236,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
             5, 6 -> 3
             else -> 4
         }
-        return arrayOf<Item?>(get(ItemID.SNOWBALL, 0, amount))
+        return arrayOf(get(ItemID.SNOWBALL, 0, amount))
     }
 
     override fun canHarvestWithHand(): Boolean {
@@ -259,16 +263,18 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
     }
 
     override fun isSolid(side: BlockFace): Boolean {
-        return side == BlockFace.UP && snowHeight == CommonBlockProperties.HEIGHT.getMax()
+        return side == BlockFace.UP && snowHeight == CommonBlockProperties.HEIGHT.max
     }
 
     override fun toFallingItem(): Item {
         return Item.get(ItemID.SNOWBALL)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SNOW_LAYER, CommonBlockProperties.COVERED_BIT, CommonBlockProperties.HEIGHT)
-
     }
 }

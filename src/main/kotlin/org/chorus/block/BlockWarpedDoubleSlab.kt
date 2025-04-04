@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 
-class BlockWarpedDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockWarpedDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
     override val slabName: String
         get() = "Warped"
@@ -29,7 +29,7 @@ class BlockWarpedDoubleSlab @JvmOverloads constructor(blockstate: BlockState = C
         get() = 0
 
     override val singleSlab: BlockState
-        get() = BlockWarpedSlab.Companion.PROPERTIES.getDefaultState()
+        get() = BlockWarpedSlab.Companion.properties.defaultState
 
     companion object {
         val properties: BlockProperties =

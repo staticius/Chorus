@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockWarpedFence @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockWarpedFence @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFence(blockstate) {
     override val name: String
         get() = "Warped Fence"

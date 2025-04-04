@@ -4,8 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
 class BlockStoneBrickSlab(blockState: BlockState) : BlockSlab(blockState, BlockID.STONE_BRICK_DOUBLE_SLAB) {
-    override val slabName: String
-        get() = "Stone Brick"
+    override fun getSlabName() = "Stone Brick"
 
     override fun canHarvestWithHand(): Boolean {
         return false
@@ -20,6 +19,9 @@ class BlockStoneBrickSlab(blockState: BlockState) : BlockSlab(blockState, BlockI
     override fun isSameType(slab: BlockSlab): Boolean {
         return slab.id == this.id
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =

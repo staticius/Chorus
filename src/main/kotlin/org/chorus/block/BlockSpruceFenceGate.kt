@@ -2,10 +2,13 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockSpruceFenceGate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSpruceFenceGate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFenceGate(blockstate) {
     override val name: String
         get() = "Spruce Fence Gate"
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -14,6 +17,5 @@ class BlockSpruceFenceGate @JvmOverloads constructor(blockstate: BlockState = Co
             CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
             CommonBlockProperties.OPEN_BIT
         )
-
     }
 }

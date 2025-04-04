@@ -1,9 +1,12 @@
 package org.chorus.block
 
-class BlockSmoothRedSandstone @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSmoothRedSandstone @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSmoothSandstone(blockstate) {
+
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SMOOTH_RED_SANDSTONE)
-
     }
 }

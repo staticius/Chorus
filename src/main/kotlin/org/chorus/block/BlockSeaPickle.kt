@@ -4,16 +4,20 @@ import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.event.Event.isCancelled
+import org.chorus.block.property.type.IntPropertyType
+import org.chorus.event.block.BlockFadeEvent
+import org.chorus.event.block.BlockGrowEvent
+import org.chorus.event.block.BlockSpreadEvent
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.math.Vector2
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Sea Pickle"
@@ -75,7 +79,7 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companio
         fz: Double,
         player: Player?
     ): Boolean {
-        if (target.id == BlockID.SEA_PICKLE && target.getPropertyValue<Int, IntPropertyType>(
+        if (target!!.id == BlockID.SEA_PICKLE && target.getPropertyValue<Int, IntPropertyType>(
                 CommonBlockProperties.CLUSTER_COUNT
             ) < 3
         ) {
@@ -201,7 +205,7 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companio
     }
 
     override fun getDrops(item: Item): Array<Item> {
-        return arrayOf<Item?>(
+        return arrayOf(
             ItemBlock(
                 BlockSeaPickle(), 0, getPropertyValue<Int, IntPropertyType>(
                     CommonBlockProperties.CLUSTER_COUNT
@@ -213,9 +217,11 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companio
     override val isFertilizable: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SEA_PICKLE, CommonBlockProperties.CLUSTER_COUNT, CommonBlockProperties.DEAD_BIT)
-
     }
 }

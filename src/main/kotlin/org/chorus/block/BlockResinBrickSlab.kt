@@ -22,9 +22,11 @@ class BlockResinBrickSlab(blockState: BlockState) : BlockSlab(blockState, BlockI
         return this.id == slab.id
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.RESIN_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

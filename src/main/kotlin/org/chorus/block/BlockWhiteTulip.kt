@@ -1,7 +1,7 @@
 package org.chorus.block
 
 class BlockWhiteTulip : BlockFlower {
-    constructor() : super(Companion.properties.getDefaultState())
+    constructor() : super(Companion.properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 

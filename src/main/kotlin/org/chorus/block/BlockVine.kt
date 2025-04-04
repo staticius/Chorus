@@ -21,7 +21,7 @@ import kotlin.math.min
  * @author Pub4Game
  * @since 15.01.2016
  */
-class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Vines"

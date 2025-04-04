@@ -4,7 +4,7 @@ import org.chorus.block.property.CommonBlockProperties
 
 open class BlockWeatheredCutCopperSlab : BlockCutCopperSlab {
     @JvmOverloads
-    constructor(blockstate: BlockState = Companion.properties.getDefaultState()) : super(
+    constructor(blockstate: BlockState = Companion.properties.defaultState) : super(
         blockstate,
         BlockID.WEATHERED_DOUBLE_CUT_COPPER_SLAB
     )

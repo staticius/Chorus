@@ -1,9 +1,11 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.entity.EntityLiving
 import org.chorus.item.ItemTool
+import org.chorus.math.AxisAlignedBB
 
-open class BlockStonePressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+open class BlockStonePressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockPressurePlateBase(blockstate) {
     init {
         this.onPitch = 0.6f
@@ -26,10 +28,10 @@ open class BlockStonePressurePlate @JvmOverloads constructor(blockstate: BlockSt
         get() = ItemTool.TIER_WOODEN
 
     override fun computeRedstoneStrength(): Int {
-        val bb: AxisAlignedBB? = collisionBoundingBox
+        val bb = collisionBoundingBox!!
 
         for (entity in level.getCollidingEntities(bb)) {
-            if (entity is EntityLiving && entity!!.doesTriggerPressurePlate()) {
+            if (entity is EntityLiving && entity.doesTriggerPressurePlate()) {
                 return 15
             }
         }
@@ -37,9 +39,11 @@ open class BlockStonePressurePlate @JvmOverloads constructor(blockstate: BlockSt
         return 0
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STONE_PRESSURE_PLATE, CommonBlockProperties.REDSTONE_SIGNAL)
-
     }
 }

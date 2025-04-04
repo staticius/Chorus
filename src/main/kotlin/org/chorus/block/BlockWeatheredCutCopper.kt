@@ -1,6 +1,6 @@
 package org.chorus.block
 
-open class BlockWeatheredCutCopper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+open class BlockWeatheredCutCopper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCutCopper(blockstate) {
     override fun getOxidizationLevel(): OxidizationLevel {
         return OxidizationLevel.WEATHERED

@@ -22,9 +22,11 @@ class BlockRedNetherBrickSlab(blockState: BlockState) : BlockSlab(blockState, Bl
         return slab.id == this.id
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.RED_NETHER_BRICK_SLAB, CommonBlockProperties.MINECRAFT_VERTICAL_HALF)
-
     }
 }

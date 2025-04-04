@@ -51,7 +51,7 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState = Compani
         return 0
     }
 
-    override fun afterRemoval(newBlock: Block?, update: Boolean) {
+    override fun afterRemoval(newBlock: Block, update: Boolean) {
         updateAroundRedstone(down())
         if (getOrientation()!!.isAscending) {
             updateAroundRedstone(up())

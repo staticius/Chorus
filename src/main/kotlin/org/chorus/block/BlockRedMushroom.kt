@@ -1,6 +1,8 @@
 package org.chorus.block
 
-class BlockRedMushroom @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+import org.chorus.level.generator.`object`.ObjectBigMushroom
+
+class BlockRedMushroom @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockMushroom(blockstate) {
     override val name: String
         get() = "Red Mushroom"
@@ -8,11 +10,12 @@ class BlockRedMushroom @JvmOverloads constructor(blockstate: BlockState = Compan
     override val lightLevel: Int
         get() = 1
 
-    override val type: MushroomType
-        get() = ObjectBigMushroom.MushroomType.RED
+    override fun getType() = ObjectBigMushroom.MushroomType.RED
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.RED_MUSHROOM)
-
     }
 }

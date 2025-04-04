@@ -10,7 +10,7 @@ import org.chorus.math.BlockFace
  * @author xtypr
  * @since 2015/12/1
  */
-class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Lily Pad"

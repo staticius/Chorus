@@ -1,7 +1,7 @@
 package org.chorus.block
 
 
-class BlockReinforcedDeepslate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockReinforcedDeepslate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "ReinForced DeepSlate"
@@ -9,8 +9,10 @@ class BlockReinforcedDeepslate @JvmOverloads constructor(blockstate: BlockState 
     override val resistance: Double
         get() = 1200.0
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REINFORCED_DEEPSLATE)
-
     }
 }

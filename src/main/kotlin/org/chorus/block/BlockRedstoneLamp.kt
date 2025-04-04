@@ -1,17 +1,16 @@
 package org.chorus.block
 
 import org.chorus.Player
-import org.chorus.event.Event.isCancelled
+import org.chorus.Server
+import org.chorus.event.redstone.RedstoneUpdateEvent
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
+import org.chorus.utils.RedstoneComponent
 
-/**
- * @author Nukkit Project Team
- */
-open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
+open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockState), RedstoneComponent {
     override val name: String
         get() = "Redstone Lamp"
@@ -51,7 +50,7 @@ open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = 
 
             if (this.isGettingPower) {
                 // Redstone event
-                val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
+                val ev = RedstoneUpdateEvent(this)
                 Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     return 0
@@ -73,8 +72,10 @@ open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = 
         )
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_LAMP)
-
     }
 }

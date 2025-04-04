@@ -3,16 +3,19 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
+import org.chorus.block.property.type.IntPropertyType
 import org.chorus.entity.Entity
+import org.chorus.entity.item.EntityFallingBlock
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
-import org.chorus.nbt.tag.CompoundTag.putBoolean
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.nbt.tag.CompoundTag
 
-class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFallable(blockstate) {
     override val name: String
         get() = "Scaffolding"
@@ -51,7 +54,7 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
         }
 
         val down = down()
-        if ((target.id != BlockID.SCAFFOLDING) && (down.id != BlockID.SCAFFOLDING) && !down.isAir && !down.isSolid) {
+        if ((target!!.id != BlockID.SCAFFOLDING) && (down.id != BlockID.SCAFFOLDING) && !down.isAir && !down.isSolid) {
             var scaffoldOnSide = false
             for (i in 0..3) {
                 val sideFace = fromHorizontalIndex(i)
@@ -164,7 +167,7 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return SimpleAxisAlignedBB(
             position.x,
             position.y + (2.0 / 16),
@@ -210,9 +213,11 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
         return side == BlockFace.UP
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SCAFFOLDING, CommonBlockProperties.STABILITY, CommonBlockProperties.STABILITY_CHECK)
-
     }
 }

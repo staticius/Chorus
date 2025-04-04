@@ -32,7 +32,7 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.registry.Registries
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Turtle Egg"

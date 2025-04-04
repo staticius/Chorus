@@ -4,17 +4,20 @@ import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.event.Event.isCancelled
+import org.chorus.event.block.BlockGrowEvent
 import org.chorus.item.Item
+import org.chorus.item.ItemSugarCane
 import org.chorus.level.Level
+import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace
+import org.chorus.tags.BlockTags
 
-class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Reeds"
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemSugarCane()
     }
 
@@ -57,7 +60,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.pr
                 for (i in 1..toGrow) {
                     val block = this.up(i)
                     if (block.isAir) {
-                        val ev: BlockGrowEvent = BlockGrowEvent(block, get(BlockID.REEDS))
+                        val ev = BlockGrowEvent(block, get(BlockID.REEDS))
                         instance.pluginManager.callEvent(ev)
 
                         if (!ev.isCancelled) {
@@ -185,8 +188,10 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.pr
     override val isFertilizable: Boolean
         get() = true
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REEDS, CommonBlockProperties.AGE_16)
-
     }
 }

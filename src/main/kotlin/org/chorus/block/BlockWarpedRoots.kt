@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockWarpedRoots @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockWarpedRoots @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockHanging(blockstate), FlowerPotBlock, Natural {
     override val name: String
         get() = "Warped Roots"

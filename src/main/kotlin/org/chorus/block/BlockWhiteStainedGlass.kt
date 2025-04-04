@@ -1,6 +1,6 @@
 package org.chorus.block
 
-class BlockWhiteStainedGlass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockWhiteStainedGlass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockGlassStained(blockstate) {
     override fun getDyeColor()  = DyeColor.WHITE
 

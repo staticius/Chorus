@@ -3,35 +3,36 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.Block.Companion.get
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.CommonPropertyMap
+import org.chorus.block.property.enums.MinecraftCardinalDirection
+import org.chorus.block.property.type.EnumPropertyType
 import org.chorus.inventory.BlockInventoryHolder
 import org.chorus.inventory.Inventory
+import org.chorus.inventory.StonecutterInventory
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
 import org.chorus.item.ItemBlock
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
-import org.chorus.registry.BiomeRegistry.get
-import org.chorus.registry.BlockRegistry.get
+import org.chorus.utils.Faceable
 import java.util.function.Supplier
 
-class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockInventoryHolder {
     override val name: String
         get() = "Stonecutter"
 
-    var blockFace: BlockFace
-        get() = CommonPropertyMap.CARDINAL_BLOCKFACE.get(
-            getPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
-                CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
-            )
-        )
+    override var blockFace: BlockFace
+        get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+        )]!!
         set(face) {
             val horizontalIndex = face.horizontalIndex
             if (horizontalIndex > -1) {
-                this.setPropertyValue<MinecraftCardinalDirection, EnumPropertyType<MinecraftCardinalDirection>>(
+                this.setPropertyValue(
                     CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                    CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(fromHorizontalIndex(horizontalIndex))
+                    CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[fromHorizontalIndex(horizontalIndex)]!!
                 )
             }
         }
@@ -65,7 +66,7 @@ class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState = C
         fy: Float,
         fz: Float
     ): Boolean {
-        player?.addWindow(inventory!!)
+        player?.addWindow(inventory)
         return true
     }
 
@@ -102,13 +103,15 @@ class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState = C
             super.maxY = maxY
         }
 
-    override fun blockInventorySupplier(): Supplier<Inventory?> {
-        return Supplier<Inventory?> { StonecutterInventory(this) }
+    override fun blockInventorySupplier(): Supplier<Inventory> {
+        return Supplier { StonecutterInventory(this) }
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.STONECUTTER_BLOCK, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)
-
     }
 }

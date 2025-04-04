@@ -153,7 +153,7 @@ abstract class BlockButton(meta: BlockState) : BlockFlowable(meta), RedstoneComp
         return if (isActivated) 15 else 0
     }
 
-    override fun getStrongPower(side: BlockFace?): Int {
+    override fun getStrongPower(side: BlockFace): Int {
         return if (!isActivated) 0 else (if (facing == side) 15 else 0)
     }
 

@@ -2,7 +2,7 @@ package org.chorus.block
 
 import org.chorus.item.*
 
-class BlockTintedGlass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockTintedGlass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockGlass(blockstate) {
     override val name: String
         get() = "Tinted Glass"

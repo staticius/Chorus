@@ -38,7 +38,7 @@ class BlockObsidian : BlockSolid {
         return super.onBreak(item)
     }
 
-    override fun afterRemoval(newBlock: Block?, update: Boolean) {
+    override fun afterRemoval(newBlock: Block, update: Boolean) {
         if (update) {
             onBreak(Item.AIR)
         }

@@ -2,16 +2,16 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.StructureBlockType
 import org.chorus.blockentity.BlockEntity
-import org.chorus.blockentity.BlockEntitySpawnable.spawnTo
-import org.chorus.blockentity.BlockEntityStructBlock.getInventory
+import org.chorus.blockentity.BlockEntityID
+import org.chorus.blockentity.BlockEntityStructBlock
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
-import org.chorus.utils.BlockColor.equals
 
-class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
-    BlockSolid(blockstate), BlockEntityHolder<BlockEntityStructBlock?> {
+class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+    BlockSolid(blockstate), BlockEntityHolder<BlockEntityStructBlock> {
     var structureBlockType: StructureBlockType
         get() = getPropertyValue(CommonBlockProperties.STRUCTURE_BLOCK_TYPE)
         set(type) {
@@ -35,7 +35,7 @@ class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState = Com
     ): Boolean {
         if (player != null) {
             if (player.isCreative && player.isOp) {
-                val tile: BlockEntityStructBlock? = this.getOrCreateBlockEntity()
+                val tile = this.getOrCreateBlockEntity()
                 tile.spawnTo(player)
                 player.addWindow(tile.getInventory())
             }
@@ -84,15 +84,15 @@ class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState = Com
         return false
     }
 
-    override val blockEntityClass: Class<out Any>
-        get() = BlockEntityStructBlock::class.java
+    override fun getBlockEntityClass() = BlockEntityStructBlock::class.java
 
-    override fun getBlockEntityType(): String {
-        return BlockEntity.STRUCTURE_BLOCK
+    override fun getBlockEntityType() = BlockEntityID.STRUCTURE_BLOCK
 
-        companion object {
-            val properties: BlockProperties =
-                BlockProperties(BlockID.STRUCTURE_BLOCK, CommonBlockProperties.STRUCTURE_BLOCK_TYPE)
+    override val properties: BlockProperties
+        get() = Companion.properties
 
-        }
+    companion object {
+        val properties: BlockProperties =
+            BlockProperties(BlockID.STRUCTURE_BLOCK, CommonBlockProperties.STRUCTURE_BLOCK_TYPE)
     }
+}

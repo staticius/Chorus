@@ -3,6 +3,7 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
 import org.chorus.item.ItemTool
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
@@ -11,7 +12,7 @@ import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockShortGrass : BlockFlowable {
-    constructor() : super(Companion.properties.getDefaultState())
+    constructor() : super(Companion.properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 
@@ -89,7 +90,7 @@ class BlockShortGrass : BlockFlowable {
 
     override fun getDrops(item: Item): Array<Item> {
         // https://minecraft.wiki/w/Fortune#Grass_and_ferns
-        val drops: MutableList<Item?> = ArrayList(2)
+        val drops: MutableList<Item> = ArrayList(2)
         if (item.isShears) {
             drops.add(toItem())
         }
@@ -108,8 +109,10 @@ class BlockShortGrass : BlockFlowable {
     override val toolType: Int
         get() = ItemTool.TYPE_SHEARS
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SHORT_GRASS)
-
     }
 }

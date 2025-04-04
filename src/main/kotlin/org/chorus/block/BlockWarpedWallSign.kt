@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
 
-class BlockWarpedWallSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
+class BlockWarpedWallSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWallSign(blockState) {
     override val wallSignId: String
         get() = BlockID.WARPED_WALL_SIGN

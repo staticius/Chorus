@@ -2,6 +2,8 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.MinecraftVerticalHalf
+import org.chorus.block.property.type.EnumPropertyType
 import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
@@ -52,9 +54,9 @@ abstract class BlockSlab : BlockTransparent {
         get() = 1
 
     var isOnTop: Boolean
-        get() = getPropertyValue<MinecraftVerticalHalf, EnumPropertyType<MinecraftVerticalHalf>>(CommonBlockProperties.MINECRAFT_VERTICAL_HALF) == MinecraftVerticalHalf.TOP
+        get() = getPropertyValue(CommonBlockProperties.MINECRAFT_VERTICAL_HALF) == MinecraftVerticalHalf.TOP
         set(top) {
-            setPropertyValue<MinecraftVerticalHalf, EnumPropertyType<MinecraftVerticalHalf>>(
+            setPropertyValue(
                 CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
                 if (top) MinecraftVerticalHalf.TOP else MinecraftVerticalHalf.BOTTOM
             )

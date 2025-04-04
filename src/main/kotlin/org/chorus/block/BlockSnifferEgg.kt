@@ -2,12 +2,13 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
+import org.chorus.block.property.enums.CrackedState
 import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
-//todo complete
+// TODO: complete
 class BlockSnifferEgg : BlockTransparent {
-    constructor() : super(Companion.properties.getDefaultState())
+    constructor() : super(Companion.properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 
@@ -24,15 +25,17 @@ class BlockSnifferEgg : BlockTransparent {
         fz: Double,
         player: Player?
     ): Boolean {
-        this.setPropertyValue<CrackedState, EnumPropertyType<CrackedState>>(
+        this.setPropertyValue(
             CommonBlockProperties.CRACKED_STATE,
             CrackedState.NO_CRACKS
         )
         return level.setBlock(this.position, this)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SNIFFER_EGG, CommonBlockProperties.CRACKED_STATE)
-
     }
 }

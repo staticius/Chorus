@@ -17,7 +17,7 @@ import kotlin.math.ceil
 /**
  * @author joserobjr
  */
-class BlockTarget @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
+class BlockTarget @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockTransparent(blockState), RedstoneComponent, BlockEntityHolder<BlockEntityTarget?> {
     override val name: String
         get() = "Target"

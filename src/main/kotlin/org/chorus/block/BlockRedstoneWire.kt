@@ -1,24 +1,22 @@
 package org.chorus.block
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.event.Event.isCancelled
+import org.chorus.event.block.BlockRedstoneEvent
+import org.chorus.event.redstone.RedstoneUpdateEvent
 import org.chorus.item.Item
+import org.chorus.item.ItemRedstone
 import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
-import org.chorus.math.Vector3.add
-import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
-import org.chorus.utils.RedstoneComponent.updateAllAroundRedstone
-import org.chorus.utils.RedstoneComponent.updateAroundRedstone
+import org.chorus.utils.RedstoneComponent
+import java.util.EnumSet
 import kotlin.math.max
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
-class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Companion.properties.getDefaultState()) :
+class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockFlowable(blockState), RedstoneComponent {
     override val name: String
         get() = "Redstone Wire"
@@ -68,8 +66,8 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
     }
 
     //Update the neighbor's block of the pos location as well as the neighbor's neighbor's block
-    private fun updateAround(pos: Locator, face: BlockFace?) {
-        if (level.getBlock(pos.position).id == Block.REDSTONE_WIRE) {
+    private fun updateAround(pos: Locator, face: BlockFace) {
+        if (level.getBlock(pos.position).id == BlockID.REDSTONE_WIRE) {
             updateAroundRedstone(face)
 
             for (side in BlockFace.entries) {
@@ -180,7 +178,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
         return true
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemRedstone()
     }
 
@@ -194,7 +192,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
         }
 
         // Redstone event
-        val ev: RedstoneUpdateEvent = RedstoneUpdateEvent(this)
+        val ev = RedstoneUpdateEvent(this)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return 0
@@ -218,7 +216,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
         return if (this.isPowerSource) getWeakPower(side) else 0
     }
 
-    override fun getWeakPower(side: BlockFace): Int {
+    override fun getWeakPower(face: BlockFace): Int {
         if (!this.isPowerSource) {
             return 0
         } else {
@@ -226,10 +224,10 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
 
             if (power == 0) {
                 return 0
-            } else if (side == BlockFace.UP) {
+            } else if (face == BlockFace.UP) {
                 return power
             } else {
-                val faces: EnumSet<BlockFace> = EnumSet.noneOf<BlockFace>(BlockFace::class.java)
+                val faces: EnumSet<BlockFace> = EnumSet.noneOf(BlockFace::class.java)
 
                 for (face in BlockFace.Plane.HORIZONTAL) {
                     if (this.isPowerSourceAt(face)) {
@@ -237,9 +235,9 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
                     }
                 }
 
-                return if (side.axis.isHorizontal && faces.isEmpty()) {
+                return if (face.axis.isHorizontal && faces.isEmpty()) {
                     power
-                } else if (faces.contains(side) && !faces.contains(side.rotateYCCW()) && !faces.contains(side.rotateY())) {
+                } else if (faces.contains(face) && !faces.contains(face.rotateYCCW()) && !faces.contains(face.rotateY())) {
                     power
                 } else {
                     0
@@ -291,7 +289,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
 
     private fun getIndirectPower(pos: Vector3, face: BlockFace): Int {
         val block = level.getBlock(pos)
-        if (block.id == Block.REDSTONE_WIRE) {
+        if (block.id == BlockID.REDSTONE_WIRE) {
             return 0
         }
         return if (block.isNormalBlock) getStrongPower(pos) else block.getWeakPower(face)
@@ -312,23 +310,25 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
     private fun getStrongPower(pos: Vector3, direction: BlockFace): Int {
         val block = level.getBlock(pos)
 
-        if (block.id == Block.REDSTONE_WIRE) {
+        if (block.id == BlockID.REDSTONE_WIRE) {
             return 0
         }
 
         return block.getStrongPower(direction)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.REDSTONE_WIRE, CommonBlockProperties.REDSTONE_SIGNAL)
-
 
         protected fun canConnectUpwardsTo(level: Level, pos: Vector3): Boolean {
             return canConnectTo(level.getBlock(pos), null)
         }
 
         protected fun canConnectTo(block: Block, side: BlockFace?): Boolean {
-            if (block.id == Block.REDSTONE_WIRE) {
+            if (block.id == BlockID.REDSTONE_WIRE) {
                 return true
             } else if (BlockRedstoneDiode.Companion.isDiode(block)) {
                 val face = (block as BlockRedstoneDiode).facing

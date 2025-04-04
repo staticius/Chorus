@@ -3,10 +3,13 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 
 
-class BlockSpruceHangingSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockSpruceHangingSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockHangingSign(blockstate) {
     override val name: String
         get() = "Spruce Hanging Sign"
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties = BlockProperties(
@@ -16,6 +19,5 @@ class BlockSpruceHangingSign @JvmOverloads constructor(blockstate: BlockState = 
             CommonBlockProperties.GROUND_SIGN_DIRECTION,
             CommonBlockProperties.HANGING
         )
-
     }
 }

@@ -1,15 +1,18 @@
 package org.chorus.block
 
-import java.util.Set
+import org.chorus.tags.BlockTags
+import org.chorus.utils.DyeColor
 
-class BlockRedWool @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockRedWool @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockWool(blockstate) {
     override fun getDyeColor(): DyeColor {
         return DyeColor.RED
     }
 
-    companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.RED_WOOL, Set.of<String?>(BlockTags.PNX_WOOL))
+    override val properties: BlockProperties
+        get() = Companion.properties
 
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.RED_WOOL, setOf(BlockTags.PNX_WOOL))
     }
 }

@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.ItemTool
 
-class BlockTuffBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.getDefaultState()) :
+class BlockTuffBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockDoubleSlabBase(blockstate) {
     override val name: String
         get() = "Tuff Brick Double Slab"
@@ -19,7 +19,7 @@ class BlockTuffBrickDoubleSlab @JvmOverloads constructor(blockstate: BlockState 
         get() = "Tuff Brick"
 
     override val singleSlab: BlockState
-        get() = BlockTuffBrickSlab.Companion.PROPERTIES.getDefaultState()
+        get() = BlockTuffBrickSlab.Companion.properties.defaultState
 
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE

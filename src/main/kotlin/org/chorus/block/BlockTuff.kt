@@ -6,7 +6,7 @@ import org.chorus.item.ItemTool
  * @author GoodLucky777
  */
 open class BlockTuff : BlockSolid {
-    constructor() : super(Companion.properties.getDefaultState())
+    constructor() : super(Companion.properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.item.ItemTool
 
 class BlockShroomlight : BlockTransparent {
-    constructor() : super(Companion.properties.getDefaultState())
+    constructor() : super(Companion.properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 
@@ -22,8 +22,10 @@ class BlockShroomlight : BlockTransparent {
     override val lightLevel: Int
         get() = 15
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.SHROOMLIGHT)
-
     }
 }

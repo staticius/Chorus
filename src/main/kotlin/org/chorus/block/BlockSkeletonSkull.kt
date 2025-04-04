@@ -2,6 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.item.Item
+import org.chorus.item.ItemSkeletonSkull
 
 class BlockSkeletonSkull(blockState: BlockState) : BlockHead(blockState) {
     override val name: String
@@ -13,13 +14,15 @@ class BlockSkeletonSkull(blockState: BlockState) : BlockHead(blockState) {
         )
     }
 
-    override fun toItem(): Item? {
+    override fun toItem(): Item {
         return ItemSkeletonSkull()
     }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.SKELETON_SKULL, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

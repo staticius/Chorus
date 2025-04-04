@@ -16,7 +16,7 @@ import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 
-class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion.properties.getDefaultState()) :
+class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion.properties.defaultState) :
     BlockTransparent(state), RedstoneComponent {
     override val name: String
         get() = "Tripwire Hook"
@@ -256,7 +256,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState? = Companion
         return if (isPowered) 15 else 0
     }
 
-    override fun getStrongPower(side: BlockFace?): Int {
+    override fun getStrongPower(side: BlockFace): Int {
         return if (!isPowered) 0 else if (facing == side) 15 else 0
     }
 
