@@ -21,6 +21,6 @@ class WillingnessExecutor : EntityControl, IBehaviorExecutor {
                 }
             }
         }
-        entity.memoryStorage[CoreMemoryTypes.WILLING] = true
+        entity.memoryStorage.set(CoreMemoryTypes.WILLING, true)
     }
 }

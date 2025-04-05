@@ -14,7 +14,7 @@ class VillagerBreedingExecutor(entityClass: Class<EntityMob>, findingRangeSquare
     override fun onStart(entity: EntityMob) {
         super.onStart(entity)
         finded = true
-        another = entity.memoryStorage[CoreMemoryTypes.ENTITY_SPOUSE] as EntityMob
+        another = entity.memoryStorage.get(CoreMemoryTypes.ENTITY_SPOUSE) as EntityMob
     }
 
     override fun onStop(entity: EntityMob) {
@@ -63,8 +63,8 @@ class VillagerBreedingExecutor(entityClass: Class<EntityMob>, findingRangeSquare
         val baby = Entity.Companion.createEntity(entity.getNetworkID(), entity.getLocator()) as EntityVillagerV2
         baby.setBaby(true)
         //防止小屁孩去生baby
-        baby.memoryStorage[CoreMemoryTypes.LAST_IN_LOVE_TIME] = entity.level!!.tick
-        baby.memoryStorage[CoreMemoryTypes.PARENT] = entity
+        baby.memoryStorage.set(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.level!!.tick)
+        baby.memoryStorage.set(CoreMemoryTypes.PARENT, entity)
         baby.spawnToAll()
     }
 
@@ -77,8 +77,8 @@ class VillagerBreedingExecutor(entityClass: Class<EntityMob>, findingRangeSquare
         //reset move speed
         entity.setMovementSpeed(0.1f)
         //interrupt in love status
-        entity.memoryStorage[CoreMemoryTypes.WILLING] = false
-        entity.memoryStorage[CoreMemoryTypes.LAST_IN_LOVE_TIME] = entity.level!!.tick
+        entity.memoryStorage.set(CoreMemoryTypes.WILLING, false)
+        entity.memoryStorage.set(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.level!!.tick)
     }
 
     protected fun sendInLoveParticles(entity: EntityMob) {

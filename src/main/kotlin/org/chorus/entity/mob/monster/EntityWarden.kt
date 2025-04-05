@@ -116,8 +116,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                 Behavior(
                     WardenViolentAnimationExecutor((4.2 * 20).toInt()), all(
                         IBehaviorEvaluator { entity: EntityMob ->
-                            entity.memoryStorage!!
-                                .compareDataTo<Boolean>(CoreMemoryTypes.Companion.IS_ATTACK_TARGET_CHANGED, true)
+                            entity.memoryStorage[CoreMemoryTypes.IS_ATTACK_TARGET_CHANGED]
                         },
                         MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET)
                     ), 5
@@ -331,10 +330,8 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
     }
 
     fun calHeartBeatDelay(): Int {
-        val target =
-            this.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
-        val anger = this.memoryStorage!!.get<MutableMap<Entity, Int>>(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)
-            .getOrDefault(target, 0)
+        val target = this.memoryStorage.get(CoreMemoryTypes.ATTACK_TARGET)
+        val anger = this.memoryStorage[CoreMemoryTypes.WARDEN_ANGER_VALUE]!!.getOrDefault(target, 0)
         return (40 - (anger / 80f).coerceIn(0f, 1f) * 30f).toInt()
     }
 

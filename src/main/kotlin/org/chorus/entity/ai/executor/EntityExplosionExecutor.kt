@@ -22,7 +22,7 @@ class EntityExplosionExecutor @JvmOverloads constructor(
 
     override fun execute(entity: EntityMob): Boolean {
         //check flag
-        if (flagMemory != null && entity.memoryStorage!!.compareDataTo(flagMemory!!, false)) {
+        if (flagMemory != null && !entity.memoryStorage[flagMemory!!]) {
             return false
         }
 

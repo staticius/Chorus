@@ -3,7 +3,7 @@ package org.chorus.entity.ai.executor.evocation
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager
-import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
+import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.Spell
 import org.chorus.level.Transform
 import kotlin.math.cos
 import kotlin.math.sin
@@ -20,8 +20,8 @@ class FangCircleExecutor : FangLineExecutor() {
         tick++
         if (tick >= DURATION) {
             val tick = entity.level!!.tick
-            entity.getMemoryStorage()[CoreMemoryTypes.LAST_ATTACK_CAST] = tick
-            entity.getMemoryStorage()[CoreMemoryTypes.LAST_ATTACK_TIME] = tick
+            entity.getMemoryStorage().set(CoreMemoryTypes.LAST_ATTACK_CAST, tick)
+            entity.getMemoryStorage().set(CoreMemoryTypes.LAST_ATTACK_TIME, tick)
             return false
         } else return true
     }
@@ -38,7 +38,7 @@ class FangCircleExecutor : FangLineExecutor() {
 
     override fun startSpell(entity: EntityMob) {
         super.startSpell(entity)
-        entity.memoryStorage[CoreMemoryTypes.LAST_MAGIC] = SPELL.CAST_CIRLCE
+        entity.memoryStorage.set(CoreMemoryTypes.LAST_MAGIC, Spell.CAST_CIRLCE)
     }
 
     companion object {

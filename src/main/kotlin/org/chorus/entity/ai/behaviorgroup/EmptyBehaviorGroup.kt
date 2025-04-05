@@ -12,7 +12,7 @@ import org.chorus.entity.mob.EntityMob
  * 用于未实现AI的实体，作为占位符使用
  */
 class EmptyBehaviorGroup(entity: EntityMob) : IBehaviorGroup {
-    private var memoryStorage: IMemoryStorage = MemoryStorage(entity)
+    override var memoryStorage: IMemoryStorage = MemoryStorage(entity)
 
     override fun evaluateBehaviors(entity: EntityMob) {}
 
@@ -64,6 +64,9 @@ class EmptyBehaviorGroup(entity: EntityMob) : IBehaviorGroup {
     override fun isForceUpdateRoute(): Boolean {
         return false
     }
+
+    override var isForceUpdateRoute: Boolean = false
+        set(value) { throw UnsupportedOperationException("Cannot set isForceUpdateRoute") }
 
     override fun setForceUpdateRoute(forceUpdateRoute: Boolean) {}
 }

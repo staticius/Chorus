@@ -13,7 +13,7 @@ class WardenViolentAnimationExecutor(protected var duration: Int) : IBehaviorExe
         else {
             //更新视线target
             if (entity.memoryStorage.notEmpty(CoreMemoryTypes.ATTACK_TARGET)) entity.lookTarget =
-                entity.memoryStorage[CoreMemoryTypes.ATTACK_TARGET]?.position
+                entity.memoryStorage.get(CoreMemoryTypes.ATTACK_TARGET)?.position
             return true
         }
     }
@@ -25,7 +25,7 @@ class WardenViolentAnimationExecutor(protected var duration: Int) : IBehaviorExe
     }
 
     override fun onStart(entity: EntityMob) {
-        entity.memoryStorage[CoreMemoryTypes.IS_ATTACK_TARGET_CHANGED] = false
+        entity.memoryStorage.set(CoreMemoryTypes.IS_ATTACK_TARGET_CHANGED, false)
         entity.moveTarget = null
 
         entity.setDataFlag(EntityFlag.ROARING, true)

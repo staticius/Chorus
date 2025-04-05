@@ -33,7 +33,7 @@ class WolfAttackExecutor
 
         if (entity.getMemoryStorage().notEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
             if (!entity.isEnablePitch()) entity.setEnablePitch(true)
-            val vector3 = entity.getMemoryStorage()[CoreMemoryTypes.NEAREST_FEEDING_PLAYER]
+            val vector3 = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)
             if (vector3 != null) {
                 this.lookTarget = vector3.position.clone()
                 entity.setDataFlag(EntityFlag.INTERESTED, true)

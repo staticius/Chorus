@@ -4,44 +4,40 @@ import org.chorus.entity.mob.EntityMob
 
 import java.util.concurrent.ConcurrentHashMap
 
-/**
- * 记忆存储器标准实现
- */
 class MemoryStorage(override var entity: EntityMob) : IMemoryStorage {
-    protected var memoryMap: MutableMap<MemoryType<*>, Any> = ConcurrentHashMap()
+    private val memoryMap: MutableMap<IMemoryType<*>, Any> = ConcurrentHashMap()
 
-    override fun <D> set(type: MemoryType<D>, data: D) {
-        val codec = type.codec
-        codec?.init(data, entity)
-        memoryMap[type] = data ?: EMPTY_VALUE
+    override fun <D> set(type: IMemoryType<D>, data: D) {
+        type.codec?.init(data, entity)
+        if (data != null) {
+            memoryMap[type] = data
+        } else memoryMap.remove(type)
     }
 
-    override fun <D> get(type: MemoryType<D>): D {
+    @Suppress("UNCHECKED_CAST")
+    override fun <D : Any> get(type: NullableMemoryType<D>): D? {
         if (!memoryMap.containsKey(type)) {
-            var data = type.decode(entity)
-            if (data == null) data = type.getDefaultData()
+            val data = type.decode(entity)
+            if (data != null) {
+                set(type, data)
+            }
+        }
+        return memoryMap[type] as D?
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <D : Any> get(type: MemoryType<D>): D {
+        if (!memoryMap.containsKey(type)) {
+            val data = type.decode(entity) ?: type.getDefaultData()
             set(type, data)
         }
-        val value: D
-        return if (((memoryMap[type] as D?).also { value = it }) !== EMPTY_VALUE) value else null
+        return memoryMap[type] as D
     }
 
-    override val all: Map<MemoryType<*>, *>
-        get() {
-            val hashMap =
-                HashMap<MemoryType<*>, Any>()
-            memoryMap.forEach { (k: MemoryType<*>?, v: Any?) ->
-                if (v !== EMPTY_VALUE) hashMap[k] = v
-            }
-            return hashMap
-        }
+    override val all: Map<IMemoryType<*>, Any>
+        get()  = memoryMap
 
-    override fun clear(type: MemoryType<*>) {
+    override fun clear(type: IMemoryType<*>) {
         memoryMap.remove(type)
-    }
-
-    companion object {
-        //表示一个空值(null)，这样做是因为在ConcurrentHashMap中不允许放入null值
-        val EMPTY_VALUE: Any = Any()
     }
 }

@@ -9,7 +9,7 @@ import org.chorus.entity.mob.EntityMob
 class DiveController : IController {
     override fun control(entity: EntityMob): Boolean {
         // add dive force
-        if (entity.memoryStorage[CoreMemoryTypes.ENABLE_DIVE_FORCE])  // 抵消额外的浮力即可
+        if (entity.memoryStorage.get(CoreMemoryTypes.ENABLE_DIVE_FORCE))  // 抵消额外的浮力即可
             entity.motion.y -= entity.getGravity() * (entity.getFloatingForceFactor() - 1)
         return true
     }

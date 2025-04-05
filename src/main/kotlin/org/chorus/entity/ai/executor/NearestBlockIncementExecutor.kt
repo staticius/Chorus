@@ -7,8 +7,10 @@ import org.chorus.entity.mob.EntityMob
 class NearestBlockIncementExecutor : IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {
         if (!entity.memoryStorage.isEmpty(CoreMemoryTypes.NEAREST_BLOCK)) {
-            entity.memoryStorage[CoreMemoryTypes.NEAREST_BLOCK] =
-                entity.memoryStorage[CoreMemoryTypes.NEAREST_BLOCK]?.up()
+            entity.memoryStorage.set(
+                CoreMemoryTypes.NEAREST_BLOCK,
+                entity.memoryStorage.get(CoreMemoryTypes.NEAREST_BLOCK)?.up()
+            )
         }
         return true
     }

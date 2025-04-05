@@ -14,6 +14,7 @@ import org.chorus.entity.ai.controller.EntityControlUtils
 import org.chorus.entity.ai.evaluator.LogicalUtils
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.IMemoryStorage
+import org.chorus.entity.ai.memory.IMemoryType
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.monster.EntityCreeper
 import org.chorus.event.entity.EntityDamageByEntityEvent
@@ -96,15 +97,17 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     override fun initEntity() {
         super.initEntity()
 
+        name.isNullOrBlank()
+
         this.behaviorGroup = requireBehaviorGroup()
 
         val storage = memoryStorage
         storage[CoreMemoryTypes.ENTITY_SPAWN_TIME] = level!!.tick
-        MemoryType.persistentMemories.forEach(Consumer { memory ->
-            val mem = memory as MemoryType<Any?>
+        IMemoryType.PERSISTENT_MEMORIES.forEach(Consumer { memory ->
+            val mem = memory as IMemoryType<Any?>
             val data = mem.codec!!.decoder.apply(this.namedTag!!)
             if (data != null) {
-                storage[mem] = data
+                storage.set(mem, data)
             }
         })
     }
@@ -489,8 +492,8 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
                 //Build memory information
                 strBuilder.append("§eMemory:§f\n")
-                val all = memoryStorage!!.all
-                all.forEach { (memory: MemoryType<*>?, value: Any?) ->
+                val all = memoryStorage.all
+                all.forEach { (memory, value) ->
                     strBuilder.append(memory.identifier)
                     strBuilder.append(" = §b")
                     strBuilder.append(value)

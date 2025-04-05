@@ -15,7 +15,7 @@ import org.chorus.entity.mob.EntityMob
 class LookAtFeedingPlayerExecutor : EntityControl, IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {
         if (!entity.isEnablePitch) entity.isEnablePitch = true
-        val vector3 = entity.memoryStorage[CoreMemoryTypes.NEAREST_FEEDING_PLAYER]
+        val vector3 = entity.memoryStorage.get(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)
         if (vector3 != null) {
             setLookTarget(entity, vector3.position)
             entity.setDataFlag(EntityFlag.INTERESTED, true)

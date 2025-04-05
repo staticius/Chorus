@@ -33,7 +33,7 @@ class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应�
         }
         val target = entity.behaviorGroup.memoryStorage[memory].vector3
         val origin =
-            entity.behaviorGroup.memoryStorage[CoreMemoryTypes.LAST_ATTACK_ENTITY].transform.add(
+            entity.behaviorGroup.memoryStorage.get(CoreMemoryTypes.LAST_ATTACK_ENTITY)!!.transform.add(
                 0.0,
                 24.0,
                 0.0
@@ -63,12 +63,12 @@ class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应�
     }
 
     override fun onStart(entity: EntityMob) {
-        entity.memoryStorage[CoreMemoryTypes.ENABLE_PITCH] = false
+        entity.memoryStorage.set(CoreMemoryTypes.ENABLE_PITCH, false)
     }
 
     override fun onInterrupt(entity: EntityMob) {
         entity.movementSpeed = EntityLiving.DEFAULT_SPEED
-        entity.memoryStorage[CoreMemoryTypes.ENABLE_PITCH] = true
+        entity.memoryStorage.set(CoreMemoryTypes.ENABLE_PITCH, true)
         entity.isEnablePitch = false
         if (clearDataWhenLose) entity.behaviorGroup.memoryStorage.clear(memory)
         circleLoc++
@@ -77,7 +77,7 @@ class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应�
 
     override fun onStop(entity: EntityMob) {
         entity.movementSpeed = EntityLiving.DEFAULT_SPEED
-        entity.memoryStorage[CoreMemoryTypes.ENABLE_PITCH] = true
+        entity.memoryStorage.set(CoreMemoryTypes.ENABLE_PITCH, true)
         entity.isEnablePitch = false
         if (clearDataWhenLose) entity.behaviorGroup.memoryStorage.clear(memory)
         circleLoc++

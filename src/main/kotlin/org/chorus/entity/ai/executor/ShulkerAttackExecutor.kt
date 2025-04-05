@@ -63,7 +63,7 @@ class ShulkerAttackExecutor(
             )
 
             if (bulletEntity is EntityShulkerBullet) {
-                bulletEntity.memoryStorage[CoreMemoryTypes.ATTACK_TARGET] = target
+                bulletEntity.memoryStorage.set(CoreMemoryTypes.ATTACK_TARGET, target)
             }
             bulletEntity?.spawnToAll()
             entity.level!!.addSound(entity.position, Sound.MOB_SHULKER_SHOOT)

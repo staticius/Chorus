@@ -10,16 +10,13 @@ import org.chorus.entity.Entity
  */
 interface IMemoryStorage {
     /**
-     * 写入数据到记忆类型
-     *
-     *
      * Write data to MemoryType
      *
-     * @param type 记忆类型
-     * @param data 数据
+     * @param type
+     * @param data
      * @param <D>  数据类型
     </D> */
-    operator fun <D> set(type: MemoryType<D>, data: D)
+    operator fun <D> set(type: IMemoryType<D>, data: D)
 
     /**
      * 从指定记忆类型获取数据
@@ -31,7 +28,9 @@ interface IMemoryStorage {
      * @param <D>  数据类型
      * @return 数据
     </D> */
-    operator fun <D> get(type: MemoryType<D>): D
+    operator fun <D : Any> get(type: NullableMemoryType<D>): D?
+
+    operator fun <D : Any> get(type: MemoryType<D>): D
 
     /**
      * 获取所有记忆
@@ -41,7 +40,7 @@ interface IMemoryStorage {
      *
      * @return 所有记忆
      */
-    val all: Map<MemoryType<*>, *>
+    val all: Map<IMemoryType<*>, Any>
 
     /**
      * 清空指定记忆类型数据为null
@@ -51,7 +50,7 @@ interface IMemoryStorage {
      *
      * @param type 记忆类型
      */
-    fun clear(type: MemoryType<*>)
+    fun clear(type: IMemoryType<*>)
 
     /**
      * 获取记忆存储所属的实体
@@ -72,7 +71,7 @@ interface IMemoryStorage {
      * @param type 记忆类型
      * @return 是否为空
      */
-    fun isEmpty(type: MemoryType<*>): Boolean {
+    fun isEmpty(type: NullableMemoryType<*>): Boolean {
         return get(type) == null
     }
 
@@ -85,23 +84,8 @@ interface IMemoryStorage {
      * @param type 记忆类型
      * @return 是否不为空
      */
-    fun notEmpty(type: MemoryType<*>): Boolean {
+    fun notEmpty(type: NullableMemoryType<*>): Boolean {
         return get(type) != null
-    }
-
-    /**
-     * 使用指定的数据对比记忆类型存储的数据
-     *
-     *
-     * Use the specified data compare the data of memory type
-     *
-     * @param type 记忆类型
-     * @param to   指定的数据
-     * @return 是否相同
-     */
-    fun <D> compareDataTo(type: MemoryType<D>, to: Any?): Boolean {
-        val value: D
-        return if ((get(type).also { value = it }) != null) (value == to) else to == null
     }
 
     /**
@@ -113,7 +97,7 @@ interface IMemoryStorage {
     fun encode() {
         val entity = entity
         for ((key, value) in all) {
-            key.forceEncode(entity, value!!)
+            key.forceEncode(entity, value)
         }
     }
 }

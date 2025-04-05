@@ -1,7 +1,5 @@
 package org.chorus.entity.ai.memory
 
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.Block
@@ -9,18 +7,21 @@ import org.chorus.block.BlockBed
 import org.chorus.block.BlockWoodenDoor
 import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.codec.BooleanMemoryCodec
+import org.chorus.entity.ai.memory.codec.MemoryCodec
 import org.chorus.entity.ai.memory.codec.NumberMemoryCodec
 import org.chorus.entity.ai.memory.codec.StringMemoryCodec
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.item.EntityItem
 import org.chorus.entity.mob.EntityMob
-import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
+import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.Spell
 import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.item.Item
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
+import java.util.function.BiConsumer
+import java.util.function.Function
 
 /**
  * 核心使用到的记忆类型枚举
@@ -37,7 +38,7 @@ interface CoreMemoryTypes {
          *
          * Entity gaze target memory
          */
-        val LOOK_TARGET: MemoryType<Vector3?> = MemoryType("minecraft:look_target")
+        val LOOK_TARGET = NullableMemoryType<Vector3>("minecraft:look_target")
 
         /**
          * 实体移动目标记忆
@@ -45,11 +46,11 @@ interface CoreMemoryTypes {
          *
          * Entity moving target memory
          */
-        val MOVE_TARGET: MemoryType<Vector3?> = MemoryType("minecraft:move_target")
+        val MOVE_TARGET = NullableMemoryType<Vector3>("minecraft:move_target")
 
-        val FORCE_PERCHING: MemoryType<Boolean> = MemoryType("minecraft:force_perching", false)
+        val FORCE_PERCHING = MemoryType("minecraft:force_perching", false)
 
-        val STAY_NEARBY: MemoryType<Vector3?> = MemoryType("minecraft:stay_nearby")
+        val STAY_NEARBY = NullableMemoryType<Vector3>("minecraft:stay_nearby")
 
         /**
          * 实体移动起点记忆
@@ -57,7 +58,7 @@ interface CoreMemoryTypes {
          *
          * Entity movement starting point memory
          */
-        val MOVE_DIRECTION_START: MemoryType<Vector3?> = MemoryType("minecraft:move_direction_start")
+        val MOVE_DIRECTION_START = NullableMemoryType<Vector3>("minecraft:move_direction_start")
 
         /**
          * 实体移动终点记忆
@@ -65,7 +66,7 @@ interface CoreMemoryTypes {
          *
          * Entity movement endpoint memory
          */
-        val MOVE_DIRECTION_END: MemoryType<Vector3?> = MemoryType("minecraft:move_direction_end")
+        val MOVE_DIRECTION_END = NullableMemoryType<Vector3>("minecraft:move_direction_end")
 
         /**
          * 实体是否需要更新路径的记忆
@@ -73,8 +74,7 @@ interface CoreMemoryTypes {
          *
          * Whether the entity needs to update the memory of the path
          */
-        val SHOULD_UPDATE_MOVE_DIRECTION: MemoryType<Boolean> =
-            MemoryType("minecraft:should_update_move_direction", false)
+        val SHOULD_UPDATE_MOVE_DIRECTION = MemoryType("minecraft:should_update_move_direction", false)
 
         /**
          * 实体是否开启pitch
@@ -82,17 +82,17 @@ interface CoreMemoryTypes {
          *
          * Whether pitch is enabled for the entity
          */
-        val ENABLE_PITCH: MemoryType<Boolean> = MemoryType("minecraft:enable_pitch", true)
+        val ENABLE_PITCH = MemoryType("minecraft:enable_pitch", true)
 
         /**
          * 控制实体是否开启升力控制器的记忆
          */
-        val ENABLE_LIFT_FORCE: MemoryType<Boolean> = MemoryType("minecraft:enable_lift_force", true)
+        val ENABLE_LIFT_FORCE = MemoryType("minecraft:enable_lift_force", true)
 
         /**
          * 控制实体是否开启下潜控制器的记忆
          */
-        val ENABLE_DIVE_FORCE: MemoryType<Boolean> = MemoryType("minecraft:enable_dive_force", true)
+        val ENABLE_DIVE_FORCE = MemoryType("minecraft:enable_dive_force", true)
         //以下这两个暂时未使用到
         //MemoryType<Boolean> ENABLE_YAW = new MemoryType<>("minecraft:enable_yaw", true);
         //MemoryType<Boolean> ENABLE_HEAD_YAW = new MemoryType<>("minecraft:enable_head_yaw", true);
@@ -100,69 +100,69 @@ interface CoreMemoryTypes {
         /**
          * 实体被攻击产生的攻击事件
          */
-        val BE_ATTACKED_EVENT: MemoryType<EntityDamageEvent?> = MemoryType("minecraft:be_attacked_event")
+        val BE_ATTACKED_EVENT = NullableMemoryType<EntityDamageEvent>("minecraft:be_attacked_event")
 
         /**
          * 实体上一次被攻击的tick
          */
-        val LAST_BE_ATTACKED_TIME: MemoryType<Int?> = MemoryType("minecraft:last_be_attacked_time", -65536)
+        val LAST_BE_ATTACKED_TIME = MemoryType("minecraft:last_be_attacked_time", -65536)
 
-        val LAST_ATTACK_TIME: MemoryType<Int?> = MemoryType("minecraft:last_attack_time", 0)
+        val LAST_ATTACK_TIME = MemoryType("minecraft:last_attack_time", 0)
 
-        val LAST_ATTACK_ENTITY: MemoryType<Entity?> = MemoryType("minecraft:last_attack_entity")
+        val LAST_ATTACK_ENTITY = NullableMemoryType<Entity>("minecraft:last_attack_entity")
 
-        val LAST_HOGLIN_ATTACK_TIME: MemoryType<Int?> = MemoryType("minecraft:last_hoglin_attack_time", 0)
+        val LAST_HOGLIN_ATTACK_TIME = MemoryType("minecraft:last_hoglin_attack_time", 0)
 
-        val NEXT_SHED: MemoryType<Int?> = MemoryType("minecraft:next_shed", 0)
+        val NEXT_SHED = MemoryType("minecraft:next_shed", 0)
 
-        val LAST_MAGIC: MemoryType<SPELL?> = MemoryType("minecraft:last_spell", SPELL.NONE)
+        val LAST_MAGIC = MemoryType("minecraft:last_spell", Spell.NONE)
 
-        val LAST_GOSSIP: MemoryType<Int?> = MemoryType("minecraft:last_gossip", -65536)
+        val LAST_GOSSIP = MemoryType("minecraft:last_gossip", -65536)
 
-        val GOSSIP: MemoryType<Object2ObjectArrayMap<String, IntArrayList>?> = MemoryType("minecraft:gossip")
+        val GOSSIP = NullableMemoryType<MutableMap<String, MutableList<Int>>>("minecraft:gossip")
 
-        val LAST_REFILL_SHIFT: MemoryType<Int?> = MemoryType("minecraft:last_refill_shift", -1)
+        val LAST_REFILL_SHIFT = MemoryType("minecraft:last_refill_shift", -1)
 
         /**
          * 实体的仇恨目标
          */
-        val ATTACK_TARGET: MemoryType<Entity?> = MemoryType("minecraft:attack_target")
+        val ATTACK_TARGET = NullableMemoryType<Entity>("minecraft:attack_target")
 
         /**
          * 实体的攻击目标是否被改变,目前仅在warden中使用
          */
-        val IS_ATTACK_TARGET_CHANGED: MemoryType<Boolean?> = MemoryType("minecraft:is_attack_target_changed", false)
+        val IS_ATTACK_TARGET_CHANGED = MemoryType("minecraft:is_attack_target_changed", false)
 
         /**
          * 实体从生成的服务器tick
          */
-        val ENTITY_SPAWN_TIME: MemoryType<Int> = MemoryType(
+        val ENTITY_SPAWN_TIME = MemoryType(
             "minecraft:entity_spawn_time"
         ) { Server.instance.tick }
 
         /**
          * 目前仅在creeper中使用，控制苦力怕是否应该爆炸
          */
-        val SHOULD_EXPLODE: MemoryType<Boolean?> = MemoryType("minecraft:should_explode", false)
+        val SHOULD_EXPLODE = MemoryType("minecraft:should_explode", false)
 
         /**
          * 目前仅在creeper中使用
          */
-        val EXPLODE_CANCELLABLE: MemoryType<Boolean?> = MemoryType("minecraft:explode_cancellable", true)
+        val EXPLODE_CANCELLABLE = MemoryType("minecraft:explode_cancellable", true)
 
         /**
          * 控制实体是否在繁殖
          */
-        val IS_IN_LOVE: MemoryType<Boolean?> = MemoryType("minecraft:is_in_love", false)
+        val IS_IN_LOVE = MemoryType("minecraft:is_in_love", false)
 
         /**
          * 上一次繁殖的时间tick
          */
-        val LAST_IN_LOVE_TIME: MemoryType<Int?> = MemoryType("minecraft:last_in_love_time", -65536)
+        val LAST_IN_LOVE_TIME = MemoryType("minecraft:last_in_love_time", -65536)
 
-        val WILLING: MemoryType<Boolean?> = MemoryType("minecraft:willing", false)
+        val WILLING = MemoryType("minecraft:willing", false)
 
-        val PARENT: MemoryType<Entity?> = MemoryType("minecraft:parent")
+        val PARENT = NullableMemoryType<Entity>("minecraft:parent")
 
         /**
          * 上一次下蛋的时间
@@ -170,7 +170,7 @@ interface CoreMemoryTypes {
          *
          * 目前仅在Chicken中使用
          */
-        val LAST_EGG_SPAWN_TIME: MemoryType<Int> = MemoryType(
+        val LAST_EGG_SPAWN_TIME = MemoryType(
             "minecraft:last_egg_spawn_time"
         ) { Server.instance.tick }
 
@@ -180,105 +180,103 @@ interface CoreMemoryTypes {
          *
          * 通常写入在在NearestTargetEntitySensor
          */
-        val NEAREST_SUITABLE_ATTACK_TARGET: MemoryType<Entity?> = MemoryType("minecraft:nearest_suitable_attack_target")
+        val NEAREST_SUITABLE_ATTACK_TARGET = NullableMemoryType<Entity>("minecraft:nearest_suitable_attack_target")
 
         /**
          * 最近持有动物要食用的食物的玩家
          */
-        val NEAREST_FEEDING_PLAYER: MemoryType<Player?> = MemoryType("minecraft:nearest_feeding_player")
+        val NEAREST_FEEDING_PLAYER = NullableMemoryType<Player>("minecraft:nearest_feeding_player")
 
         /**
          * 最近的玩家
          */
-        val NEAREST_PLAYER: MemoryType<Player?> = MemoryType("minecraft:nearest_player")
+        val NEAREST_PLAYER = NullableMemoryType<Player>("minecraft:nearest_player")
 
-        val STARING_PLAYER: MemoryType<Player?> = MemoryType("minecraft:staring_player")
+        val STARING_PLAYER = NullableMemoryType<Player>("minecraft:staring_player")
 
         /**
          * 玩家上一次攻击的实体
          */
-        val ENTITY_ATTACKED_BY_OWNER: MemoryType<Entity?> = MemoryType("minecraft:entity_attacked_by_owner")
+        val ENTITY_ATTACKED_BY_OWNER = NullableMemoryType<Entity>("minecraft:entity_attacked_by_owner")
 
         /**
          * 上一次攻击玩家的实体
          */
-        val ENTITY_ATTACKING_OWNER: MemoryType<Entity?> = MemoryType("minecraft:entity_attacking_owner")
+        val ENTITY_ATTACKING_OWNER = NullableMemoryType<Entity>("minecraft:entity_attacking_owner")
 
         /**
          * 上一次喂养的时间
          */
-        val LAST_BE_FEED_TIME: MemoryType<Int?> = MemoryType("minecraft:last_be_feed_time", -65536)
+        val LAST_BE_FEED_TIME = MemoryType("minecraft:last_be_feed_time", -65536)
 
         /**
          * 上一次喂养的玩家
          */
-        val LAST_FEED_PLAYER: MemoryType<Player?> = MemoryType("minecraft:last_feeding_player")
+        val LAST_FEED_PLAYER = NullableMemoryType<Player>("minecraft:last_feeding_player")
 
-        val LAST_ENDER_CRYSTAL_DESTROY: MemoryType<BlockVector3?> = MemoryType("minecraft:last_ender_crystal_destroy")
+        val LAST_ENDER_CRYSTAL_DESTROY = NullableMemoryType<BlockVector3>("minecraft:last_ender_crystal_destroy")
 
         /**
          * 目前仅在warden中使用
          */
-        val ROUTE_UNREACHABLE_TIME: MemoryType<Int?> = MemoryType("minecraft:route_unreachable_time", 0)
+        val ROUTE_UNREACHABLE_TIME = MemoryType("minecraft:route_unreachable_time", 0)
 
         /**
          * 实体的配偶
          */
-        val ENTITY_SPOUSE: MemoryType<Entity?> = MemoryType("minecraft:entity_spouse")
+        val ENTITY_SPOUSE = NullableMemoryType<Entity>("minecraft:entity_spouse")
 
         /**
          * 目前仅在warden中使用
          */
-        val WARDEN_ANGER_VALUE: MemoryType<MutableMap<Entity, Int>?> =
-            MemoryType("minecraft:warden_anger_value", HashMap())
+        val WARDEN_ANGER_VALUE = MemoryType<MutableMap<Entity, Int>>("minecraft:warden_anger_value", HashMap())
 
         /**
          * 最近的骷髅目标
          */
-        val NEAREST_SKELETON: MemoryType<Entity?> = MemoryType("minecraft:nearest_skeleton")
+        val NEAREST_SKELETON = NullableMemoryType<Entity>("minecraft:nearest_skeleton")
 
-        val NEAREST_ZOMBIE: MemoryType<Entity?> = MemoryType("minecraft:nearest_zombie")
+        val NEAREST_ZOMBIE = NullableMemoryType<Entity>("minecraft:nearest_zombie")
 
-        val NEAREST_ENDERMITE: MemoryType<Entity?> = MemoryType("minecraft:nearest_endermite")
+        val NEAREST_ENDERMITE = NullableMemoryType<Entity>("minecraft:nearest_endermite")
 
-        val NEAREST_GOLEM: MemoryType<Entity?> = MemoryType("minecraft:nearest_golem")
+        val NEAREST_GOLEM = NullableMemoryType<Entity>("minecraft:nearest_golem")
 
-        val NEAREST_SHARED_ENTITY: MemoryType<Entity?> = MemoryType("minecraft:nearest_shared_entity")
+        val NEAREST_SHARED_ENTITY = NullableMemoryType<Entity>("minecraft:nearest_shared_entity")
 
-        val LOOKING_BLOCK: MemoryType<Class<out Block>?> = MemoryType("minecraft:looking_block")
+        val LOOKING_BLOCK = NullableMemoryType<Class<out Block>>("minecraft:looking_block")
 
-        val LOOKING_ITEM: MemoryType<Class<out Item>?> = MemoryType("minecraft:looking_item")
+        val LOOKING_ITEM = NullableMemoryType<Class<out Item>>("minecraft:looking_item")
 
-        val OCCUPIED_BED: MemoryType<BlockBed?> = MemoryType("minecraft:occupied_bed")
+        val OCCUPIED_BED = NullableMemoryType<BlockBed>("minecraft:occupied_bed")
 
-        val NEAREST_BLOCK: MemoryType<Block?> = MemoryType("minecraft:nearest_block")
+        val NEAREST_BLOCK = NullableMemoryType<Block>("minecraft:nearest_block")
 
-        val NEAREST_BLOCK_2: MemoryType<Block?> = MemoryType("minecraft:nearest_block_2")
+        val NEAREST_BLOCK_2 = NullableMemoryType<Block>("minecraft:nearest_block_2")
 
-        val SITE_BLOCK: MemoryType<Block?> = MemoryType("minecraft:site_block")
+        val SITE_BLOCK = NullableMemoryType<Block>("minecraft:site_block")
 
-        val NEAREST_DOOR: MemoryType<BlockWoodenDoor?> = MemoryType("minecraft:nearest_door")
+        val NEAREST_DOOR = NullableMemoryType<BlockWoodenDoor>("minecraft:nearest_door")
 
-        val NEAREST_ITEM: MemoryType<EntityItem?> = MemoryType("minecraft:nearest_item")
+        val NEAREST_ITEM = NullableMemoryType<EntityItem>("minecraft:nearest_item")
 
-        val GOSSIP_TARGET: MemoryType<EntityVillagerV2?> = MemoryType("minecraft:gossip_target")
+        val GOSSIP_TARGET = NullableMemoryType<EntityVillagerV2>("minecraft:gossip_target")
 
-        val LAST_ATTACK_CAST: MemoryType<Int?> = MemoryType("minecraft:last_attack_cast", 0)
+        val LAST_ATTACK_CAST = MemoryType("minecraft:last_attack_cast", 0)
 
-        val LAST_ATTACK_SUMMON: MemoryType<Int?> = MemoryType("minecraft:last_attack_summon", 0)
+        val LAST_ATTACK_SUMMON = MemoryType("minecraft:last_attack_summon", 0)
 
-        val LAST_ATTACK_DASH: MemoryType<Int?> = MemoryType("minecraft:last_attack_dash", 0)
+        val LAST_ATTACK_DASH = MemoryType("minecraft:last_attack_dash", 0)
 
+        val LAST_CONVERSION = MemoryType("minecraft:last_conversion", 0)
 
-        val LAST_CONVERSION: MemoryType<Int?> = MemoryType("minecraft:last_conversion", 0)
-
-        val INVULNERABLE_TICKS: MemoryType<Int> = MemoryType("minecraft:invulnerable_ticks", 0)
+        val INVULNERABLE_TICKS = MemoryType("minecraft:invulnerable_ticks", 0)
 
 
         /**
          * 实体的主人
          */
-        val OWNER: MemoryType<Player?> = MemoryType("minecraft:owner")
+        val OWNER = NullableMemoryType<Player>("minecraft:owner")
 
         // region 可持久化的记忆(会写入NBT)
         /**
@@ -287,7 +285,7 @@ interface CoreMemoryTypes {
          *
          * 目前仅在wolf中使用
          */
-        val IS_ANGRY: MemoryType<Boolean> = MemoryType("minecraft:is_angry", false)
+        val IS_ANGRY = MemoryType("minecraft:is_angry", false)
             .withCodec(
                 BooleanMemoryCodec("Angry")
                     .onInit { data, entity ->
@@ -301,7 +299,7 @@ interface CoreMemoryTypes {
          *
          * 目前仅在wolf中使用
          */
-        val IS_SITTING: MemoryType<Boolean> = MemoryType("minecraft:is_sitting", false)
+        val IS_SITTING = MemoryType("minecraft:is_sitting", false)
             .withCodec(
                 BooleanMemoryCodec("Sitting")
                     .onInit { data, entity ->
@@ -315,30 +313,52 @@ interface CoreMemoryTypes {
          *
          * 目前仅在wolf中使用
          */
-        val OWNER_NAME: MemoryType<String> = MemoryType<String>("minecraft:owner_name")
+        val OWNER_NAME = NullableMemoryType<String>("minecraft:owner_name")
             .withCodec(
-                StringMemoryCodec("OwnerName")
-                    .onInit { data: String?, entity: EntityMob ->
-                        if (data == null) {
-                            entity.setDataProperty(EntityDataTypes.OWNER_EID, 0L)
-                            entity.setDataFlag(EntityFlag.TAMED, false)
-                        } else {
-                            entity.setDataFlag(EntityFlag.TAMED, true)
-                            val owner = Server.instance.getPlayerExact(data)
-                            if (owner != null && owner.isOnline) {
-                                entity.setDataProperty(EntityDataTypes.OWNER_EID, owner.getUniqueID())
-                            }
+                MemoryCodec<String?>(
+                    { tag ->
+                        if (tag.contains("OwnerName"))
+                            tag.getString("OwnerName")
+                        else null
+                    },
+                    { data, tag ->
+                        if (data != null) {
+                            tag.putString("OwnerName", data)
+                        }
+                        else tag.remove("OwnerName")
+                    }
+                ).onInit { data, entity ->
+                    if (data == null) {
+                        entity.setDataProperty(EntityDataTypes.OWNER_EID, 0L)
+                        entity.setDataFlag(EntityFlag.TAMED, false)
+                    } else {
+                        entity.setDataFlag(EntityFlag.TAMED, true)
+                        val owner = Server.instance.getPlayerExact(data)
+                        if (owner != null && owner.isOnline) {
+                            entity.setDataProperty(EntityDataTypes.OWNER_EID, owner.getUniqueID())
                         }
                     }
+                }
             )
 
         /**
          * 代表骑着某个实体的实体
          */
-        val RIDER_NAME: MemoryType<String> = MemoryType<String>("minecraft:rider_name")
+        val RIDER_NAME = NullableMemoryType<String>("minecraft:rider_name")
             .withCodec(
-                StringMemoryCodec("RiderName")
-                    .onInit { data: String?, entity: EntityMob ->
+                MemoryCodec<String?>(
+                    { tag ->
+                        if (tag.contains("RiderName"))
+                            tag.getString("RiderName")
+                        else null
+                    },
+                    { data, tag ->
+                        if (data != null) {
+                            tag.putString("RiderName", data)
+                        }
+                        else tag.remove("RiderName")
+                    }
+                ).onInit { data: String?, entity: EntityMob ->
                         if (data == null) {
                             entity.setDataFlag(EntityFlag.WASD_CONTROLLED, false)
                         } else {
@@ -350,22 +370,26 @@ interface CoreMemoryTypes {
         /**
          * 代表实体的变种,和[EntityDataTypes.VARIANT]绑定
          */
-        val VARIANT: MemoryType<Int> = MemoryType<Int>("minecraft:variant")
+        val VARIANT = NullableMemoryType<Int>("minecraft:variant")
             .withCodec(
-                NumberMemoryCodec<Int>("Variant")
+                NumberMemoryCodec<Int?>("Variant")
                     .onInit { data, entity ->
-                        entity.setDataProperty(EntityDataTypes.VARIANT, data)
+                        if (data != null) {
+                            entity.setDataProperty(EntityDataTypes.VARIANT, data)
+                        }
                     }
             )
 
         /**
          * 代表实体的次要变种,和[EntityDataTypes.MARK_VARIANT]绑定
          */
-        val MARK_VARIANT: MemoryType<Int> = MemoryType<Int>("minecraft:mark_variant")
+        val MARK_VARIANT = NullableMemoryType<Int>("minecraft:mark_variant")
             .withCodec(
-                NumberMemoryCodec<Int>("MarkVariant")
+                NumberMemoryCodec<Int?>("MarkVariant")
                     .onInit { data, entity ->
-                        entity.setDataProperty(EntityDataTypes.MARK_VARIANT, data)
+                        if (data != null) {
+                            entity.setDataProperty(EntityDataTypes.MARK_VARIANT, data)
+                        }
                     }
             )
 
@@ -376,7 +400,7 @@ interface CoreMemoryTypes {
          * <br></br>
          * Wolf collar, Cat collar, Sheep wool, Tropical Fish base color
          */
-        val COLOR: MemoryType<Byte?> = MemoryType<Byte?>("minecraft:color")
+        val COLOR = NullableMemoryType<Byte>("minecraft:color")
             .withCodec(
                 NumberMemoryCodec<Byte?>("Color")
                     .onInit { data, entity ->
@@ -391,7 +415,7 @@ interface CoreMemoryTypes {
          * <br></br>
          * Tropical Fish secondary color
          */
-        val COLOR2: MemoryType<Byte?> = MemoryType<Byte?>("minecraft:color2")
+        val COLOR2 = NullableMemoryType<Byte>("minecraft:color2")
             .withCodec(
                 NumberMemoryCodec<Byte?>("Color2")
                     .onInit { data, entity ->
@@ -407,7 +431,7 @@ interface CoreMemoryTypes {
          *
          * Sheep, Snow Golem
          */
-        val IS_SHEARED: MemoryType<Boolean> = MemoryType("minecraft:is_sheared", false)
+        val IS_SHEARED = MemoryType("minecraft:is_sheared", false)
             .withCodec(
                 BooleanMemoryCodec("Sheared")
                     .onInit { data, entity ->

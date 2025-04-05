@@ -1,6 +1,5 @@
 package org.chorus.entity.ai.executor.enderdragon
 
-import org.chorus.Player
 import org.chorus.entity.*
 import org.chorus.entity.ai.executor.EntityControl
 import org.chorus.entity.ai.executor.IBehaviorExecutor
@@ -19,7 +18,7 @@ class StrafeExecutor : EntityControl, IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {
         if (fired) return false
 
-        val player = entity.memoryStorage[CoreMemoryTypes.NEAREST_PLAYER]!!
+        val player = entity.memoryStorage.get(CoreMemoryTypes.NEAREST_PLAYER)!!
         setLookTarget(entity, player.position)
         setRouteTarget(entity, player.position)
 
@@ -66,7 +65,7 @@ class StrafeExecutor : EntityControl, IBehaviorExecutor {
 
 
     override fun onStart(entity: EntityMob) {
-        val player = entity.memoryStorage[CoreMemoryTypes.NEAREST_PLAYER]!!
+        val player = entity.memoryStorage.get(CoreMemoryTypes.NEAREST_PLAYER)!!
         setLookTarget(entity, player.position)
         setRouteTarget(entity, player.position)
         this.fired = false

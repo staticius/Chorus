@@ -68,8 +68,8 @@ open class EntityBreedingExecutor<T : EntityMob>(
     }
 
     protected fun setSpouse(entity1: T, entity2: T) {
-        entity1.memoryStorage[CoreMemoryTypes.ENTITY_SPOUSE] = entity2
-        entity2.memoryStorage[CoreMemoryTypes.ENTITY_SPOUSE] = entity1
+        entity1.memoryStorage.set(CoreMemoryTypes.ENTITY_SPOUSE, entity2)
+        entity2.memoryStorage.set(CoreMemoryTypes.ENTITY_SPOUSE, entity1)
     }
 
     protected open fun clearData(entity: T) {
@@ -81,7 +81,7 @@ open class EntityBreedingExecutor<T : EntityMob>(
         //reset move speed
         entity.setMovementSpeed(0.1f)
         //interrupt in love status
-        entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE] = false
+        entity.memoryStorage.set(CoreMemoryTypes.IS_IN_LOVE, false)
     }
 
     protected fun updateMove(entity1: T, entity2: T?) {
@@ -137,8 +137,8 @@ open class EntityBreedingExecutor<T : EntityMob>(
         val baby: T = Entity.createEntity(entity.getNetworkID(), entity.locator) as T
         baby.setBaby(true)
         //防止小屁孩去生baby
-        baby.memoryStorage[CoreMemoryTypes.LAST_IN_LOVE_TIME] = entity.level!!.tick
-        baby.memoryStorage[CoreMemoryTypes.PARENT] = entity
+        baby.memoryStorage.set(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.level!!.tick)
+        baby.memoryStorage.set(CoreMemoryTypes.PARENT, entity)
         baby.spawnToAll()
     }
 }

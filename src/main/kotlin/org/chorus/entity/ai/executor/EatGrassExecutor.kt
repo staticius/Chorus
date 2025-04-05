@@ -32,7 +32,7 @@ class EatGrassExecutor(protected var duration: Int) : IBehaviorExecutor {
                     entity.growWool()
                     return false
                 }
-                if (entity.isBaby())  //TODO: Accelerated growth instead of instant growth
+                if (entity.isBaby())  // TODO: Accelerated growth instead of instant growth
                     entity.setBaby(false)
             }
             return false

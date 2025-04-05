@@ -10,13 +10,13 @@ class InLoveExecutor(protected var duration: Int) : IBehaviorExecutor {
 
     override fun execute(entity: EntityMob): Boolean {
         if (currentTick == 0) {
-            entity.memoryStorage[CoreMemoryTypes.LAST_IN_LOVE_TIME] = entity.level!!.tick
-            entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE] = true
+            entity.memoryStorage.set(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.level!!.tick)
+            entity.memoryStorage.set(CoreMemoryTypes.IS_IN_LOVE, true)
         }
         currentTick++
         if (currentTick > duration || !entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE]!! /*interrupt by other*/) {
             currentTick = 0
-            entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE] = false
+            entity.memoryStorage.set(CoreMemoryTypes.IS_IN_LOVE, false)
             return false
         }
         if (currentTick % 10 == 0) {
@@ -26,7 +26,7 @@ class InLoveExecutor(protected var duration: Int) : IBehaviorExecutor {
     }
 
     override fun onInterrupt(entity: EntityMob) {
-        entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE] = false
+        entity.memoryStorage.set(CoreMemoryTypes.IS_IN_LOVE, false)
         currentTick = 0
     }
 

@@ -1,5 +1,6 @@
 package org.chorus.entity.mob.monster
 
+import org.apache.logging.log4j.core.Core
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.*
@@ -59,8 +60,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                     EntityExplosionExecutor(30, 3, CoreMemoryTypes.Companion.SHOULD_EXPLODE),
                     all(
                         IBehaviorEvaluator { entity: EntityMob ->
-                            entity.memoryStorage!!
-                                .compareDataTo<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, true)
+                            entity.memoryStorage[CoreMemoryTypes.SHOULD_EXPLODE]
                         },
                         any(
                             IBehaviorEvaluator { entity: EntityMob? ->
@@ -112,20 +112,14 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                     if (attacker == null) attacker = memoryStorage.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
                     if (attacker != null && (attacker !is Player || attacker.isSurvival) && attacker.position.distanceSquared(
                             entity.position
-                        ) <= 3 * 3 && (memoryStorage.isEmpty(CoreMemoryTypes.Companion.SHOULD_EXPLODE) || memoryStorage.compareDataTo<Boolean>(
-                            CoreMemoryTypes.Companion.SHOULD_EXPLODE,
-                            false
-                        ))
+                        ) <= 3 * 3 && (memoryStorage.isEmpty(CoreMemoryTypes.SHOULD_EXPLODE) || !memoryStorage[CoreMemoryTypes.SHOULD_EXPLODE]))
                     ) {
                         memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, true)
                         return@of
                     }
                     if ((attacker == null || (attacker is Player && !attacker.isSurvival) || attacker.position.distanceSquared(
                             entity.position
-                        ) >= 7 * 7) && memoryStorage.compareDataTo<Boolean>(
-                            CoreMemoryTypes.Companion.SHOULD_EXPLODE,
-                            true
-                        ) && memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.EXPLODE_CANCELLABLE)
+                        ) >= 7 * 7) && memoryStorage[CoreMemoryTypes.SHOULD_EXPLODE] && memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.EXPLODE_CANCELLABLE)
                     ) {
                         memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, false)
                     }
@@ -206,10 +200,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         val memoryStorage = this.memoryStorage
-        if (item.id === Item.FLINT_AND_STEEL && (memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.SHOULD_EXPLODE) || memoryStorage.compareDataTo<Boolean>(
-                CoreMemoryTypes.Companion.SHOULD_EXPLODE,
-                false
-            ))
+        if (item.id === Item.FLINT_AND_STEEL && (memoryStorage.isEmpty(CoreMemoryTypes.SHOULD_EXPLODE) || !memoryStorage[CoreMemoryTypes.SHOULD_EXPLODE])
         ) {
             memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, true)
             memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.EXPLODE_CANCELLABLE, false)

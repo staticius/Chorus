@@ -1,9 +1,3 @@
-/*
- * Decompiled with CFR 0.1.1 (FabricMC 57d88659).
- *
- * Could not load the following classes:
- *  org.jetbrains.annotations.Nullable
- */
 package org.chorus.utils
 
 class Identifier private constructor(id: Array<String>) {

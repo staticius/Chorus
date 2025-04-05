@@ -212,9 +212,9 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
     private inner class NearestPlayerCreakingSensor(range: Double, minRange: Double, period: Int) :
         NearestPlayerSensor(range, minRange, period) {
         override fun sense(entity: EntityMob) {
-            val before = entity.memoryStorage!![CoreMemoryTypes.NEAREST_PLAYER]
+            val before = entity.memoryStorage!!.get(CoreMemoryTypes.NEAREST_PLAYER)
             super.sense(entity)
-            val after = entity.memoryStorage!![CoreMemoryTypes.NEAREST_PLAYER]
+            val after = entity.memoryStorage!!.get(CoreMemoryTypes.NEAREST_PLAYER)
             if (before !== after) {
                 if (before == null) {
                     entity.level!!.addSound(entity.position, Sound.MOB_CREAKING_ACTIVATE)
@@ -228,9 +228,9 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
     private inner class PlayerStaringCreakingSensor(range: Double, triggerDiff: Double, ignoreRotation: Boolean) :
         PlayerStaringSensor(range, triggerDiff, ignoreRotation) {
         override fun sense(entity: EntityMob) {
-            val before = entity.memoryStorage!![CoreMemoryTypes.STARING_PLAYER]
+            val before = entity.memoryStorage!!.get(CoreMemoryTypes.STARING_PLAYER)
             super.sense(entity)
-            val after = entity.memoryStorage!![CoreMemoryTypes.STARING_PLAYER]
+            val after = entity.memoryStorage!!.get(CoreMemoryTypes.STARING_PLAYER)
             if (before !== after) {
                 if (before == null) {
                     entity.level!!.addSound(entity.position, Sound.MOB_CREAKING_FREEZE)

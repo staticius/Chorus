@@ -408,7 +408,7 @@ class BehaviorGroup(
             val sortedMemory = ArrayList(memoryStorage.all.entries)
             sortedMemory.sortWith(
                 Comparator.comparing(
-                    { s: Map.Entry<MemoryType<*>, Any?> -> s.key.identifier.path },
+                    { s -> s.key.identifier.path },
                     { obj: String, anotherString: String? ->
                         obj.compareTo(
                             anotherString!!

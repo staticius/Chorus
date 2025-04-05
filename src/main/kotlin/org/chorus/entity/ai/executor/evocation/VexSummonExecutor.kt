@@ -7,7 +7,7 @@ import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.EntityVex
 import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager
-import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.SPELL
+import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager.Spell
 import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
@@ -33,8 +33,8 @@ class VexSummonExecutor : FangLineExecutor() {
         }
         if (tick >= CAST_DURATION) {
             val tick = entity.level!!.tick
-            entity.memoryStorage[CoreMemoryTypes.LAST_ATTACK_SUMMON] = tick
-            entity.memoryStorage[CoreMemoryTypes.LAST_ATTACK_TIME] = tick
+            entity.memoryStorage.set(CoreMemoryTypes.LAST_ATTACK_SUMMON, tick)
+            entity.memoryStorage.set(CoreMemoryTypes.LAST_ATTACK_TIME, tick)
             return false
         } else return true
     }
@@ -43,7 +43,7 @@ class VexSummonExecutor : FangLineExecutor() {
         tick = 0
         entity.level!!.addSound(entity.position, Sound.MOB_EVOCATION_ILLAGER_PREPARE_SUMMON)
         entity.setDataProperty(EntityDataTypes.EVOKER_SPELL_CASTING_COLOR, BlockColor.WHITE_BLOCK_COLOR.argb)
-        entity.memoryStorage[CoreMemoryTypes.LAST_MAGIC] = SPELL.SUMMON
+        entity.memoryStorage.set(CoreMemoryTypes.LAST_MAGIC, Spell.SUMMON)
         entity.setDataFlag(EntityFlag.CASTING)
     }
 

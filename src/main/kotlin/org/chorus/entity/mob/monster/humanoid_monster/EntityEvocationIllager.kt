@@ -14,10 +14,8 @@ import org.chorus.entity.ai.executor.evocation.FangCircleExecutor
 import org.chorus.entity.ai.executor.evocation.FangLineExecutor
 import org.chorus.entity.ai.executor.evocation.VexSummonExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
-import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestTargetEntitySensor
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
@@ -30,7 +28,6 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.DyeColor
-import java.util.List
 import java.util.Set
 import java.util.concurrent.*
 import java.util.function.Function
@@ -55,7 +52,7 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY, 8.0),
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC) == SPELL.NONE }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE }
                         )
                     ), 9, 1),
                 Behavior(
@@ -70,7 +67,7 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET, 10.0),
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC) == SPELL.NONE }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE }
                         )
                     ),
                     8,
@@ -94,8 +91,8 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         },
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC) == SPELL.NONE },
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC) == SPELL.COLOR_CONVERSION }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.COLOR_CONVERSION }
                         ),
                         IBehaviorEvaluator { entity: EntityMob ->
                             entity.level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)
@@ -117,8 +114,8 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         },
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC) == SPELL.NONE },
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC) == SPELL.SUMMON }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.SUMMON }
                         )
                     ), 6, 1),
                 Behavior(
@@ -129,8 +126,8 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET, 3.0),
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC) == SPELL.NONE },
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC) == SPELL.CAST_CIRLCE }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.CAST_CIRLCE }
                         )
                     ), 5, 1),
                 Behavior(
@@ -140,8 +137,8 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, 40),
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC) == SPELL.NONE },
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<SPELL>(CoreMemoryTypes.Companion.LAST_MAGIC) == SPELL.CAST_LINE }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.CAST_LINE }
                         )
                     ), 4, 1),
                 Behavior(
@@ -155,19 +152,19 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf(
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
-                    Function<Entity, Boolean> { entity: Entity? ->
+                    listOf(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET),
+                    Function { entity ->
                         this.attackTarget(
                             entity!!
                         )
                     }),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY),
-                    Function<Entity, Boolean> { entity: Entity? -> entity is EntityCreaking })
+                    listOf(CoreMemoryTypes.NEAREST_SHARED_ENTITY),
+                    Function { entity -> entity is EntityCreaking })
             ),
             Set.of<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
@@ -202,13 +199,13 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
 
     override fun getDrops(): Array<Item> {
         return arrayOf(
-            Item.get(Item.TOTEM_OF_UNDYING),
-            Item.get(Item.EMERALD, 0, ThreadLocalRandom.current().nextInt(2))
+            Item.get(ItemID.TOTEM_OF_UNDYING),
+            Item.get(ItemID.EMERALD, 0, ThreadLocalRandom.current().nextInt(2))
         )
     }
 
 
-    enum class SPELL {
+    enum class Spell {
         NONE,
         CAST_LINE,
         CAST_CIRLCE,

@@ -10,21 +10,21 @@ interface EntityControlUtils {
     fun getMemoryStorage(): IMemoryStorage
 
     var lookTarget: Vector3?
-        get() = memoryStorage[CoreMemoryTypes.LOOK_TARGET]
+        get() = memoryStorage.get(CoreMemoryTypes.LOOK_TARGET)
         set(lookTarget) {
-            memoryStorage[CoreMemoryTypes.LOOK_TARGET] = lookTarget
+            memoryStorage.set(CoreMemoryTypes.LOOK_TARGET, lookTarget)
         }
 
     var moveTarget: Vector3?
-        get() = memoryStorage[CoreMemoryTypes.MOVE_TARGET]
+        get() = memoryStorage.get(CoreMemoryTypes.MOVE_TARGET)
         set(moveTarget) {
-            memoryStorage[CoreMemoryTypes.MOVE_TARGET] = moveTarget
+            memoryStorage.set(CoreMemoryTypes.MOVE_TARGET, moveTarget)
         }
 
     var moveDirectionStart: Vector3?
-        get() = memoryStorage[CoreMemoryTypes.MOVE_DIRECTION_START]
+        get() = memoryStorage.get(CoreMemoryTypes.MOVE_DIRECTION_START)
         set(moveDirectionStart) {
-            memoryStorage[CoreMemoryTypes.MOVE_DIRECTION_START] = moveDirectionStart
+            memoryStorage.set(CoreMemoryTypes.MOVE_DIRECTION_START, moveDirectionStart)
         }
 
     fun hasMoveDirection(): Boolean {
@@ -32,29 +32,29 @@ interface EntityControlUtils {
     }
 
     var moveDirectionEnd: Vector3?
-        get() = memoryStorage[CoreMemoryTypes.MOVE_DIRECTION_END]
+        get() = memoryStorage.get(CoreMemoryTypes.MOVE_DIRECTION_END)
         set(moveDirectionEnd) {
-            memoryStorage[CoreMemoryTypes.MOVE_DIRECTION_END] = moveDirectionEnd
+            memoryStorage.set(CoreMemoryTypes.MOVE_DIRECTION_END, moveDirectionEnd)
         }
 
     var isShouldUpdateMoveDirection: Boolean
-        get() = memoryStorage[CoreMemoryTypes.SHOULD_UPDATE_MOVE_DIRECTION]
+        get() = memoryStorage.get(CoreMemoryTypes.SHOULD_UPDATE_MOVE_DIRECTION)
         set(shouldUpdateMoveDirection) {
-            memoryStorage[CoreMemoryTypes.SHOULD_UPDATE_MOVE_DIRECTION] = shouldUpdateMoveDirection
+            memoryStorage.set(CoreMemoryTypes.SHOULD_UPDATE_MOVE_DIRECTION, shouldUpdateMoveDirection)
         }
 
     fun isEnablePitch(): Boolean {
-        return memoryStorage[CoreMemoryTypes.ENABLE_PITCH]
+        return memoryStorage.get(CoreMemoryTypes.ENABLE_PITCH)
     }
 
     fun setEnablePitch(enablePitch: Boolean) {
-        memoryStorage[CoreMemoryTypes.ENABLE_PITCH] = enablePitch
+        memoryStorage.set(CoreMemoryTypes.ENABLE_PITCH, enablePitch)
     }
 
     var isEnablePitch: Boolean
-        get() = memoryStorage[CoreMemoryTypes.ENABLE_PITCH]
+        get() = memoryStorage.get(CoreMemoryTypes.ENABLE_PITCH)
         set(enablePitch) {
-            memoryStorage[CoreMemoryTypes.ENABLE_PITCH] = enablePitch
+            memoryStorage.set(CoreMemoryTypes.ENABLE_PITCH, enablePitch)
         }
 
     //    Unused

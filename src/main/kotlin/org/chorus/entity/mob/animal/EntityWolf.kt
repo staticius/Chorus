@@ -37,7 +37,7 @@ import kotlin.math.max
  * todo 野生狼不会被刷新
  */
 class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityOwnable,
-    EntityCanAttack, EntityCanSit, EntityAngryable, EntityHealable, EntityColor {
+    EntityCanAttack, EntityCanSit, EntityAngerable, EntityHealable, EntityColor {
     override fun getIdentifier(): String {
         return EntityID.Companion.WOLF
     }

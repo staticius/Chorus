@@ -20,7 +20,7 @@ class SleepExecutor : EntityControl, IBehaviorExecutor {
         removeRouteTarget(entity)
         removeLookTarget(entity)
         if (entity.memoryStorage.notEmpty(CoreMemoryTypes.OCCUPIED_BED)) {
-            val bed = entity.memoryStorage[CoreMemoryTypes.OCCUPIED_BED]
+            val bed = entity.memoryStorage.get(CoreMemoryTypes.OCCUPIED_BED)
             if (bed is BlockBed) {
                 val head = bed.headPart!!
                 val foot = bed.footPart!!

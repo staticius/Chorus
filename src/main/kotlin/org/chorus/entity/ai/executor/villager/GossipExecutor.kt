@@ -12,8 +12,6 @@ import org.chorus.item.*
 import org.chorus.math.*
 import org.chorus.utils.*
 
-import java.util.*
-
 class GossipExecutor(
     val type: MemoryType<out EntityVillagerV2?>
 ) : EntityControl, IBehaviorExecutor {
@@ -75,7 +73,7 @@ class GossipExecutor(
         entity.lookTarget = entity.memoryStorage[type]?.position
         this.tick = 0
         this.spread = false
-        entity.memoryStorage[CoreMemoryTypes.LAST_GOSSIP] = entity.level!!.tick
+        entity.memoryStorage.set(CoreMemoryTypes.LAST_GOSSIP, entity.level!!.tick)
     }
 
     override fun onStop(entity: EntityMob) {
