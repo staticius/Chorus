@@ -2,7 +2,7 @@ package org.chorus.entity.ai.executor
 
 import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.level.Transform
 import org.chorus.math.IVector3
@@ -12,7 +12,7 @@ import kotlin.math.sin
 
 
 class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应该从哪个Memory获取目标位置
-    protected var memory: MemoryType<out IVector3>,
+    protected var memory: NullableMemoryType<out IVector3>,
     protected var speed: Float,
     protected var updateRouteImmediatelyWhenTargetChange: Boolean = false,
     protected var clearDataWhenLose: Boolean = false
@@ -31,9 +31,9 @@ class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应�
         if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) {
             return false
         }
-        val target = entity.behaviorGroup.memoryStorage[memory].vector3
+        val target = entity.behaviorGroup.memoryStorage[memory]!!.vector3
         val origin =
-            entity.behaviorGroup.memoryStorage.get(CoreMemoryTypes.LAST_ATTACK_ENTITY)!!.transform.add(
+            entity.behaviorGroup.memoryStorage[CoreMemoryTypes.LAST_ATTACK_ENTITY]!!.transform.add(
                 0.0,
                 24.0,
                 0.0

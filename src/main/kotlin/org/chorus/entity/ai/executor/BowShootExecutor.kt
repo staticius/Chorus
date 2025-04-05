@@ -3,7 +3,7 @@ package org.chorus.entity.ai.executor
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.*
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
@@ -28,7 +28,7 @@ class BowShootExecutor(
      * 用来射击的物品
      */
     protected var item: Supplier<Item>,
-    protected var memory: MemoryType<out Entity?>,
+    protected var memory: NullableMemoryType<out Entity>,
     protected var speed: Float,
     maxShootDistance: Int,
     protected var clearDataWhenLose: Boolean,
