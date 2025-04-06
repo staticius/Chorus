@@ -1,14 +1,14 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.block.BlockID
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 import java.util.concurrent.ThreadLocalRandom
 
 open class NearbyFlatRandomRoamExecutor @JvmOverloads constructor(
-    protected var memory: MemoryType<out IVector3>,
+    protected var memory: NullableMemoryType<out IVector3>,
     speed: Float,
     maxRoamRange: Int,
     frequency: Int,
@@ -30,7 +30,7 @@ open class NearbyFlatRandomRoamExecutor @JvmOverloads constructor(
         currentTargetCalTick++
         durationTick++
 
-        val center = entity.memoryStorage[memory].vector3
+        val center = entity.memoryStorage[memory]!!.vector3
 
         if (entity.isEnablePitch) entity.isEnablePitch = false
         if (currentTargetCalTick >= frequency || (calNextTargetImmediately && needUpdateTarget(entity))) {

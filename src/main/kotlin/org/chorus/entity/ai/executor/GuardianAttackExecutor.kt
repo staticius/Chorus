@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.Entity
 import org.chorus.entity.EntityLiving
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.EntityMonster
@@ -14,7 +14,7 @@ import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.LevelSoundEventPacket
 
 class GuardianAttackExecutor(
-    protected var memory: MemoryType<out Entity?>,
+    protected var memory: NullableMemoryType<out Entity>,
     protected var speed: Float,
     maxShootDistance: Int,
     protected var clearDataWhenLose: Boolean,

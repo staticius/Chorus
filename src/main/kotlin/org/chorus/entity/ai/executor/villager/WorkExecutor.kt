@@ -18,7 +18,7 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.SITE_BLOCK, 0.
 
     override fun execute(entity: EntityMob): Boolean {
         if (entity is EntityVillagerV2) {
-            val site = entity.getMemoryStorage().get(CoreMemoryTypes.SITE_BLOCK)!!
+            val site = entity.getMemoryStorage()[CoreMemoryTypes.SITE_BLOCK]!!
             if (stayTick < 100) {
                 if (site.position.distance(entity.position) < 1.5f) {
                     setLookTarget(entity, site.position)

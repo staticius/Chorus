@@ -1,6 +1,7 @@
 package org.chorus.entity.ai.route.posevaluator
 
 import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.entity.mob.EntityMob
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.SimpleAxisAlignedBB
@@ -25,17 +26,17 @@ class SwimmingPosEvaluator : IPosEvaluator {
      * 对于空间中的移动做了特别的优化
      */
     protected fun isPassable(entity: EntityMob, vector3: Vector3): Boolean {
-        val radius = (entity.width * entity.getScale()) * 0.5 + 0.1
-        val height = entity.height * entity.getScale()
+        val radius = (entity.getWidth() * entity.getScale()) * 0.5 + 0.1
+        val height = entity.getHeight() * entity.getScale()
         // 原版中不会贴地飞行
         val bb: AxisAlignedBB = SimpleAxisAlignedBB(
-            vector3.getX() - radius,
-            vector3.getY() - height * 0.5,
-            vector3.getZ() - radius,
-            vector3.getX() + radius,
-            vector3.getY() + height,
-            vector3.getZ() + radius
+            vector3.x - radius,
+            vector3.y - height * 0.5,
+            vector3.z - radius,
+            vector3.x + radius,
+            vector3.y + height,
+            vector3.z + radius
         )
-        return !Utils.hasCollisionTickCachedBlocks(entity.level, bb)
+        return !Utils.hasCollisionTickCachedBlocks(entity.getLevel(), bb)
     }
 }

@@ -1,6 +1,5 @@
 package org.chorus.entity.mob.monster
 
-import org.apache.logging.log4j.core.Core
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.*

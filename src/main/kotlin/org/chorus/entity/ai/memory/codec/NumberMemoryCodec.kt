@@ -4,54 +4,46 @@ import org.chorus.nbt.tag.*
 import java.util.function.BiConsumer
 import java.util.function.Function
 
-class NumberMemoryCodec<Data : Number?>(key: String?) : MemoryCodec<Data>(
+class NumberMemoryCodec<Data : Number?>(key: String) : MemoryCodec<Data>(
     Function { tag ->
-        if (tag.contains(key!!)) (TagReader(
-            tag[key] as NumberTag<Data>
+        if (tag.contains(key)) (TagReader<Data>(
+            tag[key] as NumberTag<*>
         )).data else null
     },
-    BiConsumer { data: Data, tag: CompoundTag -> tag.put(key, newTag(data)) }
+    BiConsumer { data, tag ->
+        if (data != null) {
+            tag.put(key, newTag(data))
+        } else tag.remove(key)
+    }
 ) {
-    private class TagReader<Data : Number?>(var tag: NumberTag<Data>) {
+    class TagReader<Data : Number?>(var tag: NumberTag<*>) {
         val data: Data
             get() {
-                val simpleName = tag.javaClass.simpleName
-                val data: Number = tag.data
-                //hack convert byteTag and shortTag because they data storage is all int type
-                return if (simpleName == "ByteTag") {
-                    data.toByte() as Data
-                } else if (simpleName == "ShortTag") {
-                    data.toShort() as Data
-                } else if (data is Int) {
-                    tag.data
-                } else if (data is Long) {
-                    tag.data
-                } else if (data is Float) {
-                    tag.data
-                } else if (data is Double) {
-                    tag.data
-                } else {
-                    throw IllegalArgumentException("Unknown number type: " + data.javaClass.name)
+                val data = tag.data
+
+                @Suppress("UNCHECKED_CAST")
+                return when (tag) {
+                    is ByteTag -> {
+                        data.toByte() as Data
+                    }
+                    is ShortTag -> {
+                        data.toShort() as Data
+                    }
+                    else -> tag.data as Data
                 }
             }
     }
 
     companion object {
-        protected fun newTag(data: Number): NumberTag<*> {
-            return if (data is Byte) {
-                ByteTag(data.toByte().toInt())
-            } else if (data is Short) {
-                ShortTag(data.toShort().toInt())
-            } else if (data is Int) {
-                IntTag(data.toInt())
-            } else if (data is Long) {
-                LongTag(data.toLong())
-            } else if (data is Float) {
-                FloatTag(data.toFloat())
-            } else if (data is Double) {
-                DoubleTag(data.toDouble())
-            } else {
-                throw IllegalArgumentException("Unknown number type: " + data.javaClass.name)
+        fun newTag(data: Number): NumberTag<*> {
+            return when (data) {
+                is Byte -> ByteTag(data.toByte().toInt())
+                is Short -> ShortTag(data.toShort().toInt())
+                is Int -> IntTag(data.toInt())
+                is Long -> LongTag(data.toLong())
+                is Float -> FloatTag(data.toFloat())
+                is Double -> DoubleTag(data.toDouble())
+                else -> throw IllegalArgumentException("Unknown number type: " + data.javaClass.name)
             }
         }
     }

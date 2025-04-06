@@ -2,14 +2,14 @@ package org.chorus.entity.ai.executor
 
 import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 
 
 open class FleeFromTargetExecutor @JvmOverloads constructor(//指示执行器应该从哪个Memory获取目标位置
-    protected var memory: MemoryType<out IVector3?>,
+    protected var memory: NullableMemoryType<out IVector3>,
     protected var speed: Float,
     protected var updateRouteImmediatelyWhenTargetChange: Boolean = false,
     protected var minDistance: Float = -1f,

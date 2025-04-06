@@ -32,12 +32,30 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
     protected val closeHashSet: HashSet<Vector3> = HashSet()
 
     override var start: Vector3? = null
+        set(value) {
+            field = value
+            if (isInterrupt) this.interrupt = true
+        }
 
     override var target: Vector3? = null
+        set(value) {
+            field = value
+            if (isInterrupt) this.interrupt = true
+        }
 
     override var reachableTarget: Vector3? = null
 
     protected var finished: Boolean = false
+
+    override val isFinished: Boolean
+        get() = this.finished
+
+    override val isInterrupt: Boolean
+        get() = this.interrupt
+
+    override val isReachable: Boolean
+        get() = this.reachable
+
     override var isSearching: Boolean = false
         protected set
 
@@ -54,16 +72,6 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
 
     protected var lastRouteParticleSpawn: Long = 0
 
-    override fun setStart(vector3: Vector3?) {
-        this.start = vector3
-        if (isInterrupt) this.setInterrupt(true)
-    }
-
-    override fun setTarget(vector3: Vector3?) {
-        this.target = vector3
-        if (isInterrupt) this.setInterrupt(true)
-    }
-
     override fun search(): Boolean {
         //init status
         this.finished = false
@@ -71,7 +79,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
         this.interrupt = false
         var currentReachable = true
         //若实体未处于active状态，则关闭路径平滑
-        this.setEnableFloydSmooth(entity.isActive)
+        this.enableFloydSmooth = (entity.isActive)
         //清空openList和closeList
         openList.clear()
         closeList.clear()
@@ -81,8 +89,8 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
 
         //将起点放置到closeList中，以开始寻路
         //起点没有父节点，且我们不需要计算他的代价
-        var currentNode = Node(start, null, 0, 0)
-        val tmpNode = Node(start, null, 0, 0)
+        var currentNode = Node(start!!, null, 0, 0)
+        val tmpNode = Node(start!!, null, 0, 0)
         closeList.add(tmpNode)
         closeHashSet.add(tmpNode.vector3)
 
@@ -114,14 +122,14 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
         //所以说这里我们还需要将其精确指向到终点
         var targetNode = currentNode
         if (currentNode.vector3 != target) {
-            targetNode = Node(target, currentNode, 0, 0)
+            targetNode = Node(target!!, currentNode, 0, 0)
         }
 
         //如果无法到达，则取最接近终点的一个Node作为尾节点
         var reachableNode: Node? = null
         reachableTarget = if (currentReachable) target else (getNearestNodeFromCloseList(target!!).also {
             reachableNode = it
-        }).getVector3()
+        })!!.getVector3()
         var findingPath: List<Node> = if (currentReachable) getPathRoute(targetNode) else getPathRoute(reachableNode)
         //使用floyd平滑路径
         if (enableFloydSmooth) findingPath = floydSmooth(findingPath)
@@ -139,9 +147,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 findingPath.forEach(Consumer { node: Node ->
                     entity.level!!.addParticle(
                         BlockForceFieldParticle(node.vector3),
-                        Server.instance.onlinePlayers.values.toArray<Player>(
-                            Player.EMPTY_ARRAY
-                        )
+                        Server.instance.onlinePlayers.values.toTypedArray()
                     )
                 })
                 lastRouteParticleSpawn = System.currentTimeMillis()
@@ -183,11 +189,11 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
         val S: Boolean
         val W: Boolean
 
-        val vector3 = Vector3(node.vector3.floorX + 0.5, node.vector3.getY(), node.vector3.floorZ + 0.5)
+        val vector3 = Vector3(node.vector3.floorX + 0.5, node.vector3.y, node.vector3.floorZ + 0.5)
 
         var offsetY: Double
 
-        if ((getAvailableHorizontalOffset(vector3).also { offsetY = it.toDouble() }) != -384.0) {
+        if ((getAvailableHorizontalOffset(vector3).also { offsetY = it.toDouble() }).toDouble() != -384.0) {
             if (abs(offsetY) > 0.25) {
                 val vec = vector3.add(0.0, offsetY, 0.0)
                 if (!existInCloseList(vec)) {
@@ -195,17 +201,16 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                     if (nodeNear == null) {
                         openList.offer(
                             Node(
-                                vec, node, node.g, calH(
+                                vec, node, node.cost, calH(
                                     vec,
                                     target!!
                                 )
                             )
                         )
                     } else {
-                        if (node.g < nodeNear.g) {
+                        if (node.cost < nodeNear.cost) {
                             nodeNear.parent = node
-                            nodeNear.g = node.g
-                            nodeNear.f = nodeNear.g + nodeNear.h
+                            nodeNear.cost = node.cost
                         }
                     }
                 }
@@ -214,10 +219,10 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
 
         if (((getAvailableHorizontalOffset(vector3.add(1.0, 0.0, 0.0)).also {
                 offsetY = it.toDouble()
-            }) != -384.0).also { E = it }) {
+            }).toDouble() != -384.0).also { E = it }) {
             val vec = vector3.add(1.0, offsetY, 0.0)
             if (!existInCloseList(vec)) {
-                val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.g
+                val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
                     openList.offer(
@@ -229,10 +234,9 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                         )
                     )
                 } else {
-                    if (cost < nodeNear.g) {
+                    if (cost < nodeNear.cost) {
                         nodeNear.parent = node
-                        nodeNear.g = cost
-                        nodeNear.f = nodeNear.g + nodeNear.h
+                        nodeNear.cost = cost
                     }
                 }
             }
@@ -240,10 +244,10 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
 
         if (((getAvailableHorizontalOffset(vector3.add(0.0, 0.0, 1.0)).also {
                 offsetY = it.toDouble()
-            }) != -384.0).also { S = it }) {
+            }).toDouble() != -384.0).also { S = it }) {
             val vec = vector3.add(0.0, offsetY, 1.0)
             if (!existInCloseList(vec)) {
-                val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.g
+                val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
                     openList.offer(
@@ -255,10 +259,9 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                         )
                     )
                 } else {
-                    if (cost < nodeNear.g) {
+                    if (cost < nodeNear.cost) {
                         nodeNear.parent = node
-                        nodeNear.g = cost
-                        nodeNear.f = nodeNear.g + nodeNear.h
+                        nodeNear.cost = cost
                     }
                 }
             }
@@ -266,10 +269,10 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
 
         if (((getAvailableHorizontalOffset(vector3.add(-1.0, 0.0, 0.0)).also {
                 offsetY = it.toDouble()
-            }) != -384.0).also { W = it }) {
+            }).toDouble() != -384.0).also { W = it }) {
             val vec = vector3.add(-1.0, offsetY, 0.0)
             if (!existInCloseList(vec)) {
-                val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.g
+                val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
                     openList.offer(
@@ -281,10 +284,9 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                         )
                     )
                 } else {
-                    if (cost < nodeNear.g) {
+                    if (cost < nodeNear.cost) {
                         nodeNear.parent = node
-                        nodeNear.g = cost
-                        nodeNear.f = nodeNear.g + nodeNear.h
+                        nodeNear.cost = cost
                     }
                 }
             }
@@ -292,10 +294,10 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
 
         if (((getAvailableHorizontalOffset(vector3.add(0.0, 0.0, -1.0)).also {
                 offsetY = it.toDouble()
-            }) != -384.0).also { N = it }) {
+            }).toDouble() != -384.0).also { N = it }) {
             val vec = vector3.add(0.0, offsetY, -1.0)
             if (!existInCloseList(vec)) {
-                val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.g
+                val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
                     openList.offer(
@@ -307,10 +309,9 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                         )
                     )
                 } else {
-                    if (cost < nodeNear.g) {
+                    if (cost < nodeNear.cost) {
                         nodeNear.parent = node
-                        nodeNear.g = cost
-                        nodeNear.f = nodeNear.g + nodeNear.h
+                        nodeNear.cost = cost
                     }
                 }
             }
@@ -320,10 +321,10 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
         //接触水的时候就不需要这么判断了
         if (N && E && (((getAvailableHorizontalOffset(vector3.add(1.0, 0.0, -1.0)).also {
                 offsetY = it.toDouble()
-            }) == 0.0) || (offsetY != -384.0 && entity.isTouchingWater))) {
+            }).toDouble() == 0.0) || (offsetY != -384.0 && entity.isTouchingWater()))) {
             val vec = vector3.add(1.0, offsetY, -1.0)
             if (!existInCloseList(vec)) {
-                val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.g
+                val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
                     openList.offer(
@@ -335,10 +336,9 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                         )
                     )
                 } else {
-                    if (cost < nodeNear.g) {
+                    if (cost < nodeNear.cost) {
                         nodeNear.parent = node
-                        nodeNear.g = cost
-                        nodeNear.f = nodeNear.g + nodeNear.h
+                        nodeNear.cost = cost
                     }
                 }
             }
@@ -346,10 +346,10 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
 
         if (E && S && (((getAvailableHorizontalOffset(vector3.add(1.0, 0.0, 1.0)).also {
                 offsetY = it.toDouble()
-            }) == 0.0) || (offsetY != -384.0 && entity.isTouchingWater))) {
+            }).toDouble() == 0.0) || (offsetY != -384.0 && entity.isTouchingWater()))) {
             val vec = vector3.add(1.0, offsetY, 1.0)
             if (!existInCloseList(vec)) {
-                val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.g
+                val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
                     openList.offer(
@@ -361,10 +361,10 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                         )
                     )
                 } else {
-                    if (cost < nodeNear.g) {
+                    if (cost < nodeNear.cost) {
                         nodeNear.parent = node
-                        nodeNear.g = cost
-                        nodeNear.f = nodeNear.g + nodeNear.h
+                        nodeNear.cost = cost
+
                     }
                 }
             }
@@ -372,10 +372,10 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
 
         if (W && S && (((getAvailableHorizontalOffset(vector3.add(-1.0, 0.0, 1.0)).also {
                 offsetY = it.toDouble()
-            }) == 0.0) || (offsetY != -384.0 && entity.isTouchingWater))) {
+            }).toDouble() == 0.0) || (offsetY != -384.0 && entity.isTouchingWater()))) {
             val vec = vector3.add(-1.0, offsetY, 1.0)
             if (!existInCloseList(vec)) {
-                val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.g
+                val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
                     openList.offer(
@@ -387,10 +387,9 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                         )
                     )
                 } else {
-                    if (cost < nodeNear.g) {
+                    if (cost < nodeNear.cost) {
                         nodeNear.parent = node
-                        nodeNear.g = cost
-                        nodeNear.f = nodeNear.g + nodeNear.h
+                        nodeNear.cost = cost
                     }
                 }
             }
@@ -398,10 +397,10 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
 
         if (W && N && (((getAvailableHorizontalOffset(vector3.add(-1.0, 0.0, -1.0)).also {
                 offsetY = it.toDouble()
-            }) == 0.0) || (offsetY != -384.0 && entity.isTouchingWater))) {
+            }).toDouble() == 0.0) || (offsetY != -384.0 && entity.isTouchingWater()))) {
             val vec = vector3.add(-1.0, offsetY, -1.0)
             if (!existInCloseList(vec)) {
-                val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.g
+                val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
                     openList.offer(
@@ -413,10 +412,9 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                         )
                     )
                 } else {
-                    if (cost < nodeNear.g) {
+                    if (cost < nodeNear.cost) {
                         nodeNear.parent = node
-                        nodeNear.g = cost
-                        nodeNear.f = nodeNear.g + nodeNear.h
+                        nodeNear.cost = cost
                     }
                 }
             }
@@ -531,7 +529,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
     }
 
     /**
-     * 使用Floyd算法平滑A*路径
+     * Smoothing A* Path Using Floyd Algorithm
      */
     protected fun floydSmooth(array: List<Node>): List<Node> {
         var current = 0
@@ -545,13 +543,12 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 total++
             }
             var temp = array[array.size - 1]
-            val tempL: MutableList<Node?> = ArrayList()
+            val tempL: MutableList<Node> = ArrayList()
             tempL.add(temp)
-            while (temp.parent != null && temp.parent.vector3 != start) {
-                tempL.add((temp.parent.also { temp = it }))
+            while (temp.parent != null && temp.parent!!.vector3 != start) {
+                tempL.add((temp.parent!!.also { temp = it }))
             }
-            Collections.reverse(tempL)
-            return tempL
+            return tempL.reversed()
         }
         return array
     }
@@ -561,20 +558,19 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
      *
      * @param end 列表尾节点
     </Node> */
-    protected fun getPathRoute(end: Node?): List<Node?> {
-        var end = end
-        val nodes: MutableList<Node?> = ArrayList()
-        if (end == null) end = closeList[closeList.size - 1]
-        nodes.add(end)
-        if (end.parent != null) {
-            while (end.getParent().vector3 != start) {
-                nodes.add(end.getParent().also { end = it })
+    protected fun getPathRoute(end: Node?): List<Node> {
+        var end1 = end
+        val nodes: MutableList<Node> = ArrayList()
+        if (end1 == null) end1 = closeList[closeList.size - 1]
+        nodes.add(end1)
+        if (end1.parent != null) {
+            while (end1!!.parent!!.vector3 != start) {
+                nodes.add(end1.parent!!.also { end1 = it })
             }
         } else {
-            nodes.add(end)
+            nodes.add(end1!!)
         }
-        Collections.reverse(nodes)
-        return nodes
+        return nodes.reversed()
     }
 
     /**

@@ -5,7 +5,7 @@ import org.chorus.entity.*
 import org.chorus.entity.ai.executor.EntityControl
 import org.chorus.entity.ai.executor.IBehaviorExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.item.*
@@ -13,7 +13,7 @@ import org.chorus.math.*
 import org.chorus.utils.*
 
 class GossipExecutor(
-    val type: MemoryType<out EntityVillagerV2?>
+    val type: NullableMemoryType<out EntityVillagerV2>
 ) : EntityControl, IBehaviorExecutor {
     protected var tick: Int = 0
     protected var spread: Boolean = false

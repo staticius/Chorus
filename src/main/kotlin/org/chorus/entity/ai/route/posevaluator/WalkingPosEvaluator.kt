@@ -3,6 +3,7 @@ package org.chorus.entity.ai.route.posevaluator
 import org.chorus.block.Block
 import org.chorus.block.BlockFence
 import org.chorus.block.BlockFenceGate
+import org.chorus.block.BlockID
 import org.chorus.entity.mob.EntityMob
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.SimpleAxisAlignedBB
@@ -22,7 +23,7 @@ class WalkingPosEvaluator : IPosEvaluator {
             return false
         //TODO: 检查碰头
         //脚下不能是伤害性方块
-        if (block.id === Block.FLOWING_LAVA || block.id === Block.LAVA || block.id === Block.CACTUS) return false
+        if (block.id === BlockID.FLOWING_LAVA || block.id === BlockID.LAVA || block.id === BlockID.CACTUS) return false
         //不能是栏杆
         if (block is BlockFence || block is BlockFenceGate) return false
         //水特判
@@ -36,15 +37,15 @@ class WalkingPosEvaluator : IPosEvaluator {
      */
     //todo: 此方法会造成大量开销，原因是碰撞检查，有待优化
     protected fun isPassable(entity: EntityMob, vector3: Vector3): Boolean {
-        val radius = ((entity.width * entity.getScale()) / 2).toDouble()
-        val height = entity.height * entity.getScale()
+        val radius = ((entity.getWidth() * entity.getScale()) / 2).toDouble()
+        val height = entity.getHeight() * entity.getScale()
         val bb: AxisAlignedBB = SimpleAxisAlignedBB(
-            vector3.getX() - radius,
-            vector3.getY(),
-            vector3.getZ() - radius,
-            vector3.getX() + radius,
-            vector3.getY() + height,
-            vector3.getZ() + radius
+            vector3.x - radius,
+            vector3.y,
+            vector3.z - radius,
+            vector3.x + radius,
+            vector3.y + height,
+            vector3.z + radius
         )
         if (radius > 0.5) {
             // A --- B --- C
@@ -53,7 +54,7 @@ class WalkingPosEvaluator : IPosEvaluator {
             // |           |
             // F --- G --- H
             // 在P点一次通过的可能性最大，所以优先检测
-            val collisionInfo = Utils.hasCollisionTickCachedBlocksWithInfo(entity.level, bb)
+            val collisionInfo = Utils.hasCollisionTickCachedBlocksWithInfo(entity.getLevel(), bb)
             if (collisionInfo.toInt() == 0) {
                 return true
             }
@@ -70,14 +71,14 @@ class WalkingPosEvaluator : IPosEvaluator {
                     if ((collisionInfo.toInt() and 3) - 2 == j) continue  // 获取z轴的碰撞信息并比较
 
                     // 由于已经缓存了方块，检测速度还是可以接受的
-                    if (!Utils.hasCollisionTickCachedBlocks(entity.level, bb.clone().offset(i * dr, 0.0, j * dr))) {
+                    if (!Utils.hasCollisionTickCachedBlocks(entity.getLevel(), bb.clone().offset(i * dr, 0.0, j * dr))) {
                         return true
                     }
                 }
             }
             return false
         } else {
-            return !Utils.hasCollisionTickCachedBlocks(entity.level, bb)
+            return !Utils.hasCollisionTickCachedBlocks(entity.getLevel(), bb)
         }
     }
 }

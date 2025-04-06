@@ -101,7 +101,7 @@ class TameHorseExecutor @JvmOverloads constructor(
             durationTick = 0
             if (Utils.rand(0, 100) <= tameProbability) {
                 val horse = entity as EntityHorse
-                horse.setOwnerName(horse.memoryStorage.get<String>(CoreMemoryTypes.Companion.RIDER_NAME))
+                horse.setOwnerName(horse.memoryStorage[CoreMemoryTypes.RIDER_NAME]!!)
                 val packet = EntityEventPacket()
                 packet.eid = horse.getRuntimeID()
                 packet.event = EntityEventPacket.TAME_SUCCESS

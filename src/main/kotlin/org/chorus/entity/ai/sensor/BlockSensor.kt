@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.sensor
 
 import org.chorus.block.Block
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 
 
@@ -9,7 +9,7 @@ import org.chorus.entity.mob.EntityMob
 
 class BlockSensor @JvmOverloads constructor(
     protected var blockClass: Class<out Block>,
-    protected var memory: MemoryType<Block?>,
+    protected var memory: NullableMemoryType<Block>,
     protected var range: Int,
     protected var lookY: Int,
     override var period: Int = 1
@@ -30,13 +30,12 @@ class BlockSensor @JvmOverloads constructor(
             }
         }
         if (block == null) {
-            if (entity.memoryStorage!!.notEmpty(memory) && (blockClass.isAssignableFrom(
-                    entity.memoryStorage!!.get(memory).javaClass
-                ) || entity.memoryStorage!!
-                    .get(memory).isAir)
+            if (entity.memoryStorage.notEmpty(memory) && (blockClass.isAssignableFrom(
+                    entity.memoryStorage[memory]!!.javaClass
+                ) || entity.memoryStorage[memory]!!.isAir)
             ) {
-                entity.memoryStorage!!.clear(memory)
+                entity.memoryStorage.clear(memory)
             } // We don't want to clear data from different sensors
-        } else entity.memoryStorage!!.set(memory, block)
+        } else entity.memoryStorage[memory] = block
     }
 }

@@ -1,11 +1,11 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.math.IVector3
 
 class LookAtTargetExecutor(//指示执行器应该从哪个Memory获取目标位置
-    protected var memory: MemoryType<out IVector3?>, protected var duration: Int
+    protected var memory: NullableMemoryType<out IVector3>, protected var duration: Int
 ) :
     EntityControl, IBehaviorExecutor {
     protected var currentTick: Int = 0

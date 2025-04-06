@@ -2,7 +2,7 @@ package org.chorus.entity.ai.executor
 
 import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.animal.EntityWolf
@@ -22,7 +22,7 @@ class WolfAttackExecutor
  * @param maxSenseRange     最大获取攻击目标范围
  * @param clearDataWhenLose 失去目标时清空记忆
  * @param coolDown          攻击冷却时间(单位tick)
- */(memory: MemoryType<out Entity>, speed: Float, maxSenseRange: Int, clearDataWhenLose: Boolean, coolDown: Int) :
+ */(memory: NullableMemoryType<out Entity>, speed: Float, maxSenseRange: Int, clearDataWhenLose: Boolean, coolDown: Int) :
     MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
     override fun execute(entity: EntityMob): Boolean {
         val wolf = entity as EntityWolf

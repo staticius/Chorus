@@ -10,21 +10,21 @@ import org.chorus.entity.ai.route.posevaluator.IPosEvaluator
  * 所以说我们并不需要异步路径查找
  */
 abstract class SimpleRouteFinder(//方块评估器
-    @field:Getter protected var evalPos: IPosEvaluator?
+    protected var evalPos: IPosEvaluator?
 ) : IRouteFinder {
     //用于存储寻路结果的List
-    protected var nodes: MutableList<Node?> = ArrayList()
+    protected var nodes: MutableList<Node> = ArrayList()
 
     //索引值
     override var nodeIndex: Int = 0
 
     //添加寻路结果节点
-    protected open fun addNode(node: Node?) {
+    protected open fun addNode(node: Node) {
         nodes.add(node)
     }
 
     //批量添加寻路结果节点
-    protected fun addNode(node: List<Node?>) {
+    protected fun addNode(node: List<Node>) {
         nodes.addAll(node)
     }
 

@@ -1,13 +1,13 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
 import org.chorus.math.IVector3
 
 class WitherDashExecutor(
-    memory: MemoryType<out IVector3>,
+    memory: NullableMemoryType<out IVector3>,
     speed: Float,
     updateRouteImmediatelyWhenTargetChange: Boolean,
     maxFollowRange: Float,

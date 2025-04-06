@@ -5,7 +5,7 @@ import org.chorus.Server
 import org.chorus.entity.Entity
 import org.chorus.entity.EntityID
 import org.chorus.entity.EntityLiving
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
@@ -22,7 +22,7 @@ import kotlin.math.min
 import kotlin.math.sin
 
 class TridentThrowExecutor(
-    protected var memory: MemoryType<out Entity?>,
+    protected var memory: NullableMemoryType<out Entity>,
     protected var speed: Float,
     maxShootDistance: Int,
     protected var clearDataWhenLose: Boolean,

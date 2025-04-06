@@ -7,6 +7,7 @@ import org.chorus.entity.EntityCanAttack
 import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.effect.Effect
 import org.chorus.entity.mob.EntityMob
 import org.chorus.event.entity.EntityDamageByEntityEvent
@@ -26,7 +27,7 @@ import java.util.*
  * Universal melee attack actuator.
  */
 open class MeleeAttackExecutor(
-    protected var memory: MemoryType<out Entity>,
+    protected var memory: NullableMemoryType<out Entity>,
     protected var speed: Float,
     maxSenseRange: Int,
     protected var clearDataWhenLose: Boolean,
@@ -66,7 +67,7 @@ open class MeleeAttackExecutor(
     protected var effects: Array<Effect> = effects.toList().toTypedArray()
 
     constructor(
-        memory: MemoryType<out Entity>,
+        memory: NullableMemoryType<out Entity>,
         speed: Float,
         maxSenseRange: Int,
         clearDataWhenLose: Boolean,
@@ -74,7 +75,7 @@ open class MeleeAttackExecutor(
     ) : this(memory, speed, maxSenseRange, clearDataWhenLose, coolDown, 2.5f)
 
     constructor(
-        memory: MemoryType<out Entity>,
+        memory: NullableMemoryType<out Entity>,
         speed: Float,
         maxSenseRange: Int,
         clearDataWhenLose: Boolean,
@@ -85,7 +86,7 @@ open class MeleeAttackExecutor(
     override fun execute(entity: EntityMob): Boolean {
         attackTick++
         if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
-        val newTarget = entity.behaviorGroup.memoryStorage[memory]
+        val newTarget = entity.behaviorGroup.memoryStorage[memory]!!
 
         //first is null
         if (this.target == null) {

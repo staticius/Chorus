@@ -3,7 +3,7 @@ package org.chorus.entity.ai.executor
 import org.chorus.Server
 import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.EntityWarden
 import org.chorus.event.entity.EntityDamageByEntityEvent
@@ -15,7 +15,7 @@ import org.chorus.network.protocol.EntityEventPacket
 import java.util.*
 
 class WardenMeleeAttackExecutor(
-    protected var memory: MemoryType<out Entity?>,
+    protected var memory: NullableMemoryType<out Entity>,
     protected var damage: Float,
     protected var speed: Float
 ) :

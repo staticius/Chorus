@@ -5,10 +5,10 @@ import org.chorus.math.Vector3
 import java.util.*
 
 class Node(
-    private val vector3: Vector3,
-    private val parent: Node?,
-    private val cost: Int,
-    private val heuristicCost: Int
+    val vector3: Vector3,
+    var parent: Node?,
+    var cost: Int,
+    val heuristicCost: Int
 ) :
     Comparable<Node?> {
     private val finalCost = cost + heuristicCost
@@ -31,13 +31,13 @@ class Node(
     }
 
     override fun toString(): String {
-        return vector3.toString() + "| G:" + this.cost + " H:" + this.heuristicCost + " F" + this.finalCost + (if (this.parent != null) "\tparent:" + parent.getVector3() else "")
+        return vector3.toString() + "| G:" + this.cost + " H:" + this.heuristicCost + " F" + this.finalCost + (if (this.parent != null) "\tparent:" + parent!!.getVector3() else "")
     }
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o == null || javaClass != o.javaClass) return false
-        val node = o as Node
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || javaClass != other.javaClass) return false
+        val node = other as Node
         return cost == node.cost && heuristicCost == node.heuristicCost && finalCost == node.finalCost && vector3 == node.vector3 && parent == node.parent
     }
 

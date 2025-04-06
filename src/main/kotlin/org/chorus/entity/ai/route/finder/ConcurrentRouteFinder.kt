@@ -14,7 +14,7 @@ abstract class ConcurrentRouteFinder(blockEvaluator: IPosEvaluator?) : SimpleRou
     //同步访问锁
     protected val lock: ReentrantReadWriteLock = ReentrantReadWriteLock()
 
-    override fun addNode(node: Node?) {
+    override fun addNode(node: Node) {
         try {
             lock.writeLock().lock()
             nodes.add(node)
@@ -23,7 +23,7 @@ abstract class ConcurrentRouteFinder(blockEvaluator: IPosEvaluator?) : SimpleRou
         }
     }
 
-    protected fun addNode(node: ArrayList<Node?>) {
+    protected fun addNode(node: ArrayList<Node>) {
         try {
             lock.writeLock().lock()
             nodes.addAll(node)
@@ -46,8 +46,7 @@ abstract class ConcurrentRouteFinder(blockEvaluator: IPosEvaluator?) : SimpleRou
          * 线程安全地获取查找到的路径信息（cloned）
          */
         get() {
-            val clone =
-                ArrayList<Node?>()
+            val clone = mutableListOf<Node>()
             try {
                 lock.writeLock().lock()
                 for (node in this.nodes) {
@@ -64,7 +63,7 @@ abstract class ConcurrentRouteFinder(blockEvaluator: IPosEvaluator?) : SimpleRou
             try {
                 lock.readLock().lock()
                 if (this.hasCurrentNode()) {
-                    return nodes[currentIndex]
+                    return nodes[nodeIndex]
                 }
                 return null
             } finally {
@@ -74,8 +73,8 @@ abstract class ConcurrentRouteFinder(blockEvaluator: IPosEvaluator?) : SimpleRou
 
     override fun hasNext(): Boolean {
         try {
-            if (this.currentIndex + 1 < nodes.size) {
-                return nodes[currentIndex + 1] != null
+            if (this.nodeIndex + 1 < nodes.size) {
+                return nodes[nodeIndex + 1] != null
             }
         } catch (ignore: Exception) {
         }
@@ -86,7 +85,7 @@ abstract class ConcurrentRouteFinder(blockEvaluator: IPosEvaluator?) : SimpleRou
         try {
             lock.readLock().lock()
             if (this.hasNext()) {
-                return nodes[++currentIndex]
+                return nodes[++nodeIndex]
             }
             return null
         } finally {
@@ -95,14 +94,10 @@ abstract class ConcurrentRouteFinder(blockEvaluator: IPosEvaluator?) : SimpleRou
     }
 
     override fun hasCurrentNode(): Boolean {
-        return currentIndex < nodes.size
+        return nodeIndex < nodes.size
     }
 
-    override var nodeIndex: Int
-        get() = this.currentIndex
-        set(index) {
-            this.currentIndex = index
-        }
+    override var nodeIndex: Int = 0
 
     //异步查找路径
     fun asyncSearch(): CompletableFuture<Void> {

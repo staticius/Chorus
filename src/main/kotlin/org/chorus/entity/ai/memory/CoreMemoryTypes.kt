@@ -9,7 +9,8 @@ import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.codec.BooleanMemoryCodec
 import org.chorus.entity.ai.memory.codec.MemoryCodec
 import org.chorus.entity.ai.memory.codec.NumberMemoryCodec
-import org.chorus.entity.ai.memory.codec.StringMemoryCodec
+import org.chorus.entity.ai.memory.codec.NumberMemoryCodec.Companion.newTag
+import org.chorus.entity.ai.memory.codec.NumberMemoryCodec.TagReader
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.item.EntityItem
@@ -20,8 +21,8 @@ import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.item.Item
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
-import java.util.function.BiConsumer
-import java.util.function.Function
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.NumberTag
 
 /**
  * 核心使用到的记忆类型枚举

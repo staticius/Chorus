@@ -4,7 +4,7 @@ import org.chorus.Server
 import org.chorus.entity.Entity
 import org.chorus.entity.EntityID
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.projectile.EntityProjectile
 import org.chorus.entity.projectile.EntitySmallFireball
@@ -16,7 +16,7 @@ import org.chorus.nbt.tag.ListTag
 import kotlin.math.cos
 import kotlin.math.sin
 
-class WitherShootExecutor(protected var targetMemory: MemoryType<out Entity?>) :
+class WitherShootExecutor(protected var targetMemory: NullableMemoryType<out Entity>) :
     EntityControl, IBehaviorExecutor {
     protected var tick: Int = 0
 

@@ -1,13 +1,13 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 
 
 open class MoveToTargetExecutor @JvmOverloads constructor(//指示执行器应该从哪个Memory获取目标位置
-    protected var memory: MemoryType<out IVector3>,
+    protected var memory: NullableMemoryType<out IVector3>,
     protected var speed: Float,
     protected var updateRouteImmediatelyWhenTargetChange: Boolean = false,
     maxFollowRange: Float = -1f,
@@ -36,7 +36,7 @@ open class MoveToTargetExecutor @JvmOverloads constructor(//指示执行器应�
             return false
         }
         //获取目标位置（这个clone很重要）
-        val target = entity.behaviorGroup.memoryStorage[memory].vector3
+        val target = entity.behaviorGroup.memoryStorage[memory]!!.vector3
 
         //        if (target instanceof Locator locator && !locator.level.getName().equals(entity.level.getName()))
 //            return false;

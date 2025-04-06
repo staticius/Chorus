@@ -27,11 +27,11 @@ open class SimpleSpaceAStarRouteFinder(blockEvaluator: IPosEvaluator?, entity: E
                     if (!existInCloseList(vec) && evalPos(vec)) {
                         // 计算移动1格的开销
                         val cost = when (abs(dx.toDouble()) + abs(dy.toDouble()) + abs(dz.toDouble())) {
-                            1 -> DIRECT_MOVE_COST
-                            2 -> OBLIQUE_2D_MOVE_COST
-                            3 -> OBLIQUE_3D_MOVE_COST
+                            1.0 -> DIRECT_MOVE_COST
+                            2.0 -> OBLIQUE_2D_MOVE_COST
+                            3.0 -> OBLIQUE_3D_MOVE_COST
                             else -> Int.MIN_VALUE
-                        } + getBlockMoveCostAt(entity.level!!, vec) + node.g - dy // -dy是为了倾向于从空中飞而不是贴地飞
+                        } + getBlockMoveCostAt(entity.level!!, vec) + node.cost - dy // -dy是为了倾向于从空中飞而不是贴地飞
                         if (cost < 0) continue
                         val nodeNear = getOpenNode(vec)
                         if (nodeNear == null) {
@@ -44,10 +44,9 @@ open class SimpleSpaceAStarRouteFinder(blockEvaluator: IPosEvaluator?, entity: E
                                 )
                             )
                         } else {
-                            if (cost < nodeNear.g) {
+                            if (cost < nodeNear.cost) {
                                 nodeNear.parent = node
-                                nodeNear.g = cost
-                                nodeNear.f = nodeNear.g + nodeNear.h
+                                nodeNear.cost = cost
                             }
                         }
                     }
