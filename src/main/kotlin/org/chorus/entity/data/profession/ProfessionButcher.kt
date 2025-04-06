@@ -15,7 +15,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
         val random: Random = Random(seed.toLong())
         when (random.nextInt(3)) {
             0 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.CHICKEN, 0, 14), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.CHICKEN, 0, 14), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -25,7 +25,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
             )
 
             1 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.PORKCHOP, 0, 7), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.PORKCHOP, 0, 7), Item.get(ItemID.EMERALD))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -35,7 +35,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
             )
 
             2 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.RABBIT, 0, 4), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.RABBIT, 0, 4), Item.get(ItemID.EMERALD))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -45,7 +45,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.RABBIT_STEW))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.RABBIT_STEW))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(1)
@@ -54,7 +54,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.COAL, 0, 15), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.COAL, 0, 15), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -64,7 +64,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
             )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.COOKED_PORKCHOP, 0, 5))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.COOKED_PORKCHOP, 0, 5))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -74,7 +74,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.COOKED_CHICKEN, 0, 8))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.COOKED_CHICKEN, 0, 8))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -85,7 +85,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
         }
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.MUTTON, 0, 7), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.MUTTON, 0, 7), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -95,7 +95,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.BEEF, 0, 10), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.BEEF, 0, 10), Item.get(ItemID.EMERALD))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -106,7 +106,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
         }
 
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(BlockID.DRIED_KELP_BLOCK, 0, 10), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(BlockID.DRIED_KELP_BLOCK, 0, 10), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(4)
@@ -115,7 +115,7 @@ class ProfessionButcher : Profession(11, BlockID.SMOKER, "entity.villager.butche
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(ItemID.SWEET_BERRIES, 0, 10), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.SWEET_BERRIES, 0, 10), Item.get(ItemID.EMERALD))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(5)

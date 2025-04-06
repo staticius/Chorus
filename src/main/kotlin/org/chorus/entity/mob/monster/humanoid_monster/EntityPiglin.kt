@@ -252,7 +252,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         if (itemInOffhand.isNothing && !isAngry()) {
             if (item is ItemGoldIngot) {
                 if (player.gamemode != Player.CREATIVE) player.inventory.decreaseCount(player.inventory.heldItemIndex)
-                itemInOffhand = Item.get(Item.GOLD_INGOT)
+                itemInOffhand = Item.get(ItemID.GOLD_INGOT)
             }
         }
         return super.onInteract(player, item)
@@ -262,7 +262,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         this.maxHealth = 16
         this.diffHandDamage = floatArrayOf(3f, 5f, 7f)
         super.initEntity()
-        if (!isBaby()) setItemInHand(Item.get(if (Utils.rand()) Item.GOLDEN_SWORD else Item.CROSSBOW))
+        if (!isBaby()) setItemInHand(Item.get(if (Utils.rand()) Item.GOLDEN_SWORD else ItemID.CROSSBOW))
         if (Utils.rand(0, 10) == 0) helmet = Item.get(Item.GOLDEN_HELMET)
         if (Utils.rand(0, 10) == 0) chestplate =
             Item.get(Item.GOLDEN_CHESTPLATE)
@@ -452,7 +452,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
     companion object {
         fun likesItem(item: Item): Boolean {
             return when (item.id) {
-                Block.BELL, Block.GOLD_BLOCK, Item.CLOCK, Item.ENCHANTED_GOLDEN_APPLE, Block.GILDED_BLACKSTONE, Item.GLISTERING_MELON_SLICE, Item.GOLD_INGOT, Item.GOLD_NUGGET, Block.GOLD_ORE, Item.GOLDEN_APPLE, Item.GOLDEN_AXE, Item.GOLDEN_BOOTS, Item.GOLDEN_CARROT, Item.GOLDEN_CHESTPLATE, Item.GOLDEN_HELMET, Item.GOLDEN_HOE, Item.GOLDEN_HORSE_ARMOR, Item.GOLDEN_LEGGINGS, Item.GOLDEN_PICKAXE, Item.GOLDEN_SHOVEL, Item.GOLDEN_SWORD, Block.LIGHT_WEIGHTED_PRESSURE_PLATE, Block.NETHER_GOLD_ORE, Block.GOLDEN_RAIL, Item.RAW_GOLD -> true
+                Block.BELL, Block.GOLD_BLOCK, ItemID.CLOCK, Item.ENCHANTED_GOLDEN_APPLE, Block.GILDED_BLACKSTONE, ItemID.GLISTERING_MELON_SLICE, ItemID.GOLD_INGOT, Item.GOLD_NUGGET, Block.GOLD_ORE, Item.GOLDEN_APPLE, Item.GOLDEN_AXE, Item.GOLDEN_BOOTS, ItemID.GOLDEN_CARROT, Item.GOLDEN_CHESTPLATE, Item.GOLDEN_HELMET, Item.GOLDEN_HOE, Item.GOLDEN_HORSE_ARMOR, Item.GOLDEN_LEGGINGS, Item.GOLDEN_PICKAXE, Item.GOLDEN_SHOVEL, Item.GOLDEN_SWORD, Block.LIGHT_WEIGHTED_PRESSURE_PLATE, Block.NETHER_GOLD_ORE, Block.GOLDEN_RAIL, Item.RAW_GOLD -> true
                 else -> false
             }
         }

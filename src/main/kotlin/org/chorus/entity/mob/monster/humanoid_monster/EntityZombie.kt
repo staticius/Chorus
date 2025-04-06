@@ -180,12 +180,12 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         val drops = ThreadLocalRandom.current().nextFloat(100f)
         if (drops < 0.83) {
             return when (Utils.rand(0, 2)) {
-                0 -> arrayOf<Item>(Item.get(Item.IRON_INGOT, 0, 1), Item.get(Item.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
-                1 -> arrayOf<Item>(Item.get(Item.CARROT, 0, 1), Item.get(Item.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
-                else -> arrayOf<Item>(Item.get(Item.POTATO, 0, 1), Item.get(Item.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
+                0 -> arrayOf<Item>(Item.get(ItemID.IRON_INGOT, 0, 1), Item.get(ItemID.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
+                1 -> arrayOf<Item>(Item.get(ItemID.CARROT, 0, 1), Item.get(ItemID.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
+                else -> arrayOf<Item>(Item.get(ItemID.POTATO, 0, 1), Item.get(ItemID.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
             }
         }
-        return arrayOf(Item.get(Item.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
+        return arrayOf(Item.get(ItemID.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
     }
 
     override fun attackTarget(entity: Entity): Boolean {

@@ -161,8 +161,8 @@ class EntityGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         val secondLoot = ThreadLocalRandom.current().nextInt(6)
         return arrayOf(
             Item.get(Item.PRISMARINE_SHARD, 0, Utils.rand(0, 2)),
-            if (ThreadLocalRandom.current().nextInt(1000) <= 25) Item.get(Item.COD, 0, 1) else Item.AIR,
-            if (secondLoot <= 2) Item.get(Item.COD, 0, Utils.rand(0, 1)) else Item.AIR,
+            if (ThreadLocalRandom.current().nextInt(1000) <= 25) Item.get(ItemID.COD, 0, 1) else Item.AIR,
+            if (secondLoot <= 2) Item.get(ItemID.COD, 0, Utils.rand(0, 1)) else Item.AIR,
             if (secondLoot > 2 && secondLoot <= 4) Item.get(Item.PRISMARINE_CRYSTALS, 0, Utils.rand(0, 1)) else Item.AIR
         )
     }

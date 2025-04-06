@@ -170,7 +170,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.LEATHER), getHorseArmor(), getSaddle())
+        return arrayOf(Item.get(ItemID.LEATHER), getHorseArmor(), getSaddle())
     }
 
     override fun getOriginalName(): String {
@@ -515,7 +515,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun isBreedingItem(item: Item): Boolean {
-        return item.id == Item.GOLDEN_APPLE || item.id == Item.GOLDEN_CARROT
+        return item.id == Item.GOLDEN_APPLE || item.id == ItemID.GOLDEN_CARROT
     }
 
     companion object {

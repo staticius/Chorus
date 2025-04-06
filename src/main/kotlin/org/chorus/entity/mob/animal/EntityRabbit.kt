@@ -106,8 +106,8 @@ class EntityRabbit(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt),
 
     override fun getDrops(): Array<Item> {
         return arrayOf(
-            Item.get((if (this.isOnFire) Item.COOKED_RABBIT else Item.RABBIT)), Item.get(Item.RABBIT_HIDE), Item.get(
-                Item.RABBIT_FOOT
+            Item.get((if (this.isOnFire) Item.COOKED_RABBIT else Item.RABBIT)), Item.get(ItemID.RABBIT_HIDE), Item.get(
+                ItemID.RABBIT_FOOT
             )
         )
     }
@@ -119,6 +119,6 @@ class EntityRabbit(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt),
     }
 
     override fun isBreedingItem(item: Item): Boolean {
-        return item.id == Item.CARROT
+        return item.id == ItemID.CARROT
     }
 }

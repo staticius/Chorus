@@ -2,6 +2,7 @@ package org.chorus.entity.data.profession
 
 import org.chorus.block.BlockID
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
@@ -24,26 +25,26 @@ class ProfessionWeapon : Profession(9, BlockID.GRINDSTONE, "entity.villager.weap
             Enchantment.ID_FIRE_ASPECT
         )
 
-        val ironsword: Item = Item.get(Item.IRON_SWORD)
+        val ironsword: Item = Item.get(ItemID.IRON_SWORD)
         val ironswordEnchantment: Enchantment =
             Enchantment.getEnchantment(enchantments.get(random.nextInt(enchantments.size)))
-        ironswordEnchantment.setLevel(1 + random.nextInt(ironswordEnchantment.getMaxLevel()))
+        ironswordEnchantment.setLevel(1 + random.nextInt(ironswordEnchantment.maxLevel))
         ironsword.addEnchantment(ironswordEnchantment)
 
-        val diamondAxe: Item = Item.get(Item.DIAMOND_AXE)
+        val diamondAxe: Item = Item.get(ItemID.DIAMOND_AXE)
         val diamondAxeEnchantment: Enchantment =
             Enchantment.getEnchantment(enchantments.get(random.nextInt(enchantments.size)))
-        diamondAxeEnchantment.setLevel(1 + random.nextInt(diamondAxeEnchantment.getMaxLevel()))
+        diamondAxeEnchantment.setLevel(1 + random.nextInt(diamondAxeEnchantment.maxLevel))
         diamondAxe.addEnchantment(diamondAxeEnchantment)
 
-        val diamondsword: Item = Item.get(Item.DIAMOND_SWORD)
+        val diamondsword: Item = Item.get(ItemID.DIAMOND_SWORD)
         val diamondswordEnchantment: Enchantment =
             Enchantment.getEnchantment(enchantments.get(random.nextInt(enchantments.size)))
-        diamondswordEnchantment.setLevel(1 + random.nextInt(diamondswordEnchantment.getMaxLevel()))
+        diamondswordEnchantment.setLevel(1 + random.nextInt(diamondswordEnchantment.maxLevel))
         diamondsword.addEnchantment(diamondswordEnchantment)
 
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.COAL, 0, 15), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.COAL, 0, 15), Item.get(ItemID.EMERALD))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(1)
@@ -52,7 +53,7 @@ class ProfessionWeapon : Profession(9, BlockID.GRINDSTONE, "entity.villager.weap
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 3), Item.get(Item.IRON_AXE))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 3), Item.get(ItemID.IRON_AXE))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -61,7 +62,7 @@ class ProfessionWeapon : Profession(9, BlockID.GRINDSTONE, "entity.villager.weap
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 7 + random.nextInt(22 - 7)), ironsword)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 7 + random.nextInt(22 - 7)), ironsword)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -70,7 +71,7 @@ class ProfessionWeapon : Profession(9, BlockID.GRINDSTONE, "entity.villager.weap
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.IRON_INGOT, 0, 4), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.IRON_INGOT, 0, 4), Item.get(ItemID.EMERALD))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -79,7 +80,7 @@ class ProfessionWeapon : Profession(9, BlockID.GRINDSTONE, "entity.villager.weap
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 36), Item.get(BlockID.BELL))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 36), Item.get(BlockID.BELL))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -88,7 +89,7 @@ class ProfessionWeapon : Profession(9, BlockID.GRINDSTONE, "entity.villager.weap
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.FLINT, 0, 24), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.FLINT, 0, 24), Item.get(ItemID.EMERALD))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -97,7 +98,7 @@ class ProfessionWeapon : Profession(9, BlockID.GRINDSTONE, "entity.villager.weap
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.DIAMOND, 0, 1), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.DIAMOND, 0, 1), Item.get(ItemID.EMERALD))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -106,7 +107,7 @@ class ProfessionWeapon : Profession(9, BlockID.GRINDSTONE, "entity.villager.weap
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 17 + random.nextInt(32 - 17)), diamondAxe)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 17 + random.nextInt(32 - 17)), diamondAxe)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -115,7 +116,7 @@ class ProfessionWeapon : Profession(9, BlockID.GRINDSTONE, "entity.villager.weap
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 13 + random.nextInt(27 - 13)), diamondsword)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 13 + random.nextInt(27 - 13)), diamondsword)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(5)

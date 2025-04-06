@@ -101,7 +101,7 @@ class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, n
         this.maxHealth = 24
         this.diffHandDamage = floatArrayOf(2.5f, 3f, 4.5f)
         super.initEntity()
-        setItemInHand(Item.get(Item.CROSSBOW))
+        setItemInHand(Item.get(ItemID.CROSSBOW))
     }
 
     override fun getWidth(): Float {

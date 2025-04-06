@@ -2,6 +2,7 @@ package org.chorus.entity.data.profession
 
 import org.chorus.block.BlockID
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
@@ -15,7 +16,7 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
         val recipes: ListTag<CompoundTag> = ListTag()
         val random: Random = Random(seed.toLong())
 
-        val bow: Item = Item.get(Item.BOW)
+        val bow: Item = Item.get(ItemID.BOW)
         val bowEnchantments: IntArray = intArrayOf(
             Enchantment.ID_BOW_FLAME,
             Enchantment.ID_BOW_INFINITY,
@@ -25,10 +26,10 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
         )
         val bowEnchantmemt: Enchantment =
             Enchantment.getEnchantment(bowEnchantments.get(random.nextInt(bowEnchantments.size)))
-        bowEnchantmemt.setLevel(random.nextInt(bowEnchantmemt.getMaxLevel()) + 1)
+        bowEnchantmemt.setLevel(random.nextInt(bowEnchantmemt.maxLevel) + 1)
         bow.addEnchantment(bowEnchantmemt)
 
-        val crossbow: Item = Item.get(Item.CROSSBOW)
+        val crossbow: Item = Item.get(ItemID.CROSSBOW)
         val crossbowEnchantments: IntArray = intArrayOf(
             Enchantment.ID_CROSSBOW_MULTISHOT,
             Enchantment.ID_CROSSBOW_PIERCING,
@@ -37,11 +38,11 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
         )
         val crossbowEnchantment: Enchantment =
             Enchantment.getEnchantment(crossbowEnchantments.get(random.nextInt(crossbowEnchantments.size)))
-        crossbowEnchantment.setLevel(random.nextInt(crossbowEnchantment.getMaxLevel()) + 1)
+        crossbowEnchantment.setLevel(random.nextInt(crossbowEnchantment.maxLevel) + 1)
         crossbow.addEnchantment(crossbowEnchantment)
 
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.STICK, 0, 32), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.STICK, 0, 32), Item.get(ItemID.EMERALD))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(1)
@@ -51,7 +52,7 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
         )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.ARROW, 0, 16))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.ARROW, 0, 16))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -62,8 +63,8 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
         } else {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD, 0, 1), Item.get(BlockID.GRAVEL, 0, 10), Item.get(
-                        Item.FLINT, 0, 10
+                    Item.get(ItemID.EMERALD, 0, 1), Item.get(BlockID.GRAVEL, 0, 10), Item.get(
+                        ItemID.FLINT, 0, 10
                     )
                 )
                     .setMaxUses(12)
@@ -75,7 +76,7 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.FLINT, 0, 26), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.FLINT, 0, 26), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(2)
@@ -84,7 +85,7 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 2), Item.get(Item.BOW))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 2), Item.get(ItemID.BOW))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -93,7 +94,7 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.STRING, 0, 14), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.STRING, 0, 14), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -102,7 +103,7 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 3), Item.get(Item.CROSSBOW))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 3), Item.get(ItemID.CROSSBOW))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -111,7 +112,7 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.FEATHER, 0, 24), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.FEATHER, 0, 24), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -120,7 +121,7 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 7 + random.nextInt(15)), bow)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 7 + random.nextInt(15)), bow)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -129,7 +130,7 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(BlockID.TRIPWIRE_HOOK, 0, 8), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(BlockID.TRIPWIRE_HOOK, 0, 8), Item.get(ItemID.EMERALD))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(5)
@@ -139,7 +140,7 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
             )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 8 + random.nextInt(15)), crossbow)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 8 + random.nextInt(15)), crossbow)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(5)
@@ -150,9 +151,9 @@ class ProfessionFletcher : Profession(4, BlockID.FLETCHING_TABLE, "entity.villag
         } else {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD, 0, 2),
-                    Item.get(Item.ARROW, 0, 5),
-                    Item.get(Item.ARROW, Utils.rand(6, 43), 5)
+                    Item.get(ItemID.EMERALD, 0, 2),
+                    Item.get(ItemID.ARROW, 0, 5),
+                    Item.get(ItemID.ARROW, Utils.rand(6, 43), 5)
                 )
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())

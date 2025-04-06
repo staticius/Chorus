@@ -110,7 +110,7 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
         this.maxHealth = 24
         this.diffHandDamage = floatArrayOf(3.5f, 5f, 7.5f)
         super.initEntity()
-        setItemInHand(Item.get(Item.IRON_AXE))
+        setItemInHand(Item.get(ItemID.IRON_AXE))
     }
 
     override fun getWidth(): Float {
@@ -132,11 +132,11 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
     }
 
     override fun getDrops(): Array<Item> {
-        val axe = Item.get(Item.IRON_AXE)
+        val axe = Item.get(ItemID.IRON_AXE)
         axe.damage = ThreadLocalRandom.current().nextInt(1, axe.maxDurability)
         return arrayOf(
             axe,
-            Item.get(Item.EMERALD, 0, ThreadLocalRandom.current().nextInt(2))
+            Item.get(ItemID.EMERALD, 0, ThreadLocalRandom.current().nextInt(2))
         )
     }
 

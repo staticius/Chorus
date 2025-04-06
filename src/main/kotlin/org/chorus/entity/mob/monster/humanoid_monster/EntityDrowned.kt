@@ -179,7 +179,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
         memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.ENABLE_DIVE_FORCE, true)
         val random = Utils.rand(0, 10000)
         if (random < 85) {
-            setItemInHand(Item.get(Item.FISHING_ROD))
+            setItemInHand(Item.get(ItemID.FISHING_ROD))
         } else if (random < 1585 && !wasTransformed()) {
             setItemInHand(Item.get(Item.TRIDENT))
         }
@@ -207,7 +207,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
             }
         }
         return arrayOf(
-            Item.get(Item.ROTTEN_FLESH),
+            Item.get(ItemID.ROTTEN_FLESH),
             trident
         )
     }

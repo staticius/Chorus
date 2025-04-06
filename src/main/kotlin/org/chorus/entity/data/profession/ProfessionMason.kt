@@ -2,6 +2,7 @@ package org.chorus.entity.data.profession
 
 import org.chorus.block.BlockID
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
@@ -16,7 +17,7 @@ class ProfessionMason :
         val random: Random = Random(seed.toLong())
 
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.CLAY_BALL, 0, 10), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.CLAY_BALL, 0, 10), Item.get(ItemID.EMERALD))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(1)
@@ -25,7 +26,7 @@ class ProfessionMason :
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD), Item.get(Item.BRICK, 0, 10))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD), Item.get(ItemID.BRICK, 0, 10))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -34,7 +35,7 @@ class ProfessionMason :
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(BlockID.STONE, 0, 20), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(BlockID.STONE, 0, 20), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -43,7 +44,7 @@ class ProfessionMason :
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(BlockID.CHISELED_STONE_BRICKS, 0, 4))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(BlockID.CHISELED_STONE_BRICKS, 0, 4))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -55,7 +56,7 @@ class ProfessionMason :
             0 -> recipes.add(
                 TradeRecipeBuildUtils.of(
                     Item.get(BlockID.GRANITE, 0, 16), Item.get(
-                        Item.EMERALD
+                        ItemID.EMERALD
                     )
                 )
                     .setMaxUses(16)
@@ -67,7 +68,7 @@ class ProfessionMason :
             )
 
             1 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(BlockID.ANDESITE, 0, 16), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(BlockID.ANDESITE, 0, 16), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -77,7 +78,7 @@ class ProfessionMason :
             )
 
             2 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(BlockID.DIORITE, 0, 16), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(BlockID.DIORITE, 0, 16), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -88,7 +89,7 @@ class ProfessionMason :
         }
         when (random.nextInt(4)) {
             0 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(BlockID.POLISHED_ANDESITE, 0, 4))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(BlockID.POLISHED_ANDESITE, 0, 4))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -98,7 +99,7 @@ class ProfessionMason :
             )
 
             1 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(BlockID.POLISHED_DIORITE, 0, 4))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(BlockID.POLISHED_DIORITE, 0, 4))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -108,7 +109,7 @@ class ProfessionMason :
             )
 
             2 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(BlockID.POLISHED_GRANITE, 0, 4))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(BlockID.POLISHED_GRANITE, 0, 4))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -118,7 +119,7 @@ class ProfessionMason :
             )
 
             3 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(BlockID.DRIPSTONE_BLOCK, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(BlockID.DRIPSTONE_BLOCK, 0, 1))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -128,7 +129,7 @@ class ProfessionMason :
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.QUARTZ, 0, 12), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.QUARTZ, 0, 12), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(4)
@@ -139,7 +140,7 @@ class ProfessionMason :
         if (random.nextBoolean()) {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD),
+                    Item.get(ItemID.EMERALD),
                     Item.get(
                         "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).colorName.lowercase(
                             Locale.getDefault()
@@ -157,7 +158,7 @@ class ProfessionMason :
         } else {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD),
+                    Item.get(ItemID.EMERALD),
                     Item.get(
                         "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).colorName.lowercase(
                             Locale.getDefault()
@@ -175,7 +176,7 @@ class ProfessionMason :
         }
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD), Item.get(BlockID.QUARTZ_PILLAR))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD), Item.get(BlockID.QUARTZ_PILLAR))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(5)
@@ -185,7 +186,7 @@ class ProfessionMason :
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD), Item.get(BlockID.QUARTZ_BLOCK))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD), Item.get(BlockID.QUARTZ_BLOCK))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(5)

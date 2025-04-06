@@ -111,7 +111,7 @@ class EntityMooshroom(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.LEATHER), Item.get(Item.BEEF))
+        return arrayOf(Item.get(ItemID.LEATHER), Item.get(Item.BEEF))
     }
 
 
@@ -125,7 +125,7 @@ class EntityMooshroom(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
             return true
         }
 
-        if (item.id === Item.SHEARS && item.useOn(this)) {
+        if (item.id === ItemID.SHEARS && item.useOn(this)) {
             this.close()
             //TODO 不同颜色的牛掉落不同的蘑菇
             level!!.dropItem(this.position, Item.get(BlockID.RED_MUSHROOM, 0, 5))
@@ -148,7 +148,7 @@ class EntityMooshroom(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
             item.count--
             player.inventory.addItem(Item.get(Item.BUCKET, 1))
             return true
-        } else if (item.id === Item.BOWL && item.damage == 0) {
+        } else if (item.id === ItemID.BOWL && item.damage == 0) {
             item.count--
             player.inventory.addItem(Item.get(Item.MUSHROOM_STEW))
             return true

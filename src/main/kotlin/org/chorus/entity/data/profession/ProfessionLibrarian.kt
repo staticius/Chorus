@@ -2,6 +2,7 @@ package org.chorus.entity.data.profession
 
 import org.chorus.block.BlockID
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
@@ -14,25 +15,25 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
         val recipes: ListTag<CompoundTag> = ListTag()
         val random: Random = Random(seed.toLong())
 
-        val book1: Item = Item.get(Item.ENCHANTED_BOOK)
+        val book1: Item = Item.get(ItemID.ENCHANTED_BOOK)
         val e_book1: Enchantment = Enchantment.getEnchantments().get(random.nextInt(Enchantment.getEnchantments().size))
-        e_book1.setLevel(random.nextInt(e_book1.getMaxLevel()) + 1)
+        e_book1.setLevel(random.nextInt(e_book1.maxLevel) + 1)
         book1.addEnchantment(e_book1)
-        val book2: Item = Item.get(Item.ENCHANTED_BOOK)
+        val book2: Item = Item.get(ItemID.ENCHANTED_BOOK)
         val e_book2: Enchantment = Enchantment.getEnchantments().get(random.nextInt(Enchantment.getEnchantments().size))
-        e_book2.setLevel(random.nextInt(e_book2.getMaxLevel()) + 1)
+        e_book2.setLevel(random.nextInt(e_book2.maxLevel) + 1)
         book2.addEnchantment(e_book2)
-        val book3: Item = Item.get(Item.ENCHANTED_BOOK)
+        val book3: Item = Item.get(ItemID.ENCHANTED_BOOK)
         val e_book3: Enchantment = Enchantment.getEnchantments().get(random.nextInt(Enchantment.getEnchantments().size))
-        e_book3.setLevel(random.nextInt(e_book3.getMaxLevel()) + 1)
+        e_book3.setLevel(random.nextInt(e_book3.maxLevel) + 1)
         book3.addEnchantment(e_book3)
-        val book4: Item = Item.get(Item.ENCHANTED_BOOK)
+        val book4: Item = Item.get(ItemID.ENCHANTED_BOOK)
         val e_book4: Enchantment = Enchantment.getEnchantments().get(random.nextInt(Enchantment.getEnchantments().size))
-        e_book4.setLevel(random.nextInt(e_book4.getMaxLevel()) + 1)
+        e_book4.setLevel(random.nextInt(e_book4.maxLevel) + 1)
         book4.addEnchantment(e_book4)
 
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.PAPER, 0, 24), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.PAPER, 0, 24), Item.get(ItemID.EMERALD))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(1)
@@ -42,7 +43,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
         )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 9), Item.get(BlockID.BOOKSHELF))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 9), Item.get(BlockID.BOOKSHELF))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -52,7 +53,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 5 + random.nextInt(60)), Item.get(Item.BOOK), book1)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 5 + random.nextInt(60)), Item.get(ItemID.BOOK), book1)
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -62,7 +63,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.BOOK), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.BOOK), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(2)
@@ -72,7 +73,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
         )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD), Item.get(BlockID.LANTERN))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD), Item.get(BlockID.LANTERN))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -82,7 +83,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 5 + random.nextInt(60)), Item.get(Item.BOOK), book2)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 5 + random.nextInt(60)), Item.get(ItemID.BOOK), book2)
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -92,7 +93,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.INK_SAC), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.INK_SAC), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(3)
@@ -102,7 +103,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
         )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD), Item.get(BlockID.GLASS, 0, 4))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD), Item.get(BlockID.GLASS, 0, 4))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -112,7 +113,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 5 + random.nextInt(60)), Item.get(Item.BOOK), book3)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 5 + random.nextInt(60)), Item.get(ItemID.BOOK), book3)
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -122,7 +123,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.WRITABLE_BOOK), Item.get(Item.WRITABLE_BOOK), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.WRITABLE_BOOK), Item.get(ItemID.WRITABLE_BOOK), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(4)
@@ -132,7 +133,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
         )
         when (random.nextInt(3)) {
             0 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 5), Item.get(Item.CLOCK))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 5), Item.get(ItemID.CLOCK))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -142,7 +143,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
             )
 
             1 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 4), Item.get(Item.COMPASS))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 4), Item.get(ItemID.COMPASS))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -152,7 +153,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
             )
 
             2 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 5 + random.nextInt(60)), Item.get(Item.BOOK), book4)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 5 + random.nextInt(60)), Item.get(ItemID.BOOK), book4)
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -162,7 +163,7 @@ class ProfessionLibrarian : Profession(5, BlockID.LECTERN, "entity.villager.libr
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 12), Item.get(Item.NAME_TAG))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 12), Item.get(ItemID.NAME_TAG))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(5)

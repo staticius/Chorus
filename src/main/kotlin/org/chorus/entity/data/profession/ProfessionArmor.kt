@@ -2,6 +2,7 @@ package org.chorus.entity.data.profession
 
 import org.chorus.block.BlockID
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
@@ -24,32 +25,32 @@ class ProfessionArmor :
             Enchantment.ID_PROTECTION_FIRE,
             Enchantment.ID_VANISHING_CURSE
         )
-        val diamondLeggings: Item = Item.get(Item.DIAMOND_LEGGINGS)
+        val diamondLeggings: Item = Item.get(ItemID.DIAMOND_LEGGINGS)
         val diamondLeggingsEnchantment: Enchantment =
             Enchantment.getEnchantment(enchantments.get(random.nextInt(enchantments.size)))
-        diamondLeggingsEnchantment.setLevel(1 + random.nextInt(diamondLeggingsEnchantment.getMaxLevel()))
+        diamondLeggingsEnchantment.setLevel(1 + random.nextInt(diamondLeggingsEnchantment.maxLevel))
         diamondLeggings.addEnchantment(diamondLeggingsEnchantment)
 
-        val diamondChestplate: Item = Item.get(Item.DIAMOND_CHESTPLATE)
+        val diamondChestplate: Item = Item.get(ItemID.DIAMOND_CHESTPLATE)
         val diamondChestplateEnchantment: Enchantment =
             Enchantment.getEnchantment(enchantments.get(random.nextInt(enchantments.size)))
-        diamondChestplateEnchantment.setLevel(1 + random.nextInt(diamondChestplateEnchantment.getMaxLevel()))
+        diamondChestplateEnchantment.setLevel(1 + random.nextInt(diamondChestplateEnchantment.maxLevel))
         diamondChestplate.addEnchantment(diamondChestplateEnchantment)
 
-        val diamondHelmet: Item = Item.get(Item.DIAMOND_HELMET)
+        val diamondHelmet: Item = Item.get(ItemID.DIAMOND_HELMET)
         val diamondHelmetEnchantment: Enchantment =
             Enchantment.getEnchantment(enchantments.get(random.nextInt(enchantments.size)))
-        diamondHelmetEnchantment.setLevel(1 + random.nextInt(diamondHelmetEnchantment.getMaxLevel()))
+        diamondHelmetEnchantment.setLevel(1 + random.nextInt(diamondHelmetEnchantment.maxLevel))
         diamondHelmet.addEnchantment(diamondHelmetEnchantment)
 
-        val diamondBoots: Item = Item.get(Item.DIAMOND_BOOTS)
+        val diamondBoots: Item = Item.get(ItemID.DIAMOND_BOOTS)
         val diamondBootsEnchantment: Enchantment =
             Enchantment.getEnchantment(enchantments.get(random.nextInt(enchantments.size)))
-        diamondBootsEnchantment.setLevel(1 + random.nextInt(diamondBootsEnchantment.getMaxLevel()))
+        diamondBootsEnchantment.setLevel(1 + random.nextInt(diamondBootsEnchantment.maxLevel))
         diamondBoots.addEnchantment(diamondBootsEnchantment)
 
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.COAL, 0, 15), Item.get(Item.EMERALD, 0, 1))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.COAL, 0, 15), Item.get(ItemID.EMERALD, 0, 1))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(1)
@@ -59,7 +60,7 @@ class ProfessionArmor :
         )
         when (random.nextInt(4)) {
             0 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 4), Item.get(Item.IRON_BOOTS, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 4), Item.get(ItemID.IRON_BOOTS, 0, 1))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -69,7 +70,7 @@ class ProfessionArmor :
             )
 
             1 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 7), Item.get(Item.IRON_LEGGINGS, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 7), Item.get(ItemID.IRON_LEGGINGS, 0, 1))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -79,7 +80,7 @@ class ProfessionArmor :
             )
 
             2 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 5), Item.get(Item.IRON_HELMET, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 5), Item.get(ItemID.IRON_HELMET, 0, 1))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -89,7 +90,7 @@ class ProfessionArmor :
             )
 
             3 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 9), Item.get(Item.IRON_CHESTPLATE, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 9), Item.get(ItemID.IRON_CHESTPLATE, 0, 1))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -99,7 +100,7 @@ class ProfessionArmor :
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.IRON_INGOT, 0, 4), Item.get(Item.EMERALD, 0, 1))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.IRON_INGOT, 0, 4), Item.get(ItemID.EMERALD, 0, 1))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(2)
@@ -109,7 +110,7 @@ class ProfessionArmor :
         )
         when (random.nextInt(3)) {
             0 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 36), Item.get(BlockID.BELL, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 36), Item.get(BlockID.BELL, 0, 1))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -119,7 +120,7 @@ class ProfessionArmor :
             )
 
             1 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 3), Item.get(Item.CHAINMAIL_LEGGINGS, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 3), Item.get(ItemID.CHAINMAIL_LEGGINGS, 0, 1))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -129,7 +130,7 @@ class ProfessionArmor :
             )
 
             2 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.CHAINMAIL_BOOTS, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.CHAINMAIL_BOOTS, 0, 1))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -139,7 +140,7 @@ class ProfessionArmor :
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.LAVA_BUCKET), Item.get(Item.EMERALD, 0, 1))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.LAVA_BUCKET), Item.get(ItemID.EMERALD, 0, 1))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(3)
@@ -148,7 +149,7 @@ class ProfessionArmor :
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.DIAMOND, 0, 1), Item.get(Item.EMERALD, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.DIAMOND, 0, 1), Item.get(ItemID.EMERALD, 0, 1))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -158,7 +159,7 @@ class ProfessionArmor :
             )
         when (random.nextInt(3)) {
             0 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 4), Item.get(Item.CHAINMAIL_CHESTPLATE, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 4), Item.get(ItemID.CHAINMAIL_CHESTPLATE, 0, 1))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -168,7 +169,7 @@ class ProfessionArmor :
             )
 
             1 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.CHAINMAIL_HELMET, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.CHAINMAIL_HELMET, 0, 1))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -178,7 +179,7 @@ class ProfessionArmor :
             )
 
             2 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 5), Item.get(Item.SHIELD, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 5), Item.get(ItemID.SHIELD, 0, 1))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -189,7 +190,7 @@ class ProfessionArmor :
         }
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 19 + random.nextInt(34 - 19)), diamondLeggings)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 19 + random.nextInt(34 - 19)), diamondLeggings)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -198,7 +199,7 @@ class ProfessionArmor :
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 13 + random.nextInt(28 - 13)), diamondBoots)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 13 + random.nextInt(28 - 13)), diamondBoots)
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -208,7 +209,7 @@ class ProfessionArmor :
         }
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 21 + random.nextInt(36 - 21)), diamondChestplate)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 21 + random.nextInt(36 - 21)), diamondChestplate)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(5)
@@ -217,7 +218,7 @@ class ProfessionArmor :
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 13 + random.nextInt(28 - 13)), diamondHelmet)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 13 + random.nextInt(28 - 13)), diamondHelmet)
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(5)

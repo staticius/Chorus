@@ -30,7 +30,7 @@ class EntityZombieHorse(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, n
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.ROTTEN_FLESH, 1, 1))
+        return arrayOf(Item.get(ItemID.ROTTEN_FLESH, 1, 1))
     }
 
     override fun isUndead(): Boolean {

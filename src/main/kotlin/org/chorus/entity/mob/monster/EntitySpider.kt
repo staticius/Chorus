@@ -113,7 +113,7 @@ class EntitySpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.STRING), Item.get(Item.SPIDER_EYE))
+        return arrayOf(Item.get(ItemID.STRING), Item.get(Item.SPIDER_EYE))
     }
 
     override fun isPreventingSleep(player: Player?): Boolean {

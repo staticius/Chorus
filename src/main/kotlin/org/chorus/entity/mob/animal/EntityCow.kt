@@ -110,7 +110,7 @@ class EntityCow(chunk: IChunk?, nbt: CompoundTag?) : EntityAnimal(chunk, nbt!!),
     override fun getDrops(): Array<Item> {
         if (!this.isBaby()) {
             return arrayOf(
-                Item.get(Item.LEATHER, 0, Utils.rand(0, 2)),
+                Item.get(ItemID.LEATHER, 0, Utils.rand(0, 2)),
                 Item.get((if (this.isOnFire) Item.COOKED_BEEF else Item.BEEF), 0, Utils.rand(1, 3))
             )
         }

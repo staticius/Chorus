@@ -91,7 +91,7 @@ class EntityDonkey(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, nbt), 
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.LEATHER))
+        return arrayOf(Item.get(ItemID.LEATHER))
     }
 
     override fun getOriginalName(): String {

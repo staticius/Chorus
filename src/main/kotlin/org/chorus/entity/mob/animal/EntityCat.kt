@@ -220,7 +220,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3?): Boolean {
-        if (item.id === Item.NAME_TAG && !player.isAdventure) {
+        if (item.id === ItemID.NAME_TAG && !player.isAdventure) {
             return playerApplyNameTag(player, item)
         }
         val healable = this.getHealingAmount(item)
@@ -287,7 +287,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     override fun getDrops(): Array<Item> {
         if (!this.isBaby()) {
             val catdrops = Utils.rand(0, 2)
-            if (catdrops > 0) return arrayOf(Item.get(Item.STRING, 0, catdrops))
+            if (catdrops > 0) return arrayOf(Item.get(ItemID.STRING, 0, catdrops))
         }
         return Item.EMPTY_ARRAY
     }

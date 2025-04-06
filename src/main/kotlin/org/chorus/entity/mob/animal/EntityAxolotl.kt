@@ -236,7 +236,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     }
 
     override fun isBreedingItem(item: Item): Boolean {
-        return item.id == Item.TROPICAL_FISH_BUCKET
+        return item.id == ItemID.TROPICAL_FISH_BUCKET
     }
 
     override fun useBreedingItem(player: Player, item: Item): Boolean {

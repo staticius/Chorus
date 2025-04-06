@@ -33,6 +33,6 @@ class EntityParrot(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt),
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.FEATHER))
+        return arrayOf(Item.get(ItemID.FEATHER))
     }
 }

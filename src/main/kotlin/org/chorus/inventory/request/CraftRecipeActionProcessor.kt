@@ -83,7 +83,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 return context.error()
             }
             var item = first.clone().autoAssignStackNetworkId()
-            if (item.id == Item.BOOK) item = Item.get(Item.ENCHANTED_BOOK)
+            if (item.id == ItemID.BOOK) item = Item.get(ItemID.ENCHANTED_BOOK)
             val enchantments = enchantOptionData.enchantments
             item.addEnchantment(*enchantments.toArray(Enchantment.EMPTY_ARRAY))
             val event = EnchantItemEvent(

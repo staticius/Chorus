@@ -95,9 +95,9 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
 
     override fun getDrops(): Array<Item> {
         if (Utils.rand(0, 3) == 1) {
-            return arrayOf(Item.get(Item.TROPICAL_FISH), Item.get(Item.BONE, 0, Utils.rand(1, 2)))
+            return arrayOf(Item.get(ItemID.TROPICAL_FISH), Item.get(Item.BONE, 0, Utils.rand(1, 2)))
         }
-        return arrayOf(Item.get(Item.TROPICAL_FISH))
+        return arrayOf(Item.get(ItemID.TROPICAL_FISH))
     }
 
     fun getColor(): Int {

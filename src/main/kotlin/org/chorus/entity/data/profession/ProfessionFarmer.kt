@@ -2,6 +2,7 @@ package org.chorus.entity.data.profession
 
 import org.chorus.block.BlockID
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
@@ -14,7 +15,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
         val random: Random = Random(seed.toLong())
         when (random.nextInt(4)) {
             0 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(BlockID.WHEAT, 0, 20), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(BlockID.WHEAT, 0, 20), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -24,7 +25,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
             )
 
             1 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(BlockID.BEETROOT, 0, 15), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(BlockID.BEETROOT, 0, 15), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -34,7 +35,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
             )
 
             2 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.CARROT, 0, 22), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.CARROT, 0, 22), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -44,7 +45,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
             )
 
             3 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.POTATO, 0, 26), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.POTATO, 0, 26), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -54,7 +55,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.EMERALD), Item.get(Item.BREAD, 0, 6))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD), Item.get(ItemID.BREAD, 0, 6))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(1)
@@ -63,7 +64,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(BlockID.PUMPKIN, 0, 6), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(BlockID.PUMPKIN, 0, 6), Item.get(ItemID.EMERALD))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -73,7 +74,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
             )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD), Item.get(Item.PUMPKIN_PIE, 0, 4))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD), Item.get(ItemID.PUMPKIN_PIE, 0, 4))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -83,7 +84,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD), Item.get(Item.APPLE, 0, 4))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD), Item.get(ItemID.APPLE, 0, 4))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -93,7 +94,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(BlockID.MELON_BLOCK, 0, 4), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(BlockID.MELON_BLOCK, 0, 4), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(3)
@@ -102,7 +103,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 3), Item.get(Item.COOKIE, 0, 18))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 3), Item.get(ItemID.COOKIE, 0, 18))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -111,7 +112,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD), Item.get(Item.SUSPICIOUS_STEW, random.nextInt(6)))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD), Item.get(ItemID.SUSPICIOUS_STEW, random.nextInt(6)))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -120,7 +121,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD), Item.get(BlockID.CAKE))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD), Item.get(BlockID.CAKE))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -129,7 +130,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 3), Item.get(Item.GOLDEN_CARROT, 0, 3))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 3), Item.get(ItemID.GOLDEN_CARROT, 0, 3))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(5)
@@ -138,7 +139,7 @@ class ProfessionFarmer : Profession(1, BlockID.COMPOSTER, "entity.villager.farme
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 4), Item.get(Item.GLISTERING_MELON_SLICE, 0, 3))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 4), Item.get(ItemID.GLISTERING_MELON_SLICE, 0, 3))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(3)

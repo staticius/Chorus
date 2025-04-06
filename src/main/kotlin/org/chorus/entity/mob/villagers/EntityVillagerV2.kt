@@ -388,8 +388,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     fun shouldShareFood(): Boolean {
         for (item in getInventory().contents.values) {
-            if ((item.id == Item.BREAD && item.getCount() >= 6)
-                || ((item.id == Item.CARROT || item.id == Block.BEETROOT) && item.getCount() >= 24)
+            if ((item.id == ItemID.BREAD && item.getCount() >= 6)
+                || ((item.id == ItemID.CARROT || item.id == Block.BEETROOT) && item.getCount() >= 24)
                 || (item.id == Block.WHEAT && item.getCount() >= 18 && getProfession() == 1)
             ) return true
         }
@@ -400,8 +400,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         var points = 0
         for (item in getInventory().contents.values) {
             points += when (item.id) {
-                Item.BREAD -> 4
-                Item.CARROT, Item.POTATO, Block.BEETROOT -> 1
+                ItemID.BREAD -> 4
+                ItemID.CARROT, ItemID.POTATO, Block.BEETROOT -> 1
                 else -> 0
             } * item.getCount()
         }
@@ -975,7 +975,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 if (i is EntityItem) {
                     val item = i.item
                     if (when (item!!.id) {
-                            Item.BREAD, Item.CARROT, Item.POTATO, BlockID.WHEAT, Item.WHEAT_SEEDS, Item.BEETROOT_SEEDS, BlockID.BEETROOT, Item.TORCHFLOWER_SEEDS, Item.PITCHER_POD, Item.BONE_MEAL -> true
+                            ItemID.BREAD, ItemID.CARROT, ItemID.POTATO, BlockID.WHEAT, Item.WHEAT_SEEDS, Item.BEETROOT_SEEDS, BlockID.BEETROOT, Item.TORCHFLOWER_SEEDS, Item.PITCHER_POD, Item.BONE_MEAL -> true
                             else -> false
                         }
                     ) {

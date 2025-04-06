@@ -2,6 +2,7 @@ package org.chorus.entity.data.profession
 
 import org.chorus.block.BlockID
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
@@ -13,7 +14,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
         val recipes: ListTag<CompoundTag> = ListTag()
         val random: Random = Random(seed.toLong())
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.ROTTEN_FLESH, 0, 32), Item.get(Item.EMERALD, 0, 2))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.ROTTEN_FLESH, 0, 32), Item.get(ItemID.EMERALD, 0, 2))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(1)
@@ -22,7 +23,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.REDSTONE, 0, 2))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.REDSTONE, 0, 2))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -31,7 +32,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.GOLD_INGOT, 0, 3), Item.get(Item.EMERALD, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.GOLD_INGOT, 0, 3), Item.get(ItemID.EMERALD, 0, 1))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -40,7 +41,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.LAPIS_LAZULI))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.LAPIS_LAZULI))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -49,7 +50,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.RABBIT_FOOT, 0, 2), Item.get(Item.EMERALD, 0, 2))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.RABBIT_FOOT, 0, 2), Item.get(ItemID.EMERALD, 0, 2))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -58,7 +59,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 4), Item.get(BlockID.GLOWSTONE, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 4), Item.get(BlockID.GLOWSTONE, 0, 1))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -67,7 +68,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
             )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.TURTLE_SCUTE, 0, 4), Item.get(Item.EMERALD, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.TURTLE_SCUTE, 0, 4), Item.get(ItemID.EMERALD, 0, 1))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -77,7 +78,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.GLASS_BOTTLE, 0, 9), Item.get(Item.EMERALD, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.GLASS_BOTTLE, 0, 9), Item.get(ItemID.EMERALD, 0, 1))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -87,7 +88,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 5), Item.get(Item.ENDER_PEARL, 0, 1))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 5), Item.get(ItemID.ENDER_PEARL, 0, 1))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(4)
@@ -96,7 +97,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(BlockID.NETHER_WART, 0, 22), Item.get(Item.EMERALD, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(BlockID.NETHER_WART, 0, 22), Item.get(ItemID.EMERALD, 0, 1))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(5)
@@ -105,7 +106,7 @@ class ProfessionCleric : Profession(7, BlockID.BREWING_STAND, "entity.villager.c
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 3), Item.get(Item.EXPERIENCE_BOTTLE, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 3), Item.get(ItemID.EXPERIENCE_BOTTLE, 0, 1))
                     .setMaxUses(99)
                     .setRewardExp(1.toByte())
                     .setTier(5)

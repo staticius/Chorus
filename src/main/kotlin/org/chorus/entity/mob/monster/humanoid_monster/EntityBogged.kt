@@ -42,7 +42,7 @@ class EntityBogged(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nb
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.BONE), Item.get(Item.ARROW)) //TODO: match vanilla drop
+        return arrayOf(Item.get(Item.BONE), Item.get(ItemID.ARROW)) //TODO: match vanilla drop
     }
 
     override fun requireBehaviorGroup(): IBehaviorGroup {

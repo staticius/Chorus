@@ -199,7 +199,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         val memoryStorage = this.memoryStorage
-        if (item.id === Item.FLINT_AND_STEEL && (memoryStorage.isEmpty(CoreMemoryTypes.SHOULD_EXPLODE) || !memoryStorage[CoreMemoryTypes.SHOULD_EXPLODE])
+        if (item.id === ItemID.FLINT_AND_STEEL && (memoryStorage.isEmpty(CoreMemoryTypes.SHOULD_EXPLODE) || !memoryStorage[CoreMemoryTypes.SHOULD_EXPLODE])
         ) {
             memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, true)
             memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.EXPLODE_CANCELLABLE, false)

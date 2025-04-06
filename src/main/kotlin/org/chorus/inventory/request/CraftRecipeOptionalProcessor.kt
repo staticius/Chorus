@@ -88,7 +88,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
 
         val enchantments: MutableSet<Enchantment> = LinkedHashSet(Arrays.asList(*target.enchantments))
         if (!sacrifice.isNothing) {
-            val enchantedBook = sacrifice.id == Item.ENCHANTED_BOOK && sacrifice.enchantments.size > 0
+            val enchantedBook = sacrifice.id == ItemID.ENCHANTED_BOOK && sacrifice.enchantments.size > 0
             var repair: Int
             var repair2: Int
             var repair3: Int
@@ -154,7 +154,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
                         targetLevel.toDouble()
                     ).toInt()
                     var compatible = sacrificeEnchantment.canEnchant(target)
-                    if (player.isCreative || target.id == Item.ENCHANTED_BOOK) {
+                    if (player.isCreative || target.id == ItemID.ENCHANTED_BOOK) {
                         compatible = true
                     }
 
@@ -276,33 +276,33 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
             return null
         }
 
-        if (input.id == Item.PAPER && additional.isNothing) {
-            result = Item.get(Item.EMPTY_MAP)
+        if (input.id == ItemID.PAPER && additional.isNothing) {
+            result = Item.get(ItemID.EMPTY_MAP)
         }
 
-        if (input.id == Item.EMPTY_MAP || input.id == Item.FILLED_MAP && additional.isNothing) {
+        if (input.id == ItemID.EMPTY_MAP || input.id == ItemID.FILLED_MAP && additional.isNothing) {
             result = input.clone()
         }
 
-        if ((input.id == Item.EMPTY_MAP || input.id == Item.FILLED_MAP || input.id == Item.PAPER) && additional.id == Item.COMPASS) {
-            val item = if (input.id == Item.PAPER) Item.get(Item.EMPTY_MAP) else input.clone()
+        if ((input.id == ItemID.EMPTY_MAP || input.id == ItemID.FILLED_MAP || input.id == ItemID.PAPER) && additional.id == ItemID.COMPASS) {
+            val item = if (input.id == ItemID.PAPER) Item.get(ItemID.EMPTY_MAP) else input.clone()
             item.damage = 2
             result = item
         }
 
-        if (input.id == Item.FILLED_MAP && additional.id == BlockID.GLASS_PANE) {
+        if (input.id == ItemID.FILLED_MAP && additional.id == BlockID.GLASS_PANE) {
             val item = input.clone()
             item.damage = 6
             result = item
         }
 
-        if (input.id == Item.FILLED_MAP && additional.id == Item.EMPTY_MAP) {
+        if (input.id == ItemID.FILLED_MAP && additional.id == ItemID.EMPTY_MAP) {
             val item = input.clone()
             item.setCount(2)
             result = item
         }
 
-        if (input.id == Item.FILLED_MAP && additional.id == Item.PAPER) {
+        if (input.id == ItemID.FILLED_MAP && additional.id == ItemID.PAPER) {
             val item = input.clone() as ItemFilledMap
             val level = server.getLevel(item.mapWorld)
             val startX = item.mapStartX

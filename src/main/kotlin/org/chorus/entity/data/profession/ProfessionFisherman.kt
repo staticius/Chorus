@@ -28,7 +28,7 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
 
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.STRING, 0, 20), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.STRING, 0, 20), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -38,7 +38,7 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.COAL, 0, 10), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.COAL, 0, 10), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -49,7 +49,7 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
         }
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 3), Item.get(Item.COD_BUCKET, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 3), Item.get(ItemID.COD_BUCKET, 0, 1))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -60,9 +60,9 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
         } else {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD),
-                    Item.get(Item.COD, 0, 6),
-                    Item.get(Item.COOKED_COD, 0, 6)
+                    Item.get(ItemID.EMERALD),
+                    Item.get(ItemID.COD, 0, 6),
+                    Item.get(ItemID.COOKED_COD, 0, 6)
                 )
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
@@ -73,7 +73,7 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.COD, 0, 15), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.COD, 0, 15), Item.get(ItemID.EMERALD))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(2)
@@ -84,7 +84,7 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
         )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 2), Item.get(BlockID.CAMPFIRE, 0, 1))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 2), Item.get(BlockID.CAMPFIRE, 0, 1))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -95,9 +95,9 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
         } else {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD),
-                    Item.get(Item.SALMON, 0, 5),
-                    Item.get(Item.COOKED_SALMON, 0, 6)
+                    Item.get(ItemID.EMERALD),
+                    Item.get(ItemID.SALMON, 0, 5),
+                    Item.get(ItemID.COOKED_SALMON, 0, 6)
                 )
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
@@ -108,7 +108,7 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.SALMON, 0, 13), Item.get(Item.EMERALD, 0, 1))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.SALMON, 0, 13), Item.get(ItemID.EMERALD, 0, 1))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(3)
@@ -117,7 +117,7 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 8 + random.nextInt(23 - 8)), rod)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 8 + random.nextInt(23 - 8)), rod)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -126,7 +126,7 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.TROPICAL_FISH, 0, 6), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.TROPICAL_FISH, 0, 6), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -135,7 +135,7 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.PUFFERFISH, 0, 4), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.PUFFERFISH, 0, 4), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(5)
@@ -144,7 +144,7 @@ class ProfessionFisherman : Profession(2, BlockID.BARREL, "entity.villager.fishe
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.BOAT, 0, 1), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.BOAT, 0, 1), Item.get(ItemID.EMERALD))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(5)

@@ -112,8 +112,8 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
         this.diffHandDamage = floatArrayOf(5f, 8f, 12f)
         super.initEntity()
         // 判断凋零骷髅是否手持石剑如果没有就给它石剑
-        if (this.getItemInHand() !== Item.get(Item.STONE_SWORD)) {
-            this.setItemInHand(Item.get(Item.STONE_SWORD))
+        if (this.getItemInHand() !== Item.get(ItemID.STONE_SWORD)) {
+            this.setItemInHand(Item.get(ItemID.STONE_SWORD))
         }
         // 设置凋零骷髅空闲状态播放空闲声音
         this.setDataProperty(EntityDataTypes.Companion.AMBIENT_SOUND_EVENT_NAME, LevelSoundEventPacket.SOUND_AMBIENT)
@@ -136,11 +136,11 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
         val drops: MutableList<Item> = ArrayList()
         drops.add(Item.get(Item.BONE, 0, Utils.rand(0, 2)))
         if (Utils.rand(0, 2) == 0) {
-            drops.add(Item.get(Item.COAL, 0, 1))
+            drops.add(Item.get(ItemID.COAL, 0, 1))
         }
         //掉落石剑的概率为8.5%
         if (Utils.rand(0, 200) <= 17) {
-            drops.add(Item.get(Item.STONE_SWORD, Utils.rand(0, 131), 1))
+            drops.add(Item.get(ItemID.STONE_SWORD, Utils.rand(0, 131), 1))
         }
         //掉落头的概率为2.5%
         if (Utils.rand(0, 40) == 1) {

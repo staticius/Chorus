@@ -2,6 +2,7 @@ package org.chorus.entity.data.profession
 
 import org.chorus.block.BlockID
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
@@ -21,34 +22,34 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             Enchantment.ID_SILK_TOUCH
         )
 
-        val iaxe: Item = Item.get(Item.IRON_AXE)
+        val iaxe: Item = Item.get(ItemID.IRON_AXE)
         val iaxee: Enchantment = Enchantment.getEnchantment(ench.get(random.nextInt(ench.size)))
-        iaxee.setLevel(1 + random.nextInt(iaxee.getMaxLevel()))
+        iaxee.setLevel(1 + random.nextInt(iaxee.maxLevel))
         iaxe.addEnchantment(iaxee)
-        val ishovel: Item = Item.get(Item.IRON_SHOVEL)
+        val ishovel: Item = Item.get(ItemID.IRON_SHOVEL)
         val ishovele: Enchantment = Enchantment.getEnchantment(ench.get(random.nextInt(ench.size)))
-        ishovele.setLevel(1 + random.nextInt(ishovele.getMaxLevel()))
+        ishovele.setLevel(1 + random.nextInt(ishovele.maxLevel))
         ishovel.addEnchantment(ishovele)
-        val ipickaxe: Item = Item.get(Item.IRON_PICKAXE)
+        val ipickaxe: Item = Item.get(ItemID.IRON_PICKAXE)
         val ipickaxee: Enchantment = Enchantment.getEnchantment(ench.get(random.nextInt(ench.size)))
-        ipickaxee.setLevel(1 + random.nextInt(ipickaxee.getMaxLevel()))
+        ipickaxee.setLevel(1 + random.nextInt(ipickaxee.maxLevel))
         ipickaxe.addEnchantment(ipickaxee)
 
-        val daxe: Item = Item.get(Item.DIAMOND_AXE)
+        val daxe: Item = Item.get(ItemID.DIAMOND_AXE)
         val daxee: Enchantment = Enchantment.getEnchantment(ench.get(random.nextInt(ench.size)))
-        daxee.setLevel(1 + random.nextInt(daxee.getMaxLevel()))
+        daxee.setLevel(1 + random.nextInt(daxee.maxLevel))
         daxe.addEnchantment(daxee)
-        val dshovel: Item = Item.get(Item.DIAMOND_SHOVEL)
+        val dshovel: Item = Item.get(ItemID.DIAMOND_SHOVEL)
         val dshovele: Enchantment = Enchantment.getEnchantment(ench.get(random.nextInt(ench.size)))
-        dshovele.setLevel(1 + random.nextInt(dshovele.getMaxLevel()))
+        dshovele.setLevel(1 + random.nextInt(dshovele.maxLevel))
         dshovel.addEnchantment(dshovele)
-        val dpickaxe: Item = Item.get(Item.DIAMOND_PICKAXE)
+        val dpickaxe: Item = Item.get(ItemID.DIAMOND_PICKAXE)
         val dpickaxee: Enchantment = Enchantment.getEnchantment(ench.get(random.nextInt(ench.size)))
-        dpickaxee.setLevel(1 + random.nextInt(dpickaxee.getMaxLevel()))
+        dpickaxee.setLevel(1 + random.nextInt(dpickaxee.maxLevel))
         dpickaxe.addEnchantment(dpickaxee)
 
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.COAL, 0, 15), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.COAL, 0, 15), Item.get(ItemID.EMERALD))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(1)
@@ -58,7 +59,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
         )
         when (random.nextInt(4)) {
             0 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.STONE_AXE))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.STONE_AXE))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -68,7 +69,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
 
             1 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.STONE_SHOVEL))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.STONE_SHOVEL))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -78,7 +79,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
 
             2 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.STONE_PICKAXE))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.STONE_PICKAXE))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -88,7 +89,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
 
             3 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 1), Item.get(Item.STONE_HOE))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 1), Item.get(ItemID.STONE_HOE))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -98,7 +99,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.IRON_INGOT, 0, 4), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.IRON_INGOT, 0, 4), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(2)
@@ -107,7 +108,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 36), Item.get(BlockID.BELL))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 36), Item.get(BlockID.BELL))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(2)
@@ -116,7 +117,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.FLINT, 0, 24), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.FLINT, 0, 24), Item.get(ItemID.EMERALD))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -126,7 +127,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
         when (random.nextInt(4)) {
             0 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 6 + random.nextInt(21 - 6)), iaxe)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 6 + random.nextInt(21 - 6)), iaxe)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -136,7 +137,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
 
             1 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 7 + random.nextInt(22 - 7)), ishovel)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 7 + random.nextInt(22 - 7)), ishovel)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -146,7 +147,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
 
             2 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 8 + random.nextInt(23 - 8)), ipickaxe)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 8 + random.nextInt(23 - 8)), ipickaxe)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -156,7 +157,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
 
             3 -> recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 4), Item.get(Item.DIAMOND_HOE))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 4), Item.get(ItemID.DIAMOND_HOE))
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(3)
@@ -166,7 +167,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.DIAMOND, 0, 1), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.DIAMOND, 0, 1), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(4)
@@ -176,7 +177,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
         )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 17 + random.nextInt(32 - 17)), daxe)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 17 + random.nextInt(32 - 17)), daxe)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -186,7 +187,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
         } else {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 10 + random.nextInt(25 - 10)), dshovel)
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 10 + random.nextInt(25 - 10)), dshovel)
                     .setMaxUses(3)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -196,7 +197,7 @@ class ProfessionTool : Profession(10, BlockID.SMITHING_TABLE, "entity.villager.t
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 18 + random.nextInt(33 - 18)), dpickaxe)
+            TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 18 + random.nextInt(33 - 18)), dpickaxe)
                 .setMaxUses(3)
                 .setRewardExp(1.toByte())
                 .setTier(5)

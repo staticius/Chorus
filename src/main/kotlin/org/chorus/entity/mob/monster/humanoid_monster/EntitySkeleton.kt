@@ -58,7 +58,7 @@ open class EntitySkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMon
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.BONE), Item.get(Item.ARROW))
+        return arrayOf(Item.get(Item.BONE), Item.get(ItemID.ARROW))
     }
 
     override fun isUndead(): Boolean {

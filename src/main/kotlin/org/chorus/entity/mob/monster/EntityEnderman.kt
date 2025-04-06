@@ -133,7 +133,7 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
 
     override fun getDrops(): Array<Item> {
         return arrayOf(
-            Item.get(Item.ENDER_PEARL, 0, Utils.rand(0, 1)),
+            Item.get(ItemID.ENDER_PEARL, 0, Utils.rand(0, 1)),
             itemInHand
         )
     }

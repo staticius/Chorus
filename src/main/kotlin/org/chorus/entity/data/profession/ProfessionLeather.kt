@@ -15,7 +15,7 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
         val random: Random = Random(seed.toLong())
 
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.LEATHER, 0, 6), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.LEATHER, 0, 6), Item.get(ItemID.EMERALD))
                 .setMaxUses(16)
                 .setRewardExp(1.toByte())
                 .setTier(1)
@@ -26,8 +26,8 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
         if (random.nextBoolean()) {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD, 0, 7),
-                    (Item.get(Item.LEATHER_CHESTPLATE) as ItemLeatherChestplate).setColor(
+                    Item.get(ItemID.EMERALD, 0, 7),
+                    (Item.get(ItemID.LEATHER_CHESTPLATE) as ItemLeatherChestplate).setColor(
                         DyeColor.entries.get(
                             random.nextInt(DyeColor.entries.size)
                         )
@@ -43,8 +43,8 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
         } else {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD, 0, 3),
-                    (Item.get(Item.LEATHER_LEGGINGS) as ItemLeatherLeggings).setColor(
+                    Item.get(ItemID.EMERALD, 0, 3),
+                    (Item.get(ItemID.LEATHER_LEGGINGS) as ItemLeatherLeggings).setColor(
                         DyeColor.entries.get(
                             random.nextInt(DyeColor.entries.size)
                         )
@@ -59,7 +59,7 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.FLINT, 0, 26), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.FLINT, 0, 26), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(2)
@@ -70,8 +70,8 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
         if (random.nextBoolean()) {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD, 0, 5),
-                    (Item.get(Item.LEATHER_HELMET) as ItemLeatherHelmet).setColor(
+                    Item.get(ItemID.EMERALD, 0, 5),
+                    (Item.get(ItemID.LEATHER_HELMET) as ItemLeatherHelmet).setColor(
                         DyeColor.entries.get(
                             random.nextInt(DyeColor.entries.size)
                         )
@@ -87,8 +87,8 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
         } else {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD, 0, 4),
-                    (Item.get(Item.LEATHER_BOOTS) as ItemLeatherBoots).setColor(
+                    Item.get(ItemID.EMERALD, 0, 4),
+                    (Item.get(ItemID.LEATHER_BOOTS) as ItemLeatherBoots).setColor(
                         DyeColor.entries.get(
                             random.nextInt(DyeColor.entries.size)
                         )
@@ -103,7 +103,7 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
             )
         }
         recipes.add(
-            TradeRecipeBuildUtils.of(Item.get(Item.RABBIT_HIDE, 0, 9), Item.get(Item.EMERALD))
+            TradeRecipeBuildUtils.of(Item.get(ItemID.RABBIT_HIDE, 0, 9), Item.get(ItemID.EMERALD))
                 .setMaxUses(12)
                 .setRewardExp(1.toByte())
                 .setTier(3)
@@ -113,8 +113,8 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
         )
             .add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD, 0, 7),
-                    (Item.get(Item.LEATHER_CHESTPLATE) as ItemLeatherChestplate).setColor(
+                    Item.get(ItemID.EMERALD, 0, 7),
+                    (Item.get(ItemID.LEATHER_CHESTPLATE) as ItemLeatherChestplate).setColor(
                         DyeColor.entries.get(
                             random.nextInt(DyeColor.entries.size)
                         )
@@ -128,7 +128,7 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.TURTLE_HELMET, 0, 4), Item.get(Item.EMERALD))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.TURTLE_HELMET, 0, 4), Item.get(ItemID.EMERALD))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -137,7 +137,7 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 6), Item.get(Item.LEATHER_HORSE_ARMOR))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 6), Item.get(ItemID.LEATHER_HORSE_ARMOR))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(4)
@@ -147,7 +147,7 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
             )
         if (random.nextBoolean()) {
             recipes.add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 6), Item.get(Item.SADDLE))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 6), Item.get(ItemID.SADDLE))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(5)
@@ -158,8 +158,8 @@ class ProfessionLeather : Profession(12, BlockID.CAULDRON, "entity.villager.leat
         } else {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD, 0, 5),
-                    (Item.get(Item.LEATHER_HELMET) as ItemLeatherHelmet).setColor(
+                    Item.get(ItemID.EMERALD, 0, 5),
+                    (Item.get(ItemID.LEATHER_HELMET) as ItemLeatherHelmet).setColor(
                         DyeColor.entries.get(
                             random.nextInt(DyeColor.entries.size)
                         )

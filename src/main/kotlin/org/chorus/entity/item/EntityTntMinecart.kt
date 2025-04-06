@@ -148,7 +148,7 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         val interact: Boolean = super.onInteract(player, item, clickedPos)
-        if (item.getId() == Item.FLINT_AND_STEEL || item.getId() == Item.FIRE_CHARGE) {
+        if (item.getId() == ItemID.FLINT_AND_STEEL || item.getId() == Item.FIRE_CHARGE) {
             level!!.addSound(this.position, Sound.FIRE_IGNITE)
             this.fuse = 79
             return true

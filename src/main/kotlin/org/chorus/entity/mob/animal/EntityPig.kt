@@ -126,6 +126,6 @@ class EntityPig(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     override fun isBreedingItem(item: Item): Boolean {
         val id = item.id
 
-        return id == Item.CARROT || id == Item.POTATO || id == BlockID.BEETROOT
+        return id == ItemID.CARROT || id == ItemID.POTATO || id == BlockID.BEETROOT
     }
 }

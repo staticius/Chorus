@@ -2,6 +2,7 @@ package org.chorus.entity.data.profession
 
 import org.chorus.block.BlockID
 import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
@@ -15,7 +16,7 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
         val recipes: ListTag<CompoundTag> = ListTag()
         val random: Random = Random(seed.toLong())
 
-        val rod: Item = Item.get(Item.FISHING_ROD)
+        val rod: Item = Item.get(ItemID.FISHING_ROD)
         val rodEnchantment: Enchantment = Enchantment.getEnchantment(
             intArrayOf(
                 Enchantment.ID_DURABILITY,
@@ -33,7 +34,7 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
                         random.nextInt(4)
                     ).colorName.lowercase(Locale.getDefault()) + "_wool", 0, 18
                 ), Item.get(
-                    Item.EMERALD
+                    ItemID.EMERALD
                 )
             )
                 .setMaxUses(16)
@@ -44,7 +45,7 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
                 .build()
         )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 2), Item.get(Item.SHEARS))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 2), Item.get(ItemID.SHEARS))
                     .setMaxUses(16)
                     .setRewardExp(1.toByte())
                     .setTier(1)
@@ -57,15 +58,15 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
                     Item.get(
                         "minecraft:" + DyeColor.entries.get(
                             intArrayOf(
-                                DyeColor.WHITE.getDyeData(),
-                                DyeColor.LIGHT_BLUE.getDyeData(),
-                                DyeColor.LIME.getDyeData(),
-                                DyeColor.BLACK.getDyeData(),
-                                DyeColor.GRAY.getDyeData()
+                                DyeColor.WHITE.dyeData,
+                                DyeColor.LIGHT_BLUE.dyeData,
+                                DyeColor.LIME.dyeData,
+                                DyeColor.BLACK.dyeData,
+                                DyeColor.GRAY.dyeData
                             ).get(random.nextInt(5))
                         ).colorName.lowercase(Locale.getDefault()) + "_dye", 0, 12
                     ), Item.get(
-                        Item.EMERALD
+                        ItemID.EMERALD
                     )
                 )
                     .setMaxUses(16)
@@ -78,9 +79,9 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
         if (random.nextBoolean()) {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD),
+                    Item.get(ItemID.EMERALD),
                     Item.get(
-                        "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).getName()
+                        "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).name
                             .lowercase(Locale.getDefault()) + "_wool"
                     )
                 )
@@ -94,7 +95,7 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
         } else {
             recipes.add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD, 0, 1),
+                    Item.get(ItemID.EMERALD, 0, 1),
                     Item.get(
                         "minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).colorName.lowercase(
                             Locale.getDefault()
@@ -114,15 +115,15 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
                 Item.get(
                     "minecraft:" + DyeColor.entries.get(
                         intArrayOf(
-                            DyeColor.YELLOW.getDyeData(),
-                            DyeColor.LIGHT_GRAY.getDyeData(),
-                            DyeColor.ORANGE.getDyeData(),
-                            DyeColor.RED.getDyeData(),
-                            DyeColor.PINK.getDyeData()
+                            DyeColor.YELLOW.dyeData,
+                            DyeColor.LIGHT_GRAY.dyeData,
+                            DyeColor.ORANGE.dyeData,
+                            DyeColor.RED.dyeData,
+                            DyeColor.PINK.dyeData
                         ).get(random.nextInt(5))
                     ).colorName.lowercase(Locale.getDefault()) + "_dye", 0, 12
                 ), Item.get(
-                    Item.EMERALD
+                    ItemID.EMERALD
                 )
             )
                 .setMaxUses(16)
@@ -134,7 +135,7 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
         )
             .add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD, 0, 3),
+                    Item.get(ItemID.EMERALD, 0, 3),
                     Item.get("minecraft:" + DyeColor.entries.get(random.nextInt(DyeColor.entries.size)).colorName + "_bed")
                 )
                     .setMaxUses(12)
@@ -156,7 +157,7 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
                             DyeColor.CYAN
                         ).get(random.nextInt(6)).colorName.lowercase(Locale.getDefault()) + "_dye", 0, 12
                     ), Item.get(
-                        Item.EMERALD
+                        ItemID.EMERALD
                     )
                 )
                     .setMaxUses(16)
@@ -168,8 +169,8 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
             )
             .add(
                 TradeRecipeBuildUtils.of(
-                    Item.get(Item.EMERALD),
-                    Item.get(Item.BANNER, random.nextInt(DyeColor.entries.size))
+                    Item.get(ItemID.EMERALD),
+                    Item.get(ItemID.BANNER, random.nextInt(DyeColor.entries.size))
                 )
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
@@ -179,7 +180,7 @@ class ProfessionShepherd : Profession(3, BlockID.LOOM, "entity.villager.shepherd
                     .build()
             )
             .add(
-                TradeRecipeBuildUtils.of(Item.get(Item.EMERALD, 0, 2), Item.get(Item.PAINTING, 0, 3))
+                TradeRecipeBuildUtils.of(Item.get(ItemID.EMERALD, 0, 2), Item.get(ItemID.PAINTING, 0, 3))
                     .setMaxUses(12)
                     .setRewardExp(1.toByte())
                     .setTier(5)

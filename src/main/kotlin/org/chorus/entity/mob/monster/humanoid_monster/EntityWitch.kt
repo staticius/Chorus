@@ -108,13 +108,13 @@ class EntityWitch(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chu
 
     override fun getDrops(): Array<Item> {
         val itemId = when (ThreadLocalRandom.current().nextInt(7)) {
-            0 -> Item.STICK
+            0 -> ItemID.STICK
             1 -> Item.SPIDER_EYE
             2 -> Item.GLOWSTONE_DUST
             3 -> Item.GUNPOWDER
-            4 -> Item.REDSTONE
+            4 -> ItemID.REDSTONE
             5 -> Item.SUGAR
-            else -> Item.GLASS_BOTTLE
+            else -> ItemID.GLASS_BOTTLE
         }
         return arrayOf(
             Item.get(itemId, 0, ThreadLocalRandom.current().nextInt(5))

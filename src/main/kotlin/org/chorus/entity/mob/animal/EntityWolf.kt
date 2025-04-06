@@ -234,7 +234,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        if (item.id === Item.NAME_TAG && !player.isAdventure) {
+        if (item.id === ItemID.NAME_TAG && !player.isAdventure) {
             return playerApplyNameTag(player, item)
         }
 

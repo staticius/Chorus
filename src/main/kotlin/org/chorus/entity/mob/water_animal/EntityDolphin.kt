@@ -61,7 +61,7 @@ class EntityDolphin(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(chunk,
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.COD))
+        return arrayOf(Item.get(ItemID.COD))
     }
 
     override fun getExperienceDrops(): Int {

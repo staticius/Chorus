@@ -37,9 +37,9 @@ class EntityCod(chunk: IChunk?, nbt: CompoundTag) : EntityFish(chunk, nbt) {
         if (Utils.rand(0, 3) == 1) {
             return arrayOf(
                 Item.get(Item.BONE, 0, Utils.rand(1, 2)),
-                Item.get((if (this.isOnFire) Item.COOKED_COD else Item.COD))
+                Item.get((if (this.isOnFire) ItemID.COOKED_COD else ItemID.COD))
             )
         }
-        return arrayOf(Item.get((if (this.isOnFire) Item.COOKED_COD else Item.COD)))
+        return arrayOf(Item.get((if (this.isOnFire) ItemID.COOKED_COD else ItemID.COD)))
     }
 }

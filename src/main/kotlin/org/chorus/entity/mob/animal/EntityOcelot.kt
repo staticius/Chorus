@@ -98,6 +98,6 @@ class EntityOcelot(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt),
     }
 
     override fun isBreedingItem(item: Item): Boolean {
-        return item.id === Item.COD
+        return item.id === ItemID.COD
     }
 }
