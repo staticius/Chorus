@@ -12,7 +12,7 @@ class EntityBreezeWindCharge @JvmOverloads constructor(
 ) :
     EntityWindCharge(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.BREEZE_WIND_CHARGE_PROJECTILE
+        return EntityID.BREEZE_WIND_CHARGE_PROJECTILE
     }
 
     override fun getOriginalName(): String {

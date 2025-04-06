@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom
 class EntitySnowball @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityThrowable(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SNOWBALL
+        return EntityID.SNOWBALL
     }
 
     override fun getWidth(): Float {

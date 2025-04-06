@@ -9,7 +9,7 @@ import org.chorus.nbt.tag.*
 
 class EntityLingeringPotion : EntitySplashPotion {
     override fun getIdentifier(): String {
-        return EntityID.Companion.LINGERING_POTION
+        return EntityID.LINGERING_POTION
     }
 
     constructor(chunk: IChunk?, nbt: CompoundTag) : super(chunk, nbt)
@@ -26,7 +26,7 @@ class EntityLingeringPotion : EntitySplashPotion {
         saveNBT()
         val pos: ListTag<*> = namedTag!!.getList("Pos", CompoundTag::class.java).copy() as ListTag<*>
         val entity: EntityAreaEffectCloud? = Entity.Companion.createEntity(
-            EntityID.Companion.AREA_EFFECT_CLOUD,
+            EntityID.AREA_EFFECT_CLOUD,
             getLocator().getChunk(),
             CompoundTag().putList("Pos", pos)
                 .putList(

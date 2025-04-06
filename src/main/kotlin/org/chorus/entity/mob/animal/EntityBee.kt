@@ -33,7 +33,7 @@ import kotlin.collections.setOf
 
 class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.BEE
+        return EntityID.BEE
     }
 
     private var hasNectar = false

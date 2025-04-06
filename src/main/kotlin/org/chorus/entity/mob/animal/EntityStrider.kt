@@ -11,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom
  */
 class EntityStrider(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.STRIDER
+        return EntityID.STRIDER
     }
 
     override fun initEntity() {

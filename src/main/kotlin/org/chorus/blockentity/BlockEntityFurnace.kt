@@ -101,7 +101,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         get() = "Furnace"
 
     protected open val clientName: String
-        get() = BlockEntityID.Companion.FURNACE
+        get() = BlockEntityID.FURNACE
 
     override var name: String?
         get() = if (this.hasName()) namedTag.getString("CustomName") else furnaceName

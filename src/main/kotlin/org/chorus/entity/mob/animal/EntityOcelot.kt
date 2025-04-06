@@ -31,7 +31,7 @@ import java.util.Set
  */
 class EntityOcelot(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.OCELOT
+        return EntityID.OCELOT
     }
 
 

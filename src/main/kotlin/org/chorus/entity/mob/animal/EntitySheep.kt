@@ -37,7 +37,7 @@ import java.util.concurrent.*
  */
 class EntitySheep(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityShearable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SHEEP
+        return EntityID.SHEEP
     }
 
     override var sheared: Boolean = false

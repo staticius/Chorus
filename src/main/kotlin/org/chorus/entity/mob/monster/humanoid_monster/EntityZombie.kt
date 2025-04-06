@@ -43,7 +43,7 @@ import java.util.function.Function
 open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable,
     EntitySmite {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ZOMBIE
+        return EntityID.ZOMBIE
     }
 
 
@@ -190,8 +190,8 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
 
     override fun attackTarget(entity: Entity): Boolean {
         return when (entity.getIdentifier()) {
-            EntityID.Companion.VILLAGER_V2, EntityID.Companion.SNOW_GOLEM, EntityID.Companion.IRON_GOLEM -> true
-            EntityID.Companion.TURTLE -> entity is EntityTurtle && !entity.isBaby()
+            EntityID.VILLAGER_V2, EntityID.SNOW_GOLEM, EntityID.IRON_GOLEM -> true
+            EntityID.TURTLE -> entity is EntityTurtle && !entity.isBaby()
             else -> false
         }
     }

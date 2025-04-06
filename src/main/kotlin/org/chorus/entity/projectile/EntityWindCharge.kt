@@ -25,7 +25,7 @@ open class EntityWindCharge @JvmOverloads constructor(
     var directionChanged: Entity? = null
 
     override fun getIdentifier(): String {
-        return EntityID.Companion.WIND_CHARGE_PROJECTILE
+        return EntityID.WIND_CHARGE_PROJECTILE
     }
 
     override fun onCollideWithBlock(locator: Locator, motion: Vector3, collisionBlock: Block): Boolean {

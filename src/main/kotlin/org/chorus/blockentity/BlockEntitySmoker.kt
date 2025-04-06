@@ -14,7 +14,7 @@ class BlockEntitySmoker(chunk: IChunk, nbt: CompoundTag) : BlockEntityFurnace(ch
         get() = "Smoker"
 
     override val clientName: String
-        get() = BlockEntityID.Companion.SMOKER
+        get() = BlockEntityID.SMOKER
 
     override val idleBlockId: String
         get() = BlockID.SMOKER

@@ -36,7 +36,7 @@ import java.util.concurrent.*
  */
 class EntityWitch(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.WITCH
+        return EntityID.WITCH
     }
 
     override fun requireBehaviorGroup(): IBehaviorGroup {

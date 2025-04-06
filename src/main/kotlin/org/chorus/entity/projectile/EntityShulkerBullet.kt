@@ -29,7 +29,7 @@ import java.util.Set
 
 class EntityShulkerBullet(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SHULKER_BULLET
+        return EntityID.SHULKER_BULLET
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

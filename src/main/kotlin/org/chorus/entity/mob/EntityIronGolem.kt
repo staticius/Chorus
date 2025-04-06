@@ -40,7 +40,7 @@ import java.util.concurrent.*
  */
 class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt), EntityOwnable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.IRON_GOLEM
+        return EntityID.IRON_GOLEM
     }
 
     private var attackingPlayer: Boolean = false
@@ -249,7 +249,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                                 )
 
                             val irongolem: Entity? = Entity.Companion.createEntity(
-                                EntityID.Companion.IRON_GOLEM,
+                                EntityID.IRON_GOLEM,
                                 block.level.getChunk(block.position.getChunkX(), block.position.getChunkZ()),
                                 nbt
                             )

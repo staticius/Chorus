@@ -12,7 +12,7 @@ import java.awt.Color
 
 class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.AREA_EFFECT_CLOUD
+        return EntityID.AREA_EFFECT_CLOUD
     }
 
     var cloudEffects: MutableList<Effect>? = null
@@ -61,19 +61,19 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
 
         if (namedTag!!.contains("ParticleColor")) {
             val effectColor: Int = namedTag!!.getInt("ParticleColor")
-            color.get(0) = (effectColor and -0x1000000) shr 24
-            color.get(1) = (effectColor and 0x00FF0000) shr 16
-            color.get(2) = (effectColor and 0x0000FF00) shr 8
-            color.get(3) = effectColor and 0x000000FF
+            color[0] = (effectColor and -0x1000000) shr 24
+            color[1] = (effectColor and 0x00FF0000) shr 16
+            color[2] = (effectColor and 0x0000FF00) shr 8
+            color[3] = effectColor and 0x000000FF
         } else {
-            color.get(0) = 255
+            color[0] = 255
 
             val potion: PotionType = PotionType.Companion.get(getPotionId())
             for (effect: Effect in potion.getEffects(true)) {
                 val effectColor: Color = effect.getColor()
-                color.get(1) += effectColor.red * effect.getLevel()
-                color.get(2) += effectColor.green * effect.getLevel()
-                color.get(3) += effectColor.blue * effect.getLevel()
+                color[1] += effectColor.red * effect.getLevel()
+                color[2] += effectColor.green * effect.getLevel()
+                color[3] += effectColor.blue * effect.getLevel()
                 count += effect.getLevel()
             }
         }
@@ -199,18 +199,17 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         this.invulnerable = true
         this.setDataFlag(EntityFlag.FIRE_IMMUNE, true)
         this.setDataFlag(EntityFlag.NO_AI, true)
-        this.setSpawnTime(level!!.getCurrentTick(), false)
+        this.setSpawnTime(level!!.currentTick, false)
         this.setPickupCount(0, false)
 
-        cloudEffects = ArrayList(1)
-        for (effectTag: CompoundTag in namedTag!!.getList<CompoundTag>("mobEffects", CompoundTag::class.java)
-            .getAll()) {
+        cloudEffects = mutableListOf()
+        for (effectTag: CompoundTag in namedTag!!.getList("mobEffects", CompoundTag::class.java).all) {
             val effect: Effect = Effect.get(effectTag.getByte("Id").toInt())
                 .setAmbient(effectTag.getBoolean("Ambient"))
                 .setAmplifier(effectTag.getByte("Amplifier").toInt())
                 .setVisible(effectTag.getBoolean("DisplayOnScreenTextureAnimation"))
                 .setDuration(effectTag.getInt("Duration"))
-            cloudEffects.add(effect)
+            cloudEffects!!.add(effect)
         }
         if (namedTag!!.contains("PotionId")) {
             this.setParticleId(32, false)
@@ -328,17 +327,17 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             if ((tickDiff.let { nextApply -= it; nextApply }) <= 0) {
                 nextApply = reapplicationDelay + 10
 
-                val collidingEntities: Array<Entity> = level!!.getCollidingEntities(getBoundingBox())
+                val collidingEntities= level!!.getCollidingEntities(getBoundingBox())
                 if (collidingEntities.size > 0) {
                     radius += radiusOnUse
                     radiusOnUse /= 2f
 
                     setDuration(getDuration() + durationOnUse)
 
-                    for (collidingEntity: Entity in collidingEntities) {
+                    for (collidingEntity in collidingEntities) {
                         if (collidingEntity === this || collidingEntity !is EntityLiving) continue
 
-                        for (effect: Effect? in cloudEffects!!) {
+                        for (effect in cloudEffects!!) {
                             collidingEntity.addEffect(effect)
                         }
                     }

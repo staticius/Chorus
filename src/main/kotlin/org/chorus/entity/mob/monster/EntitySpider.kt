@@ -36,7 +36,7 @@ import java.util.function.Function
  */
 class EntitySpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityArthropod {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SPIDER
+        return EntityID.SPIDER
     }
 
 

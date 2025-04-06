@@ -25,7 +25,7 @@ import java.util.Set
 
 class EntityGoat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.GOAT
+        return EntityID.GOAT
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

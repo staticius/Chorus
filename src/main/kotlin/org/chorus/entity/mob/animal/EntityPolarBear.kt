@@ -29,7 +29,7 @@ import java.util.Set
  */
 class EntityPolarBear(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.POLAR_BEAR
+        return EntityID.POLAR_BEAR
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

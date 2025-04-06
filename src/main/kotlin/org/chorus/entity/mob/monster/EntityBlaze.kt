@@ -34,7 +34,7 @@ import java.util.Set
  */
 class EntityBlaze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.BLAZE
+        return EntityID.BLAZE
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

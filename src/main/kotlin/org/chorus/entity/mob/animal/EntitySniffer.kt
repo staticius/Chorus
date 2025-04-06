@@ -78,7 +78,7 @@ class EntitySniffer(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     }
 
     override fun getIdentifier(): String {
-        return EntityID.Companion.SNIFFER
+        return EntityID.SNIFFER
     }
 
     override fun initEntity() {

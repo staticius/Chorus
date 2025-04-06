@@ -18,7 +18,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SMALL_FIREBALL
+        return EntityID.SMALL_FIREBALL
     }
 
     override fun getHeight(): Float {

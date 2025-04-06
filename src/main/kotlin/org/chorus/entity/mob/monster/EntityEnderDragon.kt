@@ -51,7 +51,7 @@ import kotlin.math.sin
 
 class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ENDER_DRAGON
+        return EntityID.ENDER_DRAGON
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

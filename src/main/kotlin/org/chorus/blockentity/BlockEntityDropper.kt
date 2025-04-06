@@ -12,7 +12,7 @@ class BlockEntityDropper(chunk: IChunk, nbt: CompoundTag) : BlockEntityEjectable
     }
 
     override val blockEntityName: String
-        get() = BlockEntityID.Companion.DROPPER
+        get() = BlockEntityID.DROPPER
 
     override fun getInventory(): DropperInventory {
         return inventory as DropperInventory

@@ -21,7 +21,7 @@ import java.util.Set
  */
 class EntityDolphin(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(chunk, nbt), EntitySwimmable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.DOLPHIN
+        return EntityID.DOLPHIN
     }
 
 

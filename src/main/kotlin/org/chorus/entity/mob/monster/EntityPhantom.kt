@@ -34,7 +34,7 @@ import java.util.function.Function
  */
 class EntityPhantom(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityFlyable, EntitySmite {
     override fun getIdentifier(): String {
-        return EntityID.Companion.PHANTOM
+        return EntityID.PHANTOM
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

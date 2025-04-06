@@ -36,7 +36,7 @@ import kotlin.math.max
 class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityOwnable,
     EntityCanSit, EntityCanAttack, EntityHealable, EntityVariant, EntityColor {
     override fun getIdentifier(): String {
-        return EntityID.Companion.CAT
+        return EntityID.CAT
     }
 
     override var diffHandDamage: FloatArray = floatArrayOf(4f, 4f, 4f)
@@ -175,7 +175,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     //流浪猫会攻击兔子,小海龟
     override fun attackTarget(entity: Entity): Boolean {
         return when (entity.getIdentifier().toString()) {
-            EntityID.Companion.RABBIT, EntityID.Companion.TURTLE -> true
+            EntityID.RABBIT, EntityID.TURTLE -> true
             else -> false
         }
     }

@@ -27,7 +27,7 @@ import java.util.Set
 
 class EntityPanda(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.PANDA
+        return EntityID.PANDA
     }
 
 

@@ -6,7 +6,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 class EntityWitherSkullDangerous(chunk: IChunk?, nbt: CompoundTag?) : EntityWitherSkull(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.WITHER_SKULL_DANGEROUS
+        return EntityID.WITHER_SKULL_DANGEROUS
     }
 
     override fun getStrength(): Float {

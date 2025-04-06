@@ -11,7 +11,7 @@ import org.chorus.nbt.tag.CompoundTag
  */
 class EntityParrot(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.PARROT
+        return EntityID.PARROT
     }
 
 

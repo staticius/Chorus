@@ -26,7 +26,7 @@ import kotlin.math.abs
 
 class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityInteractable, EntityNameable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ARMOR_STAND
+        return EntityID.ARMOR_STAND
     }
 
     override fun getHeight(): Float {

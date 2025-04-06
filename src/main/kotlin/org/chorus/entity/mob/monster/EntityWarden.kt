@@ -40,7 +40,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
     protected var lastCollideTime: Int = level!!.tick
     protected var waitForVibration: Boolean = false
     override fun getIdentifier(): String {
-        return EntityID.Companion.WARDEN
+        return EntityID.WARDEN
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

@@ -33,7 +33,7 @@ import java.util.Set
 open class EntitySkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable,
     EntitySmite {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SKELETON
+        return EntityID.SKELETON
     }
 
 

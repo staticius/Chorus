@@ -42,7 +42,7 @@ import java.util.function.Function
  */
 class EntityGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntitySwimmable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.GUARDIAN
+        return EntityID.GUARDIAN
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
@@ -173,7 +173,7 @@ class EntityGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
 
     override fun attackTarget(entity: Entity): Boolean {
         return when (entity.getIdentifier()) {
-            EntityID.Companion.SQUID, EntityID.Companion.GLOW_SQUID, EntityID.Companion.AXOLOTL -> true
+            EntityID.SQUID, EntityID.GLOW_SQUID, EntityID.AXOLOTL -> true
             else -> false
         }
     }

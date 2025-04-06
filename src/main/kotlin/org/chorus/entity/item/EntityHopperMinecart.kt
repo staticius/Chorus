@@ -21,7 +21,7 @@ import org.chorus.utils.MinecartType
 class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt), InventoryHolder,
     IHopper {
     override fun getIdentifier(): String {
-        return EntityID.Companion.HOPPER_MINECART
+        return EntityID.HOPPER_MINECART
     }
 
     private val temporalVector: BlockVector3 = BlockVector3()

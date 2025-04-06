@@ -41,7 +41,7 @@ import java.util.function.Function
 
 class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), EntityFlyable, EntitySmite {
     override fun getIdentifier(): String {
-        return EntityID.Companion.WITHER
+        return EntityID.WITHER
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
@@ -166,7 +166,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                 this.position,
                 LevelSoundEventPacket.SOUND_DEATH,
                 -1,
-                EntityID.Companion.WITHER,
+                EntityID.WITHER,
                 false,
                 false
             )
@@ -431,7 +431,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                                 )
 
                             val wither: Entity = Entity.Companion.createEntity(
-                                EntityID.Companion.WITHER,
+                                EntityID.WITHER,
                                 check.level.getChunk(check.position.chunkX, check.position.chunkZ),
                                 nbt
                             )

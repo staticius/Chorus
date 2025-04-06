@@ -31,7 +31,7 @@ import java.util.function.Function
  */
 class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!!), EntityWalkable, EntityVariant {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SLIME
+        return EntityID.SLIME
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

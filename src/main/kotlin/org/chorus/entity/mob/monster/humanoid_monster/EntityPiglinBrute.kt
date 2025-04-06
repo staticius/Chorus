@@ -34,7 +34,7 @@ import java.util.function.Function
  */
 class EntityPiglinBrute(chunk: IChunk?, nbt: CompoundTag?) : EntityPiglin(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.PIGLIN_BRUTE
+        return EntityID.PIGLIN_BRUTE
     }
 
     override fun requireBehaviorGroup(): IBehaviorGroup {
@@ -111,7 +111,7 @@ class EntityPiglinBrute(chunk: IChunk?, nbt: CompoundTag?) : EntityPiglin(chunk,
 
     override fun attackTarget(entity: Entity): Boolean {
         return when (entity.getIdentifier()) {
-            EntityID.Companion.WITHER_SKELETON, EntityID.Companion.WITHER -> true
+            EntityID.WITHER_SKELETON, EntityID.WITHER -> true
             else -> false
         }
     }

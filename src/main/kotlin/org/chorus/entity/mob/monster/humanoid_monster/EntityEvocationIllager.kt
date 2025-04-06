@@ -37,7 +37,7 @@ import java.util.function.Function
  */
 class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.EVOCATION_ILLAGER
+        return EntityID.EVOCATION_ILLAGER
     }
 
     override fun requireBehaviorGroup(): IBehaviorGroup {

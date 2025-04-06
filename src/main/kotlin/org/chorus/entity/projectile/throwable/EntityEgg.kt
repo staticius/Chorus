@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom
 class EntityEgg @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityThrowable(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.EGG
+        return EntityID.EGG
     }
 
     override fun getWidth(): Float {

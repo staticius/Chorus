@@ -104,8 +104,8 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
 
     override fun attackTarget(entity: Entity): Boolean {
         return when (entity.getIdentifier()) {
-            EntityID.Companion.VILLAGER -> entity is EntityVillager && !entity.isBaby()
-            EntityID.Companion.IRON_GOLEM, EntityID.Companion.WANDERING_TRADER -> true
+            EntityID.VILLAGER -> entity is EntityVillager && !entity.isBaby()
+            EntityID.IRON_GOLEM, EntityID.WANDERING_TRADER -> true
             else -> false
         }
     }

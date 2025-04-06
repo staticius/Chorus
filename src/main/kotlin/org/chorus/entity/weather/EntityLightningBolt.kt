@@ -25,7 +25,7 @@ import kotlin.math.max
 class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt),
     EntityLightningStrike {
     override fun getIdentifier(): String {
-        return EntityID.Companion.LIGHTNING_BOLT
+        return EntityID.LIGHTNING_BOLT
     }
 
     var state: Int = 0

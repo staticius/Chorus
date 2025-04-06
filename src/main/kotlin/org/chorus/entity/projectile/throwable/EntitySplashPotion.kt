@@ -20,7 +20,7 @@ import kotlin.math.sqrt
  */
 open class EntitySplashPotion : EntityThrowable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SPLASH_POTION
+        return EntityID.SPLASH_POTION
     }
 
     @JvmField

@@ -30,7 +30,7 @@ import kotlin.math.min
  */
 class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.FALLING_BLOCK
+        return EntityID.FALLING_BLOCK
     }
 
     protected var blockState: BlockState? = null

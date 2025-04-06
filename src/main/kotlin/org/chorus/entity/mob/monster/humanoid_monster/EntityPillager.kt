@@ -30,7 +30,7 @@ import java.util.function.Function
 
 class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.PILLAGER
+        return EntityID.PILLAGER
     }
 
 

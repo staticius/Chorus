@@ -15,7 +15,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile(chunk, nbt), EntityExplosive {
     override fun getIdentifier(): String {
-        return EntityID.Companion.WITHER_SKULL
+        return EntityID.WITHER_SKULL
     }
 
     override fun getDamage(): Double {

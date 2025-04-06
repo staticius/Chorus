@@ -17,7 +17,7 @@ import kotlin.math.sqrt
  */
 class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.XP_ORB
+        return EntityID.XP_ORB
     }
 
     var closestPlayer: Player? = null

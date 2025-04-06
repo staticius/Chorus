@@ -41,7 +41,7 @@ import java.util.concurrent.*
  */
 class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityInteractable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.CREEPER
+        return EntityID.CREEPER
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

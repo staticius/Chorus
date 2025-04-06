@@ -34,7 +34,7 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
     private var rollState = RollState.UNROLLED
 
     override fun getIdentifier(): String {
-        return EntityID.Companion.ARMADILLO
+        return EntityID.ARMADILLO
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

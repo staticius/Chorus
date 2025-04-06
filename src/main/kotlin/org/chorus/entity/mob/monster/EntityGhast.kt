@@ -31,7 +31,7 @@ import kotlin.collections.forEach
  */
 class EntityGhast(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.GHAST
+        return EntityID.GHAST
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

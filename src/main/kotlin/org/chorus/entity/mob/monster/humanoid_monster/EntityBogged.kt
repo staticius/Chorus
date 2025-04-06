@@ -26,7 +26,7 @@ import java.util.Set
 
 class EntityBogged(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nbt), EntityWalkable, EntitySmite {
     override fun getIdentifier(): String {
-        return EntityID.Companion.BOGGED
+        return EntityID.BOGGED
     }
 
     override fun initEntity() {

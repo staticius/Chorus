@@ -10,7 +10,7 @@ import org.chorus.nbt.tag.CompoundTag
  */
 class EntityPufferfish(chunk: IChunk?, nbt: CompoundTag) : EntityFish(chunk, nbt), EntitySwimmable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.PUFFERFISH
+        return EntityID.PUFFERFISH
     }
 
     override fun getOriginalName(): String {

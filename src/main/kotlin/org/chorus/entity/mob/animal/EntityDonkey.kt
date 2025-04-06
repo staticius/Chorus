@@ -29,7 +29,7 @@ import java.util.Set
  */
 class EntityDonkey(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.DONKEY
+        return EntityID.DONKEY
     }
 
     override fun requireBehaviorGroup(): IBehaviorGroup {

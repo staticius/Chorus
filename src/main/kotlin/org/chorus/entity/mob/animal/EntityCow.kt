@@ -32,7 +32,7 @@ import java.util.Set
  */
 class EntityCow(chunk: IChunk?, nbt: CompoundTag?) : EntityAnimal(chunk, nbt!!), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.COW
+        return EntityID.COW
     }
 
 

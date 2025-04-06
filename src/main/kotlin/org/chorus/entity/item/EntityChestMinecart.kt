@@ -21,7 +21,7 @@ import org.chorus.utils.MinecartType
  */
 class EntityChestMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt), InventoryHolder {
     override fun getIdentifier(): String {
-        return EntityID.Companion.CHEST_MINECART
+        return EntityID.CHEST_MINECART
     }
 
     protected var inventory: Inventory = null

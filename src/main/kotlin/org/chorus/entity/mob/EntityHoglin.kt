@@ -38,7 +38,7 @@ import java.util.Set
  */
 class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.HOGLIN
+        return EntityID.HOGLIN
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
@@ -220,7 +220,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                 entity.position,
                 LevelSoundEventPacket.SOUND_ANGRY,
                 -1,
-                EntityID.Companion.HOGLIN,
+                EntityID.HOGLIN,
                 false,
                 false
             )

@@ -29,7 +29,7 @@ import java.util.function.Function
 
 class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!!), EntityWalkable, EntityVariant {
     override fun getIdentifier(): String {
-        return EntityID.Companion.MAGMA_CUBE
+        return EntityID.MAGMA_CUBE
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

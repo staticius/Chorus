@@ -221,7 +221,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
     }
 
     override fun updateCompoundTag(nbt: CompoundTag, player: Player): Boolean {
-        if (nbt.getString("id") != BlockEntityID.Companion.SIGN && nbt.getString("id") != BlockEntityID.Companion.HANGING_SIGN) {
+        if (nbt.getString("id") != BlockEntityID.SIGN && nbt.getString("id") != BlockEntityID.HANGING_SIGN) {
             return false
         }
         if (player.isOpenSignFront == null) return false

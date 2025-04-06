@@ -11,7 +11,7 @@ import org.chorus.nbt.tag.*
 
 class EntityDragonFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.DRAGON_FIREBALL
+        return EntityID.DRAGON_FIREBALL
     }
 
     override fun getHeight(): Float {
@@ -52,7 +52,7 @@ class EntityDragonFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile
     protected fun onCollide() {
         this.close()
         val entity: EntityAreaEffectCloud? = Entity.Companion.createEntity(
-            EntityID.Companion.AREA_EFFECT_CLOUD,
+            EntityID.AREA_EFFECT_CLOUD,
             getLocator().getChunk(),
             CompoundTag().putList(
                 "Pos", ListTag<Tag>()

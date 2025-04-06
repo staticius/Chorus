@@ -37,7 +37,7 @@ import java.util.function.Function
  */
 class EntityHusk(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.HUSK
+        return EntityID.HUSK
     }
 
     override fun requireBehaviorGroup(): IBehaviorGroup {

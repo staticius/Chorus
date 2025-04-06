@@ -36,7 +36,7 @@ import kotlin.math.sqrt
 class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, shootingEntity: Entity? = null) :
     SlenderProjectile(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.FISHING_HOOK
+        return EntityID.FISHING_HOOK
     }
 
     var waitChance: Int = 120
@@ -247,7 +247,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
 
             if (!event.isCancelled) {
                 val itemEntity: EntityItem? = Entity.Companion.createEntity(
-                    EntityID.Companion.ITEM,
+                    EntityID.ITEM,
                     level!!.getChunk(
                         position.x.toInt() shr 4,
                         position.z.toInt() shr 4, true

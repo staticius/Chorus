@@ -32,7 +32,7 @@ import java.util.Set
  */
 class EntityTurtle(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntitySwimmable, EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.TURTLE
+        return EntityID.TURTLE
     }
 
 

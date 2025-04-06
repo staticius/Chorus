@@ -41,7 +41,7 @@ import kotlin.collections.setOf
  */
 class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.VINDICATOR
+        return EntityID.VINDICATOR
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
@@ -101,7 +101,7 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
 
     override fun attackTarget(entity: Entity): Boolean {
         return when (entity.getIdentifier()) {
-            EntityID.Companion.IRON_GOLEM, EntityID.Companion.SNOW_GOLEM, EntityID.Companion.VILLAGER, EntityID.Companion.WANDERING_TRADER -> true
+            EntityID.IRON_GOLEM, EntityID.SNOW_GOLEM, EntityID.VILLAGER, EntityID.WANDERING_TRADER -> true
             else -> super.attackTarget(entity) || isJohnny()
         }
     }
@@ -160,7 +160,7 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
                 entity.position,
                 LevelSoundEventPacket.SOUND_ANGRY,
                 -1,
-                EntityID.Companion.VINDICATOR,
+                EntityID.VINDICATOR,
                 false,
                 false
             )

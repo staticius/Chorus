@@ -13,7 +13,7 @@ import org.chorus.nbt.tag.ListTag
 
 class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt), InventoryHolder {
     override fun getIdentifier(): String {
-        return EntityID.Companion.CHEST_BOAT
+        return EntityID.CHEST_BOAT
     }
 
     protected var inventory: Inventory = null

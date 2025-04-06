@@ -27,7 +27,7 @@ import java.util.Set
 
 class EntityFrog(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityVariant {
     override fun getIdentifier(): String {
-        return EntityID.Companion.FROG
+        return EntityID.FROG
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

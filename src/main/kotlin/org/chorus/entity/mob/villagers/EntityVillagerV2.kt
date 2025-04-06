@@ -57,7 +57,7 @@ import kotlin.math.min
 
 class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt!!), InventoryHolder {
     override fun getIdentifier(): String {
-        return EntityID.Companion.VILLAGER_V2
+        return EntityID.VILLAGER_V2
     }
 
     private val tradeNetId: MutableList<Int> = ArrayList()

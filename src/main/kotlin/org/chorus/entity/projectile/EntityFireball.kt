@@ -16,7 +16,7 @@ class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(ch
     var directionChanged: Entity? = null
 
     override fun getIdentifier(): String {
-        return EntityID.Companion.FIREBALL
+        return EntityID.FIREBALL
     }
 
     override fun getWidth(): Float {

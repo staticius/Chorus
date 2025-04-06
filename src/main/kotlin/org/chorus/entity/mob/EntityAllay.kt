@@ -35,7 +35,7 @@ import java.util.function.Function
 class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityFlyable, EntityOwnable,
     EntityInventoryHolder {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ALLAY
+        return EntityID.ALLAY
     }
 
 

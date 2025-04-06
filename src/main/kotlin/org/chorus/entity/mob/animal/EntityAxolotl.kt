@@ -39,7 +39,7 @@ import java.util.function.Predicate
 class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntitySwimmable, EntityVariant,
     EntityCanAttack {
     override fun getIdentifier(): String {
-        return EntityID.Companion.AXOLOTL
+        return EntityID.AXOLOTL
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
@@ -268,7 +268,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
 
     override fun attackTarget(entity: Entity): Boolean {
         return when (entity.getIdentifier()) {
-            EntityID.Companion.COD, EntityID.Companion.ELDER_GUARDIAN, EntityID.Companion.GLOW_SQUID, EntityID.Companion.GUARDIAN, EntityID.Companion.PUFFERFISH, EntityID.Companion.SALMON, EntityID.Companion.TADPOLE, EntityID.Companion.TROPICALFISH, EntityID.Companion.DROWNED -> true
+            EntityID.COD, EntityID.ELDER_GUARDIAN, EntityID.GLOW_SQUID, EntityID.GUARDIAN, EntityID.PUFFERFISH, EntityID.SALMON, EntityID.TADPOLE, EntityID.TROPICALFISH, EntityID.DROWNED -> true
             else -> false
         }
     }

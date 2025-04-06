@@ -24,7 +24,7 @@ import java.util.Set
 
 class EntityCamel(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.CAMEL
+        return EntityID.CAMEL
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

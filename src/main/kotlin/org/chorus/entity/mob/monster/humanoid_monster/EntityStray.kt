@@ -11,7 +11,7 @@ import org.chorus.nbt.tag.CompoundTag
  */
 class EntityStray(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nbt), EntityWalkable, EntitySmite {
     override fun getIdentifier(): String {
-        return EntityID.Companion.STRAY
+        return EntityID.STRAY
     }
 
     override fun initEntity() {

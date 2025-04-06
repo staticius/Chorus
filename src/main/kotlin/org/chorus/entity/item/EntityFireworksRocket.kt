@@ -25,7 +25,7 @@ import kotlin.math.sqrt
 
 open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.FIREWORKS_ROCKET
+        return EntityID.FIREWORKS_ROCKET
     }
 
     private val lifetime: Int

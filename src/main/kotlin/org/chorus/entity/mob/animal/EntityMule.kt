@@ -29,7 +29,7 @@ import java.util.Set
  */
 class EntityMule(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.MULE
+        return EntityID.MULE
     }
 
     override fun getDrops(): Array<Item> {

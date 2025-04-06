@@ -35,7 +35,7 @@ import java.util.Set
  */
 class EntityMooshroom(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.MOOSHROOM
+        return EntityID.MOOSHROOM
     }
 
 

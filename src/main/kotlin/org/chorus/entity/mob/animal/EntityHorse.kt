@@ -57,7 +57,7 @@ import kotlin.math.ceil
 open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityVariant,
     EntityMarkVariant, EntityRideable, EntityOwnable, InventoryHolder {
     override fun getIdentifier(): String {
-        return EntityID.Companion.HORSE
+        return EntityID.HORSE
     }
 
     private var attributeMap: MutableMap<String?, Attribute>? = null

@@ -30,7 +30,7 @@ import java.util.Set
  */
 class EntitySilverfish(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityArthropod {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SILVERFISH
+        return EntityID.SILVERFISH
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

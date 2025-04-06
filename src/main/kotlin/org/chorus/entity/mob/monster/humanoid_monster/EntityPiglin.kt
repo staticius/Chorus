@@ -46,7 +46,7 @@ import kotlin.collections.setOf
 
 open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.PIGLIN
+        return EntityID.PIGLIN
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
@@ -312,8 +312,8 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
 
     override fun attackTarget(entity: Entity): Boolean {
         return when (entity.getIdentifier()) {
-            EntityID.Companion.WITHER_SKELETON, EntityID.Companion.WITHER -> true
-            EntityID.Companion.HOGLIN -> {
+            EntityID.WITHER_SKELETON, EntityID.WITHER -> true
+            EntityID.HOGLIN -> {
                 if (entity is EntityHoglin) {
                     if (!entity.isBaby()) {
                         if (entity.getHealth() - getDiffHandDamage(Server.instance.difficulty) <= 0) {
@@ -420,7 +420,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 entity.position,
                 LevelSoundEventPacket.SOUND_ANGRY,
                 -1,
-                EntityID.Companion.PIGLIN,
+                EntityID.PIGLIN,
                 false,
                 false
             )

@@ -6,7 +6,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 class EntityWanderingTrader(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.WANDERING_TRADER
+        return EntityID.WANDERING_TRADER
     }
 
     override fun getWidth(): Float {

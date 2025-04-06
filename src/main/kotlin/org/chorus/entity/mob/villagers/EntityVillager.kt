@@ -17,7 +17,7 @@ import org.chorus.nbt.tag.CompoundTag
  */
 class EntityVillager(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.VILLAGER
+        return EntityID.VILLAGER
     }
 
     override fun getWidth(): Float {

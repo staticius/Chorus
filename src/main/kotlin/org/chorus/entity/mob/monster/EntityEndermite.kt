@@ -34,7 +34,7 @@ import java.util.Set
  */
 class EntityEndermite(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityArthropod {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ENDERMITE
+        return EntityID.ENDERMITE
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

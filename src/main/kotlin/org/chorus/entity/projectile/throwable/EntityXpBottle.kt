@@ -16,7 +16,7 @@ import java.util.concurrent.ThreadLocalRandom
 class EntityXpBottle @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityThrowable(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.XP_BOTTLE
+        return EntityID.XP_BOTTLE
     }
 
 

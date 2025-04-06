@@ -24,7 +24,7 @@ import kotlin.math.sqrt
  */
 class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt), EntityExplosive {
     override fun getIdentifier(): String {
-        return EntityID.Companion.TNT_MINECART
+        return EntityID.TNT_MINECART
     }
 
     private var fuse: Int = 0

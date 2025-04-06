@@ -38,7 +38,7 @@ import java.util.Set
  */
 class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityInteractable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.NPC
+        return EntityID.NPC
     }
 
     protected var dialog: FormWindowDialog? = null

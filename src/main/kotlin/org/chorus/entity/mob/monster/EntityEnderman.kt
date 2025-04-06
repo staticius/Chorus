@@ -32,7 +32,7 @@ import java.util.Set
 
 class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ENDERMAN
+        return EntityID.ENDERMAN
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

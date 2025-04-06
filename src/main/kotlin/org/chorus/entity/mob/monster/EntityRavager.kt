@@ -24,7 +24,7 @@ import java.util.Set
 
 class EntityRavager(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.RAVAGER
+        return EntityID.RAVAGER
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

@@ -22,7 +22,7 @@ import org.chorus.nbt.tag.CompoundTag
  */
 class EntityEnderCrystal(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt), EntityExplosive {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ENDER_CRYSTAL
+        return EntityID.ENDER_CRYSTAL
     }
 
 

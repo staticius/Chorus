@@ -23,7 +23,7 @@ import java.util.concurrent.*
  */
 class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.TROPICALFISH
+        return EntityID.TROPICALFISH
     }
 
     override var color: Int = 0

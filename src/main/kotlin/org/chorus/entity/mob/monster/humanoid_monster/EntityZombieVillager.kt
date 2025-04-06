@@ -37,7 +37,7 @@ import java.util.function.Consumer
 
 class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt), EntityWalkable, EntitySmite {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ZOMBIE_VILLAGER
+        return EntityID.ZOMBIE_VILLAGER
     }
 
     override fun requireBehaviorGroup(): IBehaviorGroup {

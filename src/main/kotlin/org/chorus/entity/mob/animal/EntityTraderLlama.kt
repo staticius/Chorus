@@ -6,7 +6,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 class EntityTraderLlama(chunk: IChunk?, nbt: CompoundTag) : EntityLlama(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.TRADER_LLAMA
+        return EntityID.TRADER_LLAMA
     }
 
     override fun getOriginalName(): String {

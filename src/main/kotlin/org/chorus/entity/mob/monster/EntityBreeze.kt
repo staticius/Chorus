@@ -28,7 +28,7 @@ import java.util.Set
 
 class EntityBreeze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.BREEZE
+        return EntityID.BREEZE
     }
 
     override fun requireBehaviorGroup(): IBehaviorGroup {

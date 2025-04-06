@@ -21,7 +21,7 @@ import java.util.Set
  */
 open class EntitySquid(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntitySwimmable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SQUID
+        return EntityID.SQUID
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

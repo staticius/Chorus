@@ -18,7 +18,7 @@ import kotlin.math.floor
 class EntityEnderPearl @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityThrowable(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ENDER_PEARL
+        return EntityID.ENDER_PEARL
     }
 
     override fun getWidth(): Float {
@@ -99,7 +99,7 @@ class EntityEnderPearl @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTa
         if (level!!.gameRules.getBoolean(GameRule.DO_MOB_SPAWNING)) {
             if (ThreadLocalRandom.current().nextInt(1, 20) == 1) {
                 val endermite: EntityEndermite? = Entity.Companion.createEntity(
-                    EntityID.Companion.ENDERMITE,
+                    EntityID.ENDERMITE,
                     level!!.getChunk(destination.getFloorX() shr 4, destination.getFloorZ() shr 4), CompoundTag()
                         .putList(
                             "Pos", ListTag<Tag>()

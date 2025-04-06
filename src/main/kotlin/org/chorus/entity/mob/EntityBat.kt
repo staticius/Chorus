@@ -20,7 +20,7 @@ import java.util.Set
  */
 class EntityBat(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.BAT
+        return EntityID.BAT
     }
 
 

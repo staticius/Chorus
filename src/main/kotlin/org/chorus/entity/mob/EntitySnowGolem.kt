@@ -37,7 +37,7 @@ import java.util.Set
 
 class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.SNOW_GOLEM
+        return EntityID.SNOW_GOLEM
     }
 
     var waterTicks: Int = 0
@@ -198,7 +198,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                             )
 
                         val snowgolem: Entity? = Entity.Companion.createEntity(
-                            EntityID.Companion.SNOW_GOLEM,
+                            EntityID.SNOW_GOLEM,
                             block.level.getChunk(block.position.getChunkX(), block.position.getChunkZ()),
                             nbt
                         )

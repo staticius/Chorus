@@ -37,7 +37,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     override var color: Int = 0
 
     override fun getIdentifier(): String {
-        return EntityID.Companion.SHULKER
+        return EntityID.SHULKER
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

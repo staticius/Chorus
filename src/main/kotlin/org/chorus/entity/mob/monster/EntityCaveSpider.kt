@@ -37,7 +37,7 @@ import java.util.function.Function
  */
 class EntityCaveSpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityArthropod {
     override fun getIdentifier(): String {
-        return EntityID.Companion.CAVE_SPIDER
+        return EntityID.CAVE_SPIDER
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

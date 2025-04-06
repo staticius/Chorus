@@ -12,7 +12,7 @@ import org.chorus.nbt.tag.CompoundTag
  */
 class EntityZombieHorse(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, nbt), EntityWalkable, EntitySmite {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ZOMBIE_HORSE
+        return EntityID.ZOMBIE_HORSE
     }
 
 

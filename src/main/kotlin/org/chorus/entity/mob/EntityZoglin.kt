@@ -27,7 +27,7 @@ import java.util.function.Function
 
 class EntityZoglin(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt!!), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.ZOGLIN
+        return EntityID.ZOGLIN
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {

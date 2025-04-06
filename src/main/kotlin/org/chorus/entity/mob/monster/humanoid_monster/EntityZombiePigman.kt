@@ -38,7 +38,7 @@ import java.util.Set
 class EntityZombiePigman(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt), EntityWalkable, EntitySmite {
     //Mojang seems to kept the old name?
     override fun getIdentifier(): String {
-        return EntityID.Companion.ZOMBIE_PIGMAN
+        return EntityID.ZOMBIE_PIGMAN
     }
 
 

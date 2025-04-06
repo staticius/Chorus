@@ -203,7 +203,7 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         }
 
     override fun updateCompoundTag(nbt: CompoundTag, player: Player): Boolean {
-        if (nbt.getString("id") != BlockEntityID.Companion.BEACON) {
+        if (nbt.getString("id") != BlockEntityID.BEACON) {
             return false
         }
 

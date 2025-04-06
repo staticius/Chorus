@@ -11,7 +11,7 @@ import org.chorus.nbt.tag.CompoundTag
  */
 class EntityLlamaSpit(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.LLAMA_SPIT
+        return EntityID.LLAMA_SPIT
     }
 
     override fun getWidth(): Float {

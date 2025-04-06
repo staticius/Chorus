@@ -14,7 +14,7 @@ import org.chorus.utils.MinecartType
  */
 class EntityMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.MINECART
+        return EntityID.MINECART
     }
 
     override fun getOriginalName(): String {

@@ -23,7 +23,7 @@ import java.util.function.Predicate
 
 class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.PAINTING
+        return EntityID.PAINTING
     }
 
 

@@ -11,7 +11,7 @@ import org.chorus.utils.*
  */
 class EntityCod(chunk: IChunk?, nbt: CompoundTag) : EntityFish(chunk, nbt) {
     override fun getIdentifier(): String {
-        return EntityID.Companion.COD
+        return EntityID.COD
     }
 
 

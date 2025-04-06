@@ -19,7 +19,7 @@ import java.util.Set
 
 class EntityTadpole(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(chunk, nbt), EntitySwimmable {
     override fun getIdentifier(): String {
-        return EntityID.Companion.TADPOLE
+        return EntityID.TADPOLE
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
