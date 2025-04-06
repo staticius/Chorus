@@ -70,8 +70,16 @@ open class EntityDamageEvent(entity: Entity, cause: DamageCause, modifiers: Map<
         return 0f
     }
 
+    fun getDamage(): Float {
+        return this.damage
+    }
+
     fun setDamage(damage: Float, type: DamageModifier) {
         modifiers[type] = damage
+    }
+
+    fun setDamage(damage: Float) {
+        this.damage = damage
     }
 
     fun isApplicable(type: DamageModifier): Boolean {

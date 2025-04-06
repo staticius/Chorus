@@ -1,6 +1,7 @@
 package org.chorus.entity.item
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.*
 import org.chorus.entity.data.EntityDataType
@@ -173,7 +174,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
 
         // A killer task
         if (this.level != null) {
-            if (position.y < level.getMinHeight() - 16) {
+            if (position.y < level!!.minHeight - 16) {
                 kill()
                 return false
             }
@@ -212,7 +213,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             ticksInWater += tickDiff
             if (ticksInWater >= 3 * 20) {
                 for (i in passengers.indices.reversed()) {
-                    dismountEntity(passengers.get(i))
+                    dismountEntity(passengers[i])
                 }
             }
         }
@@ -238,7 +239,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
                 motion.z
             ) > 0.00001)
         ) {
-            friction *= level!!.getBlock(position.add(0.0, -1.0, 0.0).floor()).getFrictionFactor()
+            friction *= level!!.getBlock(position.add(0.0, -1.0, 0.0).floor()).frictionFactor
         }
 
         motion.x *= friction
@@ -265,7 +266,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             Server.instance.pluginManager.callEvent(VehicleMoveEvent(this, from, to))
         }
 
-        //TODO: lily pad collision
+        // TODO: lily pad collision
         this.updateMovement()
     }
 
@@ -379,7 +380,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
 
     fun getWaterLevel(): Double {
         val maxY: Double = boundingBox.minY + getBaseOffset()
-        val consumer: BBConsumer<Double> = object : BBConsumer<Double?> {
+        val consumer = object : BBConsumer<Double> {
             private var diffY: Double = Double.MAX_VALUE
 
             override fun accept(x: Int, y: Int, z: Int) {
@@ -465,10 +466,9 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
     }
 
     fun onPaddle(animation: AnimatePacket.Action, value: Float) {
-        val propertyId: EntityDataType<Float?> =
-            if (animation == AnimatePacket.Action.ROW_RIGHT) EntityDataTypes.Companion.ROW_TIME_RIGHT else EntityDataTypes.Companion.ROW_TIME_LEFT
+        val propertyId = if (animation == AnimatePacket.Action.ROW_RIGHT) EntityDataTypes.ROW_TIME_RIGHT else EntityDataTypes.ROW_TIME_LEFT
 
-        if (java.lang.Float.compare(getDataProperty(propertyId), value) != 0) {
+        if (getDataProperty(propertyId).compareTo(value) != 0) {
             this.setDataProperty(propertyId, value)
         }
     }
@@ -479,7 +479,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             ) && !ignoreCollision.contains(entity)
         ) {
             if (!entity.boundingBox.intersectsWith(boundingBox.grow(0.20000000298023224, -0.1, 0.20000000298023224))
-                || entity is Player && entity.isSpectator()
+                || entity is Player && entity.isSpectator
             ) {
                 return
             }
@@ -523,8 +523,9 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         super.kill()
 
         if (lastDamageCause is EntityDamageByEntityEvent) {
-            val damager: Entity = lastDamageCause.damager
-            if (damager is Player && damager.isCreative()) {
+            val damageByEntityCause = lastDamageCause as EntityDamageByEntityEvent
+            val damager: Entity = damageByEntityCause.damager
+            if (damager is Player && damager.isCreative) {
                 return
             }
         }
