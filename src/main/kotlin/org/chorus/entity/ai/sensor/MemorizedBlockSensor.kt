@@ -14,15 +14,14 @@ class MemorizedBlockSensor @JvmOverloads constructor(
 ) :
     ISensor {
     override fun sense(entity: EntityMob) {
-        val blockClass =
-            entity.memoryStorage!!.get<Class<out Block>>(CoreMemoryTypes.Companion.LOOKING_BLOCK)
+        val blockClass = entity.memoryStorage[CoreMemoryTypes.LOOKING_BLOCK]!!
         var block: Block? = null
         for (x in -range..range) {
             for (z in -range..range) {
                 for (y in -lookY..lookY) {
                     val lookTransform = entity.transform.add(x.toDouble(), y.toDouble(), z.toDouble())
                     val lookBlock = lookTransform.levelBlock
-                    if (lookBlock.id == Block.DIRT || lookBlock.id == Block.GRASS_BLOCK || lookBlock.isAir || lookBlock.id == Block.BEDROCK) continue
+                    if (lookBlock.id == BlockID.DIRT || lookBlock.id == BlockID.GRASS_BLOCK || lookBlock.isAir || lookBlock.id == BlockID.BEDROCK) continue
                     if (blockClass.isAssignableFrom(lookBlock.javaClass)) {
                         block = lookBlock
                         break
@@ -30,6 +29,6 @@ class MemorizedBlockSensor @JvmOverloads constructor(
                 }
             }
         }
-        entity.memoryStorage!!.set<Block>(CoreMemoryTypes.Companion.NEAREST_BLOCK, block)
+        entity.memoryStorage[CoreMemoryTypes.NEAREST_BLOCK] = block
     }
 }

@@ -19,14 +19,13 @@ class NearestPlayerAngryPiglinSensor : ISensor {
                         trigger = true
                     }
                 }
-                if (player.isBreakingBlock) {
-                    if (checkBlock(player.breakingBlock)) {
+                if (player.isBreakingBlock()) {
+                    if (checkBlock(player.breakingBlock!!)) {
                         trigger = true
                     }
                 }
                 if (trigger) {
-                    entity.memoryStorage!!
-                        .set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, player)
+                    entity.memoryStorage[CoreMemoryTypes.ATTACK_TARGET] = player
                 }
             }
         }
@@ -47,7 +46,7 @@ class NearestPlayerAngryPiglinSensor : ISensor {
 
     private fun checkBlock(block: Block): Boolean {
         return when (block.id) {
-            Block.GOLD_BLOCK, Block.GOLD_ORE, Block.GILDED_BLACKSTONE, Block.NETHER_GOLD_ORE, Block.RAW_GOLD_BLOCK, Block.DEEPSLATE_GOLD_ORE -> true
+            BlockID.GOLD_BLOCK, BlockID.GOLD_ORE, BlockID.GILDED_BLACKSTONE, BlockID.NETHER_GOLD_ORE, BlockID.RAW_GOLD_BLOCK, BlockID.DEEPSLATE_GOLD_ORE -> true
             else -> false
         }
     }

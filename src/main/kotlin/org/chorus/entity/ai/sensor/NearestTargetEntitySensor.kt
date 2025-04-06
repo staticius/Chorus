@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.sensor
 
 import org.chorus.entity.*
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.utils.*
 import java.util.*
@@ -17,13 +17,11 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
     protected var minRange: Double,
     protected var maxRange: Double,
     override var period: Int,
-    memories: List<MemoryType<Entity?>?>,
-    vararg allTargetFunction: Function<T?, Boolean>
+    protected var memories: List<NullableMemoryType<Entity>>,
+    vararg allTargetFunction: Function<T, Boolean>
 ) :
     ISensor {
     protected var allTargetFunction: Array<Function<T, Boolean>>?
-
-    protected var memories: List<MemoryType<Entity?>?>
 
     /**
      * 不指定目标函数，默认将全部结果存入第一个记忆
@@ -33,12 +31,11 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
      *
      * @see .NearestTargetEntitySensor
      */
-    constructor(minRange: Double, maxRange: Double, memories: List<MemoryType<Entity?>?>) : this(
+    constructor(minRange: Double, maxRange: Double, memories: List<NullableMemoryType<Entity>>) : this(
         minRange,
         maxRange,
         1,
-        memories,
-        null as Function<T, Boolean?>?
+        memories
     )
 
     /**
@@ -49,13 +46,9 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
      * @param memories          保存结果的记忆类型<br></br>Memory class type for saving results
      */
     init {
-        if (allTargetFunction == null) this.allTargetFunction = null
-        else {
-            if (memories.size >= 1 && allTargetFunction.size == memories.size) {
-                this.allTargetFunction = allTargetFunction
-            } else throw IllegalArgumentException("All Target Function must correspond to memories one by one")
-        }
-        this.memories = memories
+        if (memories.isNotEmpty() && allTargetFunction.size == memories.size) {
+            this.allTargetFunction = allTargetFunction.toList().toTypedArray()
+        } else throw IllegalArgumentException("All Target Function must correspond to memories one by one")
     }
 
     override fun sense(entity: EntityMob) {
@@ -64,8 +57,8 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
 
         if (allTargetFunction == null && memories.size == 1) {
             val currentMemory = memories[0]
-            val current = entity.memoryStorage!!.get(currentMemory)
-            if (current != null && current.isAlive) return
+            val current = entity.memoryStorage[currentMemory]
+            if (current != null && current.isAlive()) return
 
             //寻找范围内最近的实体
             val entities = Collections.synchronizedList(SortedList(Comparator.comparingDouble { e: Entity ->
@@ -73,15 +66,15 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
                     entity.position
                 )
             }))
-            for (p in entity.level!!.entities) {
+            for (p in entity.level!!.entities.values) {
                 if (entity.position.distanceSquared(p.position) <= maxRangeSquared && entity.position.distanceSquared(p.position) >= minRangeSquared && (p != entity)) {
                     entities.add(p)
                 }
             }
 
             if (entities.isEmpty()) {
-                entity.memoryStorage!!.clear(currentMemory)
-            } else entity.memoryStorage!!.set(currentMemory, entities[0])
+                entity.memoryStorage.clear(currentMemory)
+            } else entity.memoryStorage.set(currentMemory, entities[0])
             return
         }
         if (allTargetFunction != null) {
@@ -100,7 +93,7 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
                 }
             }
 
-            for (p in entity.level!!.entities) {
+            for (p in entity.level!!.entities.values) {
                 if (entity.position.distanceSquared(p.position) <= maxRangeSquared && entity.position.distanceSquared(p.position) >= minRangeSquared && (p != entity)) {
                     var i = 0
                     for (targetFunction in allTargetFunction!!) {
@@ -116,15 +109,15 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
             val len = sortEntities.size
             while (i < len) {
                 val currentMemory = memories[i]
-                val current = entity.memoryStorage!!.get(currentMemory)
-                if (current != null && current.isAlive) {
+                val current = entity.memoryStorage.get(currentMemory)
+                if (current != null && current.isAlive()) {
                     ++i
                     continue
                 }
 
                 if (sortEntities[i].isEmpty()) {
-                    entity.memoryStorage!!.clear(currentMemory)
-                } else entity.memoryStorage!!.set(currentMemory, sortEntities[i][0])
+                    entity.memoryStorage.clear(currentMemory)
+                } else entity.memoryStorage.set(currentMemory, sortEntities[i][0])
                 ++i
             }
         }

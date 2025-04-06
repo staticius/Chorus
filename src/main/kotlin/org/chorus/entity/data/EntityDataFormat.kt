@@ -5,8 +5,6 @@ import org.chorus.math.Vector3
 import org.chorus.math.Vector3f
 import org.chorus.nbt.tag.CompoundTag
 
-
-@RequiredArgsConstructor
 enum class EntityDataFormat {
     BYTE,
     SHORT,
@@ -20,26 +18,19 @@ enum class EntityDataFormat {
 
     companion object {
         fun from(clazz: Class<*>): EntityDataFormat {
-            if (clazz == Byte::class.java) {
-                return BYTE
-            } else if (clazz == Short::class.java) {
-                return SHORT
-            } else if (clazz == Int::class.java) {
-                return INT
-            } else if (clazz == Float::class.java) {
-                return FLOAT
-            } else if (clazz == String::class.java) {
-                return STRING
-            } else if (clazz == CompoundTag::class.java) {
-                return NBT
-            } else if (clazz == BlockVector3::class.java) {
-                return VECTOR3I
-            } else if (clazz == Long::class.java) {
-                return LONG
-            } else if (clazz == Vector3::class.java || clazz == Vector3f::class.java) {
-                return VECTOR3F
+            when (clazz) {
+                Byte::class.java -> return BYTE
+                Short::class.java -> return SHORT
+                Int::class.java -> return INT
+                Float::class.java -> return FLOAT
+                String::class.java -> return STRING
+                CompoundTag::class.java -> return NBT
+                BlockVector3::class.java -> return VECTOR3I
+                Long::class.java -> return LONG
+                Vector3::class.java,
+                Vector3f::class.java -> return VECTOR3F
+                else -> throw IllegalArgumentException("Unknown EntityDataType: $clazz")
             }
-            throw IllegalArgumentException("Unknown EntityDataType: " + clazz)
         }
     }
 }

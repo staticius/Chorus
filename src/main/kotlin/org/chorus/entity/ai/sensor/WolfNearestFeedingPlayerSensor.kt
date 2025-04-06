@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.animal.EntityAnimal
-import org.chorus.item.*
+import org.chorus.item.ItemID
 
 //TODO: 需要进一步抽象
 /**
@@ -22,7 +22,7 @@ class WolfNearestFeedingPlayerSensor @JvmOverloads constructor(range: Double, mi
             val minRangeSquared = this.minRange * this.minRange
             //寻找范围内最近满足乞食要求的玩家
             for (p in entity.level!!.players.values) {
-                if (entity.position.distanceSquared(p.position) <= rangeSquared && entity.position.distanceSquared(p.position) >= minRangeSquared && (p.inventory.itemInHand.id === Item.BONE || entity.isBreedingItem(
+                if (entity.position.distanceSquared(p.position) <= rangeSquared && entity.position.distanceSquared(p.position) >= minRangeSquared && (p.inventory.itemInHand.id === ItemID.BONE || entity.isBreedingItem(
                         p.inventory.itemInHand
                     ))
                 ) {
@@ -35,9 +35,9 @@ class WolfNearestFeedingPlayerSensor @JvmOverloads constructor(range: Double, mi
                     }
                 }
             }
-            entity.getMemoryStorage()!!.set<Player>(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER, player)
+            entity.getMemoryStorage()[CoreMemoryTypes.NEAREST_FEEDING_PLAYER] = player
             return
         }
-        entity.memoryStorage!!.clear(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)
+        entity.memoryStorage.clear(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)
     }
 }

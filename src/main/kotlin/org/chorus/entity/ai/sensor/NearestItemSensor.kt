@@ -15,16 +15,14 @@ class NearestItemSensor @JvmOverloads constructor(
 ) :
     ISensor {
     override fun sense(entity: EntityMob) {
-        val itemClass =
-            entity.memoryStorage!!.get<Class<out Item>>(CoreMemoryTypes.Companion.LOOKING_ITEM)
-
+        val itemClass = entity.memoryStorage[CoreMemoryTypes.LOOKING_ITEM]!!
         var item: EntityItem? = null
         val rangeSquared = this.range * this.range
         val minRangeSquared = this.minRange * this.minRange
         //寻找范围内最近的玩家
-        for (e in entity.level!!.entities) {
+        for (e in entity.level!!.entities.values) {
             if (e is EntityItem) {
-                if (itemClass.isAssignableFrom(e.item!!.javaClass)) {
+                if (itemClass.isAssignableFrom(e.item.javaClass)) {
                     if (entity.position.distanceSquared(e.position) <= rangeSquared && entity.position.distanceSquared(e.position) >= minRangeSquared) {
                         if (item == null) {
                             item = e
@@ -37,6 +35,6 @@ class NearestItemSensor @JvmOverloads constructor(
                 }
             }
         }
-        entity.memoryStorage!!.set<EntityItem>(CoreMemoryTypes.Companion.NEAREST_ITEM, item)
+        entity.memoryStorage[CoreMemoryTypes.NEAREST_ITEM] = item
     }
 }

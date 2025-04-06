@@ -3,13 +3,13 @@ package org.chorus.entity.ai.sensor
 import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.EntityMob
 
-class RouteUnreachableTimeSensor(protected var type: MemoryType<Int?>) : ISensor {
+class RouteUnreachableTimeSensor(protected var type: MemoryType<Int>) : ISensor {
     override fun sense(entity: EntityMob) {
-        val old = entity.memoryStorage!!.get(type)
-        if (!entity.behaviorGroup!!.routeFinder.isReachable) {
-            entity.memoryStorage!!.set(type, old + 1)
+        val old = entity.memoryStorage[type]
+        if (!entity.behaviorGroup.getRouteFinder()!!.isReachable) {
+            entity.memoryStorage[type] = old + 1
         } else {
-            entity.memoryStorage!!.set(type, 0)
+            entity.memoryStorage[type] = 0
         }
     }
 }

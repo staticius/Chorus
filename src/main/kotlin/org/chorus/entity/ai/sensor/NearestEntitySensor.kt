@@ -1,7 +1,7 @@
 package org.chorus.entity.ai.sensor
 
 import org.chorus.entity.Entity
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 
 
@@ -9,7 +9,7 @@ import org.chorus.entity.mob.EntityMob
 
 class NearestEntitySensor @JvmOverloads constructor(
     protected var entityClass: Class<out Entity>,
-    protected var memoryType: MemoryType<Entity?>,
+    protected var memoryType: NullableMemoryType<Entity>,
     protected var range: Double,
     protected var minRange: Double,
     override var period: Int = 1
@@ -20,7 +20,7 @@ class NearestEntitySensor @JvmOverloads constructor(
         val rangeSquared = this.range * this.range
         val minRangeSquared = this.minRange * this.minRange
         //寻找范围内最近的玩家
-        for (e in entity.level!!.entities) {
+        for (e in entity.level!!.entities.values) {
             if (entityClass.isAssignableFrom(e.javaClass)) {
                 if (entity.position.distanceSquared(e.position) <= rangeSquared && entity.position.distanceSquared(e.position) >= minRangeSquared) {
                     if (ent == null) {
@@ -34,12 +34,12 @@ class NearestEntitySensor @JvmOverloads constructor(
             }
         }
         if (ent == null) {
-            if (entity.memoryStorage!!.notEmpty(memoryType) && entity.memoryStorage!!.get(memoryType).javaClass.isAssignableFrom(
+            if (entity.memoryStorage.notEmpty(memoryType) && entity.memoryStorage[memoryType]!!.javaClass.isAssignableFrom(
                     entityClass
                 )
             ) {
-                entity.memoryStorage!!.clear(memoryType)
+                entity.memoryStorage.clear(memoryType)
             } // We don't want to clear data from different sensors
-        } else entity.memoryStorage!!.set(memoryType, ent)
+        } else entity.memoryStorage[memoryType] = ent
     }
 }

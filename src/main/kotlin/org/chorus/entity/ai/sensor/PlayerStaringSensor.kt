@@ -1,9 +1,7 @@
 package org.chorus.entity.ai.sensor
 
-import org.chorus.Player
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
-
 import kotlin.math.abs
 
 
@@ -18,18 +16,17 @@ open class PlayerStaringSensor(
             if (player.position.distance(entity.position) <= range) {
                 if (ignoreRotation || abs(abs(player.headYaw - entity.headYaw) - 180) <= this.triggerDiff) {
                     if (player.isLookingAt(
-                            entity.position.add(0.0, entity.eyeHeight.toDouble(), 0.0),
+                            entity.position.add(0.0, entity.getEyeHeight().toDouble(), 0.0),
                             triggerDiff,
                             true
                         )
                     ) {
-                        entity.memoryStorage!!
-                            .set<Player>(CoreMemoryTypes.Companion.STARING_PLAYER, player)
+                        entity.memoryStorage[CoreMemoryTypes.STARING_PLAYER] = player
                         return
                     }
                 }
             }
         }
-        entity.memoryStorage!!.clear(CoreMemoryTypes.Companion.STARING_PLAYER)
+        entity.memoryStorage.clear(CoreMemoryTypes.STARING_PLAYER)
     }
 }
