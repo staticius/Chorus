@@ -25,7 +25,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState = Companion.
     override fun onUpdate(type: Int): Int {
         when (type) {
             Level.BLOCK_UPDATE_NORMAL -> {
-                val supportBlock = this.getSide(facing!!.getOpposite())
+                val supportBlock = this.getSide(facing.getOpposite())
                 if (!supportBlock.isNormalBlock && supportBlock !is BlockGlass) {
                     level.useBreakOn(this.position)
                 }
@@ -80,7 +80,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState = Companion.
 
         if (powered) {
             updateAroundRedstone()
-            updateAroundRedstone(getSide(facing!!.getOpposite()))
+            updateAroundRedstone(getSide(facing.getOpposite()))
         }
 
         return true
@@ -110,7 +110,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState = Companion.
             var b = level.getBlock(locator.getSide(facing, steps).position)
 
             if (b is BlockTripwireHook) {
-                if (b.facing == facing!!.getOpposite()) {
+                if (b.facing == facing.getOpposite()) {
                     pairedHookDistance = steps
                 }
                 break
@@ -147,7 +147,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState = Companion.
 
         if (foundPairedHook) {
             val pairedPos = locator.getSide(facing, pairedHookDistance)
-            val pairedFace = facing!!.getOpposite()
+            val pairedFace = facing.getOpposite()
             updatedHook.setFace(pairedFace)
             level.setBlock(pairedPos.position, updatedHook, true, true)
             updateAroundRedstone(pairedPos)
@@ -158,7 +158,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState = Companion.
         this.addSound(locator.position, isConnected, isPowered, wasConnected, wasPowered)
 
         if (!isHookBroken) {
-            updatedHook.setFace(facing!!)
+            updatedHook.setFace(facing)
             level.setBlock(locator.position, updatedHook, true, true)
 
             if (doUpdateAroundHook) {
@@ -172,7 +172,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState = Companion.
         }
         for (steps in 1..<pairedHookDistance) {
             val wire = line[steps] ?: continue
-            val vc = locator.position.getSide(facing!!, steps)
+            val vc = locator.position.getSide(facing, steps)
             wire.isAttached = isConnected
             level.setBlock(vc, wire, true, true)
         }

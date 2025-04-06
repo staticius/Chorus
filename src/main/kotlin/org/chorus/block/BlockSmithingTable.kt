@@ -30,7 +30,7 @@ class BlockSmithingTable @JvmOverloads constructor(blockState: BlockState = Comp
             return false
         }
 
-        player.addWindow(inventory!!)
+        player.addWindow(inventory)
         return true
     }
 

@@ -43,8 +43,8 @@ class BVector3 {
      */
     private constructor(yaw: Double, pitch: Double, length: Double) {
         this.unclonedDirectionVector = getDirectionVector(yaw, pitch)
-        this.yaw = getYawFromVector(unclonedDirectionVector!!)
-        this.pitch = getPitchFromVector(unclonedDirectionVector!!)
+        this.yaw = getYawFromVector(unclonedDirectionVector)
+        this.pitch = getPitchFromVector(unclonedDirectionVector)
         this.length = length
     }
 
@@ -85,7 +85,7 @@ class BVector3 {
     fun setPitch(pitch: Double): BVector3 {
         this.unclonedDirectionVector = getDirectionVector(this.yaw, pitch)
         //重新计算在范围内的等价pitch值
-        this.pitch = getPitchFromVector(unclonedDirectionVector!!)
+        this.pitch = getPitchFromVector(unclonedDirectionVector)
         return this
     }
 
@@ -102,7 +102,7 @@ class BVector3 {
         this.yaw += yaw
         this.unclonedDirectionVector = getDirectionVector(this.yaw, this.pitch)
         //重新计算在范围内的等价yaw值
-        this.yaw = getYawFromVector(unclonedDirectionVector!!)
+        this.yaw = getYawFromVector(unclonedDirectionVector)
         return this
     }
 
@@ -119,7 +119,7 @@ class BVector3 {
         this.pitch += pitch
         this.unclonedDirectionVector = getDirectionVector(this.yaw, this.pitch)
         //重新计算在范围内的等价pitch值
-        this.pitch = getPitchFromVector(unclonedDirectionVector!!)
+        this.pitch = getPitchFromVector(unclonedDirectionVector)
         return this
     }
 
@@ -138,8 +138,8 @@ class BVector3 {
         this.yaw += yaw
         this.unclonedDirectionVector = getDirectionVector(this.yaw, this.pitch)
         //重新计算在范围内的等价pitch值
-        this.pitch = getPitchFromVector(unclonedDirectionVector!!)
-        this.pitch = getYawFromVector(unclonedDirectionVector!!)
+        this.pitch = getPitchFromVector(unclonedDirectionVector)
+        this.pitch = getYawFromVector(unclonedDirectionVector)
         return this
     }
 
@@ -149,7 +149,7 @@ class BVector3 {
      * @return 结果向量
      */
     fun add(x: Double, y: Double, z: Double): BVector3 {
-        val pos = unclonedDirectionVector!!.multiply(this.length)
+        val pos = unclonedDirectionVector.multiply(this.length)
         pos.add(x, y, z)
         this.yaw = getYawFromVector(pos)
         this.pitch = getPitchFromVector(pos)
@@ -228,7 +228,7 @@ class BVector3 {
          *
          * @return the direction vector
          */
-        get() = unclonedDirectionVector!!.clone()
+        get() = unclonedDirectionVector.clone()
 
     companion object {
         /**

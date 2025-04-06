@@ -45,7 +45,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
                     v.setComponents(
                         position.x,
                         position.y + 1, position.z
-                    )!!
+                    )
                 ) is BlockCrops
             ) {
                 return 0
@@ -92,7 +92,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
                 v.setComponents(
                     position.x,
                     position.y - 1, position.z
-                )!!
+                )
             )
             if (found || block is BlockFlowingWater || block is BlockFrostedIce) {
                 if (moistureAmount < 7) {

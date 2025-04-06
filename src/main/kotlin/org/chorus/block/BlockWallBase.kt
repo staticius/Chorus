@@ -401,7 +401,7 @@ abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blocksta
                         return block.blockFace.axis != calculateAxis(this.position, block.position)
                     }
                     if (block is BlockStairs) {
-                        return block.blockFace!!.getOpposite() == calculateFace(this.position, block.position)
+                        return block.blockFace.getOpposite() == calculateFace(this.position, block.position)
                     }
                     if (block is BlockTrapdoor) {
                         return block.isOpen && block.blockFace == calculateFace(this.position, block.position)

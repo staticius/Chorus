@@ -47,7 +47,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
 
         for (i in 0..<size) {
-            inventory!!.setItem(i, this.getItem(i))
+            inventory.setItem(i, this.getItem(i))
         }
 
         if (!namedTag.contains("CookTime") || namedTag.getShort("CookTime") > MAX_BREW_TIME) {
@@ -85,17 +85,17 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     }
 
     override fun onBreak(isSilkTouch: Boolean) {
-        for (content in inventory!!.contents.values) {
+        for (content in inventory.contents.values) {
             level.dropItem(this.position, content)
         }
-        inventory!!.clearAll()
+        inventory.clearAll()
     }
 
     override fun saveNBT() {
         super.saveNBT()
         namedTag.putList("Items", ListTag<Tag<*>>())
         for (index in 0..<size) {
-            this.setItem(index, inventory!!.getItem(index))
+            this.setItem(index, inventory.getItem(index))
         }
 
         namedTag.putShort("CookTime", brewTime)
@@ -191,14 +191,14 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         for (i in 0..2) {
             val recipe = recipes[i] ?: continue
 
-            val previous = inventory!!.getItem(i + 1)
+            val previous = inventory.getItem(i + 1)
             if (!previous.isNothing) {
                 val result = recipe.result
                 result.setCount(previous.getCount())
                 if (recipe is ContainerRecipe) {
                     result.damage = previous.damage
                 }
-                inventory!!.setItem(i + 1, result)
+                inventory.setItem(i + 1, result)
                 mixed = true
             }
         }
@@ -206,7 +206,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         if (mixed) {
             val ingredient = inventory.ingredient
             ingredient.count--
-            inventory!!.ingredient = ingredient
+            inventory.ingredient = ingredient
 
             fuel--
             this.sendFuel()
@@ -307,7 +307,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         val block = this.levelBlock as? BlockBrewingStand ?: return
 
         for (i in 1..3) {
-            val potion = inventory!!.getItem(i)
+            val potion = inventory.getItem(i)
 
             val id = potion.id
             if ((id === ItemID.POTION || id === ItemID.SPLASH_POTION || id === ItemID.LINGERING_POTION) && potion.getCount() > 0) {

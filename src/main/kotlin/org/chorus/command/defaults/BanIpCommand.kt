@@ -46,7 +46,7 @@ class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.descript
         val list = result.value
         when (result.key) {
             "default" -> {
-                var value = list!!.getResult<String>(0)!!
+                var value = list.getResult<String>(0)!!
                 if (list.hasResult(1)) reason = list.getResult(1)!!
                 val player = Server.instance.getPlayer(value)
                 if (player != null) {
@@ -84,7 +84,7 @@ class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.descript
             }
 
             "byIp" -> {
-                val ip = list!!.getResult<String>(0)!!
+                val ip = list.getResult<String>(0)!!
                 if (list.hasResult(1)) reason = list.getResult(1)!!
                 this.processIPBan(ip, sender, reason)
                 log.addSuccess("commands.banip.success", ip).output(true)

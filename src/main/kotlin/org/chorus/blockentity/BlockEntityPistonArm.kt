@@ -46,8 +46,8 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             return
         }
 
-        val pushDirection = if (this.extending) facing!! else facing!!.getOpposite()
-        for (pos in attachedBlocks!!) {
+        val pushDirection = if (this.extending) facing else facing.getOpposite()
+        for (pos in attachedBlocks) {
             val blockEntity = level.getBlockEntity(pos.getSide(pushDirection))
             if (blockEntity is BlockEntityMovingBlock) blockEntity.moveCollidedEntities(
                 this,
@@ -137,9 +137,9 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             //结束推动
             this.newState = (if (extending) 2 else 0).toByte()
             this.state = this.newState
-            val pushDirection = if (this.extending) facing!! else facing!!.getOpposite()
+            val pushDirection = if (this.extending) facing else facing.getOpposite()
             val redstoneUpdateList = ArrayList<BlockVector3>()
-            for (pos in attachedBlocks!!) {
+            for (pos in attachedBlocks) {
                 redstoneUpdateList.add(pos)
                 redstoneUpdateList.add(pos.getSide(pushDirection))
                 val movingBlock = level.getBlockEntity(pos.getSide(pushDirection))
@@ -187,7 +187,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             level.updateAroundObserver(this.position)
             //下一计划刻再自检一遍，防止出错
             level.scheduleUpdate(this.levelBlock, 1)
-            attachedBlocks!!.clear()
+            attachedBlocks.clear()
             this.finished = true
             hasUpdate = false
             updateMovingData(false)
@@ -238,7 +238,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         namedTag.putFloat("LastProgress", this.lastProgress)
         namedTag.putBoolean("powered", this.powered)
         namedTag.putList("AttachedBlocks", getAttachedBlocks())
-        namedTag.putInt("facing", facing!!.index)
+        namedTag.putInt("facing", facing.index)
         namedTag.putBoolean("Sticky", this.sticky)
         namedTag.putBoolean("Extending", this.extending)
     }
@@ -262,7 +262,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
     protected fun getAttachedBlocks(): ListTag<IntTag> {
         val attachedBlocks = ListTag<IntTag>()
-        for (block in this.attachedBlocks!!) {
+        for (block in this.attachedBlocks) {
             attachedBlocks.add(IntTag(block.x))
             attachedBlocks.add(IntTag(block.y))
             attachedBlocks.add(IntTag(block.z))
@@ -284,8 +284,8 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         } else {
             Server.broadcastPacket(
                 level.getChunkPlayers(
-                    chunk!!.x,
-                    chunk!!.z
+                    chunk.x,
+                    chunk.z
                 ).values, packet
             )
         }

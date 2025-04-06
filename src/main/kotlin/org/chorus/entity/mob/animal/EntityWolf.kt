@@ -134,7 +134,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                 ),
                 Behavior(
                     EntityBreedingExecutor<EntityWolf>(EntityWolf::class.java, 16, 100, 0.35f),
-                    { entity: EntityMob -> entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
+                    { entity: EntityMob -> entity.memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
                     5,
                     1
                 ),
@@ -142,7 +142,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                     if (this.hasOwner()) {
                         val player = owner
                         if (!player!!.isOnGround) return@IBehaviorEvaluator false
-                        val distanceSquared = position.distanceSquared(player!!.position)
+                        val distanceSquared = position.distanceSquared(player.position)
                         return@IBehaviorEvaluator distanceSquared >= 100
                     } else return@IBehaviorEvaluator false
                 }, 4, 1),

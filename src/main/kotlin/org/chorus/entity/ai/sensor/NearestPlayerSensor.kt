@@ -29,6 +29,6 @@ open class NearestPlayerSensor @JvmOverloads constructor(
                 }
             }
         }
-        entity.memoryStorage!![CoreMemoryTypes.NEAREST_PLAYER] = player
+        entity.memoryStorage[CoreMemoryTypes.NEAREST_PLAYER] = player
     }
 }

@@ -41,7 +41,7 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
         log: CommandLogger
     ): Int {
         val list = result.value
-        val players = list!!.getResult<List<Player>>(1)!!
+        val players = list.getResult<List<Player>>(1)!!
         if (players.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0
@@ -51,8 +51,7 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
                 val players_str = players.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(" "))
                 val intensity = list.getResult<Float>(2)!!
                 val second = list.getResult<Float>(3)!!
-                val type = list.getResult<String>(4)
-                val shakeType = when (type) {
+                val shakeType = when (val type = list.getResult<String>(4)) {
                     "positional" -> CameraShakePacket.CameraShakeType.POSITIONAL
                     "rotational" -> CameraShakePacket.CameraShakeType.ROTATIONAL
                     else -> throw RuntimeException("Unknown CameraShakeType: $type")

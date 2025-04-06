@@ -57,7 +57,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                 Behavior(
                     EntityBreedingExecutor<EntityHoglin>(EntityHoglin::class.java, 16, 100, 0.5f),
                     IBehaviorEvaluator { entity: EntityMob ->
-                        entity.getMemoryStorage()!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE)
+                        entity.getMemoryStorage().get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE)
                     }, 9, 1
                 ),
                 Behavior(
@@ -80,7 +80,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                     HoglinMeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.5f, 40, true, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
                         not(IBehaviorEvaluator { entity: EntityMob? ->
-                            getMemoryStorage()!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is Player && isBreedingItem(
+                            getMemoryStorage().get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is Player && isBreedingItem(
                                 player.getInventory().getItemInHand()
                             )
                         })
@@ -90,7 +90,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                     HoglinMeleeAttackExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.5f, 40, false, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
                         not(IBehaviorEvaluator { entity: EntityMob? ->
-                            getMemoryStorage()!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && isBreedingItem(
+                            getMemoryStorage().get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && isBreedingItem(
                                 player.getInventory().getItemInHand()
                             )
                         })
@@ -170,8 +170,8 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         val superResult: Boolean = super.onInteract(player, item, clickedPos)
         if (isBreedingItem(item)) {
-            getMemoryStorage()!!.set<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
-            getMemoryStorage()!!.set<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.getTick())
+            getMemoryStorage().set<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
+            getMemoryStorage().set<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.getTick())
             sendBreedingAnimation(item)
             item.count--
             return player.getInventory().setItemInHand(item) && superResult
@@ -195,7 +195,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
         FleeFromTargetExecutor(memory, 0.5f, true, 8f) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            if (entity.position.distance(entity.getMemoryStorage()!!.get(getMemory()).getVector3()) < 8) {
+            if (entity.position.distance(entity.getMemoryStorage().get(getMemory()).getVector3()) < 8) {
                 entity.level!!.addSound(entity.position, Sound.MOB_HOGLIN_RETREAT)
             }
         }
@@ -213,7 +213,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
             super.onStart(entity)
             entity.setDataProperty(
                 EntityDataTypes.Companion.TARGET_EID,
-                entity.getMemoryStorage()!!.get(memory).getRuntimeID()
+                entity.getMemoryStorage().get(memory).getRuntimeID()
             )
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(

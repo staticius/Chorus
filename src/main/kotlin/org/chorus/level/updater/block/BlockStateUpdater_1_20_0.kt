@@ -94,7 +94,7 @@ class BlockStateUpdater_1_20_0 : Updater {
             .popVisit()
             .tryEdit("states") { helper: CompoundTagEditHelper ->
                 val states = helper.compoundTag
-                states!!["cauldron_liquid"] = type
+                states["cauldron_liquid"] = type
                 helper.rootTag["name"] = "minecraft:cauldron"
             }
     }

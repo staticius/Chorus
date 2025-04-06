@@ -32,7 +32,7 @@ open class BlockFlowingWater @JvmOverloads constructor(blockstate: BlockState = 
             return
         }
 
-        val newId = newBlock!!.id
+        val newId = newBlock.id
         if (newId == BlockID.FLOWING_WATER || newId == BlockID.WATER) {
             return
         }

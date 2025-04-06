@@ -106,7 +106,7 @@ class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockStat
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 

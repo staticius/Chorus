@@ -185,7 +185,7 @@ abstract class BlockVinesNether
                 break
             }
 
-            if (!level.setBlock(pos.position, ev.newState!!)) {
+            if (!level.setBlock(pos.position, ev.newState)) {
                 break
             }
 

@@ -71,7 +71,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState = Companion.proper
             super.maxZ = maxZ
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return SimpleAxisAlignedBB(
             position.x,
             position.y,
@@ -122,7 +122,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState = Companion.proper
                 val event = BlockGrowEvent(b, get(BlockID.CACTUS))
                 instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
-                    level.setBlock(b.position, event.newState!!, true)
+                    level.setBlock(b.position, event.newState, true)
                 }
                 break
             }

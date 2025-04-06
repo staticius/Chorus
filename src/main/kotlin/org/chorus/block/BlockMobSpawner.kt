@@ -52,7 +52,7 @@ class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState = Compani
     }
 
     fun setType(networkId: Int): Boolean {
-        val identifier = Registries.ENTITY.getEntityIdentifier(networkId)!!
+        val identifier = Registries.ENTITY.getEntityIdentifier(networkId)
 
         val blockEntity = level.getBlockEntity(this.position)
         if (blockEntity is BlockEntityMobSpawner) {

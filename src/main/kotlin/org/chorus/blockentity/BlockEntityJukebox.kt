@@ -33,7 +33,7 @@ class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
         this.recordItem = recordItem
     }
 
-    fun getRecordItem(): Item? {
+    fun getRecordItem(): Item {
         return recordItem
     }
 
@@ -70,7 +70,7 @@ class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
     }
 
     fun dropItem() {
-        if (!recordItem!!.isNothing) {
+        if (!recordItem.isNothing) {
             stop()
             level.dropItem(position.up(), this.recordItem)
             this.recordItem = Item.AIR

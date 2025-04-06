@@ -14,7 +14,7 @@ class InLoveExecutor(protected var duration: Int) : IBehaviorExecutor {
             entity.memoryStorage.set(CoreMemoryTypes.IS_IN_LOVE, true)
         }
         currentTick++
-        if (currentTick > duration || !entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE]!! /*interrupt by other*/) {
+        if (currentTick > duration || !entity.memoryStorage[CoreMemoryTypes.IS_IN_LOVE] /*interrupt by other*/) {
             currentTick = 0
             entity.memoryStorage.set(CoreMemoryTypes.IS_IN_LOVE, false)
             return false

@@ -68,7 +68,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                             all(
                                 MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME),
                                 IBehaviorEvaluator { entity: EntityMob ->
-                                    entity.level!!.tick - memoryStorage!!.get<Int>(
+                                    entity.level!!.tick - memoryStorage.get<Int>(
                                         CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME
                                     ) <= 1
                                 }
@@ -122,7 +122,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                     ), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
                         IBehaviorEvaluator { entity: EntityMob? ->
-                            memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && player.getInventory() != null && !Arrays.stream<Item>(
+                            memoryStorage.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && player.getInventory() != null && !Arrays.stream<Item>(
                                 player.getInventory().getArmorContents()
                             )
                                 .anyMatch { item: Item -> !item.isNothing && item is ItemArmor && item.getTier() == ItemArmor.TIER_GOLD }
@@ -143,7 +143,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         IBehaviorEvaluator { entity: EntityMob -> !entity.namedTag!!.getBoolean("CannotHunt") },
                         IBehaviorEvaluator { entity: EntityMob? -> getItemInHand() is ItemCrossbow },
                         any(
-                            IBehaviorEvaluator { entity: EntityMob? -> memoryStorage!!.get<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME) == 0 },
+                            IBehaviorEvaluator { entity: EntityMob? -> memoryStorage.get<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME) == 0 },
                             PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, 6000)
                         )
                     ), 7, 1
@@ -157,7 +157,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                     PiglinMeleeAttackExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.5f, 40, false, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
                         IBehaviorEvaluator { entity: EntityMob? ->
-                            memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && player.getInventory() != null && !Arrays.stream<Item>(
+                            memoryStorage.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && player.getInventory() != null && !Arrays.stream<Item>(
                                 player.getInventory().getArmorContents()
                             )
                                 .anyMatch { item: Item -> !item.isNothing && item is ItemArmor && item.getTier() == ItemArmor.TIER_GOLD }
@@ -174,7 +174,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                         IBehaviorEvaluator { entity: EntityMob -> !entity.namedTag!!.getBoolean("CannotHunt") },
                         any(
-                            IBehaviorEvaluator { entity: EntityMob? -> memoryStorage!!.get<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME) == 0 },
+                            IBehaviorEvaluator { entity: EntityMob? -> memoryStorage.get<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME) == 0 },
                             PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, 6000)
                         )
                     ), 5, 1
@@ -182,7 +182,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 Behavior(
                     PiglinFleeFromTargetExecutor(CoreMemoryTypes.Companion.NEAREST_BLOCK), all(
                         MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.NEAREST_BLOCK),
-                        IBehaviorEvaluator { entity: EntityMob? -> memoryStorage!!.get<Block>(CoreMemoryTypes.Companion.NEAREST_BLOCK) is BlockSoulFire }
+                        IBehaviorEvaluator { entity: EntityMob? -> memoryStorage.get<Block>(CoreMemoryTypes.Companion.NEAREST_BLOCK) is BlockSoulFire }
                     ), 2, 1),
                 Behavior(
                     PiglinFleeFromTargetExecutor(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY), all(
@@ -192,7 +192,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                                 return@all true
                             } else {
                                 val entity1 =
-                                    memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY)
+                                    memoryStorage.get<Entity>(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY)
                                 return@all !(entity1 is EntityWither || entity1 is EntityWitherSkeleton)
                             }
                         }
@@ -355,7 +355,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                     var pickup = false
                     if (i is EntityItem) {
                         val item = i.item
-                        if ((item!!.isArmor || item.isTool) && item.tier == ItemTool.TIER_GOLD) {
+                        if ((item.isArmor || item.isTool) && item.tier == ItemTool.TIER_GOLD) {
                             if (entity.equip(item)) {
                                 pickup = true
                             }
@@ -398,7 +398,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         FleeFromTargetExecutor(memory, 0.5f, true, 8f) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            if (entity.position.distance(entity.memoryStorage!!.get(getMemory()).vector3) < 8) {
+            if (entity.position.distance(entity.memoryStorage.get(getMemory()).vector3) < 8) {
                 entity.level!!.addSound(entity.position, Sound.MOB_PIGLIN_RETREAT)
             }
         }
@@ -414,7 +414,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage!!.get(memory).runtimeId)
+            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage.get(memory).runtimeId)
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(
                 entity.position,
@@ -425,14 +425,14 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 false
             )
             Arrays.stream<Entity>(entity.level!!.entities).filter { entity1: Entity ->
-                entity1 is EntityPiglin && entity1.position.distance(entity.position) < 16 && entity1.memoryStorage!!
+                entity1 is EntityPiglin && entity1.position.distance(entity.position) < 16 && entity1.memoryStorage
                     .isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
             }.forEach { entity1: Entity ->
-                (entity1 as EntityPiglin).memoryStorage!!
-                    .set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage!!.get(memory))
+                (entity1 as EntityPiglin).memoryStorage
+                    .set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage.get(memory))
             }
-            if (entity.memoryStorage!!.get(memory) is EntityHoglin) {
-                entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)
+            if (entity.memoryStorage.get(memory) is EntityHoglin) {
+                entity.memoryStorage.set<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)
             }
         }
 

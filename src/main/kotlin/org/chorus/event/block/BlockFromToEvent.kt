@@ -5,7 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
 class BlockFromToEvent(block: Block, @JvmField var to: Block) : BlockEvent(block), Cancellable {
-    val from: Block?
+    val from: Block
         get() = getBlock()
 
     companion object {

@@ -17,7 +17,7 @@ class BlockResinClump @JvmOverloads constructor(blockstate: BlockState = Compani
 
     override fun getDrops(item: Item): Array<Item> {
         val drop = toItem()
-        drop!!.setCount(growthSides.size)
+        drop.setCount(growthSides.size)
         return arrayOf(drop)
     }
 
@@ -28,7 +28,7 @@ class BlockResinClump @JvmOverloads constructor(blockstate: BlockState = Compani
                 getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.MULTI_FACE_DIRECTION_BITS) xor (1 shl side.indexDUSWNE)
             )
             level.setBlock(this.position, this, true, true)
-            level.dropItem(this.position, toItem()!!)
+            level.dropItem(this.position, toItem())
         }
     }
 

@@ -210,7 +210,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     } else {
                         val current = cauldron.customColor
                         val mixed = BlockColor(
-                            Math.round(sqrt((color!!.red * current!!.red).toDouble()) * 0.965).toInt(),
+                            Math.round(sqrt((color.red * current!!.red).toDouble()) * 0.965).toInt(),
                             Math.round(sqrt((color.green * current.green).toDouble()) * 0.965).toInt(),
                             Math.round(sqrt((color.blue * current.blue).toDouble()) * 0.965).toInt()
                         )
@@ -623,7 +623,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
         return true
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return shrink(0.3, 0.3, 0.3)
     }
 

@@ -113,7 +113,7 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
     override fun initEntity() {
         this.maxHealth = 14
         super.initEntity()
-        memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, level!!.tick)
+        memoryStorage.set<Int>(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, level!!.tick)
         this.setItemInHand(Item.get(ItemID.IRON_SWORD))
         this.diffHandDamage = floatArrayOf(5.5f, 9f, 13.5f)
     }

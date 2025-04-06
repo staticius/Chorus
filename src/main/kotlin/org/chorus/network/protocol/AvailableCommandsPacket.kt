@@ -55,7 +55,7 @@ class AvailableCommandsPacket : DataPacket() {
                         if (commandEnumData.isSoft) {
                             softEnumsSet.add(commandEnumData)
                         } else {
-                            enumValuesSet.addAll(commandEnumData.getValues()!!)
+                            enumValuesSet.addAll(commandEnumData.getValues())
                             enumsSet.add(commandEnumData)
                         }
                     }

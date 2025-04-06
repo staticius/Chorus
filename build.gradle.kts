@@ -150,7 +150,7 @@ tasks.jacocoTestReport {
     dependsOn(tasks.test) // tests are required to run before generating the report
 }
 
-tasks.withType<AbstractCopyTask>() {
+tasks.withType<AbstractCopyTask> {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 

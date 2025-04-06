@@ -75,7 +75,7 @@ class CommandEnum {
         if (!this.isSoft && this.supplier == null) return
         val packet = UpdateSoftEnumPacket()
         packet.name = this.name
-        packet.values = this.getValues()!!
+        packet.values = this.getValues()
         packet.type = UpdateSoftEnumPacket.Type.SET
         Server.broadcastPacket(Server.instance.onlinePlayers.values, packet)
     }

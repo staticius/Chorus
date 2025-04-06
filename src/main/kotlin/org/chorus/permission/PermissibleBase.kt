@@ -70,7 +70,7 @@ class PermissibleBase(opable: ServerOperator?) : Permissible {
 
     override fun addAttachment(plugin: Plugin, name: String?, value: Boolean?): PermissionAttachment {
         if (!plugin.isEnabled) {
-            throw PluginException("Plugin " + plugin.description!!.name + " is disabled")
+            throw PluginException("Plugin " + plugin.description.name + " is disabled")
         }
 
         val result = PermissionAttachment(plugin, if (this.parent != null) this.parent else this)

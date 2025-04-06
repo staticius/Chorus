@@ -212,7 +212,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState = Companion.prop
             super.maxY = maxY
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 

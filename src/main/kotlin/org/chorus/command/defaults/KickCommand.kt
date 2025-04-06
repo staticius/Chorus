@@ -28,7 +28,7 @@ class KickCommand(name: String) : VanillaCommand(name, "commands.kick.descriptio
         log: CommandLogger
     ): Int {
         val list = result.value
-        val players = list!!.getResult<List<Player>>(0)!!
+        val players = list.getResult<List<Player>>(0)!!
         if (players.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0

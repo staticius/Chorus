@@ -1408,7 +1408,7 @@ class Player(
         val level: Level?
         if (Server.instance.getLevelByName(nbt.getString("Level")).also { level = it } == null) {
             this.level = Server.instance.defaultLevel
-            nbt.putString("Level", this.level!!.getName()!!)
+            nbt.putString("Level", this.level!!.getName())
             val spawnLocation = this.level!!.safeSpawn
             nbt.getList("Pos", FloatTag::class.java)
                 .add(FloatTag(spawnLocation.position.x))
@@ -3737,7 +3737,7 @@ class Player(
             namedTag!!.putInt("SpawnX", spawnPoint!!.position.floorX)
                 .putInt("SpawnY", spawnPoint!!.position.floorY)
                 .putInt("SpawnZ", spawnPoint!!.position.floorZ)
-            namedTag!!.putString("SpawnLevel", spawnPoint!!.level.getName()!!)
+            namedTag!!.putString("SpawnLevel", spawnPoint!!.level.getName())
             namedTag!!.putInt("SpawnDimension", spawnPoint!!.level.dimension)
         }
 
@@ -3751,7 +3751,7 @@ class Player(
         saveNBT()
 
         if (this.level != null) {
-            namedTag!!.putString("Level", level!!.getName()!!)
+            namedTag!!.putString("Level", level!!.getName())
 
             val achievements = CompoundTag()
             for (achievement in this.achievements) {

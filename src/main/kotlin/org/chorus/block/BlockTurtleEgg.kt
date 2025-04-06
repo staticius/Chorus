@@ -75,7 +75,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
         fz: Float
     ): Boolean {
         if (item.getBlock() != null && item.blockId == BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
-            val eggCount = eggCount!!
+            val eggCount = eggCount
             if (eggCount == TurtleEggCount.FOUR_EGG) {
                 return false
             }
@@ -91,14 +91,14 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
             if (placeEvent.isCancelled) {
                 return false
             }
-            if (!level.setBlock(this.position, placeEvent.getBlock()!!, true, true)) {
+            if (!level.setBlock(this.position, placeEvent.getBlock(), true, true)) {
                 return false
             }
             val placeBlock = placeEvent.getBlock()
             level.addLevelSoundEvent(
                 this.position,
                 LevelSoundEventPacket.SOUND_PLACE,
-                placeBlock!!.runtimeId
+                placeBlock.runtimeId
             )
             item.setCount(item.getCount() - 1)
 
@@ -146,7 +146,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
             super.maxY = maxY
         }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 
@@ -156,7 +156,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
                 val celestialAngle = level.calculateCelestialAngle(level.getTime(), 1f)
                 val random = ThreadLocalRandom.current()
                 if (0.70 > celestialAngle && celestialAngle > 0.65 || random.nextInt(500) == 0) {
-                    val crackState = cracks!!
+                    val crackState = cracks
                     if (crackState != CrackedState.MAX_CRACKED) {
                         val newState = clone()
                         newState.cracks = crackState.next()
@@ -169,7 +169,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
                                 0.7f,
                                 0.9f + random.nextFloat() * 0.2f
                             )
-                            level.setBlock(this.position, event.newState!!, true, true)
+                            level.setBlock(this.position, event.newState, true, true)
                         }
                     } else {
                         hatch()
@@ -182,7 +182,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
     }
 
     @JvmOverloads
-    fun hatch(eggs: TurtleEggCount = eggCount!!, newState: Block = BlockAir()) {
+    fun hatch(eggs: TurtleEggCount = eggCount, newState: Block = BlockAir()) {
         val turtleEggHatchEvent = TurtleEggHatchEvent(this, eggs.ordinal + 1, newState)
         //TODO Cancelled by default because EntityTurtle doesn't have AI yet, remove it when AI is added
         turtleEggHatchEvent.isCancelled = true
@@ -196,7 +196,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
                 level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK)
 
                 val creatureSpawnEvent = CreatureSpawnEvent(
-                    Registries.ENTITY.getEntityNetworkId(EntityID.TURTLE)!!,
+                    Registries.ENTITY.getEntityNetworkId(EntityID.TURTLE),
                     add(
                         0.3 + i * 0.2,
                         0.0,
@@ -264,7 +264,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
     }
 
     override fun onBreak(item: Item?): Boolean {
-        val eggCount = eggCount!!
+        val eggCount = eggCount
         if (item!!.getEnchantment(Enchantment.ID_SILK_TOUCH) == null) {
             level.addSound(this.position, Sound.BLOCK_TURTLE_EGG_CRACK)
         }

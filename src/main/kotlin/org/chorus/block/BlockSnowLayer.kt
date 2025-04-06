@@ -64,7 +64,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
         )
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 

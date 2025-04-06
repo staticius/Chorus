@@ -38,7 +38,7 @@ class BlockStateUpdater_1_21_30 : Updater {
             .match("name", "minecraft:colored_torch_bp")
             .edit("states") { helper: CompoundTagEditHelper ->
                 val states = helper.compoundTag
-                val bit = states!!.remove("color_bit")
+                val bit = states.remove("color_bit")
                 val toggled =
                     bit is Byte && bit.toInt() == 1 || bit is Boolean && bit
                 helper.rootTag["name"] =
@@ -49,7 +49,7 @@ class BlockStateUpdater_1_21_30 : Updater {
             .match("name", "minecraft:colored_torch_rg")
             .edit("states") { helper: CompoundTagEditHelper ->
                 val states = helper.compoundTag
-                val bit = states!!.remove("color_bit")
+                val bit = states.remove("color_bit")
                 val toggled =
                     bit is Byte && bit.toInt() == 1 || bit is Boolean && bit
                 helper.rootTag["name"] = if (toggled) "minecraft:colored_torch_red" else "minecraft:colored_torch_green"
@@ -83,7 +83,7 @@ class BlockStateUpdater_1_21_30 : Updater {
             .match("name", "minecraft:tnt")
             .edit("states") { helper: CompoundTagEditHelper ->
                 val states = helper.compoundTag
-                val allowUnderwater = states!!.remove("allow_underwater_bit")
+                val allowUnderwater = states.remove("allow_underwater_bit")
                 val toggled =
                     allowUnderwater is Byte && allowUnderwater.toInt() == 1 || allowUnderwater is Boolean && allowUnderwater
                 helper.rootTag["name"] = if (toggled) "minecraft:tnt" else "minecraft:underwater_tnt"

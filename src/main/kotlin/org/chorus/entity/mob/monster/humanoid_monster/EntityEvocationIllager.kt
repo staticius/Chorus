@@ -52,7 +52,7 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY, 8.0),
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE }
                         )
                     ), 9, 1),
                 Behavior(
@@ -67,7 +67,7 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET, 10.0),
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE }
                         )
                     ),
                     8,
@@ -91,8 +91,8 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         },
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.COLOR_CONVERSION }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.COLOR_CONVERSION }
                         ),
                         IBehaviorEvaluator { entity: EntityMob ->
                             entity.level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)
@@ -114,8 +114,8 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         },
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.SUMMON }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.SUMMON }
                         )
                     ), 6, 1),
                 Behavior(
@@ -126,8 +126,8 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET, 3.0),
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.CAST_CIRLCE }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.CAST_CIRLCE }
                         )
                     ), 5, 1),
                 Behavior(
@@ -137,8 +137,8 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                         PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_ATTACK_TIME, 40),
                         any(
                             MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.LAST_MAGIC),
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
-                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage!!.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.CAST_LINE }
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.NONE },
+                            IBehaviorEvaluator { entity: EntityMob -> entity.memoryStorage.get<Spell>(CoreMemoryTypes.Companion.LAST_MAGIC) == Spell.CAST_LINE }
                         )
                     ), 4, 1),
                 Behavior(
@@ -158,7 +158,7 @@ class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(
                     listOf(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function { entity ->
                         this.attackTarget(
-                            entity!!
+                            entity
                         )
                     }),
                 NearestTargetEntitySensor<Entity>(

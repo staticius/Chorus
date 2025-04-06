@@ -60,7 +60,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
         Server.instance.pluginManager.callEvent(blockGrowEvent)
         if (!blockGrowEvent.isCancelled) {
             val newState1 = blockGrowEvent.newState
-            newState1!!.position.x = position.x
+            newState1.position.x = position.x
             newState1.position.y = up.position.y
             newState1.position.z = position.z
             newState1.level = level

@@ -19,7 +19,7 @@ open class EntityBreedingExecutor<T : EntityMob>(
         if (entityClass.isInstance(uncasted)) {
             val entity = entityClass.cast(uncasted)
             if (shouldFindingSpouse(entity)) {
-                if (!entity!!.memoryStorage[CoreMemoryTypes.IS_IN_LOVE]!!) return false
+                if (!entity!!.memoryStorage[CoreMemoryTypes.IS_IN_LOVE]) return false
                 another = getNearestInLove(entity)
                 if (another == null) return true
                 setSpouse(entity, another!!)
@@ -118,7 +118,7 @@ open class EntityBreedingExecutor<T : EntityMob>(
             val newDistance = e.position.distanceSquared(entity.position)
             if (e != entity && entityClass.isInstance(e)) {
                 val another = e as T
-                if (!another.isBaby() && another.memoryStorage[CoreMemoryTypes.IS_IN_LOVE]!! && another.memoryStorage
+                if (!another.isBaby() && another.memoryStorage[CoreMemoryTypes.IS_IN_LOVE] && another.memoryStorage
                         .isEmpty(CoreMemoryTypes.ENTITY_SPOUSE) && (maxDistanceSquared == -1.0 || newDistance < maxDistanceSquared)
                 ) {
                     maxDistanceSquared = newDistance

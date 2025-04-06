@@ -40,17 +40,17 @@ abstract class BlockEntitySpawnableContainer(chunk: IChunk, nbt: CompoundTag) : 
     }
 
     override fun onBreak(isSilkTouch: Boolean) {
-        for (content in inventory!!.contents.values) {
+        for (content in inventory.contents.values) {
             level.dropItem(this.position, content)
         }
-        inventory!!.clearAll() // Stop items from being moved around by another player in the inventory
+        inventory.clearAll() // Stop items from being moved around by another player in the inventory
     }
 
     override fun saveNBT() {
         super.saveNBT()
         namedTag.putList("Items", ListTag<CompoundTag>())
         for (index in 0..<inventory.size) {
-            this.setItem(index, inventory!!.getItem(index))
+            this.setItem(index, inventory.getItem(index))
         }
     }
 

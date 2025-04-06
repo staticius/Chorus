@@ -768,7 +768,7 @@ class Level(
 
             while (!normalUpdateQueue.isEmpty()) {
                 val queuedUpdate = normalUpdateQueue.poll()
-                val block = getBlock(queuedUpdate.block!!.position, queuedUpdate.block.layer)
+                val block = getBlock(queuedUpdate.block.position, queuedUpdate.block.layer)
                 val event: BlockUpdateEvent = BlockUpdateEvent(block)
                 Server.instance.pluginManager.callEvent(event)
 
@@ -998,13 +998,13 @@ class Level(
                 vector,
                 LevelSoundEventPacket.SOUND_THUNDER,
                 -1,
-                Registries.ENTITY.getEntityNetworkId(EntityID.LIGHTNING_BOLT)!!
+                Registries.ENTITY.getEntityNetworkId(EntityID.LIGHTNING_BOLT)
             )
             this.addLevelSoundEvent(
                 vector,
                 LevelSoundEventPacket.SOUND_EXPLODE,
                 -1,
-                Registries.ENTITY.getEntityNetworkId(EntityID.LIGHTNING_BOLT)!!
+                Registries.ENTITY.getEntityNetworkId(EntityID.LIGHTNING_BOLT)
             )
         }
     }
@@ -3048,7 +3048,7 @@ class Level(
             .getBlockState(x and 0x0f, ensureY(y), z and 0x0f, layer)
     }
 
-    fun getBlockStateAt(x: Int, y: Int, z: Int): BlockState? {
+    fun getBlockStateAt(x: Int, y: Int, z: Int): BlockState {
         return getBlockStateAt(x, y, z, 0)
     }
 
@@ -3185,7 +3185,7 @@ class Level(
                     generatorConfig.dimensionData,
                     generatorConfig.preset
                 )
-            generator!!.setLevel(this@Level)
+            generator.setLevel(this@Level)
         } catch (e: Throwable) {
             throw RuntimeException(e)
         }
@@ -3777,7 +3777,7 @@ class Level(
 
     fun isSpawnChunk(x: Int, z: Int): Boolean {
         val spawn = requireProvider().spawn
-        val spawnCX = spawn!!.floorX shr 4
+        val spawnCX = spawn.floorX shr 4
         val spawnCZ = spawn.floorZ shr 4
         return x == spawnCX && z == spawnCZ
     }
@@ -3972,7 +3972,7 @@ class Level(
         val index = chunkHash(x, z)
         if (chunkGenerationQueue.putIfAbsent(index, java.lang.Boolean.TRUE) == null) {
             val chunk = this.getChunk(x, z, true)
-            generator!!.asyncGenerate(
+            generator.asyncGenerate(
                 chunk
             ) { c: ChunkGenerateContext -> chunkGenerationQueue.remove(c.chunk.index) } //async
         }
@@ -3982,7 +3982,7 @@ class Level(
         val index = chunkHash(x, z)
         if (chunkGenerationQueue.putIfAbsent(index, java.lang.Boolean.TRUE) == null) {
             val chunk = this.getChunk(x, z, true)
-            generator!!.syncGenerate(chunk)
+            generator.syncGenerate(chunk)
             chunkGenerationQueue.remove(index)
         }
     }
@@ -4574,7 +4574,7 @@ class Level(
             val z = Math.round(srcZ + normalizedDirection.z * t).toInt()
 
             val block = getBlock(x, y, z)
-            if (block?.collisionBoundingBox != null) {
+            if (block.collisionBoundingBox != null) {
                 val bb: AxisAlignedBB = block.collisionBoundingBox!!
                 if (bb.isVectorInside(x.toDouble(), y.toDouble(), z.toDouble())) {
                     return true

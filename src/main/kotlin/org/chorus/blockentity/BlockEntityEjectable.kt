@@ -28,7 +28,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
         }
 
         for (i in 0..<this.size) {
-            inventory!!.setItem(i, this.getItem(i))
+            inventory.setItem(i, this.getItem(i))
         }
     }
 
@@ -91,7 +91,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
         super.saveNBT()
         namedTag.putList("Items", ListTag<CompoundTag>())
         for (index in 0..<this.size) {
-            this.setItem(index, inventory!!.getItem(index))
+            this.setItem(index, inventory.getItem(index))
         }
     }
 
@@ -111,7 +111,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
     }
 
     override fun onBreak(isSilkTouch: Boolean) {
-        for (content in inventory!!.contents.values) {
+        for (content in inventory.contents.values) {
             level.dropItem(this.position, content)
         }
     }

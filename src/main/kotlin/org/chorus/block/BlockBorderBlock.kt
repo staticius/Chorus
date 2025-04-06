@@ -57,7 +57,7 @@ class BlockBorderBlock @JvmOverloads constructor(blockstate: BlockState = Compan
         return Item.EMPTY_ARRAY
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         val aabb = super.recalculateBoundingBox()
         aabb!!.minY = Double.MIN_VALUE
         aabb.maxY = Double.MAX_VALUE

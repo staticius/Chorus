@@ -108,7 +108,7 @@ abstract class BlockCoralFan(blockstate: BlockState) : BlockFlowable(blockstate)
             setPropertyValue(CommonBlockProperties.CORAL_FAN_DIRECTION, axisBit)
             level.setBlock(
                 this.position, 0, if (hasWater) this.clone() else getDeadCoralFan().setPropertyValues(
-                    blockState.blockPropertyValues!!
+                    blockState.blockPropertyValues
                 ), direct = true, update = true
             )
         } else {

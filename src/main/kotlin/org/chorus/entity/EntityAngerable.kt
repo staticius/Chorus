@@ -5,7 +5,7 @@ import org.chorus.entity.data.EntityFlag
 
 interface EntityAngerable : EntityComponent {
     fun isAngry(): Boolean {
-        return getMemoryStorage()[CoreMemoryTypes.IS_ANGRY]!!
+        return getMemoryStorage()[CoreMemoryTypes.IS_ANGRY]
     }
 
     fun setAngry(angry: Boolean) {

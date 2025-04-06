@@ -44,10 +44,10 @@ abstract class BlockRedstoneComparator(blockstate: BlockState) : BlockRedstoneDi
 
     override val unpowered: Block
         get() = get(BlockID.UNPOWERED_COMPARATOR)
-            .setPropertyValues(blockState.blockPropertyValues!!) as BlockRedstoneComparator
+            .setPropertyValues(blockState.blockPropertyValues) as BlockRedstoneComparator
 
     public override fun getPowered(): BlockRedstoneComparator {
-        return get(BlockID.POWERED_COMPARATOR).setPropertyValues(blockState.blockPropertyValues!!) as BlockRedstoneComparator
+        return get(BlockID.POWERED_COMPARATOR).setPropertyValues(blockState.blockPropertyValues) as BlockRedstoneComparator
     }
 
     override val redstoneSignal: Int

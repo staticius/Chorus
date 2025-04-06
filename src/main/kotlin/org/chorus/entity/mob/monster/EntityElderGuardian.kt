@@ -79,12 +79,12 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                     GuardianAttackExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.3f, 15, true, 60, 40), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
                         IBehaviorEvaluator { entity: EntityMob ->
-                            entity.memoryStorage!!.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && !entity.memoryStorage!!
+                            entity.memoryStorage.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && !entity.memoryStorage
                                 .get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER).isBlocking
                         },
                         IBehaviorEvaluator { entity: EntityMob ->
-                            entity.memoryStorage!!.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && level!!.raycastBlocks(
-                                entity.position, entity.memoryStorage!!
+                            entity.memoryStorage.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && level!!.raycastBlocks(
+                                entity.position, entity.memoryStorage
                                     .get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER).position
                             ).stream().allMatch { obj: Block -> obj.isTransparent }
                         }

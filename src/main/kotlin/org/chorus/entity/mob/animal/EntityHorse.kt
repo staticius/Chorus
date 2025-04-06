@@ -233,7 +233,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         if (this.getRider() == null || this.owner == null || getSaddle().isNothing) {
             isActive = level!!.isHighLightChunk(chunkX, chunkZ)
             if (!this.isImmobile) {
-                val behaviorGroup = getBehaviorGroup() ?: return
+                val behaviorGroup = getBehaviorGroup()
                 behaviorGroup.collectSensorData(this)
                 behaviorGroup.evaluateCoreBehaviors(this)
                 behaviorGroup.evaluateBehaviors(this)

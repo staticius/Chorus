@@ -162,7 +162,7 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         instance.pluginManager.callEvent(ev)
         return !ev.isCancelled && level.setBlock(
             this.position,
-            ev.newState!!, direct = true, update = true
+            ev.newState, direct = true, update = true
         )
     }
 

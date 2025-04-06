@@ -126,7 +126,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
             this.updateAroundRedstoneTorches(powered)
             if (arm.state % 2 == 0 && arm.powered != powered && checkState(powered)) {
                 arm.powered = powered
-                if (arm.chunk != null) arm.chunk!!.setChanged()
+                if (arm.chunk != null) arm.chunk.setChanged()
                 if (powered && !isExtended)  //推出未成功,下一个计划刻再次自检
                 //TODO: 这里可以记录阻挡的方块并在阻挡因素移除后同步更新到活塞，而不是使用计划刻
                     level.scheduleUpdate(this, 2)
@@ -162,7 +162,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
             ) {
                 val torch = getSide(side) as BlockTorch?
 
-                val torchAttachment = torch!!.torchAttachment!!
+                val torchAttachment = torch!!.torchAttachment
                 val support = torch.getSide(torchAttachment.attachedFace)
 
                 if (support.locator == this.locator) {
@@ -231,7 +231,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
             //破坏需要破坏的方块
             for (i in destroyBlocks.indices.reversed()) {
                 val block = destroyBlocks[i]
-                val item = getBestTool(block!!.toolType)
+                val item = getBestTool(block.toolType)
                 //清除位置上所含的水等
                 level.setBlock(block.position, 1, get(BlockID.AIR), true, false)
                 level.useBreakOn(block.position, item)
@@ -250,7 +250,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
                     .putInt("pistonPosX", position.floorX)
                     .putInt("pistonPosY", position.floorY)
                     .putInt("pistonPosZ", position.floorZ)
-                    .putCompound("movingBlock", blockToMove.blockState!!.blockStateTag)
+                    .putCompound("movingBlock", blockToMove.blockState.blockStateTag)
                     .putCompound(
                         "movingBlockExtra",
                         level.getBlock(blockToMove.position, 1).blockState.blockStateTag
@@ -335,7 +335,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
             return if (face.horizontalIndex >= 0) face.getOpposite() else face
         }
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
         override val isSolid: Boolean

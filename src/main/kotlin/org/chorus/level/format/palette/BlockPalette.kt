@@ -83,9 +83,9 @@ class BlockPalette : Palette<BlockState> {
             write = obfuscatePalette!!
         }
 
-        byteBuf.writeByte(getPaletteHeader(write.bitArray!!.version(), true))
-        for (word in write.bitArray!!.words()) byteBuf.writeIntLE(word)
-        bitArray!!.writeSizeToNetwork(byteBuf, write.palette.size)
+        byteBuf.writeByte(getPaletteHeader(write.bitArray.version(), true))
+        for (word in write.bitArray.words()) byteBuf.writeIntLE(word)
+        bitArray.writeSizeToNetwork(byteBuf, write.palette.size)
         for (value in write.palette) ByteBufVarInt.writeInt(byteBuf, serializer.serialize(value))
     }
 

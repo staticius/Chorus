@@ -42,7 +42,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Co
                 instance.pluginManager.callEvent(ev)
 
 
-                level.setBlock(this.position, ev.newState!!, false, true)
+                level.setBlock(this.position, ev.newState, false, true)
                 level.addParticle(BoneMealParticle(this.position))
 
                 if (player != null && !player.isCreative) {
@@ -61,7 +61,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Co
                     return false
                 }
 
-                level.setBlock(this.position, ev.newState!!, false, true)
+                level.setBlock(this.position, ev.newState, false, true)
                 level.addParticle(BoneMealParticle(this.position))
 
                 if (player != null && !player.isCreative) {
@@ -94,7 +94,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Co
                     if (ev.isCancelled) {
                         return 0
                     } else {
-                        level.setBlock(this.position, ev.newState!!, false, true)
+                        level.setBlock(this.position, ev.newState, false, true)
                         return Level.BLOCK_UPDATE_RANDOM
                     }
                 }
@@ -105,7 +105,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Co
                     instance.pluginManager.callEvent(ev)
 
                     if (!ev.isCancelled) {
-                        level.setBlock(this.position, ev.newState!!, false, true)
+                        level.setBlock(this.position, ev.newState, false, true)
                     } else {
                         return Level.BLOCK_UPDATE_RANDOM
                     }

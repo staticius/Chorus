@@ -190,14 +190,14 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             "fade-time-color" -> {
                 pk.setInstruction(
                     FadeInstruction(
-                        time = Time(list[3]!!.get()!!, list[4]!!.get()!!, list[5]!!.get()!!),
+                        time = Time(list[3].get()!!, list[4].get()!!, list[5].get()!!),
                         color = Color(getFloat(list, 7), getFloat(list, 8), getFloat(list, 9))
                     )
                 )
             }
 
             "set-default" -> {
-                val preset = getPreset(list[2]!!.get()!!)
+                val preset = getPreset(list[2].get()!!)
                 if (preset == null) {
                     log.addError("commands.camera.invalid-preset").output()
                     return 0
@@ -223,12 +223,12 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             }
 
             "set-pos" -> {
-                val preset = getPreset(list[2]!!.get()!!)
+                val preset = getPreset(list[2].get()!!)
                 if (preset == null) {
                     log.addError("commands.camera.invalid-preset").output()
                     return 0
                 }
-                val locator = list[4]!!.get<Locator>()
+                val locator = list[4].get<Locator>()
                 pk.setInstruction(
                     SetInstruction(
                         preset = preset,
@@ -238,12 +238,12 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             }
 
             "set-pos-rot" -> {
-                val preset = getPreset(list[2]!!.get()!!)
+                val preset = getPreset(list[2].get()!!)
                 if (preset == null) {
                     log.addError("commands.camera.invalid-preset").output()
                     return 0
                 }
-                val locator = list[4]!!.get<Locator>()
+                val locator = list[4].get<Locator>()
                 pk.setInstruction(
                     SetInstruction(
                         preset = preset,
@@ -257,13 +257,13 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             }
 
             "set-ease-default" -> {
-                val preset = getPreset(list[2]!!.get()!!)
+                val preset = getPreset(list[2].get()!!)
                 if (preset == null) {
                     log.addError("commands.camera.invalid-preset").output()
                     return 0
                 }
-                val easeTime = list[4]!!.get<Float>()!!
-                val easeType: EaseType = EaseType.valueOf((list[5]!!.get<Any>() as String).uppercase())
+                val easeTime = list[4].get<Float>()!!
+                val easeType: EaseType = EaseType.valueOf((list[5].get<Any>() as String).uppercase())
                 pk.setInstruction(
                     SetInstruction(
                         preset = preset,
@@ -273,13 +273,13 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             }
 
             "set-ease-rot" -> {
-                val preset = getPreset(list[2]!!.get()!!)
+                val preset = getPreset(list[2].get()!!)
                 if (preset == null) {
                     log.addError("commands.camera.invalid-preset").output()
                     return 0
                 }
-                val easeTime = list[4]!!.get<Float>()!!
-                val easeType: EaseType = EaseType.valueOf((list[5]!!.get<Any>() as String).uppercase())
+                val easeTime = list[4].get<Float>()!!
+                val easeType: EaseType = EaseType.valueOf((list[5].get<Any>() as String).uppercase())
                 pk.setInstruction(
                     SetInstruction(
                         preset = preset,
@@ -293,14 +293,14 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             }
 
             "set-ease-pos" -> {
-                val preset = getPreset(list[2]!!.get()!!)
+                val preset = getPreset(list[2].get()!!)
                 if (preset == null) {
                     log.addError("commands.camera.invalid-preset").output()
                     return 0
                 }
-                val easeTime = list[4]!!.get<Float>()!!
-                val easeType: EaseType = EaseType.valueOf((list[5]!!.get<Any>() as String).uppercase())
-                val locator = list[7]!!.get<Locator>()
+                val easeTime = list[4].get<Float>()!!
+                val easeType: EaseType = EaseType.valueOf((list[5].get<Any>() as String).uppercase())
+                val locator = list[7].get<Locator>()
                 pk.setInstruction(
                     SetInstruction(
                         preset = preset,
@@ -311,14 +311,14 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
             }
 
             "set-ease-pos-rot" -> {
-                val preset = getPreset(list[2]!!.get()!!)
+                val preset = getPreset(list[2].get()!!)
                 if (preset == null) {
                     log.addError("commands.camera.invalid-preset").output()
                     return 0
                 }
-                val easeTime = list[4]!!.get<Float>()!!
-                val easeType: EaseType = EaseType.valueOf((list[5]!!.get<Any>() as String).uppercase())
-                val locator = list[7]!!.get<Locator>()
+                val easeTime = list[4].get<Float>()!!
+                val easeType: EaseType = EaseType.valueOf((list[5].get<Any>() as String).uppercase())
+                val locator = list[7].get<Locator>()
                 pk.setInstruction(
                     SetInstruction(
                         preset = preset,
@@ -347,7 +347,7 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
         val EASE_TYPES = EaseType.entries.map(EaseType::type).toTypedArray()
 
         private fun getFloat(list: ParamList, index: Int): Float {
-            return list[index]!!.get()!!
+            return list[index].get()!!
         }
     }
 }

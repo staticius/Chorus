@@ -51,7 +51,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
 
         for (i in 0..<this.size) {
-            inventory!!.setItem(i, this.getItem(i))
+            inventory.setItem(i, this.getItem(i))
         }
 
         burnTime =
@@ -128,10 +128,10 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     }
 
     override fun onBreak(isSilkTouch: Boolean) {
-        for (content in inventory!!.contents.values) {
+        for (content in inventory.contents.values) {
             level.dropItem(this.position, content)
         }
-        inventory!!.clearAll()
+        inventory.clearAll()
         val xp = calculateXpDrop()
         if (xp > 0) {
             storedXP = 0f
@@ -143,7 +143,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         super.saveNBT()
         namedTag.putList("Items", ListTag<CompoundTag>())
         for (index in 0..<this.size) {
-            this.setItem(index, inventory!!.getItem(index))
+            this.setItem(index, inventory.getItem(index))
         }
         namedTag.putShort("CookTime", cookTime)
         namedTag.putShort("BurnTime", burnTime)

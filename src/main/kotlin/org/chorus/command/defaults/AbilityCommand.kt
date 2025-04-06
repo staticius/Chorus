@@ -40,7 +40,7 @@ class AbilityCommand(name: String) : VanillaCommand(name, "commands.ability.desc
         log: CommandLogger
     ): Int {
         val list = result.value
-        val players = list!!.getResult<List<Player>>(0)!!
+        val players = list.getResult<List<Player>>(0)!!
         if (players.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0

@@ -10,7 +10,7 @@ import org.chorus.math.Vector3
  */
 class PositionTracking(override var levelName: String, x: Double, y: Double, z: Double) :
     Vector3(x, y, z), NamedPosition {
-    constructor(level: Level, x: Double, y: Double, z: Double) : this(level.getName()!!, x, y, z)
+    constructor(level: Level, x: Double, y: Double, z: Double) : this(level.getName(), x, y, z)
 
     constructor(level: Level, v: Vector3) : this(level, v.x, v.y, v.z)
 
@@ -36,11 +36,11 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return PositionTracking(levelName, x + v.x, y + v.y, z + v.z)
     }
 
-    override fun subtract(x: Double): PositionTracking? {
+    override fun subtract(x: Double): PositionTracking {
         return subtract(x, 0.0, 0.0)
     }
 
-    override fun subtract(x: Double, y: Double): PositionTracking? {
+    override fun subtract(x: Double, y: Double): PositionTracking {
         return subtract(x, y, 0.0)
     }
 
@@ -98,7 +98,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         )
     }
 
-    override fun up(): PositionTracking? {
+    override fun up(): PositionTracking {
         return up(1)
     }
 
@@ -106,7 +106,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return getSide(BlockFace.UP, step)
     }
 
-    override fun down(): PositionTracking? {
+    override fun down(): PositionTracking {
         return down(1)
     }
 
@@ -114,7 +114,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return getSide(BlockFace.DOWN, step)
     }
 
-    override fun north(): PositionTracking? {
+    override fun north(): PositionTracking {
         return north(1)
     }
 
@@ -122,7 +122,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return getSide(BlockFace.NORTH, step)
     }
 
-    override fun south(): PositionTracking? {
+    override fun south(): PositionTracking {
         return south(1)
     }
 
@@ -130,7 +130,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return getSide(BlockFace.SOUTH, step)
     }
 
-    override fun east(): PositionTracking? {
+    override fun east(): PositionTracking {
         return east(1)
     }
 
@@ -138,7 +138,7 @@ class PositionTracking(override var levelName: String, x: Double, y: Double, z: 
         return getSide(BlockFace.EAST, step)
     }
 
-    override fun west(): PositionTracking? {
+    override fun west(): PositionTracking {
         return west(1)
     }
 

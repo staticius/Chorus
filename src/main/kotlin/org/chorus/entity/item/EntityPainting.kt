@@ -75,7 +75,7 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
                 motive!!.height.toDouble(), motive!!.width.toDouble()
             ).multiply(0.5)
 
-            if (face!!.getAxis() == BlockFace.Axis.Z) {
+            if (face.getAxis() == BlockFace.Axis.Z) {
                 size.z = 0.5
             } else {
                 size.x = 0.5

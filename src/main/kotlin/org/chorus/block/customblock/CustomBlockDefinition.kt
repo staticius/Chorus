@@ -78,18 +78,18 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
             )
 
             //设置方块在创造栏的分类
-            nbt!!.putCompound(
+            nbt.putCompound(
                 "menu_category", CompoundTag()
                     .putString("category", CreativeCategory.NATURE.name)
                     .putString("group", CreativeGroup.NONE.groupName)
             )
             //molang版本
-            nbt!!.putInt("molangVersion", 9)
+            nbt.putInt("molangVersion", 9)
 
             //设置方块的properties
             val propertiesNBT = propertiesNBT
             if (propertiesNBT != null) {
-                nbt!!.putList("properties", propertiesNBT)
+                nbt.putList("properties", propertiesNBT)
             }
 
             var blockId: Int
@@ -101,7 +101,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
             } else {
                 blockId = INTERNAL_ALLOCATION_ID_MAP[identifier]!!
             }
-            nbt!!.putCompound(
+            nbt.putCompound(
                 "vanilla_block_data", CompoundTag().putInt("block_id", blockId) /*.putString("material", "")*/
             ) //todo Figure what is dirt, maybe that corresponds to https://wiki.bedrock.dev/documentation/materials.html
         }
@@ -113,7 +113,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
 
         fun name(name: String): Builder {
             Preconditions.checkArgument(name.isNotBlank(), "name is blank")
-            nbt!!.getCompound("components").putCompound(
+            nbt.getCompound("components").putCompound(
                 "minecraft:display_name", CompoundTag()
                     .putString("value", name)
             )
@@ -121,7 +121,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
         }
 
         fun materials(materials: Materials): Builder {
-            nbt!!.getCompound("components").putCompound(
+            nbt.getCompound("components").putCompound(
                 "minecraft:material_instances", CompoundTag()
                     .putCompound("mappings", CompoundTag())
                     .putCompound("materials", materials.toCompoundTag())
@@ -130,20 +130,20 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
         }
 
         fun creativeGroupAndCategory(creativeGroup: CreativeGroup, creativeCategory: CreativeCategory): Builder {
-            nbt!!.getCompound("menu_category")
+            nbt.getCompound("menu_category")
                 .putString("category", creativeCategory.name.lowercase())
                 .putString("group", creativeGroup.groupName)
             return this
         }
 
         fun creativeCategory(creativeCategory: String): Builder {
-            nbt!!.getCompound("menu_category")
+            nbt.getCompound("menu_category")
                 .putString("category", creativeCategory.lowercase())
             return this
         }
 
         fun creativeCategory(creativeCategory: CreativeCategory): Builder {
-            nbt!!.getCompound("menu_category")
+            nbt.getCompound("menu_category")
                 .putString("category", creativeCategory.name.lowercase())
             return this
         }
@@ -161,7 +161,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
          * The digging time of a custom cube depends on the smallest of the server-side and client-side
          */
         fun breakTime(second: Double): Builder {
-            nbt!!.getCompound("components")
+            nbt.getCompound("components")
                 .putCompound(
                     "minecraft:destructible_by_mining", CompoundTag()
                         .putFloat("value", second.toFloat())
@@ -179,7 +179,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
                 CustomBlockDefinition.log.error("creativeGroup has an invalid value!")
                 return this
             }
-            nbt!!.getCompound("components")
+            nbt.getCompound("components")
                 .getCompound("menu_category").putString("group", creativeGroup.lowercase())
             return this
         }
@@ -190,7 +190,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
          * [wiki.bedrock.dev](https://wiki.bedrock.dev/documentation/creative-categories.html)
          */
         fun creativeGroup(creativeGroup: CreativeGroup): Builder {
-            nbt!!.getCompound("components")
+            nbt.getCompound("components")
                 .getCompound("menu_category").putString("group", creativeGroup.groupName)
             return this
         }
@@ -199,7 +199,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
          * [wiki.bedrock.dev](https://wiki.bedrock.dev/blocks/block-components.html.crafting-table)
          */
         fun craftingTable(craftingTable: CraftingTable): Builder {
-            nbt!!.getCompound("components").putCompound("minecraft:crafting_table", craftingTable.toCompoundTag())
+            nbt.getCompound("components").putCompound("minecraft:crafting_table", craftingTable.toCompoundTag())
             return this
         }
 
@@ -207,7 +207,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
          * supports rotation, scaling, and translation. The component can be added to the whole block and/or to individual block permutations. Transformed geometries still have the same restrictions that non-transformed geometries have such as a maximum size of 30/16 units.
          */
         fun transformation(transformation: Transformation): Builder {
-            nbt!!.getCompound("components").putCompound("minecraft:transformation", transformation.toCompoundTag())
+            nbt.getCompound("components").putCompound("minecraft:transformation", transformation.toCompoundTag())
             return this
         }
 
@@ -230,7 +230,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
                 CustomBlockDefinition.log.error("geometry has an invalid value!")
                 return this
             }
-            val components = nbt!!.getCompound("components")
+            val components = nbt.getCompound("components")
             //默认单位立方体方块，如果定义几何模型需要移除
             if (components.contains("minecraft:unit_cube")) components.remove("minecraft:unit_cube")
             //设置方块对应的几何模型
@@ -249,7 +249,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
          * Geometry identifier from geo file in 'RP/models/blocks' folder
          */
         fun geometry(geometry: Geometry): Builder {
-            val components = nbt!!.getCompound("components")
+            val components = nbt.getCompound("components")
             //默认单位立方体方块，如果定义几何模型需要移除
             if (components.contains("minecraft:unit_cube")) components.remove("minecraft:unit_cube")
             //设置方块对应的几何模型
@@ -264,15 +264,15 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
          * Control custom block permutation features such as conditional rendering, partial rendering, etc.
          */
         fun permutation(permutation: Permutation): Builder {
-            if (!nbt!!.contains("permutations")) {
-                nbt!!.putList("permutations", ListTag<CompoundTag>())
+            if (!nbt.contains("permutations")) {
+                nbt.putList("permutations", ListTag<CompoundTag>())
             }
-            val permutations = nbt!!.getList(
+            val permutations = nbt.getList(
                 "permutations",
                 CompoundTag::class.java
             )
             permutations.add(permutation.toCompoundTag())
-            nbt!!.putList("permutations", permutations)
+            nbt.putList("permutations", permutations)
             return this
         }
 
@@ -287,7 +287,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
             for (permutation in permutations) {
                 per.add(permutation.toCompoundTag())
             }
-            nbt!!.putList("permutations", per)
+            nbt.putList("permutations", per)
             return this
         }
 
@@ -301,7 +301,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
          * @param size   碰撞箱的大小 The size of the collision box
          */
         fun collisionBox(origin: Vector3f, size: Vector3f): Builder {
-            nbt!!.getCompound("components")
+            nbt.getCompound("components")
                 .putCompound(
                     "minecraft:collision_box", CompoundTag()
                         .putBoolean("enabled", true)
@@ -331,7 +331,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
          * @param size   选择箱的大小 The size of the collision box
          */
         fun selectionBox(origin: Vector3f, size: Vector3f): Builder {
-            nbt!!.getCompound("components")
+            nbt.getCompound("components")
                 .putCompound(
                     "minecraft:selection_box", CompoundTag()
                         .putBoolean("enabled", true)
@@ -358,7 +358,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
             for (s in tag) {
                 stringTagListTag.add(StringTag(s))
             }
-            nbt!!.putList("blockTags", stringTagListTag)
+            nbt.putList("blockTags", stringTagListTag)
             return this
         }
 

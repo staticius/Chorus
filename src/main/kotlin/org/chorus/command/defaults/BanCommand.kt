@@ -27,7 +27,7 @@ class BanCommand(name: String) : VanillaCommand(name, "commands.ban.description"
         log: CommandLogger
     ): Int {
         val list = result.value
-        val name = list!!.getResult<String>(0)!!
+        val name = list.getResult<String>(0)!!
         val reason = list.getResult<String>(1)
         Server.instance.bannedPlayers.addBan(name, reason, null, sender.getName())
 

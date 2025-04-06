@@ -12,7 +12,7 @@ class BlockUnpoweredRepeater @JvmOverloads constructor(blockstate: BlockState = 
         get() = "Unpowered Repeater"
 
     public override fun getPowered(): Block {
-        return BlockPoweredRepeater().setPropertyValues(blockState.blockPropertyValues!!)
+        return BlockPoweredRepeater().setPropertyValues(blockState.blockPropertyValues)
     }
 
     override val unpowered: Block

@@ -47,8 +47,8 @@ abstract class BlockEntitySpawnable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
         }
 
         for (player in level.getChunkPlayers(
-            chunk!!.x,
-            chunk!!.z
+            chunk.x,
+            chunk.z
         ).values) {
             if (player.spawned) {
                 this.spawnTo(player)

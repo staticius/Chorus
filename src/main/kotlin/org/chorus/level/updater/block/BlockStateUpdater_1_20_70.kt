@@ -25,7 +25,7 @@ class BlockStateUpdater_1_20_70 : Updater {
             .match("name", "minecraft:wood")
             .edit("states") { helper: CompoundTagEditHelper ->
                 val states = helper.compoundTag
-                val bit = states!!.remove("stripped_bit")
+                val bit = states.remove("stripped_bit")
                 val toggles =
                     bit is Byte && bit.toInt() == 1 || bit is Boolean && bit
 

@@ -69,7 +69,7 @@ abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
                     return false
                 }
 
-                level.setBlock(this.position, ev.newState!!, direct = false, update = true)
+                level.setBlock(this.position, ev.newState, direct = false, update = true)
                 level.addParticle(BoneMealParticle(this.position))
 
                 if (player != null && !player.isCreative) {
@@ -101,7 +101,7 @@ abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
                     instance.pluginManager.callEvent(ev)
 
                     if (!ev.isCancelled) {
-                        level.setBlock(this.position, ev.newState!!, direct = false, update = true)
+                        level.setBlock(this.position, ev.newState, direct = false, update = true)
                     } else {
                         return Level.BLOCK_UPDATE_RANDOM
                     }

@@ -1013,7 +1013,7 @@ class Server internal constructor(
      */
     fun enablePlugins(type: PluginLoadOrder) {
         for (plugin in ArrayList(pluginManager.getPlugins().values)) {
-            if (!plugin.isEnabled && type == plugin.description!!.order) {
+            if (!plugin.isEnabled && type == plugin.description.order) {
                 this.enablePlugin(plugin)
             }
         }
@@ -1406,7 +1406,7 @@ class Server internal constructor(
                         .add(FloatTag(spawn.position.y))
                         .add(FloatTag(spawn.position.z))
                 )
-                .putString("Level", getDefaultLevel()!!.getName()!!)
+                .putString("Level", getDefaultLevel()!!.getName())
                 .putList("Inventory", ListTag<Tag<*>>())
                 .putCompound("Achievements", CompoundTag())
                 .putInt("playerGameType", this.gamemode)
@@ -1672,7 +1672,7 @@ class Server internal constructor(
      * Set default overworld
      */
     fun setDefaultLevel(defaultLevel: Level?) {
-        if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getName()!!) && defaultLevel != this.defaultLevel)) {
+        if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getName()) && defaultLevel != this.defaultLevel)) {
             this.defaultLevel = defaultLevel
         }
     }
@@ -1686,7 +1686,7 @@ class Server internal constructor(
          * Set default nether
          */
         set(defaultLevel) {
-            if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getName()!!) && defaultLevel != this.defaultNether)) {
+            if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getName()) && defaultLevel != this.defaultNether)) {
                 this.defaultNether = defaultLevel
             }
         }
@@ -1700,7 +1700,7 @@ class Server internal constructor(
          * Set default the_end level
          */
         set(defaultLevel) {
-            if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getName()!!) && defaultLevel != this.defaultEnd)) {
+            if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getName()) && defaultLevel != this.defaultEnd)) {
                 this.defaultEnd = defaultLevel
             }
         }

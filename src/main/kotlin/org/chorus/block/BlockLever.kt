@@ -94,7 +94,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            val blockFace = leverOrientation!!.facing.getOpposite()
+            val blockFace = leverOrientation.facing.getOpposite()
             val side = this.getSide(blockFace)
             if (!isSupportValid(side, blockFace.getOpposite())) {
                 level.useBreakOn(this.position)

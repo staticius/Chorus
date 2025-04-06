@@ -57,7 +57,7 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone> {
 
         val trackingHandle: Int
         try {
-            trackingHandle = getOrCreateBlockEntity()!!.requestTrackingHandler()
+            trackingHandle = getOrCreateBlockEntity().requestTrackingHandler()
             compass.trackingHandle = trackingHandle
         } catch (e: Exception) {
             BlockLodestone.log.warn(

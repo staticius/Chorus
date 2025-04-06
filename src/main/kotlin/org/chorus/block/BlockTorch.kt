@@ -19,7 +19,7 @@ open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Compani
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            val torchAttachment = torchAttachment!!
+            val torchAttachment = torchAttachment
 
             val support = this.getSide(torchAttachment.attachedFace)
             if (!isSupportValid(support, torchAttachment.torchDirection!!)) {

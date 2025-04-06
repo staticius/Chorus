@@ -56,7 +56,7 @@ class BlockEntitySkull(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(c
         get() = false
 
     override fun setDirty() {
-        chunk!!.setChanged()
+        chunk.setChanged()
     }
 
     fun isMouthMoving(): Boolean {

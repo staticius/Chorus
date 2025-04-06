@@ -36,7 +36,7 @@ class SpreadPlayersCommand(name: String) : VanillaCommand(name, "commands.spread
         log: CommandLogger
     ): Int {
         val list = result.value
-        val x = list!!.getResult<Double>(0)!!
+        val x = list.getResult<Double>(0)!!
         val z = list.getResult<Double>(1)!!
         val spreadDistance = list.getResult<Float>(2)!!
         val maxRange = list.getResult<Float>(3)!!

@@ -165,11 +165,11 @@ abstract class PluginBase : Plugin {
      */
     fun getCommand(name: String): PluginIdentifiableCommand? {
         var command = Server.instance.getPluginCommand(name)
-        if (command == null || !command.plugin!!.equals(this)) {
+        if (command == null || !command.plugin.equals(this)) {
             command = Server.instance.getPluginCommand(description.getName().lowercase() + ":" + name)
         }
 
-        return if (command != null && command.plugin!!.equals(this)) {
+        return if (command != null && command.plugin.equals(this)) {
             command
         } else {
             null

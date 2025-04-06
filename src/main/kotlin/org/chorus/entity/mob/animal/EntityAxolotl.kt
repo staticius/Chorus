@@ -97,7 +97,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                 ),
                 Behavior(
                     EntityBreedingExecutor<EntityAxolotl>(EntityAxolotl::class.java, 16, 100, 0.5f),
-                    { entity: EntityMob -> entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
+                    { entity: EntityMob -> entity.memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
                     3,
                     1
                 ),

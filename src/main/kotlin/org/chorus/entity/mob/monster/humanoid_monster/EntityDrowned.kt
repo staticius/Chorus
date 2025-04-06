@@ -47,7 +47,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                 Behavior(
                     NearestBlockIncementExecutor(),
                     { entity: EntityMob? ->
-                        !memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) && memoryStorage!!.get<Block>(
+                        !memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) && memoryStorage.get<Block>(
                             CoreMemoryTypes.Companion.NEAREST_BLOCK
                         ) is BlockTurtleEgg
                     }, 1, 1
@@ -66,7 +66,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                 ),
                 Behavior(
                     JumpExecutor(), all(
-                        IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) },
+                        IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) },
                         IBehaviorEvaluator { entity: EntityMob ->
                             entity.getCollisionBlocks()!!.stream().anyMatch { block: Block? -> block is BlockTurtleEgg }
                         }), 9, 1, 10
@@ -91,7 +91,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                         any(
                             IBehaviorEvaluator { entity: EntityMob? -> level!!.isNight },
                             IBehaviorEvaluator { entity: EntityMob? ->
-                                memoryStorage!!.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && memoryStorage!!.get<Player>(
+                                memoryStorage.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && memoryStorage.get<Player>(
                                     CoreMemoryTypes.Companion.NEAREST_PLAYER
                                 ).isInsideOfWater
                             }
@@ -122,7 +122,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                         any(
                             IBehaviorEvaluator { entity: EntityMob? -> level!!.isNight },
                             IBehaviorEvaluator { entity: EntityMob? ->
-                                memoryStorage!!.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && memoryStorage!!.get<Player>(
+                                memoryStorage.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && memoryStorage.get<Player>(
                                     CoreMemoryTypes.Companion.NEAREST_PLAYER
                                 ).isInsideOfWater
                             }
@@ -176,7 +176,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
         this.maxHealth = 20
         this.diffHandDamage = floatArrayOf(2.5f, 3f, 4.5f)
         super.initEntity()
-        memoryStorage!!.set<Boolean>(CoreMemoryTypes.Companion.ENABLE_DIVE_FORCE, true)
+        memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.ENABLE_DIVE_FORCE, true)
         val random = Utils.rand(0, 10000)
         if (random < 85) {
             setItemInHand(Item.get(ItemID.FISHING_ROD))

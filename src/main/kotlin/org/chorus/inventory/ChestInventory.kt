@@ -53,7 +53,7 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
         try {
             if (holder.block is BlockTrappedChest) {
                 val event = RedstoneUpdateEvent(trappedChest)
-                holder!!.Server.instance.pluginManager.callEvent(event)
+                holder.Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
                     RedstoneComponent.updateAllAroundRedstone(this.holder)
                 }
@@ -82,7 +82,7 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
         try {
             if (holder.block is BlockTrappedChest) {
                 val event = RedstoneUpdateEvent(trappedChest)
-                holder!!.Server.instance.pluginManager.callEvent(event)
+                holder.Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
                     RedstoneComponent.updateAllAroundRedstone(this.holder)
                 }
@@ -112,6 +112,6 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
         return true
     }
 
-    override val blockEntityInventoryHolder: BlockEntityNameable?
+    override val blockEntityInventoryHolder: BlockEntityNameable
         get() = holder
 }

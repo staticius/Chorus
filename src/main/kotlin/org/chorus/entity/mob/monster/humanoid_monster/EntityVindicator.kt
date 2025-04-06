@@ -154,7 +154,7 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
         MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage!!.get(memory).runtimeId)
+            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage.get(memory).runtimeId)
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(
                 entity.position,
@@ -165,17 +165,17 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
                 false
             )
             Arrays.stream<Entity>(entity.level!!.entities).filter { entity1: Entity ->
-                entity1 is EntityPiglin && entity1.position.distance(entity.position) < 16 && entity1.memoryStorage!!
+                entity1 is EntityPiglin && entity1.position.distance(entity.position) < 16 && entity1.memoryStorage
                     .isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
             }.forEach { entity1: Entity ->
-                (entity1 as EntityPiglin).memoryStorage!!
+                (entity1 as EntityPiglin).memoryStorage
                     .set<Entity>(
-                        CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage!!
+                        CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage
                             .get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
                     )
             }
-            if (entity.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is EntityHoglin) {
-                entity.memoryStorage!!.set<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)
+            if (entity.memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is EntityHoglin) {
+                entity.memoryStorage.set<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)
             }
         }
 

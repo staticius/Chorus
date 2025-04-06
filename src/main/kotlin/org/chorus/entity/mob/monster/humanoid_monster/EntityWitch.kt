@@ -51,7 +51,7 @@ class EntityWitch(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chu
                     UsePotionExecutor(0.3f, 30, 20), all(
                         MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME),
                         IBehaviorEvaluator { entity: EntityMob ->
-                            entity.level!!.tick - memoryStorage!!.get<Int>(
+                            entity.level!!.tick - memoryStorage.get<Int>(
                                 CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME
                             ) <= 1
                         }

@@ -47,10 +47,7 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
             "default" -> {
                 val str = list.getResult<String>(1)!!
 
-                val effect: Effect = Effect.get(str) ?: run {
-                    log.addError("commands.effect.notFound", str).output()
-                    return 0
-                }
+                val effect: Effect = Effect.get(str)
 
                 var duration = 300
                 var amplification = 0

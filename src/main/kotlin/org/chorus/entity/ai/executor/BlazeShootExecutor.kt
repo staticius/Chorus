@@ -105,7 +105,7 @@ class BlazeShootExecutor(
         removeLookTarget(entity)
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
-            entity.getBehaviorGroup()!!.getMemoryStorage()!!.clear(memory)
+            entity.getBehaviorGroup().getMemoryStorage().clear(memory)
         }
         entity.setEnablePitch(false)
         stopOnFire(entity)
@@ -117,7 +117,7 @@ class BlazeShootExecutor(
         removeLookTarget(entity)
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
-            entity.getBehaviorGroup()!!.getMemoryStorage()!!.clear(memory)
+            entity.getBehaviorGroup().getMemoryStorage().clear(memory)
         }
         entity.setEnablePitch(false)
         stopOnFire(entity)

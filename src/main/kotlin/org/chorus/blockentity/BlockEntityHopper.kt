@@ -60,7 +60,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         }
 
         for (i in 0..<this.size) {
-            inventory!!.setItem(i, this.getItem(i))
+            inventory.setItem(i, this.getItem(i))
         }
 
         this.pickupArea = generatePickupArea()
@@ -165,7 +165,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         super.saveNBT()
         namedTag.putList("Items", ListTag<CompoundTag>())
         for (index in 0..<this.size) {
-            this.setItem(index, inventory!!.getItem(index))
+            this.setItem(index, inventory.getItem(index))
         }
 
         namedTag.putInt("TransferCooldown", this.transferCooldown)
@@ -213,12 +213,12 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         get() = false
 
     fun pullItemsFromMinecart(): Boolean {
-        if (inventory!!.isFull) {
+        if (inventory.isFull) {
             return false
         }
 
         if (minecartInvPickupFrom != null) {
-            val inv: Inventory = minecartInvPickupFrom!!.inventory!!
+            val inv: Inventory = minecartInvPickupFrom!!.inventory
 
             for (i in 0..<inv.size) {
                 val item = inv.getItem(i)
@@ -226,11 +226,11 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                 if (!item.isNothing) {
                     val itemToAdd = item.clone()
                     itemToAdd.count = 1
-                    if (!inventory!!.canAddItem(itemToAdd)) continue
+                    if (!inventory.canAddItem(itemToAdd)) continue
 
                     val ev = InventoryMoveItemEvent(
                         inv,
-                        this.inventory!!,
+                        this.inventory,
                         this,
                         itemToAdd,
                         InventoryMoveItemEvent.Action.SLOT_CHANGE
@@ -238,7 +238,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                     Server.instance.pluginManager.callEvent(ev)
                     if (ev.isCancelled) continue
 
-                    val items = inventory!!.addItem(itemToAdd)
+                    val items = inventory.addItem(itemToAdd)
                     if (items.size >= 1) continue
 
                     item.count--
@@ -256,29 +256,29 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
     override fun close() {
         if (!closed) {
-            for (player in HashSet(inventory!!.viewers)) {
-                player.removeWindow(this.inventory!!)
+            for (player in HashSet(inventory.viewers)) {
+                player.removeWindow(this.inventory)
             }
             super.close()
         }
     }
 
     override fun onBreak(isSilkTouch: Boolean) {
-        for (content in inventory!!.contents.values) {
+        for (content in inventory.contents.values) {
             level.dropItem(this.position, content)
         }
-        inventory!!.clearAll()
+        inventory.clearAll()
     }
 
 
     fun pushItemsIntoMinecart(): Boolean {
         if (minecartInvPushTo != null) {
-            val holderInventory: Inventory = minecartInvPushTo!!.inventory!!
+            val holderInventory: Inventory = minecartInvPushTo!!.inventory
 
             if (holderInventory.isFull) return false
 
-            for (i in 0..<inventory!!.size) {
-                val item = inventory!!.getItem(i)
+            for (i in 0..<inventory.size) {
+                val item = inventory.getItem(i)
 
                 if (!item.isNothing) {
                     val itemToAdd = item.clone()
@@ -287,7 +287,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                     if (!holderInventory.canAddItem(itemToAdd)) continue
 
                     val ev = InventoryMoveItemEvent(
-                        this.inventory!!, holderInventory,
+                        this.inventory, holderInventory,
                         this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                     )
                     Server.instance.pluginManager.callEvent(ev)
@@ -299,7 +299,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                     if (items.size > 0) continue
 
                     item.count--
-                    inventory!!.setItem(i, item)
+                    inventory.setItem(i, item)
 
                     //归位为null
                     minecartInvPushTo = (null)
@@ -312,7 +312,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
     }
 
     fun pushItems(): Boolean {
-        if (inventory!!.isEmpty) {
+        if (inventory.isEmpty) {
             return false
         }
 
@@ -343,8 +343,8 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
             var pushedItem = false
 
-            for (i in 0..<this.inventory!!.size) {
-                val item = this.inventory!!.getItem(i)
+            for (i in 0..<this.inventory.size) {
+                val item = this.inventory.getItem(i)
                 if (!item.isNothing) {
                     val itemToAdd = item.clone()
                     itemToAdd.setCount(1)
@@ -354,7 +354,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                         val smelting = inventory.smelting
                         if (smelting.isNothing) {
                             event = InventoryMoveItemEvent(
-                                this.inventory!!, inventory,
+                                this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
                             Server.instance.pluginManager.callEvent(event)
@@ -366,7 +366,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                             }
                         } else if (inventory.smelting.id == itemToAdd.id && inventory.smelting.damage == itemToAdd.damage && inventory.smelting.id == itemToAdd.id && smelting.count < smelting.maxStackSize) {
                             event = InventoryMoveItemEvent(
-                                this.inventory!!, inventory,
+                                this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
                             Server.instance.pluginManager.callEvent(event)
@@ -382,7 +382,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                         val fuel = inventory.fuel
                         if (fuel.isNothing) {
                             event = InventoryMoveItemEvent(
-                                this.inventory!!, inventory,
+                                this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
                             Server.instance.pluginManager.callEvent(event)
@@ -394,7 +394,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                             }
                         } else if (fuel.id == itemToAdd.id && fuel.damage == itemToAdd.damage && fuel.id == itemToAdd.id && fuel.count < fuel.maxStackSize) {
                             event = InventoryMoveItemEvent(
-                                this.inventory!!, inventory,
+                                this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
                             Server.instance.pluginManager.callEvent(event)
@@ -409,7 +409,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                     }
 
                     if (pushedItem) {
-                        this.inventory!!.setItem(i, item)
+                        this.inventory.setItem(i, item)
                     }
                 }
             }
@@ -423,8 +423,8 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
 
             var pushedItem = false
 
-            for (i in 0..<this.inventory!!.size) {
-                val item = this.inventory!!.getItem(i)
+            for (i in 0..<this.inventory.size) {
+                val item = this.inventory.getItem(i)
                 if (!item.isNothing) {
                     val itemToAdd = item.clone()
                     itemToAdd.setCount(1)
@@ -434,7 +434,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                         val ingredient = inventory.ingredient
                         if (ingredient.isNothing) {
                             event = InventoryMoveItemEvent(
-                                this.inventory!!, inventory,
+                                this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
                             Server.instance.pluginManager.callEvent(event)
@@ -446,7 +446,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                             }
                         } else if (ingredient.id == itemToAdd.id && ingredient.damage == itemToAdd.damage && ingredient.id == itemToAdd.id && ingredient.count < ingredient.maxStackSize) {
                             event = InventoryMoveItemEvent(
-                                this.inventory!!, inventory,
+                                this.inventory, inventory,
                                 this, itemToAdd, InventoryMoveItemEvent.Action.SLOT_CHANGE
                             )
                             Server.instance.pluginManager.callEvent(event)
@@ -473,7 +473,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                     }
 
                     if (pushedItem) {
-                        this.inventory!!.setItem(i, item)
+                        this.inventory.setItem(i, item)
                     }
                 }
             }
@@ -484,8 +484,8 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                 return false
             }
 
-            for (i in 0..<inventory!!.size) {
-                val item = inventory!!.getItem(i)
+            for (i in 0..<inventory.size) {
+                val item = inventory.getItem(i)
 
                 if (item.isNothing) {
                     continue
@@ -498,7 +498,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                     return false
                 }
                 item.count--
-                inventory!!.setItem(i, item)
+                inventory.setItem(i, item)
                 return true
             }
         } else {
@@ -508,8 +508,8 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                 return false
             }
 
-            for (i in 0..<this.inventory!!.size) {
-                val item = this.inventory!!.getItem(i)
+            for (i in 0..<this.inventory.size) {
+                val item = this.inventory.getItem(i)
 
                 if (!item.isNothing) {
                     val itemToAdd = item.clone()
@@ -520,7 +520,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                     }
 
                     val ev = InventoryMoveItemEvent(
-                        this.inventory!!,
+                        this.inventory,
                         inventory,
                         this,
                         itemToAdd,
@@ -539,7 +539,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
                     }
 
                     item.count--
-                    this.inventory!!.setItem(i, item)
+                    this.inventory.setItem(i, item)
                     return true
                 }
             }

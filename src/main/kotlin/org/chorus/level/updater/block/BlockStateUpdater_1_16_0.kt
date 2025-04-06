@@ -124,7 +124,7 @@ class BlockStateUpdater_1_16_0 : Updater {
             .regex("name", name)
             .tryEdit("states") { helper: CompoundTagEditHelper ->
                 val states = helper.compoundTag
-                states!!["wall_post_bit"] = 0.toByte()
+                states["wall_post_bit"] = 0.toByte()
                 states["wall_connection_type_north"] = "none"
                 states["wall_connection_type_east"] = "none"
                 states["wall_connection_type_south"] = "none"

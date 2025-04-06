@@ -379,7 +379,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         get() = id
 
     val propertyValues: MutableList<BlockPropertyValue<*, *, *>>
-        get() = blockState.blockPropertyValues!!
+        get() = blockState.blockPropertyValues
 
     val isAir: Boolean
         get() = this.blockState === BlockAir.properties.defaultState
@@ -1283,7 +1283,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
             var id1 = id
             id1 = if (id1.contains(":")) id1 else "minecraft:$id1"
             val block = get(id1)
-            blockState.blockPropertyValues?.let { block.setPropertyValues(it) }
+            blockState.blockPropertyValues.let { block.setPropertyValues(it) }
             return block
         }
 

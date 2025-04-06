@@ -55,7 +55,7 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.SITE_BLOCK, 0.
                                     if (nearest != null) {
                                         if (minDistance < 1.5f) {
                                             entity.level!!.breakBlock(nearest)
-                                            entity.inventory!!.addItem(*nearest.getDrops(Item.AIR))
+                                            entity.inventory.addItem(*nearest.getDrops(Item.AIR))
                                             entity.level!!.setBlock(
                                                 nearest.position,
                                                 nearest.properties.defaultState.toBlock()

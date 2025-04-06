@@ -47,7 +47,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                     val ev = BlockGrowEvent(this, block)
                     instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
-                        level.setBlock(this.position, ev.newState!!, direct = false, update = true)
+                        level.setBlock(this.position, ev.newState, direct = false, update = true)
                     } else {
                         return type
                     }
@@ -59,7 +59,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                     val ev = BlockGrowEvent(this, block)
                     instance.pluginManager.callEvent(ev)
                     if (!ev.isCancelled) {
-                        level.setBlock(this.position, ev.newState!!, direct = false, update = true)
+                        level.setBlock(this.position, ev.newState, direct = false, update = true)
                     } else {
                         return type
                     }
@@ -74,7 +74,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
-                    level.setBlock(down().position, ev.newState!!, direct = false, update = true)
+                    level.setBlock(down().position, ev.newState, direct = false, update = true)
                 } else {
                     return type
                 }
@@ -84,7 +84,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
-                    level.setBlock(down().position, ev.newState!!, direct = false, update = true)
+                    level.setBlock(down().position, ev.newState, direct = false, update = true)
                 }
             }
             return type
@@ -113,7 +113,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                 if (ev.isCancelled) {
                     return false
                 }
-                level.setBlock(this.position, ev.newState!!, direct = false, update = true)
+                level.setBlock(this.position, ev.newState, direct = false, update = true)
                 level.addParticle(BoneMealParticle(this.position))
                 if (player != null && !player.isCreative) {
                     item.count--

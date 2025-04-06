@@ -85,7 +85,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
 
         val blockEntity = getOrCreateBlockEntity()
 
-        return player?.addWindow(blockEntity.inventory!!) != -1
+        return player?.addWindow(blockEntity.inventory) != -1
     }
 
     override fun canBeActivated(): Boolean {
@@ -163,7 +163,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
         fun getLocator(): Locator?
 
         fun pullItems(hopperHolder: InventoryHolder, hopperPos: Locator): Boolean {
-            val hopperInv = hopperHolder.inventory!!
+            val hopperInv = hopperHolder.inventory
 
             if (hopperInv.isFull) return false
 
@@ -172,7 +172,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
                 hopperPos.level.getBlockEntity(Vector3().setComponentsAdding(hopperPos.position, BlockFace.UP))
 
             if (blockEntity is InventoryHolder) {
-                val inv = if (blockEntity is RecipeInventoryHolder) blockEntity.productView!! else blockEntity.inventory!!
+                val inv = if (blockEntity is RecipeInventoryHolder) blockEntity.productView!! else blockEntity.inventory
 
                 for (i in 0..<inv.size) {
                     val item = inv.getItem(i)
@@ -226,7 +226,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
         }
 
         fun pickupItems(hopperHolder: InventoryHolder, hopperPos: Locator, pickupArea: AxisAlignedBB): Boolean {
-            val hopperInv = hopperHolder.inventory!!
+            val hopperInv = hopperHolder.inventory
 
             if (hopperInv.isFull) return false
 
@@ -237,7 +237,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
 
                 val item = entity.getItem()
 
-                if (item!!.isNothing || !hopperInv.canAddItem(item)) continue
+                if (item.isNothing || !hopperInv.canAddItem(item)) continue
 
                 val originalCount = item.getCount()
 

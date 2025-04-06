@@ -55,7 +55,7 @@ class BlockHoneyBlock @JvmOverloads constructor(blockstate: BlockState = Compani
         }
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return SimpleAxisAlignedBB(
             position.x,
             position.y,

@@ -49,10 +49,10 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
             Set.of<IBehavior>(
                 Behavior({ entity: EntityMob? ->
                     //刷新随机播放音效
-                    if (this.memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) setAmbientSoundEvent(
+                    if (this.memoryStorage.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) setAmbientSoundEvent(
                         Sound.MOB_WARDEN_ANGRY
                     )
-                    else if (this.memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)) setAmbientSoundEvent(
+                    else if (this.memoryStorage.notEmpty(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)) setAmbientSoundEvent(
                         Sound.MOB_WARDEN_AGITATED
                     )
                     else setAmbientSoundEvent(Sound.MOB_WARDEN_IDLE)
@@ -61,7 +61,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                 Behavior({ entity: EntityMob ->
                     //刷新anger数值
                     val angerValueMap =
-                        this.memoryStorage!!.get<MutableMap<Entity, Int>>(
+                        this.memoryStorage.get<MutableMap<Entity, Int>>(
                             CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE
                         )
                     val iterator =
@@ -72,8 +72,8 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                         if (entity.level!!.name != level!!.name || !isValidAngerEntity(next.key)) {
                             iterator.remove()
                             val attackTarget =
-                                this.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
-                            if (attackTarget != null && attackTarget == next.key) this.memoryStorage!!.clear(
+                                this.memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
+                            if (attackTarget != null && attackTarget == next.key) this.memoryStorage.clear(
                                 CoreMemoryTypes.Companion.ATTACK_TARGET
                             )
                             continue
@@ -124,10 +124,10 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                 Behavior(
                     WardenRangedAttackExecutor((1.7 * 20).toInt(), (3.0 * 20).toInt()),
                     { entity: EntityMob? ->
-                        this.memoryStorage!!.get<Int>(CoreMemoryTypes.Companion.ROUTE_UNREACHABLE_TIME) > 20 //1s
-                                && this.memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
+                        this.memoryStorage.get<Int>(CoreMemoryTypes.Companion.ROUTE_UNREACHABLE_TIME) > 20 //1s
+                                && this.memoryStorage.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
                                 && isInRangedAttackRange(
-                            this.memoryStorage!!.get<Entity>(
+                            this.memoryStorage.get<Entity>(
                                 CoreMemoryTypes.Companion.ATTACK_TARGET
                             )
                         )
@@ -145,10 +145,10 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                         }, 0.7f
                     ),
                     IBehaviorEvaluator { entity: EntityMob ->
-                        if (entity.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) {
+                        if (entity.memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) {
                             return@IBehaviorEvaluator false
                         } else {
-                            val e = entity.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
+                            val e = entity.memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
                             if (e is Player) {
                                 return@IBehaviorEvaluator e.isSurvival || e.isAdventure
                             }
@@ -230,7 +230,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
             }
         }
 
-        if (this.memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) level!!.addSound(
+        if (this.memoryStorage.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) level!!.addSound(
             this.position,
             Sound.MOB_WARDEN_LISTENING_ANGRY
         )
@@ -273,8 +273,8 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
 
     fun addEntityAngerValue(entity: Entity?, addition: Int) {
         val angerValueMap =
-            this.memoryStorage!!.get<MutableMap<Entity?, Int>>(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)
-        val attackTarget = this.memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
+            this.memoryStorage.get<MutableMap<Entity?, Int>>(CoreMemoryTypes.Companion.WARDEN_ANGER_VALUE)
+        val attackTarget = this.memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
         val origin = angerValueMap.getOrDefault(entity, 0)
         var added = (origin + addition).coerceIn(0, 150)
         if (added == 0) angerValueMap.remove(entity)
@@ -285,9 +285,9 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
             val changed = attackTarget == null ||
                     (entity is Player && attackTarget !is Player)
             if (changed) {
-                this.memoryStorage!!
+                this.memoryStorage
                     .set<Boolean>(CoreMemoryTypes.Companion.IS_ATTACK_TARGET_CHANGED, true)
-                this.memoryStorage!!
+                this.memoryStorage
                     .set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity)
             }
         } else angerValueMap[entity] = added
@@ -331,7 +331,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
 
     fun calHeartBeatDelay(): Int {
         val target = this.memoryStorage.get(CoreMemoryTypes.ATTACK_TARGET)
-        val anger = this.memoryStorage[CoreMemoryTypes.WARDEN_ANGER_VALUE]!!.getOrDefault(target, 0)
+        val anger = this.memoryStorage[CoreMemoryTypes.WARDEN_ANGER_VALUE].getOrDefault(target, 0)
         return (40 - (anger / 80f).coerceIn(0f, 1f) * 30f).toInt()
     }
 

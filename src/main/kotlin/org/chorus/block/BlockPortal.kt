@@ -65,7 +65,7 @@ class BlockPortal @JvmOverloads constructor(blockstate: BlockState = Companion.p
         return false
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 

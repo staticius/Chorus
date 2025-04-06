@@ -74,7 +74,7 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
                 ),
                 Behavior(
                     EntityBreedingExecutor<EntityArmadillo>(EntityArmadillo::class.java, 16, 100, 0.5f),
-                    { entity: EntityMob -> entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
+                    { entity: EntityMob -> entity.memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
                     7,
                     1
                 ),
@@ -118,7 +118,7 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
         super.initEntity()
         setMovementSpeed(0.5f)
         setRollState(RollState.UNROLLED)
-        memoryStorage!!.set<Int>(
+        memoryStorage.set<Int>(
             CoreMemoryTypes.Companion.NEXT_SHED,
             level!!.tick + Utils.rand(6000, 10800)
         )

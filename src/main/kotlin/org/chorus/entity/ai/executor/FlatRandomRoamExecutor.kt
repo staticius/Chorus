@@ -60,7 +60,7 @@ open class FlatRandomRoamExecutor @JvmOverloads constructor(
             //更新视线target
             setLookTarget(entity, target)
             currentTargetCalTick = 0
-            entity.behaviorGroup!!.isForceUpdateRoute = calNextTargetImmediately
+            entity.behaviorGroup.isForceUpdateRoute = calNextTargetImmediately
         }
         if (durationTick <= runningTime || runningTime == -1) return true
         else {

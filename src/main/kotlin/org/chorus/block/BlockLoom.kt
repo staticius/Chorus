@@ -52,7 +52,7 @@ class BlockLoom @JvmOverloads constructor(blockState: BlockState = Companion.pro
             if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
                 return false
             }
-            player.addWindow(inventory!!)
+            player.addWindow(inventory)
         }
         return true
     }

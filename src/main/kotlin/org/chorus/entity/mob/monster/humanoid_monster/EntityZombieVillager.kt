@@ -47,7 +47,7 @@ class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chu
                 Behavior(
                     NearestBlockIncementExecutor(),
                     { entity: EntityMob? ->
-                        !memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) && memoryStorage!!.get<Block>(
+                        !memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) && memoryStorage.get<Block>(
                             CoreMemoryTypes.Companion.NEAREST_BLOCK
                         ) is BlockTurtleEgg
                     }, 1, 1
@@ -65,7 +65,7 @@ class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chu
                 ),
                 Behavior(
                     JumpExecutor(), all(
-                        IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) },
+                        IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) },
                         IBehaviorEvaluator { entity: EntityMob ->
                             entity.getCollisionBlocks()!!.stream().anyMatch { block: Block? -> block is BlockTurtleEgg }
                         }), 6, 1, 10
@@ -138,7 +138,7 @@ class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chu
         this.maxHealth = 20
         this.diffHandDamage = floatArrayOf(2.5f, 3f, 4.5f)
         super.initEntity()
-        memoryStorage!!.set<Class<out Block>>(
+        memoryStorage.set<Class<out Block>>(
             CoreMemoryTypes.Companion.LOOKING_BLOCK,
             BlockTurtleEgg::class.java
         )

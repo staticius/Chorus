@@ -130,7 +130,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
     override fun saveNBT() {
         super.saveNBT()
-        getBehaviorGroup()!!.save(this)
+        getBehaviorGroup().save(this)
 
         if (activeEffects != null) namedTag!!.putList(TAG_ACTIVE_EFFECTS, ListTag(activeEffects!!))
         namedTag!!.putShort(TAG_AIR, air.toInt())
@@ -212,7 +212,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
         if (source is EntityDamageByEntityEvent && source.damager !is EntityCreeper) {
             //更新仇恨目标
-            memoryStorage!!.set(CoreMemoryTypes.ATTACK_TARGET, source.damager)
+            memoryStorage.set(CoreMemoryTypes.ATTACK_TARGET, source.damager)
         }
 
         if (source.cause != DamageCause.VOID && source.cause != DamageCause.CUSTOM && source.cause != DamageCause.MAGIC && source.cause != DamageCause.HUNGER) {
@@ -319,7 +319,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     }
 
     override fun getDrops(): Array<Item> {
-        return inventory!!.contents.values.stream()
+        return inventory.contents.values.stream()
             .filter { it.hasEnchantment(Enchantment.ID_VANISHING_CURSE) }
             .toList().toTypedArray()
     }
@@ -470,7 +470,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         // 计算是否活跃
         isActive = level!!.isHighLightChunk(getChunkX(), getChunkZ())
         if (!this.isImmobile()) { // immobile会禁用实体AI
-            val behaviorGroup = getBehaviorGroup() ?: return
+            val behaviorGroup = getBehaviorGroup()
             behaviorGroup.collectSensorData(this)
             behaviorGroup.evaluateCoreBehaviors(this)
             behaviorGroup.evaluateBehaviors(this)

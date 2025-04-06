@@ -26,7 +26,7 @@ class BlockEntityGlowItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntityIte
             val item = item
             val tag = super.spawnCompound
 
-            if (!item!!.isNothing) {
+            if (!item.isNothing) {
                 val itemTag = NBTIO.putItemHelper(item)
                 val networkDamage = item.damage
                 val namespacedId = item.id

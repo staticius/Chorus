@@ -49,7 +49,7 @@ class HudCommand(name: String) : VanillaCommand(name, "commands.hud.description"
     ): Int {
         val list = result.value
 
-        val players = list!!.getResult<List<Player>>(0)!!
+        val players = list.getResult<List<Player>>(0)!!
         if (players.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0

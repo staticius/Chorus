@@ -63,15 +63,15 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                         },
                         any(
                             IBehaviorEvaluator { entity: EntityMob? ->
-                                memoryStorage!!.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && level!!.raycastBlocks(
+                                memoryStorage.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && level!!.raycastBlocks(
                                     this.position,
-                                    memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER).position
+                                    memoryStorage.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER).position
                                 ).isEmpty()
                             },
                             IBehaviorEvaluator { entity: EntityMob? ->
-                                memoryStorage!!.get<Entity?>(CoreMemoryTypes.Companion.ATTACK_TARGET) != null && level!!.raycastBlocks(
+                                memoryStorage.get<Entity?>(CoreMemoryTypes.Companion.ATTACK_TARGET) != null && level!!.raycastBlocks(
                                     this.position,
-                                    memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET).position
+                                    memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET).position
                                 ).isEmpty()
                             }
                         )
@@ -81,7 +81,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                     MoveToTargetExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, true, 16f, 3f, true), all(
                         MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
                         IBehaviorEvaluator { entity: EntityMob ->
-                            !entity.memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) || (entity.memoryStorage!!
+                            !entity.memoryStorage.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) || (entity.memoryStorage
                                 .get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) !is Player) || player.isSurvival()
                         }
                     ), 3, 1),
@@ -89,8 +89,8 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                     MoveToTargetExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.3f, true, 16f, 3f), all(
                         MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
                         IBehaviorEvaluator { entity: EntityMob ->
-                            if (entity.memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_PLAYER)) return@all true
-                            val player = entity.memoryStorage!!.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
+                            if (entity.memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_PLAYER)) return@all true
+                            val player = entity.memoryStorage.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
                             player.isSurvival
                         }
                     ), 2, 1),
@@ -107,7 +107,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                 ),
                 ISensor { entity: EntityMob ->
                     val memoryStorage = entity.memoryStorage
-                    var attacker = memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
+                    var attacker = memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
                     if (attacker == null) attacker = memoryStorage.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
                     if (attacker != null && (attacker !is Player || attacker.isSurvival) && attacker.position.distanceSquared(
                             entity.position

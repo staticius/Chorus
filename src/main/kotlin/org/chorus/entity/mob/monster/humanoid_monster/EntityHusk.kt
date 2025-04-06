@@ -56,7 +56,7 @@ class EntityHusk(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt) {
                 ),
                 Behavior(
                     JumpExecutor(), all(
-                        IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) },
+                        IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) },
                         IBehaviorEvaluator { entity: EntityMob ->
                             entity.getCollisionBlocks()!!.stream().anyMatch { block: Block? -> block is BlockTurtleEgg }
                         }), 6, 1, 10

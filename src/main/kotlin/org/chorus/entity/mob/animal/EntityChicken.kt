@@ -73,7 +73,7 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                 ),
                 Behavior(
                     EntityBreedingExecutor<EntityChicken>(EntityChicken::class.java, 16, 100, 0.3f),
-                    { entity: EntityMob -> entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
+                    { entity: EntityMob -> entity.memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
                     5,
                     1
                 ),
@@ -98,7 +98,7 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                 ),
                 Behavior(
                     { entity: EntityMob ->
-                        entity.memoryStorage!!.set<Int>(
+                        entity.memoryStorage.set<Int>(
                             CoreMemoryTypes.Companion.LAST_EGG_SPAWN_TIME,
                             level!!.tick
                         )

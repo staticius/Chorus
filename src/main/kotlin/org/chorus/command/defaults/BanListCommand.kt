@@ -31,7 +31,7 @@ class BanListCommand(name: String) : VanillaCommand(name, "list all the banned p
         val list: BanList
         var ips = false
 
-        if (paramList!!.hasResult(0)) {
+        if (paramList.hasResult(0)) {
             val type = paramList.getResult<String>(0)
             when (type!!.lowercase()) {
                 "ips" -> {

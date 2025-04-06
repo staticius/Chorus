@@ -66,12 +66,12 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
                             IBehaviorEvaluator { entity: EntityMob? -> level!!.tick % 10 == 0 }),
                         IBehaviorEvaluator { entity: EntityMob? -> isInsideOfWater },
                         all(
-                            IBehaviorEvaluator { entity: EntityMob? -> memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) },
+                            IBehaviorEvaluator { entity: EntityMob? -> memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) },
                             IBehaviorEvaluator { entity: EntityMob? -> level!!.tick % 20 == 0 },
                             ProbabilityEvaluator(2, 25)
                         ),
                         all(
-                            IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) },
+                            IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) },
                             ProbabilityEvaluator(1, 20),
                             PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME, 0, 10)
                         )
@@ -82,10 +82,10 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
                         any(
                             IBehaviorEvaluator { entity: EntityMob? ->
-                                memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is Player && holder.getInventory() != null && (holder.getInventory()
+                                memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is Player && holder.getInventory() != null && (holder.getInventory()
                                     .getHelmet().getId() != Block.CARVED_PUMPKIN)
                             },
-                            IBehaviorEvaluator { entity: EntityMob? -> memoryStorage!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is EntityMob }
+                            IBehaviorEvaluator { entity: EntityMob? -> memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is EntityMob }
                         )
                     ), 3, 1),
                 Behavior(
@@ -142,7 +142,7 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         if (source.cause == DamageCause.PROJECTILE) {
             if (source is EntityDamageByEntityEvent) {
                 if (source.damager is EntityProjectile) {
-                    memoryStorage!!.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, projectile.shootingEntity)
+                    memoryStorage.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, projectile.shootingEntity)
                 }
             }
             TeleportExecutor(16, 5, 16).execute(this)

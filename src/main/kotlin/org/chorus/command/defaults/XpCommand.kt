@@ -38,7 +38,7 @@ class XpCommand(name: String) : Command(name, "commands.xp.description") {
         var players: List<Player>? = if (sender.isPlayer) listOf(sender.asPlayer()!!) else null
         when (result.key) {
             "default" -> {
-                val amount = list!!.getResult<Int>(0)!!
+                val amount = list.getResult<Int>(0)!!
                 if (amount < 0) {
                     log.addError("commands.xp.failure.widthdrawXp").output()
                     return 0
@@ -59,7 +59,7 @@ class XpCommand(name: String) : Command(name, "commands.xp.description") {
             }
 
             "level" -> {
-                val level = list!!.getResult<Int>(0)!!
+                val level = list.getResult<Int>(0)!!
                 if (list.hasResult(1)) {
                     players = list.getResult(1)
                 }

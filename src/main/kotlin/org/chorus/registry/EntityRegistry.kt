@@ -703,7 +703,7 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
                 IRegistry.Companion.fastMemberLoaderCache.computeIfAbsent(plugin.name) { p: String? ->
                     FastMemberLoader(plugin.pluginClassLoader)
                 }
-            FAST_NEW[key!!.id] = FastConstructor.create(
+            FAST_NEW[key.id] = FastConstructor.create(
                 value.getConstructor(
                     IChunk::class.java,
                     CompoundTag::class.java

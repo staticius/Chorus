@@ -1043,11 +1043,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                     this.setHealth(1f)
 
                     this.addEffect(
-                        Effect.get(EffectType.REGENERATION)!!.setDuration(800).setAmplifier(1)
+                        Effect.get(EffectType.REGENERATION).setDuration(800).setAmplifier(1)
                     )
-                    this.addEffect(Effect.get(EffectType.FIRE_RESISTANCE)!!.setDuration(800))
+                    this.addEffect(Effect.get(EffectType.FIRE_RESISTANCE).setDuration(800))
                     this.addEffect(
-                        Effect.get(EffectType.ABSORPTION)!!.setDuration(100).setAmplifier(1)
+                        Effect.get(EffectType.ABSORPTION).setDuration(100).setAmplifier(1)
                     )
 
                     val pk = EntityEventPacket()
@@ -1093,7 +1093,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     open fun getNetworkID(): Int {
-        return Registries.ENTITY.getEntityNetworkId(getIdentifier())!!
+        return Registries.ENTITY.getEntityNetworkId(getIdentifier())
     }
 
     fun heal(source: EntityRegainHealthEvent) {
@@ -1825,7 +1825,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             if (damage > 0) {
                 if (!this.isSneaking()) {
                     if (this !is EntityItem ||
-                        !ItemTags.getTagSet(item!!.identifier.toString()).contains(ItemTags.WOOL)
+                        !ItemTags.getTagSet(item.identifier.toString()).contains(ItemTags.WOOL)
                     ) {
                         level!!.vibrationManager.callVibrationEvent(
                             VibrationEvent(
@@ -2011,14 +2011,14 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         ) else level!!.getBlock(position.floor())
 
         var layer1 = false
-        val block1: Block? =
-            if (tickCached) block?.getTickCachedLevelBlockAtLayer(1) else block?.getLevelBlockAtLayer(1)
+        val block1: Block =
+            if (tickCached) block.getTickCachedLevelBlockAtLayer(1) else block.getLevelBlockAtLayer(1)
         if (block !is BlockBubbleColumn && (block is BlockFlowingWater
                     || (block1 is BlockFlowingWater).also { layer1 = it }
                     )
         ) {
             val water: BlockFlowingWater = (if (layer1) block1 else block) as BlockFlowingWater
-            val f: Double = (block!!.position.y + 1) - (water.fluidHeightPercent - 0.1111111)
+            val f: Double = (block.position.y + 1) - (water.fluidHeightPercent - 0.1111111)
             return y < f
         }
 
@@ -2031,7 +2031,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             position.clone().setY(y).floor()
         )
 
-        val bb: AxisAlignedBB? = block?.boundingBox
+        val bb: AxisAlignedBB? = block.boundingBox
 
         return bb != null && block.isSolid && !block.isTransparent && bb.intersectsWith(this.getBoundingBox())
     }
@@ -2070,7 +2070,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     fun isOnLadder(): Boolean {
         val b: Block = getTransform().levelBlock
 
-        return BlockID.LADDER == b?.id
+        return BlockID.LADDER == b.id
     }
 
     /**
@@ -3280,7 +3280,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
          */
         @JvmStatic
         fun createEntity(type: Int, pos: Locator, vararg args: Any?): Entity? {
-            val entityIdentifier = Registries.ENTITY.getEntityIdentifier(type) ?: return null
+            val entityIdentifier = Registries.ENTITY.getEntityIdentifier(type)
             return createEntity(
                 entityIdentifier,
                 requireNonNull(pos.chunk)!!,
@@ -3303,7 +3303,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
          */
         @JvmStatic
         fun createEntity(type: Int, chunk: IChunk, nbt: CompoundTag, vararg args: Any?): Entity? {
-            val entityIdentifier = Registries.ENTITY.getEntityIdentifier(type) ?: return null
+            val entityIdentifier = Registries.ENTITY.getEntityIdentifier(type)
             return Registries.ENTITY.provideEntity(entityIdentifier, chunk, nbt, *args)
         }
 
@@ -3322,7 +3322,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
          * @return the identifier
          */
         fun getIdentifier(networkID: Int): Identifier? {
-            val entityIdentifier = Registries.ENTITY.getEntityIdentifier(networkID) ?: return null
+            val entityIdentifier = Registries.ENTITY.getEntityIdentifier(networkID)
             return Identifier(entityIdentifier)
         }
 

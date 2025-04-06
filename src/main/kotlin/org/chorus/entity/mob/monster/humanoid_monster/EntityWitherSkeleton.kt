@@ -49,7 +49,7 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
                 Behavior(
                     IBehaviorExecutor { entity: EntityMob? ->
                         val storage = memoryStorage
-                        if (storage!!.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) return@IBehaviorExecutor false
+                        if (storage.notEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)) return@IBehaviorExecutor false
                         var attackTarget: Entity? = null
                         if (storage.notEmpty(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET) && storage.get<Entity>(
                                 CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET

@@ -38,7 +38,7 @@ class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState = Compani
         }
     }
 
-    override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
+    override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return this
     }
 

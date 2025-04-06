@@ -59,7 +59,7 @@ abstract class BlockCropsStem(blockstate: BlockState) : BlockCrops(blockstate), 
             val ev = BlockGrowEvent(this, block)
             instance.pluginManager.callEvent(ev)
             if (!ev.isCancelled) {
-                level.setBlock(this.position, ev.newState!!, true)
+                level.setBlock(this.position, ev.newState, true)
             }
             return Level.BLOCK_UPDATE_RANDOM
         }
@@ -84,7 +84,7 @@ abstract class BlockCropsStem(blockstate: BlockState) : BlockCrops(blockstate), 
             val ev = BlockGrowEvent(side, get(fruitId))
             instance.pluginManager.callEvent(ev)
             if (!ev.isCancelled) {
-                level.setBlock(side.position, ev.newState!!, true)
+                level.setBlock(side.position, ev.newState, true)
                 blockFace = sideFace
                 level.setBlock(this.position, this, true)
             }

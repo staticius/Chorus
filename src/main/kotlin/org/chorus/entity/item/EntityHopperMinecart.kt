@@ -97,7 +97,7 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
     }
 
     override fun dropItem() {
-        for (item: Item? in inventory!!.getContents().values) {
+        for (item: Item? in inventory.getContents().values) {
             level!!.dropItem(this.position, item)
         }
         if (lastDamageCause is EntityDamageByEntityEvent) {
@@ -111,7 +111,7 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
 
     override fun kill() {
         super.kill()
-        inventory!!.clearAll()
+        inventory.clearAll()
     }
 
     override fun mountEntity(entity: Entity, mode: EntityLink.Type): Boolean {
@@ -119,12 +119,12 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        player.addWindow(inventory!!)
+        player.addWindow(inventory)
         return false // If true, the count of items player has in hand decreases
     }
 
     override fun getInventory(): MinecartHopperInventory {
-        return inventory!!
+        return inventory
     }
 
     override fun initEntity() {
@@ -135,12 +135,12 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
                 CompoundTag::class.java
             )
             for (item: CompoundTag in inventoryList.getAll()) {
-                inventory!!.setItem(item.getByte("Slot").toInt(), NBTIO.getItemHelper(item))
+                inventory.setItem(item.getByte("Slot").toInt(), NBTIO.getItemHelper(item))
             }
         }
 
         entityDataMap.put(EntityDataTypes.Companion.CONTAINER_TYPE, 11)
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_SIZE, inventory!!.size)
+        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_SIZE, inventory.size)
         entityDataMap.put(EntityDataTypes.Companion.CONTAINER_STRENGTH_MODIFIER, 0)
 
         this.updatePickupArea()
@@ -179,7 +179,7 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
         namedTag!!.putList("Items", ListTag<CompoundTag>())
         if (this.inventory != null) {
             for (slot in 0..4) {
-                val item: Item = inventory!!.getItem(slot)
+                val item: Item = inventory.getItem(slot)
                 if (item != null && !item.isNull()) {
                     namedTag!!.getList("Items", CompoundTag::class.java)
                         .add(NBTIO.putItemHelper(item, slot))

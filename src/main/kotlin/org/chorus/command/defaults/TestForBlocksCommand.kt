@@ -35,7 +35,7 @@ class TestForBlocksCommand(name: String) : VanillaCommand(name, "commands.testfo
         log: CommandLogger
     ): Int {
         val list = result.value
-        val begin = list!!.getResult<Locator>(0)
+        val begin = list.getResult<Locator>(0)
         val end = list.getResult<Locator>(1)
         val destination = list.getResult<Locator>(2)
         var mode = TestForBlocksMode.ALL

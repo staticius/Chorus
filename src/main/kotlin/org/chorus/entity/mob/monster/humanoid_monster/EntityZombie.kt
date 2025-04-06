@@ -54,7 +54,7 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 Behavior(
                     NearestBlockIncementExecutor(),
                     { entity: EntityMob? ->
-                        !memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) && memoryStorage!!.get<Block>(
+                        !memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) && memoryStorage.get<Block>(
                             CoreMemoryTypes.Companion.NEAREST_BLOCK
                         ) is BlockTurtleEgg
                     }, 1, 1
@@ -72,7 +72,7 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 ),
                 Behavior(
                     JumpExecutor(), all(
-                        IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage!!.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) },
+                        IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_BLOCK) },
                         IBehaviorEvaluator { entity: EntityMob ->
                             entity.getCollisionBlocks()!!.stream().anyMatch { block: Block? -> block is BlockTurtleEgg }
                         }), 6, 1, 10
@@ -215,7 +215,7 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 )) {
                     if (i is EntityItem) {
                         val item = i.item
-                        if (item!!.isArmor || item.isTool) {
+                        if (item.isArmor || item.isTool) {
                             if (entity.equip(item)) {
                                 val pk = TakeItemEntityPacket()
                                 pk.entityId = entity.runtimeId

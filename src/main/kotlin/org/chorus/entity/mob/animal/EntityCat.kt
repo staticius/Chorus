@@ -104,14 +104,14 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                 ),  //猫咪繁殖 优先级5
                 Behavior(
                     EntityBreedingExecutor<EntityCat>(EntityCat::class.java, 8, 100, 0.35f),
-                    { entity: EntityMob -> entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
+                    { entity: EntityMob -> entity.memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
                     5
                 ),  //猫咪向主人移动 优先级4
                 Behavior(EntityMoveToOwnerExecutor(0.35f, true, 15), IBehaviorEvaluator { entity: EntityMob ->
                     if (this.hasOwner()) {
                         val player = owner
                         if (!player!!.isOnGround) return@IBehaviorEvaluator false
-                        val distanceSquared = entity.position.distanceSquared(player!!.position)
+                        val distanceSquared = entity.position.distanceSquared(player.position)
                         return@IBehaviorEvaluator distanceSquared >= 100
                     } else return@IBehaviorEvaluator false
                 }, 4),  //猫在主人身边随机移动 优先级3

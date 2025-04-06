@@ -43,7 +43,7 @@ class BlockCartographyTable @JvmOverloads constructor(blockstate: BlockState = C
         fz: Float
     ): Boolean {
         if (isNotActivate(player)) return false
-        player!!.addWindow(inventory!!)
+        player!!.addWindow(inventory)
         return true
     }
 

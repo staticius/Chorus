@@ -50,7 +50,7 @@ class EntityGoat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                 ),
                 Behavior(
                     EntityBreedingExecutor<EntityArmadillo>(EntityArmadillo::class.java, 16, 100, 0.5f),
-                    { entity: EntityMob -> entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
+                    { entity: EntityMob -> entity.memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
                     3,
                     1
                 ),

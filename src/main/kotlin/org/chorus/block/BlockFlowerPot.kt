@@ -177,7 +177,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
         }
     }
 
-    override fun recalculateBoundingBox(): AxisAlignedBB? {
+    override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }
 

@@ -133,7 +133,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         return true
     }
 
-    val text: Array<String?>?
+    val text: Array<String?>
         get() = getText(true)
 
     fun getText(front: Boolean): Array<String?> {

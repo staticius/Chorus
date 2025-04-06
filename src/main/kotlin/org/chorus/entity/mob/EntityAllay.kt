@@ -122,7 +122,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
             setItemInHand(itemInHand)
         }
         updateMemory()
-        return super.onInteract(player!!, item, clickedPos)
+        return super.onInteract(player, item, clickedPos)
     }
 
     private fun updateMemory() {
@@ -142,7 +142,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
             val nearestItem: EntityItem = getMemoryStorage().get<EntityItem>(CoreMemoryTypes.Companion.NEAREST_ITEM)
             if (nearestItem != null && !nearestItem.closed) {
                 if (nearestItem.position.distance(this.position) < 1 && currentTick - lastItemDropTick > dropCollectCooldown) {
-                    val item: Item? = nearestItem.getItem()
+                    val item: Item = nearestItem.getItem()
                     val currentItem: Item = getInventory().getItem(0).clone()
                     if (getInventory().canAddItem(item)) {
                         if (currentItem.isNull()) {

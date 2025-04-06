@@ -2,7 +2,7 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-abstract class DataPacket() {
+abstract class DataPacket {
     open fun decode(byteBuf: HandleByteBuf) {}
 
     open fun encode(byteBuf: HandleByteBuf) {}

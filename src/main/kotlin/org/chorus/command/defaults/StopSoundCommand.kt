@@ -31,7 +31,7 @@ class StopSoundCommand(name: String) : VanillaCommand(name, "commands.stopsound.
         log: CommandLogger
     ): Int {
         val list = result.value
-        val targets = list!!.getResult<List<Player>>(0)!!
+        val targets = list.getResult<List<Player>>(0)!!
         if (targets.isEmpty()) {
             log.addNoTargetMatch().output()
             return 0

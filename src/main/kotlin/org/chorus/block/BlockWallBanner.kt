@@ -17,7 +17,7 @@ class BlockWallBanner @JvmOverloads constructor(blockstate: BlockState = Compani
 
     override fun onUpdate(type: Int): Int {
         if (type == Level.BLOCK_UPDATE_NORMAL) {
-            if (getSide(blockFace!!.getOpposite()).isAir) {
+            if (getSide(blockFace.getOpposite()).isAir) {
                 level.useBreakOn(this.position)
             }
             return Level.BLOCK_UPDATE_NORMAL
@@ -28,7 +28,7 @@ class BlockWallBanner @JvmOverloads constructor(blockstate: BlockState = Compani
     override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION))
         set(face) {
-            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face!!.index)
+            setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
     override var direction: CompassRoseDirection

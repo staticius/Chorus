@@ -52,7 +52,7 @@ class WhitelistCommand(name: String) :
         val list = result.value
         when (result.key) {
             "1arg" -> {
-                val action = list!!.getResult<String>(0)
+                val action = list.getResult<String>(0)
                 if (this.badPerm(log, sender, action!!.lowercase())) {
                     return 0
                 }

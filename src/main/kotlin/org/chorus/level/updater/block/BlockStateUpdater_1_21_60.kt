@@ -56,7 +56,7 @@ class BlockStateUpdater_1_21_60 : Updater {
             .match("name", "minecraft:creaking_heart")
             .edit("states") { helper: CompoundTagEditHelper ->
                 val states = helper.compoundTag
-                val bit = states!!.remove("active")
+                val bit = states.remove("active")
                 val active =
                     bit is Byte && bit.toInt() == 1 || bit is Boolean && bit
                 helper.replaceWith("creaking_heart_state", if (active) "awake" else "uprooted")

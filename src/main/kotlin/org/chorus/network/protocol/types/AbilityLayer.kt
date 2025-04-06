@@ -2,7 +2,7 @@ package org.chorus.network.protocol.types
 
 import java.util.*
 
-class AbilityLayer() {
+class AbilityLayer {
     var layerType: Type = Type.CACHE
     var abilitiesSet: MutableSet<PlayerAbility> = EnumSet.noneOf(PlayerAbility::class.java)
     var abilityValues: MutableSet<PlayerAbility> = EnumSet.noneOf(PlayerAbility::class.java)

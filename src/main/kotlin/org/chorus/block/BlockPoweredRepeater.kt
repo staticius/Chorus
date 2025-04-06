@@ -18,7 +18,7 @@ class BlockPoweredRepeater @JvmOverloads constructor(blockstate: BlockState = Co
     override val unpowered
         get(): Block {
             val blockUnpoweredRepeater = BlockUnpoweredRepeater()
-            return blockUnpoweredRepeater.setPropertyValues(blockState.blockPropertyValues!!)
+            return blockUnpoweredRepeater.setPropertyValues(blockState.blockPropertyValues)
         }
 
     override val lightLevel: Int

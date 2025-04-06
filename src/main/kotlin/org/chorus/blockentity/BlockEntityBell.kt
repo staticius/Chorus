@@ -86,8 +86,8 @@ class BlockEntityBell(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(ch
         }
 
         for (player in level.getChunkPlayers(
-            chunk!!.x,
-            chunk!!.z
+            chunk.x,
+            chunk.z
         ).values) {
             if (player.spawned && !spawnExceptions.contains(player)) {
                 this.spawnTo(player)

@@ -72,7 +72,7 @@ abstract class BlockSignBase(blockState: BlockState) : BlockTransparent(blockSta
 
             when (item) {
                 is ItemDye -> {
-                    val color: BlockColor = item.dyeColor.color!!
+                    val color: BlockColor = item.dyeColor.color
                     if (color == blockEntity.getColor(front) || blockEntity.isEmpty(front)) {
                         player!!.openSignEditor(this.position, front)
                         return

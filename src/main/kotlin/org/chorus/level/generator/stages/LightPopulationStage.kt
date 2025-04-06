@@ -9,7 +9,7 @@ class LightPopulationStage : GenerateStage() {
     }
 
     override fun apply(context: ChunkGenerateContext) {
-        val chunk = context.chunk ?: return
+        val chunk = context.chunk
         chunk.recalculateHeightMap()
         chunk.populateSkyLight()
     }

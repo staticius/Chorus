@@ -58,7 +58,7 @@ class EntityMule(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, nbt), En
                 ),
                 Behavior(
                     EntityBreedingExecutor<EntityHorse>(EntityHorse::class.java, 16, 100, 0.5f),
-                    { entity: EntityMob -> entity.memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
+                    { entity: EntityMob -> entity.memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
                     3,
                     1
                 ),

@@ -19,7 +19,7 @@ class BlockSoulCampfire @JvmOverloads constructor(blockstate: BlockState = Compa
         return arrayOf(get(BlockID.SOUL_SOIL, 0, 1))
     }
 
-    override fun getDamageEvent(entity: Entity): EntityDamageEvent? {
+    override fun getDamageEvent(entity: Entity): EntityDamageEvent {
         return EntityDamageByBlockEvent(this, entity, EntityDamageEvent.DamageCause.FIRE, 2f)
     }
 

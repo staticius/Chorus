@@ -51,7 +51,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                     SnowGolemShootExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.4f, 16, true, 20, 0),
                     all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
-                        IBehaviorEvaluator { entity: EntityMob? -> getMemoryStorage()!!.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) !is EntitySnowGolem }),
+                        IBehaviorEvaluator { entity: EntityMob? -> getMemoryStorage().get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) !is EntitySnowGolem }),
                     3,
                     1
                 ),
@@ -61,7 +61,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY),
                         IBehaviorEvaluator { entity: EntityMob? ->
                             attackTarget(
-                                getMemoryStorage()!!.get<Entity>(
+                                getMemoryStorage().get<Entity>(
                                     CoreMemoryTypes.Companion.ATTACK_TARGET
                                 )
                             )

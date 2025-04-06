@@ -87,7 +87,7 @@ class TeleportCommand(name: String) :
                     log.addNoTargetMatch().output()
                     return 0
                 }
-                val destination = list!!.getResult<List<Entity>>(0)!!
+                val destination = list.getResult<List<Entity>>(0)!!
                 if (destination.isEmpty()) {
                     log.addNoTargetMatch().output()
                     return 0
@@ -122,7 +122,7 @@ class TeleportCommand(name: String) :
             }
 
             "Entity->Entity" -> {
-                val victims = list!!.getResult<List<Entity>>(0)!!
+                val victims = list.getResult<List<Entity>>(0)!!
                 if (victims.isEmpty()) {
                     log.addNoTargetMatch().output()
                     return 0
@@ -168,7 +168,7 @@ class TeleportCommand(name: String) :
             }
 
             "Entity->Pos" -> {
-                val victims = list!!.getResult<List<Entity>>(0)!!
+                val victims = list.getResult<List<Entity>>(0)!!
                 if (victims.isEmpty()) {
                     log.addNoTargetMatch().output()
                     return 0
@@ -223,7 +223,7 @@ class TeleportCommand(name: String) :
             }
 
             "Entity->Pos(FacingPos)" -> {
-                val victims = list!!.getResult<List<Entity>>(0)!!
+                val victims = list.getResult<List<Entity>>(0)!!
                 if (victims.isEmpty()) {
                     log.addNoTargetMatch().output()
                     return 0
@@ -283,7 +283,7 @@ class TeleportCommand(name: String) :
             }
 
             "Entity->Pos(FacingEntity)" -> {
-                val victims = list!!.getResult<List<Entity>>(0)!!
+                val victims = list.getResult<List<Entity>>(0)!!
                 if (victims.isEmpty()) {
                     log.addNoTargetMatch().output()
                     return 0
@@ -393,7 +393,7 @@ class TeleportCommand(name: String) :
                     log.addError("commands.generic.noTargetMatch").output()
                     return 0
                 }
-                val pos = list!!.getResult<Locator>(0)
+                val pos = list.getResult<Locator>(0)
                 val lookAtLocator = list.getResult<Locator>(2)
                 var checkForBlocks = false
                 if (list.hasResult(3)) {
@@ -441,7 +441,7 @@ class TeleportCommand(name: String) :
                     log.addError("commands.generic.noTargetMatch").output()
                     return 0
                 }
-                val pos = list!!.getResult<Locator>(0)
+                val pos = list.getResult<Locator>(0)
                 val lookAtEntity = list.getResult<List<Entity>>(2)!!
                 if (lookAtEntity.isEmpty()) {
                     log.addNoTargetMatch().output()

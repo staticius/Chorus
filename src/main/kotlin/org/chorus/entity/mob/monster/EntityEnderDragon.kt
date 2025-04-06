@@ -63,7 +63,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
             Set.of<IBehavior>(
                 Behavior(
                     PerchingExecutor(),
-                    { entity: EntityMob? -> memoryStorage!!.get<Boolean>(CoreMemoryTypes.Companion.FORCE_PERCHING) },
+                    { entity: EntityMob? -> memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.FORCE_PERCHING) },
                     5,
                     1
                 ),
@@ -253,7 +253,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         this.diffHandDamage = floatArrayOf(6f, 10f, 15f)
         this.maxHealth = 200
         super.initEntity()
-        memoryStorage!!.set<Vector3>(CoreMemoryTypes.Companion.STAY_NEARBY, Vector3(0.0, 84.0, 0.0))
+        memoryStorage.set<Vector3>(CoreMemoryTypes.Companion.STAY_NEARBY, Vector3(0.0, 84.0, 0.0))
         isActive = false
         noClip = true
     }
@@ -293,9 +293,9 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         SimpleSpaceAStarRouteFinder(blockEvaluator, entity) {
         override fun search(): Boolean {
             val superRes = super.search()
-            if (superRes && memoryStorage!!.notEmpty(CoreMemoryTypes.Companion.MOVE_TARGET)) {
+            if (superRes && memoryStorage.notEmpty(CoreMemoryTypes.Companion.MOVE_TARGET)) {
                 this.nodes = ArrayList<Node?>(setOf<Node>(nodes.first()))
-                nodes.add(Node(memoryStorage!!.get<Vector3>(CoreMemoryTypes.Companion.MOVE_TARGET), null, 0, 0))
+                nodes.add(Node(memoryStorage.get<Vector3>(CoreMemoryTypes.Companion.MOVE_TARGET), null, 0, 0))
             }
             return superRes
         }
@@ -327,7 +327,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
 
     protected inner class LookController : IController {
         override fun control(entity: EntityMob): Boolean {
-            val target = entity.memoryStorage!!.get<Vector3>(CoreMemoryTypes.Companion.LOOK_TARGET)
+            val target = entity.memoryStorage.get<Vector3>(CoreMemoryTypes.Companion.LOOK_TARGET)
             val toPlayerVector = Vector3(
                 entity.position.x - target.x,
                 entity.position.y - target.y,

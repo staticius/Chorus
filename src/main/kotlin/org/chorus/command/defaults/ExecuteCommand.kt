@@ -250,13 +250,13 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
         val list = result.value
         when (result.key) {
             "run" -> {
-                val command = list!!.getResult<String>(1)
+                val command = list.getResult<String>(1)
                 if (command!!.isBlank()) return 0
                 return Server.instance.executeCommand(sender, command)
             }
 
             "as" -> {
-                val executors = list!!.getResult<List<Entity>>(1)!!
+                val executors = list.getResult<List<Entity>>(1)!!
                 if (executors.isEmpty()) {
                     log.addNoTargetMatch().output()
                     return 0
