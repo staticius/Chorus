@@ -6,12 +6,13 @@ import org.chorus.nbt.NBTIO.read
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.utils.Loggable
 import java.nio.ByteOrder
 
 
-class SyncEntityPropertyPacket : DataPacket() {
+class SyncEntityPropertyPacket(
     var data: CompoundTag? = null
-
+) : DataPacket() {
     override fun decode(byteBuf: HandleByteBuf) {
         try {
             ByteBufInputStream(byteBuf).use { stream ->
@@ -37,4 +38,6 @@ class SyncEntityPropertyPacket : DataPacket() {
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
+
+    companion object : Loggable
 }

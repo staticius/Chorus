@@ -50,9 +50,9 @@ data class PotionType(
         return sb.toString()
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (obj is PotionType) {
-            return obj.stringId == this.stringId && obj.id == this.id
+    override fun equals(other: Any?): Boolean {
+        if (other is PotionType) {
+            return other.stringId == this.stringId && other.id == this.id
         }
         return false
     }
@@ -267,26 +267,26 @@ data class PotionType(
         val INFESTED: PotionType = PotionType("Infested", "minecraft:infested", 46, PotionEffects.Companion.EMPTY)
 
         private fun appendRoman(sb: StringBuilder, num: Int) {
-            var num: Int = num
+            var num1: Int = num
             val romans: Array<String> = arrayOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
             val ints: IntArray = intArrayOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
 
             for (i in ints.indices.reversed()) {
-                val times: Int = num / ints.get(i)
-                num %= ints.get(i)
+                val times: Int = num1 / ints[i]
+                num1 %= ints[i]
 
-                sb.append(romans.get(i).repeat(times))
+                sb.append(romans[i].repeat(times))
             }
         }
 
         @JvmStatic
-        fun get(stringId: String?): PotionType {
-            return Registries.POTION.get(stringId)
+        fun get(stringId: String): PotionType {
+            return Registries.POTION.get(stringId) ?: throw RuntimeException("Unknown PotionType ID: $stringId")
         }
 
         @JvmStatic
         fun get(id: Int): PotionType {
-            return Registries.POTION.get(id)
+            return Registries.POTION.get(id) ?: throw RuntimeException("Unknown PotionType ID: $id")
         }
     }
 }

@@ -30,10 +30,10 @@ abstract class EntityProperty(private val identifier: String) {
             try {
                 EntityProperty::class.java.getClassLoader().getResourceAsStream("entity_properties.nbt").use { stream ->
                     val root: CompoundTag = NBTIO.readCompressed(stream)
-                    root.getTags().values.forEach(Consumer<Tag> { uncast: Tag ->
+                    root.getTags().values.forEach({ uncast ->
                         if (uncast is CompoundTag) {
                             val properties: ListTag<CompoundTag> = uncast.getList("properties", CompoundTag::class.java)
-                            for (property: CompoundTag in properties.getAll()) {
+                            for (property: CompoundTag in properties.all) {
                                 val name: String = property.getString("name")
                                 val data: EntityProperty = when (val type: Int = property.getInt("type")) {
                                     0 -> IntEntityProperty(
@@ -54,10 +54,10 @@ abstract class EntityProperty(private val identifier: String) {
                                     3 -> {
                                         val enums: MutableList<String> = ArrayList()
                                         for (entry: StringTag in property.getList("enum", StringTag::class.java)
-                                            .getAll()) enums.add(entry.data)
+                                            .all) enums.add(entry.data)
                                         EnumEntityProperty(
                                             name,
-                                            enums.toArray<String>(IntFunction<Array<String>> { _Dummy_.__Array__() }),
+                                            enums.toTypedArray(),
                                             enums.first()
                                         )
                                     }
@@ -107,7 +107,7 @@ abstract class EntityProperty(private val identifier: String) {
 
         @JvmStatic
         fun getPacketCache(): List<SyncEntityPropertyPacket> {
-            return nbtCache.stream().map { data: CompoundTag? -> SyncEntityPropertyPacket(data) }.toList()
+            return nbtCache.stream().map { data -> SyncEntityPropertyPacket(data) }.toList()
         }
 
         @JvmStatic
