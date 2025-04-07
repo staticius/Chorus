@@ -35,7 +35,7 @@ class WalkingPosEvaluator : IPosEvaluator {
     /**
      * 指定实体在指定坐标上能否不发生碰撞
      */
-    //todo: 此方法会造成大量开销，原因是碰撞检查，有待优化
+    // TODO: 此方法会造成大量开销，原因是碰撞检查，有待优化
     protected fun isPassable(entity: EntityMob, vector3: Vector3): Boolean {
         val radius = ((entity.getWidth() * entity.getScale()) / 2).toDouble()
         val height = entity.getHeight() * entity.getScale()

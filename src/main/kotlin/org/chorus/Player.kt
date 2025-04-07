@@ -2720,7 +2720,7 @@ class Player(
                 this.dataPacket(pk) //Send to self
             }
             if (this.motion.y > 0) {
-                //todo: check this
+                // TODO: check this
                 this.startAirTicks =
                     ((-(ln(this.getGravity() / (this.getGravity() + this.getDrag() * this.motion.y))) / this.getDrag()) * 2 + 5).toInt()
             }

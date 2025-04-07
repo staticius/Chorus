@@ -51,17 +51,14 @@ import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.ceil
 
-/**
- * @author PikyCZ
- */
 open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityVariant,
     EntityMarkVariant, EntityRideable, EntityOwnable, InventoryHolder {
     override fun getIdentifier(): String {
         return EntityID.HORSE
     }
 
-    private var attributeMap: MutableMap<String?, Attribute>? = null
-    private var horseInventory: HorseInventory? = null
+    private lateinit var attributeMap: MutableMap<String, Attribute>
+    override lateinit var inventory: HorseInventory
     private val jumping = AtomicBoolean(false)
 
     override fun getWidth(): Float {
@@ -86,14 +83,14 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
             }
         } else {
             for (attribute in randomizeAttributes()) {
-                attributeMap[attribute.name] = attribute
+                attributeMap[attribute.getName()] = attribute
             }
         }
         this.maxHealth =
-            ceil(attributeMap.get("minecraft:health")!!.maxValue.toDouble()).toInt()
+            ceil(attributeMap["minecraft:health"]!!.getMaxValue().toDouble()).toInt()
         super.initEntity()
 
-        this.horseInventory = HorseInventory(this)
+        this.inventory = HorseInventory(this)
         val inventoryTag: ListTag<CompoundTag>
         if (namedTag!!.containsList("Inventory")) {
             inventoryTag = namedTag!!.getList("Inventory", CompoundTag::class.java)
@@ -135,7 +132,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         namedTag!!.putList("Inventory", inventoryTag)
 
         val compoundTagListTag = ListTag<CompoundTag>()
-        for (attribute in attributeMap!!.values) {
+        for (attribute in attributeMap.values) {
             compoundTagListTag.add(Attribute.Companion.toNBT(attribute))
         }
         namedTag!!.putList("Attributes", compoundTagListTag)
@@ -143,8 +140,8 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
     override fun setHealth(health: Float) {
         super.setHealth(health)
-        if (this.isAlive) {
-            val attr = attributeMap!!["minecraft:health"]
+        if (this.isAlive()) {
+            val attr = attributeMap["minecraft:health"]!!
                 .setDefaultValue(maxHealth.toFloat())
                 .setMaxValue(maxHealth.toFloat())
                 .setValue(if (health > 0) (if (health < maxHealth) health else maxHealth.toFloat()) else 0f)
@@ -157,11 +154,11 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
     override fun setMaxHealth(maxHealth: Int) {
         super.setMaxHealth(maxHealth)
-        val attr = attributeMap!!["minecraft:health"]
+        val attr = attributeMap["minecraft:health"]!!
             .setMaxValue(maxHealth.toFloat())
             .setDefaultValue(maxHealth.toFloat())
             .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f)
-        if (this.isAlive) {
+        if (this.isAlive()) {
             val pk = UpdateAttributesPacket()
             pk.entries = arrayOf(attr)
             pk.entityId = this.getRuntimeID()
@@ -231,8 +228,8 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
     override fun asyncPrepare(currentTick: Int) {
         if (this.getRider() == null || this.owner == null || getSaddle().isNothing) {
-            isActive = level!!.isHighLightChunk(chunkX, chunkZ)
-            if (!this.isImmobile) {
+            isActive = level!!.isHighLightChunk(getChunkX(), getChunkZ())
+            if (!this.isImmobile()) {
                 val behaviorGroup = getBehaviorGroup()
                 behaviorGroup.collectSensorData(this)
                 behaviorGroup.evaluateCoreBehaviors(this)
@@ -248,7 +245,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
             this.needsReCalcMovement =
                 level!!.tickRateOptDelay == 1 || ((currentTick + tickSpread) and (level!!.tickRateOptDelay - 1)) == 0
             this.calculateOffsetBoundingBox()
-            if (!this.isImmobile) {
+            if (!this.isImmobile()) {
                 handleGravity()
                 if (needsReCalcMovement) {
                     handleCollideMovement(currentTick)
@@ -281,7 +278,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
                 .getBoolean(GameRule.FALL_DAMAGE)) && down.useDefaultFallDamage()
         ) {
             val jumpBoost =
-                if (this.hasEffect(EffectType.JUMP_BOOST)) getEffect(EffectType.JUMP_BOOST).level else 0
+                if (this.hasEffect(EffectType.JUMP_BOOST)) getEffect(EffectType.JUMP_BOOST)!!.getLevel() else 0
             val damage = fallDistance - 3 - jumpBoost - getClientMaxJumpHeight()
 
             if (damage > 0) {
@@ -291,8 +288,8 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
         down.onEntityFallOn(this, fallDistance)
 
-        if (fallDistance > 0.75) { //todo: moving these into their own classes (method "onEntityFallOn()")
-            if (down.id == Block.FARMLAND) {
+        if (fallDistance > 0.75) { // TODO: moving these into their own classes (method "onEntityFallOn()")
+            if (down.id == BlockID.FARMLAND) {
                 if (onPhysicalInteraction(down, false)) {
                     return
                 }
@@ -316,7 +313,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     override fun onUpdate(currentTick: Int): Boolean {
         val b = super.onUpdate(currentTick)
         if (currentTick % 2 == 0) {
-            if (this.jumping != null && jumping.get() && this.isOnGround) {
+            if (this.jumping != null && jumping.get() && this.isOnGround()) {
                 this.setDataFlag(EntityFlag.STANDING, false)
                 jumping.set(false)
             }
@@ -365,7 +362,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun mountEntity(entity: Entity): Boolean {
-        this.memoryStorage.set<String>(CoreMemoryTypes.Companion.RIDER_NAME, entity.name)
+        this.memoryStorage.set(CoreMemoryTypes.RIDER_NAME, entity.name)
         super.mountEntity(entity, EntityLink.Type.RIDER)
         return true
     }
@@ -380,7 +377,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     fun getInventory(): HorseInventory {
-        return horseInventory!!
+        return inventory
     }
 
     fun getRider(): Entity? {
@@ -391,20 +388,20 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     fun getClientMaxJumpHeight(): Float {
-        return attributeMap!!["minecraft:horse.jump_strength"]!!.value
+        return attributeMap["minecraft:horse.jump_strength"]!!.getValue()
     }
 
     /**
      * @see HorseInventory.setSaddle
      */
-    fun setSaddle(item: Item?) {
+    fun setSaddle(item: Item) {
         this.inventory.saddle = item
     }
 
     /**
      * @see HorseInventory.setHorseArmor
      */
-    fun setHorseArmor(item: Item?) {
+    fun setHorseArmor(item: Item) {
         this.inventory.horseArmor = item
     }
 
@@ -448,7 +445,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
     override fun spawnTo(player: Player) {
         super.spawnTo(player)
-        val attr = attributeMap!!["minecraft:health"]
+        val attr = attributeMap["minecraft:health"]!!
             .setDefaultValue(maxHealth.toFloat())
             .setMaxValue(maxHealth.toFloat())
             .setValue(if (health > 0) (if (health < maxHealth) health else maxHealth.toFloat()) else 0f)
@@ -470,21 +467,22 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         return ((0.45f + Utils.random.nextDouble() * 0.3 + Utils.random.nextDouble() * 0.3 + Utils.random.nextDouble() * 0.3) * 0.25).toFloat()
     }
 
-    protected fun randomizeAttributes(): Array<Attribute?> {
-        val attributes = arrayOfNulls<Attribute>(3)
-        attributes[0] = Attribute.Companion.getAttribute(Attribute.Companion.MOVEMENT_SPEED)
-            .setValue(generateRandomSpeed())
+    protected fun randomizeAttributes(): Array<Attribute> {
         val maxHealth = generateRandomMaxHealth()
-        attributes[1] = Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)
-            .setMinValue(0f).setMaxValue(maxHealth).setDefaultValue(maxHealth).setValue(maxHealth)
-        attributes[2] = Attribute.Companion.getAttribute(Attribute.Companion.HORSE_JUMP_STRENGTH)
-            .setValue(generateRandomJumpStrength())
+        val attributes = arrayOf(
+            Attribute.Companion.getAttribute(Attribute.Companion.MOVEMENT_SPEED)
+                .setValue(generateRandomSpeed()),
+            Attribute.Companion.getAttribute(Attribute.Companion.MAX_HEALTH)
+                .setMinValue(0f).setMaxValue(maxHealth).setDefaultValue(maxHealth).setValue(maxHealth),
+            Attribute.Companion.getAttribute(Attribute.Companion.HORSE_JUMP_STRENGTH)
+                .setValue(generateRandomJumpStrength())
+        )
         val compoundTagListTag = ListTag<CompoundTag>()
-        compoundTagListTag.add(Attribute.Companion.toNBT(attributes[0]!!)).add(
+        compoundTagListTag.add(Attribute.Companion.toNBT(attributes[0])).add(
             Attribute.Companion.toNBT(
-                attributes[1]!!
+                attributes[1]
             )
-        ).add(Attribute.Companion.toNBT(attributes[2]!!))
+        ).add(Attribute.Companion.toNBT(attributes[2]))
         namedTag!!.putList("Attributes", compoundTagListTag)
         return attributes
     }
@@ -515,7 +513,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun isBreedingItem(item: Item): Boolean {
-        return item.id == Item.GOLDEN_APPLE || item.id == ItemID.GOLDEN_CARROT
+        return item.id == ItemID.GOLDEN_APPLE || item.id == ItemID.GOLDEN_CARROT
     }
 
     companion object {

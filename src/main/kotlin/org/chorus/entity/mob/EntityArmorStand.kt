@@ -292,7 +292,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
 
         level!!.addSound(this.position, Sound.MOB_ARMOR_STAND_BREAK)
 
-        //todo: initiator should be a entity who kill it but not itself
+        // TODO: initiator should be a entity who kill it but not itself
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 run {

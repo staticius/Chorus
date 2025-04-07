@@ -111,7 +111,7 @@ class EntityMooshroom(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(ItemID.LEATHER), Item.get(Item.BEEF))
+        return arrayOf(Item.get(ItemID.LEATHER), Item.get(ItemID.BEEF))
     }
 
 
@@ -130,7 +130,7 @@ class EntityMooshroom(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
             //TODO 不同颜色的牛掉落不同的蘑菇
             level!!.dropItem(this.position, Item.get(BlockID.RED_MUSHROOM, 0, 5))
             level!!.addParticleEffect(
-                position.add(0.0, this.height.toDouble(), 0.0),
+                position.add(0.0, this.getHeight().toDouble(), 0.0),
                 ParticleEffect.LARGE_EXPLOSION_LEVEL
             )
             val cow = EntityCow(this.locator.chunk, this.namedTag)
@@ -144,13 +144,13 @@ class EntityMooshroom(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
                 )
             )
             return true
-        } else if (item.id === Item.BUCKET && item.damage == 0) {
+        } else if (item.id === ItemID.BUCKET && item.damage == 0) {
             item.count--
-            player.inventory.addItem(Item.get(Item.BUCKET, 1))
+            player.inventory.addItem(Item.get(ItemID.BUCKET, 1))
             return true
         } else if (item.id === ItemID.BOWL && item.damage == 0) {
             item.count--
-            player.inventory.addItem(Item.get(Item.MUSHROOM_STEW))
+            player.inventory.addItem(Item.get(ItemID.MUSHROOM_STEW))
             return true
         }
 

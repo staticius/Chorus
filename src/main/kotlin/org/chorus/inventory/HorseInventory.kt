@@ -2,7 +2,6 @@ package org.chorus.inventory
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.Entity.setDataFlag
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.animal.EntityHorse
 import org.chorus.item.*
@@ -18,17 +17,17 @@ import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import java.io.IOException
 import java.util.List
 
-class HorseInventory(holder: EntityHorse?) : BaseInventory(holder, InventoryType.HORSE, 2) {
-    var saddle: Item?
+class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.HORSE, 2) {
+    var saddle: Item
         get() = this.getItem(0)
         set(item) {
-            this.setItem(0, item!!)
+            this.setItem(0, item)
         }
 
-    var horseArmor: Item?
+    var horseArmor: Item
         get() = this.getItem(1)
         set(item) {
-            this.setItem(1, item!!)
+            this.setItem(1, item)
         }
 
     override fun init() {

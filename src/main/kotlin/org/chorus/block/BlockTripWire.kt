@@ -190,7 +190,7 @@ class BlockTripWire @JvmOverloads constructor(state: BlockState = Companion.prop
             level.setBlock(this.position, this, true, false)
             this.updateHook(false)
             level.setBlock(this.position, get(BlockID.AIR), true, true)
-            //todo: initiator should be a entity
+            // TODO: initiator should be a entity
             level.vibrationManager.callVibrationEvent(
                 VibrationEvent(
                     this, position.add(0.5, 0.5, 0.5), VibrationType.SHEAR

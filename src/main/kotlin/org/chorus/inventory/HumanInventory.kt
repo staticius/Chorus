@@ -230,7 +230,7 @@ class HumanInventory(human: IHuman) //9+27+4
         val itemSlots: MutableList<Item> = ArrayList()
         for (slot in slots) {
             if (!slot.isNothing) {
-                //todo: clone only if necessary
+                // TODO: clone only if necessary
                 itemSlots.add(slot.clone())
             }
         }

@@ -81,7 +81,7 @@ class ItemFlintAndSteel @JvmOverloads constructor(meta: Int = 0, count: Int = 1)
         get() = DURABILITY_FLINT_STEEL
 
     override fun useOn(block: Block): Boolean {
-        //todo: initiator should be an entity who use it but not null
+        // TODO: initiator should be an entity who use it but not null
         block.level.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 null,

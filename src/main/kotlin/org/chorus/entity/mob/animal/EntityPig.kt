@@ -119,7 +119,7 @@ class EntityPig(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get((if (this.isOnFire) Item.COOKED_PORKCHOP else Item.PORKCHOP)))
+        return arrayOf(Item.get((if (this.isOnFire()) ItemID.COOKED_PORKCHOP else ItemID.PORKCHOP)))
     }
 
 

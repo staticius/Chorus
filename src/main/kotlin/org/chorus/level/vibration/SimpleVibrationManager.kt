@@ -68,7 +68,7 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
         val packet: LevelEventGenericPacket = LevelEventGenericPacket()
         packet.eventId = LevelEventPacket.EVENT_PARTICLE_VIBRATION_SIGNAL
         packet.tag = tag
-        //todo: 只对在视野范围内的玩家发包
+        // TODO: 只对在视野范围内的玩家发包
         Server.broadcastPacket(level.players.values, packet)
     }
 
@@ -84,7 +84,7 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
         return CompoundTag()
             .putString("type", "actor")
             .putLong("uniqueID", entity.getRuntimeID())
-            .putInt("attachPos", 3) //todo: check the use of this value :)
+            .putInt("attachPos", 3) // TODO: check the use of this value :)
     }
 
     protected fun canVibrationArrive(level: Level, from: Vector3, to: Vector3): Boolean {

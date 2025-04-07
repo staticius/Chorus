@@ -175,7 +175,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                         this.cauldronLiquid = CauldronLiquid.POWDER_SNOW
                         cauldron.clearCustomColor()
                         level.setBlock(this.position, this, true)
-                        //todo: add the sound of powder snow (I can't find it)
+                        // TODO: add the sound of powder snow (I can't find it)
                     } else { // lava bucket
                         if (isEmpty) {
                             this.cauldronLiquid = CauldronLiquid.LAVA

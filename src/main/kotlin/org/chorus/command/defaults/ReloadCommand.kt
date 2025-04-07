@@ -57,7 +57,7 @@ class ReloadCommand(name: String) : VanillaCommand(name, "Reload the server/plug
                 val pluginManager = Server.instance.pluginManager
                 val str = list.getResult<String>(1)!!
                 var plugin = pluginManager.getPlugin(str) ?: return 0
-                //todo: 多语言
+                // TODO: 多语言
                 log.addSuccess("Reloading plugin §a" + plugin.description.name).output(true)
                 pluginManager.disablePlugin(plugin)
                 pluginManager.plugins.remove(plugin.description.name)

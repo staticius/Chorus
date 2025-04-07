@@ -104,7 +104,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     var persistent: Boolean = false
     var portalCooldown: Int = 0
     var saddled: Boolean = false
-    var sheared: Boolean = false
+    open var sheared: Boolean = false
     var showBottom: Boolean = false
     var sitting: Boolean = false
     var skinId: Int = 0
@@ -1797,7 +1797,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return this.boundingBox
     }
 
-    open fun fall(fallDistance: Float) { //todo: check why @param fallDistance always less than the real distance
+    open fun fall(fallDistance: Float) { // TODO: check why @param fallDistance always less than the real distance
         var fallDistance1: Float = fallDistance
         if (this.hasEffect(EffectType.SLOW_FALLING)) {
             return
@@ -1840,7 +1840,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
         down.onEntityFallOn(this, fallDistance1)
 
-        if (fallDistance1 > 0.75) { //todo: moving these into their own classes (method "onEntityFallOn()")
+        if (fallDistance1 > 0.75) { // TODO: moving these into their own classes (method "onEntityFallOn()")
             if (BlockID.FARMLAND == down.id) {
                 if (onPhysicalInteraction(down, false)) {
                     return

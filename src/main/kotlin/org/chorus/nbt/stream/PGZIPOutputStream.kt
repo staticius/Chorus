@@ -20,7 +20,7 @@ class PGZIPOutputStream(
     private val executor: ExecutorService, private val nthreads: Int
 ) :
     FilterOutputStream(out) {
-    // todo: remove after block guessing is implemented
+    // TODO: remove after block guessing is implemented
     // array list that contains the block sizes
     private val blockSizes: IntList = IntArrayList()
 
@@ -156,7 +156,7 @@ class PGZIPOutputStream(
             // It's an ordered queue. This MUST be the same element as above.
             emitQueue.remove()
             val toWrite = future.get()
-            blockSizes.add(toWrite.size) // todo: remove after block guessing is implemented
+            blockSizes.add(toWrite.size) // TODO: remove after block guessing is implemented
             out.write(toWrite)
         }
     }
@@ -172,7 +172,7 @@ class PGZIPOutputStream(
                 // LOG.info("Waiting for taskCount=" + emitQueue.size() + " -> " + taskCountAllowed);
                 val future = emitQueue.remove() // Valid because emitQueue.size() > 0
                 val toWrite = future.get() // Blocks until this task is done.
-                blockSizes.add(toWrite.size) // todo: remove after block guessing is implemented
+                blockSizes.add(toWrite.size) // TODO: remove after block guessing is implemented
                 out.write(toWrite)
             }
             // We may have achieved more opportunistically available blocks

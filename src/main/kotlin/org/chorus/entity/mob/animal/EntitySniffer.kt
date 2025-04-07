@@ -101,6 +101,6 @@ class EntitySniffer(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     }
 
     override fun isBreedingItem(item: Item): Boolean {
-        return item.id == Item.TORCHFLOWER_SEEDS
+        return item.id == ItemID.TORCHFLOWER_SEEDS
     }
 }

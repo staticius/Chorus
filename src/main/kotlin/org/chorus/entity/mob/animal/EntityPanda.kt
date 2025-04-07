@@ -102,6 +102,6 @@ class EntityPanda(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), 
     }
 
     override fun isBreedingItem(item: Item): Boolean {
-        return item.id == Block.BAMBOO
+        return item.id == BlockID.BAMBOO
     }
 }

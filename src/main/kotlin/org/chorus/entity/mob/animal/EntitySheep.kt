@@ -41,7 +41,7 @@ class EntitySheep(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), 
     }
 
     override var sheared: Boolean = false
-    override var color: Int = 0
+    override var color: Byte = 0
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
@@ -88,8 +88,8 @@ class EntitySheep(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), 
                             )
                         ),
                         any(
-                            BlockCheckEvaluator(Block.GRASS_BLOCK, Vector3(0.0, -1.0, 0.0)),
-                            BlockCheckEvaluator(Block.TALL_GRASS, Vector3.ZERO)
+                            BlockCheckEvaluator(BlockID.GRASS_BLOCK, Vector3(0.0, -1.0, 0.0)),
+                            BlockCheckEvaluator(BlockID.TALL_GRASS, Vector3.ZERO)
                         )
                     ),
                     3, 1, 100
@@ -156,7 +156,7 @@ class EntitySheep(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), 
     override fun saveNBT() {
         super.saveNBT()
 
-        namedTag!!.putByte("Color", this.color)
+        namedTag!!.putByte("Color", this.color.toInt())
         namedTag!!.putBoolean("Sheared", this.sheared)
     }
 
@@ -202,7 +202,7 @@ class EntitySheep(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), 
 
     override fun getDrops(): Array<Item> {
         val woolItem = if (sheared) Item.AIR else this.getWoolItem()
-        return arrayOf(Item.get((if (this.isOnFire) Item.COOKED_MUTTON else Item.MUTTON)), woolItem)
+        return arrayOf(Item.get((if (this.isOnFire()) ItemID.COOKED_MUTTON else ItemID.MUTTON)), woolItem)
     }
 
     fun getColor(): Int {
@@ -210,29 +210,29 @@ class EntitySheep(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), 
     }
 
     fun setColor(color: Int) {
-        this.color = color
+        this.color = color.toByte()
         this.setDataProperty(EntityDataTypes.Companion.COLOR, color)
-        namedTag!!.putByte("Color", this.color)
+        namedTag!!.putByte("Color", this.color.toInt())
     }
 
     fun getWoolItem(): Item {
         return when (getColor()) {
-            0 -> Item.get(Block.WHITE_WOOL)
-            1 -> Item.get(Block.ORANGE_WOOL)
-            2 -> Item.get(Block.MAGENTA_WOOL)
-            3 -> Item.get(Block.LIGHT_BLUE_WOOL)
-            4 -> Item.get(Block.YELLOW_WOOL)
-            5 -> Item.get(Block.LIME_WOOL)
-            6 -> Item.get(Block.PINK_WOOL)
-            7 -> Item.get(Block.GRAY_WOOL)
-            8 -> Item.get(Block.LIGHT_GRAY_WOOL)
-            9 -> Item.get(Block.CYAN_WOOL)
-            10 -> Item.get(Block.PURPLE_WOOL)
-            11 -> Item.get(Block.BLUE_WOOL)
-            12 -> Item.get(Block.BROWN_WOOL)
-            13 -> Item.get(Block.GREEN_WOOL)
-            14 -> Item.get(Block.RED_WOOL)
-            15 -> Item.get(Block.BLACK_WOOL)
+            0 -> Item.get(BlockID.WHITE_WOOL)
+            1 -> Item.get(BlockID.ORANGE_WOOL)
+            2 -> Item.get(BlockID.MAGENTA_WOOL)
+            3 -> Item.get(BlockID.LIGHT_BLUE_WOOL)
+            4 -> Item.get(BlockID.YELLOW_WOOL)
+            5 -> Item.get(BlockID.LIME_WOOL)
+            6 -> Item.get(BlockID.PINK_WOOL)
+            7 -> Item.get(BlockID.GRAY_WOOL)
+            8 -> Item.get(BlockID.LIGHT_GRAY_WOOL)
+            9 -> Item.get(BlockID.CYAN_WOOL)
+            10 -> Item.get(BlockID.PURPLE_WOOL)
+            11 -> Item.get(BlockID.BLUE_WOOL)
+            12 -> Item.get(BlockID.BROWN_WOOL)
+            13 -> Item.get(BlockID.GREEN_WOOL)
+            14 -> Item.get(BlockID.RED_WOOL)
+            15 -> Item.get(BlockID.BLACK_WOOL)
             else -> throw IllegalStateException("Unexpected value: " + getColor())
         }
     }
