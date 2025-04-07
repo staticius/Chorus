@@ -186,7 +186,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = Compan
                     level.setBlock(this.position, this, direct = true, update = false)
                 }
 
-                else -> {}
+                else -> Unit
             }
             return Level.BLOCK_UPDATE_SCHEDULED
         }

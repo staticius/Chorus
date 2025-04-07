@@ -133,7 +133,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
                 return true
             }
 
-            else -> {}
+            else -> Unit
         }
 
         return level.setBlock(block.position, this, true)

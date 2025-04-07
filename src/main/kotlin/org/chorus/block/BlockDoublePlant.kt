@@ -159,7 +159,7 @@ abstract class BlockDoublePlant(blockstate: BlockState) : BlockFlowable(blocksta
                     level.dropItem(this.position, toItem())
                 }
 
-                else -> {}
+                else -> Unit
             }
 
             return true

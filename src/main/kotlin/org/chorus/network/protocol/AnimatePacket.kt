@@ -40,7 +40,7 @@ data class AnimatePacket(
                 val actionData = this.actionData as Action.RowingData
                 byteBuf.writeFloatLE(actionData.rowingTime)
             }
-            else -> {}
+            else -> Unit
         }
 
     }

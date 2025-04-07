@@ -31,7 +31,7 @@ data class CommandOutputPacket(
                 byteBuf.writeString(dataSet)
             }
 
-            else -> {}
+            else -> Unit
         }
     }
 

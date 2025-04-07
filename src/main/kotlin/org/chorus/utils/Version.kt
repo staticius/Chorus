@@ -133,7 +133,7 @@ class Version(private val original: String) : Comparable<Version>, Serializable 
                 when (type.toInt()) {
                     1 -> pending.append(c)
                     2, 3 -> pending.append(c.lowercaseChar())
-                    else -> {}
+                    else -> Unit
                 }
             }
             addPendingPart(parts, pending, previous)
@@ -170,7 +170,7 @@ class Version(private val original: String) : Comparable<Version>, Serializable 
                     pending.setLength(0)
                 }
 
-                else -> {}
+                else -> Unit
             }
         }
     }

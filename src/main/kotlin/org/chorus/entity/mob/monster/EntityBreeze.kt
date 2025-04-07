@@ -52,20 +52,20 @@ class EntityBreeze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_BREEZE_IDLE_AIR), all(
                         RandomSoundEvaluator(),
-                        IBehaviorEvaluator { entity: EntityMob? -> !isOnGround }), 7, 1
+                        IBehaviorEvaluator { entity: EntityMob? -> !isOnGround() }), 7, 1
                 ),
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_BREEZE_IDLE_GROUND), all(
                         RandomSoundEvaluator(),
-                        IBehaviorEvaluator { entity: EntityMob? -> isOnGround }), 6, 1
+                        IBehaviorEvaluator { entity: EntityMob? -> isOnGround() }), 6, 1
                 ),
                 Behavior(
                     BreezeJumpExecutor(), all(
                         any(
-                            IBehaviorEvaluator { obj: EntityMob -> obj.isOnGround },
-                            IBehaviorEvaluator { obj: EntityMob -> obj.isInsideOfWater }),
+                            IBehaviorEvaluator { obj: EntityMob -> obj.isOnGround() },
+                            IBehaviorEvaluator { obj: EntityMob -> obj.isInsideOfWater() }),
                         IBehaviorEvaluator { entity: EntityMob? -> getRiding() == null },
-                        IBehaviorEvaluator { entity: EntityMob? -> !isInsideOfLava }), 5, 1
+                        IBehaviorEvaluator { entity: EntityMob? -> !isInsideOfLava() }), 5, 1
                 ),
                 Behavior(
                     MoveToTargetExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 1.2f, true),
@@ -108,7 +108,7 @@ class EntityBreeze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.BREEZE_ROD, 0, Utils.rand(1, 2)))
+        return arrayOf(Item.get(ItemID.BREEZE_ROD, 0, Utils.rand(1, 2)))
     }
 
     override fun getExperienceDrops(): Int {

@@ -11,7 +11,7 @@ import org.chorus.entity.mob.EntityMob
  * This interface abstracts a sensor<br></br>
  * The sensor is used to collect environmental information and write a memory [org.chorus.entity.ai.memory.MemoryType] to the memory storage [IMemoryStorage]
  */
-interface ISensor {
+fun interface ISensor {
     /**
      * @param entity 目标实体
      */

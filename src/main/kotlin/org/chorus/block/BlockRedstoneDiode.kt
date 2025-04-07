@@ -2,14 +2,11 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.Block.Companion.get
 import org.chorus.block.BlockLever.Companion.isSupportValid
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
-import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.event.redstone.RedstoneUpdateEvent
 import org.chorus.item.Item
-import org.chorus.item.Item.Companion.get
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace

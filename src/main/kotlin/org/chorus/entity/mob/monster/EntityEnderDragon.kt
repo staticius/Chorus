@@ -139,6 +139,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
             DamageCause.SUFFOCATION, DamageCause.MAGIC -> {
                 return false
             }
+            else -> Unit
         }
         return super.attack(source)
     }
@@ -161,7 +162,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
                     this.getIdentifier(), false, false
                 )
             }
-            for (e in level!!.entities) {
+            for (e in level!!.entities.values) {
                 if (e is EntityEnderCrystal) {
                     if (e.position.distance(this.position) <= 28) {
                         val health = this.getHealth()
@@ -192,22 +193,22 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
             packet.event = EntityEventPacket.ENDER_DRAGON_DEATH
             packet.eid = getRuntimeID()
             Server.broadcastPacket(viewers.values, packet)
-            isImmobile = true
+            setImmobile(true)
         } else {
             super.kill()
             close()
             if (!isRevived()) {
                 level!!.setBlock(
                     Vector3(0.0, (level!!.getHighestBlockAt(Vector2.ZERO) + 1).toDouble(), 0.0), Block.get(
-                        Block.DRAGON_EGG
+                        BlockID.DRAGON_EGG
                     )
                 )
             }
             for (i in -2..2) {
                 for (j in -1..1) {
                     if (!(i == 0 && j == 0)) {
-                        level!!.setBlock(Vector3(i.toDouble(), 63.0, j.toDouble()), Block.get(Block.END_PORTAL))
-                        level!!.setBlock(Vector3(j.toDouble(), 63.0, i.toDouble()), Block.get(Block.END_PORTAL))
+                        level!!.setBlock(Vector3(i.toDouble(), 63.0, j.toDouble()), Block.get(BlockID.END_PORTAL))
+                        level!!.setBlock(Vector3(j.toDouble(), 63.0, i.toDouble()), Block.get(BlockID.END_PORTAL))
                     }
                 }
             }
@@ -215,26 +216,26 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
                 val origin = Vector3.ZERO
                 val angleIncrement = 360.0 / 20
                 val angle = Math.toRadians(i * angleIncrement)
-                val particleX = origin.getX() + cos(angle) * 96
-                val particleZ = origin.getZ() + sin(angle) * 96
+                val particleX = origin.x + cos(angle) * 96
+                val particleZ = origin.z + sin(angle) * 96
                 val dest =
                     level!!.getBlock(Vector3(particleX, 75.0, particleZ))
                 if (dest !is BlockEndGateway) {
-                    Arrays.stream(BlockFace.entries.toTypedArray()).forEach { face: BlockFace? ->
+                    Arrays.stream(BlockFace.entries.toTypedArray()).forEach { face ->
                         level!!.setBlock(
                             dest.up().getSide(face).position, Block.get(
-                                Block.BEDROCK
+                                BlockID.BEDROCK
                             )
                         )
                     }
-                    Arrays.stream(BlockFace.entries.toTypedArray()).forEach { face: BlockFace? ->
+                    Arrays.stream(BlockFace.entries.toTypedArray()).forEach { face ->
                         level!!.setBlock(
                             dest.down().getSide(face).position, Block.get(
-                                Block.BEDROCK
+                                BlockID.BEDROCK
                             )
                         )
                     }
-                    level!!.setBlock(dest.position, Block.get(Block.END_GATEWAY))
+                    level!!.setBlock(dest.position, Block.get(BlockID.END_GATEWAY))
                     break
                 } else continue
             }
@@ -253,7 +254,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         this.diffHandDamage = floatArrayOf(6f, 10f, 15f)
         this.maxHealth = 200
         super.initEntity()
-        memoryStorage.set<Vector3>(CoreMemoryTypes.Companion.STAY_NEARBY, Vector3(0.0, 84.0, 0.0))
+        memoryStorage[CoreMemoryTypes.Companion.STAY_NEARBY] = Vector3(0.0, 84.0, 0.0)
         isActive = false
         noClip = true
     }
@@ -294,8 +295,8 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         override fun search(): Boolean {
             val superRes = super.search()
             if (superRes && memoryStorage.notEmpty(CoreMemoryTypes.Companion.MOVE_TARGET)) {
-                this.nodes = ArrayList<Node?>(setOf<Node>(nodes.first()))
-                nodes.add(Node(memoryStorage.get<Vector3>(CoreMemoryTypes.Companion.MOVE_TARGET), null, 0, 0))
+                this.nodes = mutableListOf(nodes.first())
+                nodes.add(Node(memoryStorage[CoreMemoryTypes.Companion.MOVE_TARGET]!!, null, 0, 0))
             }
             return superRes
         }
@@ -310,11 +311,11 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
     override fun move(dx: Double, dy: Double, dz: Double): Boolean {
         val superRes = super.move(dx, dy, dz)
         if (superRes) {
-            Arrays.stream(level!!.getCollisionBlocks(getBoundingBox())).filter { block: Block? ->
+            level!!.getCollisionBlocks(getBoundingBox()).filter { block ->
                 canBreakBlock(
-                    block!!
+                    block
                 )
-            }.forEach { block: Block? -> level!!.breakBlock(block) }
+            }.forEach { block -> level!!.breakBlock(block) }
         }
         return superRes
     }
@@ -327,7 +328,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
 
     protected inner class LookController : IController {
         override fun control(entity: EntityMob): Boolean {
-            val target = entity.memoryStorage.get<Vector3>(CoreMemoryTypes.Companion.LOOK_TARGET)
+            val target = entity.memoryStorage[CoreMemoryTypes.LOOK_TARGET]!!
             val toPlayerVector = Vector3(
                 entity.position.x - target.x,
                 entity.position.y - target.y,

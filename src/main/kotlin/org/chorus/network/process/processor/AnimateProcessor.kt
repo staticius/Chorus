@@ -40,7 +40,7 @@ class AnimateProcessor : DataPacketProcessor<AnimatePacket>() {
                 }
                 return
             }
-            else -> {}
+            else -> Unit
         }
 
         if (animationEvent.animationType == Action.SWING_ARM) {

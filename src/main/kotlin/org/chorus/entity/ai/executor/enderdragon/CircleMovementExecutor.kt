@@ -3,7 +3,7 @@ package org.chorus.entity.ai.executor.enderdragon
 import org.chorus.entity.ai.executor.EntityControl
 import org.chorus.entity.ai.executor.IBehaviorExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.item.EntityEnderCrystal
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.EntityEnderDragon
@@ -15,7 +15,7 @@ import kotlin.math.sin
 
 
 class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标位置
-    protected var memory: MemoryType<out Vector3>,
+    protected var memory: NullableMemoryType<out Vector3>,
     protected var speed: Float,
     protected var updateRouteImmediatelyWhenTargetChange: Boolean,
     private val size: Int,
@@ -29,16 +29,6 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
     private var lastLocation: Vector3? = null
 
     private val ticks = 0
-
-
-    constructor(memory: MemoryType<out Vector3>, speed: Float, size: Int, sections: Int, circles: Int) : this(
-        memory,
-        speed,
-        false,
-        size,
-        sections,
-        circles
-    )
 
     override fun execute(entity: EntityMob): Boolean {
         if (entity.isEnablePitch()) entity.setEnablePitch(false)
@@ -71,7 +61,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
                         Vector2.ZERO
                     ) < 128
                 }) < 1) {
-                entity.getMemoryStorage().set(CoreMemoryTypes.FORCE_PERCHING, true)
+                entity.getMemoryStorage()[CoreMemoryTypes.FORCE_PERCHING] = true
             }
         }
     }
@@ -88,7 +78,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
     }
 
     protected fun next(entity: EntityMob): Vector3 {
-        val origin = entity.getBehaviorGroup().getMemoryStorage()[memory]
+        val origin = entity.getBehaviorGroup().getMemoryStorage()[memory]!!
         val angleIncrement = 360.0 / sections
         val angle = Math.toRadians(((circleLoc + startLoc) * angleIncrement))
         val particleX = origin.x + cos(angle) * size

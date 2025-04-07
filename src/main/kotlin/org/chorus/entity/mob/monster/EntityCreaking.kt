@@ -181,10 +181,9 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
                 moveTarget = creakingHeart!!.position
                 lookTarget = creakingHeart!!.position
             }
-            if (memoryStorage.notEmpty(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME)) {
-                if (level!!.tick - memoryStorage[CoreMemoryTypes.LAST_BE_ATTACKED_TIME] < 51) {
-                    sendParticleTrail()
-                }
+
+            if (level!!.tick - memoryStorage[CoreMemoryTypes.LAST_BE_ATTACKED_TIME] < 51) {
+                sendParticleTrail()
             }
         }
         return super.onUpdate(currentTick)

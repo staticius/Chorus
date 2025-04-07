@@ -1,6 +1,7 @@
 package org.chorus.entity.mob.monster
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.*
 import org.chorus.entity.ai.behavior.Behavior
@@ -55,7 +56,7 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
             Set.of<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_ELDERGUARDIAN_IDLE, 0.8f, 1.2f, 1f, 1f),
-                    all(IBehaviorEvaluator { entity: EntityMob? -> isInsideOfWater }, RandomSoundEvaluator()),
+                    all(IBehaviorEvaluator { entity: EntityMob? -> isInsideOfWater() }, RandomSoundEvaluator()),
                     6,
                     1,
                     1,
@@ -63,7 +64,7 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                 ),
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_GUARDIAN_LAND_IDLE, 0.8f, 1.2f, 1f, 1f),
-                    all(IBehaviorEvaluator { entity: EntityMob? -> !isInsideOfWater }, RandomSoundEvaluator()),
+                    all(IBehaviorEvaluator { entity: EntityMob? -> !isInsideOfWater() }, RandomSoundEvaluator()),
                     5,
                     1,
                     1,
@@ -79,14 +80,14 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                     GuardianAttackExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.3f, 15, true, 60, 40), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
                         IBehaviorEvaluator { entity: EntityMob ->
-                            entity.memoryStorage.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && !entity.memoryStorage
-                                .get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER).isBlocking
+                            entity.memoryStorage.get(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && !entity.memoryStorage
+                                .get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)!!.isBlocking()
                         },
                         IBehaviorEvaluator { entity: EntityMob ->
-                            entity.memoryStorage.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && level!!.raycastBlocks(
+                            entity.memoryStorage[CoreMemoryTypes.Companion.NEAREST_PLAYER] != null && level!!.raycastBlocks(
                                 entity.position, entity.memoryStorage
-                                    .get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER).position
-                            ).stream().allMatch { obj: Block -> obj.isTransparent }
+                                    .get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)!!.position
+                            ).stream().allMatch { obj -> obj.isTransparent }
                         }
                     ), 3, 1),
                 Behavior(
@@ -105,7 +106,7 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!
@@ -145,16 +146,16 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
     override fun getDrops(): Array<Item> {
         val secondLoot = ThreadLocalRandom.current().nextInt(6)
         return arrayOf(
-            Item.get(Item.PRISMARINE_SHARD, 0, Utils.rand(0, 2)),
-            Item.get(Block.WET_SPONGE, 0, 1),
+            Item.get(ItemID.PRISMARINE_SHARD, 0, Utils.rand(0, 2)),
+            Item.get(BlockID.WET_SPONGE, 0, 1),
             if (ThreadLocalRandom.current().nextInt(100) < 20) Item.get(
-                Item.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE,
+                ItemID.TIDE_ARMOR_TRIM_SMITHING_TEMPLATE,
                 0,
                 1
             ) else Item.AIR,
             if (ThreadLocalRandom.current().nextInt(1000) < 25) Item.get(ItemID.COD, 0, 1) else Item.AIR,
             if (secondLoot <= 2) Item.get(ItemID.COD, 0, Utils.rand(0, 1)) else Item.AIR,
-            if (secondLoot > 2 && secondLoot <= 4) Item.get(Item.PRISMARINE_CRYSTALS, 0, Utils.rand(0, 1)) else Item.AIR
+            if (secondLoot > 2 && secondLoot <= 4) Item.get(ItemID.PRISMARINE_CRYSTALS, 0, Utils.rand(0, 1)) else Item.AIR
         )
     }
 
@@ -167,9 +168,9 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                 source.damager.attack(
                     EntityDamageByEntityEvent(
                         this,
-                        source.getEntity(),
+                        source.entity!!,
                         DamageCause.THORNS,
-                        (if (Server.instance.difficulty == 3) 2 else 3).toFloat()
+                        (if (Server.instance.getDifficulty() == 3) 2 else 3).toFloat()
                     )
                 )
             }
@@ -179,9 +180,9 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
-        if (!this.closed && this.isAlive) {
+        if (!this.closed && this.isAlive()) {
             for (p in this.viewers.values) {
-                if (p.locallyInitialized && p.getGamemode() % 2 == 0 && p.position.distance(this.position) < 50 && !p.hasEffect(
+                if (p.locallyInitialized && p.gamemode % 2 == 0 && p.position.distance(this.position) < 50 && !p.hasEffect(
                         EffectType.MINING_FATIGUE
                     )
                 ) {

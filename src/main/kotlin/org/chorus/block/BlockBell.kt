@@ -206,7 +206,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
                 }
             }
 
-            else -> {}
+            else -> Unit
         }
 
         val event = BellRingEvent(this, cause, causeEntity!!)
@@ -250,7 +250,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
                 }
             }
 
-            else -> {}
+            else -> Unit
         }
         return false
     }

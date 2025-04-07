@@ -96,7 +96,7 @@ class CustomForm(title: String) : Form<CustomResponse?>(title) {
                 }
 
                 -> elementResponse = java.lang.Boolean.parseBoolean(responseData)
-                else -> {}
+                else -> Unit
             }
 
             response.setResponse(i, elementResponse)

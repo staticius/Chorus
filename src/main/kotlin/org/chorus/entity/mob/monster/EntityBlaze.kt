@@ -103,7 +103,7 @@ class EntityBlaze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt),
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.BLAZE_ROD, 0, Utils.rand(0, 1)))
+        return arrayOf(Item.get(ItemID.BLAZE_ROD, 0, Utils.rand(0, 1)))
     }
 
     override fun getExperienceDrops(): Int {
@@ -112,7 +112,7 @@ class EntityBlaze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt),
 
     override fun onUpdate(currentTick: Int): Boolean {
         if (currentTick % 10 == 0) {
-            if (level!!.isRaining && !this.isUnderBlock) {
+            if (level!!.isRaining && !this.isUnderBlock()) {
                 this.attack(EntityDamageEvent(this, DamageCause.WEATHER, 1f))
             }
         }

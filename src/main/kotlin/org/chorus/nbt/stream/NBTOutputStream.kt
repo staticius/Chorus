@@ -191,7 +191,7 @@ class NBTOutputStream @JvmOverloads constructor(
                 }
             }
 
-            else -> {}
+            else -> Unit
         }
     }
 }

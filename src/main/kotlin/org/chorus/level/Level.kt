@@ -1457,12 +1457,12 @@ class Level(
             .toList()
     }
 
-    fun raycastBlocks(start: Vector3, end: Vector3): List<Block?> {
+    fun raycastBlocks(start: Vector3, end: Vector3): List<Block> {
         return raycastBlocks(start, end, true, false, 1.0)
     }
 
-    fun raycastBlocks(start: Vector3, end: Vector3, ignoreAir: Boolean, load: Boolean, space: Double): List<Block?> {
-        val result: MutableList<Block?> = ArrayList()
+    fun raycastBlocks(start: Vector3, end: Vector3, ignoreAir: Boolean, load: Boolean, space: Double): List<Block> {
+        val result = mutableListOf<Block>()
         val direction = end.subtract(start).normalize()
         var currentPos = start.clone()
 
@@ -1473,7 +1473,7 @@ class Level(
             if (!block.isAir || !ignoreAir) result.add(block)
             i += space
         }
-        return Collections.unmodifiableList(result)
+        return result
     }
 
     fun getCollisionBlocks(bb: AxisAlignedBB): Array<Block> {
@@ -4248,7 +4248,7 @@ class Level(
          */
         get() = dimensionData.maxHeight
 
-    fun getStrongPower(pos: IVector3, direction: BlockFace?): Int {
+    fun getStrongPower(pos: IVector3, direction: BlockFace): Int {
         return getBlock(pos.vector3).getStrongPower(direction)
     }
 

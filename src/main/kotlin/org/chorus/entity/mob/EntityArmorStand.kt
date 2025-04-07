@@ -319,7 +319,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
                 return false
             }
 
-            else -> {}
+            else -> Unit
         }
 
         if (source.cause != DamageCause.ENTITY_ATTACK) {

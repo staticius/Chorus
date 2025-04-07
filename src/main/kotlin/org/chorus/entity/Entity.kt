@@ -3118,7 +3118,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                 is IntEntityProperty -> intProperties[identifier] = property.getDefaultValue()
                 is BooleanEntityProperty -> intProperties[identifier] = if (property.getDefaultValue()) 1 else 0
                 is EnumEntityProperty -> intProperties[identifier] = property.findIndex(property.getDefaultValue())
-                else -> {}
+                else -> Unit
             }
         }
     }

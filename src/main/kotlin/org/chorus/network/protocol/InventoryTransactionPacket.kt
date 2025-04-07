@@ -81,7 +81,7 @@ class InventoryTransactionPacket(
                 byteBuf.writeVector3f(releaseItemData.headRot.asVector3f())
             }
 
-            else -> {}
+            else -> Unit
         }
     }
 

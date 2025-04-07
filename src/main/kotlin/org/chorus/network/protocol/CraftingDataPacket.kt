@@ -136,10 +136,10 @@ data class CraftingDataPacket(
                         RecipeType.BLAST_FURNACE -> byteBuf.writeString(CRAFTING_TAG_BLAST_FURNACE)
                         RecipeType.CAMPFIRE -> byteBuf.writeString(CRAFTING_TAG_CAMPFIRE)
                         RecipeType.SOUL_CAMPFIRE -> byteBuf.writeString(CRAFTING_TAG_SOUL_CAMPFIRE)
-                        else -> {}
+                        else -> Unit
                     }
                 }
-                else -> {}
+                else -> Unit
             }
         }
 

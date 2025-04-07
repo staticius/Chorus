@@ -427,7 +427,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 }
             }
 
-            else -> {}
+            else -> Unit
         }
     }
 

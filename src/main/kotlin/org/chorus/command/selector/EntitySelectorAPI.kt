@@ -74,7 +74,7 @@ class EntitySelectorAPI private constructor() {
         //对于确定的玩家类型选择器，排除掉不是玩家的实体
         when (selectorType) {
             SelectorType.ALL_PLAYERS, SelectorType.NEAREST_PLAYER -> entities.removeIf { e: Entity? -> e !is Player }
-            else -> {}
+            else -> Unit
         }
         //没符合条件的实体了，return
         if (entities.isEmpty()) return entities

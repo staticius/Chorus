@@ -190,7 +190,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
                     return true
                 }
 
-                else -> {}
+                else -> Unit
             }
 
             if (face == BlockFace.DOWN) {

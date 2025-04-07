@@ -403,7 +403,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                 recipe
             )
 
-            else -> {}
+            else -> Unit
         }
     }
 
