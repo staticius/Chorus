@@ -31,9 +31,6 @@ class MemoryType <Data : Any> (
         return defaultDataSupplier.get()
     }
 
-    val defaultData: Data
-        get() = defaultDataSupplier.get()
-
     override fun withCodec(codec: IMemoryCodec<Data>): MemoryType<Data> {
         this.codec = codec
         IMemoryType.PERSISTENT_MEMORIES.add(this)

@@ -12,7 +12,7 @@ import org.chorus.entity.mob.EntityMob
  * Executes specific behavior on the entity<br></br>
  * For each instantiated entity, this object should only be instantiated once, and the entity will not change all the time
  */
-interface IBehaviorExecutor {
+fun interface IBehaviorExecutor {
     /**
      * 调度器将会持续执行此执行器，直到返回false，或者执行器被中断<br></br>
      * 此方法每gt都会调用

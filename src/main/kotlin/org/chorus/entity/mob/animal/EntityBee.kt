@@ -106,13 +106,13 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     }
 
     fun setAngry(angry: Boolean) {
-        memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.IS_ANGRY, angry)
+        memoryStorage[CoreMemoryTypes.Companion.IS_ANGRY] = angry
         setDataFlag(EntityFlag.ANGRY, angry)
     }
 
     fun setAngry(entity: Entity?) {
         setAngry(true)
-        memoryStorage.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity)
+        memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET] = entity
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
@@ -136,18 +136,15 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
-        if (!hasSting() && isAlive) {
+        if (!hasSting() && isAlive()) {
             dieInTicks--
             if (dieInTicks < 0) {
                 kill()
             }
         }
         if (currentTick % 20 == 0 && hasSting()) {
-            memoryStorage.set<Class<out Block>>(
-                CoreMemoryTypes.Companion.LOOKING_BLOCK,
-                if (shouldSearchBeehive()) BlockBeehive::class.java else BlockFlower::class.java
-            )
-            val blockClass = this.memoryStorage.get<Class<out Block>>(CoreMemoryTypes.Companion.LOOKING_BLOCK)
+            memoryStorage[CoreMemoryTypes.LOOKING_BLOCK] = if (shouldSearchBeehive()) BlockBeehive::class.java else BlockFlower::class.java
+            val blockClass = this.memoryStorage[CoreMemoryTypes.LOOKING_BLOCK]!!
             if (blockClass.isAssignableFrom(BlockFlower::class.java)) {
                 Arrays.stream(level!!.getCollisionBlocks(getBoundingBox().grow(1.5, 1.5, 1.5), false, true))
                     .filter { block: Block? -> block is BlockFlower }

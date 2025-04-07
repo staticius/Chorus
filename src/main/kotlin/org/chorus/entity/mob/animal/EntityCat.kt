@@ -51,7 +51,8 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
         return BehaviorGroup(
             this.tickSpread,
             Set.of<IBehavior>(
-                Behavior({ entity: EntityMob? ->
+                Behavior(
+                    { entity: EntityMob? ->
                     //刷新随机播放音效
                     //当猫被驯服时发出的声音
                     if (this.hasOwner(false)) this.setAmbientSoundEvent(Sound.MOB_CAT_MEOW)
@@ -75,13 +76,11 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                         var attackTarget: Entity? = null
                         //已驯服为家猫就不攻击下述动物反之未驯服为流浪猫攻击下述动物
                         //攻击最近的小海龟，兔子
-                        if (storage.notEmpty(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET) && storage.get<Entity>(
-                                CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET
-                            ).isAlive
+                        if (storage.notEmpty(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET) && storage[CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET]!!.isAlive()
                         ) {
                             attackTarget = storage.get<Entity>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET)
                         }
-                        storage.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, attackTarget)
+                        storage.set(CoreMemoryTypes.Companion.ATTACK_TARGET, attackTarget)
                         false
                     },
                     { entity: EntityMob? -> true }, 20
@@ -90,12 +89,12 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
             Set.of<IBehavior>( //坐下锁定 优先级8
                 Behavior(
                     { entity: EntityMob? -> false },
-                    { entity: EntityMob? -> this.isSitting }, 8
+                    { entity: EntityMob? -> this.isSitting() }, 8
                 ),  //睡觉 优先级7
                 Behavior(SleepOnOwnerBedExecutor(), IBehaviorEvaluator { entity: EntityMob? ->
                     val player = this.owner ?: return@IBehaviorEvaluator false
-                    if (player.level.id != level!!.id) return@IBehaviorEvaluator false
-                    player.isSleeping
+                    if (player.level!!.id != level!!.id) return@IBehaviorEvaluator false
+                    player.isSleeping()
                 }, 7),  //攻击仇恨目标 优先级6
                 Behavior(
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.35f, 15, true, 10),
@@ -103,14 +102,14 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                     6
                 ),  //猫咪繁殖 优先级5
                 Behavior(
-                    EntityBreedingExecutor<EntityCat>(EntityCat::class.java, 8, 100, 0.35f),
+                    EntityBreedingExecutor(EntityCat::class.java, 8, 100, 0.35f),
                     { entity: EntityMob -> entity.memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE) },
                     5
                 ),  //猫咪向主人移动 优先级4
                 Behavior(EntityMoveToOwnerExecutor(0.35f, true, 15), IBehaviorEvaluator { entity: EntityMob ->
                     if (this.hasOwner()) {
                         val player = owner
-                        if (!player!!.isOnGround) return@IBehaviorEvaluator false
+                        if (!player!!.isOnGround()) return@IBehaviorEvaluator false
                         val distanceSquared = entity.position.distanceSquared(player.position)
                         return@IBehaviorEvaluator distanceSquared >= 100
                     } else return@IBehaviorEvaluator false
@@ -148,7 +147,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                 NearestPlayerSensor(8.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 15.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!
@@ -184,8 +183,8 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
         //同步owner eid
         if (hasOwner()) {
             val owner = owner
-            if (owner != null && getDataProperty<Long>(EntityDataTypes.Companion.OWNER_EID) != owner.id) {
-                this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, owner.id)
+            if (owner != null && getDataProperty<Long>(EntityDataTypes.Companion.OWNER_EID) != owner.getUniqueID()) {
+                this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, owner.getUniqueID())
             }
         }
         return super.onUpdate(currentTick)
@@ -219,7 +218,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
         return VARIANTS
     }
 
-    override fun onInteract(player: Player, item: Item, clickedPos: Vector3?): Boolean {
+    override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         if (item.id === ItemID.NAME_TAG && !player.isAdventure) {
             return playerApplyNameTag(player, item)
         }
@@ -236,7 +235,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
 
                     this.maxHealth = 10
                     this.setHealth(10f)
-                    this.ownerName = player.getName()
+                    this.setOwnerName(player.getName())
                     this.setColor(DyeColor.RED)
                     this.saveNBT()
 
@@ -254,7 +253,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                 level!!.addSound(this.position, Sound.MOB_CAT_EAT)
                 level!!.addParticle(
                     ItemBreakParticle(
-                        position.add(0.0, (height * 0.75f).toDouble(), 0.0),
+                        position.add(0.0, (getHeight() * 0.75f).toDouble(), 0.0),
                         Item.get(item.id, 0, 1)
                     )
                 )
@@ -266,17 +265,17 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                     CoreMemoryTypes.Companion.LAST_BE_FEED_TIME,
                     level!!.tick
                 )
-                memoryStorage.set<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
+                memoryStorage.set(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
                 return true
             }
-        } else if (item.id === Item.DYE) {
+        } else if (item.id === ItemID.DYE) {
             if (this.hasOwner() && player == this.owner) {
                 player.inventory.decreaseCount(player.inventory.heldItemIndex)
                 this.setColor((item as ItemDye).dyeColor)
                 return true
             }
-        } else if (this.hasOwner() && player.getName() == ownerName && !this.isTouchingWater) {
-            this.isSitting = !this.isSitting
+        } else if (this.hasOwner() && player.getName() == getOwnerName() && !this.isTouchingWater()) {
+            this.setSitting(!this.isSitting())
             return false
         }
         return false

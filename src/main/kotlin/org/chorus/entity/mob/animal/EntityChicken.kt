@@ -102,7 +102,7 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                             CoreMemoryTypes.Companion.LAST_EGG_SPAWN_TIME,
                             level!!.tick
                         )
-                        entity.level!!.dropItem(entity.position, Item.get(Item.EGG))
+                        entity.level!!.dropItem(entity.position, Item.get(ItemID.EGG))
                         entity.level!!.addSound(entity.position, Sound.MOB_CHICKEN_PLOP)
                         false
                     }, any(
@@ -140,7 +140,7 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get((if (this.isOnFire) Item.COOKED_CHICKEN else Item.CHICKEN)), Item.get(ItemID.FEATHER))
+        return arrayOf(Item.get((if (this.isOnFire()) ItemID.COOKED_CHICKEN else ItemID.CHICKEN)), Item.get(ItemID.FEATHER))
     }
 
 
@@ -152,6 +152,6 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     override fun isBreedingItem(item: Item): Boolean {
         val id = item.id
 
-        return id === Item.WHEAT_SEEDS || id === Item.MELON_SEEDS || id === Item.PUMPKIN_SEEDS || id === Item.BEETROOT_SEEDS
+        return id === ItemID.WHEAT_SEEDS || id === ItemID.MELON_SEEDS || id === ItemID.PUMPKIN_SEEDS || id === ItemID.BEETROOT_SEEDS
     }
 }

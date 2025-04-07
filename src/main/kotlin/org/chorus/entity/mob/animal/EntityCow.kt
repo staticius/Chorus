@@ -111,7 +111,7 @@ class EntityCow(chunk: IChunk?, nbt: CompoundTag?) : EntityAnimal(chunk, nbt!!),
         if (!this.isBaby()) {
             return arrayOf(
                 Item.get(ItemID.LEATHER, 0, Utils.rand(0, 2)),
-                Item.get((if (this.isOnFire) Item.COOKED_BEEF else Item.BEEF), 0, Utils.rand(1, 3))
+                Item.get((if (this.isOnFire()) ItemID.COOKED_BEEF else ItemID.BEEF), 0, Utils.rand(1, 3))
             )
         }
         return Item.EMPTY_ARRAY
@@ -128,9 +128,9 @@ class EntityCow(chunk: IChunk?, nbt: CompoundTag?) : EntityAnimal(chunk, nbt!!),
             return true
         }
 
-        if (item.id === Item.BUCKET && item.damage == 0) {
+        if (item.id === ItemID.BUCKET && item.damage == 0) {
             item.count--
-            player.inventory.addItem(Item.get(Item.BUCKET, 1))
+            player.inventory.addItem(Item.get(ItemID.BUCKET, 1))
             return true
         }
 

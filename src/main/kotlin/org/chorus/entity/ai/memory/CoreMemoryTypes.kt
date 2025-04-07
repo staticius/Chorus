@@ -23,6 +23,7 @@ import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.NumberTag
+import java.util.function.Supplier
 
 /**
  * 核心使用到的记忆类型枚举
@@ -137,7 +138,7 @@ interface CoreMemoryTypes {
         /**
          * 实体从生成的服务器tick
          */
-        val ENTITY_SPAWN_TIME = MemoryType(
+        val ENTITY_SPAWN_TIME = MemoryType<Int>(
             "minecraft:entity_spawn_time"
         ) { Server.instance.tick }
 
@@ -171,7 +172,7 @@ interface CoreMemoryTypes {
          *
          * 目前仅在Chicken中使用
          */
-        val LAST_EGG_SPAWN_TIME = MemoryType(
+        val LAST_EGG_SPAWN_TIME = MemoryType<Int>(
             "minecraft:last_egg_spawn_time"
         ) { Server.instance.tick }
 

@@ -105,6 +105,6 @@ class EntityFox(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     }
 
     override fun isBreedingItem(item: Item): Boolean {
-        return item.id == Item.GLOW_BERRIES || item.id == Item.SWEET_BERRIES
+        return item.id == ItemID.GLOW_BERRIES || item.id == ItemID.SWEET_BERRIES
     }
 }

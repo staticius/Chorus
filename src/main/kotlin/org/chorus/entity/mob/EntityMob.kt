@@ -85,7 +85,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
      *
      * The damage that can be caused by the entity's empty hand at different difficulties.
      */
-    protected lateinit var diffHandDamage: FloatArray
+    protected open lateinit var diffHandDamage: FloatArray
 
 
     override val equipment = EntityEquipment(this)

@@ -104,7 +104,7 @@ class EntityFrog(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
     }
 
     override fun isBreedingItem(item: Item): Boolean {
-        return item.id == Item.SLIME_BALL
+        return item.id == ItemID.SLIME_BALL
     }
 
     override fun getAllVariant(): IntArray {
