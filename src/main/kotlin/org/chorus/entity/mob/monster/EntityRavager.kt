@@ -31,7 +31,7 @@ class EntityRavager(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.2f, 40, true, 30),
                     EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
@@ -46,8 +46,8 @@ class EntityRavager(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(NearestPlayerSensor(40.0, 0.0, 20)),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<ISensor>(NearestPlayerSensor(40.0, 0.0, 20)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

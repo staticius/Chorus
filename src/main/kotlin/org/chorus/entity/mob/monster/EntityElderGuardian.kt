@@ -53,7 +53,7 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_ELDERGUARDIAN_IDLE, 0.8f, 1.2f, 1f, 1f),
                     all(IBehaviorEvaluator { entity: EntityMob? -> isInsideOfWater() }, RandomSoundEvaluator()),
@@ -102,7 +102,7 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                 ),
                 Behavior(SpaceRandomRoamExecutor(0.36f, 12, 1, 80, false, -1, false, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
@@ -113,7 +113,7 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                         )
                     })
             ),
-            Set.of<IController>(SpaceMoveController(), LookController(true, true), DiveController()),
+            setOf<IController>(SpaceMoveController(), LookController(true, true), DiveController()),
             SimpleSpaceAStarRouteFinder(SwimmingPosEvaluator(), this),
             this
         )

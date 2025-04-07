@@ -57,10 +57,10 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(PlaySoundExecutor(Sound.MOB_ENDERDRAGON_GROWL), RandomSoundEvaluator(), 2, 1)
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     PerchingExecutor(),
                     { entity: EntityMob? -> memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.FORCE_PERCHING) },
@@ -87,7 +87,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
                     ), 2, 1
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(512.0, 0.0, 20),
                 NearestEntitySensor(
                     EntityEnderCrystal::class.java,
@@ -97,7 +97,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
                     10
                 )
             ),
-            Set.of<IController>(SpaceMoveController(), LookController(), LiftController()),
+            setOf<IController>(SpaceMoveController(), LookController(), LiftController()),
             EnderDragonRouteFinder(EnderDragonPosEvaluator(), this),
             this
         )

@@ -44,7 +44,7 @@ class EntitySpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(PlaySoundExecutor(Sound.MOB_SPIDER_SAY), RandomSoundEvaluator(), 6, 1),
                 Behavior(
                     FleeFromTargetExecutor(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY, 0.3f, true, 9f),
@@ -75,11 +75,11 @@ class EntitySpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity -> this.attackTarget(entity) }),
                 NearestEntitySensor(
                     EntityArmadillo::class.java,
@@ -88,7 +88,7 @@ class EntitySpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                     0.0
                 )
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )
@@ -113,7 +113,7 @@ class EntitySpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(ItemID.STRING), Item.get(Item.SPIDER_EYE))
+        return arrayOf(Item.get(ItemID.STRING), Item.get(ItemID.SPIDER_EYE))
     }
 
     override fun isPreventingSleep(player: Player?): Boolean {

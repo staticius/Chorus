@@ -118,7 +118,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     DoorExecutor(), all(
                         IBehaviorEvaluator { entity: EntityMob? ->
@@ -153,7 +153,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                     ), RandomSoundEvaluator(), 1, 1
                 )
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     { entity: EntityMob? ->
                         moveTarget = null
@@ -241,7 +241,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                     1
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 ISensor { entity: EntityMob ->
                     if (level!!.tick % 120 == 0) {
                         if (memoryStorage.isEmpty(CoreMemoryTypes.Companion.OCCUPIED_BED)) {
@@ -371,7 +371,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 BlockSensor(BlockDoor::class.java, CoreMemoryTypes.Companion.NEAREST_BLOCK_2, 1, 0, 10),
                 NearestEntitySensor(EntityZombie::class.java, CoreMemoryTypes.Companion.NEAREST_ZOMBIE, 8.0, 0.0)
             ),
-            Set.of<IController>(WalkController(), LookController(true, true), FluctuateController()),
+            setOf<IController>(WalkController(), LookController(true, true), FluctuateController()),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

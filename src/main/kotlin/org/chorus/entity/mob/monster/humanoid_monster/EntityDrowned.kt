@@ -43,7 +43,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
     override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     NearestBlockIncementExecutor(),
                     { entity: EntityMob? ->
@@ -53,7 +53,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                     }, 1, 1
                 )
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_DROWNED_SAY_WATER), all(
                         RandomSoundEvaluator(),
@@ -139,7 +139,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, false, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(64.0, 0.0, 0),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
@@ -151,7 +151,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                     }),
                 BlockSensor(BlockTurtleEgg::class.java, CoreMemoryTypes.Companion.NEAREST_BLOCK, 11, 15, 10)
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

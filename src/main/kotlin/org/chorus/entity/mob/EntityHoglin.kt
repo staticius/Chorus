@@ -44,7 +44,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     InLoveExecutor(400),
                     all(
@@ -53,7 +53,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                     ), 1, 1
                 )
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     EntityBreedingExecutor<EntityHoglin>(EntityHoglin::class.java, 16, 100, 0.5f),
                     IBehaviorEvaluator { entity: EntityMob ->
@@ -111,13 +111,13 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                     ), 2, 1),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(40.0, 0.0, 20),
                 BlockSensor(BlockPortal::class.java, CoreMemoryTypes.Companion.NEAREST_BLOCK, 8, 2, 20),
                 BlockSensor(BlockWarpedFungus::class.java, CoreMemoryTypes.Companion.NEAREST_BLOCK, 8, 2, 20),
                 BlockSensor(BlockRespawnAnchor::class.java, CoreMemoryTypes.Companion.NEAREST_BLOCK, 8, 2, 20)
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

@@ -171,7 +171,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
             ).toInt()
         }
 
-    protected fun getPowerOnSide(pos: Vector3, side: BlockFace?): Int {
+    protected fun getPowerOnSide(pos: Vector3, side: BlockFace): Int {
         val block = level.getBlock(pos)
         return if (isAlternateInput(block)) (if (block.id == BlockID.REDSTONE_BLOCK) 15 else (if (block.id == BlockID.REDSTONE_WIRE)
             block.blockState.specialValue()

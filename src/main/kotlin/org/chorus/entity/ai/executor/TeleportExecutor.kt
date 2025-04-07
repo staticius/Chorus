@@ -9,11 +9,11 @@ import java.util.concurrent.*
 import kotlin.math.floor
 import kotlin.math.min
 
-class TeleportExecutor : IBehaviorExecutor {
-    var maxDistance: Int = 0
-    var minDistance: Int = 0
-    var maxTries: Int = 16
-
+class TeleportExecutor(
+    var maxDistance: Int = 0,
+    var minDistance: Int = 0,
+    var maxTries: Int = 16,
+) : IBehaviorExecutor {
     private fun find(locator: Locator): Locator {
         val distance = maxDistance - minDistance
         val dx = locator.position.x + ThreadLocalRandom.current().nextInt(-distance, distance) + minDistance

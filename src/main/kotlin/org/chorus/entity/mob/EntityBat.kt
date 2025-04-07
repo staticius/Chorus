@@ -28,7 +28,7 @@ class EntityBat(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
         return BehaviorGroup(
             this.tickSpread,
             setOf(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     SpaceRandomRoamExecutor(0.3f, 12, 100, 20, false, -1, true, 10),
                     (IBehaviorEvaluator { entity: EntityMob? -> true }),
@@ -37,7 +37,7 @@ class EntityBat(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
                 )
             ),
             setOf(),
-            Set.of(SpaceMoveController(), LookController(true, true), LiftController()),
+            setOf(SpaceMoveController(), LookController(true, true), LiftController()),
             SimpleSpaceAStarRouteFinder(FlyingPosEvaluator(), this),
             this
         )

@@ -43,7 +43,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     LookAtTargetExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 100),
                     ProbabilityEvaluator(4, 10),
@@ -57,7 +57,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
                     1
                 )
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(ShulkerIdleExecutor(), RandomSoundEvaluator(20, 10), 2, 1),
                 Behavior(
                     ShulkerAttackExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER), all(
@@ -67,8 +67,8 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
                     ), 1, 1
                 )
             ),
-            Set.of<ISensor>(NearestPlayerSensor(40.0, 0.0, 20)),
-            Set.of<IController>(LookController(true, true)),
+            setOf<ISensor>(NearestPlayerSensor(40.0, 0.0, 20)),
+            setOf<IController>(LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

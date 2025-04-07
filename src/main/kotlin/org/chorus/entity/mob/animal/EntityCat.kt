@@ -50,7 +50,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     { entity: EntityMob? ->
                     //刷新随机播放音效
@@ -86,7 +86,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                     { entity: EntityMob? -> true }, 20
                 )
             ),
-            Set.of<IBehavior>( //坐下锁定 优先级8
+            setOf<IBehavior>( //坐下锁定 优先级8
                 Behavior(
                     { entity: EntityMob? -> false },
                     { entity: EntityMob? -> this.isSitting() }, 8
@@ -142,7 +142,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                     25
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestFeedingPlayerSensor(7.0, 0.0),
                 NearestPlayerSensor(8.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
@@ -154,7 +154,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                         )
                     })
             ),
-            Set.of<IController>(WalkController(), LookController(true, true), FluctuateController()),
+            setOf<IController>(WalkController(), LookController(true, true), FluctuateController()),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

@@ -114,14 +114,14 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
         return BehaviorGroup(
             this.tickSpread,
             setOf(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     SpaceRandomRoamExecutor(0.36f, 12, 1, 80, false, -1, false, 10),
                     { entity: EntityMob? -> true }, 1
                 )
             ),
             setOf(),
-            Set.of(SpaceMoveController(), LookController(true, true), DiveController()),
+            setOf(SpaceMoveController(), LookController(true, true), DiveController()),
             SimpleSpaceAStarRouteFinder(SwimmingPosEvaluator(), this),
             this
         )

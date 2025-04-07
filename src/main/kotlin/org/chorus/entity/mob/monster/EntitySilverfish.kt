@@ -37,7 +37,7 @@ class EntitySilverfish(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, 
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.4f, 40, true, 30),
                     EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
@@ -58,11 +58,11 @@ class EntitySilverfish(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, 
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestEntitySensor(EntityGolem::class.java, CoreMemoryTypes.Companion.NEAREST_GOLEM, 42.0, 0.0)
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

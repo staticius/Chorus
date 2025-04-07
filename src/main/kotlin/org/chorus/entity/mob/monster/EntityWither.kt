@@ -2,17 +2,22 @@ package org.chorus.entity.mob.monster
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockBedrock
+import org.chorus.block.BlockSoulSand
+import org.chorus.block.BlockWitherSkeletonSkull
 import org.chorus.entity.*
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LiftController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.SpaceMoveController
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleSpaceAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.FlyingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
@@ -24,7 +29,8 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.EntityExplosionPrimeEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Explosion
 import org.chorus.level.GameRule
 import org.chorus.level.Sound
@@ -35,8 +41,6 @@ import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.network.protocol.*
 import org.chorus.network.protocol.types.EntityLink
-import java.util.List
-import java.util.Set
 import java.util.function.Function
 
 class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), EntityFlyable, EntitySmite {
@@ -48,7 +52,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_WITHER_AMBIENT), all(
                         RandomSoundEvaluator(),
@@ -143,14 +147,14 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                     { entity: EntityMob? -> age >= 200 }, 1, 1
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(64.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 64.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity -> this.attackTarget(entity) })
             ),
-            Set.of<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
+            setOf<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
             SimpleSpaceAStarRouteFinder(FlyingPosEvaluator(), this),
             this
         )
@@ -174,7 +178,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
             packet.event = EntityEventPacket.DEATH_ANIMATION
             packet.eid = getRuntimeID()
             Server.broadcastPacket(viewers.values, packet)
-            isImmobile = true
+            setImmobile(true)
         } else {
             if (!this.exploded && this.lastDamageCause != null && DamageCause.SUICIDE != lastDamageCause!!.cause) {
                 this.exploded = true
@@ -251,7 +255,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
     }
 
     private fun getMaxDiffHealth(): Int {
-        return when (Server.instance.difficulty) {
+        return when (Server.instance.getDifficulty()) {
             2 -> 450
             3 -> 600
             else -> 300
@@ -328,7 +332,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.NETHER_STAR))
+        return arrayOf(Item.get(ItemID.NETHER_STAR))
     }
 
     override fun getExperienceDrops(): Int {
@@ -339,7 +343,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
         if ((age % 40 == 0 || getDataFlag(EntityFlag.CAN_DASH) && age > 200)) {
             val blocks = level!!.getCollisionBlocks(getBoundingBox().grow(1.0, 1.0, 1.0))
             if (blocks.size > 0) {
-                if (blockBreakSound != null) level!!.addSound(this.position, blockBreakSound)
+                if (blockBreakSound != null) level!!.addSound(this.position, blockBreakSound!!)
                 for (collisionBlock in blocks) {
                     if (collisionBlock !is BlockBedrock) {
                         level!!.breakBlock(collisionBlock)
@@ -368,7 +372,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
             var check = block
             var skullFace: BlockFace? = null
             if (block.level.gameRules.getBoolean(GameRule.DO_MOB_SPAWNING)) {
-                for (face in Set.of<BlockFace>(BlockFace.UP, BlockFace.NORTH, BlockFace.EAST)) {
+                for (face in setOf<BlockFace>(BlockFace.UP, BlockFace.NORTH, BlockFace.EAST)) {
                     val skulls = BooleanArray(5)
                     ints@ for (i in -2..2) {
                         skulls[i + 2] = block.getSide(face, i) is BlockWitherSkeletonSkull
@@ -394,7 +398,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                                 continue@faces
                             }
                         }
-                        faces1@ for (face in Set.of<BlockFace>(BlockFace.UP, BlockFace.NORTH, BlockFace.EAST)) {
+                        faces1@ for (face in setOf<BlockFace>(BlockFace.UP, BlockFace.NORTH, BlockFace.EAST)) {
                             for (i in -1..1) {
                                 if (check.getSide(blockFace).getSide(face, i) !is BlockSoulSand) {
                                     continue@faces1
@@ -408,7 +412,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                             for (i in -1..1) {
                                 val location = check.getSide(blockFace).getSide(face, i)
                                 location.level.breakBlock(location)
-                                location.level.breakBlock(location.getSide(blockFace.opposite))
+                                location.level.breakBlock(location.getSide(blockFace.getOpposite()))
                             }
                             val pos = check.getSide(blockFace, 2)
                             val nbt = CompoundTag()
@@ -430,12 +434,12 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                                         .add(FloatTag(0f))
                                 )
 
-                            val wither: Entity = Entity.Companion.createEntity(
+                            val wither = Entity.createEntity(
                                 EntityID.WITHER,
                                 check.level.getChunk(check.position.chunkX, check.position.chunkZ),
                                 nbt
                             )
-                            wither.spawnToAll()
+                            wither?.spawnToAll()
                             return true
                         }
                     }

@@ -189,7 +189,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>( //todo breed
+            setOf<IBehavior>( //todo breed
                 Behavior(
                     AnimalGrowExecutor(),  //todo：Growth rate
                     all(
@@ -199,7 +199,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
                     1, 1, 1200
                 )
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     TameHorseExecutor(0.4f, 12, 40, true, 100, true, 10, 35), all(
                         MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.RIDER_NAME),
@@ -219,8 +219,8 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
                     1
                 )
             ),
-            Set.of<ISensor>(NearestFeedingPlayerSensor(8.0, 0.0), NearestPlayerSensor(8.0, 0.0, 20)),
-            Set.of<IController>(WalkController(), LookController(true, true), FluctuateController()),
+            setOf<ISensor>(NearestFeedingPlayerSensor(8.0, 0.0), NearestPlayerSensor(8.0, 0.0, 20)),
+            setOf<IController>(WalkController(), LookController(true, true), FluctuateController()),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

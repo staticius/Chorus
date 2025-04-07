@@ -12,7 +12,7 @@ class BlockLimeShulkerBox @JvmOverloads constructor(blockstate: BlockState = Com
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.LIME_SHULKER_BOX, Set.of(BlockTags.PNX_SHULKERBOX))
+        val properties: BlockProperties = BlockProperties(BlockID.LIME_SHULKER_BOX, setOf(BlockTags.PNX_SHULKERBOX))
 
     }
 }

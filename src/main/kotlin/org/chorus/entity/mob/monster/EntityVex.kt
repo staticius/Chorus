@@ -16,6 +16,7 @@ import org.chorus.entity.ai.executor.PlaySoundExecutor
 import org.chorus.entity.ai.executor.SpaceRandomRoamExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleSpaceAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.FlyingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
@@ -52,7 +53,7 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(PlaySoundExecutor(Sound.MOB_VEX_AMBIENT), RandomSoundEvaluator(), 5, 1),
                 Behavior(
                     VexMeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 40, true, 30), all(
@@ -85,18 +86,18 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
                     1
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(70.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 70.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!
                         )
                     })
             ),
-            Set.of<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
+            setOf<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
             SimpleSpaceAStarRouteFinder(FlyingPosEvaluator(), this),
             this
         )
@@ -143,8 +144,9 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
 
     override fun getDrops(): Array<Item> {
         if (itemInHand is ItemTool) {
-            tool.setDamage(ThreadLocalRandom.current().nextInt(tool.getMaxDurability()))
-            return arrayOf<Item?>(
+            val tool = itemInHand as ItemTool
+            tool.damage = (ThreadLocalRandom.current().nextInt(tool.maxDurability))
+            return arrayOf(
                 tool
             )
         }
@@ -153,10 +155,10 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
 
     override fun onUpdate(currentTick: Int): Boolean {
         if (closed) return true
-        if (getIllager() != null) {
+        if (this.illager != null) {
             if (position.distanceSquared(illager!!.position) > 56.25) {
-                moveTarget = illager.position
-                lookTarget = illager.position
+                moveTarget = this.illager!!.position
+                lookTarget = this.illager!!.position
             }
             if (ticksLived % 20 == 0) {
                 if (ticksLived >= start_damage_timer * 20) {
@@ -168,7 +170,7 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
     }
 
     private inner class VexMeleeAttackExecutor(
-        memory: MemoryType<out Entity?>?,
+        memory: NullableMemoryType<out Entity>,
         speed: Float,
         maxSenseRange: Int,
         clearDataWhenLose: Boolean,

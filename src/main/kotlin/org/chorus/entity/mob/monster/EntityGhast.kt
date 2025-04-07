@@ -37,11 +37,11 @@ class EntityGhast(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt),
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(PlaySoundExecutor(Sound.MOB_GHAST_MOAN), RandomSoundEvaluator(), 2, 1),
                 Behavior(SpaceRandomRoamExecutor(0.15f, 12, 100, 20, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     GhastShootExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 64, true, 60, 10),
                     EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
@@ -55,8 +55,8 @@ class EntityGhast(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt),
                     1
                 )
             ),
-            Set.of<ISensor>(NearestPlayerSensor(64.0, 0.0, 20)),
-            Set.of<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
+            setOf<ISensor>(NearestPlayerSensor(64.0, 0.0, 20)),
+            setOf<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
             SimpleSpaceAStarRouteFinder(FlyingPosEvaluator(), this),
             this
         )
@@ -68,7 +68,7 @@ class EntityGhast(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt),
     }
 
     override fun kill() {
-        Arrays.stream(level!!.entities).filter { entity: Entity ->
+        level!!.entities.values.filter { entity: Entity ->
             if (entity is EntityFireball) {
                 return@filter entity.shootingEntity === this && !entity.closed
             }
@@ -91,8 +91,8 @@ class EntityGhast(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt),
 
     override fun getDrops(): Array<Item> {
         return arrayOf(
-            Item.get(Item.GHAST_TEAR, 0, Utils.rand(0, 1)),
-            Item.get(Item.GUNPOWDER, 0, Utils.rand(0, 2))
+            Item.get(ItemID.GHAST_TEAR, 0, Utils.rand(0, 1)),
+            Item.get(ItemID.GUNPOWDER, 0, Utils.rand(0, 2))
         )
     }
 

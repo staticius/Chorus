@@ -20,6 +20,7 @@ import java.util.*
 import java.util.concurrent.*
 import kotlin.math.abs
 import kotlin.math.atan2
+import kotlin.math.ceil
 import kotlin.math.sqrt
 
 
@@ -59,7 +60,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
     }
 
     open fun getResultDamage(): Int {
-        return ceil(sqrt(motion.x * motion.x + motion.y * motion.y + motion.z * motion.z) * getDamage())
+        return ceil(sqrt(motion.x * motion.x + motion.y * motion.y + motion.z * motion.z) * getDamage()).toInt()
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {

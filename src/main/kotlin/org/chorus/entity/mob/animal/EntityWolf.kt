@@ -47,7 +47,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>( //用于刷新InLove状态的核心行为
+            setOf<IBehavior>( //用于刷新InLove状态的核心行为
                 Behavior(
                     InLoveExecutor(400),
                     all(
@@ -122,7 +122,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                     { entity: EntityMob? -> this.memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) }, 1
                 )
             ),
-            Set.of<IBehavior>( //坐下锁定
+            setOf<IBehavior>( //坐下锁定
                 Behavior(
                     { entity: EntityMob? -> false },
                     { entity: EntityMob? -> this.isSitting() }, 7
@@ -167,7 +167,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                     ProbabilityEvaluator(5, 10), 1, 1, 50
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 WolfNearestFeedingPlayerSensor(7.0, 0.0),
                 NearestPlayerSensor(8.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
@@ -189,7 +189,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                     }),
                 EntityAttackedByOwnerSensor(5, false)
             ),
-            Set.of<IController>(WalkController(), LookController(true, true), FluctuateController()),
+            setOf<IController>(WalkController(), LookController(true, true), FluctuateController()),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

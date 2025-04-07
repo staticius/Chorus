@@ -42,11 +42,11 @@ class EntityWitch(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chu
     override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(PlaySoundExecutor(Sound.MOB_WITCH_AMBIENT), RandomSoundEvaluator(), 2, 1),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     UsePotionExecutor(0.3f, 30, 20), all(
                         MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME),
@@ -75,11 +75,11 @@ class EntityWitch(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chu
                     1
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(16.0, 0.0, 20),
                 NearestEntitySensor(EntityGolem::class.java, CoreMemoryTypes.Companion.NEAREST_GOLEM, 42.0, 0.0)
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

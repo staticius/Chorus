@@ -40,7 +40,7 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>( //用于刷新InLove状态的核心行为
+            setOf<IBehavior>( //用于刷新InLove状态的核心行为
                 Behavior(
                     InLoveExecutor(400),
                     all(
@@ -50,7 +50,7 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
                     1, 1
                 )
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     UnrollingExecutor(),
                     { entity: EntityMob? -> rollState == RollState.ROLLED_UP_UNROLLING }, 8, 1
@@ -93,8 +93,8 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
                     { entity: EntityMob? -> rollState == RollState.UNROLLED }, 1, 1
                 )
             ),
-            Set.of<ISensor>(NearestFeedingPlayerSensor(8.0, 0.0), NearestPlayerSensor(8.0, 0.0, 20)),
-            Set.of<IController>(WalkController(), LookController(true, true), FluctuateController()),
+            setOf<ISensor>(NearestFeedingPlayerSensor(8.0, 0.0), NearestPlayerSensor(8.0, 0.0, 20)),
+            setOf<IController>(WalkController(), LookController(true, true), FluctuateController()),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

@@ -54,7 +54,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     MoveToTargetExecutor(CoreMemoryTypes.Companion.NEAREST_ITEM, 0.22f, true),
                     MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.NEAREST_ITEM),
@@ -85,11 +85,11 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
                     1
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestItemSensor(32.0, 0.0, 20),
                 NearestPlayerSensor(64.0, 0.0, 20)
             ),
-            Set.of<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
+            setOf<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
             SimpleSpaceAStarRouteFinder(FlyingPosEvaluator(), this),
             this
         )

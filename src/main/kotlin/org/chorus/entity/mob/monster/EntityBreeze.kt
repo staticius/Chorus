@@ -34,7 +34,7 @@ class EntityBreeze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
     override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     BreezeShootExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.4f, 15, true, 30, 20),
                     EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
@@ -48,7 +48,7 @@ class EntityBreeze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                     1
                 )
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_BREEZE_IDLE_AIR), all(
                         RandomSoundEvaluator(),
@@ -87,8 +87,8 @@ class EntityBreeze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                 ),
                 Behavior(FlatRandomRoamExecutor(1f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(NearestPlayerSensor(24.0, 0.0, 20)),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<ISensor>(NearestPlayerSensor(24.0, 0.0, 20)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

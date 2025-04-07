@@ -37,7 +37,7 @@ class EntityFox(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>( //用于刷新InLove状态的核心行为
+            setOf<IBehavior>( //用于刷新InLove状态的核心行为
                 Behavior(
                     InLoveExecutor(400),
                     all(
@@ -47,7 +47,7 @@ class EntityFox(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                     1, 1
                 )
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     FlatRandomRoamExecutor(0.4f, 12, 40, true, 100, true, 10),
                     PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME, 0, 100),
@@ -80,8 +80,8 @@ class EntityFox(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                     1
                 )
             ),
-            Set.of<ISensor>(NearestFeedingPlayerSensor(8.0, 0.0), NearestPlayerSensor(8.0, 0.0, 20)),
-            Set.of<IController>(WalkController(), LookController(true, true), FluctuateController()),
+            setOf<ISensor>(NearestFeedingPlayerSensor(8.0, 0.0), NearestPlayerSensor(8.0, 0.0, 20)),
+            setOf<IController>(WalkController(), LookController(true, true), FluctuateController()),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

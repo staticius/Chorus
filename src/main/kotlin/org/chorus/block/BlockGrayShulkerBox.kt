@@ -12,7 +12,7 @@ class BlockGrayShulkerBox @JvmOverloads constructor(blockstate: BlockState = Com
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.GRAY_SHULKER_BOX, Set.of(BlockTags.PNX_SHULKERBOX))
+        val properties: BlockProperties = BlockProperties(BlockID.GRAY_SHULKER_BOX, setOf(BlockTags.PNX_SHULKERBOX))
 
     }
 }

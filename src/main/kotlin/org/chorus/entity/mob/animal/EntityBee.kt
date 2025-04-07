@@ -46,7 +46,7 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     BeeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.7f, 33, true, 20),
                     all(
@@ -66,10 +66,10 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                     1
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 MemorizedBlockSensor(20, 5, 20)
             ),
-            Set.of<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
+            setOf<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
             SimpleSpaceAStarRouteFinder(FlyingPosEvaluator(), this),
             this
         )

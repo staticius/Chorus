@@ -41,7 +41,7 @@ class EntityEndermite(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, n
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(PlaySoundExecutor(Sound.MOB_ENDERMITE_SAY), RandomSoundEvaluator(), 6, 1),
                 Behavior(
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 16, true, 30),
@@ -63,7 +63,7 @@ class EntityEndermite(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, n
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(16.0, 0.0, 0),
                 NearestEntitySensor(
                     EntityIronGolem::class.java,
@@ -78,7 +78,7 @@ class EntityEndermite(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, n
                     0.0
                 )
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

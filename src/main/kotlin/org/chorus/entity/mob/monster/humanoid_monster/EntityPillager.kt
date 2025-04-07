@@ -38,7 +38,7 @@ class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, n
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_PILLAGER_IDLE, 0.8f, 1.2f, 0.8f, 0.8f),
                     RandomSoundEvaluator(),
@@ -80,7 +80,7 @@ class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, n
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
@@ -91,7 +91,7 @@ class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, n
                         )
                     })
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

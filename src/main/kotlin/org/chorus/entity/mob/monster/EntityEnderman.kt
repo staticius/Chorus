@@ -1,19 +1,20 @@
 package org.chorus.entity.mob.monster
 
 import org.chorus.Player
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.BlockID
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
-import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestEntitySensor
 import org.chorus.entity.ai.sensor.PlayerStaringSensor
 import org.chorus.entity.data.EntityFlag
@@ -22,12 +23,13 @@ import org.chorus.entity.projectile.EntityProjectile
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.GameRule
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
+import org.chorus.utils.Utils
 import java.util.Set
 
 class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable {
@@ -38,10 +40,10 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(StaringAttackTargetExecutor(), none(), 1, 1, 1, true)
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_ENDERMEN_IDLE, 0.8f, 1.2f, 1f, 1f),
                     all(not(EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET)), RandomSoundEvaluator()),
@@ -61,17 +63,17 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
                 Behavior(
                     TeleportExecutor(16, 5, 16), any(
                         all(
-                            IBehaviorEvaluator { entity: EntityMob? -> level!!.isRaining },
-                            IBehaviorEvaluator { entity: EntityMob? -> !isUnderBlock },
-                            IBehaviorEvaluator { entity: EntityMob? -> level!!.tick % 10 == 0 }),
-                        IBehaviorEvaluator { entity: EntityMob? -> isInsideOfWater },
+                            IBehaviorEvaluator { level!!.isRaining },
+                            IBehaviorEvaluator { !isUnderBlock() },
+                            IBehaviorEvaluator { level!!.tick % 10 == 0 }),
+                        IBehaviorEvaluator { isInsideOfWater() },
                         all(
-                            IBehaviorEvaluator { entity: EntityMob? -> memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) },
-                            IBehaviorEvaluator { entity: EntityMob? -> level!!.tick % 20 == 0 },
+                            IBehaviorEvaluator { memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) },
+                            IBehaviorEvaluator { level!!.tick % 20 == 0 },
                             ProbabilityEvaluator(2, 25)
                         ),
                         all(
-                            IBehaviorEvaluator { entity: EntityMob? -> !memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) },
+                            IBehaviorEvaluator { !memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET) },
                             ProbabilityEvaluator(1, 20),
                             PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME, 0, 10)
                         )
@@ -81,29 +83,29 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.45f, 64, true, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
                         any(
-                            IBehaviorEvaluator { entity: EntityMob? ->
-                                memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is Player && holder.getInventory() != null && (holder.getInventory()
-                                    .getHelmet().getId() != Block.CARVED_PUMPKIN)
+                            IBehaviorEvaluator {
+                                val holder = memoryStorage[CoreMemoryTypes.ATTACK_TARGET]
+                                holder is Player && (holder.inventory.helmet.id != BlockID.CARVED_PUMPKIN)
                             },
-                            IBehaviorEvaluator { entity: EntityMob? -> memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is EntityMob }
+                            IBehaviorEvaluator { memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET] is EntityMob }
                         )
                     ), 3, 1),
                 Behavior(
                     EndermanBlockExecutor(), all(
-                        IBehaviorEvaluator { entity: EntityMob? ->
+                        IBehaviorEvaluator {
                             level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)
                         },
-                        IBehaviorEvaluator { entity: EntityMob? -> level!!.tick % 60 == 0 },
+                        IBehaviorEvaluator { level!!.tick % 60 == 0 },
                         ProbabilityEvaluator(1, 20)
                     ), 2, 1, 1, true
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            mutableSetOf(
                 PlayerStaringSensor(64.0, 20.0, false),
-                NearestEntitySensor(EntityEndermite::class.java, CoreMemoryTypes.Companion.NEAREST_ENDERMITE, 64.0, 0.0)
+                NearestEntitySensor(EntityEndermite::class.java, CoreMemoryTypes.NEAREST_ENDERMITE, 64.0, 0.0)
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            mutableSetOf(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )
@@ -142,7 +144,7 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         if (source.cause == DamageCause.PROJECTILE) {
             if (source is EntityDamageByEntityEvent) {
                 if (source.damager is EntityProjectile) {
-                    memoryStorage.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, projectile.shootingEntity)
+                    memoryStorage[CoreMemoryTypes.ATTACK_TARGET] = source.damager.shootingEntity
                 }
             }
             TeleportExecutor(16, 5, 16).execute(this)

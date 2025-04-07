@@ -45,7 +45,7 @@ class EntityZombiePigman(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk
     override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     NearestBlockIncementExecutor(),
                     { entity: EntityMob? ->
@@ -55,7 +55,7 @@ class EntityZombiePigman(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk
                     }, 1, 1
                 )
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(
                         Sound.MOB_ZOMBIEPIG_ZPIG,
@@ -98,12 +98,12 @@ class EntityZombiePigman(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(40.0, 0.0, 0),
                 NearestEntitySensor(EntityGolem::class.java, CoreMemoryTypes.Companion.NEAREST_GOLEM, 42.0, 0.0),
                 MemorizedBlockSensor(11, 5, 20)
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

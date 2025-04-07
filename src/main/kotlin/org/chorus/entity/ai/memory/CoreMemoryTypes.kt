@@ -231,7 +231,7 @@ interface CoreMemoryTypes {
         /**
          * 目前仅在warden中使用
          */
-        val WARDEN_ANGER_VALUE = MemoryType<MutableMap<Entity, Int>>("minecraft:warden_anger_value", HashMap())
+        val WARDEN_ANGER_VALUE = NullableMemoryType<MutableMap<Entity, Int>>("minecraft:warden_anger_value")
 
         /**
          * 最近的骷髅目标

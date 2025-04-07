@@ -41,7 +41,7 @@ class EntityBlaze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt),
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(PlaySoundExecutor(Sound.MOB_BLAZE_BREATHE), RandomSoundEvaluator(), 5, 1),
                 Behavior(
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.3f, 1, false, 30), all(
@@ -63,8 +63,8 @@ class EntityBlaze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt),
                 ),
                 Behavior(SpaceRandomRoamExecutor(0.15f, 12, 100, 20, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(NearestPlayerSensor(40.0, 0.0, 20)),
-            Set.of<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
+            setOf<ISensor>(NearestPlayerSensor(40.0, 0.0, 20)),
+            setOf<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
             SimpleSpaceAStarRouteFinder(FlyingPosEvaluator(), this),
             this
         )

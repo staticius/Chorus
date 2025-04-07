@@ -36,7 +36,7 @@ class EntityShulkerBullet(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, n
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     MoveToTargetExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.2f, true),
                     EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
@@ -45,7 +45,7 @@ class EntityShulkerBullet(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, n
                 )
             ),
             setOf<ISensor>(),
-            Set.of<IController>(SpaceMoveController(), LiftController()),
+            setOf<IController>(SpaceMoveController(), LiftController()),
             SimpleSpaceAStarRouteFinder(FlyingPosEvaluator(), this),
             this
         )

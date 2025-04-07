@@ -38,7 +38,7 @@ class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 40, true, 30),
                     EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
@@ -56,13 +56,13 @@ class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity -> this.attackTarget(entity) })
             ),
-            Set.of<IController>(HoppingController(40), LookController(true, true)),
+            setOf<IController>(HoppingController(40), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )
@@ -114,12 +114,13 @@ class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!
         if (getVariant() == SIZE_SMALL) {
             if (getLastDamageCause() != null) {
                 if (lastDamageCause is EntityDamageByEntityEvent) {
-                    if (lastDamageCause.damager is EntityFrog) {
-                        return arrayOf(Item.get(Item.SLIME_BALL))
+                    val damager = (lastDamageCause as EntityDamageByEntityEvent).damager
+                    if (damager is EntityFrog) {
+                        return arrayOf(Item.get(ItemID.SLIME_BALL))
                     }
                 }
             }
-            return arrayOf(Item.get(Item.SLIME_BALL, Utils.rand(0, 3)))
+            return arrayOf(Item.get(ItemID.SLIME_BALL, Utils.rand(0, 3)))
         }
         return Item.EMPTY_ARRAY
     }

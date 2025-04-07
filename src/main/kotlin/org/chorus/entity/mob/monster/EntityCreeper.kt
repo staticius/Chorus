@@ -48,7 +48,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     FleeFromTargetExecutor(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY, 0.3f, true, 4f),
                     EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY),
@@ -96,7 +96,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                     ), 2, 1),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(16.0, 0.0, 20),
                 NearestEntitySensor(EntityCat::class.java, CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY, 42.0, 0.0),
                 NearestEntitySensor(
@@ -120,7 +120,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                         memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, false)
                     }
                 }),
-            Set.of<IController>(WalkController(), LookController(true, true), FluctuateController()),
+            setOf<IController>(WalkController(), LookController(true, true), FluctuateController()),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

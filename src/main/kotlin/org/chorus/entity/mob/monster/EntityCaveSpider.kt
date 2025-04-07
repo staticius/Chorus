@@ -44,7 +44,7 @@ class EntityCaveSpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, 
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(PlaySoundExecutor(Sound.MOB_SPIDER_SAY), RandomSoundEvaluator(), 5, 1),
                 Behavior(
                     FleeFromTargetExecutor(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY, 0.3f, true, 9f),
@@ -75,7 +75,7 @@ class EntityCaveSpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, 
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
@@ -88,7 +88,7 @@ class EntityCaveSpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, 
                     0.0
                 )
             ),
-            Set.of<IController>(WalkController(), LookController(true, true)),
+            setOf<IController>(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )

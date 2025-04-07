@@ -40,7 +40,7 @@ class EntityTurtle(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt),
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     FlatRandomRoamExecutor(0.4f, 12, 40, true, 100, true, 10),
                     PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME, 0, 100),
@@ -67,8 +67,8 @@ class EntityTurtle(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt),
                     1
                 )
             ),
-            Set.of<ISensor>(NearestFeedingPlayerSensor(8.0, 0.0), NearestPlayerSensor(8.0, 0.0, 20)),
-            Set.of<IController>(
+            setOf<ISensor>(NearestFeedingPlayerSensor(8.0, 0.0), NearestPlayerSensor(8.0, 0.0, 20)),
+            setOf<IController>(
                 WalkController(),
                 LookController(true, true),
                 FluctuateController(),

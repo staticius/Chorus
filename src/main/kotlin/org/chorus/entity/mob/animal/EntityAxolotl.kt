@@ -45,7 +45,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
-            Set.of<IBehavior>( //用于刷新InLove状态的核心行为
+            setOf<IBehavior>( //用于刷新InLove状态的核心行为
                 Behavior(
                     InLoveExecutor(400),
                     all(
@@ -67,7 +67,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                     ), 1, 1
                 )
             ),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_AXOLOTL_SPLASH), all(
                         IBehaviorEvaluator { entity: EntityMob? -> getAirTicks() == 399 }
@@ -125,7 +125,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                     { EntityMob: EntityMob -> EntityMob.isInsideOfWater() }, 1, 1
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestFeedingPlayerSensor(8.0, 0.0),
                 NearestPlayerSensor(8.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
@@ -164,7 +164,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                     }
                 }
             ),
-            Set.of<IController>(
+            setOf<IController>(
                 LookController(true, true),
                 ConditionalController(
                     Pair.of<Predicate<EntityMob>, IController>(

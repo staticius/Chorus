@@ -67,9 +67,7 @@ class WardenMeleeAttackExecutor(
 
     protected fun calCoolDown(entity: EntityMob, target: Entity?): Int {
         if (entity is EntityWarden) {
-            val anger =
-                entity.getMemoryStorage()[CoreMemoryTypes.WARDEN_ANGER_VALUE]
-                    .getOrDefault(target, 0)
+            val anger = entity.getMemoryStorage()[CoreMemoryTypes.WARDEN_ANGER_VALUE]!!.getOrDefault(target, 0)
             return if (anger >= 145) 18 else 36
         } else {
             return 20

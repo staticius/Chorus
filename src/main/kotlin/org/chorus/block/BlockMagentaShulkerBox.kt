@@ -12,7 +12,7 @@ class BlockMagentaShulkerBox @JvmOverloads constructor(blockstate: BlockState = 
     }
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.MAGENTA_SHULKER_BOX, Set.of(BlockTags.PNX_SHULKERBOX))
+        val properties: BlockProperties = BlockProperties(BlockID.MAGENTA_SHULKER_BOX, setOf(BlockTags.PNX_SHULKERBOX))
 
     }
 }

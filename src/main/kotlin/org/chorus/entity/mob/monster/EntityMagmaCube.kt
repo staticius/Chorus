@@ -11,7 +11,6 @@ import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.executor.FlatRandomRoamExecutor
 import org.chorus.entity.ai.executor.MeleeAttackExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
@@ -23,7 +22,6 @@ import org.chorus.item.*
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
-import java.util.List
 import java.util.Set
 import java.util.function.Function
 
@@ -36,7 +34,7 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 40, true, 30),
                     EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
@@ -54,13 +52,13 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
                 ),
                 Behavior(FlatRandomRoamExecutor(0.3f, 12, 100, false, -1, true, 10), none(), 1, 1)
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity -> this.attackTarget(entity) })
             ),
-            Set.of<IController>(HoppingController(40), LookController(true, true)),
+            setOf<IController>(HoppingController(40), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )
@@ -116,16 +114,21 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
     override fun getDrops(): Array<Item> {
         if (getLastDamageCause() != null) {
             if (lastDamageCause is EntityDamageByEntityEvent) {
-                if (lastDamageCause.damager is EntityFrog) {
+                val damager = (lastDamageCause as EntityDamageByEntityEvent).damager
+                if (damager is EntityFrog) {
                     if (getVariant() == SIZE_SMALL) {
-                        return arrayOf<Item?>(Item.get(if (frog.getVariant() == 0) Block.OCHRE_FROGLIGHT else if (frog.getVariant() == 1) Block.VERDANT_FROGLIGHT else Block.PEARLESCENT_FROGLIGHT))
+                        return arrayOf(Item.get(
+                            if (damager.getVariant() == 0) BlockID.OCHRE_FROGLIGHT
+                            else if (damager.getVariant() == 1) BlockID.VERDANT_FROGLIGHT
+                            else BlockID.PEARLESCENT_FROGLIGHT
+                        ))
                     }
                 }
             }
         }
         if (getVariant() != SIZE_SMALL) {
             if (Utils.rand(0, 4) == 0) {
-                return arrayOf(Item.get(Item.MAGMA_CREAM))
+                return arrayOf(Item.get(ItemID.MAGMA_CREAM))
             }
         }
         return Item.EMPTY_ARRAY

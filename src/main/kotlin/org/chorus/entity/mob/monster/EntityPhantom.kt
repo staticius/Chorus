@@ -14,6 +14,7 @@ import org.chorus.entity.ai.executor.PlaySoundExecutor
 import org.chorus.entity.ai.executor.SpaceRandomRoamExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleSpaceAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.FlyingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
@@ -41,7 +42,7 @@ class EntityPhantom(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_PHANTOM_IDLE, 0.8f, 1.2f, 0.8f, 0.8f),
                     all(RandomSoundEvaluator()),
@@ -87,18 +88,18 @@ class EntityPhantom(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                     1
                 )
             ),
-            Set.of<ISensor>(
+            setOf<ISensor>(
                 NearestPlayerSensor(64.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 64.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!
                         )
                     })
             ),
-            Set.of<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
+            setOf<IController>(SpaceMoveController(), LookController(true, true), LiftController()),
             SimpleSpaceAStarRouteFinder(FlyingPosEvaluator(), this),
             this
         )
@@ -144,7 +145,7 @@ class EntityPhantom(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
     }
 
     private inner class PhantomMeleeAttackExecutor(
-        memory: MemoryType<out Entity?>?,
+        memory: NullableMemoryType<out Entity>,
         speed: Float,
         maxSenseRange: Int,
         clearDataWhenLose: Boolean,
