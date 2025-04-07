@@ -101,13 +101,12 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
         this.behaviorGroup = requireBehaviorGroup()
 
-        val storage = memoryStorage
-        storage[CoreMemoryTypes.ENTITY_SPAWN_TIME] = level!!.tick
+        memoryStorage[CoreMemoryTypes.ENTITY_SPAWN_TIME] = level!!.tick
         IMemoryType.PERSISTENT_MEMORIES.forEach(Consumer { memory ->
             val mem = memory as IMemoryType<Any?>
-            val data = mem.codec!!.decoder.apply(this.namedTag!!)
+            val data = mem.codec?.decoder?.apply(this.namedTag!!)
             if (data != null) {
-                storage.set(mem, data)
+                memoryStorage[mem] = data
             }
         })
     }

@@ -53,13 +53,13 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
             Set.of<IBehavior>(
                 Behavior(
                     UnrollingExecutor(),
-                    { entity: EntityMob? -> getRollState() == RollState.ROLLED_UP_UNROLLING }, 8, 1
+                    { entity: EntityMob? -> rollState == RollState.ROLLED_UP_UNROLLING }, 8, 1
                 ),
                 Behavior(
                     PeekExecutor(), any(
-                        IBehaviorEvaluator { entity: EntityMob? -> getRollState() == RollState.ROLLED_UP_PEEKING },
+                        IBehaviorEvaluator { entity: EntityMob? -> rollState == RollState.ROLLED_UP_PEEKING },
                         all(
-                            IBehaviorEvaluator { entity: EntityMob? -> getRollState() == RollState.ROLLED_UP_RELAXING },
+                            IBehaviorEvaluator { entity: EntityMob? -> rollState == RollState.ROLLED_UP_RELAXING },
                             ProbabilityEvaluator(1, 0xFFF)
                         )
                     ), 7, 1
@@ -68,7 +68,7 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
                 Behavior(RelaxingExecutor(), ProbabilityEvaluator(1, 0xFFFF), 5, 1),
                 Behavior(
                     ShedExecutor(), all(
-                        IBehaviorEvaluator { entity: EntityMob? -> getRollState() == RollState.UNROLLED },
+                        IBehaviorEvaluator { entity: EntityMob? -> rollState == RollState.UNROLLED },
                         PassByTimeEvaluator(CoreMemoryTypes.Companion.NEXT_SHED, 0)
                     ), 5, 1
                 ),
@@ -81,16 +81,16 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
                 Behavior(
                     MoveToTargetExecutor(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER, 0.4f, true), all(
                         MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER),
-                        IBehaviorEvaluator { entity: EntityMob? -> getRollState() == RollState.UNROLLED }
+                        IBehaviorEvaluator { entity: EntityMob? -> rollState == RollState.UNROLLED }
                     ), 2, 1),
                 Behavior(
                     LookAtTargetExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 100), all(
                         ProbabilityEvaluator(4, 10),
-                        IBehaviorEvaluator { entity: EntityMob? -> getRollState() == RollState.UNROLLED }
+                        IBehaviorEvaluator { entity: EntityMob? -> rollState == RollState.UNROLLED }
                     ), 1, 1, 100),
                 Behavior(
                     FlatRandomRoamExecutor(0.2f, 12, 20, false, -1, true, 40),
-                    { entity: EntityMob? -> getRollState() == RollState.UNROLLED }, 1, 1
+                    { entity: EntityMob? -> rollState == RollState.UNROLLED }, 1, 1
                 )
             ),
             Set.of<ISensor>(NearestFeedingPlayerSensor(8.0, 0.0), NearestPlayerSensor(8.0, 0.0, 20)),
@@ -101,12 +101,13 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        if (player.inventory.getUnclonedItem(player.inventory.heldItemIndex) is ItemBrush) {
-            level!!.dropItem(this.position, Item.get(Item.ARMADILLO_SCUTE))
+        val brush = player.inventory.getUnclonedItem(player.inventory.heldItemIndex)
+        if (brush is ItemBrush) {
+            level!!.dropItem(this.position, Item.get(ItemID.ARMADILLO_SCUTE))
             level!!.addSound(player.position, Sound.MOB_ARMADILLO_BRUSH)
             brush.incDamage(16)
-            if (brush.getDamage() >= brush.getMaxDurability()) {
-                player.level.addSound(player.position, Sound.RANDOM_BREAK)
+            if (brush.damage >= brush.maxDurability) {
+                player.level!!.addSound(player.position, Sound.RANDOM_BREAK)
                 player.inventory.clear(player.inventory.heldItemIndex)
             }
         }
@@ -139,25 +140,25 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
-        if (getRollState() != RollState.UNROLLED) {
+        if (rollState != RollState.UNROLLED) {
             source.damage = (source.damage - 1) / 2f
         }
         return super.attack(source)
     }
 
     override fun isBreedingItem(item: Item): Boolean {
-        return item.id == Item.SPIDER_EYE
+        return item.id == ItemID.SPIDER_EYE
     }
 
     fun setRollState(state: RollState) {
         this.rollState = state
-        setEnumEntityProperty(PROPERTY_STATE, state.getState())
-        sendData(viewers.values.toArray<Player?> { _Dummy_.__Array__() })
+        setEnumEntityProperty(PROPERTY_STATE, state.state)
+        sendData(viewers.values.toTypedArray())
         setDataFlag(EntityFlag.BODY_ROTATION_BLOCKED, rollState != RollState.UNROLLED)
     }
 
 
-    enum class RollState(@field:Getter private val state: String) {
+    enum class RollState(val state: String) {
         UNROLLED("unrolled"),
         ROLLED_UP("rolled_up"),
         ROLLED_UP_PEEKING("rolled_up_peeking"),

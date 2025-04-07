@@ -55,12 +55,14 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                     1, 1
                 ),
                 Behavior(
-                    { entity: EntityMob? ->
-                        moveTarget = memoryStorage.get<Block>(CoreMemoryTypes.Companion.NEAREST_BLOCK).position
-                        true
+                    object : IBehaviorExecutor {
+                        override fun execute(entity: EntityMob): Boolean {
+                            moveTarget = memoryStorage[CoreMemoryTypes.Companion.NEAREST_BLOCK]?.position
+                            return true
+                        }
                     }, all(
                         MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.NEAREST_BLOCK),
-                        IBehaviorEvaluator { entity: EntityMob? -> !isInsideOfWater },
+                        IBehaviorEvaluator { entity: EntityMob? -> !isInsideOfWater() },
                         not(DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_BLOCK, 9.0))
                     ), 1, 1
                 )
@@ -68,17 +70,17 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
             Set.of<IBehavior>(
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_AXOLOTL_SPLASH), all(
-                        IBehaviorEvaluator { entity: EntityMob? -> airTicks == 399 }
+                        IBehaviorEvaluator { entity: EntityMob? -> getAirTicks() == 399 }
                     ), 7, 1),
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_AXOLOTL_IDLE_WATER), all(
                         RandomSoundEvaluator(),
-                        IBehaviorEvaluator { entity: EntityMob? -> isInsideOfWater }), 7, 1
+                        IBehaviorEvaluator { entity: EntityMob? -> isInsideOfWater() }), 7, 1
                 ),
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_AXOLOTL_IDLE), all(
                         RandomSoundEvaluator(),
-                        IBehaviorEvaluator { entity: EntityMob? -> !isInsideOfWater }), 6, 1
+                        IBehaviorEvaluator { entity: EntityMob? -> !isInsideOfWater() }), 6, 1
                 ),
                 Behavior(
                     MeleeAttackExecutor(
@@ -116,11 +118,11 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                 ),
                 Behavior(
                     FlatRandomRoamExecutor(0.2f, 12, 100, false, -1, false, 10),
-                    { entity: EntityMob -> !entity.isInsideOfWater }, 1, 1
+                    { entity: EntityMob -> !entity.isInsideOfWater() }, 1, 1
                 ),
                 Behavior(
                     SpaceRandomRoamExecutor(0.36f, 12, 1, 80, false, -1, false, 10),
-                    { EntityMob: EntityMob -> EntityMob.isInsideOfWater }, 1, 1
+                    { EntityMob: EntityMob -> EntityMob.isInsideOfWater() }, 1, 1
                 )
             ),
             Set.of<ISensor>(
@@ -128,35 +130,35 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                 NearestPlayerSensor(8.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!
                         )
                     }),
                 BlockSensor(BlockFlowingWater::class.java, CoreMemoryTypes.Companion.NEAREST_BLOCK, 16, 5, 10),
-                ISensor { entity: EntityMob? ->
-                    if (level!!.tick % 20 == 0) {
-                        val lastAttack = memoryStorage.get<Entity>(CoreMemoryTypes.Companion.LAST_ATTACK_ENTITY)
-                        if (lastAttack != null) {
-                            if (!lastAttack.isAlive) {
-                                if (lastAttack is EntityMob) {
-                                    if (lastAttack.getLastDamageCause() is EntityDamageByEntityEvent) {
-                                        if (event.getDamager() is Player) {
-                                            player.removeEffect(EffectType.MINING_FATIGUE)
-                                            player.addEffect(
-                                                Effect.get(EffectType.REGENERATION).setDuration(
-                                                    (if (player.hasEffect(
-                                                            EffectType.REGENERATION
-                                                        )
-                                                    ) player.getEffect(EffectType.REGENERATION)
-                                                        .getDuration() else 0) + 100
+                object : ISensor {
+                    override fun sense(entity: EntityMob) {
+                        if (level!!.tick % 20 == 0) {
+                            val lastAttack = memoryStorage.get<Entity>(CoreMemoryTypes.Companion.LAST_ATTACK_ENTITY)
+                            if (lastAttack != null) {
+                                if (!lastAttack.isAlive()) {
+                                    if (lastAttack is EntityMob) {
+                                        val event = lastAttack.getLastDamageCause()
+                                        if (event is EntityDamageByEntityEvent) {
+                                            if (event.damager is Player) {
+                                                val player = event.damager
+                                                player.removeEffect(EffectType.MINING_FATIGUE)
+                                                player.addEffect(
+                                                    Effect.get(EffectType.REGENERATION).setDuration(
+                                                        (if (player.hasEffect(EffectType.REGENERATION)) player.getEffect(EffectType.REGENERATION)!!.getDuration() else 0) + 100
+                                                    )
                                                 )
-                                            )
+                                            }
                                         }
                                     }
+                                    memoryStorage.clear(CoreMemoryTypes.Companion.LAST_ATTACK_ENTITY)
                                 }
-                                memoryStorage.clear(CoreMemoryTypes.Companion.LAST_ATTACK_ENTITY)
                             }
                         }
                     }
@@ -166,27 +168,27 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                 LookController(true, true),
                 ConditionalController(
                     Pair.of<Predicate<EntityMob>, IController>(
-                        Predicate<EntityMob> { obj: EntityMob -> obj.isInsideOfWater },
+                        Predicate<EntityMob> { obj: EntityMob -> obj.isInsideOfWater() },
                         DiveController()
                     ), Pair.of<Predicate<EntityMob>, IController>(
-                        Predicate<EntityMob> { obj: EntityMob -> obj.isInsideOfWater }, SpaceMoveController()
+                        Predicate<EntityMob> { obj: EntityMob -> obj.isInsideOfWater() }, SpaceMoveController()
                     ), Pair.of<Predicate<EntityMob>, IController>(
-                        Predicate<EntityMob> { entity: EntityMob -> !entity.isInsideOfWater }, WalkController()
+                        Predicate<EntityMob> { entity: EntityMob -> !entity.isInsideOfWater() }, WalkController()
                     ), Pair.of<Predicate<EntityMob>, IController>(
-                        Predicate<EntityMob> { entity: EntityMob -> !entity.isInsideOfWater }, FluctuateController()
+                        Predicate<EntityMob> { entity: EntityMob -> !entity.isInsideOfWater() }, FluctuateController()
                     )
                 )
             ),
             ConditionalAStarRouteFinder(
                 this,
                 Pair.of<Predicate<EntityMob>, IRouteFinder>(
-                    Predicate<EntityMob> { ent: EntityMob -> !ent.isInsideOfWater }, SimpleFlatAStarRouteFinder(
+                    Predicate<EntityMob> { ent: EntityMob -> !ent.isInsideOfWater() }, SimpleFlatAStarRouteFinder(
                         WalkingPosEvaluator(),
                         this
                     )
                 ),
                 Pair.of<Predicate<EntityMob>, IRouteFinder>(
-                    Predicate<EntityMob> { obj: EntityMob -> obj.isInsideOfWater }, SimpleSpaceAStarRouteFinder(
+                    Predicate<EntityMob> { obj: EntityMob -> obj.isInsideOfWater() }, SimpleSpaceAStarRouteFinder(
                         SwimmingPosEvaluator(),
                         this
                     )
@@ -197,8 +199,8 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        if (item.id == Item.WATER_BUCKET) {
-            val bucket = Item.get(Item.AXOLOTL_BUCKET)
+        if (item.id == ItemID.WATER_BUCKET) {
+            val bucket = Item.get(ItemID.AXOLOTL_BUCKET)
             val tag = CompoundTag()
             tag.putInt("Variant", getVariant())
             bucket.setCompoundTag(tag)
@@ -218,7 +220,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
 
     override fun attack(source: EntityDamageEvent): Boolean {
         if (source.cause == DamageCause.SUFFOCATION && this.locator.levelBlock.canPassThrough()) {
-            if (airTicks > -5600 || level!!.isRaining || level!!.isThundering) return false
+            if (getAirTicks() > -5600 || level!!.isRaining || level!!.isThundering()) return false
         }
         return super.attack(source)
     }
@@ -240,10 +242,10 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     }
 
     override fun useBreedingItem(player: Player, item: Item): Boolean {
-        memoryStorage.set<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
-        memoryStorage.set<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.tick)
+        memoryStorage[CoreMemoryTypes.Companion.LAST_FEED_PLAYER] = player
+        memoryStorage[CoreMemoryTypes.Companion.LAST_BE_FEED_TIME] = level!!.tick
         sendBreedingAnimation(item)
-        return player.inventory.setItemInHand(Item.get(Item.WATER_BUCKET))
+        return player.inventory.setItemInHand(Item.get(ItemID.WATER_BUCKET))
     }
 
     override fun getAllVariant(): IntArray {

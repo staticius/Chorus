@@ -216,7 +216,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     protected var runtimeId: Long = 0
     protected var lastDamageCause: EntityDamageEvent? = null
 
-    @JvmField
     protected open var age: Int = 0
 
     var health: Float = 20f

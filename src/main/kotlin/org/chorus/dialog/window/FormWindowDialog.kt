@@ -1,7 +1,6 @@
 package org.chorus.dialog.window
 
 import com.google.common.reflect.TypeToken
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.Player
 import org.chorus.dialog.element.ElementDialogButton
 import org.chorus.dialog.handler.FormDialogHandler
@@ -19,7 +18,7 @@ class FormWindowDialog @JvmOverloads constructor(
     @JvmField var title: String?,
     @JvmField var content: String?,
     @JvmField var bindEntity: Entity?,
-    private var buttons: MutableList<ElementDialogButton?> = ArrayList()
+    private var buttons: MutableList<ElementDialogButton> = mutableListOf()
 ) :
     Dialog {
     @JvmField
@@ -33,7 +32,7 @@ class FormWindowDialog @JvmOverloads constructor(
         protected set
 
     @Transient
-    protected val handlers: MutableList<FormDialogHandler> = ObjectArrayList()
+    protected val handlers: MutableList<FormDialogHandler> = mutableListOf()
 
     init {
         try {
@@ -49,11 +48,11 @@ class FormWindowDialog @JvmOverloads constructor(
         requireNotNull(this.bindEntity) { "bindEntity cannot be null!" }
     }
 
-    fun getButtons(): List<ElementDialogButton?> {
+    fun getButtons(): List<ElementDialogButton> {
         return buttons
     }
 
-    fun setButtons(buttons: MutableList<ElementDialogButton?>) {
+    fun setButtons(buttons: MutableList<ElementDialogButton>) {
         this.buttons = buttons
     }
 
@@ -61,7 +60,7 @@ class FormWindowDialog @JvmOverloads constructor(
         this.addButton(ElementDialogButton(text, text))
     }
 
-    fun addButton(button: ElementDialogButton?) {
+    fun addButton(button: ElementDialogButton) {
         buttons.add(button)
     }
 
@@ -79,7 +78,7 @@ class FormWindowDialog @JvmOverloads constructor(
     var buttonJSONData: String?
         get() = JSONUtils.to(this.buttons)
         set(json) {
-            val buttons = JSONUtils.from<MutableList<ElementDialogButton?>?>(json, object : TypeToken<List<ElementDialogButton?>?>() {}.type) ?: mutableListOf()
+            val buttons = JSONUtils.from<MutableList<ElementDialogButton>?>(json, object : TypeToken<List<ElementDialogButton>?>() {}.type) ?: mutableListOf()
             this.setButtons(buttons)
         }
 
