@@ -8,17 +8,13 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.MinecartType
 
-/**
- * @author Snake1999
- * @since 2016/1/30
- */
 class EntityMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt) {
     override fun getIdentifier(): String {
         return EntityID.MINECART
     }
 
     override fun getOriginalName(): String {
-        return getType().getName()
+        return getType().name
     }
 
     override fun getType(): MinecartType {

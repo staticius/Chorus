@@ -66,7 +66,7 @@ import kotlin.random.Random
  */
 abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDataTypes, IVector3 {
     var chested: Boolean = false
-    var color: Byte = 0
+    open var color: Byte = 0
     var color2: Byte = 0
     var customName: String? = null
     var customNameVisible: Boolean? = null
@@ -217,7 +217,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     protected var lastDamageCause: EntityDamageEvent? = null
 
     @JvmField
-    protected var age: Int = 0
+    protected open var age: Int = 0
 
     var health: Float = 20f
         protected set

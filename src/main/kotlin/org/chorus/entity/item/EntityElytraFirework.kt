@@ -33,7 +33,7 @@ class EntityElytraFirework(chunk: IChunk?, nbt: CompoundTag, private var followi
                     motion.x = followingPlayer!!.motion.x
                     motion.y = followingPlayer!!.motion.y
                     motion.z = followingPlayer!!.motion.z
-                    this.teleport(followingPlayer!!.getNextPosition().position.add(followingPlayer!!.getMotion()))
+                    this.teleport(followingPlayer!!.nextPosition.position.add(followingPlayer!!.getMotion()))
 
                     this.move(motion.x, motion.y, motion.z)
                     this.updateMovement()

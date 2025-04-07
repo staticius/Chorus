@@ -4,13 +4,9 @@ import org.chorus.Player
 import org.chorus.command.NPCCommandSender
 import org.chorus.dialog.element.ElementDialogButton
 import org.chorus.dialog.element.ElementDialogButton.CmdLine
-import org.chorus.dialog.element.ElementDialogButton.getData
-import org.chorus.dialog.element.ElementDialogButton.getMode
 import org.chorus.dialog.handler.FormDialogHandler
 import org.chorus.dialog.response.FormResponseDialog
 import org.chorus.dialog.window.FormWindowDialog
-import org.chorus.dialog.window.FormWindowDialog.buttonJSONData
-import org.chorus.dialog.window.FormWindowDialog.getButtons
 import org.chorus.entity.*
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
@@ -61,7 +57,7 @@ class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
     }
 
     override fun getInteractButtonText(player: Player): String {
-        return if (player.isCreative()) "action.interact.edit" else "action.interact.talk"
+        return if (player.isCreative) "action.interact.edit" else "action.interact.talk"
     }
 
     override fun getOriginalName(): String {
@@ -76,14 +72,14 @@ class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
         return BehaviorGroup(
             this.tickSpread,
             setOf<IBehavior>(),
-            Set.of<IBehavior>(
+            setOf<IBehavior>(
                 Behavior(
                     LookAtTargetExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 100),
                     ProbabilityEvaluator(2, 100)
                 )
             ),
-            Set.of<ISensor>(NearestPlayerSensor(6.0, 0.0, 20)),
-            Set.of<IController>(LookController(true, false)),
+            setOf<ISensor>(NearestPlayerSensor(6.0, 0.0, 20)),
+            setOf<IController>(LookController(true, false)),
             null,
             this
         )

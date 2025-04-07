@@ -85,7 +85,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         this.item = NBTIO.getItemHelper(namedTag!!.getCompound("Item"))
         this.setDataFlag(EntityFlag.HAS_GRAVITY, true)
 
-        if (item.isLavaResistant()) {
+        if (item.isLavaResistant) {
             this.fireProof = true // Netherite items are fireproof
         }
 
@@ -94,13 +94,13 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
 
 
     override fun attack(source: EntityDamageEvent): Boolean {
-        if (item != null && item.isLavaResistant() && (source.cause == DamageCause.LAVA || source.cause == DamageCause.FIRE || source.cause == DamageCause.FIRE_TICK)) {
+        if (item != null && item.isLavaResistant && (source.cause == DamageCause.LAVA || source.cause == DamageCause.FIRE || source.cause == DamageCause.FIRE_TICK)) {
             return false
         }
 
         return (source.cause == DamageCause.VOID || source.cause == DamageCause.CONTACT || source.cause == DamageCause.FIRE_TICK || (source.cause == DamageCause.ENTITY_EXPLOSION ||
                 source.cause == DamageCause.BLOCK_EXPLOSION) && !this.isInsideOfWater() && (this.item == null ||
-                item.getId() !== Item.NETHER_STAR)) && super.attack(source)
+                item.id !== ItemID.NETHER_STAR)) && super.attack(source)
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
@@ -117,7 +117,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         this.lastUpdate = currentTick
 
         if (this.age % 60 == 0 && this.onGround && this.getItem() != null && this.isAlive()) {
-            if (getItem().getCount() < getItem().getMaxStackSize()) {
+            if (getItem().getCount() < getItem().maxStackSize) {
                 for (entity: Entity in level!!.getNearbyEntities(
                     getBoundingBox().grow(1.0, 1.0, 1.0),
                     this, false
@@ -134,7 +134,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
                             continue
                         }
                         val newAmount: Int = getItem().getCount() + closeItem.getCount()
-                        if (newAmount > getItem().getMaxStackSize()) {
+                        if (newAmount > getItem().maxStackSize) {
                             continue
                         }
                         entity.close()
@@ -151,7 +151,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
 
         var hasUpdate: Boolean = this.entityBaseTick(tickDiff)
 
-        val lavaResistant: Boolean = fireProof || item != null && item.isLavaResistant()
+        val lavaResistant: Boolean = fireProof || item != null && item.isLavaResistant
 
         if (!lavaResistant && (isInsideOfFire() || isInsideOfLava())) {
             this.kill()
@@ -223,7 +223,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
                     motion.z
                 ) > 0.00001)
             ) {
-                friction *= level!!.getBlock(position.add(0.0, -1.0, 0.0).floor()).getFrictionFactor()
+                friction *= level!!.getBlock(position.add(0.0, -1.0, 0.0).floor()).frictionFactor
             }
 
             motion.x *= friction
@@ -254,7 +254,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
     }
 
     override fun setOnFire(seconds: Int) {
-        if (item != null && item.isLavaResistant()) {
+        if (item != null && item.isLavaResistant) {
             return
         }
         super.setOnFire(seconds)

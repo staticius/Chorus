@@ -30,7 +30,7 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
 
     private val lifetime: Int
     private var fireworkAge: Int = 0
-    private var firework: Item? = null
+    private var firework: Item
     private var hadCollision: Boolean = false
 
 
@@ -48,14 +48,14 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
             firework = ItemFireworkRocket()
         }
 
-        if (!firework!!.hasCompoundTag() || !firework!!.getNamedTag()!!.contains("Fireworks")) {
-            var tag: CompoundTag? = firework!!.getNamedTag()
+        if (!firework.hasCompoundTag() || !firework.namedTag!!.contains("Fireworks")) {
+            var tag: CompoundTag? = firework.namedTag
             if (tag == null) {
                 tag = CompoundTag()
             }
 
             val ex: CompoundTag = CompoundTag()
-                .putByteArray("FireworkColor", byteArrayOf(DyeColor.BLACK.getDyeData().toByte()))
+                .putByteArray("FireworkColor", byteArrayOf(DyeColor.BLACK.dyeData.toByte()))
                 .putByteArray("FireworkFade", byteArrayOf())
                 .putBoolean("FireworkFlicker", false)
                 .putBoolean("FireworkTrail", false)
@@ -67,7 +67,7 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
                     .putByte("Flight", 1)
             )
 
-            firework!!.setNamedTag(tag)
+            firework.setNamedTag(tag)
         }
 
         //        this.setDataProperty(Entity.HORSE_FLAGS, firework.getNamedTag());//TODO FIXME
@@ -150,7 +150,7 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
                 && super.attack(source)
     }
 
-    fun setFirework(item: Item?) {
+    fun setFirework(item: Item) {
         this.firework = item
         //        this.setDataProperty(Entity.HORSE_FLAGS, item.getNamedTag());//TODO FIXME
     }

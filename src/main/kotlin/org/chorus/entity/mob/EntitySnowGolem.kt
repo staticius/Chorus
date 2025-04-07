@@ -59,11 +59,11 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                     SnowGolemShootExecutor(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY, 0.4f, 10, true, 20, 0),
                     all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY),
-                        IBehaviorEvaluator { entity: EntityMob? ->
+                        IBehaviorEvaluator {
                             attackTarget(
-                                getMemoryStorage().get<Entity>(
+                                getMemoryStorage().get(
                                     CoreMemoryTypes.Companion.ATTACK_TARGET
-                                )
+                                )!!
                             )
                         }
                     ),
@@ -90,13 +90,13 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
             if (!isSheared()) {
                 this.setSheared(true)
                 level!!.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_SHEAR)
-                if (player.gamemode != Player.CREATIVE) player.getInventory().getItemInHand()
-                    .setDamage(item.getDamage() + 1)
+                if (player.gamemode != Player.CREATIVE) player.getInventory().itemInHand
+                    .damage = (item.damage + 1)
                 level!!.dropItem(
                     position.add(
                         0.0,
                         getEyeHeight().toDouble(), 0.0
-                    ), Item.get(Block.CARVED_PUMPKIN)
+                    ), Item.get(BlockID.CARVED_PUMPKIN)
                 )
             }
         }
@@ -132,20 +132,20 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
     override fun onUpdate(currentTick: Int): Boolean {
         waterTicks++
         if (level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {
-            if (getLocator().getLevelBlock().isAir()) {
-                val support: Block = getLocator().getLevelBlock().down()
-                if (support.isFullBlock() && !support.isAir()) {
-                    level!!.setBlock(getLocator().getLevelBlock().position, Block.get(BlockID.SNOW_LAYER))
+            if (getLocator().levelBlock.isAir) {
+                val support: Block = getLocator().levelBlock.down()
+                if (support.isFullBlock && !support.isAir) {
+                    level!!.setBlock(getLocator().levelBlock.position, Block.get(BlockID.SNOW_LAYER))
                 }
             }
         }
         if (this.waterTicks >= 20) {
-            if ((level!!.isRaining() && !this.isUnderBlock()) || getLocator().getLevelBlock() is BlockLiquid || Registries.BIOME.get(
+            if ((level!!.isRaining && !this.isUnderBlock()) || getLocator().levelBlock is BlockLiquid || Registries.BIOME.get(
                     level!!.getBiomeId(
-                        position.getFloorX(),
-                        position.getFloorY(), position.getFloorZ()
+                        position.floorX,
+                        position.floorY, position.floorZ
                     )
-                ).temperature > 1.0
+                )!!.temperature > 1.0
             ) {
                 this.attack(EntityDamageEvent(this, DamageCause.WEATHER, 1f))
             }
@@ -159,7 +159,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
         fun checkAndSpawnGolem(block: Block) {
             if (block.level.gameRules.getBoolean(GameRule.DO_MOB_SPAWNING)) {
                 if (block is BlockPumpkin) {
-                    faces@ for (blockFace: BlockFace? in BlockFace.entries) {
+                    faces@ for (blockFace in BlockFace.entries) {
                         for (i in 1..2) {
                             if (block.getSide(blockFace, i) !is BlockSnow) {
                                 continue@faces
@@ -199,7 +199,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
 
                         val snowgolem: Entity? = Entity.Companion.createEntity(
                             EntityID.SNOW_GOLEM,
-                            block.level.getChunk(block.position.getChunkX(), block.position.getChunkZ()),
+                            block.level.getChunk(block.position.chunkX, block.position.chunkZ),
                             nbt
                         )
                         snowgolem!!.spawnToAll()

@@ -34,7 +34,7 @@ import java.util.function.Consumer
 import kotlin.collections.List
 
 class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityVariant {
-    override var color: Int = 0
+    override var color: Byte = 0
 
     override fun getIdentifier(): String {
         return EntityID.SHULKER
@@ -94,8 +94,8 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
-        val block: Block = getLocator().getLevelBlock()
-        if (!block.isAir() || block.down().isAir()) teleport()
+        val block: Block = getLocator().levelBlock
+        if (!block.isAir || block.down().isAir) teleport()
         return super.onUpdate(currentTick)
     }
 
@@ -125,10 +125,10 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     override fun initEntity() {
         this.setMaxHealth(30)
         super.initEntity()
-        if (getMemoryStorage().get<Int?>(CoreMemoryTypes.Companion.VARIANT) == null) setVariant(16)
+        if (getMemoryStorage()[CoreMemoryTypes.Companion.VARIANT] == null) setVariant(16)
         setDataProperty(
             EntityDataTypes.Companion.SHULKER_ATTACH_POS,
-            getLocator().getLevelBlock().getSide(BlockFace.UP).position.asBlockVector3()
+            getLocator().levelBlock.getSide(BlockFace.UP).position.asBlockVector3()
         )
     }
 
@@ -145,14 +145,14 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.SHULKER_SHELL, 0, Utils.rand(0, 2)))
+        return arrayOf(Item.get(ItemID.SHULKER_SHELL, 0, Utils.rand(0, 2)))
     }
 
     fun teleport() {
         Arrays.stream(level!!.getCollisionBlocks(getBoundingBox().grow(7.0, 7.0, 7.0)))
-            .filter { block: Block -> block.isFullBlock() && block.up().isAir() }.findAny().ifPresent(
+            .filter { block: Block -> block.isFullBlock && block.up().isAir }.findAny().ifPresent(
                 Consumer { block: Block ->
-                    val locator: Locator = block.up().getLocator()
+                    val locator: Locator = block.up().locator
                     level!!.addLevelSoundEvent(
                         this.position,
                         LevelSoundEventPacket.SOUND_TELEPORT,

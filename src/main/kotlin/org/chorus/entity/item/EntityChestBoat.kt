@@ -16,15 +16,10 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
         return EntityID.CHEST_BOAT
     }
 
-    protected var inventory: Inventory = null
+    override var inventory = ChestBoatInventory(this)
 
     override fun getOriginalName(): String {
         return "Chest Boat"
-    }
-
-
-    override fun getInventory(): ChestBoatInventory {
-        return inventory
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
@@ -51,18 +46,17 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
     public override fun initEntity() {
         super.initEntity()
 
-        this.inventory = ChestBoatInventory(this)
         if (namedTag!!.contains("Items") && namedTag!!.get("Items") is ListTag<*>) {
             val inventoryList: ListTag<CompoundTag> = namedTag!!.getList(
                 "Items",
                 CompoundTag::class.java
             )
-            for (item: CompoundTag in inventoryList.getAll()) {
+            for (item: CompoundTag in inventoryList.all) {
                 inventory.setItem(item.getByte("Slot").toInt(), NBTIO.getItemHelper(item))
             }
         }
 
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_TYPE, InventoryType.CHEST_BOAT.getNetworkType())
+        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_TYPE, InventoryType.CHEST_BOAT.networkType)
         entityDataMap.put(EntityDataTypes.Companion.CONTAINER_SIZE, inventory.size)
         entityDataMap.put(EntityDataTypes.Companion.CONTAINER_STRENGTH_MODIFIER, 0)
     }
@@ -73,8 +67,8 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
         namedTag!!.putList("Items", ListTag<CompoundTag>())
         if (this.inventory != null) {
             for (slot in 0..26) {
-                val item: Item = inventory.getItem(slot)
-                if (item != null && !item.isNull()) {
+                val item = inventory.getItem(slot)
+                if (item != null && !item.isNothing) {
                     namedTag!!.getList("Items", CompoundTag::class.java)
                         .add(NBTIO.putItemHelper(item, slot))
                 }
@@ -94,7 +88,7 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
             else -> level!!.dropItem(this.position, Item.get(ItemID.CHEST_BOAT))
         }
 
-        for (item: Item? in inventory.getContents().values) {
+        for (item in inventory.contents.values) {
             level!!.dropItem(this.position, item)
         }
         inventory.clearAll()

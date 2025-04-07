@@ -2,6 +2,7 @@
 package org.chorus.entity.mob
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.*
 import org.chorus.entity.ai.behavior.Behavior
@@ -55,26 +56,24 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
                         not(
                             any(
-                                IBehaviorEvaluator { entity: EntityMob -> entity.Server.instance.getDifficulty() == 0 },
+                                IBehaviorEvaluator { Server.instance.getDifficulty() == 0 },
                                 all(
-                                    IBehaviorEvaluator { entity: EntityMob? ->
-                                        attackingPlayer =
-                                            getMemoryStorage().get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is Player
+                                    IBehaviorEvaluator {
+                                        attackingPlayer = getMemoryStorage()[CoreMemoryTypes.ATTACK_TARGET] is Player
+                                        attackingPlayer
                                     },
-                                    IBehaviorEvaluator { entity: EntityMob? -> hasOwner(false) }
+                                    IBehaviorEvaluator { hasOwner(false) }
                                 )))
                     ), 3, 1),
                 Behavior(
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY, 0.2f, 40, true, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY),
-                        IBehaviorEvaluator { entity: EntityMob? ->
+                        IBehaviorEvaluator {
                             attackTarget(
-                                getMemoryStorage().get<Entity>(
-                                    CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY
-                                )
+                                getMemoryStorage()[CoreMemoryTypes.NEAREST_SHARED_ENTITY]!!
                             )
                         },
-                        not(IBehaviorEvaluator { entity: EntityMob? -> attackingPlayer = false })
+                        not { !attackingPlayer }
                     ), 2, 1
                 ),
                 Behavior(FlatRandomRoamExecutor(0.2f, 12, 100, false, -1, true, 10), none(), 1, 1)
@@ -119,7 +118,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         if (item is ItemIronIngot && getHealth() <= getMaxHealth() * 0.75f) {
             level!!.addSound(this.position, Sound.MOB_IRONGOLEM_REPAIR)
-            if (player.gamemode != Player.CREATIVE) player.getInventory().getItemInHand().decrement(1)
+            if (player.gamemode != Player.CREATIVE) player.getInventory().itemInHand.decrement(1)
             heal(25f)
         }
         return super.onInteract(player, item)
@@ -129,14 +128,16 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
         // Item drops
         val random: ThreadLocalRandom = ThreadLocalRandom.current()
         val flowerAmount: Int = random.nextInt(3)
-        val drops: Array<Item?>
-        if (flowerAmount > 0) {
-            drops = arrayOfNulls(2)
-            drops.get(1) = Item.get(BlockID.POPPY, 0, flowerAmount)
+        val drops: Array<Item> = if (flowerAmount > 0) {
+            arrayOf(
+                Item.get(ItemID.IRON_INGOT, 0, random.nextInt(3, 6)),
+                Item.get(BlockID.POPPY, 0, flowerAmount)
+            )
         } else {
-            drops = arrayOfNulls(1)
+            arrayOf(
+                Item.get(ItemID.IRON_INGOT, 0, random.nextInt(3, 6))
+            )
         }
-        drops.get(0) = Item.get(ItemID.IRON_INGOT, 0, random.nextInt(3, 6))
         return drops
     }
 
@@ -178,13 +179,13 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
         fun checkAndSpawnGolem(block: Block, player: Player?) {
             if (block.level.gameRules.getBoolean(GameRule.DO_MOB_SPAWNING)) {
                 if (block is BlockPumpkin) {
-                    faces@ for (blockFace: BlockFace? in BlockFace.entries) {
+                    faces@ for (blockFace in BlockFace.entries) {
                         for (i in 1..2) {
                             if (block.getSide(blockFace, i) !is BlockIronBlock) {
                                 continue@faces
                             }
                         }
-                        faces1@ for (face: BlockFace? in Set.of<BlockFace>(
+                        faces1@ for (face in setOf(
                             BlockFace.UP,
                             BlockFace.NORTH,
                             BlockFace.EAST
@@ -250,7 +251,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
 
                             val irongolem: Entity? = Entity.Companion.createEntity(
                                 EntityID.IRON_GOLEM,
-                                block.level.getChunk(block.position.getChunkX(), block.position.getChunkZ()),
+                                block.level.getChunk(block.position.chunkX, block.position.chunkZ),
                                 nbt
                             )
                             irongolem!!.spawnToAll()

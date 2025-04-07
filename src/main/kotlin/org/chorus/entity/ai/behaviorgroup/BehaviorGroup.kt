@@ -8,7 +8,6 @@ import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.controller.IController
 import org.chorus.entity.ai.memory.IMemoryStorage
 import org.chorus.entity.ai.memory.MemoryStorage
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.RouteFindingManager
 import org.chorus.entity.ai.route.RouteFindingManager.RouteFindingTask
 import org.chorus.entity.ai.route.finder.IRouteFinder
@@ -50,7 +49,7 @@ class BehaviorGroup(
     /**
      * 寻路器(非异步，因为没必要，生物AI本身就是并行的)
      */
-    private val routeFinder: IRouteFinder,
+    private val routeFinder: IRouteFinder?,
     /**
      * 此行为组所属实体
      */
@@ -73,7 +72,7 @@ class BehaviorGroup(
         return controllers
     }
 
-    override fun getRouteFinder(): IRouteFinder {
+    override fun getRouteFinder(): IRouteFinder? {
         return routeFinder
     }
 
@@ -295,7 +294,7 @@ class BehaviorGroup(
                 if (reSubmit) routeFindingTask!!.cancel(true)
                 //clone防止寻路器潜在的修改
                 RouteFindingManager.instance
-                    .submit(RouteFindingTask(routeFinder, object : RouteFindingTask.FinishCallback {
+                    .submit(RouteFindingTask(routeFinder!!, object : RouteFindingTask.FinishCallback {
                         override fun onFinish(task: RouteFindingTask?) {
                             updateMoveDirection(entity)
                             entity.isShouldUpdateMoveDirection = false
@@ -314,7 +313,7 @@ class BehaviorGroup(
         }
         if (routeFindingTask != null && routeFindingTask!!.getFinished() && !hasNewUnCalMoveTarget(entity)) {
             //若不能再移动了，且没有正在计算的寻路任务，则清除路径信息
-            val reachableTarget = routeFinder.reachableTarget
+            val reachableTarget = routeFinder!!.reachableTarget
             if (reachableTarget != null && entity.position.floor() == reachableTarget.floor()) {
                 entity.moveTarget = null
                 entity.moveDirectionStart = null
@@ -323,7 +322,7 @@ class BehaviorGroup(
             }
         }
         if (entity.isShouldUpdateMoveDirection) {
-            if (routeFinder.hasNext()) {
+            if (routeFinder!!.hasNext()) {
                 //若有新的移动方向，则更新
                 updateMoveDirection(entity)
                 entity.isShouldUpdateMoveDirection = false
@@ -340,7 +339,7 @@ class BehaviorGroup(
         //此优化只针对处于非active区块的实体
         if (entity.isActive) return true
         //终点发生变化或第一次计算，需要重算
-        if (routeFinder.target == null || hasNewUnCalMoveTarget(entity)) return true
+        if (routeFinder!!.target == null || hasNewUnCalMoveTarget(entity)) return true
         val passByChunkSections =
             calPassByChunkSections(
                 routeFinder.route.stream().map { it.getVector3() }.toList(),
@@ -362,7 +361,7 @@ class BehaviorGroup(
      * @return 是否存在新的未计算的寻路目标
      */
     private fun hasNewUnCalMoveTarget(entity: EntityMob): Boolean {
-        return entity.moveTarget != routeFinder.target
+        return entity.moveTarget != routeFinder?.target
     }
 
     /**
@@ -500,7 +499,7 @@ class BehaviorGroup(
         if (end == null) {
             end = entity.position.clone()
         }
-        val next = routeFinder.next()
+        val next = routeFinder?.next()
         if (next != null) {
             entity.moveDirectionStart = end
             entity.moveDirectionEnd = next.getVector3()

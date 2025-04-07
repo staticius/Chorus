@@ -37,8 +37,8 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
     private val temporalVector = BlockVector3()
 
     // The container mine cart detects the funnel and notifies the update, which greatly optimizes performance
-    private var minecartInvPickupFrom: InventoryHolder? = null
-    private var minecartInvPushTo: InventoryHolder? = null
+    var minecartInvPickupFrom: InventoryHolder? = null
+    var minecartInvPushTo: InventoryHolder? = null
 
     override fun initBlockEntity() {
         super.initBlockEntity()

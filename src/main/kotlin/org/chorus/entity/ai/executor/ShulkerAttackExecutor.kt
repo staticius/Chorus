@@ -4,7 +4,7 @@ import org.chorus.entity.Entity
 import org.chorus.entity.EntityID
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.EntityShulker
@@ -17,14 +17,14 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.Utils
 
 class ShulkerAttackExecutor(
-    protected val target: MemoryType<out Entity>
+    protected val target: NullableMemoryType<out Entity>
 ) : IBehaviorExecutor {
 
     private var tick = 0
     private var nextAttack = 0
 
     override fun execute(entity: EntityMob): Boolean {
-        val target = entity.memoryStorage[target]
+        val target = entity.memoryStorage[target] ?: return false
         tick++
         if (tick > nextAttack) {
             tick = 0
@@ -80,7 +80,7 @@ class ShulkerAttackExecutor(
         nextAttack = 0
         if (entity is EntityShulker) {
             entity.setPeeking(40)
-            val target = entity.getMemoryStorage()[target]
+            val target = entity.getMemoryStorage()[target] ?: return
             entity.setDataProperty(EntityDataTypes.TARGET_EID, target.getRuntimeID())
         }
     }

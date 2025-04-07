@@ -22,10 +22,6 @@ import org.chorus.utils.Rail
 import java.util.*
 import kotlin.math.*
 
-/**
- * @author larryTheCoder (Nukkit Project, Minecart and Riding Project)
- * @since 2017/6/26
- */
 abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : EntityVehicle(chunk, nbt) {
     var customDisplayTile: Boolean? = null
     var displayBlock: Block? = null
@@ -215,7 +211,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                     position.y - 1,
                     position.z, position.x + 1, position.y, position.z + 1
                 )
-                checkPickupHopper(pickupArea, holder)
+                checkPickupHopper(pickupArea, this)
                 //漏斗矿车会自行拉取物品!
                 if (this !is EntityHopperMinecart) {
                     val pushArea: SimpleAxisAlignedBB = SimpleAxisAlignedBB(
@@ -223,7 +219,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                         position.y,
                         position.z, position.x + 1, position.y + 2, position.z + 1
                     )
-                    checkPushHopper(pushArea, holder)
+                    checkPushHopper(pushArea, this)
                 }
             }
 
@@ -252,8 +248,8 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
 
     open fun dropItem() {
         if (lastDamageCause is EntityDamageByEntityEvent) {
-            val damager: Entity = lastDamageCause.damager
-            if (damager is Player && damager.isCreative()) {
+            val damager: Entity = (lastDamageCause as EntityDamageByEntityEvent).damager
+            if (damager is Player && damager.isCreative) {
                 return
             }
         }
@@ -292,7 +288,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
     }
 
     override fun applyEntityCollision(entity: Entity) {
-        if (entity !== riding && !(entity is Player && entity.isSpectator())) {
+        if (entity !== riding && !(entity is Player && entity.isSpectator)) {
             if (entity is EntityLiving
                 && (entity !is EntityHuman) && motion.x * motion.x + motion.z * motion.z > 0.01 && passengers.isEmpty()
                 && entity.riding == null && displayBlock == null
@@ -342,14 +338,14 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                     var motX: Double = entity.motion.x + motion.x
                     var motZ: Double = entity.motion.z + motion.z
 
-                    if (entity.getType().getId() == 2 && getType().getId() != 2) {
+                    if (entity.getType().id == 2 && getType().id != 2) {
                         motion.x *= 0.20000000298023224
                         motion.z *= 0.20000000298023224
                         motion.x += entity.motion.x - motiveX
                         motion.z += entity.motion.z - motiveZ
                         entity.motion.x *= 0.949999988079071
                         entity.motion.z *= 0.949999988079071
-                    } else if (entity.getType().getId() != 2 && getType().getId() == 2) {
+                    } else if (entity.getType().id != 2 && getType().id == 2) {
                         entity.motion.x *= 0.20000000298023224
                         entity.motion.z *= 0.20000000298023224
                         motion.x += entity.motion.x + motiveX
@@ -388,7 +384,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         if (this.displayBlock != null) {
             namedTag!!.putCompound(
                 TAG_DISPLAY_BLOCK,
-                displayBlock!!.getBlockState().getBlockStateTag()
+                displayBlock!!.blockState.blockStateTag
             )
         }
         if (this.displayOffset != null) {
@@ -413,17 +409,17 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         val minX: Int = floor(pushArea.minX).toInt()
         val minY: Int = floor(pushArea.minY).toInt()
         val minZ: Int = floor(pushArea.minZ).toInt()
-        val maxX: Int = ceil(pushArea.maxX)
-        val maxY: Int = ceil(pushArea.maxY)
-        val maxZ: Int = ceil(pushArea.maxZ)
+        val maxX: Int = ceil(pushArea.maxX).toInt()
+        val maxY: Int = ceil(pushArea.maxY).toInt()
+        val maxZ: Int = ceil(pushArea.maxZ).toInt()
         val tmpBV: BlockVector3 = BlockVector3()
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
                 for (y in minY..maxY) {
                     tmpBV.setComponents(x, y, z)
-                    val be: BlockEntity = level!!.getBlockEntity(tmpBV)
+                    val be = level!!.getBlockEntity(tmpBV)
                     if (be is BlockEntityHopper) {
-                        be.setMinecartInvPushTo(holder)
+                        be.minecartInvPushTo = (holder)
                         return true
                     }
                 }
@@ -450,9 +446,9 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             for (x in minX..maxX) {
                 for (y in minY..maxY) {
                     tmpBV.setComponents(x, y, z)
-                    val be: BlockEntity = level!!.getBlockEntity(tmpBV)
+                    val be = level!!.getBlockEntity(tmpBV)
                     if (be is BlockEntityHopper) {
-                        be.setMinecartInvPickupFrom(holder)
+                        be.minecartInvPickupFrom = (holder)
                         return true
                     }
                 }
@@ -504,7 +500,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             isSlowed = !block.isActive()
         }
 
-        when (Rail.Orientation.byMetadata(block.getRealMeta())) {
+        when (Rail.Orientation.byMetadata(block.realMeta)) {
             Rail.Orientation.ASCENDING_NORTH -> {
                 motion.x -= 0.0078125
                 position.y += 1.0
@@ -524,9 +520,11 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                 motion.z -= 0.0078125
                 position.y += 1.0
             }
+
+            else -> Unit
         }
 
-        val facing: Array<IntArray> = matrix.get(block.getRealMeta())
+        val facing: Array<IntArray> = matrix.get(block.realMeta)
         var facing1: Double = (facing.get(1).get(0) - facing.get(0).get(0)).toDouble()
         var facing2: Double = (facing.get(1).get(2) - facing.get(0).get(2)).toDouble()
         val speedOnTurns: Double = sqrt(facing1 * facing1 + facing2 * facing2)
@@ -676,18 +674,18 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
                 this.motion.x += this.motion.x / newMovie * nextMovie
                 this.motion.z += this.motion.z / newMovie * nextMovie
             } else if (block.getOrientation() == Rail.Orientation.STRAIGHT_NORTH_SOUTH) {
-                if (level!!.getBlock(Vector3((dx - 1).toDouble(), dy.toDouble(), dz.toDouble())).isNormalBlock()) {
+                if (level!!.getBlock(Vector3((dx - 1).toDouble(), dy.toDouble(), dz.toDouble())).isNormalBlock) {
                     this.motion.x = 0.02
                 } else if (level!!.getBlock(Vector3((dx + 1).toDouble(), dy.toDouble(), dz.toDouble()))
-                        .isNormalBlock()
+                        .isNormalBlock
                 ) {
                     this.motion.x = -0.02
                 }
             } else if (block.getOrientation() == Rail.Orientation.STRAIGHT_EAST_WEST) {
-                if (level!!.getBlock(Vector3(dx.toDouble(), dy.toDouble(), (dz - 1).toDouble())).isNormalBlock()) {
+                if (level!!.getBlock(Vector3(dx.toDouble(), dy.toDouble(), (dz - 1).toDouble())).isNormalBlock) {
                     this.motion.z = 0.02
                 } else if (level!!.getBlock(Vector3(dx.toDouble(), dy.toDouble(), (dz + 1).toDouble()))
-                        .isNormalBlock()
+                        .isNormalBlock
                 ) {
                     this.motion.z = -0.02
                 }
@@ -722,7 +720,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         val block: Block = level!!.getBlock(Vector3(checkX.toDouble(), checkY.toDouble(), checkZ.toDouble()))
 
         if (Rail.isRailBlock(block)) {
-            val facing: Array<IntArray> = matrix.get((block as BlockRail).getRealMeta())
+            val facing: Array<IntArray> = matrix.get((block as BlockRail).realMeta)
             val rail: Double
             // Genisys mistake (Doesn't check surrounding more exactly)
             val nextOne: Double = checkX.toDouble() + 0.5 + facing.get(0).get(0).toDouble() * 0.5
@@ -780,7 +778,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             setDataProperty(EntityDataTypes.Companion.CUSTOM_DISPLAY, if (customDisplayTile!!) 1 else 0)
         }
         if (this.displayBlock != null) {
-            setDataProperty(EntityDataTypes.Companion.HORSE_FLAGS, displayBlock!!.getRuntimeId())
+            setDataProperty(EntityDataTypes.Companion.HORSE_FLAGS, displayBlock!!.runtimeId)
         }
         if (this.displayOffset != null) {
             setDataProperty(EntityDataTypes.Companion.DISPLAY_OFFSET, displayOffset!!)
@@ -810,7 +808,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         displayBlock = block
         if (displayBlock != null) {
             setCustomDisplayTile(true)
-            setDataProperty(EntityDataTypes.Companion.HORSE_FLAGS, displayBlock!!.getRuntimeId())
+            setDataProperty(EntityDataTypes.Companion.HORSE_FLAGS, displayBlock!!.runtimeId)
             setDisplayBlockOffset(6)
         } else {
             setCustomDisplayTile(false)
@@ -853,9 +851,9 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
 
     fun setFlyingVelocityMod(flying: Vector3) {
         Objects.requireNonNull(flying, "Flying velocity modifiers cannot be null")
-        flyingX = flying.getX()
-        flyingY = flying.getY()
-        flyingZ = flying.getZ()
+        flyingX = flying.x
+        flyingY = flying.y
+        flyingZ = flying.z
     }
 
     fun getDerailedVelocityMod(): Vector3 {
@@ -864,9 +862,9 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
 
     fun setDerailedVelocityMod(derailed: Vector3) {
         Objects.requireNonNull(derailed, "Derailed velocity modifiers cannot be null")
-        derailedX = derailed.getX()
-        derailedY = derailed.getY()
-        derailedZ = derailed.getZ()
+        derailedX = derailed.x
+        derailedY = derailed.y
+        derailedZ = derailed.z
     }
 
     fun setMaximumSpeed(speed: Double) {

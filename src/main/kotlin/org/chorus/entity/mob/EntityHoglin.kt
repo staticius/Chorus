@@ -15,7 +15,7 @@ import org.chorus.entity.ai.controller.*
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.BlockSensor
@@ -80,8 +80,9 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                     HoglinMeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.5f, 40, true, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
                         not(IBehaviorEvaluator { entity: EntityMob? ->
-                            getMemoryStorage().get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is Player && isBreedingItem(
-                                player.getInventory().getItemInHand()
+                            val player = getMemoryStorage().get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
+                            player is Player && isBreedingItem(
+                                player.getInventory().itemInHand
                             )
                         })
                     ), 5, 1
@@ -90,8 +91,9 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                     HoglinMeleeAttackExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.5f, 40, false, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
                         not(IBehaviorEvaluator { entity: EntityMob? ->
-                            getMemoryStorage().get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && isBreedingItem(
-                                player.getInventory().getItemInHand()
+                            val player = getMemoryStorage()[CoreMemoryTypes.Companion.NEAREST_PLAYER]
+                            player is Player && isBreedingItem(
+                                player.getInventory().itemInHand
                             )
                         })
                     ), 4, 1
@@ -156,7 +158,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
     }
 
     fun isBreedingItem(item: Item): Boolean {
-        return item.getId() == BlockID.CRIMSON_FUNGUS
+        return item.id == BlockID.CRIMSON_FUNGUS
     }
 
     override fun getOriginalName(): String {
@@ -164,14 +166,14 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get((if (this.isOnFire()) Item.COOKED_PORKCHOP else Item.PORKCHOP), 0, Utils.rand(1, 3)))
+        return arrayOf(Item.get((if (this.isOnFire()) ItemID.COOKED_PORKCHOP else ItemID.PORKCHOP), 0, Utils.rand(1, 3)))
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         val superResult: Boolean = super.onInteract(player, item, clickedPos)
         if (isBreedingItem(item)) {
-            getMemoryStorage().set<Player>(CoreMemoryTypes.Companion.LAST_FEED_PLAYER, player)
-            getMemoryStorage().set<Int>(CoreMemoryTypes.Companion.LAST_BE_FEED_TIME, level!!.getTick())
+            getMemoryStorage()[CoreMemoryTypes.Companion.LAST_FEED_PLAYER] = player
+            getMemoryStorage()[CoreMemoryTypes.Companion.LAST_BE_FEED_TIME] = level!!.tick
             sendBreedingAnimation(item)
             item.count--
             return player.getInventory().setItemInHand(item) && superResult
@@ -183,7 +185,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
         val pk: EntityEventPacket = EntityEventPacket()
         pk.event = EntityEventPacket.EATING_ITEM
         pk.eid = this.getRuntimeID()
-        pk.data = item.getFullId()
+        pk.data = item.fullId
         Server.broadcastPacket(getViewers().values, pk)
     }
 
@@ -191,18 +193,18 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
         return if (isBaby()) 0 else Utils.rand(1, 3)
     }
 
-    protected class HoglinFleeFromTargetExecutor(memory: MemoryType<out IVector3?>) :
+    protected class HoglinFleeFromTargetExecutor(memory: NullableMemoryType<out IVector3>) :
         FleeFromTargetExecutor(memory, 0.5f, true, 8f) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            if (entity.position.distance(entity.getMemoryStorage().get(getMemory()).getVector3()) < 8) {
+            if (entity.position.distance(entity.getMemoryStorage()[memory]!!.vector3) < 8) {
                 entity.level!!.addSound(entity.position, Sound.MOB_HOGLIN_RETREAT)
             }
         }
     }
 
     protected class HoglinMeleeAttackExecutor(
-        memory: MemoryType<out Entity?>?,
+        memory: NullableMemoryType<out Entity>,
         speed: Float,
         maxSenseRange: Int,
         clearDataWhenLose: Boolean,
@@ -213,7 +215,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
             super.onStart(entity)
             entity.setDataProperty(
                 EntityDataTypes.Companion.TARGET_EID,
-                entity.getMemoryStorage().get(memory).getRuntimeID()
+                entity.getMemoryStorage()[memory]!!.getRuntimeID()
             )
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(

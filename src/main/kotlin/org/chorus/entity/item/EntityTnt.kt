@@ -1,5 +1,6 @@
 package org.chorus.entity.item
 
+import org.chorus.Server
 import org.chorus.entity.*
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
@@ -144,7 +145,7 @@ class EntityTnt @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, pro
         }
         val explosion: Explosion = Explosion(this.getLocator(), event.force, this)
         explosion.fireChance = event.fireChance
-        if (event.isBlockBreaking()) {
+        if (event.isBlockBreaking) {
             explosion.explodeA()
         }
         explosion.explodeB()

@@ -15,23 +15,19 @@ import org.chorus.nbt.tag.ListTag
 import org.chorus.network.protocol.types.EntityLink
 import org.chorus.utils.MinecartType
 
-/**
- * @author Snake1999
- * @since 2016/1/30
- */
 class EntityChestMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt), InventoryHolder {
     override fun getIdentifier(): String {
         return EntityID.CHEST_MINECART
     }
 
-    protected var inventory: Inventory = null
+    override var inventory = MinecartChestInventory(this)
 
     init {
-        setDisplayBlock(Block.get(Block.CHEST), false)
+        setDisplayBlock(Block.get(BlockID.CHEST), false)
     }
 
     override fun getOriginalName(): String {
-        return getType().getName()
+        return getType().name
     }
 
     override fun getType(): MinecartType {
@@ -44,17 +40,17 @@ class EntityChestMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbst
 
 
     override fun dropItem() {
-        for (item: Item? in inventory.getContents().values) {
+        for (item in inventory.contents.values) {
             level!!.dropItem(this.position, item)
         }
 
         if (lastDamageCause is EntityDamageByEntityEvent) {
-            val damager: Entity = lastDamageCause.damager
-            if (damager is Player && damager.isCreative()) {
+            val damager: Entity = (lastDamageCause as EntityDamageByEntityEvent).damager
+            if (damager is Player && damager.isCreative) {
                 return
             }
         }
-        level!!.dropItem(this.position, Item.get(Item.CHEST_MINECART))
+        level!!.dropItem(this.position, Item.get(ItemID.CHEST_MINECART))
     }
 
     override fun kill() {
@@ -66,25 +62,20 @@ class EntityChestMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbst
         return false
     }
 
-    override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        player.addWindow(inventory)
+    override fun onInteract(p: Player, item: Item, clickedPos: Vector3): Boolean {
+        p.addWindow(inventory)
         return false // If true, the count of items player has in hand decreases
-    }
-
-    override fun getInventory(): MinecartChestInventory {
-        return inventory
     }
 
     override fun initEntity() {
         super.initEntity()
 
-        this.inventory = MinecartChestInventory(this)
         if (namedTag!!.contains("Items") && namedTag!!.get("Items") is ListTag<*>) {
             val inventoryList: ListTag<CompoundTag> = namedTag!!.getList(
                 "Items",
                 CompoundTag::class.java
             )
-            for (item: CompoundTag in inventoryList.getAll()) {
+            for (item: CompoundTag in inventoryList.all) {
                 inventory.setItem(item.getByte("Slot").toInt(), NBTIO.getItemHelper(item))
             }
         }
@@ -101,7 +92,7 @@ class EntityChestMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbst
         if (this.inventory != null) {
             for (slot in 0..26) {
                 val item: Item = inventory.getItem(slot)
-                if (item != null && !item.isNull()) {
+                if (item != null && !item.isNothing) {
                     namedTag!!.getList("Items", CompoundTag::class.java)
                         .add(NBTIO.putItemHelper(item, slot))
                 }

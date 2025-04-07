@@ -5,14 +5,13 @@ import org.chorus.level.Sound
 
 import java.util.concurrent.ThreadLocalRandom
 
-
-class PlaySoundExecutor(private val sound: Sound) : IBehaviorExecutor {
-    var minPitch: Float = 0.8f
-    var maxPitch: Float = 1.2f
-    var minVolume: Float = 1f
-    var maxVolume: Float = 1f
-
-
+class PlaySoundExecutor(
+    val sound: Sound,
+    val minPitch: Float = 0.8f,
+    val maxPitch: Float = 1.2f,
+    val minVolume: Float = 1f,
+    val maxVolume: Float = 1f
+) : IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {
         val volume =
             if (minVolume == maxVolume) minVolume else ThreadLocalRandom.current().nextFloat(minVolume, maxVolume)

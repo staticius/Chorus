@@ -28,7 +28,7 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
 
 
     fun interface PaintingPlacePredicate {
-        fun test(level: Level?, blockFace: BlockFace?, block: Block?, target: Block?): Boolean
+        fun test(level: Level, blockFace: BlockFace, block: Block, target: Block): Boolean
     }
 
     private var motive: Motive? = null
@@ -54,7 +54,7 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
         if (currentTick % 20 == 0) {
             val tickCachedCollisionBlocks: Array<Block> = level!!.getTickCachedCollisionBlocks(
                 this.getBoundingBox(), false, false,
-                Predicate { bl: Block -> !bl.isAir() })
+                Predicate { bl: Block -> !bl.isAir })
             if (tickCachedCollisionBlocks.size < (getMotive()!!.height * getMotive()!!.width)) {
                 level!!.dropItem(this.position, ItemPainting())
                 this.close()
@@ -75,7 +75,7 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
                 motive!!.height.toDouble(), motive!!.width.toDouble()
             ).multiply(0.5)
 
-            if (face.getAxis() == BlockFace.Axis.Z) {
+            if (face.axis == BlockFace.Axis.Z) {
                 size.z = 0.5
             } else {
                 size.x = 0.5
@@ -116,7 +116,7 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
         if (super.attack(source)) {
             if (source is EntityDamageByEntityEvent) {
                 val damager: Entity = source.damager
-                if (damager is Player && (damager.isAdventure() || damager.isSurvival()) && level!!.gameRules
+                if (damager is Player && (damager.isAdventure || damager.isSurvival) && level!!.gameRules
                         .getBoolean(GameRule.DO_ENTITY_DROPS)
                 ) {
                     level!!.dropItem(this.position, ItemPainting())
@@ -214,7 +214,7 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
             this.title = title
             this.width = width
             this.height = height
-            this.predicate = PaintingPlacePredicate { level: Level, face: BlockFace, block: Block, target: Block ->
+            this.predicate = PaintingPlacePredicate { level, face, block, target ->
                 for (x in 0..<width) {
                     for (z in 0..<height) {
                         if (checkPlacePaint(x, z, level, face, block, target)) return@PaintingPlacePredicate false
@@ -251,25 +251,25 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
             block: Block,
             target: Block
         ): Boolean {
-            if (target.getSide(face.rotateYCCW(), x).up(z).isTransparent() ||
-                block.getSide(face.rotateYCCW(), x).up(z).isSolid()
+            if (target.getSide(face.rotateYCCW(), x).up(z).isTransparent ||
+                block.getSide(face.rotateYCCW(), x).up(z).isSolid
             ) {
                 return true
             } else {
                 val side: Block = block.getSide(face.rotateYCCW(), x)
-                val up: Block = block.getSide(face.rotateYCCW(), x).up(z).getLevelBlock()
+                val up: Block = block.getSide(face.rotateYCCW(), x).up(z).levelBlock
                 val up1: Block = block.up(z)
-                val chunks: Set<IChunk> = Sets.newHashSet(side.getChunk(), up.getChunk(), up1.getChunk())
+                val chunks: Set<IChunk> = Sets.newHashSet(side.chunk, up.chunk, up1.chunk)
                 val entities: Collection<Entity> =
                     chunks.stream().map<Collection<Entity>> { c: IChunk -> c.entities.values }.reduce(
                         ArrayList(),
-                        BiFunction { e1: ArrayList<Entity>, e2: Collection<Entity>? ->
+                        { e1: ArrayList<Entity>, e2: Collection<Entity>? ->
                             e1.addAll(
                                 e2!!
                             )
                             e1
                         },
-                        BinaryOperator { entities1: ArrayList<Entity>, entities2: ArrayList<Entity>? ->
+                        { entities1: ArrayList<Entity>, entities2: ArrayList<Entity>? ->
                             entities1.addAll(
                                 entities2!!
                             )

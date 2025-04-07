@@ -73,17 +73,17 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        if (player.isSpectator()) {
+        if (player.isSpectator) {
             return false
         }
 
         // Name tag
-        if (!item.isNull() && item.getId() == ItemID.NAME_TAG && playerApplyNameTag(player, item, false)) {
+        if (!item.isNothing && item.id == ItemID.NAME_TAG && playerApplyNameTag(player, item, false)) {
             return true
         }
 
         //Pose
-        if (player.isSneaking() || player.isFlySneaking()) {
+        if (player.isSneaking() || player.isFlySneaking) {
             if (this.getPose() >= 12) {
                 this.setPose(0)
             } else {
@@ -95,13 +95,13 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         //Inventory
         val isArmor: Boolean
 
-        val hasItemInHand: Boolean = !item.isNull()
+        val hasItemInHand: Boolean = !item.isNothing
         var slot: Int
 
         if (hasItemInHand && item is ItemArmor) {
             isArmor = true
             slot = getArmorSlot(item)
-        } else if (hasItemInHand && (item.getId() == BlockID.SKULL) || item.getBlockId() == BlockID.CARVED_PUMPKIN) {
+        } else if (hasItemInHand && (item.id == BlockID.SKULL) || item.blockId == BlockID.CARVED_PUMPKIN) {
             isArmor = true
             slot = EntityEquipment.Companion.HEAD
         } else if (hasItemInHand) {
@@ -113,32 +113,32 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
             }
         } else {
             val clickHeight: Double = clickedPos.y - position.y
-            if (clickHeight >= 0.1 && clickHeight < 0.55 && !getBoots().isNull()) {
+            if (clickHeight >= 0.1 && clickHeight < 0.55 && !boots.isNothing) {
                 isArmor = true
                 slot = EntityEquipment.Companion.FEET
             } else if (clickHeight >= 0.9 && clickHeight < 1.6) {
-                if (!getItemInOffhand().isNull()) {
+                if (!itemInOffhand.isNothing) {
                     isArmor = false
                     slot = EntityEquipment.Companion.OFF_HAND
-                } else if (!getItemInHand().isNull()) {
+                } else if (!itemInHand.isNothing) {
                     isArmor = false
                     slot = EntityEquipment.Companion.MAIN_HAND
-                } else if (!getChestplate().isNull()) {
+                } else if (!chestplate.isNothing) {
                     isArmor = true
                     slot = EntityEquipment.Companion.CHEST
                 } else {
                     return false
                 }
-            } else if (clickHeight >= 0.4 && clickHeight < 1.2 && !getLeggings().isNull()) {
+            } else if (clickHeight >= 0.4 && clickHeight < 1.2 && !leggings.isNothing) {
                 isArmor = true
                 slot = EntityEquipment.Companion.LEGS
-            } else if (clickHeight >= 1.6 && !getHelmet().isNull()) {
+            } else if (clickHeight >= 1.6 && !helmet.isNothing) {
                 isArmor = true
                 slot = EntityEquipment.Companion.HEAD
-            } else if (!getItemInOffhand().isNull()) {
+            } else if (!itemInOffhand.isNothing) {
                 isArmor = false
                 slot = EntityEquipment.Companion.OFF_HAND
-            } else if (!getItemInHand().isNull()) {
+            } else if (!itemInHand.isNothing) {
                 isArmor = false
                 slot = EntityEquipment.Companion.MAIN_HAND
             } else {
@@ -171,19 +171,19 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         val inventory: BaseInventory = equipment
         val item: Item = inventory.getItem(slot)
 
-        if (item.isNull() && !handItem.isNull()) {
+        if (item.isNothing && !handItem.isNothing) {
             // Adding item to the armor stand
             val itemClone: Item = handItem.clone()
             itemClone.setCount(1)
             inventory.setItem(slot, itemClone)
-            if (!player.isCreative()) {
+            if (!player.isCreative) {
                 handItem.count--
-                player.getInventory().setItem(player.getInventory().getHeldItemIndex(), handItem)
+                player.getInventory().setItem(player.getInventory().heldItemIndex, handItem)
             }
             return true
-        } else if (!item.isNull()) {
+        } else if (!item.isNothing) {
             var itemtoAddToArmorStand: Item = Item.AIR
-            if (!handItem.isNull()) {
+            if (!handItem.isNothing) {
                 if (handItem.equals(item, true, true)) {
                     // Attempted to replace with the same item type
                     return false
@@ -205,15 +205,15 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
                     itemtoAddToArmorStand = handItem.clone()
                     itemToSetToPlayerInv = Item.AIR
                 }
-                player.getInventory().setItem(player.getInventory().getHeldItemIndex(), itemToSetToPlayerInv)
+                player.getInventory().setItem(player.getInventory().heldItemIndex, itemToSetToPlayerInv)
             }
 
             // Removing item from the armor stand
             val notAdded: Array<Item> = player.getInventory().addItem(item)
             if (notAdded.size > 0) {
                 if (notAdded.get(0).count == item.count) {
-                    if (!handItem.isNull()) {
-                        player.getInventory().setItem(player.getInventory().getHeldItemIndex(), handItem)
+                    if (!handItem.isNothing) {
+                        player.getInventory().setItem(player.getInventory().heldItemIndex, handItem)
                     }
                     return false
                 }
@@ -275,19 +275,19 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         val pos: Vector3 = getLocator().position
 
         pos.y += 0.2
-        level!!.dropItem(pos, getBoots())
+        level!!.dropItem(pos, boots)
 
         pos.y = position.y + 0.6
-        level!!.dropItem(pos, getLeggings())
+        level!!.dropItem(pos, leggings)
 
         pos.y = position.y + 1.4
         level!!.dropItem(if (byAttack) pos else this.position, Item.get(ItemID.ARMOR_STAND))
-        level!!.dropItem(pos, getChestplate())
-        level!!.dropItem(pos, getItemInHand())
-        level!!.dropItem(pos, getItemInOffhand())
+        level!!.dropItem(pos, chestplate)
+        level!!.dropItem(pos, itemInHand)
+        level!!.dropItem(pos, itemInOffhand)
 
         pos.y = position.y + 1.8
-        level!!.dropItem(pos, getHelmet())
+        level!!.dropItem(pos, helmet)
         equipment.clearAll()
 
         level!!.addSound(this.position, Sound.MOB_ARMOR_STAND_BREAK)
@@ -295,8 +295,12 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         //todo: initiator should be a entity who kill it but not itself
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
-                if (getLastDamageCause() is EntityDamageByEntityEvent) byEntity.getDamager() else this,
-                this.vector3, VibrationType.ENTITY_DIE
+                run {
+                    val byEntity = getLastDamageCause()
+                    if (byEntity is EntityDamageByEntityEvent) byEntity.damager else this
+                },
+                this.vector3,
+                VibrationType.ENTITY_DIE
             )
         )
     }
@@ -342,7 +346,8 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
 
         if (source is EntityDamageByEntityEvent) {
             if (source.damager is Player) {
-                if (player.isCreative()) {
+                val player = source.damager
+                if (player.isCreative) {
                     level!!.addParticle(DestroyBlockParticle(this.position, Block.get(BlockID.OAK_PLANKS)))
                     this.close()
                     return true
@@ -436,14 +441,14 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         private const val TAG_POSE_INDEX: String = "PoseIndex"
 
         private fun getArmorSlot(armorItem: ItemArmor): Int {
-            if (armorItem.isHelmet()) {
-                return EntityArmorInventory.SLOT_HEAD
-            } else if (armorItem.isChestplate()) {
-                return EntityArmorInventory.SLOT_CHEST
-            } else if (armorItem.isLeggings()) {
-                return EntityArmorInventory.SLOT_LEGS
+            return if (armorItem.isHelmet) {
+                EntityArmorInventory.SLOT_HEAD
+            } else if (armorItem.isChestplate) {
+                EntityArmorInventory.SLOT_CHEST
+            } else if (armorItem.isLeggings) {
+                EntityArmorInventory.SLOT_LEGS
             } else {
-                return EntityArmorInventory.SLOT_FEET
+                EntityArmorInventory.SLOT_FEET
             }
         }
     }

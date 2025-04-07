@@ -11,10 +11,6 @@ import org.chorus.nbt.tag.CompoundTag
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-/**
- * @author xtypr
- * @since 2015/12/26
- */
 class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
     override fun getIdentifier(): String {
         return EntityID.XP_ORB
@@ -125,7 +121,7 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
                 this.closestPlayer = null
                 var closestDistance: Double = 0.0
                 for (p: Player in getViewers().values) {
-                    if (!p.isSpectator() && p.spawned && p.isAlive()) {
+                    if (!p.isSpectator && p.spawned && p.isAlive()) {
                         val d: Double = p.position.distanceSquared(this.position)
                         if (d <= 64.0 && (this.closestPlayer == null || d < closestDistance)) {
                             this.closestPlayer = p
@@ -135,7 +131,7 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
                 }
             }
 
-            if (this.closestPlayer != null && (closestPlayer!!.isSpectator() || !closestPlayer!!.spawned || !closestPlayer!!.isAlive())) {
+            if (this.closestPlayer != null && (closestPlayer!!.isSpectator || !closestPlayer!!.spawned || !closestPlayer!!.isAlive())) {
                 this.closestPlayer = null
             }
 
@@ -163,7 +159,7 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
                     motion.z
                 ) > 0.00001)
             ) {
-                friction = level!!.getBlock(position.add(0.0, -1.0, 0.0).floor()).getFrictionFactor() * friction
+                friction = level!!.getBlock(position.add(0.0, -1.0, 0.0).floor()).frictionFactor * friction
             }
 
             motion.x *= friction

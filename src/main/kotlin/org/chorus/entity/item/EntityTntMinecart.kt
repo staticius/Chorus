@@ -1,6 +1,7 @@
 package org.chorus.entity.item
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.*
 import org.chorus.entity.data.EntityDataTypes
@@ -114,7 +115,7 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
         }
         val explosion: Explosion = Explosion(this.getLocator(), event.force, this)
         explosion.fireChance = event.fireChance
-        if (event.isBlockBreaking()) {
+        if (event.isBlockBreaking) {
             explosion.explodeA()
         }
         explosion.explodeB()
@@ -123,8 +124,8 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
 
     override fun dropItem() {
         if (lastDamageCause is EntityDamageByEntityEvent) {
-            val damager: Entity = lastDamageCause.damager
-            if (damager is Player && damager.isCreative()) {
+            val damager: Entity = (lastDamageCause as EntityDamageByEntityEvent).damager
+            if (damager is Player && damager.isCreative) {
                 return
             }
         }
@@ -132,7 +133,7 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
     }
 
     override fun getOriginalName(): String {
-        return getType().getName()
+        return getType().name
     }
 
     override fun getType(): MinecartType {
@@ -148,7 +149,7 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         val interact: Boolean = super.onInteract(player, item, clickedPos)
-        if (item.getId() == ItemID.FLINT_AND_STEEL || item.getId() == Item.FIRE_CHARGE) {
+        if (item.id == ItemID.FLINT_AND_STEEL || item.id == ItemID.FIRE_CHARGE) {
             level!!.addSound(this.position, Sound.FIRE_IGNITE)
             this.fuse = 79
             return true

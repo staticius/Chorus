@@ -1,6 +1,7 @@
 package org.chorus.entity.item
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.block.BlockHopper.IHopper
 import org.chorus.blockentity.*
@@ -27,12 +28,12 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
     private val temporalVector: BlockVector3 = BlockVector3()
     var transferCooldown: Int = 0
 
-    protected var inventory: Inventory = null
+    override var inventory = MinecartHopperInventory(this)
     private var disabled: Boolean = false
     private var pickupArea: AxisAlignedBB? = null
 
     init {
-        setDisplayBlock(Block.get(Block.HOPPER), false)
+        setDisplayBlock(Block.get(BlockID.HOPPER), false)
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
@@ -55,18 +56,15 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
 
         this.updatePickupArea()
 
-        val blockSide: Block = getLocator().getSide(BlockFace.UP).getTickCachedLevelBlock()
-        val blockEntity: BlockEntity =
-            level!!.getBlockEntity(temporalVector.setComponentsAdding(this.position, BlockFace.UP))
+        val blockSide: Block = getLocator().getSide(BlockFace.UP).tickCachedLevelBlock
+        val blockEntity = level!!.getBlockEntity(temporalVector.setComponentsAdding(this.position, BlockFace.UP))
 
-        val changed: Boolean
-
-        if (blockEntity is InventoryHolder || blockSide is BlockComposter) {
+        val changed: Boolean = if (blockEntity is InventoryHolder || blockSide is BlockComposter) {
             //从容器中拉取物品
-            changed = pullItems(this, this.getLocator())
+            pullItems(this, this.getLocator())
         } else {
             //收集掉落物
-            changed = pickupItems(this, this.getLocator(), pickupArea)
+            pickupItems(this, this.getLocator(), pickupArea!!)
         }
 
         if (changed) {
@@ -85,7 +83,7 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
     }
 
     override fun getOriginalName(): String {
-        return getType().getName()
+        return getType().name
     }
 
     override fun getType(): MinecartType {
@@ -97,16 +95,16 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
     }
 
     override fun dropItem() {
-        for (item: Item? in inventory.getContents().values) {
+        for (item in inventory.contents.values) {
             level!!.dropItem(this.position, item)
         }
         if (lastDamageCause is EntityDamageByEntityEvent) {
-            val damager: Entity = lastDamageCause.damager
-            if (damager is Player && damager.isCreative()) {
+            val damager: Entity = (lastDamageCause as EntityDamageByEntityEvent).damager
+            if (damager is Player && damager.isCreative) {
                 return
             }
         }
-        level!!.dropItem(this.position, Item.get(Item.HOPPER_MINECART))
+        level!!.dropItem(this.position, Item.get(ItemID.HOPPER_MINECART))
     }
 
     override fun kill() {
@@ -118,23 +116,18 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
         return false
     }
 
-    override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        player.addWindow(inventory)
+    override fun onInteract(p: Player, item: Item, clickedPos: Vector3): Boolean {
+        p.addWindow(inventory)
         return false // If true, the count of items player has in hand decreases
     }
 
-    override fun getInventory(): MinecartHopperInventory {
-        return inventory
-    }
-
     override fun initEntity() {
-        this.inventory = MinecartHopperInventory(this)
         if (namedTag!!.contains("Items") && namedTag!!.get("Items") is ListTag<*>) {
             val inventoryList: ListTag<CompoundTag> = namedTag!!.getList(
                 "Items",
                 CompoundTag::class.java
             )
-            for (item: CompoundTag in inventoryList.getAll()) {
+            for (item: CompoundTag in inventoryList.all) {
                 inventory.setItem(item.getByte("Slot").toInt(), NBTIO.getItemHelper(item))
             }
         }
@@ -161,7 +154,8 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
     }
 
     fun checkDisabled() {
-        if (getLocator().getLevelBlock() is BlockActivatorRail) {
+        val rail = getLocator().levelBlock
+        if (rail is BlockActivatorRail) {
             setDisabled(rail.isActive())
         }
     }
@@ -180,7 +174,7 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
         if (this.inventory != null) {
             for (slot in 0..4) {
                 val item: Item = inventory.getItem(slot)
-                if (item != null && !item.isNull()) {
+                if (item != null && !item.isNothing) {
                     namedTag!!.getList("Items", CompoundTag::class.java)
                         .add(NBTIO.putItemHelper(item, slot))
                 }

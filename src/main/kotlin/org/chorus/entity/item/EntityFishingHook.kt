@@ -162,14 +162,13 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
     }
 
     fun getWaterHeight(): Int {
-        for (y in position.getFloorY()..level!!.getMaxHeight()) {
-            val id: String =
-                level!!.getBlockIdAt(position.getFloorX(), y, position.getFloorZ())
+        for (y in position.floorY..level!!.maxHeight) {
+            val id: String = level!!.getBlockIdAt(position.floorX, y, position.floorZ)
             if (id == BlockID.AIR) {
                 return y
             }
         }
-        return position.getFloorY()
+        return position.floorY
     }
 
     fun fishBites() {
@@ -214,14 +213,14 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
     }
 
     fun attractFish(): Boolean {
-        val multiply: Double = 0.1
+        val multiply = 0.1
         fish!!.setComponents(
             fish!!.x + (position.x - fish!!.x) * multiply,
             fish!!.y,
             fish!!.z + (position.z - fish!!.z) * multiply
         )
         if (ThreadLocalRandom.current().nextInt(100) < 85) {
-            level!!.addParticle(WaterParticle(this.fish))
+            level!!.addParticle(WaterParticle(this.fish!!))
         }
         val dist: Double = abs(
             sqrt(position.x * position.x + position.z * position.z) - sqrt(
@@ -233,16 +232,17 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
 
     fun reelLine() {
         if (shootingEntity is Player && this.caught) {
+            val player = shootingEntity as Player
             val item: Item = Fishing.getFishingResult(this.rod)
             val experience: Int = ThreadLocalRandom.current().nextInt(3) + 1
             val pos: Vector3 = Vector3(
                 position.x,
                 getWaterHeight().toDouble(), position.z
             ) //实体生成在水面上
-            val motion: Vector3 = shootingEntity.position.subtract(pos).multiply(0.1)
-            motion.y += sqrt(shootingEntity.position.distance(pos)) * 0.08
+            val motion: Vector3 = player.position.subtract(pos).multiply(0.1)
+            motion.y += sqrt(player.position.distance(pos)) * 0.08
 
-            val event: PlayerFishEvent = PlayerFishEvent(shootingEntity, this, item, experience, motion)
+            val event = PlayerFishEvent(player, this, item, experience, motion)
             Server.instance.pluginManager.callEvent(event)
 
             if (!event.isCancelled) {
@@ -262,9 +262,9 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
                 ) as EntityItem?
 
                 if (itemEntity != null) {
-                    itemEntity.setOwner(shootingEntity.getName())
+                    itemEntity.setOwner(player.getName())
                     itemEntity.spawnToAll()
-                    shootingEntity.level.dropExpOrb(shootingEntity.position, event.experience)
+                    player.level!!.dropExpOrb(player.position, event.experience)
                 }
             }
         } else if (this.shootingEntity != null) {
@@ -311,12 +311,10 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
     override fun onCollideWithEntity(entity: Entity) {
         Server.instance.pluginManager.callEvent(ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity)))
         val damage: Float = getResultDamage().toFloat()
-
-        val ev: EntityDamageEvent
-        if (this.shootingEntity == null) {
-            ev = EntityDamageByEntityEvent(this, entity, DamageCause.PROJECTILE, damage)
+        val ev: EntityDamageEvent = if (this.shootingEntity == null) {
+            EntityDamageByEntityEvent(this, entity, DamageCause.PROJECTILE, damage)
         } else {
-            ev = EntityDamageByChildEntityEvent(this.shootingEntity, this, entity, DamageCause.PROJECTILE, damage)
+            EntityDamageByChildEntityEvent(this.shootingEntity!!, this, entity, DamageCause.PROJECTILE, damage)
         }
 
         if (entity.attack(ev)) {
@@ -328,7 +326,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
         if (rod != null) {
             val ench: Enchantment? = rod!!.getEnchantment(Enchantment.ID_LURE)
             if (ench != null) {
-                this.waitChance = 120 - (25 * ench.getLevel())
+                this.waitChance = 120 - (25 * ench.level)
             }
         }
     }

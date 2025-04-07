@@ -126,10 +126,10 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
     }
 
     private fun updateMemory() {
-        val item: Item = getItemInHand()
-        if (item.isNull()) {
+        val item = itemInHand
+        if (item.isNothing) {
             getMemoryStorage().clear(CoreMemoryTypes.Companion.LOOKING_ITEM)
-        } else getMemoryStorage().set<Class<out Item>>(CoreMemoryTypes.Companion.LOOKING_ITEM, item.javaClass)
+        } else getMemoryStorage()[CoreMemoryTypes.Companion.LOOKING_ITEM] = item.javaClass
     }
 
     fun getInventory(): Inventory {
@@ -139,13 +139,13 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
 
     override fun onUpdate(currentTick: Int): Boolean {
         if (currentTick % 10 == 0) {
-            val nearestItem: EntityItem = getMemoryStorage().get<EntityItem>(CoreMemoryTypes.Companion.NEAREST_ITEM)
+            val nearestItem = getMemoryStorage()[CoreMemoryTypes.Companion.NEAREST_ITEM]
             if (nearestItem != null && !nearestItem.closed) {
                 if (nearestItem.position.distance(this.position) < 1 && currentTick - lastItemDropTick > dropCollectCooldown) {
                     val item: Item = nearestItem.getItem()
                     val currentItem: Item = getInventory().getItem(0).clone()
                     if (getInventory().canAddItem(item)) {
-                        if (currentItem.isNull()) {
+                        if (currentItem.isNothing) {
                             getInventory().setItem(0, item)
                         } else {
                             item!!.setCount(item.getCount() + currentItem.getCount())
@@ -171,7 +171,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
             return false
         }
         val item: Item = getInventory().getItem(0)
-        if (item.isNull()) return true
+        if (item.isNothing) return true
         val motion: Vector3 = getDirectionVector().multiply(0.4)
         level!!.dropItem(position.add(0.0, 1.3, 0.0), item, motion, 40)
         getInventory().clearAll()

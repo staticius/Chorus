@@ -68,7 +68,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
             InteractPacket.Action.OPEN_INVENTORY -> {
                 if (targetEntity is EntityRideable) {
                     if (targetEntity is EntityChestBoat) {
-                        player.addWindow(targetEntity.getInventory())
+                        player.addWindow(targetEntity.inventory)
                         return
                     } else if (targetEntity is EntityHorse) {
                         if (targetEntity.hasOwner(false) && targetEntity.getOwnerName() == player.getName()) {

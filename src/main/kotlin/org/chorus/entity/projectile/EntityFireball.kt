@@ -49,7 +49,7 @@ class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(ch
         var affect: Boolean = false
         for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) affect =
             onCollideWithBlock(locator, motion, collisionBlock)
-        if (!affect && getLocator().getLevelBlock().isAir()) {
+        if (!affect && getLocator().levelBlock.isAir()) {
             explode()
         }
     }
