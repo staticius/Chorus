@@ -15,7 +15,6 @@ import org.chorus.item.*
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
-import java.util.Set
 import java.util.concurrent.*
 
 /**
@@ -26,10 +25,10 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
         return EntityID.TROPICALFISH
     }
 
-    override var color: Int = 0
+    override var color: Byte = 0
     override var variant: Int = 0
     private var mark_variant = 0
-    override var color2: Int = 0
+    override var color2: Byte = 0
 
     override fun getOriginalName(): String {
         return "Tropical Fish"
@@ -57,12 +56,12 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
             this.mark_variant = getRandomMarkVariant()
         }
         if (!namedTag!!.contains("Color")) {
-            this.setColor(getRandomColor())
+            this.setColor(getRandomColor().toByte())
         } else {
-            this.setColor(namedTag!!.getByte("Color").toInt())
+            this.setColor(namedTag!!.getByte("Color"))
         }
         if (namedTag!!.contains("Color2")) {
-            this.color2 = namedTag!!.getInt("Color2")
+            this.color2 = namedTag!!.getByte("Color2")
         } else {
             this.color2 = getRandomColor2()
         }
@@ -79,7 +78,7 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
         return MARK_VARIANTS[Utils.rand(0, MARK_VARIANTS.size - 1)]
     }
 
-    private fun getRandomColor2(): Int {
+    private fun getRandomColor2(): Byte {
         return COLOR2[Utils.rand(0, COLOR2.size - 1)]
     }
 
@@ -90,12 +89,12 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
     override fun saveNBT() {
         super.saveNBT()
 
-        namedTag!!.putByte("Color", this.color)
+        namedTag!!.putByte("Color", this.color.toInt())
     }
 
     override fun getDrops(): Array<Item> {
         if (Utils.rand(0, 3) == 1) {
-            return arrayOf(Item.get(ItemID.TROPICAL_FISH), Item.get(Item.BONE, 0, Utils.rand(1, 2)))
+            return arrayOf(Item.get(ItemID.TROPICAL_FISH), Item.get(ItemID.BONE, 0, Utils.rand(1, 2)))
         }
         return arrayOf(Item.get(ItemID.TROPICAL_FISH))
     }
@@ -104,10 +103,10 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
         return namedTag!!.getByte("Color").toInt()
     }
 
-    fun setColor(color: Int) {
+    fun setColor(color: Byte) {
         this.color = color
-        this.setDataProperty(EntityDataTypes.Companion.COLOR, color)
-        namedTag!!.putByte("Color", this.color)
+        this.setDataProperty(EntityDataTypes.COLOR, color)
+        namedTag!!.putByte("Color", this.color.toInt())
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
@@ -130,6 +129,6 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
     companion object {
         private val VARIANTS = intArrayOf(0, 1)
         private val MARK_VARIANTS = intArrayOf(0, 1, 2, 3, 4, 5)
-        private val COLOR2 = intArrayOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)
+        private val COLOR2 = byteArrayOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14)
     }
 }

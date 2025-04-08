@@ -62,14 +62,13 @@ class EntitySnowball @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag,
         val particles: Int = nextParticleCount()
         val particlePackets: Array<DataPacket> = GenericParticle(this.position, Particle.TYPE_SNOWBALL_POOF).encode()
         val length: Int = particlePackets.size
-        val allPackets: Array<DataPacket?> = particlePackets.copyOf(length * particles)
-        for (i in length..<allPackets.size) {
-            allPackets.get(i) = particlePackets.get(i % length)
+        val allPackets: Array<DataPacket> = Array(length * particles) { i ->
+            particlePackets[i % length]
         }
         val chunkX: Int = position.x.toInt() shr 4
         val chunkZ: Int = position.z.toInt() shr 4
         val level: Level = level!!
-        for (p: DataPacket? in allPackets) {
+        for (p in allPackets) {
             Server.broadcastPacket(level.getChunkPlayers(chunkX, chunkZ).values, p)
         }
     }
@@ -84,7 +83,7 @@ class EntitySnowball @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag,
 
         init {
             for (i in particleCounts.indices) {
-                particleCounts.get(i) = (ThreadLocalRandom.current().nextInt(10) + 5).toByte()
+                particleCounts[i] = (ThreadLocalRandom.current().nextInt(10) + 5).toByte()
             }
         }
 

@@ -111,7 +111,7 @@ class EntityArrow @JvmOverloads constructor(
             hasUpdate = true
         }
 
-        if (level!!.isRaining() && this.fireTicks > 0 && level!!.canBlockSeeSky(this.position)) {
+        if (level!!.isRaining && this.fireTicks > 0 && level!!.canBlockSeeSky(this.position)) {
             extinguish()
 
             hasUpdate = true
@@ -127,9 +127,9 @@ class EntityArrow @JvmOverloads constructor(
     override fun afterCollisionWithEntity(entity: Entity) {
         if (hadCollision) {
             if (getArrowItem() != null) {
-                if (getArrowItem()!!.getTippedArrowPotion() != null) {
-                    getArrowItem()!!.getTippedArrowPotion()!!
-                        .getEffects(false).forEach(Consumer { effect: Effect? -> entity.addEffect(effect) })
+                if (getArrowItem()!!.tippedArrowPotion != null) {
+                    getArrowItem()!!.tippedArrowPotion!!
+                        .getEffects(false).forEach(Consumer { entity.addEffect(it) })
                 }
             }
             close()
@@ -164,8 +164,8 @@ class EntityArrow @JvmOverloads constructor(
 
     fun setItem(arrow: ItemArrow) {
         this.item = arrow
-        if (arrow.getTippedArrowPotion() != null) {
-            this.setDataProperty(EntityDataTypes.Companion.CUSTOM_DISPLAY, arrow.getTippedArrowPotion()!!.id + 1)
+        if (arrow.tippedArrowPotion != null) {
+            this.setDataProperty(EntityDataTypes.Companion.CUSTOM_DISPLAY, arrow.tippedArrowPotion!!.id + 1)
         }
     }
 

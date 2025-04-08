@@ -59,7 +59,7 @@ class EntityVillager(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt) {
         if (getHealth() - source.finalDamage <= 1) {
             if (source is EntityDamageByEntityEvent) {
                 if (source.damager is EntityThrownTrident) {
-                    if (trident.shootingEntity is EntityDrowned) {
+                    if (source.damager.shootingEntity is EntityDrowned) {
                         transform()
                         return true
                     }

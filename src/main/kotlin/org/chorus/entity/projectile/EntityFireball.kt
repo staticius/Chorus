@@ -1,5 +1,6 @@
 package org.chorus.entity.projectile
 
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.*
 import org.chorus.event.entity.EntityDamageByEntityEvent
@@ -49,7 +50,7 @@ class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(ch
         var affect: Boolean = false
         for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) affect =
             onCollideWithBlock(locator, motion, collisionBlock)
-        if (!affect && getLocator().levelBlock.isAir()) {
+        if (!affect && getLocator().levelBlock.isAir) {
             explode()
         }
     }
@@ -75,10 +76,9 @@ class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(ch
         ev.fireChance = .4
         Server.instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled) {
-            val explosion: Explosion =
-                Explosion(this.getLocator(), ev.force.toFloat().toDouble(), this.shootingEntity)
+            val explosion = Explosion(this.getLocator(), ev.force.toFloat().toDouble(), this.shootingEntity!!)
             explosion.fireChance = ev.fireChance
-            if (ev.isBlockBreaking() && level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {
+            if (ev.isBlockBreaking && level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {
                 explosion.explodeA()
             }
             explosion.explodeB()

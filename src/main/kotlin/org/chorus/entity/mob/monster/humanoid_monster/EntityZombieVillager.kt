@@ -113,7 +113,7 @@ class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chu
                 if (!getDataFlag(EntityFlag.SHAKING)) {
                     setDataFlag(EntityFlag.SHAKING)
                     if (!player.isCreative) {
-                        namedTag!!.putString("purifyPlayer", player.loginChainData.xuid)
+                        namedTag!!.putString("purifyPlayer", player.loginChainData.xuid!!)
                         player.inventory.decreaseCount(player.inventory.heldItemIndex)
                     }
                     level!!.addSound(this.position, Sound.MOB_ZOMBIE_REMEDY)
@@ -138,10 +138,7 @@ class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chu
         this.maxHealth = 20
         this.diffHandDamage = floatArrayOf(2.5f, 3f, 4.5f)
         super.initEntity()
-        memoryStorage.set<Class<out Block>>(
-            CoreMemoryTypes.Companion.LOOKING_BLOCK,
-            BlockTurtleEgg::class.java
-        )
+        memoryStorage[CoreMemoryTypes.LOOKING_BLOCK] = BlockTurtleEgg::class.java
     }
 
     override fun getOriginalName(): String {
@@ -150,7 +147,7 @@ class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chu
 
     protected fun transformVillager() {
         this.close()
-        equipment.contents.values.forEach(Consumer { i: Item? -> level!!.dropItem(this.position, i) })
+        equipment.contents.values.forEach(Consumer { level!!.dropItem(this.position, it) })
         val villager = EntityVillagerV2(this.locator.chunk, this.namedTag)
         villager.addEffect(Effect.get(EffectType.NAUSEA).setDuration(200))
         villager.setPosition(this.position)

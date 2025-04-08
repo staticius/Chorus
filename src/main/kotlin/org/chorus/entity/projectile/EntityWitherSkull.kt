@@ -1,5 +1,6 @@
 package org.chorus.entity.projectile
 
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.*
 import org.chorus.entity.effect.*
@@ -20,10 +21,10 @@ open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjecti
 
     override fun getDamage(): Double {
         return when (Server.instance.getDifficulty()) {
-            1 -> 5
-            2 -> 8
-            3 -> 12
-            else -> 0
+            1 -> 5.0
+            2 -> 8.0
+            3 -> 12.0
+            else -> 0.0
         }
     }
 
@@ -61,7 +62,7 @@ open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjecti
         var affect: Boolean = false
         for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) affect =
             onCollideWithBlock(locator, motion, collisionBlock)
-        if (!affect && getLocator().levelBlock.isAir()) {
+        if (!affect && getLocator().levelBlock.isAir) {
             explode()
         }
     }
@@ -83,10 +84,9 @@ open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjecti
         ev.fireChance = 0.0
         Server.instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled) {
-            val explosion: Explosion =
-                Explosion(this.getLocator(), ev.force.toFloat().toDouble(), this.shootingEntity)
+            val explosion = Explosion(this.getLocator(), ev.force.toFloat().toDouble(), this.shootingEntity!!)
             explosion.fireChance = ev.fireChance
-            if (ev.isBlockBreaking() && level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {
+            if (ev.isBlockBreaking && level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {
                 explosion.explodeA()
             }
             explosion.explodeB()

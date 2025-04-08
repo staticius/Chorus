@@ -51,22 +51,22 @@ class EntityDragonFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile
 
     protected fun onCollide() {
         this.close()
-        val entity: EntityAreaEffectCloud? = Entity.Companion.createEntity(
+        val entity = Entity.Companion.createEntity(
             EntityID.AREA_EFFECT_CLOUD,
-            getLocator().getChunk(),
+            getLocator().chunk,
             CompoundTag().putList(
-                "Pos", ListTag<Tag>()
+                "Pos", ListTag<FloatTag>()
                     .add(FloatTag(position.x))
                     .add(FloatTag(position.y))
                     .add(FloatTag(position.z))
             )
                 .putList(
-                    "Rotation", ListTag<Tag>()
+                    "Rotation", ListTag<FloatTag>()
                         .add(FloatTag(0f))
                         .add(FloatTag(0f))
                 )
                 .putList(
-                    "Motion", ListTag<Tag>()
+                    "Motion", ListTag<FloatTag>()
                         .add(FloatTag(0f))
                         .add(FloatTag(0f))
                         .add(FloatTag(0f))
@@ -78,9 +78,9 @@ class EntityDragonFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile
                 .putFloat("RadiusPerTick", 0f)
         ) as EntityAreaEffectCloud?
 
-        val effects: List<Effect?> = PotionType.Companion.get(PotionType.Companion.HARMING_STRONG.id).getEffects(false)
-        for (effect: Effect? in effects) {
-            if (effect != null && entity != null) {
+        val effects = PotionType.get(PotionType.HARMING_STRONG.id).getEffects(false)
+        for (effect in effects) {
+            if (entity != null) {
                 entity.cloudEffects!!.add(effect.setVisible(false).setAmbient(false))
                 entity.spawnToAll()
             }

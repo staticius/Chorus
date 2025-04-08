@@ -1,8 +1,10 @@
 package org.chorus.entity.projectile.abstract_arrow
 
 import org.chorus.Player
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.Server
+import org.chorus.block.Block
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.projectile.EntityProjectile
@@ -12,17 +14,22 @@ import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.ProjectileHitEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.level.*
+import org.chorus.level.GameRule
+import org.chorus.level.Locator
+import org.chorus.level.MovingObjectPosition
+import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.BVector3
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.DoubleTag
 import org.chorus.nbt.tag.IntTag
 import org.chorus.nbt.tag.ListTag
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 
 class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityAbstractArrow(chunk, nbt, shootingEntity) {
@@ -31,7 +38,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
     }
 
     var alreadyCollided: Boolean = false
-    protected var trident: Item? = null
+    protected lateinit var trident: Item
 
     // Default Values
     protected var gravity: Float = 0.04f
@@ -42,7 +49,6 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
     private var collisionPos: Vector3? = null
     private var stuckToBlockPos: BlockVector3? = null
     private var favoredSlot: Int = 0
-    override var player: Boolean = false
 
     // Enchantment
     private var loyaltyLevel: Int = 0
@@ -146,15 +152,15 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
     }
 
     fun getItem(): Item {
-        return if (this.trident != null) trident!!.clone() else Item.AIR
+        return if (this.trident != null) trident.clone() else Item.AIR
     }
 
     fun setItem(item: Item) {
         this.trident = item.clone()
-        this.loyaltyLevel = trident!!.getEnchantmentLevel(Enchantment.ID_TRIDENT_LOYALTY)
-        this.hasChanneling = trident!!.hasEnchantment(Enchantment.ID_TRIDENT_CHANNELING)
-        this.riptideLevel = trident!!.getEnchantmentLevel(Enchantment.ID_TRIDENT_RIPTIDE)
-        this.impalingLevel = trident!!.getEnchantmentLevel(Enchantment.ID_TRIDENT_IMPALING)
+        this.loyaltyLevel = trident.getEnchantmentLevel(Enchantment.ID_TRIDENT_LOYALTY)
+        this.hasChanneling = trident.hasEnchantment(Enchantment.ID_TRIDENT_CHANNELING)
+        this.riptideLevel = trident.getEnchantmentLevel(Enchantment.ID_TRIDENT_RIPTIDE)
+        this.impalingLevel = trident.getEnchantmentLevel(Enchantment.ID_TRIDENT_IMPALING)
     }
 
     fun setCritical() {
@@ -208,7 +214,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
                     shooter.position.z - position.z
                 )
                 val bVector: BVector3 = BVector3.fromPos(vector3)
-                this.setRotation(bVector.getYaw(), bVector.getPitch())
+                this.setRotation(bVector.yaw, bVector.pitch)
                 this.setMotion(getMotion().multiply(-1.0))
                 hasUpdate = true
             } else {
@@ -233,18 +239,16 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
 
         Server.instance.pluginManager.callEvent(ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity)))
         var damage: Float = getResultDamage().toFloat()
-        if (this.impalingLevel > 0 && (entity.isTouchingWater() || (entity.level!!.isRaining() && entity.level!!.canBlockSeeSky(
+        if (this.impalingLevel > 0 && (entity.isTouchingWater() || (entity.level!!.isRaining && entity.level!!.canBlockSeeSky(
                 entity.position
             )))
         ) {
             damage = damage + (2.5f * impalingLevel.toFloat())
         }
-
-        val ev: EntityDamageEvent
-        if (this.shootingEntity == null) {
-            ev = EntityDamageByEntityEvent(this, entity, DamageCause.PROJECTILE, damage)
+        val ev: EntityDamageEvent = if (this.shootingEntity == null) {
+            EntityDamageByEntityEvent(this, entity, DamageCause.PROJECTILE, damage)
         } else {
-            ev = EntityDamageByChildEntityEvent(this.shootingEntity, this, entity, DamageCause.PROJECTILE, damage)
+            EntityDamageByChildEntityEvent(this.shootingEntity!!, this, entity, DamageCause.PROJECTILE, damage)
         }
         entity.attack(ev)
         level!!.addSound(this.position, Sound.ITEM_TRIDENT_HIT)
@@ -253,16 +257,15 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         this.setCollisionPos(this.position)
         this.setMotion(
             Vector3(
-                getMotion().getX() * -0.01,
-                getMotion().getY() * -0.1, getMotion().getZ() * -0.01
+                getMotion().x * -0.01,
+                getMotion().y * -0.1, getMotion().z * -0.01
             )
         )
 
         if (this.hasChanneling) {
             if (level!!.isThundering() && level!!.canBlockSeeSky(this.position)) {
                 val pos: Locator = this.getLocator()
-                val lighting: EntityLightningBolt =
-                    EntityLightningBolt(pos.getChunk(), Entity.Companion.getDefaultNBT(pos.position))
+                val lighting = EntityLightningBolt(pos.chunk, getDefaultNBT(pos.position))
                 lighting.spawnToAll()
                 level!!.addSound(this.position, Sound.ITEM_TRIDENT_THUNDER)
             }
@@ -292,9 +295,9 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) {
             this.setStuckToBlockPos(
                 BlockVector3(
-                    collisionBlock.position.getFloorX(),
-                    collisionBlock.position.getFloorY(),
-                    collisionBlock.position.getFloorZ()
+                    collisionBlock.position.floorX,
+                    collisionBlock.position.floorY,
+                    collisionBlock.position.floorZ
                 )
             )
             if (this.canReturnToShooter()) {
@@ -346,7 +349,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
     fun setLoyaltyLevel(loyaltyLevel: Int) {
         this.loyaltyLevel = loyaltyLevel
         if (loyaltyLevel > 0) {
-            trident!!.addEnchantment(Enchantment.getEnchantment(Enchantment.ID_TRIDENT_LOYALTY).setLevel(loyaltyLevel))
+            trident.addEnchantment(Enchantment.getEnchantment(Enchantment.ID_TRIDENT_LOYALTY).setLevel(loyaltyLevel))
         } else {
             // TODO: this.trident.removeEnchantment(Enchantment.ID_TRIDENT_LOYALTY);
         }
@@ -359,7 +362,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
     fun setChanneling(hasChanneling: Boolean) {
         this.hasChanneling = hasChanneling
         if (hasChanneling) {
-            trident!!.addEnchantment(Enchantment.getEnchantment(Enchantment.ID_TRIDENT_CHANNELING))
+            trident.addEnchantment(Enchantment.getEnchantment(Enchantment.ID_TRIDENT_CHANNELING))
         } else {
             // TODO: this.trident.removeEnchantment(Enchantment.ID_TRIDENT_CHANNELING);
         }
@@ -372,7 +375,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
     fun setRiptideLevel(riptideLevel: Int) {
         this.riptideLevel = riptideLevel
         if (riptideLevel > 0) {
-            trident!!.addEnchantment(Enchantment.getEnchantment(Enchantment.ID_TRIDENT_RIPTIDE).setLevel(riptideLevel))
+            trident.addEnchantment(Enchantment.getEnchantment(Enchantment.ID_TRIDENT_RIPTIDE).setLevel(riptideLevel))
         } else {
             // TODO: this.trident.removeEnchantment(Enchantment.ID_TRIDENT_RIPTIDE);
         }
@@ -385,7 +388,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
     fun setImpalingLevel(impalingLevel: Int) {
         this.impalingLevel = impalingLevel
         if (impalingLevel > 0) {
-            trident!!.addEnchantment(
+            trident.addEnchantment(
                 Enchantment.getEnchantment(Enchantment.ID_TRIDENT_IMPALING).setLevel(impalingLevel)
             )
         } else {
@@ -418,7 +421,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         val shooter: Entity? = this.shootingEntity
         if (shooter != null) {
             if (shooter.isAlive() && shooter is Player) {
-                return !(shooter.isSpectator())
+                return !(shooter.isSpectator)
             }
         }
         return false

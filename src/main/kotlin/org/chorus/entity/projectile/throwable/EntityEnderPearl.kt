@@ -1,22 +1,27 @@
 package org.chorus.entity.projectile.throwable
 
 import org.chorus.Player
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.mob.monster.EntityEndermite
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
 import org.chorus.level.GameRule
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
-import org.chorus.nbt.tag.*
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
 import org.chorus.network.protocol.LevelEventPacket
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.floor
 
 class EntityEnderPearl @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityThrowable(chunk, nbt, shootingEntity) {
+
     override fun getIdentifier(): String {
         return EntityID.ENDER_PEARL
     }
@@ -50,12 +55,12 @@ class EntityEnderPearl @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTa
         if (this.isCollided && shootingEntity is Player) {
             var portal: Boolean = false
             for (collided: Block in getCollisionBlocks()!!) {
-                if (collided.getId() === Block.PORTAL) {
+                if (collided.id === BlockID.PORTAL) {
                     portal = true
                 }
             }
             if (!portal) {
-                teleport()
+                teleport(shootingEntity as Player)
             }
         }
 
@@ -69,52 +74,52 @@ class EntityEnderPearl @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTa
 
     override fun onCollideWithEntity(entity: Entity) {
         if (shootingEntity is Player) {
-            teleport()
+            teleport(shootingEntity as Player)
         }
         super.onCollideWithEntity(entity)
     }
 
-    private fun teleport() {
+    private fun teleport(player: Player) {
         if (this.level != shootingEntity!!.level) {
             return
         }
 
         level!!.addLevelEvent(
-            shootingEntity!!.position.add(0.5, 0.5, 0.5),
+            player.position.add(0.5, 0.5, 0.5),
             LevelEventPacket.EVENT_SOUND_TELEPORT_ENDERPEARL
         )
-        val destination: Vector3 = Vector3(
+        val destination = Vector3(
             floor(position.x) + 0.5,
             position.y + 1, floor(position.z) + 0.5
         )
-        shootingEntity!!.teleport(destination, TeleportCause.ENDER_PEARL)
-        if (((shootingEntity as Player).gamemode and 0x01) == 0) {
-            shootingEntity.attack(EntityDamageByEntityEvent(this, shootingEntity, DamageCause.PROJECTILE, 5f, 0f))
+        player.teleport(destination, TeleportCause.ENDER_PEARL)
+        if ((player.gamemode and 0x01) == 0) {
+            player.attack(EntityDamageByEntityEvent(this, player, DamageCause.PROJECTILE, 5f, 0f))
         }
         level!!.addLevelEvent(this.position, LevelEventPacket.EVENT_PARTICLE_TELEPORT)
-        level.addLevelEvent(
-            shootingEntity.position.add(0.5, 0.5, 0.5),
+        level!!.addLevelEvent(
+            player.position.add(0.5, 0.5, 0.5),
             LevelEventPacket.EVENT_SOUND_TELEPORT_ENDERPEARL
         )
         if (level!!.gameRules.getBoolean(GameRule.DO_MOB_SPAWNING)) {
             if (ThreadLocalRandom.current().nextInt(1, 20) == 1) {
                 val endermite: EntityEndermite? = Entity.Companion.createEntity(
                     EntityID.ENDERMITE,
-                    level!!.getChunk(destination.getFloorX() shr 4, destination.getFloorZ() shr 4), CompoundTag()
+                    level!!.getChunk(destination.floorX shr 4, destination.floorZ shr 4), CompoundTag()
                         .putList(
-                            "Pos", ListTag<Tag>()
-                                .add(FloatTag(destination.getX() + 0.5))
-                                .add(FloatTag(destination.getY() + 0.0625))
-                                .add(FloatTag(destination.getZ() + 0.5))
+                            "Pos", ListTag<FloatTag>()
+                                .add(FloatTag(destination.x + 0.5))
+                                .add(FloatTag(destination.y + 0.0625))
+                                .add(FloatTag(destination.z + 0.5))
                         )
                         .putList(
-                            "Motion", ListTag<Tag>()
+                            "Motion", ListTag<FloatTag>()
                                 .add(FloatTag(0f))
                                 .add(FloatTag(0f))
                                 .add(FloatTag(0f))
                         )
                         .putList(
-                            "Rotation", ListTag<Tag>()
+                            "Rotation", ListTag<FloatTag>()
                                 .add(FloatTag(0f))
                                 .add(FloatTag(0f))
                         )

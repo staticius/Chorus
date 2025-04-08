@@ -117,10 +117,7 @@ class EntityZombiePigman(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk
         this.maxHealth = 20
         this.diffHandDamage = floatArrayOf(2.5f, 3f, 4.5f)
         super.initEntity()
-        memoryStorage.set<Class<out Block>>(
-            CoreMemoryTypes.Companion.LOOKING_BLOCK,
-            BlockTurtleEgg::class.java
-        )
+        memoryStorage[CoreMemoryTypes.LOOKING_BLOCK] = BlockTurtleEgg::class.java
     }
 
     override fun getWidth(): Float {

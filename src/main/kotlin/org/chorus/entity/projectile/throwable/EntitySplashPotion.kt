@@ -1,5 +1,6 @@
 package org.chorus.entity.projectile.throwable
 
+import org.chorus.Server
 import org.chorus.entity.*
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.effect.*
@@ -78,7 +79,7 @@ open class EntitySplashPotion : EntityThrowable {
     }
 
     protected open fun splash(collidedWith: Entity?) {
-        var potion: PotionType? = PotionType.Companion.get(this.potionId)
+        var potion = PotionType.Companion.get(this.potionId)
         val event: PotionCollideEvent = PotionCollideEvent(potion, this)
         Server.instance.pluginManager.callEvent(event)
 
@@ -89,9 +90,6 @@ open class EntitySplashPotion : EntityThrowable {
         this.close()
 
         potion = event.potion
-        if (potion == null) {
-            return
-        }
 
         if (potion == PotionType.Companion.WATER) {
             if (collidedWith is EntityBlaze) {
@@ -105,16 +103,16 @@ open class EntitySplashPotion : EntityThrowable {
         if (!potion.getEffects(true).isEmpty()) {
             for (effect: Effect in potion.getEffects(true)) {
                 val effectColor: Color = effect.getColor()
-                color.get(0) += effectColor.red * effect.getLevel()
-                color.get(1) += effectColor.green * effect.getLevel()
-                color.get(2) += effectColor.blue * effect.getLevel()
+                color[0] += effectColor.red * effect.getLevel()
+                color[1] += effectColor.green * effect.getLevel()
+                color[2] += effectColor.blue * effect.getLevel()
                 count += effect.getLevel()
             }
         } else {
             val water: BlockColor = BlockColor.WATER_BLOCK_COLOR
-            color.get(0) = water.red
-            color.get(1) = water.green
-            color.get(2) = water.blue
+            color[0] = water.red
+            color[1] = water.green
+            color[2] = water.blue
             count = 1
         }
 
@@ -126,10 +124,10 @@ open class EntitySplashPotion : EntityThrowable {
         level!!.addParticle(particle)
         level!!.addSound(this.position, Sound.RANDOM_GLASS)
 
-        val entities: Array<Entity> = level!!.getNearbyEntities(
+        val entities = level!!.getNearbyEntities(
             getBoundingBox().grow(4.125, 2.125, 4.125)
         )
-        for (anEntity: Entity in entities) {
+        for (anEntity in entities) {
             val distance: Double = anEntity.position.distanceSquared(this.position)
             if (distance < 16) {
                 val splashDistance: Double = if (anEntity == collidedWith) 1.0 else 1 - sqrt(distance) / 4

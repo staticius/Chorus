@@ -36,10 +36,10 @@ class EntityCod(chunk: IChunk?, nbt: CompoundTag) : EntityFish(chunk, nbt) {
         //只能25%获得骨头
         if (Utils.rand(0, 3) == 1) {
             return arrayOf(
-                Item.get(Item.BONE, 0, Utils.rand(1, 2)),
-                Item.get((if (this.isOnFire) ItemID.COOKED_COD else ItemID.COD))
+                Item.get(ItemID.BONE, 0, Utils.rand(1, 2)),
+                Item.get((if (this.isOnFire()) ItemID.COOKED_COD else ItemID.COD))
             )
         }
-        return arrayOf(Item.get((if (this.isOnFire) ItemID.COOKED_COD else ItemID.COD)))
+        return arrayOf(Item.get((if (this.isOnFire()) ItemID.COOKED_COD else ItemID.COD)))
     }
 }

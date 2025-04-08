@@ -1,5 +1,6 @@
 package org.chorus.entity.weather
 
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.block.property.enums.OxidizationLevel
 import org.chorus.entity.*
@@ -43,7 +44,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
 
         if (isEffect && level!!.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && (Server.instance.getDifficulty() >= 2)) {
             val block: Block = getLocator().levelBlock
-            if (block.isAir() || block.getId() == BlockID.TALL_GRASS) {
+            if (block.isAir || block.id == BlockID.TALL_GRASS) {
                 val fire: BlockFire = Block.get(BlockID.FIRE) as BlockFire
                 fire.position = block.position.clone()
                 fire.level = level!!
@@ -98,7 +99,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
             val down: Block = level!!.getBlock(position.down())
             if (isVulnerableOxidizable(down)) {
                 val changes: MutableMap<Locator, OxidizationLevel> = LinkedHashMap()
-                changes.put(Locator(down.getVector3(), level!!), OxidizationLevel.UNAFFECTED)
+                changes.put(Locator(down.vector3, level!!), OxidizationLevel.UNAFFECTED)
 
                 val random: ThreadLocalRandom = ThreadLocalRandom.current()
                 val scans: Int = random.nextInt(3) + 3
@@ -169,7 +170,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
                 if (this.isEffect && level!!.gameRules.getBoolean(GameRule.DO_FIRE_TICK)) {
                     val block: Block = getLocator().levelBlock
 
-                    if (block.isAir() || block.getId() == Block.TALL_GRASS) {
+                    if (block.isAir || block.id == BlockID.TALL_GRASS) {
                         val event: BlockIgniteEvent =
                             BlockIgniteEvent(block, null, this, BlockIgniteEvent.BlockIgniteCause.LIGHTNING)
                         Server.instance.pluginManager.callEvent(event)
@@ -187,7 +188,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
         if (this.state >= 0) {
             if (this.isEffect) {
                 val bb: AxisAlignedBB = getBoundingBox().grow(3.0, 3.0, 3.0)
-                bb.setMaxX(bb.maxX + 6)
+                bb.maxX = (bb.maxX + 6)
 
                 for (entity: Entity in level!!.getCollidingEntities(bb, this)) {
                     entity.onStruckByLightning(this)
