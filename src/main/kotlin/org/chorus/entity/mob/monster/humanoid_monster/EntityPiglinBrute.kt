@@ -15,7 +15,6 @@ import org.chorus.entity.ai.executor.FlatRandomRoamExecutor
 import org.chorus.entity.ai.executor.PiglinTransformExecutor
 import org.chorus.entity.ai.executor.PlaySoundExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.*
@@ -24,8 +23,6 @@ import org.chorus.item.*
 import org.chorus.level.*
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.List
-import java.util.Set
 import java.util.function.Function
 
 /**
@@ -45,7 +42,7 @@ class EntityPiglinBrute(chunk: IChunk?, nbt: CompoundTag?) : EntityPiglin(chunk,
                 Behavior(
                     PiglinTransformExecutor(), all(
                         IBehaviorEvaluator { entity: EntityMob -> entity.level!!.dimension != Level.DIMENSION_NETHER },
-                        IBehaviorEvaluator { entity: EntityMob? -> !isImmobile },
+                        IBehaviorEvaluator { entity: EntityMob? -> !isImmobile() },
                         IBehaviorEvaluator { entity: EntityMob -> !entity.namedTag!!.getBoolean("IsImmuneToZombification") }
                     ), 12, 1),
                 Behavior(
@@ -81,7 +78,7 @@ class EntityPiglinBrute(chunk: IChunk?, nbt: CompoundTag?) : EntityPiglin(chunk,
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!
@@ -96,7 +93,7 @@ class EntityPiglinBrute(chunk: IChunk?, nbt: CompoundTag?) : EntityPiglin(chunk,
                 ),
                 BlockSensor(BlockDoor::class.java, CoreMemoryTypes.Companion.NEAREST_BLOCK, 2, 2, 20)
             ),
-            setOf<IController>(WalkController(), LookController(true, true)),
+            setOf(WalkController(), LookController(true, true)),
             SimpleFlatAStarRouteFinder(WalkingPosEvaluator(), this),
             this
         )
@@ -106,7 +103,7 @@ class EntityPiglinBrute(chunk: IChunk?, nbt: CompoundTag?) : EntityPiglin(chunk,
         super.initEntity()
         this.maxHealth = 50
         this.diffHandDamage = floatArrayOf(6f, 10f, 15f)
-        setItemInHand(Item.get(Item.GOLDEN_AXE))
+        setItemInHand(Item.get(ItemID.GOLDEN_AXE))
     }
 
     override fun attackTarget(entity: Entity): Boolean {

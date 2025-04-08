@@ -99,7 +99,7 @@ class EntityHusk(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt) {
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!

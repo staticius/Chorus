@@ -49,7 +49,6 @@ class EntityWitch(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chu
             setOf<IBehavior>(
                 Behavior(
                     UsePotionExecutor(0.3f, 30, 20), all(
-                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME),
                         IBehaviorEvaluator { entity: EntityMob ->
                             entity.level!!.tick - memoryStorage.get<Int>(
                                 CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME
@@ -109,11 +108,11 @@ class EntityWitch(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chu
     override fun getDrops(): Array<Item> {
         val itemId = when (ThreadLocalRandom.current().nextInt(7)) {
             0 -> ItemID.STICK
-            1 -> Item.SPIDER_EYE
-            2 -> Item.GLOWSTONE_DUST
-            3 -> Item.GUNPOWDER
+            1 -> ItemID.SPIDER_EYE
+            2 -> ItemID.GLOWSTONE_DUST
+            3 -> ItemID.GUNPOWDER
             4 -> ItemID.REDSTONE
-            5 -> Item.SUGAR
+            5 -> ItemID.SUGAR
             else -> ItemID.GLASS_BOTTLE
         }
         return arrayOf(

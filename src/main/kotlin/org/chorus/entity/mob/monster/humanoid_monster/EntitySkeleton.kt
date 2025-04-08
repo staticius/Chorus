@@ -40,7 +40,7 @@ open class EntitySkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMon
     override fun initEntity() {
         this.maxHealth = 20
         super.initEntity()
-        if (getItemInHand().isNull) {
+        if (itemInHand.isNothing) {
             setItemInHand(Item.get(ItemID.BOW))
         }
     }
@@ -58,7 +58,7 @@ open class EntitySkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMon
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.BONE), Item.get(ItemID.ARROW))
+        return arrayOf(Item.get(ItemID.BONE), Item.get(ItemID.ARROW))
     }
 
     override fun isUndead(): Boolean {
@@ -82,7 +82,7 @@ open class EntitySkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMon
                 Behavior(PlaySoundExecutor(Sound.MOB_SKELETON_SAY), RandomSoundEvaluator(), 5, 1),
                 Behavior(
                     BowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.ATTACK_TARGET,
                         0.3f,
                         15,
@@ -93,7 +93,7 @@ open class EntitySkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMon
                 ),
                 Behavior(
                     BowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.NEAREST_GOLEM,
                         0.3f,
                         15,
@@ -104,7 +104,7 @@ open class EntitySkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMon
                 ),
                 Behavior(
                     BowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.NEAREST_PLAYER,
                         0.3f,
                         15,

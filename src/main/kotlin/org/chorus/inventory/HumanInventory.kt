@@ -424,14 +424,11 @@ class HumanInventory(human: IHuman) //9+27+4
         return true
     }
 
-    var armorContents: Array<Item?>
+    var armorContents: Array<Item>
         get() {
-            val armor = arrayOfNulls<Item>(4)
-            for (i in 0..3) {
-                armor[i] = this.getItem(ARMORS_INDEX + i)
+            return Array(4) { i ->
+                this.getItem(ARMORS_INDEX + i)
             }
-
-            return armor
         }
         /**
          * Set all armor for the player

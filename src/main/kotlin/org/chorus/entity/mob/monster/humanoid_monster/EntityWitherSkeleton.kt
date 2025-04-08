@@ -85,7 +85,7 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!
@@ -112,7 +112,7 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
         this.diffHandDamage = floatArrayOf(5f, 8f, 12f)
         super.initEntity()
         // 判断凋零骷髅是否手持石剑如果没有就给它石剑
-        if (this.getItemInHand() !== Item.get(ItemID.STONE_SWORD)) {
+        if (this.itemInHand !== Item.get(ItemID.STONE_SWORD)) {
             this.setItemInHand(Item.get(ItemID.STONE_SWORD))
         }
         // 设置凋零骷髅空闲状态播放空闲声音

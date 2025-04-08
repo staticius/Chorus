@@ -12,7 +12,7 @@ import org.chorus.entity.ai.controller.*
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.*
@@ -34,8 +34,6 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.network.protocol.TakeItemEntityPacket
 import org.chorus.utils.*
 import java.util.*
-import java.util.List
-import java.util.Set
 import java.util.concurrent.*
 import java.util.function.Consumer
 import java.util.function.Function
@@ -57,7 +55,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 Behavior(
                     PiglinTransformExecutor(), all(
                         IBehaviorEvaluator { entity: EntityMob -> entity.level!!.dimension != Level.DIMENSION_NETHER },
-                        IBehaviorEvaluator { entity: EntityMob? -> !isImmobile },
+                        IBehaviorEvaluator { entity: EntityMob? -> !isImmobile() },
                         IBehaviorEvaluator { entity: EntityMob -> !entity.namedTag!!.getBoolean("IsImmuneToZombification") }
                     ), 13, 1),
                 Behavior(
@@ -66,11 +64,8 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         IBehaviorEvaluator { entity: EntityMob? -> !isAngry() },
                         not(
                             all(
-                                MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME),
                                 IBehaviorEvaluator { entity: EntityMob ->
-                                    entity.level!!.tick - memoryStorage.get<Int>(
-                                        CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME
-                                    ) <= 1
+                                    entity.level!!.tick - memoryStorage[CoreMemoryTypes.Companion.LAST_BE_ATTACKED_TIME] <= 1
                                 }
                             )
                         )
@@ -80,7 +75,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         RandomSoundEvaluator(),
                         IBehaviorEvaluator { entity: EntityMob ->
                             viewers.values.stream().noneMatch { p: Player ->
-                                p.position.distance(entity.position) < 8 && likesItem(p.inventory.itemInHand) && p.level.raycastBlocks(
+                                p.position.distance(entity.position) < 8 && likesItem(p.inventory.itemInHand) && p.level!!.raycastBlocks(
                                     p.position,
                                     entity.position
                                 ).isEmpty()
@@ -99,7 +94,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 ),
                 Behavior(
                     CrossBowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.ATTACK_TARGET,
                         0.3f,
                         15,
@@ -108,11 +103,11 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         80
                     ), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
-                        IBehaviorEvaluator { entity: EntityMob? -> getItemInHand() is ItemCrossbow }
+                        IBehaviorEvaluator { entity: EntityMob? -> itemInHand is ItemCrossbow }
                     ), 9, 1),
                 Behavior(
                     CrossBowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.NEAREST_PLAYER,
                         0.3f,
                         15,
@@ -121,17 +116,16 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         80
                     ), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
-                        IBehaviorEvaluator { entity: EntityMob? ->
-                            memoryStorage.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && player.getInventory() != null && !Arrays.stream<Item>(
-                                player.getInventory().getArmorContents()
-                            )
-                                .anyMatch { item: Item -> !item.isNothing && item is ItemArmor && item.getTier() == ItemArmor.TIER_GOLD }
+                        IBehaviorEvaluator {
+                            val player = memoryStorage[CoreMemoryTypes.NEAREST_PLAYER]
+                            player is Player && !
+                                player.getInventory().armorContents.toList().stream().anyMatch { item -> !item.isNothing && item is ItemArmor && item.tier == ItemArmor.TIER_GOLD }
                         },
-                        IBehaviorEvaluator { entity: EntityMob? -> getItemInHand() is ItemCrossbow }
+                        IBehaviorEvaluator { itemInHand is ItemCrossbow }
                     ), 8, 1),
                 Behavior(
                     CrossBowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET,
                         0.3f,
                         15,
@@ -141,7 +135,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                     ), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                         IBehaviorEvaluator { entity: EntityMob -> !entity.namedTag!!.getBoolean("CannotHunt") },
-                        IBehaviorEvaluator { entity: EntityMob? -> getItemInHand() is ItemCrossbow },
+                        IBehaviorEvaluator { entity: EntityMob? -> itemInHand is ItemCrossbow },
                         any(
                             IBehaviorEvaluator { entity: EntityMob? -> memoryStorage.get<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME) == 0 },
                             PassByTimeEvaluator(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, 6000)
@@ -156,11 +150,10 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 Behavior(
                     PiglinMeleeAttackExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.5f, 40, false, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
-                        IBehaviorEvaluator { entity: EntityMob? ->
-                            memoryStorage.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER) is Player && player.getInventory() != null && !Arrays.stream<Item>(
-                                player.getInventory().getArmorContents()
-                            )
-                                .anyMatch { item: Item -> !item.isNothing && item is ItemArmor && item.getTier() == ItemArmor.TIER_GOLD }
+                        IBehaviorEvaluator {
+                            val player = memoryStorage[CoreMemoryTypes.Companion.NEAREST_PLAYER]
+                            player is Player && !
+                                player.getInventory().armorContents.toList().stream().anyMatch { item: Item -> !item.isNothing && item is ItemArmor && item.tier == ItemArmor.TIER_GOLD }
                         }
                     ), 5, 1),
                 Behavior(
@@ -189,11 +182,11 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY),
                         IBehaviorEvaluator { entity: EntityMob? ->
                             if (isBaby()) {
-                                return@all true
+                                return@IBehaviorEvaluator true
                             } else {
                                 val entity1 =
                                     memoryStorage.get<Entity>(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY)
-                                return@all !(entity1 is EntityWither || entity1 is EntityWitherSkeleton)
+                                return@IBehaviorEvaluator !(entity1 is EntityWither || entity1 is EntityWitherSkeleton)
                             }
                         }
                     ), 3, 1),
@@ -203,7 +196,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!
@@ -252,7 +245,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         if (itemInOffhand.isNothing && !isAngry()) {
             if (item is ItemGoldIngot) {
                 if (player.gamemode != Player.CREATIVE) player.inventory.decreaseCount(player.inventory.heldItemIndex)
-                itemInOffhand = Item.get(ItemID.GOLD_INGOT)
+                setItemInOffhand(Item.get(ItemID.GOLD_INGOT))
             }
         }
         return super.onInteract(player, item)
@@ -262,13 +255,11 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         this.maxHealth = 16
         this.diffHandDamage = floatArrayOf(3f, 5f, 7f)
         super.initEntity()
-        if (!isBaby()) setItemInHand(Item.get(if (Utils.rand()) Item.GOLDEN_SWORD else ItemID.CROSSBOW))
-        if (Utils.rand(0, 10) == 0) helmet = Item.get(Item.GOLDEN_HELMET)
-        if (Utils.rand(0, 10) == 0) chestplate =
-            Item.get(Item.GOLDEN_CHESTPLATE)
-        if (Utils.rand(0, 10) == 0) leggings =
-            Item.get(Item.GOLDEN_LEGGINGS)
-        if (Utils.rand(0, 10) == 0) boots = Item.get(Item.GOLDEN_BOOTS)
+        if (!isBaby()) setItemInHand(Item.get(if (Utils.rand()) ItemID.GOLDEN_SWORD else ItemID.CROSSBOW))
+        if (Utils.rand(0, 10) == 0) setHelmet(Item.get(ItemID.GOLDEN_HELMET))
+        if (Utils.rand(0, 10) == 0) setChestplate(Item.get(ItemID.GOLDEN_CHESTPLATE))
+        if (Utils.rand(0, 10) == 0) setLeggings(Item.get(ItemID.GOLDEN_LEGGINGS))
+        if (Utils.rand(0, 10) == 0) setBoots(Item.get(ItemID.GOLDEN_BOOTS))
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
@@ -303,8 +294,8 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
     override fun getDrops(): Array<Item> {
         val drops: MutableList<Item> = ArrayList()
         if (ThreadLocalRandom.current().nextInt(200) < 17) { // 8.5%
-            drops.add(getItemInHand())
-            drops.addAll(equipment.armor)
+            drops.add(itemInHand)
+            drops.addAll(equipment.getArmor())
         }
         drops.add(itemInOffhand)
         return drops.toTypedArray()
@@ -316,19 +307,18 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
             EntityID.HOGLIN -> {
                 if (entity is EntityHoglin) {
                     if (!entity.isBaby()) {
-                        if (entity.getHealth() - getDiffHandDamage(Server.instance.difficulty) <= 0) {
-                            val entities = Arrays.stream(
-                                level!!.entities
-                            ).filter { entity1: Entity ->
+                        if (entity.getHealth() - getDiffHandDamage(Server.instance.getDifficulty()) <= 0) {
+                            val entities = level!!.entities.values.filter { entity1: Entity ->
                                 entity1 is EntityPiglin && entity1.position.distance(
                                     this.position
                                 ) < 16
                             }.toList()
-                            val builder = Animation.builder()
-                            builder.animation("animation.piglin.celebrate_hunt_special")
-                            builder.nextState("r")
-                            builder.blendOutTime(1f)
-                            Entity.Companion.playAnimationOnEntities(builder.build(), entities)
+                            val builder = Animation(
+                                animation = "animation.piglin.celebrate_hunt_special",
+                                nextState = "r",
+                                blendOutTime = 1f
+                            )
+                            Entity.Companion.playAnimationOnEntities(builder, entities)
                             entities.forEach(Consumer { entity1: Entity ->
                                 entity1.level!!.addSound(
                                     entity1.position,
@@ -336,7 +326,6 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                                 )
                             })
                         }
-                        true
                     }
                 }
                 false
@@ -363,13 +352,13 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                             pickup = true
                         } else if (likesItem(item)) {
                             if (itemInOffhand.isNothing) {
-                                itemInOffhand = item
+                                setItemInOffhand(item)
                                 pickup = true
                             }
                         }
                         if (pickup) {
                             val pk = TakeItemEntityPacket()
-                            pk.entityId = entity.runtimeId
+                            pk.entityId = entity.getRuntimeID()
                             pk.target = i.getRuntimeID()
                             Server.broadcastPacket(entity.viewers.values, pk)
                             i.close()
@@ -381,31 +370,31 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
     }
 
     override fun getExperienceDrops(): Int {
-        return Math.toIntExact(if (isBaby()) 1 else 5 + (equipment.armor.stream().filter { obj: Item -> obj.isArmor }
+        return Math.toIntExact(if (isBaby()) 1 else 5 + (equipment.getArmor().stream().filter { it.isArmor }
             .count() * ThreadLocalRandom.current().nextInt(1, 4)))
     }
 
     override fun equip(item: Item): Boolean {
-        if ((item.tier > getItemInHand().tier && getItemInHand().tier != ItemArmor.TIER_GOLD) || item.tier == ItemArmor.TIER_GOLD) {
-            level!!.dropItem(this.position, getItemInHand())
+        if ((item.tier > itemInHand.tier && itemInHand.tier != ItemArmor.TIER_GOLD) || item.tier == ItemArmor.TIER_GOLD) {
+            level!!.dropItem(this.position, itemInHand)
             this.setItemInHand(item)
             return true
         }
         return false
     }
 
-    protected class PiglinFleeFromTargetExecutor(memory: MemoryType<out IVector3?>) :
+    protected class PiglinFleeFromTargetExecutor(memory: NullableMemoryType<out IVector3>) :
         FleeFromTargetExecutor(memory, 0.5f, true, 8f) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            if (entity.position.distance(entity.memoryStorage.get(getMemory()).vector3) < 8) {
+            if (entity.position.distance(entity.memoryStorage[memory]!!.vector3) < 8) {
                 entity.level!!.addSound(entity.position, Sound.MOB_PIGLIN_RETREAT)
             }
         }
     }
 
     protected class PiglinMeleeAttackExecutor(
-        memory: MemoryType<out Entity?>?,
+        memory: NullableMemoryType<out Entity>,
         speed: Float,
         maxSenseRange: Int,
         clearDataWhenLose: Boolean,
@@ -414,7 +403,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage.get(memory).runtimeId)
+            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage[memory]!!.getRuntimeID())
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(
                 entity.position,
@@ -424,12 +413,11 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 false,
                 false
             )
-            Arrays.stream<Entity>(entity.level!!.entities).filter { entity1: Entity ->
+            (entity.level!!.entities.values).filter { entity1: Entity ->
                 entity1 is EntityPiglin && entity1.position.distance(entity.position) < 16 && entity1.memoryStorage
                     .isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
             }.forEach { entity1: Entity ->
-                (entity1 as EntityPiglin).memoryStorage
-                    .set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage.get(memory))
+                (entity1 as EntityPiglin).memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET] = entity.memoryStorage[memory]
             }
             if (entity.memoryStorage.get(memory) is EntityHoglin) {
                 entity.memoryStorage.set<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)
@@ -452,7 +440,31 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
     companion object {
         fun likesItem(item: Item): Boolean {
             return when (item.id) {
-                Block.BELL, Block.GOLD_BLOCK, ItemID.CLOCK, Item.ENCHANTED_GOLDEN_APPLE, Block.GILDED_BLACKSTONE, ItemID.GLISTERING_MELON_SLICE, ItemID.GOLD_INGOT, Item.GOLD_NUGGET, Block.GOLD_ORE, Item.GOLDEN_APPLE, Item.GOLDEN_AXE, Item.GOLDEN_BOOTS, ItemID.GOLDEN_CARROT, Item.GOLDEN_CHESTPLATE, Item.GOLDEN_HELMET, Item.GOLDEN_HOE, Item.GOLDEN_HORSE_ARMOR, Item.GOLDEN_LEGGINGS, Item.GOLDEN_PICKAXE, Item.GOLDEN_SHOVEL, Item.GOLDEN_SWORD, Block.LIGHT_WEIGHTED_PRESSURE_PLATE, Block.NETHER_GOLD_ORE, Block.GOLDEN_RAIL, Item.RAW_GOLD -> true
+                BlockID.BELL,
+                BlockID.GOLD_BLOCK,
+                ItemID.CLOCK,
+                ItemID.ENCHANTED_GOLDEN_APPLE,
+                BlockID.GILDED_BLACKSTONE,
+                ItemID.GLISTERING_MELON_SLICE,
+                ItemID.GOLD_INGOT,
+                ItemID.GOLD_NUGGET,
+                BlockID.GOLD_ORE,
+                ItemID.GOLDEN_APPLE,
+                ItemID.GOLDEN_AXE,
+                ItemID.GOLDEN_BOOTS,
+                ItemID.GOLDEN_CARROT,
+                ItemID.GOLDEN_CHESTPLATE,
+                ItemID.GOLDEN_HELMET,
+                ItemID.GOLDEN_HOE,
+                ItemID.GOLDEN_HORSE_ARMOR,
+                ItemID.GOLDEN_LEGGINGS,
+                ItemID.GOLDEN_PICKAXE,
+                ItemID.GOLDEN_SHOVEL,
+                ItemID.GOLDEN_SWORD,
+                BlockID.LIGHT_WEIGHTED_PRESSURE_PLATE,
+                BlockID.NETHER_GOLD_ORE,
+                BlockID.GOLDEN_RAIL,
+                ItemID.RAW_GOLD -> true
                 else -> false
             }
         }

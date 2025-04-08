@@ -9,20 +9,20 @@ import org.chorus.nbt.tag.CompoundTag
 
 
 abstract class EntityHumanoidMonster(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!!), EntityCanAttack {
-    protected var itemInHand: Item = null
+    override lateinit var itemInHand: Item
 
     override fun initEntity() {
         super.initEntity()
 
-        if (namedTag!!.contains(TAG_ITEM_IN_HAND)) {
-            itemInHand = NBTIO.getItemHelper(namedTag!!.getCompound(TAG_ITEM_IN_HAND))
-        }
+        itemInHand = if (namedTag!!.contains(TAG_ITEM_IN_HAND)) {
+            NBTIO.getItemHelper(namedTag!!.getCompound(TAG_ITEM_IN_HAND))
+        } else Item.AIR
     }
 
     override fun saveNBT() {
         super.saveNBT()
 
-        if (itemInHand != null) {
+        if (!itemInHand.isNothing) {
             namedTag!!.putCompound(TAG_ITEM_IN_HAND, NBTIO.putItemHelper(itemInHand))
         }
     }

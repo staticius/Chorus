@@ -26,11 +26,11 @@ data class AnimateEntityPacket(
 
     data class Animation(
         val animation: String,
-        val nextState: String,
-        val stopExpression: String,
-        val stopExpressionVersion: Int,
-        val controller: String,
-        val blendOutTime: Float,
+        val nextState: String = DEFAULT_NEXT_STATE,
+        val stopExpression: String = DEFAULT_STOP_EXPRESSION,
+        val stopExpressionVersion: Int = DEFAULT_STOP_EXPRESSION_VERSION,
+        val controller: String = DEFAULT_CONTROLLER,
+        val blendOutTime: Float = DEFAULT_BLEND_OUT_TIME,
     ) {
         companion object {
             const val DEFAULT_BLEND_OUT_TIME: Float = 0.0f

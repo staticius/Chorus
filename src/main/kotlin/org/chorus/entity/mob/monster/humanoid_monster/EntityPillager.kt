@@ -47,7 +47,7 @@ class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, n
                 ),
                 Behavior(
                     CrossBowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.ATTACK_TARGET,
                         0.3f,
                         15,
@@ -58,7 +58,7 @@ class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, n
                 ),
                 Behavior(
                     CrossBowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.NEAREST_PLAYER,
                         0.3f,
                         15,
@@ -69,7 +69,7 @@ class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, n
                 ),
                 Behavior(
                     CrossBowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET,
                         0.3f,
                         15,
@@ -84,7 +84,7 @@ class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, n
                 NearestPlayerSensor(40.0, 0.0, 20),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!

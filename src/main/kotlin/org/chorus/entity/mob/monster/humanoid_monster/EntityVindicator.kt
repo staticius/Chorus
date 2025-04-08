@@ -13,7 +13,7 @@ import org.chorus.entity.ai.executor.FlatRandomRoamExecutor
 import org.chorus.entity.ai.executor.MeleeAttackExecutor
 import org.chorus.entity.ai.executor.PlaySoundExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
+import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
@@ -29,8 +29,6 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelSoundEventPacket
 import java.util.*
-import java.util.List
-import java.util.Set
 import java.util.concurrent.*
 import java.util.function.Function
 import kotlin.collections.forEach
@@ -84,7 +82,7 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
             setOf<ISensor>(
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!
@@ -145,7 +143,7 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
     }
 
     protected class VindicatorMeleeAttackExecutor(
-        memory: MemoryType<out Entity?>?,
+        memory: NullableMemoryType<out Entity>,
         speed: Float,
         maxSenseRange: Int,
         clearDataWhenLose: Boolean,
@@ -154,7 +152,7 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
         MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage.get(memory).runtimeId)
+            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage[memory]!!.getRuntimeID())
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(
                 entity.position,
@@ -164,15 +162,10 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
                 false,
                 false
             )
-            Arrays.stream<Entity>(entity.level!!.entities).filter { entity1: Entity ->
-                entity1 is EntityPiglin && entity1.position.distance(entity.position) < 16 && entity1.memoryStorage
-                    .isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
+            entity.level!!.entities.values.filter { entity1: Entity ->
+                entity1 is EntityPiglin && entity1.position.distance(entity.position) < 16 && entity1.memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
             }.forEach { entity1: Entity ->
-                (entity1 as EntityPiglin).memoryStorage
-                    .set<Entity>(
-                        CoreMemoryTypes.Companion.ATTACK_TARGET, entity.memoryStorage
-                            .get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
-                    )
+                (entity1 as EntityPiglin).memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET] = entity.memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET]
             }
             if (entity.memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is EntityHoglin) {
                 entity.memoryStorage.set<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)
@@ -193,6 +186,6 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
     }
 
     fun isJohnny(): Boolean {
-        return nameTag == "Johnny" || (namedTag!!.exist("Johnny") && namedTag!!.getBoolean("Johnny"))
+        return getNameTag() == "Johnny" || (namedTag!!.exist("Johnny") && namedTag!!.getBoolean("Johnny"))
     }
 }

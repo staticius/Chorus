@@ -57,12 +57,12 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_DROWNED_SAY_WATER), all(
                         RandomSoundEvaluator(),
-                        IBehaviorEvaluator { entity: EntityMob? -> isInsideOfWater }), 11, 1
+                        IBehaviorEvaluator { entity: EntityMob? -> isInsideOfWater() }), 11, 1
                 ),
                 Behavior(
                     PlaySoundExecutor(Sound.MOB_DROWNED_SAY), all(
                         RandomSoundEvaluator(),
-                        IBehaviorEvaluator { entity: EntityMob? -> !isInsideOfWater }), 10, 1
+                        IBehaviorEvaluator { entity: EntityMob? -> !isInsideOfWater() }), 10, 1
                 ),
                 Behavior(
                     JumpExecutor(), all(
@@ -81,19 +81,17 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                     TridentThrowExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 15, true, 30, 20), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
                         DistanceEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET, 32.0, 3.0),
-                        IBehaviorEvaluator { entity: EntityMob? -> getItemInHand().id == Item.TRIDENT }
+                        IBehaviorEvaluator { entity: EntityMob? -> itemInHand.id == ItemID.TRIDENT }
                     ), 7, 1),
                 Behavior(
                     TridentThrowExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.3f, 15, false, 30, 20), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER, 32.0, 3.0),
-                        IBehaviorEvaluator { entity: EntityMob? -> getItemInHand().id == Item.TRIDENT },
+                        IBehaviorEvaluator { itemInHand.id == ItemID.TRIDENT },
                         any(
-                            IBehaviorEvaluator { entity: EntityMob? -> level!!.isNight },
-                            IBehaviorEvaluator { entity: EntityMob? ->
-                                memoryStorage.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && memoryStorage.get<Player>(
-                                    CoreMemoryTypes.Companion.NEAREST_PLAYER
-                                ).isInsideOfWater
+                            IBehaviorEvaluator { level!!.isNight },
+                            IBehaviorEvaluator {
+                                memoryStorage[CoreMemoryTypes.Companion.NEAREST_PLAYER]?.isInsideOfWater() ?: false
                             }
                         )
                     ), 6, 1),
@@ -108,7 +106,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                     ), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET, 32.0, 3.0),
-                        IBehaviorEvaluator { entity: EntityMob? -> getItemInHand().id == Item.TRIDENT }
+                        IBehaviorEvaluator { itemInHand.id == ItemID.TRIDENT }
                     ), 5, 1),
                 Behavior(
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.3f, 40, true, 30),
@@ -120,11 +118,11 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                     MeleeAttackExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.3f, 40, false, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
                         any(
-                            IBehaviorEvaluator { entity: EntityMob? -> level!!.isNight },
-                            IBehaviorEvaluator { entity: EntityMob? ->
-                                memoryStorage.get<Player?>(CoreMemoryTypes.Companion.NEAREST_PLAYER) != null && memoryStorage.get<Player>(
-                                    CoreMemoryTypes.Companion.NEAREST_PLAYER
-                                ).isInsideOfWater
+                            IBehaviorEvaluator {
+                                level!!.isNight
+                            },
+                            IBehaviorEvaluator {
+                                memoryStorage[CoreMemoryTypes.Companion.NEAREST_PLAYER]?.isInsideOfWater() ?: false
                             }
                         )
                     ), 3, 1),
@@ -143,7 +141,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                 NearestPlayerSensor(64.0, 0.0, 0),
                 NearestTargetEntitySensor<Entity>(
                     0.0, 16.0, 20,
-                    List.of<MemoryType<Entity?>?>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
+                    listOf(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET),
                     Function<Entity, Boolean> { entity: Entity? ->
                         this.attackTarget(
                             entity!!
@@ -164,7 +162,7 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
                 MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.NEAREST_BLOCK)
             ).evaluate(this)
         ) {
-            if (hasWaterAt(this.floatingHeight)) {
+            if (hasWaterAt(this.getFloatingHeight())) {
                 return 1.3
             }
             return 0.7
@@ -181,10 +179,10 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
         if (random < 85) {
             setItemInHand(Item.get(ItemID.FISHING_ROD))
         } else if (random < 1585 && !wasTransformed()) {
-            setItemInHand(Item.get(Item.TRIDENT))
+            setItemInHand(Item.get(ItemID.TRIDENT))
         }
         if (Utils.rand(0, 100) < 3) {
-            itemInOffhand = Item.get(Item.NAUTILUS_SHELL)
+            setItemInOffhand(Item.get(ItemID.NAUTILUS_SHELL))
         }
     }
 
@@ -194,16 +192,16 @@ class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt
 
     override fun getDrops(): Array<Item> {
         var trident = Item.AIR
-        if (getItemInHand() is ItemTrident) {
+        if (itemInHand is ItemTrident) {
             val event = getLastDamageCause()
             var lootingLevel = 0
             if (event is EntityDamageByEntityEvent) {
                 if (event.damager is EntityInventoryHolder) {
-                    lootingLevel = holder.getItemInHand().getEnchantmentLevel(Enchantment.ID_LOOTING)
+                    lootingLevel = event.damager.itemInHand.getEnchantmentLevel(Enchantment.ID_LOOTING)
                 }
             }
             if (ThreadLocalRandom.current().nextInt(1, 100) < min(37.0, (25 + lootingLevel).toDouble())) {
-                trident = Item.get(Item.TRIDENT)
+                trident = Item.get(ItemID.TRIDENT)
             }
         }
         return arrayOf(
