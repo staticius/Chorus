@@ -1,16 +1,22 @@
 package org.chorus.entity.mob.villagers
 
 import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockBed
+import org.chorus.block.BlockDoor
+import org.chorus.block.BlockID
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.FluctuateController
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.executor.villager.*
@@ -29,28 +35,31 @@ import org.chorus.entity.mob.animal.EntityAnimal
 import org.chorus.entity.mob.monster.humanoid_monster.EntityZombie
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
-import org.chorus.inventory.*
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.inventory.EntityEquipmentInventory
+import org.chorus.inventory.InventoryHolder
+import org.chorus.inventory.InventorySlice
+import org.chorus.inventory.TradeInventory
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.level.Level
+import org.chorus.level.ParticleEffect
+import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.*
 import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.TakeItemEntityPacket
 import org.chorus.network.protocol.UpdateTradePacket
 import org.chorus.registry.Registries
-import org.chorus.utils.*
+import org.chorus.utils.ChorusRandom
+import org.chorus.utils.TradeRecipeBuildUtils
+import org.chorus.utils.Utils
 import java.util.*
-import java.util.Set
 import java.util.function.Consumer
-import kotlin.collections.ArrayList
-import kotlin.collections.MutableList
 import kotlin.collections.component1
 import kotlin.collections.component2
-import kotlin.collections.iterator
 import kotlin.collections.set
-import kotlin.collections.toTypedArray
 import kotlin.math.max
 import kotlin.math.min
 
@@ -78,7 +87,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     protected var tradeInventory: TradeInventory? = null
 
-    override var inventory: Inventory = null
+    override lateinit var inventory: EntityEquipmentInventory
 
     protected var canTrade: Boolean? = null
 
@@ -123,8 +132,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                     DoorExecutor(), all(
                         IBehaviorEvaluator { entity: EntityMob? ->
                             val block = memoryStorage.get<Block>(CoreMemoryTypes.Companion.NEAREST_BLOCK_2)
-                            if (block == null || moveDirectionEnd == null) return@all false
-                            level!!.raycastBlocks(this.position, moveDirectionEnd, true, false, 0.5).contains(block)
+                            if (block == null || moveDirectionEnd == null) return@IBehaviorEvaluator false
+                            level!!.raycastBlocks(this.position, moveDirectionEnd!!, true, false, 0.5).contains(block)
                         }
                     ), 4, 1),
                 Behavior(
@@ -168,17 +177,17 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                     FleeFromTargetExecutor(CoreMemoryTypes.Companion.NEAREST_ZOMBIE, 0.5f, true, 8f), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_ZOMBIE),
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_ZOMBIE, 8.0),
-                        IBehaviorEvaluator { entity: EntityMob? ->
-                            memoryStorage.notEmpty(CoreMemoryTypes.Companion.NEAREST_ZOMBIE) && memoryStorage.get<Entity>(
-                                CoreMemoryTypes.Companion.NEAREST_ZOMBIE
-                            ) is EntityMob && i.getMemoryStorage()
-                                .notEmpty(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET) && i.getMemoryStorage()
-                                .get<Entity>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET) === this
+                        IBehaviorEvaluator { entity ->
+                            memoryStorage.notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE)
+                                    && memoryStorage[CoreMemoryTypes.NEAREST_ZOMBIE]!! is EntityMob
+                                    && entity.getMemoryStorage()
+                                .notEmpty(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET)
+                                    && entity.getMemoryStorage()[CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET]!! === this
                         },
-                        IBehaviorEvaluator { entity: EntityMob? ->
+                        IBehaviorEvaluator {
                             memoryStorage.notEmpty(CoreMemoryTypes.Companion.NEAREST_ZOMBIE) && level!!.raycastBlocks(
                                 this.position,
-                                memoryStorage.get<Entity>(CoreMemoryTypes.Companion.NEAREST_ZOMBIE).position
+                                memoryStorage.get<Entity>(CoreMemoryTypes.Companion.NEAREST_ZOMBIE)!!.position
                             ).isEmpty()
                         }
                     ), 8, 1),
@@ -255,9 +264,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                                             entity.transform.add(x.toDouble(), y.toDouble(), z.toDouble())
                                         val lookBlock = lookTransform.levelBlock
                                         if (lookBlock is BlockBed) {
-                                            if (!lookBlock.isHeadPiece && Arrays.stream<Entity>(
-                                                    level!!.entities
-                                                ).noneMatch { entity1: Entity ->
+                                            if (!lookBlock.isHeadPiece &&
+                                                level!!.entities.values.stream().noneMatch { entity1: Entity ->
                                                     entity1 is EntityVillagerV2 && entity1.memoryStorage
                                                         .notEmpty(CoreMemoryTypes.Companion.OCCUPIED_BED) && entity1.getBed() == lookBlock
                                                 }
@@ -269,7 +277,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                                 }
                             }
                             if (block != null && !block.isOccupied) setBed(block)
-                        } else if (!memoryStorage.get<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED).isBedValid) {
+                        } else if (!memoryStorage.get<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED)!!.isBedValid) {
                             namedTag!!.remove("bed")
                             memoryStorage.clear(CoreMemoryTypes.Companion.OCCUPIED_BED)
                         }
@@ -277,12 +285,12 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 },
                 ISensor { entity: EntityMob ->
                     if (level!!.tick % 60 == 0) {
-                        val entities = Arrays.stream(
+                        val entities =
                             entity.level!!.getCollidingEntities(
                                 entity.getBoundingBox().grow(64.0, 3.0, 64.0)
                             )
-                        ).filter { entity1: Entity -> entity1 is EntityVillagerV2 && entity1 !== this }
-                            .map { entity1: Entity -> (entity1 as EntityVillagerV2) }
+                                .filter { entity1: Entity -> entity1 is EntityVillagerV2 && entity1 !== this }
+                                .map { entity1: Entity -> (entity1 as EntityVillagerV2) }
                         if (level!!.dayTime > 8000 && level!!.dayTime < 10000) {
                             if (memoryStorage.isEmpty(CoreMemoryTypes.Companion.GOSSIP_TARGET)) {
                                 var minDistance = Float.MAX_VALUE.toDouble()
@@ -295,10 +303,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                                     }
                                 }
                                 if (nearest != null) {
-                                    memoryStorage.set<EntityVillagerV2>(
-                                        CoreMemoryTypes.Companion.GOSSIP_TARGET,
-                                        nearest
-                                    )
+                                    memoryStorage[CoreMemoryTypes.Companion.GOSSIP_TARGET] = nearest
                                 } else memoryStorage.clear(CoreMemoryTypes.Companion.GOSSIP_TARGET)
                             }
                         } else {
@@ -307,14 +312,10 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                                     entity1.isHungry() && entity1.position.distance(
                                         this.position
                                     ) < 16
-                                }.findAny().ifPresentOrElse(
+                                }.stream().findAny().ifPresentOrElse(
                                     { entity1: EntityVillagerV2 ->
-                                        memoryStorage.set<EntityVillagerV2>(
-                                            CoreMemoryTypes.Companion.GOSSIP_TARGET,
-                                            entity1
-                                        )
-                                        entity1.memoryStorage
-                                            .set<EntityVillagerV2>(CoreMemoryTypes.Companion.GOSSIP_TARGET, this)
+                                        memoryStorage[CoreMemoryTypes.Companion.GOSSIP_TARGET] = entity1
+                                        entity1.memoryStorage[CoreMemoryTypes.Companion.GOSSIP_TARGET] = this
                                     },
                                     { memoryStorage.clear(CoreMemoryTypes.Companion.GOSSIP_TARGET) })
                             } else if (!isHungry()) memoryStorage.clear(CoreMemoryTypes.Companion.GOSSIP_TARGET)
@@ -333,10 +334,10 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                                     getBoundingBox()
                                         .grow(16.0, 4.0, 16.0)
                                 )) {
-                                    if (Arrays.stream<Entity>(level!!.entities).noneMatch { entity1: Entity ->
+                                    if (level!!.entities.values.stream().noneMatch { entity1: Entity ->
                                             entity1 is EntityVillagerV2 && entity1.memoryStorage
                                                 .notEmpty(CoreMemoryTypes.Companion.SITE_BLOCK) && entity1.getSite() == block
-                                        }) if (setProfessionBlock(block)) return@of
+                                        }) if (setProfessionBlock(block)) return@ISensor
                                 }
                                 if (getTradeExp() == 0) setProfession(0, true)
                             }
@@ -346,7 +347,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 ISensor { entity: EntityMob ->
                     if (level!!.tick % 100 == 0) {
                         if (memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.WILLING)) {
-                            val entities = entity.level!!.entities
+                            val entities = entity.level!!.entities.values
                             var maxDistanceSquared = -1.0
                             var nearestInLove: EntityVillagerV2? = null
                             for (e in entities) {
@@ -361,9 +362,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                                 }
                             }
                             if (nearestInLove != null) {
-                                nearestInLove.memoryStorage
-                                    .set<Entity>(CoreMemoryTypes.Companion.ENTITY_SPOUSE, this)
-                                memoryStorage.set<Entity>(CoreMemoryTypes.Companion.ENTITY_SPOUSE, nearestInLove)
+                                nearestInLove.memoryStorage[CoreMemoryTypes.Companion.ENTITY_SPOUSE] = this
+                                memoryStorage[CoreMemoryTypes.Companion.ENTITY_SPOUSE] = nearestInLove
                             }
                         }
                     }
@@ -388,8 +388,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     fun shouldShareFood(): Boolean {
         for (item in getInventory().contents.values) {
             if ((item.id == ItemID.BREAD && item.getCount() >= 6)
-                || ((item.id == ItemID.CARROT || item.id == Block.BEETROOT) && item.getCount() >= 24)
-                || (item.id == Block.WHEAT && item.getCount() >= 18 && getProfession() == 1)
+                || ((item.id == ItemID.CARROT || item.id == BlockID.BEETROOT) && item.getCount() >= 24)
+                || (item.id == BlockID.WHEAT && item.getCount() >= 18 && getProfession() == 1)
             ) return true
         }
         return false
@@ -400,7 +400,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         for (item in getInventory().contents.values) {
             points += when (item.id) {
                 ItemID.BREAD -> 4
-                ItemID.CARROT, ItemID.POTATO, Block.BEETROOT -> 1
+                ItemID.CARROT, ItemID.POTATO, BlockID.BEETROOT -> 1
                 else -> 0
             } * item.getCount()
         }
@@ -409,7 +409,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     fun setBed(bed: BlockBed) {
         if (bed.isBedValid) {
-            memoryStorage.set<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED, bed)
+            memoryStorage.set(CoreMemoryTypes.Companion.OCCUPIED_BED, bed)
             for (i in 0..4) {
                 val randX = Utils.rand(0f, 0.5f)
                 val randY = Utils.rand(0f, 0.3f)
@@ -417,7 +417,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 level!!.addParticleEffect(
                     position.add(
                         randX.toDouble(),
-                        (this.eyeHeight + randY).toDouble(),
+                        (this.getEyeHeight() + randY).toDouble(),
                         randZ.toDouble()
                     ), ParticleEffect.VILLAGER_HAPPY
                 )
@@ -432,12 +432,12 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         }
     }
 
-    fun getBed(): BlockBed {
-        return memoryStorage.get<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED)
+    fun getBed(): BlockBed? {
+        return memoryStorage[CoreMemoryTypes.OCCUPIED_BED]
     }
 
-    fun getSite(): Block {
-        return memoryStorage.get<Block>(CoreMemoryTypes.Companion.SITE_BLOCK)
+    fun getSite(): Block? {
+        return memoryStorage[CoreMemoryTypes.Companion.SITE_BLOCK]
     }
 
     override fun getHeight(): Float {
@@ -531,17 +531,14 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 compound.getInt("y").toDouble(),
                 compound.getInt("z").toDouble()
             )
-            if (level!!.getBlock(vector) is BlockBed) {
+            val bed = level!!.getBlock(vector)
+            if (bed is BlockBed) {
                 setBed(bed)
             }
         }
-        memoryStorage.set<Object2ObjectArrayMap<String, IntArrayList>>(
-            CoreMemoryTypes.Companion.GOSSIP,
-            Object2ObjectArrayMap<String, IntArrayList>()
-        )
+        memoryStorage[CoreMemoryTypes.GOSSIP] = mutableMapOf()
         if (namedTag!!.containsCompound("gossip")) {
-            val gossipMap =
-                memoryStorage.get<Object2ObjectArrayMap<String, IntArrayList>>(CoreMemoryTypes.Companion.GOSSIP)
+            val gossipMap = memoryStorage[CoreMemoryTypes.GOSSIP]!!
             val gossipTag = namedTag!!.getCompound("gossip")
             for (key in gossipTag.tags.keys) {
                 val gossipValues = gossipTag.getList(key, IntTag::class.java)
@@ -553,7 +550,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
             }
         }
         if (namedTag!!.containsString("purifyPlayer")) {
-            val xuid = namedTag!!.removeAndGet<Tag>("purifyPlayer").parseValue<String>()
+            val xuid = namedTag!!.removeAndGet<StringTag>("purifyPlayer")!!.parseValue()
             this.addGossip(xuid, Gossip.MAJOR_POSITIVE, 20)
             this.addGossip(xuid, Gossip.MINOR_POSITIVE, 25)
         }
@@ -587,7 +584,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         if (super.attack(source)) {
             if (source is EntityDamageByEntityEvent) {
                 if (source.damager is Player) {
-                    addGossip(player.getLoginChainData().getXUID(), Gossip.MINOR_NEGATIVE, 25)
+                    addGossip(source.damager.loginChainData.xuid!!, Gossip.MINOR_NEGATIVE, 25)
                     val pk = EntityEventPacket()
                     pk.eid = getRuntimeID()
                     pk.event = EntityEventPacket.VILLAGER_ANGRY
@@ -599,16 +596,16 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     override fun kill() {
-        if (getLastDamageCause() is EntityDamageByEntityEvent) {
-            if (event.getEntity() is Player) {
+        val event = getLastDamageCause()
+        if (event is EntityDamageByEntityEvent) {
+            val player = event.entity
+            if (player is Player) {
                 println("1")
-                Arrays.stream<Entity>(
-                    level!!.getCollidingEntities(
-                        getBoundingBox().grow(16.0, 16.0, 16.0)
-                    )
-                ).filter { entity: Entity? -> entity is EntityVillagerV2 }.forEach { entity: Entity ->
+                level!!.getCollidingEntities(
+                    getBoundingBox().grow(16.0, 16.0, 16.0)
+                ).filterIsInstance<EntityVillagerV2>().forEach { entity: Entity ->
                     (entity as EntityVillagerV2).addGossip(
-                        player.getLoginChainData().getXUID(), Gossip.MAJOR_NEGATIVE, 25
+                        player.loginChainData.xuid!!, Gossip.MAJOR_NEGATIVE, 25
                     )
                 }
             }
@@ -617,8 +614,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     fun addGossip(xuid: String, gossip: Gossip, value: Int) {
-        val gossipMap =
-            memoryStorage.get<Object2ObjectArrayMap<String, IntArrayList>>(CoreMemoryTypes.Companion.GOSSIP)
+        val gossipMap = memoryStorage[CoreMemoryTypes.Companion.GOSSIP]!!
         if (!gossipMap.containsKey(xuid)) gossipMap[xuid] = IntArrayList(
             Collections.nCopies(
                 Gossip.VALUES.size, 0
@@ -626,7 +622,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         )
         val values = gossipMap[xuid]
         val ordinal = gossip.ordinal
-        values!![ordinal] = min(gossip.max.toDouble(), (values.getInt(ordinal) + value).toDouble()).toInt()
+        values!![ordinal] = min(gossip.max.toDouble(), (values[ordinal] + value).toDouble()).toInt()
         level!!.players.values.stream().filter { player: Player -> player.loginChainData.xuid == xuid }.findFirst()
             .ifPresent { player: Player ->
                 this.updateTrades(
@@ -636,15 +632,13 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     fun spreadGossip() {
-        Arrays.stream<Entity>(level!!.getCollidingEntities(getBoundingBox().grow(2.0, 0.0, 2.0)))
+        level!!.getCollidingEntities(getBoundingBox().grow(2.0, 0.0, 2.0))
             .filter { entity2: Entity? -> entity2 is EntityVillagerV2 }
-            .map<EntityVillagerV2> { entity2: Entity -> (entity2 as EntityVillagerV2) }
+            .map { entity2: Entity -> (entity2 as EntityVillagerV2) }
             .forEach { target: EntityVillagerV2 ->
-                val gossipMap =
-                    memoryStorage.get<Object2ObjectArrayMap<String, IntArrayList>>(CoreMemoryTypes.Companion.GOSSIP)
-                val targetGossipMap = target.memoryStorage
-                    .get<Object2ObjectArrayMap<String, IntArrayList>>(CoreMemoryTypes.Companion.GOSSIP)
-                for ((xuid, value) in gossipMap.object2ObjectEntrySet()) {
+                val gossipMap = memoryStorage[CoreMemoryTypes.GOSSIP]!!
+                val targetGossipMap = target.memoryStorage[CoreMemoryTypes.Companion.GOSSIP]!!
+                for ((xuid, value) in gossipMap.entries) {
                     if (!targetGossipMap.containsKey(xuid)) targetGossipMap[xuid] = IntArrayList(
                         Collections.nCopies(
                             Gossip.VALUES.size, 0
@@ -654,8 +648,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                     for (gossip in Gossip.VALUES) {
                         val ordinal = gossip.ordinal
                         targetValues!![ordinal] = max(
-                            targetValues.getInt(ordinal).toDouble(),
-                            (value.getInt(ordinal) - gossip.penalty).toDouble()
+                            targetValues[ordinal].toDouble(),
+                            (value[ordinal] - gossip.penalty).toDouble()
                         ).toInt()
                     }
                 }
@@ -663,8 +657,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     fun getGossip(xuid: String, gossip: Gossip): Int {
-        val gossipMap =
-            memoryStorage.get<Object2ObjectArrayMap<String, IntArrayList>>(CoreMemoryTypes.Companion.GOSSIP)
+        val gossipMap = memoryStorage[CoreMemoryTypes.Companion.GOSSIP]!!
         if (!gossipMap.containsKey(xuid)) gossipMap[xuid] = IntArrayList(
             Collections.nCopies(
                 Gossip.VALUES.size,
@@ -673,17 +666,15 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         )
         val values = gossipMap[xuid]
         val ordinal = gossip.ordinal
-        return values!!.getInt(ordinal) * gossip.multiplier
+        return values!!.get(ordinal) * gossip.multiplier
     }
 
     fun getReputation(player: Player): Int {
         var reputation = 0
-        val values = memoryStorage.get<Object2ObjectArrayMap<String, IntArrayList>>(
-            CoreMemoryTypes.Companion.GOSSIP
-        )[player.loginChainData.xuid]
+        val values = memoryStorage.get(CoreMemoryTypes.Companion.GOSSIP)!![player.loginChainData.xuid]
         if (values != null) {
             for (gossip in Gossip.VALUES) {
-                reputation += (values.getInt(gossip.ordinal) * gossip.multiplier)
+                reputation += (values.get(gossip.ordinal) * gossip.multiplier)
             }
         }
         return reputation
@@ -700,8 +691,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         namedTag!!.putInt("tradeSeed", this.getTradeSeed())
         namedTag!!.putInt("clothing", this.getDataProperty<Int>(EntityDataTypes.Companion.MARK_VARIANT))
         val gossipTag = CompoundTag()
-        for ((key, value) in memoryStorage.get<Object2ObjectArrayMap<String, IntArrayList>>(CoreMemoryTypes.Companion.GOSSIP)
-            .object2ObjectEntrySet()) {
+        for ((key, value) in memoryStorage.get(CoreMemoryTypes.Companion.GOSSIP)!!
+            .entries) {
             val gossipValues = ListTag<IntTag>()
             for (v2 in value) {
                 gossipValues.add(IntTag(v2))
@@ -710,7 +701,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         }
         namedTag!!.putCompound("gossip", gossipTag)
         if (memoryStorage.notEmpty(CoreMemoryTypes.Companion.OCCUPIED_BED)) {
-            val bed = memoryStorage.get<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED)
+            val bed = memoryStorage.get<BlockBed>(CoreMemoryTypes.Companion.OCCUPIED_BED)!!
             namedTag!!.putCompound(
                 "bed",
                 CompoundTag().putInt("x", bed.position.floorX).putInt("y", bed.position.floorY)
@@ -718,20 +709,17 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
             )
         }
         if (memoryStorage.notEmpty(CoreMemoryTypes.Companion.SITE_BLOCK)) {
-            val site = memoryStorage.get<Block>(CoreMemoryTypes.Companion.SITE_BLOCK)
+            val site = memoryStorage.get<Block>(CoreMemoryTypes.Companion.SITE_BLOCK)!!
             namedTag!!.putCompound(
                 "siteBlock",
                 CompoundTag().putInt("x", site.position.floorX).putInt("y", site.position.floorY)
                     .putInt("z", site.position.floorZ)
             )
         }
-        var inventoryTag: ListTag<CompoundTag?>? = null
-        if (this.getInventory() != null) {
-            inventoryTag = ListTag()
-            namedTag!!.putList("Inventory", inventoryTag)
-            for ((key, value) in getInventory().contents) {
-                inventoryTag.add(NBTIO.putItemHelper(value, key))
-            }
+        val inventoryTag: ListTag<CompoundTag> = ListTag()
+        namedTag!!.putList("Inventory", inventoryTag)
+        for ((key, value) in getInventory().contents) {
+            inventoryTag.add(NBTIO.putItemHelper(value, key))
         }
     }
 
@@ -772,11 +760,11 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     fun setProfessionBlock(block: Block): Boolean {
-        for (profession in Profession.Companion.getProfessions().values) {
-            if (getTradeExp() != 0 && profession.index != getProfession()) continue
-            if (block.id == profession.blockID) {
-                memoryStorage.set<Block>(CoreMemoryTypes.Companion.SITE_BLOCK, block)
-                setProfession(profession.index, true)
+        for (profession in Profession.getProfessions().values) {
+            if (getTradeExp() != 0 && profession.getIndex() != getProfession()) continue
+            if (block.id == profession.getBlockID()) {
+                memoryStorage[CoreMemoryTypes.SITE_BLOCK] = block
+                setProfession(profession.getIndex(), true)
                 return true
             }
         }
@@ -826,7 +814,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
      * @return 该村民的交易等级
      */
     fun getTradeTier(): Int {
-        return tradeTier
+        return tradeTier!!
     }
 
     /**
@@ -835,9 +823,9 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
      *村民的交易等级(1-[EntityVillagerV2.maxTradeTier])
      */
     fun setTradeTier(tradeTier: Int) {
-        var tradeTier = tradeTier
-        this.tradeTier = --tradeTier
-        namedTag!!.putInt("tradeTier", this.tradeTier)
+        var tradeTier1 = tradeTier
+        this.tradeTier = --tradeTier1
+        namedTag!!.putInt("tradeTier", this.tradeTier!!)
     }
 
     fun updateTrades(player: Player) {
@@ -845,8 +833,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         val pk1 = UpdateTradePacket()
         pk1.containerId = player.getWindowId(getTradeInventory()!!).toByte()
         pk1.tradeTier = getTradeTier()
-        pk1.traderUniqueEntityId = getRuntimeID()
-        pk1.playerUniqueEntityId = player.runtimeId
+        pk1.traderUniqueEntityId = getUniqueID()
+        pk1.playerUniqueEntityId = player.getUniqueID()
         pk1.displayName = getDisplayName()
         val tierExpRequirements = ListTag<CompoundTag>()
         var i = 0
@@ -898,7 +886,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     fun setMaxTradeTier(maxTradeTier: Int) {
         this.maxTradeTier = maxTradeTier
         this.setDataProperty(EntityDataTypes.Companion.MAX_TRADE_TIER, 5)
-        namedTag!!.putInt("maxTradeTier", this.tradeTier)
+        namedTag!!.putInt("maxTradeTier", this.tradeTier!!)
     }
 
     override fun close() {
@@ -919,7 +907,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     fun setTradeExp(tradeExp: Int) {
         this.tradeExp = tradeExp
         this.setDataProperty(EntityDataTypes.Companion.TRADE_EXPERIENCE, 10)
-        namedTag!!.putInt("tradeExp", this.tradeTier)
+        namedTag!!.putInt("tradeExp", this.tradeTier!!)
     }
 
 
@@ -960,11 +948,11 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     override fun onUpdate(tick: Int): Boolean {
         if (ticksLived % 24000 == 23999) {
-            for ((_, values) in memoryStorage.get<Object2ObjectArrayMap<String, IntArrayList>>(CoreMemoryTypes.Companion.GOSSIP)
-                .object2ObjectEntrySet()) {
+            for ((_, values) in memoryStorage.get(CoreMemoryTypes.Companion.GOSSIP)!!
+                .entries) {
                 for (gossip in Gossip.VALUES) {
                     values[gossip.ordinal] =
-                        max(0.0, (values.getInt(gossip.ordinal) - gossip.decay).toDouble()).toInt()
+                        max(0.0, (values.get(gossip.ordinal) - gossip.decay).toDouble()).toInt()
                 }
             }
         }
@@ -974,7 +962,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 if (i is EntityItem) {
                     val item = i.item
                     if (when (item.id) {
-                            ItemID.BREAD, ItemID.CARROT, ItemID.POTATO, BlockID.WHEAT, Item.WHEAT_SEEDS, Item.BEETROOT_SEEDS, BlockID.BEETROOT, Item.TORCHFLOWER_SEEDS, Item.PITCHER_POD, Item.BONE_MEAL -> true
+                            ItemID.BREAD, ItemID.CARROT, ItemID.POTATO, BlockID.WHEAT, ItemID.WHEAT_SEEDS, ItemID.BEETROOT_SEEDS, BlockID.BEETROOT, ItemID.TORCHFLOWER_SEEDS, ItemID.PITCHER_POD, ItemID.BONE_MEAL -> true
                             else -> false
                         }
                     ) {
@@ -998,9 +986,9 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         if (this.profession == 0) {
             this.setCanTrade(false)
         } else {
-            getTradeNetIds().forEach(Consumer { key: Int? -> TradeRecipeBuildUtils.RECIPE_MAP.remove(key) })
-            val profession: Profession = Profession.Companion.getProfession(this.profession)
-            setDisplayName(profession.name)
+            getTradeNetIds().forEach(Consumer { key -> TradeRecipeBuildUtils.RECIPE_MAP.remove(key) })
+            val profession = Profession.getProfession(this.profession)!!
+            setDisplayName(profession.getName())
             for (trade in profession.buildTrades(getTradeSeed()).all) {
                 getTradeNetIds().add(trade.getInt("netId"))
             }
@@ -1026,7 +1014,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
         companion object {
             fun getClothing(biomeId: Int): Clothing {
-                val definition = Registries.BIOME[biomeId]
+                val definition = Registries.BIOME[biomeId]!!
                 val tags = definition.tags
                 if (tags.contains("desert") || tags.contains("mesa")) return DESERT
                 if (tags.contains("jungle")) return JUNGLE

@@ -53,11 +53,11 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
                         var attackTarget: Entity? = null
                         if (storage.notEmpty(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET) && storage.get<Entity>(
                                 CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET
-                            ).isAlive
+                            )!!.isAlive()
                         ) {
                             attackTarget = storage.get<Entity>(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET)
                         }
-                        storage.set<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET, attackTarget)
+                        storage[CoreMemoryTypes.Companion.ATTACK_TARGET] = attackTarget
                         false
                     },
                     { entity: EntityMob? -> true }, 20
@@ -134,7 +134,7 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
     //掉落剑的概率为8.5% 掉落头的概率为2.5%
     override fun getDrops(): Array<Item> {
         val drops: MutableList<Item> = ArrayList()
-        drops.add(Item.get(Item.BONE, 0, Utils.rand(0, 2)))
+        drops.add(Item.get(ItemID.BONE, 0, Utils.rand(0, 2)))
         if (Utils.rand(0, 2) == 0) {
             drops.add(Item.get(ItemID.COAL, 0, 1))
         }

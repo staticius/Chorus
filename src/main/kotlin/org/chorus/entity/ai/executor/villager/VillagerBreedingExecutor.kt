@@ -9,7 +9,7 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.network.protocol.EntityEventPacket
 
-class VillagerBreedingExecutor(entityClass: Class<EntityMob>, findingRangeSquared: Int, duration: Int, moveSpeed: Float) :
+class VillagerBreedingExecutor(entityClass: Class<out EntityMob>, findingRangeSquared: Int, duration: Int, moveSpeed: Float) :
     EntityBreedingExecutor<EntityMob>(entityClass, findingRangeSquared, duration, moveSpeed) {
     override fun onStart(entity: EntityMob) {
         super.onStart(entity)

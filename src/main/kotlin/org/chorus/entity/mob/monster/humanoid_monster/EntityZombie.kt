@@ -198,7 +198,7 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
 
     protected open fun transform() {
         this.close()
-        equipment.contents.values.forEach(Consumer { i: Item? -> level!!.dropItem(this.position, i) })
+        equipment.contents.values.forEach(Consumer { i -> level!!.dropItem(this.position, i) })
         val drowned = EntityDrowned(this.locator.chunk, this.namedTag)
         drowned.setPosition(this.position)
         drowned.setRotation(rotation.yaw, rotation.pitch)
@@ -218,7 +218,7 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         if (item.isArmor || item.isTool) {
                             if (entity.equip(item)) {
                                 val pk = TakeItemEntityPacket()
-                                pk.entityId = entity.runtimeId
+                                pk.entityId = entity.getRuntimeID()
                                 pk.target = i.getRuntimeID()
                                 Server.broadcastPacket(entity.viewers.values, pk)
                                 i.close()

@@ -5,7 +5,7 @@ import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 
 open class EntityBreedingExecutor<T : EntityMob>(
-    protected var entityClass: Class<T>,
+    protected var entityClass: Class<out T>,
     protected var findingRangeSquared: Int,
     protected var duration: Int,
     protected var moveSpeed: Float
