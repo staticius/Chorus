@@ -15,7 +15,6 @@ import org.chorus.entity.ai.evaluator.LogicalUtils
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.IMemoryStorage
 import org.chorus.entity.ai.memory.IMemoryType
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.mob.monster.EntityCreeper
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent

@@ -5,9 +5,6 @@ import org.chorus.plugin.RegisteredListener
 import java.util.*
 import kotlin.concurrent.Volatile
 
-/**
- * @author Nukkit Team.
- */
 class HandlerList {
     @Volatile
     private var handlers: Array<RegisteredListener>? = null
@@ -82,26 +79,26 @@ class HandlerList {
         for ((_, value) in handlerslots) {
             entries.addAll(value)
         }
-        handlers = entries.toArray(RegisteredListener.EMPTY_ARRAY)
+        handlers = entries.toTypedArray()
     }
 
     val registeredListeners: Array<RegisteredListener>
         get() {
-            var handlers: Array<RegisteredListener>
-            while ((this.handlers.also { handlers = it!! }) == null) {
+            var handlers: Array<RegisteredListener>?
+            while ((this.handlers.also { handlers = it }) == null) {
                 bake()
             } // This prevents fringe cases of returning null
 
-            return handlers
+            return handlers!!
         }
 
     val isEmpty: Boolean
         get() {
             val handlers = this.handlers
             if (handlers != null) {
-                return handlers.size == 0
+                return handlers.isEmpty()
             }
-            return registeredListeners.length == 0
+            return registeredListeners.isEmpty()
         }
 
     companion object {

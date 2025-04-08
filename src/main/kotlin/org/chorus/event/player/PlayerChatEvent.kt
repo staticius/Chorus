@@ -7,7 +7,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
 class PlayerChatEvent @JvmOverloads constructor(
-    player: Player?,
+    override var player: Player?,
     message: String?,
     format: String = "chat.type.text",
     recipients: MutableSet<CommandSender>? = null
@@ -19,7 +19,6 @@ class PlayerChatEvent @JvmOverloads constructor(
     var format: String
 
     init {
-        this.player = player
         this.message = message
 
         this.format = format
@@ -34,17 +33,6 @@ class PlayerChatEvent @JvmOverloads constructor(
             this.recipients = recipients
         }
     }
-
-    override var player: Player?
-        get() = super.player
-        /**
-         * Changes the player that is sending the message
-         *
-         * @param player messenger
-         */
-        set(player) {
-            this.player = player
-        }
 
     fun getRecipients(): Set<CommandSender> {
         return this.recipients

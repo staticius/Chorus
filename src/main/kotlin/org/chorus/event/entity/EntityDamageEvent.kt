@@ -12,7 +12,7 @@ import java.util.*
 open class EntityDamageEvent(entity: Entity, cause: DamageCause, modifiers: Map<DamageModifier, Float>) :
     EntityEvent(), Cancellable {
     @JvmField
-    val cause: DamageCause?
+    val cause: DamageCause
     private val modifiers: MutableMap<DamageModifier, Float>
     private val originals: Map<DamageModifier, Float>
 

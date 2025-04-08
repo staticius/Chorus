@@ -7,13 +7,14 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
 
-class CreeperPowerEvent(creeper: EntityCreeper?, cause: PowerCause?) : EntityEvent(), Cancellable {
-    /**
-     * Gets the cause of the creeper being (un)powered.
-     *
-     * @return A PowerCause value detailing the cause of change in power.
-     */
-    val cause: PowerCause?
+class CreeperPowerEvent(creeper: EntityCreeper,
+                        /**
+                         * Gets the cause of the creeper being (un)powered.
+                         *
+                         * @return A PowerCause value detailing the cause of change in power.
+                         */
+                        val cause: PowerCause?
+) : EntityEvent(), Cancellable {
 
     /**
      * Gets the lightning bolt which is striking the Creeper.
@@ -23,20 +24,11 @@ class CreeperPowerEvent(creeper: EntityCreeper?, cause: PowerCause?) : EntityEve
     var lightning: EntityLightningStrike? = null
         private set
 
-    constructor(creeper: EntityCreeper?, bolt: EntityLightningStrike?, cause: PowerCause?) : this(creeper, cause) {
+    constructor(creeper: EntityCreeper, bolt: EntityLightningStrike?, cause: PowerCause?) : this(creeper, cause) {
         this.lightning = bolt
     }
 
-    init {
-        this.entity = creeper
-        this.cause = cause
-    }
-
-    override var entity: Entity?
-        get() = super.getEntity() as EntityCreeper
-        set(entity) {
-            super.entity = entity
-        }
+    override var entity: Entity = creeper
 
     /**
      * An enum to specify the cause of the change in power

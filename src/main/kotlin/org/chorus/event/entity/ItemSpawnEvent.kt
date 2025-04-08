@@ -6,16 +6,8 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
 
-class ItemSpawnEvent(item: EntityItem?) : EntityEvent(), Cancellable {
-    init {
-        this.entity = item
-    }
-
-    override var entity: Entity?
-        get() = entity as EntityItem
-        set(entity) {
-            super.entity = entity
-        }
+class ItemSpawnEvent(item: EntityItem) : EntityEvent(), Cancellable {
+    override var entity: Entity = item
 
     companion object {
         val handlers: HandlerList = HandlerList()

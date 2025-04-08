@@ -7,5 +7,5 @@ import org.chorus.inventory.Inventory
 
 abstract class InventoryEvent(val inventory: Inventory) : Event() {
     val viewers: Array<Player>
-        get() = inventory.viewers.toArray(Player.EMPTY_ARRAY)
+        get() = inventory.viewers.toTypedArray()
 }

@@ -32,7 +32,6 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.LevelSoundEventPacket
-import java.util.Set
 import kotlin.math.abs
 
 class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, VibrationListener {

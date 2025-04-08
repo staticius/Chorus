@@ -7,25 +7,11 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
-/**
- * @author GoodLucky777, Superice666
- */
-class EntityShootCrossbowEvent(shooter: EntityLiving?, crossbow: Item, vararg projectiles: EntityProjectile) :
+class EntityShootCrossbowEvent(shooter: EntityLiving, val crossbow: Item, vararg projectiles: EntityProjectile) :
     EntityEvent(), Cancellable {
-    private val projectiles: Array<EntityProjectile>
-    val crossbow: Item
+    private val projectiles: Array<EntityProjectile> = projectiles.toList().toTypedArray()
 
-    init {
-        this.entity = shooter
-        this.crossbow = crossbow
-        this.projectiles = projectiles
-    }
-
-    override var entity: Entity?
-        get() = entity as EntityLiving
-        set(entity) {
-            super.entity = entity
-        }
+    override var entity: Entity = shooter
 
     fun getProjectile(array: Int): EntityProjectile {
         return projectiles[array]

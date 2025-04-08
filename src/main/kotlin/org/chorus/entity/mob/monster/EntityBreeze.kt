@@ -24,7 +24,6 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
-import java.util.Set
 
 class EntityBreeze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt) {
     override fun getIdentifier(): String {

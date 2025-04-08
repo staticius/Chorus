@@ -30,7 +30,6 @@ import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 /**
  * @author PikyCZ, Buddelbubi

@@ -40,10 +40,7 @@ import org.chorus.network.protocol.*
 import org.chorus.network.protocol.types.EntityLink
 import org.chorus.plugin.InternalPlugin
 import java.util.*
-import java.util.Set
-import kotlin.collections.ArrayList
 import kotlin.collections.first
-import kotlin.collections.iterator
 import kotlin.collections.setOf
 import kotlin.collections.toTypedArray
 import kotlin.math.cos

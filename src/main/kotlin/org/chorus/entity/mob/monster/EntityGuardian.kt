@@ -18,7 +18,6 @@ import org.chorus.entity.ai.executor.GuardianAttackExecutor
 import org.chorus.entity.ai.executor.PlaySoundExecutor
 import org.chorus.entity.ai.executor.SpaceRandomRoamExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleSpaceAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.SwimmingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
@@ -33,8 +32,6 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
-import java.util.List
-import java.util.Set
 import java.util.concurrent.*
 import java.util.function.Function
 

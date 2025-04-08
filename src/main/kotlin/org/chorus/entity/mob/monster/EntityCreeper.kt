@@ -33,12 +33,8 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 import java.util.concurrent.*
 
-/**
- * @author Box.
- */
 class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityInteractable {
     override fun getIdentifier(): String {
         return EntityID.CREEPER

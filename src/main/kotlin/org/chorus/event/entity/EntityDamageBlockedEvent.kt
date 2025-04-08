@@ -5,7 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 
-class EntityDamageBlockedEvent(entity: Entity?, damage: EntityDamageEvent, knockBack: Boolean, animation: Boolean) :
+class EntityDamageBlockedEvent(entity: Entity, damage: EntityDamageEvent, knockBack: Boolean, animation: Boolean) :
     EntityEvent(), Cancellable {
     val damage: EntityDamageEvent
     val knockBackAttacker: Boolean
@@ -18,11 +18,11 @@ class EntityDamageBlockedEvent(entity: Entity?, damage: EntityDamageEvent, knock
         this.animation = animation
     }
 
-    val cause: DamageCause?
+    val cause: DamageCause
         get() = damage.cause
 
-    val attacker: Entity?
-        get() = damage.getEntity()
+    val attacker: Entity
+        get() = damage.entity
 
     companion object {
         val handlers: HandlerList = HandlerList()

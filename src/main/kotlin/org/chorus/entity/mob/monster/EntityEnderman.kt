@@ -30,7 +30,6 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Utils
-import java.util.Set
 
 class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {

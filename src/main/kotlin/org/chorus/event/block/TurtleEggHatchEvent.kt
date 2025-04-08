@@ -2,6 +2,7 @@ package org.chorus.event.block
 
 import org.chorus.block.Block
 import org.chorus.block.BlockAir
+import org.chorus.block.BlockTuff
 import org.chorus.block.BlockTurtleEgg
 import org.chorus.block.property.enums.TurtleEggCount
 import org.chorus.event.Cancellable
@@ -24,7 +25,7 @@ class TurtleEggHatchEvent(turtleEgg: BlockTurtleEgg, @JvmField var eggsHatching:
         }
     }
 
-    override fun getBlock(): Block {
+    override fun getBlock(): BlockTurtleEgg {
         return super.getBlock() as BlockTurtleEgg
     }
 
