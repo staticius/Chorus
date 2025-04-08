@@ -32,7 +32,7 @@ class EntityBogged(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nb
     override fun initEntity() {
         this.maxHealth = 16
         super.initEntity()
-        if (getItemInHand().isNull) {
+        if (itemInHand.isNothing) {
             setItemInHand(Item.get(ItemID.BOW))
         }
     }
@@ -42,7 +42,7 @@ class EntityBogged(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nb
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get(Item.BONE), Item.get(ItemID.ARROW)) //TODO: match vanilla drop
+        return arrayOf(Item.get(ItemID.BONE), Item.get(ItemID.ARROW)) // TODO: match vanilla drop
     }
 
     override fun requireBehaviorGroup(): IBehaviorGroup {
@@ -53,7 +53,7 @@ class EntityBogged(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nb
                 Behavior(PlaySoundExecutor(Sound.MOB_SKELETON_SAY), RandomSoundEvaluator(), 4, 1),
                 Behavior(
                     BowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.ATTACK_TARGET,
                         0.3f,
                         15,
@@ -64,7 +64,7 @@ class EntityBogged(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nb
                 ),
                 Behavior(
                     BowShootExecutor(
-                        { this.getItemInHand() },
+                        { this.itemInHand },
                         CoreMemoryTypes.Companion.NEAREST_PLAYER,
                         0.3f,
                         15,
