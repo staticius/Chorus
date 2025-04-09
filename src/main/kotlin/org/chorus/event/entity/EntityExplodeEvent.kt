@@ -6,10 +6,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.level.Locator
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
-class EntityExplodeEvent(entity: Entity?, locator: Locator, blocks: List<Block>, yield: Double) :
+class EntityExplodeEvent(entity: Entity, locator: Locator, blocks: List<Block>, yield: Double) :
     EntityEvent(), Cancellable {
     val position: Locator
     var blockList: List<Block>

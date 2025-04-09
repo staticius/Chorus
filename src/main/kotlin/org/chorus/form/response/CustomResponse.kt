@@ -5,7 +5,7 @@ package org.chorus.form.response
  * The response of a [org.chorus.form.window.CustomForm]
  */
 class CustomResponse : Response() {
-    val responses: MutableMap<Int, Any> = HashMap()
+    val responses: MutableMap<Int, Any?> = HashMap()
 
     /**
      * Set a response for an element (internal)
@@ -14,7 +14,7 @@ class CustomResponse : Response() {
      * @param response The value of the response
      * @param <T>      Any
     </T> */
-    fun <T : Any> setResponse(index: Int, response: T) {
+    fun <T : Any?> setResponse(index: Int, response: T) {
         responses[index] = response
     }
 
@@ -25,7 +25,7 @@ class CustomResponse : Response() {
      * @return The response corresponding to the index
      * @param <T> Any valid response
     </T> */
-    fun <T : Any> getResponse(index: Int): T {
+    fun <T : Any?> getResponse(index: Int): T {
         return responses[index] as T
     }
 

@@ -1,7 +1,6 @@
 package org.chorus.event.player
 
 import org.chorus.Player
-import org.chorus.entity.Entity
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.event.entity.EntityDeathEvent
@@ -10,8 +9,8 @@ import org.chorus.lang.TextContainer
 import org.chorus.lang.TranslationContainer
 
 class PlayerDeathEvent(
-    player: Player?,
-    drops: Array<Item>?,
+    player: Player,
+    drops: Array<Item>,
     @JvmField var deathMessage: TextContainer,
     @JvmField var experience: Int
 ) :
@@ -22,18 +21,12 @@ class PlayerDeathEvent(
     @JvmField
     var keepExperience: Boolean = false
 
-    constructor(player: Player?, drops: Array<Item>?, deathMessage: String?, experience: Int) : this(
+    constructor(player: Player, drops: Array<Item>, deathMessage: String, experience: Int) : this(
         player,
         drops,
         TextContainer(deathMessage),
         experience
     )
-
-    override var entity: Entity?
-        get() = super.getEntity() as Player
-        set(entity) {
-            super.entity = entity
-        }
 
     val translationDeathMessage: TranslationContainer
         get() = if (deathMessage is TranslationContainer) deathMessage as TranslationContainer else TranslationContainer(
@@ -48,7 +41,7 @@ class PlayerDeathEvent(
         this.deathMessage = deathMessage
     }
 
-    fun setDeathMessage(deathMessage: String?) {
+    fun setDeathMessage(deathMessage: String) {
         this.deathMessage = TextContainer(deathMessage)
     }
 

@@ -2,12 +2,7 @@ package org.chorus.form.element.custom
 
 import com.google.gson.JsonObject
 
-
-@Accessors(chain = true, fluent = true)
-
-class ElementLabel : ElementCustom {
-    private val text: String? = null
-
+class ElementLabel(val text: String) : ElementCustom() {
     constructor() : this("")
 
     override fun toJson(): JsonObject {

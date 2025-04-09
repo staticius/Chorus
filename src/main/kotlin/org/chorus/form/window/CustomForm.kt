@@ -5,7 +5,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.reflect.TypeToken
 import org.chorus.Player
-import org.chorus.form.element.custom.ElementCustom
+import org.chorus.form.element.custom.*
 import org.chorus.form.response.CustomResponse
 import org.chorus.form.response.ElementResponse
 import org.chorus.utils.JSONUtils
@@ -78,24 +78,23 @@ class CustomForm(title: String) : Form<CustomResponse?>(title) {
             val element = elements[i]
 
             var elementResponse: Any? = null
-
             when (element) {
-                -> {
+                is ElementDropdown -> {
                     val index = responseData.toInt()
-                    val option: String = dropdown.options().get(index)
+                    val option: String = element.options[index]
                     elementResponse = ElementResponse(index, option)
                 }
 
-                -> elementResponse = responseData
-                -> elementResponse = label.text()
-                -> elementResponse = java.lang.Float.parseFloat(responseData)
-                -> {
+                is ElementInput -> elementResponse = responseData
+                is ElementLabel -> elementResponse = element.text
+                is ElementSlider -> elementResponse = responseData.toFloat()
+                is ElementStepSlider -> {
                     val index = Integer.parseInt(responseData)
-                    val step: String = stepSlider.steps().get(index)
+                    val step: String = element.steps[index]
                     elementResponse = ElementResponse(index, step)
                 }
 
-                -> elementResponse = java.lang.Boolean.parseBoolean(responseData)
+                is ElementToggle -> elementResponse = responseData.toBoolean()
                 else -> Unit
             }
 
@@ -107,7 +106,7 @@ class CustomForm(title: String) : Form<CustomResponse?>(title) {
         return response
     }
 
-    override fun <M> putMeta(key: String, `object`: M): CustomForm {
+    override fun <M : Any> putMeta(key: String, `object`: M): CustomForm {
         return super.putMeta(key, `object`) as CustomForm
     }
 

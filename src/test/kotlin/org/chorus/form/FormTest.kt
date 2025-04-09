@@ -58,7 +58,7 @@ class FormTest {
                     override fun handle(event: PlayerFormRespondedEvent) {
                         val response = event.response as CustomResponse
                         val dropdownResponse = response.getDropdownResponse(0)
-                        Assertions.assertEquals("2", dropdownResponse.elementText())
+                        Assertions.assertEquals("2", dropdownResponse.elementText)
                         val inputResponse = response.getInputResponse(1)
                         Assertions.assertEquals("input", inputResponse)
                         val labelResponse = response.getLabelResponse(2)
@@ -66,7 +66,7 @@ class FormTest {
                         val sliderResponse = response.getSliderResponse(3)
                         Assertions.assertEquals(6f, sliderResponse)
                         val stepSliderResponse = response.getStepSliderResponse(4)
-                        Assertions.assertEquals("step1", stepSliderResponse.elementText())
+                        Assertions.assertEquals("step1", stepSliderResponse.elementText)
                         val toggleResponse = response.getToggleResponse(5)
                         Assertions.assertFalse(toggleResponse)
 

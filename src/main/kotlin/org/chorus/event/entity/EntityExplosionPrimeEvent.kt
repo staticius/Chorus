@@ -4,10 +4,7 @@ import org.chorus.entity.Entity
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @since 15-10-27
- */
-class EntityExplosionPrimeEvent(entity: Entity?, force: Double) : EntityEvent(), Cancellable {
+class EntityExplosionPrimeEvent(entity: Entity, force: Double) : EntityEvent(), Cancellable {
     var force: Double
     var isBlockBreaking: Boolean
     var fireChance: Double = 0.0
