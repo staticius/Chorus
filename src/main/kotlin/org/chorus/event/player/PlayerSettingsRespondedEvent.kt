@@ -6,7 +6,7 @@ import org.chorus.event.HandlerList
 import org.chorus.form.response.Response
 import org.chorus.form.window.Form
 
-class PlayerSettingsRespondedEvent(player: Player?, formID: Int, window: Form<*>, response: Response) :
+class PlayerSettingsRespondedEvent(player: Player, formID: Int, window: Form<*>, response: Response) :
     PlayerEvent(), Cancellable {
     var formID: Int
         protected set

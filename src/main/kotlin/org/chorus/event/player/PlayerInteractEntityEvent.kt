@@ -7,11 +7,7 @@ import org.chorus.event.HandlerList
 import org.chorus.item.Item
 import org.chorus.math.Vector3
 
-/**
- * @author CreeperFace
- * @since 1. 1. 2017
- */
-class PlayerInteractEntityEvent(player: Player?, entity: Entity, item: Item, clickedPos: Vector3) :
+class PlayerInteractEntityEvent(player: Player, entity: Entity, item: Item, clickedPos: Vector3) :
     PlayerEvent(), Cancellable {
     val entity: Entity
     val item: Item

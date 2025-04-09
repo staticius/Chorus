@@ -7,12 +7,7 @@ import org.chorus.event.HandlerList
 import org.chorus.item.Item
 import org.chorus.math.Vector3
 
-/**
- * An event that is called when player catches a fish
- *
- * @author PetteriM1
- */
-class PlayerFishEvent(player: Player?, hook: EntityFishingHook, loot: Item, experience: Int, motion: Vector3) :
+class PlayerFishEvent(player: Player, hook: EntityFishingHook, loot: Item, experience: Int, motion: Vector3) :
     PlayerEvent(), Cancellable {
     val hook: EntityFishingHook
     var loot: Item

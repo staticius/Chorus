@@ -27,7 +27,7 @@ class PlayerKickEvent(player: Player, reason: Reason, reasonString: String, quit
     }
 
     @JvmField
-    var quitMessage: TextContainer?
+    var quitMessage: TextContainer
 
     val reasonEnum: Reason
     protected val reasonString: String

@@ -31,16 +31,13 @@ class QueryRegenerateEvent @JvmOverloads constructor(server: Server, var timeout
     var extraData: Map<String, String> = HashMap()
 
     init {
-        this.listPlugins = server.settings.baseSettings().queryPlugins()
-        this.plugins =
-            if (server.pluginManager == null) Plugin.EMPTY_ARRAY else server.pluginManager.plugins.values.toArray(
-                Plugin.EMPTY_ARRAY
-            )
-        this.playerList = server.onlinePlayers.values.toArray(Player.EMPTY_ARRAY)
+        this.listPlugins = server.settings.baseSettings.queryPlugins
+        this.plugins = server.pluginManager.plugins.values.toTypedArray()
+        this.playerList = server.onlinePlayers.values.toTypedArray()
         this.gameType = if ((server.gamemode and 0x01) == 0) "SMP" else "CMP"
         this.version = ProtocolInfo.GAME_VERSION_NET
         this.server_engine = server.name + " " + server.nukkitVersion + " (" + server.gitCommit + ")"
-        this.world = if (server.defaultLevel == null) "unknown" else server.defaultLevel.name
+        this.world = if (server.defaultLevel == null) "unknown" else server.defaultLevel!!.name
         this.playerCount = playerList.size
         this.maxPlayerCount = server.maxPlayers
         this.whitelist = if (server.hasWhitelist()) "on" else "off"
@@ -64,8 +61,8 @@ class QueryRegenerateEvent @JvmOverloads constructor(server: Server, var timeout
                 plist.append(":")
                 for (p in this.plugins) {
                     val d = p.description
-                    plist.append(" ").append(d.name.replace(";", "").replace(":", "").replace(" ", "_"))
-                        .append(" ").append(d.version.replace(";", "").replace(":", "").replace(" ", "_"))
+                    plist.append(" ").append(d.name!!.replace(";", "").replace(":", "").replace(" ", "_"))
+                        .append(" ").append(d.version!!.replace(";", "").replace(":", "").replace(" ", "_"))
                         .append(";")
                 }
                 plist = StringBuilder(plist.substring(0, plist.length - 2))

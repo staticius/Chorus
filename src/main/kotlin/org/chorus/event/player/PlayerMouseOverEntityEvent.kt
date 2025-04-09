@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.entity.Entity
 import org.chorus.event.HandlerList
 
-class PlayerMouseOverEntityEvent(player: Player?, entity: Entity) : PlayerEvent() {
+class PlayerMouseOverEntityEvent(player: Player, entity: Entity) : PlayerEvent() {
     val entity: Entity
 
     init {

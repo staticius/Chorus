@@ -5,7 +5,7 @@ import org.chorus.block.Block
 import org.chorus.event.Cancellable
 import org.chorus.item.Item
 
-class PlayerGlassBottleFillEvent(player: Player?, target: Block, item: Item) :
+class PlayerGlassBottleFillEvent(player: Player, target: Block, item: Item) :
     PlayerEvent(), Cancellable {
     val item: Item
     val block: Block

@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.block.Block
 import org.chorus.event.HandlerList
 
-class PlayerBedLeaveEvent(player: Player?, bed: Block) : PlayerEvent() {
+class PlayerBedLeaveEvent(player: Player, bed: Block) : PlayerEvent() {
     val bed: Block
 
     init {

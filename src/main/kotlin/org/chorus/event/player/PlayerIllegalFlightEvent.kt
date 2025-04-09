@@ -3,7 +3,7 @@ package org.chorus.event.player
 import org.chorus.Player
 import org.chorus.event.HandlerList
 
-class PlayerIllegalFlightEvent(player: Player?) : PlayerEvent() {
+class PlayerIllegalFlightEvent(player: Player) : PlayerEvent() {
     var isKick: Boolean = true
 
     init {

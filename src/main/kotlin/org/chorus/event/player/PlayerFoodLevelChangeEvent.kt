@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class PlayerFoodLevelChangeEvent(player: Player?, foodLevel: Int, foodSaturationLevel: Float) :
+class PlayerFoodLevelChangeEvent(player: Player, foodLevel: Int, foodSaturationLevel: Float) :
     PlayerEvent(), Cancellable {
     @JvmField
     var foodLevel: Int

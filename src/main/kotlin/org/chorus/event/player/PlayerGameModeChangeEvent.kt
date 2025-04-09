@@ -5,7 +5,7 @@ import org.chorus.Player
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class PlayerGameModeChangeEvent(player: Player?, newGameMode: Int, newAdventureSettings: AdventureSettings) :
+class PlayerGameModeChangeEvent(player: Player, newGameMode: Int, newAdventureSettings: AdventureSettings) :
     PlayerEvent(), Cancellable {
     val newGamemode: Int
 

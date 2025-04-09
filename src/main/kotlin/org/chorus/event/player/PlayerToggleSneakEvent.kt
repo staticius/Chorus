@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class PlayerToggleSneakEvent(player: Player?, isSneaking: Boolean) : PlayerEvent(), Cancellable {
+class PlayerToggleSneakEvent(player: Player, isSneaking: Boolean) : PlayerEvent(), Cancellable {
     val isSneaking: Boolean
 
     init {

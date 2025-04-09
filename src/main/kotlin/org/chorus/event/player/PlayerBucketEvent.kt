@@ -7,7 +7,7 @@ import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
 abstract class PlayerBucketEvent(
-    who: Player?,
+    override var player: Player,
     blockClicked: Block,
     blockFace: BlockFace,
     liquid: Block,
@@ -36,7 +36,6 @@ abstract class PlayerBucketEvent(
 
 
     init {
-        this.player = who
         this.blockClicked = blockClicked
         this.blockFace = blockFace
         this.liquid = liquid

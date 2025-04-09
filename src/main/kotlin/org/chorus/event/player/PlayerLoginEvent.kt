@@ -9,7 +9,7 @@ import org.chorus.event.HandlerList
  * this is called.
  * Cancelling this event will cause the player to be disconnected with the kick message set.
  */
-class PlayerLoginEvent(player: Player?, kickMessage: String) : PlayerEvent(), Cancellable {
+class PlayerLoginEvent(player: Player, kickMessage: String) : PlayerEvent(), Cancellable {
     @JvmField
     var kickMessage: String
 

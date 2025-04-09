@@ -5,8 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
-
-class PlayerItemHeldEvent(player: Player?, item: Item, hotbarSlot: Int) : PlayerEvent(),
+class PlayerItemHeldEvent(player: Player, item: Item, hotbarSlot: Int) : PlayerEvent(),
     Cancellable {
     val item: Item
     val slot: Int

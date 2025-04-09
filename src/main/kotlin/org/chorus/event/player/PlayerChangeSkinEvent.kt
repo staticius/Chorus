@@ -5,10 +5,7 @@ import org.chorus.entity.data.Skin
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @author KCodeYT (Nukkit Project)
- */
-class PlayerChangeSkinEvent(player: Player?, skin: Skin) : PlayerEvent(), Cancellable {
+class PlayerChangeSkinEvent(player: Player, skin: Skin) : PlayerEvent(), Cancellable {
     val skin: Skin
 
     init {

@@ -12,7 +12,7 @@ class PlayerAnimationEvent : PlayerEvent, Cancellable {
     @JvmField
     val rowingTime: Float?
 
-    constructor(player: Player?, animatePacket: AnimatePacket) {
+    constructor(player: Player, animatePacket: AnimatePacket) {
         this.player = player
         animationType = animatePacket.action
         rowingTime = when (animationType) {
@@ -26,7 +26,7 @@ class PlayerAnimationEvent : PlayerEvent, Cancellable {
     }
 
     @JvmOverloads
-    constructor(player: Player?, animation: AnimatePacket.Action = AnimatePacket.Action.SWING_ARM) {
+    constructor(player: Player, animation: AnimatePacket.Action = AnimatePacket.Action.SWING_ARM) {
         this.player = player
         this.animationType = animation
         rowingTime = 0f

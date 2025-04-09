@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class PlayerToggleGlideEvent(player: Player?, isSneaking: Boolean) : PlayerEvent(), Cancellable {
+class PlayerToggleGlideEvent(player: Player, isSneaking: Boolean) : PlayerEvent(), Cancellable {
     val isGliding: Boolean
 
     init {

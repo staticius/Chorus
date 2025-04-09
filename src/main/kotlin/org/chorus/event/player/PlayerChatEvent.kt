@@ -7,7 +7,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
 class PlayerChatEvent @JvmOverloads constructor(
-    override var player: Player?,
+    override var player: Player,
     message: String?,
     format: String = "chat.type.text",
     recipients: MutableSet<CommandSender>? = null

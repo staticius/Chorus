@@ -6,7 +6,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
-class PlayerChangeArmorStandEvent(player: Player?, armorStand: Entity, item: Item, slot: Int) :
+class PlayerChangeArmorStandEvent(player: Player, armorStand: Entity, item: Item, slot: Int) :
     PlayerEvent(), Cancellable {
     val armorStand: Entity
     val slot: Int

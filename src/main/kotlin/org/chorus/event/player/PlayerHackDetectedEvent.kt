@@ -3,7 +3,7 @@ package org.chorus.event.player
 import org.chorus.Player
 import org.chorus.event.HandlerList
 
-class PlayerHackDetectedEvent(player: Player?, type: HackType) : PlayerEvent() {
+class PlayerHackDetectedEvent(player: Player, type: HackType) : PlayerEvent() {
     var isKick: Boolean = true
     protected var type: HackType
 

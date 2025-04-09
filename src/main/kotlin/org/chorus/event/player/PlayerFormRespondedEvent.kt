@@ -5,7 +5,7 @@ import org.chorus.event.HandlerList
 import org.chorus.form.response.Response
 import org.chorus.form.window.Form
 
-class PlayerFormRespondedEvent(player: Player?, formID: Int, window: Form<*>, response: Response) :
+class PlayerFormRespondedEvent(player: Player, formID: Int, window: Form<*>, response: Response) :
     PlayerEvent() {
     var formID: Int
         protected set

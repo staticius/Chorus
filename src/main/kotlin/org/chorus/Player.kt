@@ -3587,7 +3587,7 @@ class Player(
      * @see .close
      */
     @JvmOverloads
-    fun close(message: TextContainer?, reason: String = "generic") {
+    fun close(message: TextContainer, reason: String = "generic") {
         var reason = reason
         if (!connected.compareAndSet(true, false) && this.closed) {
             return

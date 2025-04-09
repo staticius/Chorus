@@ -5,10 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
-/**
- * Called when a player eats something
- */
-class PlayerItemConsumeEvent(player: Player?, item: Item) : PlayerEvent(), Cancellable {
+class PlayerItemConsumeEvent(player: Player, item: Item) : PlayerEvent(), Cancellable {
     private val item: Item
 
     init {

@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class PlayerExperienceChangeEvent(player: Player?, oldExp: Int, oldLevel: Int, newExp: Int, newLevel: Int) :
+class PlayerExperienceChangeEvent(player: Player, oldExp: Int, oldLevel: Int, newExp: Int, newLevel: Int) :
     PlayerEvent(), Cancellable {
     val oldExperience: Int
     val oldExperienceLevel: Int

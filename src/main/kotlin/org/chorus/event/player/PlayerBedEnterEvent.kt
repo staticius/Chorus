@@ -5,7 +5,7 @@ import org.chorus.block.Block
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class PlayerBedEnterEvent(player: Player?, bed: Block) : PlayerEvent(), Cancellable {
+class PlayerBedEnterEvent(player: Player, bed: Block) : PlayerEvent(), Cancellable {
     val bed: Block
 
     init {

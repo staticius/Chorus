@@ -6,7 +6,7 @@ import org.chorus.event.HandlerList
 import org.chorus.inventory.EnchantInventory
 import org.chorus.network.protocol.PlayerEnchantOptionsPacket.EnchantOptionData
 
-class PlayerEnchantOptionsRequestEvent(player: Player?, table: EnchantInventory, options: List<EnchantOptionData>) :
+class PlayerEnchantOptionsRequestEvent(player: Player, table: EnchantInventory, options: List<EnchantOptionData>) :
     PlayerEvent(), Cancellable {
     val inventory: EnchantInventory
 

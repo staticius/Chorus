@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class PlayerToggleSprintEvent(player: Player?, isSprinting: Boolean) : PlayerEvent(), Cancellable {
+class PlayerToggleSprintEvent(player: Player, isSprinting: Boolean) : PlayerEvent(), Cancellable {
     val isSprinting: Boolean
 
     init {

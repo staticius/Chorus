@@ -6,7 +6,7 @@ import org.chorus.event.HandlerList
 import org.chorus.level.Transform
 
 class PlayerMoveEvent @JvmOverloads constructor(
-    player: Player?,
+    player: Player,
     from: Transform,
     to: Transform,
     resetBlocks: Boolean = true

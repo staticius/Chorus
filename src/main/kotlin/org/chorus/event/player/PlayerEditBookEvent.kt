@@ -6,7 +6,7 @@ import org.chorus.event.HandlerList
 import org.chorus.item.Item
 import org.chorus.network.protocol.BookEditPacket
 
-class PlayerEditBookEvent(player: Player?, oldBook: Item, newBook: Item, action: BookEditPacket.Action) :
+class PlayerEditBookEvent(player: Player, oldBook: Item, newBook: Item, action: BookEditPacket.Action) :
     PlayerEvent(), Cancellable {
     val oldBook: Item
     val action: BookEditPacket.Action

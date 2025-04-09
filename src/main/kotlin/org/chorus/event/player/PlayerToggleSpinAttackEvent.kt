@@ -4,10 +4,7 @@ import org.chorus.Player
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @author GoodLucky777
- */
-class PlayerToggleSpinAttackEvent(player: Player?, isSpinAttacking: Boolean) : PlayerEvent(), Cancellable {
+class PlayerToggleSpinAttackEvent(player: Player, isSpinAttacking: Boolean) : PlayerEvent(), Cancellable {
     val isSpinAttacking: Boolean
 
     init {
