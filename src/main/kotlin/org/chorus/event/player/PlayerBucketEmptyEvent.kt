@@ -7,14 +7,14 @@ import org.chorus.item.Item
 import org.chorus.math.BlockFace
 
 class PlayerBucketEmptyEvent(
-    who: Player?,
+    player: Player,
     blockClicked: Block,
     blockFace: BlockFace,
     liquid: Block,
     bucket: Item,
     itemInHand: Item
 ) :
-    PlayerBucketEvent(who, blockClicked, blockFace, liquid, bucket, itemInHand) {
+    PlayerBucketEvent(player, blockClicked, blockFace, liquid, bucket, itemInHand) {
     companion object {
         val handlers: HandlerList = HandlerList()
     }
