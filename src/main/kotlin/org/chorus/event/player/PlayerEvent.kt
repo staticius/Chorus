@@ -5,6 +5,6 @@ import org.chorus.event.Event
 
 
 abstract class PlayerEvent : Event() {
-    open var player: Player? = null
+    open lateinit var player: Player
         protected set
 }

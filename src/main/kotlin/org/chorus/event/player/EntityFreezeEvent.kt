@@ -5,9 +5,9 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.event.entity.EntityEvent
 
-class EntityFreezeEvent(human: Entity?) : EntityEvent(), Cancellable {
+class EntityFreezeEvent(entity: Entity) : EntityEvent(), Cancellable {
     init {
-        this.entity = human
+        this.entity = entity
     }
 
     companion object {

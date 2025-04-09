@@ -5,10 +5,10 @@ import org.chorus.event.HandlerList
 import org.chorus.lang.TextContainer
 
 class PlayerQuitEvent @JvmOverloads constructor(
-    player: Player?,
-    quitMessage: TextContainer?,
+    player: Player,
+    quitMessage: TextContainer,
     autoSave: Boolean = true,
-    reason: String? = "No reason"
+    reason: String = "No reason"
 ) :
     PlayerEvent() {
     @JvmField
@@ -19,11 +19,11 @@ class PlayerQuitEvent @JvmOverloads constructor(
     var reason: String? = null
         protected set
 
-    constructor(player: Player?, quitMessage: TextContainer?, reason: String?) : this(player, quitMessage, true, reason)
+    constructor(player: Player, quitMessage: TextContainer, reason: String) : this(player, quitMessage, true, reason)
 
-    constructor(player: Player?, quitMessage: String?, reason: String?) : this(player, quitMessage, true, reason)
+    constructor(player: Player, quitMessage: String, reason: String) : this(player, quitMessage, true, reason)
 
-    constructor(player: Player?, quitMessage: String?, autoSave: Boolean, reason: String?) : this(
+    constructor(player: Player, quitMessage: String, autoSave: Boolean, reason: String) : this(
         player,
         TextContainer(quitMessage),
         autoSave,
@@ -31,7 +31,7 @@ class PlayerQuitEvent @JvmOverloads constructor(
     )
 
     @JvmOverloads
-    constructor(player: Player?, quitMessage: String?, autoSave: Boolean = true) : this(
+    constructor(player: Player, quitMessage: String, autoSave: Boolean = true) : this(
         player,
         TextContainer(quitMessage),
         autoSave
@@ -44,7 +44,7 @@ class PlayerQuitEvent @JvmOverloads constructor(
         this.reason = reason
     }
 
-    fun setQuitMessage(quitMessage: String?) {
+    fun setQuitMessage(quitMessage: String) {
         this.quitMessage = TextContainer(quitMessage)
     }
 

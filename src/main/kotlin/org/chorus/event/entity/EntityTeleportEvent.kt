@@ -6,9 +6,8 @@ import org.chorus.event.HandlerList
 import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
 import org.chorus.level.Transform
 
-
 class EntityTeleportEvent @JvmOverloads constructor(
-    entity: Entity?,
+    entity: Entity,
     from: Transform,
     to: Transform,
     cause: TeleportCause = TeleportCause.UNKNOWN

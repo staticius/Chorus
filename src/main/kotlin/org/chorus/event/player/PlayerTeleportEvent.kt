@@ -34,7 +34,7 @@ class PlayerTeleportEvent private constructor(player: Player) : PlayerEvent(), C
     private fun vectorToLocation(baseLevel: Level, vector: Vector3): Transform {
 //        if (vector instanceof Transform) return (Transform) vector;
 //        if (vector instanceof Locator) return ((Locator) vector).getLocation();
-        return Transform(vector.getX(), vector.getY(), vector.getZ(), 0.0, 0.0, baseLevel)
+        return Transform(vector.x, vector.y, vector.z, 0.0, 0.0, baseLevel)
     }
 
     enum class TeleportCause {

@@ -5,7 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
 
-class EntityRegainHealthEvent(entity: Entity?, amount: Float, regainReason: Int) :
+class EntityRegainHealthEvent(entity: Entity, amount: Float, regainReason: Int) :
     EntityEvent(), Cancellable {
     var amount: Float
     val regainReason: Int

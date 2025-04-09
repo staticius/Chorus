@@ -46,7 +46,6 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.network.protocol.UpdateAttributesPacket
 import org.chorus.network.protocol.types.EntityLink
 import org.chorus.utils.*
-import java.util.Set
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.ceil

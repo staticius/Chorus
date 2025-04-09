@@ -7,10 +7,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
-/**
- * @author Box (Nukkit Project)
- */
-class EntityShootBowEvent(shooter: EntityLiving?, bow: Item, projectile: EntityProjectile, force: Double) :
+class EntityShootBowEvent(shooter: EntityLiving, bow: Item, projectile: EntityProjectile, force: Double) :
     EntityEvent(), Cancellable {
     val bow: Item
 
@@ -23,12 +20,6 @@ class EntityShootBowEvent(shooter: EntityLiving?, bow: Item, projectile: EntityP
                 }
                 field = projectile
             }
-        }
-
-    override var entity: Entity?
-        get() = entity as EntityLiving
-        set(entity) {
-            super.entity = entity
         }
 
     @JvmField

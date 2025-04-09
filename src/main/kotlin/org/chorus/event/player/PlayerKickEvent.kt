@@ -5,7 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.lang.TextContainer
 
-class PlayerKickEvent(player: Player?, reason: Reason, reasonString: String?, quitMessage: TextContainer?) :
+class PlayerKickEvent(player: Player, reason: Reason, reasonString: String, quitMessage: TextContainer) :
     PlayerEvent(), Cancellable {
     enum class Reason {
         NEW_CONNECTION,
@@ -32,14 +32,14 @@ class PlayerKickEvent(player: Player?, reason: Reason, reasonString: String?, qu
     val reasonEnum: Reason
     protected val reasonString: String
 
-    constructor(player: Player?, reason: Reason, quitMessage: TextContainer?) : this(
+    constructor(player: Player, reason: Reason, quitMessage: TextContainer) : this(
         player,
         reason,
         reason.toString(),
         quitMessage
     )
 
-    constructor(player: Player?, reason: Reason, quitMessage: String?) : this(
+    constructor(player: Player, reason: Reason, quitMessage: String) : this(
         player,
         reason,
         TextContainer(quitMessage)
@@ -56,7 +56,7 @@ class PlayerKickEvent(player: Player?, reason: Reason, reasonString: String?, qu
         return reasonString
     }
 
-    fun setQuitMessage(joinMessage: String?) {
+    fun setQuitMessage(joinMessage: String) {
         this.quitMessage = TextContainer(joinMessage)
     }
 

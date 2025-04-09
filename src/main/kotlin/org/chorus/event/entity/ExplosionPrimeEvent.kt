@@ -4,13 +4,7 @@ import org.chorus.entity.Entity
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @author Box (Nukkit Project)
- *
- *
- * Called when a entity decides to explode
- */
-class ExplosionPrimeEvent(entity: Entity?, force: Double) : EntityEvent(), Cancellable {
+class ExplosionPrimeEvent(entity: Entity, force: Double) : EntityEvent(), Cancellable {
     var force: Double
     var isBlockBreaking: Boolean
 

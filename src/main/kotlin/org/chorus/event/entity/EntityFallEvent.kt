@@ -5,7 +5,7 @@ import org.chorus.entity.Entity
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class EntityFallEvent(entity: Entity?, blockFallOn: Block, fallDistance: Float) :
+class EntityFallEvent(entity: Entity, blockFallOn: Block, fallDistance: Float) :
     EntityEvent(), Cancellable {
     val blockFallOn: Block
     var fallDistance: Float

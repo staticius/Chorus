@@ -8,7 +8,7 @@ import org.chorus.item.Item
 import java.util.*
 
 class PlayerTransferItemEvent(
-    player: Player?,
+    player: Player,
     type: Type,
     sourceItem: Item,
     destinationItem: Item?,
@@ -17,11 +17,6 @@ class PlayerTransferItemEvent(
     sourceInventory: Inventory,
     destinationInventory: Inventory?
 ) : PlayerEvent(), Cancellable {
-    override var player: Player
-        get() = this.player
-        private set(player) {
-            super.player = player
-        }
     val type: Type
     val sourceItem: Item
 
@@ -36,7 +31,7 @@ class PlayerTransferItemEvent(
     private val destinationInventory: Inventory?
 
     init {
-        this.player = player!!
+        this.player = player
         this.type = type
         this.sourceItem = sourceItem
         this.destinationItem = destinationItem

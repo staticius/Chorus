@@ -17,17 +17,17 @@ class PlayerJoinEvent : PlayerEvent {
     @JvmField
     var joinMessage: TextContainer
 
-    constructor(player: Player?, joinMessage: TextContainer) {
+    constructor(player: Player, joinMessage: TextContainer) {
         this.player = player
         this.joinMessage = joinMessage
     }
 
-    constructor(player: Player?, joinMessage: String?) {
+    constructor(player: Player, joinMessage: String) {
         this.player = player
         this.joinMessage = TextContainer(joinMessage)
     }
 
-    fun setJoinMessage(joinMessage: String?) {
+    fun setJoinMessage(joinMessage: String) {
         this.joinMessage = TextContainer(joinMessage)
     }
 

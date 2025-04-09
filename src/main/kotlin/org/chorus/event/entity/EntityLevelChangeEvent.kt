@@ -5,8 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.level.Level
 
-
-class EntityLevelChangeEvent(entity: Entity?, originLevel: Level, targetLevel: Level) :
+class EntityLevelChangeEvent(entity: Entity, originLevel: Level, targetLevel: Level) :
     EntityEvent(), Cancellable {
     val origin: Level
     val target: Level

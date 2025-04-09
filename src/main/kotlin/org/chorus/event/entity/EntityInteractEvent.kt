@@ -5,8 +5,7 @@ import org.chorus.entity.Entity
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-
-class EntityInteractEvent(entity: Entity?, block: Block) : EntityEvent(), Cancellable {
+class EntityInteractEvent(entity: Entity, block: Block) : EntityEvent(), Cancellable {
     val block: Block
 
     init {

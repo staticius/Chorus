@@ -4,7 +4,7 @@ import org.chorus.entity.Entity
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class EntityVehicleEnterEvent(entity: Entity?, vehicle: Entity) : EntityEvent(), Cancellable {
+class EntityVehicleEnterEvent(entity: Entity, vehicle: Entity) : EntityEvent(), Cancellable {
     val vehicle: Entity
 
     init {

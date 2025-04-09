@@ -5,9 +5,8 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.level.MovingObjectPosition
 
-
 class ProjectileHitEvent @JvmOverloads constructor(
-    entity: EntityProjectile?,
+    entity: EntityProjectile,
     movingObjectPosition: MovingObjectPosition? = null
 ) :
     EntityEvent(), Cancellable {

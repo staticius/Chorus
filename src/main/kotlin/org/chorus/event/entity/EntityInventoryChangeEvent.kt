@@ -5,8 +5,7 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.item.Item
 
-
-class EntityInventoryChangeEvent(entity: Entity?, oldItem: Item, newItem: Item, slot: Int) :
+class EntityInventoryChangeEvent(entity: Entity, oldItem: Item, newItem: Item, slot: Int) :
     EntityEvent(), Cancellable {
     val oldItem: Item
 

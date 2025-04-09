@@ -11,9 +11,6 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.function.Consumer
-import java.util.function.Predicate
-import java.util.function.Supplier
 import java.util.stream.Stream
 import kotlin.math.abs
 import kotlin.math.sqrt
