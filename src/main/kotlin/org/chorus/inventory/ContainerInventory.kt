@@ -27,7 +27,7 @@ abstract class ContainerInventory(holder: InventoryHolder, type: InventoryType, 
             who.level!!.vibrationManager.callVibrationEvent(
                 VibrationEvent(
                     who,
-                    holder.add(0.5, 0.5, 0.5),
+                    (holder as Vector3).add(0.5, 0.5, 0.5),
                     VibrationType.CONTAINER_OPEN
                 )
             )
@@ -77,7 +77,7 @@ abstract class ContainerInventory(holder: InventoryHolder, type: InventoryType, 
                     }
                 }
 
-                averageCount = averageCount / inv.size.toFloat()
+                averageCount /= inv.size.toFloat()
                 return floor(averageCount * 14).toInt() + (if (itemCount > 0) 1 else 0)
             }
         }

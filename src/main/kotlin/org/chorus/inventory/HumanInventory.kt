@@ -2,8 +2,6 @@ package org.chorus.inventory
 
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.ints.IntList
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.IHuman
@@ -49,13 +47,13 @@ class HumanInventory(human: IHuman) //9+27+4
         }
         armorInventory = object : InventorySlice(this, ARMORS_INDEX, this.size) {
             init {
-                val map = HashMap<Int, ContainerSlotType>()
+                val map1 = HashMap<Int, ContainerSlotType>()
                 val biMap: BiMap<Int, Int> = HashBiMap.create()
                 for (i in 0..3) {
-                    map[i] = ContainerSlotType.ARMOR
+                    map1[i] = ContainerSlotType.ARMOR
                     biMap[i] = i
                 }
-                this.setNetworkMapping(map, biMap)
+                this.setNetworkMapping(map1, biMap)
             }
         }
     }
@@ -74,19 +72,22 @@ class HumanInventory(human: IHuman) //9+27+4
         }
 
         if (holder is Player) {
+            val player = holder as Player
             val ev = PlayerItemHeldEvent(player, this.getItem(slot), slot)
-            holder.Server.instance.pluginManager.callEvent(ev)
+            Server.instance.pluginManager.callEvent(ev)
 
             if (ev.isCancelled) {
                 this.sendContents(this.getViewers())
                 return false
             }
-            if (getItem(slot) is ItemFilledMap) {
-                map.sendImage(player, 1)
+
+            val item = getItem(slot)
+            if (item is ItemFilledMap) {
+                item.sendImage(player, 1)
             }
 
             if (player.fishing != null) {
-                if (!(this.getItem(slot) == player.fishing.rod)) {
+                if (item != player.fishing!!.rod) {
                     player.stopFishing(false)
                 }
             }
@@ -114,7 +115,7 @@ class HumanInventory(human: IHuman) //9+27+4
                 this.sendHeldItem((holder as Player))
             }
 
-            this.sendHeldItem(holder.getEntity().getViewers().values)
+            this.sendHeldItem((holder as IHuman).getEntity().getViewers().values)
         }
     }
 
@@ -152,7 +153,7 @@ class HumanInventory(human: IHuman) //9+27+4
         pk.slot = pk.selectedSlot
 
         for (player in players) {
-            pk.eid = holder.getEntity().getId()
+            pk.eid = (holder as IHuman).getEntity().getUniqueID()
             if (player == this.holder) {
                 pk.eid = player.getRuntimeID()
                 this.sendSlot(this.heldItemIndex, player)
@@ -162,12 +163,12 @@ class HumanInventory(human: IHuman) //9+27+4
         }
     }
 
-    fun sendHeldItem(players: Collection<Player?>) {
+    fun sendHeldItem(players: Collection<Player>) {
         this.sendHeldItem(*players.toTypedArray())
     }
 
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
-        val holder: IHuman? = this.holder
+        val holder: IHuman = (this.holder as IHuman)
         if (holder is Player && !holder.spawned) {
             return
         }
@@ -176,13 +177,13 @@ class HumanInventory(human: IHuman) //9+27+4
             this.sendArmorSlot(index - ARMORS_INDEX, this.getViewers())
             this.sendArmorSlot(
                 index - ARMORS_INDEX,
-                this.holder.getEntity().getViewers().values
+                holder.getEntity().viewers.values
             )
             if (getItem(index) is ItemArmor) {
-                this.holder.getEntity().level.getVibrationManager().callVibrationEvent(
+                holder.getEntity().level!!.vibrationManager.callVibrationEvent(
                     VibrationEvent(
-                        this.holder,
-                        this.holder.getEntity().position, VibrationType.EQUIP
+                        holder,
+                        holder.getEntity().position, VibrationType.EQUIP
                     )
                 )
             }
@@ -195,30 +196,30 @@ class HumanInventory(human: IHuman) //9+27+4
     }
 
     override fun canAddItem(item: Item): Boolean {
-        var item = item
-        item = item.clone()
-        val checkDamage = item.hasMeta()
-        val checkTag = item.compoundTag != null
+        var item1 = item
+        item1 = item1.clone()
+        val checkDamage = item1.hasMeta()
+        val checkTag = item1.compoundTag != null
         for (i in 0..<ARMORS_INDEX) {
             val slot = this.getUnclonedItem(i)
-            if (item.equals(slot, checkDamage, checkTag)) {
+            if (item1.equals(slot, checkDamage, checkTag)) {
                 val diff: Int
-                if (((min(slot.maxStackSize.toDouble(), getMaxStackSize().toDouble()) - slot.getCount()).also {
+                if (((min(slot.maxStackSize.toDouble(), maxStackSize.toDouble()) - slot.getCount()).also {
                         diff =
                             it.toInt()
                     }) > 0) {
-                    item.setCount(item.getCount() - diff)
+                    item1.setCount(item1.getCount() - diff)
                 }
             } else if (slot.isNothing) {
-                item.setCount(
-                    (item.getCount() - min(
+                item1.setCount(
+                    (item1.getCount() - min(
                         slot.maxStackSize.toDouble(),
-                        getMaxStackSize().toDouble()
+                        maxStackSize.toDouble()
                     )).toInt()
                 )
             }
 
-            if (item.getCount() <= 0) {
+            if (item1.getCount() <= 0) {
                 return true
             }
         }
@@ -235,8 +236,7 @@ class HumanInventory(human: IHuman) //9+27+4
             }
         }
 
-        //使用FastUtils的IntArrayList提高性能
-        val emptySlots: IntList = IntArrayList(this.getSize())
+        val emptySlots = mutableListOf<Int>()
 
         for (i in 0..<ARMORS_INDEX) {
             //获取未克隆Item对象
@@ -250,11 +250,11 @@ class HumanInventory(human: IHuman) //9+27+4
             while (iterator.hasNext()) {
                 val slot = iterator.next()
                 if (slot == item) {
-                    val maxStackSize = min(getMaxStackSize().toDouble(), item.maxStackSize.toDouble()).toInt()
+                    val maxStackSize = min(this.maxStackSize.toDouble(), item.maxStackSize.toDouble()).toInt()
                     if (item.getCount() < maxStackSize) {
                         var amount =
                             min((maxStackSize - item.getCount()).toDouble(), slot.getCount().toDouble()).toInt()
-                        amount = min(amount.toDouble(), getMaxStackSize().toDouble()).toInt()
+                        amount = min(amount.toDouble(), this.maxStackSize.toDouble()).toInt()
                         if (amount > 0) {
                             //在需要clone时再clone
                             item = item.clone()
@@ -273,13 +273,13 @@ class HumanInventory(human: IHuman) //9+27+4
             }
         }
 
-        if (!itemSlots.isEmpty() && !emptySlots.isEmpty()) {
+        if (itemSlots.isNotEmpty() && emptySlots.isNotEmpty()) {
             for (slotIndex in emptySlots) {
-                if (!itemSlots.isEmpty()) {
+                if (itemSlots.isNotEmpty()) {
                     val slot = itemSlots[0]
-                    val maxStackSize = min(slot.maxStackSize.toDouble(), getMaxStackSize().toDouble()).toInt()
+                    val maxStackSize = min(slot.maxStackSize.toDouble(), this.maxStackSize.toDouble()).toInt()
                     var amount = min(maxStackSize.toDouble(), slot.getCount().toDouble()).toInt()
-                    amount = min(amount.toDouble(), getMaxStackSize().toDouble()).toInt()
+                    amount = min(amount.toDouble(), this.maxStackSize.toDouble()).toInt()
                     slot.setCount(slot.getCount() - amount)
                     val item = slot.clone()
                     item.setCount(amount)
@@ -360,15 +360,15 @@ class HumanInventory(human: IHuman) //9+27+4
 
         //Armor change
         if (!ignoreArmorEvents && index >= ARMORS_INDEX) {
-            val ev = EntityArmorChangeEvent(holder.getEntity(), this.getItem(index), item, index)
+            val ev = EntityArmorChangeEvent((holder as IHuman).getEntity(), this.getItem(index), item, index)
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled && this.holder != null) {
+            if (ev.isCancelled) {
                 this.sendArmorSlot(index, this.getViewers())
                 return false
             }
             item = ev.newItem
         } else {
-            val ev = EntityInventoryChangeEvent(holder.getEntity(), this.getItem(index), item, index)
+            val ev = EntityInventoryChangeEvent((holder as IHuman).getEntity(), this.getItem(index), item, index)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
                 this.sendSlot(index, this.getViewers())
@@ -388,7 +388,7 @@ class HumanInventory(human: IHuman) //9+27+4
             val old = slots[index]
             if (index >= ARMORS_INDEX && index < this.size) {
                 val ev = EntityArmorChangeEvent(
-                    holder.getEntity(),
+                    (holder as IHuman).getEntity(),
                     old!!, item, index
                 )
                 Server.instance.pluginManager.callEvent(ev)
@@ -399,7 +399,7 @@ class HumanInventory(human: IHuman) //9+27+4
                 item = ev.newItem
             } else if (index < ARMORS_INDEX) {
                 val ev = EntityInventoryChangeEvent(
-                    holder.getEntity(),
+                    (holder as IHuman).getEntity(),
                     old!!, item, index
                 )
                 Server.instance.pluginManager.callEvent(ev)
@@ -436,30 +436,26 @@ class HumanInventory(human: IHuman) //9+27+4
          * @param items all armors
          */
         set(items) {
-            var items = items
-            if (items.size < 4) {
-                val newItems = arrayOfNulls<Item>(4)
-                System.arraycopy(items, 0, newItems, 0, items.size)
-                items = newItems
+            var items1 = items
+            if (items1.size < 4) {
+                val newItems = Array(4) { Item.AIR }
+                items1.copyInto(newItems)
+                items1 = newItems
             }
             for (i in 0..3) {
-                if (items[i] == null) {
-                    items[i] = Item.AIR
-                }
-
-                if (items[i]!!.isNothing) {
+                if (items1[i].isNothing) {
                     this.clear(ARMORS_INDEX + i)
                 } else {
-                    this.setItem(ARMORS_INDEX + i, items[i]!!)
+                    this.setItem(ARMORS_INDEX + i, items1[i])
                 }
             }
         }
 
     override fun clearAll() {
-        for (index in 0..<getSize()) {
+        for (index in 0..<size) {
             this.clear(index)
         }
-        holder.getOffhandInventory().clearAll()
+        (holder as IHuman).getOffhandInventory()!!.clearAll()
     }
 
     /**
@@ -467,7 +463,7 @@ class HumanInventory(human: IHuman) //9+27+4
      *
      * @param players the players
      */
-    fun sendArmorContents(players: Collection<Player?>) {
+    fun sendArmorContents(players: Collection<Player>) {
         this.sendArmorContents(players.toTypedArray())
     }
 
@@ -489,7 +485,7 @@ class HumanInventory(human: IHuman) //9+27+4
         val armor = this.armorContents
 
         val pk = MobArmorEquipmentPacket()
-        pk.eid = holder.getEntity().getId()
+        pk.eid = (holder as IHuman).getEntity().getUniqueID()
         pk.slots = armor
 
         for (player in players) {
@@ -510,7 +506,7 @@ class HumanInventory(human: IHuman) //9+27+4
                     if (item!!.isNothing) {
                         pk2.damage[i] = 0
                     } else {
-                        pk2.flags.add(PlayerArmorDamageFlag.PlayerArmorDamageFlag.entries.toTypedArray().get(i))
+                        pk2.flags.add(PlayerArmorDamageFlag.entries.toTypedArray()[i])
                         pk2.damage[i] = item.damage
                     }
                 }
@@ -537,7 +533,7 @@ class HumanInventory(human: IHuman) //9+27+4
      * @param index   the index 0~3 [PlayerArmorDamagePacket.PlayerArmorDamageFlag]
      * @param players the players
      */
-    fun sendArmorSlot(index: Int, players: Collection<Player?>) {
+    fun sendArmorSlot(index: Int, players: Collection<Player>) {
         this.sendArmorSlot(index, players.toTypedArray())
     }
 
@@ -551,7 +547,7 @@ class HumanInventory(human: IHuman) //9+27+4
         val armor = this.armorContents
 
         val pk = MobArmorEquipmentPacket()
-        pk.eid = holder.getEntity().getId()
+        pk.eid = (holder as IHuman).getEntity().getUniqueID()
         pk.slots = armor
 
         for (player in players) {
@@ -569,10 +565,10 @@ class HumanInventory(human: IHuman) //9+27+4
 
                 val pk2 = PlayerArmorDamagePacket()
                 val item = armor[index]
-                if (item!!.isNothing) {
+                if (item.isNothing) {
                     pk2.damage[index] = 0
                 } else {
-                    pk2.flags.add(PlayerArmorDamageFlag.PlayerArmorDamageFlag.entries.toTypedArray().get(index))
+                    pk2.flags.add(PlayerArmorDamageFlag.entries.toTypedArray()[index])
                     pk2.damage[index] = item.damage
                 }
                 player.dataPacket(pk2)
@@ -592,10 +588,9 @@ class HumanInventory(human: IHuman) //9+27+4
 
     override fun sendContents(vararg players: Player) {
         val pk = InventoryContentPacket()
-        val inventoryAndHotBarSize = this.getSize() - 4
-        pk.slots = arrayOfNulls(inventoryAndHotBarSize)
-        for (i in 0..<inventoryAndHotBarSize) {
-            pk.slots[i] = this.getItem(i)
+        val inventoryAndHotBarSize = this.size - 4
+        pk.slots = Array(inventoryAndHotBarSize) {i ->
+            this.getItem(i)
         }
 
         for (player in players) {
@@ -650,12 +645,6 @@ class HumanInventory(human: IHuman) //9+27+4
             }
         }
     }
-
-    override var holder: InventoryHolder?
-        get() = super.getHolder() as IHuman
-        set(holder) {
-            super.holder = holder
-        }
 
     override fun onOpen(who: Player) {
         super.onOpen(who)

@@ -4,16 +4,7 @@ import org.chorus.entity.Entity
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-
-open class EntityCombustEvent(combustee: Entity?, duration: Int) : EntityEvent(), Cancellable {
-    @JvmField
-    var duration: Int
-
-    init {
-        this.entity = combustee
-        this.duration = duration
-    }
-
+open class EntityCombustEvent(override var entity: Entity, @JvmField var duration: Int) : EntityEvent(), Cancellable {
     companion object {
         val handlers: HandlerList = HandlerList()
     }

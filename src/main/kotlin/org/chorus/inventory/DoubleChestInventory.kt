@@ -11,89 +11,27 @@ import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 
 class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
-    ContainerInventory(null, InventoryType.CONTAINER, 27 + 27) {
+    ContainerInventory(left.realInventory.holder, InventoryType.CONTAINER, 27 + 27) {
     val leftSide: ChestInventory = left.realInventory
     val rightSide: ChestInventory
 
-    init {
-        leftSide.setDoubleInventory(this)
-
-        this.rightSide = right.realInventory
-        rightSide.setDoubleInventory(this)
-
-        val items: MutableMap<Int, Item?> = HashMap()
-        // First we add the items from the left chest
-        for (idx in 0..<leftSide.getSize()) {
-            if (leftSide.contents.containsKey(idx)) { // Don't forget to skip empty slots!
-                items[idx] = leftSide.contents[idx]
-            }
-        }
-        // And them the items from the right chest
-        for (idx in 0..<rightSide.getSize()) {
-            if (rightSide.contents.containsKey(idx)) { // Don't forget to skip empty slots!
-                items[idx + leftSide.getSize()] =
-                    rightSide.contents[idx] // idx + this.left.getSize() so we don't overlap left chest items
-            }
-        }
-
-        this.contents = items
-    }
-
-    override fun init() {
-        val map = super.slotTypeMap()
-        for (i in 0..<getSize()) {
-            map[i] = ContainerSlotType.LEVEL_ENTITY
-        }
-    }
-
-    override var holder: InventoryHolder
-        get() = leftSide.holder
-        set(holder) {
-            super.holder = holder
-        }
-
-    override fun getItem(index: Int): Item {
-        return if (index < leftSide.getSize()) leftSide.getItem(index) else rightSide.getItem(index - rightSide.getSize())
-    }
-
-
-    override fun getUnclonedItem(index: Int): Item {
-        return if (index < leftSide.getSize()) leftSide.getUnclonedItem(index) else rightSide.getUnclonedItem(index - rightSide.getSize())
-    }
-
-    override fun setItem(index: Int, item: Item, send: Boolean): Boolean {
-        return if (index < leftSide.getSize()) leftSide.setItem(
-            index,
-            item,
-            send
-        ) else rightSide.setItem(index - rightSide.getSize(), item, send)
-    }
-
-    override fun clear(index: Int, send: Boolean): Boolean {
-        return if (index < leftSide.getSize()) leftSide.clear(
-            index,
-            send
-        ) else rightSide.clear(index - rightSide.getSize(), send)
-    }
-
     override var contents: Map<Int, Item>
         get() {
-            val contents: MutableMap<Int, Item> =
-                HashMap()
-
-            for (i in 0..<this.getSize()) {
+            val contents: MutableMap<Int, Item> = HashMap()
+            for (i in 0..<this.size) {
                 contents[i] = getItem(i)
             }
 
             return contents
         }
         set(items) {
-            if (items.size > this.size) {
-                items.keys.removeIf { slot: Int -> slot >= this.size }
+            val items1 = items.toMutableMap()
+            if (items1.size > this.size) {
+                items1.keys.removeIf { slot: Int -> slot >= this.size }
             }
 
             for (i in 0..<this.size) {
-                val item = items[i]
+                val item = items1[i]
                 var isSet = false
 
                 if (item != null) {
@@ -110,6 +48,60 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
             }
         }
 
+    init {
+        leftSide.setDoubleInventory(this)
+
+        this.rightSide = right.realInventory
+        rightSide.setDoubleInventory(this)
+
+        val items: MutableMap<Int, Item> = HashMap()
+        // First we add the items from the left chest
+        for (idx in 0..<leftSide.size) {
+            if (leftSide.contents.containsKey(idx)) { // Don't forget to skip empty slots!
+                items[idx] = leftSide.contents[idx]!!
+            }
+        }
+        // And them the items from the right chest
+        for (idx in 0..<rightSide.size) {
+            if (rightSide.contents.containsKey(idx)) { // Don't forget to skip empty slots!
+                items[idx + leftSide.size] =
+                    rightSide.contents[idx]!! // idx + this.left.size so we don't overlap left chest items
+            }
+        }
+
+        this.contents = items
+    }
+
+    override fun init() {
+        val map = super.slotTypeMap()
+        for (i in 0..<size) {
+            map[i] = ContainerSlotType.LEVEL_ENTITY
+        }
+    }
+
+    override fun getItem(index: Int): Item {
+        return if (index < leftSide.size) leftSide.getItem(index) else rightSide.getItem(index - rightSide.size)
+    }
+
+    override fun getUnclonedItem(index: Int): Item {
+        return if (index < leftSide.size) leftSide.getUnclonedItem(index) else rightSide.getUnclonedItem(index - rightSide.size)
+    }
+
+    override fun setItem(index: Int, item: Item, send: Boolean): Boolean {
+        return if (index < leftSide.size) leftSide.setItem(
+            index,
+            item,
+            send
+        ) else rightSide.setItem(index - rightSide.size, item, send)
+    }
+
+    override fun clear(index: Int, send: Boolean): Boolean {
+        return if (index < leftSide.size) leftSide.clear(
+            index,
+            send
+        ) else rightSide.clear(index - rightSide.size, send)
+    }
+
     override fun onOpen(who: Player) {
         super.onOpen(who)
         leftSide.viewers.add(who)
@@ -121,12 +113,12 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
                 eventType = 1,
                 eventValue = 2,
             )
-            var level = leftSide.getHolder().getLevel()
+            var level = leftSide.holder.level
             if (level != null) {
-                level.addSound(leftSide.getHolder().position.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTOPEN)
+                level.addSound(leftSide.holder.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTOPEN)
                 level.addChunkPacket(
-                    leftSide.getHolder().x.toInt() shr 4,
-                    leftSide.getHolder().z.toInt() shr 4, pk1
+                    leftSide.holder.vector3.x.toInt() shr 4,
+                    leftSide.holder.vector3.z.toInt() shr 4, pk1
                 )
             }
 
@@ -136,12 +128,12 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
                 eventValue = 2,
             )
 
-            level = rightSide.getHolder().getLevel()
+            level = rightSide.holder.level
             if (level != null) {
-                level.addSound(rightSide.getHolder().position.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTOPEN)
+                level.addSound(rightSide.holder.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTOPEN)
                 level.addChunkPacket(
-                    rightSide.getHolder().x.toInt() shr 4,
-                    rightSide.getHolder().z.toInt() shr 4, pk2
+                    rightSide.holder.vector3.x.toInt() shr 4,
+                    rightSide.holder.vector3.z.toInt() shr 4, pk2
                 )
             }
         }
@@ -155,12 +147,12 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
                 eventValue = 0,
             )
 
-            var level = rightSide.getHolder().getLevel()
+            var level = rightSide.holder.level
             if (level != null) {
-                level.addSound(rightSide.getHolder().position.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTCLOSED)
+                level.addSound(rightSide.holder.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTCLOSED)
                 level.addChunkPacket(
-                    rightSide.getHolder().x.toInt() shr 4,
-                    rightSide.getHolder().z.toInt() shr 4, pk1
+                    rightSide.holder.vector3.x.toInt() shr 4,
+                    rightSide.holder.vector3.z.toInt() shr 4, pk1
                 )
             }
 
@@ -170,12 +162,12 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
                 eventValue = 0,
             )
 
-            level = leftSide.getHolder().getLevel()
+            level = leftSide.holder.level
             if (level != null) {
-                level.addSound(leftSide.getHolder().position.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTCLOSED)
+                level.addSound(leftSide.holder.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTCLOSED)
                 level.addChunkPacket(
-                    leftSide.getHolder().x.toInt() shr 4,
-                    leftSide.getHolder().z.toInt() shr 4, pk2
+                    leftSide.holder.vector3.x.toInt() shr 4,
+                    leftSide.holder.vector3.z.toInt() shr 4, pk2
                 )
             }
         }
@@ -187,7 +179,7 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
 
     fun sendSlot(inv: Inventory, index: Int, vararg players: Player) {
         val pk = InventorySlotPacket()
-        val i = if (inv === this.rightSide) leftSide.getSize() + index else index
+        val i = if (inv === this.rightSide) leftSide.size + index else index
         pk.slot = toNetworkSlot(i)
         pk.item = inv.getUnclonedItem(index)
 

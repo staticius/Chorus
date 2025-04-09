@@ -6,16 +6,14 @@ import org.chorus.network.connection.util.HandleByteBuf
 
 class MobArmorEquipmentPacket : DataPacket() {
     var eid: Long = 0
-    var slots: Array<Item?> = arrayOfNulls(4)
+    lateinit var slots: Array<Item>
     var body: Item = Item.AIR
 
     override fun decode(byteBuf: HandleByteBuf) {
         this.eid = byteBuf.readActorRuntimeID()
-        this.slots = arrayOfNulls(4)
-        slots[0] = byteBuf.readSlot()
-        slots[1] = byteBuf.readSlot()
-        slots[2] = byteBuf.readSlot()
-        slots[3] = byteBuf.readSlot()
+        this.slots = Array(4) {
+            byteBuf.readSlot()
+        }
         this.body = byteBuf.readSlot()
     }
 

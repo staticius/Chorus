@@ -5,7 +5,7 @@ import org.chorus.entity.effect.Effect
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-class EntityEffectUpdateEvent(entity: Entity?, oldEffect: Effect, newEffect: Effect) :
+class EntityEffectUpdateEvent(entity: Entity, oldEffect: Effect, newEffect: Effect) :
     EntityEvent(), Cancellable {
     val oldEffect: Effect
     val newEffect: Effect
