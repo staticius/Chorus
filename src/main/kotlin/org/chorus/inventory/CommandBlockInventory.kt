@@ -112,10 +112,6 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override val type: InventoryType
         get() = InventoryType.COMMAND_BLOCK
 
-    override fun getHolder(): BlockEntityCommandBlock {
-        return this.holder
-    }
-
     override fun onOpen(who: Player) {
         if (who.isOp && who.isCreative) {
             viewers.add(who)
@@ -180,5 +176,5 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     }
 
     override val blockEntityInventoryHolder: BlockEntityNameable
-        get() = getHolder()
+        get() = holder
 }
