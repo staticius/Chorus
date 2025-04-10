@@ -6,20 +6,14 @@ import org.chorus.item.Item
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus.recipe.Input
 
-class StonecutterInventory(blockStonecutterBlock: BlockStonecutterBlock?) :
+class StonecutterInventory(blockStonecutterBlock: BlockStonecutterBlock) :
     ContainerInventory(blockStonecutterBlock, InventoryType.STONECUTTER, 3), CraftTypeInventory, InputInventory {
-    override var holder: InventoryHolder?
-        get() = super.getHolder() as BlockStonecutterBlock
-        set(holder) {
-            super.holder = holder
-        }
-
     override fun onClose(who: Player) {
         super.onClose(who)
         val drops = who.inventory.addItem(this.getItem(0))
         for (drop in drops) {
             if (!who.dropItem(drop)) {
-                holder.level.dropItem(holder.vector3.add(0.5, 0.5, 0.5), drop)
+                holder.level!!.dropItem(holder.vector3.add(0.5, 0.5, 0.5), drop)
             }
         }
         this.clear(0)

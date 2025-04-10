@@ -29,7 +29,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
         return false
     }
 
-    override fun addItem(vararg slots: Item): Array<Item?> {
+    override fun addItem(vararg slots: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 
@@ -37,7 +37,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
         return false
     }
 
-    override fun removeItem(vararg slots: Item): Array<Item?> {
+    override fun removeItem(vararg slots: Item): Array<Item> {
         return Item.EMPTY_ARRAY
     }
 
@@ -103,16 +103,12 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
     override val isEmpty: Boolean
         get() = true
 
-    override fun getViewers(): Set<Player?> {
-        return emptySet<Player>()
+    override fun getViewers(): Set<Player> {
+        return emptySet()
     }
 
     override val type: InventoryType
         get() = InventoryType.STRUCTURE_EDITOR
-
-    override fun getHolder(): BlockEntityStructBlock {
-        return this.holder
-    }
 
     override fun onOpen(who: Player) {
         if (who.isOp && who.isCreative) {
@@ -127,7 +123,8 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
     }
 
     override fun open(who: Player): Boolean {
-        if (who.getWindowId(this) != -1) { //todo hack, ContainerClosePacket no longer triggers for command block and struct block, finding the correct way to close them
+        if (who.getWindowId(this) != -1) {
+            // TODO: hack, ContainerClosePacket no longer triggers for command block and struct block, finding the correct way to close them
             who.removeWindow(this)
         }
 

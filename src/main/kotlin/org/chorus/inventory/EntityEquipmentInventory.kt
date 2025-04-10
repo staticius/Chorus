@@ -29,8 +29,8 @@ class EntityEquipmentInventory(holder: InventoryHolder) :
         player.dataPacket(mobEquipmentPacket)
     }
 
-    override fun getViewers(): Set<Player?> {
-        val viewers: MutableSet<Player?> = HashSet(this.viewers)
+    override fun getViewers(): Set<Player> {
+        val viewers: MutableSet<Player> = HashSet(this.viewers)
         viewers.addAll(entity.getViewers().values)
         return viewers
     }

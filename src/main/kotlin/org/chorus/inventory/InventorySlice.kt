@@ -13,7 +13,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
 
     override fun getSlotType(nativeSlot: Int): ContainerSlotType {
         return if (slotTypeMap != null) {
-            slotTypeMap!![nativeSlot]
+            slotTypeMap!![nativeSlot]!!
         } else rawInv.getSlotType(nativeSlot)
     }
 
@@ -94,7 +94,7 @@ open class InventorySlice(private val rawInv: Inventory, var startSlot: Int, var
         return false
     }
 
-    override fun removeItem(vararg slots: Item): Array<Item?> {
+    override fun removeItem(vararg slots: Item): Array<Item> {
         return rawInv.removeItem(*slots)
     }
 

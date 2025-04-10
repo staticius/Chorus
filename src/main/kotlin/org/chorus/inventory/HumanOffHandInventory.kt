@@ -2,14 +2,13 @@ package org.chorus.inventory
 
 import org.chorus.Player
 import org.chorus.entity.IHuman
-import org.chorus.entity.IHuman.getEntity
 import org.chorus.item.*
 import org.chorus.network.protocol.InventoryContentPacket
 import org.chorus.network.protocol.MobEquipmentPacket
 import org.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-class HumanOffHandInventory(holder: IHuman?) : BaseInventory(holder, InventoryType.INVENTORY, 1) {
+class HumanOffHandInventory(holder: IHuman) : BaseInventory(holder, InventoryType.INVENTORY, 1) {
     override fun init() {
         val map = super.networkSlotMap()
         map[0] = 1
@@ -35,7 +34,7 @@ class HumanOffHandInventory(holder: IHuman?) : BaseInventory(holder, InventoryTy
     }
 
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
-        val holder: IHuman? = this.holder
+        val holder = this.holder
         if (holder is Player) {
             if (!holder.spawned) return
             if (send) {
@@ -72,16 +71,10 @@ class HumanOffHandInventory(holder: IHuman?) : BaseInventory(holder, InventoryTy
 
     private fun createMobEquipmentPacket(item: Item): MobEquipmentPacket {
         val pk = MobEquipmentPacket()
-        pk.eid = holder.getEntity().getId()
+        pk.eid = (holder as IHuman).getEntity().getUniqueID()
         pk.item = item
         pk.slot = 1
         pk.containerId = SpecialWindowId.OFFHAND.id
         return pk
     }
-
-    override var holder: InventoryHolder?
-        get() = super.getHolder() as IHuman
-        set(holder) {
-            super.holder = holder
-        }
 }

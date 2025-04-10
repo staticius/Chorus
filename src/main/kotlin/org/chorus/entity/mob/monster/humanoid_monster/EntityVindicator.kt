@@ -28,7 +28,6 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelSoundEventPacket
-import java.util.*
 import java.util.concurrent.*
 import java.util.function.Function
 import kotlin.collections.forEach

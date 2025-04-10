@@ -22,7 +22,6 @@ import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 class EntityBogged(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nbt), EntityWalkable, EntitySmite {
     override fun getIdentifier(): String {

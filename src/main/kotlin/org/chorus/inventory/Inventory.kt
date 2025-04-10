@@ -80,7 +80,7 @@ interface Inventory {
     /**
      * remove some items to the inventory
      */
-    fun removeItem(vararg slots: Item): Array<Item?>
+    fun removeItem(vararg slots: Item): Array<Item>
 
     /**
      * Get all items of the inventory

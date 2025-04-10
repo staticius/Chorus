@@ -8,18 +8,7 @@ import org.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 
-class PlayerCursorInventory(player: Player?) : BaseInventory(player, InventoryType.INVENTORY, 1) {
-    override var holder: InventoryHolder?
-        /**
-         * This override is here for documentation and code completion purposes only.
-         *
-         * @return Player
-         */
-        get() = super.getHolder() as Player
-        set(holder) {
-            super.holder = holder
-        }
-
+class PlayerCursorInventory(player: Player) : BaseInventory(player, InventoryType.INVENTORY, 1) {
     val item: Item
         get() = getItem(0)
 
@@ -54,6 +43,6 @@ class PlayerCursorInventory(player: Player?) : BaseInventory(player, InventoryTy
             ContainerSlotType.CURSOR,
             id
         )
-        Server.broadcastPacket(players, inventorySlotPacket)
+        Server.broadcastPacket(players.toList(), inventorySlotPacket)
     }
 }

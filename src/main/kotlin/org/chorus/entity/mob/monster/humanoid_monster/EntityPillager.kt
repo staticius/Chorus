@@ -13,7 +13,6 @@ import org.chorus.entity.ai.executor.CrossBowShootExecutor
 import org.chorus.entity.ai.executor.FlatRandomRoamExecutor
 import org.chorus.entity.ai.executor.PlaySoundExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
@@ -24,8 +23,6 @@ import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.List
-import java.util.Set
 import java.util.function.Function
 
 class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, nbt), EntityWalkable {

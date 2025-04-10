@@ -6,15 +6,11 @@ import org.chorus.block.BlockSmithingTable
 import org.chorus.item.Item
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-/**
- * @author joserobjr | CoolLoong
- * @since 2020-09-28
- */
-class SmithingInventory(blockSmithingTable: BlockSmithingTable?) :
+class SmithingInventory(blockSmithingTable: BlockSmithingTable) :
     ContainerInventory(blockSmithingTable, InventoryType.SMITHING_TABLE, 3), CraftTypeInventory, SoleInventory {
     override fun init() {
         val map = super.networkSlotMap()
-        for (i in 0..<getSize()) {
+        for (i in 0..<size) {
             map[i] = 51 + i
         }
 

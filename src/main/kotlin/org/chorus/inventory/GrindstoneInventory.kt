@@ -8,7 +8,7 @@ import org.chorus.event.inventory.InventoryCloseEvent
 import org.chorus.item.*
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-class GrindstoneInventory(blockGrindstone: BlockGrindstone?) :
+class GrindstoneInventory(blockGrindstone: BlockGrindstone) :
     ContainerInventory(blockGrindstone, InventoryType.GRINDSTONE, 3), CraftTypeInventory, SoleInventory {
     override fun networkSlotMap(): BiMap<Int, Int> {
         val map = super.networkSlotMap()
@@ -35,14 +35,14 @@ class GrindstoneInventory(blockGrindstone: BlockGrindstone?) :
     override fun onClose(who: Player) {
         super.onClose(who)
 
-        var drops = arrayOf<Item?>(
+        var drops = arrayOf(
             firstItem,
             secondItem
         )
         drops = who.inventory.addItem(*drops)
         for (drop in drops) {
             if (!who.dropItem(drop)) {
-                getHolder().level.dropItem(getHolder().vector3.add(0.5, 0.5, 0.5), drop)
+                (holder as BlockGrindstone).level.dropItem(holder.vector3.add(0.5, 0.5, 0.5), drop)
             }
         }
 

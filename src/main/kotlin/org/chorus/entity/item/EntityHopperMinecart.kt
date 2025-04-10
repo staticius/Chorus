@@ -4,7 +4,6 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.block.BlockHopper.IHopper
-import org.chorus.blockentity.*
 import org.chorus.entity.*
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.event.block.HopperSearchItemEvent

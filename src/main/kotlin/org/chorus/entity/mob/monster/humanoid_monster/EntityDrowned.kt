@@ -11,7 +11,6 @@ import org.chorus.entity.ai.controller.*
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.BlockSensor
@@ -28,8 +27,6 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.*
-import java.util.List
-import java.util.Set
 import java.util.concurrent.*
 import java.util.function.Function
 import kotlin.math.min

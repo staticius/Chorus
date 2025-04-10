@@ -8,7 +8,7 @@ import org.chorus.item.Item
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class CreativeOutputInventory(private val player: Player) : Inventory {
-    private var item: Item? = null
+    private var item: Item = Item.AIR
 
     override fun slotTypeMap(): MutableMap<Int?, ContainerSlotType?> {
         val map = super.slotTypeMap()
@@ -27,11 +27,10 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
 
     override var maxStackSize: Int
         get() = 64
-        set(size) {
-        }
+        set(size) {}
 
     override fun getItem(index: Int): Item {
-        return item!!
+        return item
     }
 
     override fun setItem(index: Int, item: Item, send: Boolean): Boolean {
@@ -43,7 +42,7 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
         return setItem(0, item, false)
     }
 
-    override fun addItem(vararg slots: Item): Array<Item?> {
+    override fun addItem(vararg slots: Item): Array<Item> {
         Preconditions.checkNotNull(slots[0])
         this.item = slots[0]
         return arrayOf(item)
@@ -53,15 +52,15 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
         return false
     }
 
-    override fun removeItem(vararg slots: Item): Array<Item?> {
+    override fun removeItem(vararg slots: Item): Array<Item> {
         item = Item.AIR
-        return Item.EMPTY_ARRAY
+        return emptyArray()
     }
 
     override var contents: Map<Int, Item>
-        get() = java.util.Map.of(0, item)
+        get() = mapOf(0 to item)
         set(items) {
-            item = items[0]
+            item = items[0]!!
         }
 
     override fun sendContents(player: Player) {
@@ -90,8 +89,8 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
         return false
     }
 
-    override fun all(item: Item): MutableMap<Int, Item>? {
-        return null
+    override fun all(item: Item): Map<Int, Item> {
+        return emptyMap()
     }
 
     override fun first(item: Item, exact: Boolean): Int {
@@ -124,7 +123,7 @@ class CreativeOutputInventory(private val player: Player) : Inventory {
         get() = false
 
     override val viewers: MutableSet<Player>
-        get() = null
+        get() = emptySet<Player>().toMutableSet()
 
     override val type: InventoryType
         get() = InventoryType.NONE

@@ -14,7 +14,6 @@ import org.chorus.entity.ai.executor.IBehaviorExecutor
 import org.chorus.entity.ai.executor.MeleeAttackExecutor
 import org.chorus.entity.ai.executor.PlaySoundExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
@@ -29,8 +28,6 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.*
-import java.util.List
-import java.util.Set
 import java.util.function.Function
 
 /**

@@ -1,10 +1,9 @@
 package org.chorus.inventory
 
-import org.chorus.blockentity.BlockEntity.scheduleUpdate
 import org.chorus.blockentity.BlockEntityFurnace
 import org.chorus.item.*
 
-abstract class SmeltingInventory(holder: InventoryHolder?, type: InventoryType, size: Int) :
+abstract class SmeltingInventory(holder: BlockEntityFurnace, type: InventoryType, size: Int) :
     ContainerInventory(holder, type, size) {
     val result: Item
         get() = this.getItem(2)
@@ -27,22 +26,16 @@ abstract class SmeltingInventory(holder: InventoryHolder?, type: InventoryType, 
         return this.setItem(0, item!!)
     }
 
-    override var holder: InventoryHolder?
-        get() = holder as BlockEntityFurnace
-        set(holder) {
-            super.holder = holder
-        }
-
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
         super.onSlotChange(index, before, send)
         if (index == 2 && (before.isNothing || before.getCount() > 0)) {
-            val holder: BlockEntityFurnace? = holder
-            val xp = holder!!.calculateXpDrop()
+            val holder = holder as BlockEntityFurnace
+            val xp = holder.calculateXpDrop()
             if (xp > 0) {
                 holder.storedXP = 0f
                 holder.level.dropExpOrb(holder.position, xp.toInt())
             }
         }
-        holder.scheduleUpdate()
+        (holder as BlockEntityFurnace).scheduleUpdate()
     }
 }

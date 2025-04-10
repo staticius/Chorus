@@ -14,28 +14,28 @@ interface EntityInventoryHolder : InventoryHolder {
     val helmet: Item
         get() = equipment.getHead()
 
-    fun setHelmet(item: Item?): Boolean {
+    fun setHelmet(item: Item): Boolean {
         return equipment.setHead(item)
     }
 
     val chestplate: Item
         get() = equipment.getChest()
 
-    fun setChestplate(item: Item?): Boolean {
+    fun setChestplate(item: Item): Boolean {
         return equipment.setChest(item)
     }
 
     val leggings: Item
         get() = equipment.getLegs()
 
-    fun setLeggings(item: Item?): Boolean {
+    fun setLeggings(item: Item): Boolean {
         return equipment.setLegs(item)
     }
 
     val boots: Item
         get() = equipment.getFeet()
 
-    fun setBoots(item: Item?): Boolean {
+    fun setBoots(item: Item): Boolean {
         return equipment.setFeet(item)
     }
 
@@ -45,19 +45,19 @@ interface EntityInventoryHolder : InventoryHolder {
     val itemInOffhand: Item
         get() = equipment.getOffHand()
 
-    fun setItemInHand(item: Item?): Boolean {
+    fun setItemInHand(item: Item): Boolean {
         return equipment.setMainHand(item)
     }
 
-    fun setItemInHand(item: Item?, send: Boolean): Boolean {
+    fun setItemInHand(item: Item, send: Boolean): Boolean {
         return equipment.setMainHand(item, send)
     }
 
-    fun setItemInOffhand(item: Item?): Boolean {
+    fun setItemInOffhand(item: Item): Boolean {
         return equipment.setOffHand(item, true)
     }
 
-    fun setItemInOffhand(item: Item?, send: Boolean): Boolean {
+    fun setItemInOffhand(item: Item, send: Boolean): Boolean {
         return equipment.setOffHand(item, send)
     }
 

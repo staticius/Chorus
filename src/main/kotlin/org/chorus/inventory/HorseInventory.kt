@@ -4,7 +4,8 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.animal.EntityHorse
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
@@ -15,7 +16,6 @@ import org.chorus.network.protocol.MobArmorEquipmentPacket
 import org.chorus.network.protocol.UpdateEquipmentPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import java.io.IOException
-import java.util.List
 
 class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.HORSE, 2) {
     var saddle: Item
@@ -38,25 +38,25 @@ class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
         super.onSlotChange(index, before, send)
         if (index == 0) {
-            if (saddle!!.isNothing) {
-                holder.setDataFlag(EntityFlag.SADDLED, false)
-                holder.setDataFlag(EntityFlag.WASD_CONTROLLED, false)
-                holder.setDataFlag(EntityFlag.CAN_POWER_JUMP, false)
+            if (saddle.isNothing) {
+                (holder as EntityHorse).setDataFlag(EntityFlag.SADDLED, false)
+                (holder as EntityHorse).setDataFlag(EntityFlag.WASD_CONTROLLED, false)
+                (holder as EntityHorse).setDataFlag(EntityFlag.CAN_POWER_JUMP, false)
             } else {
-                holder!!.level.addLevelSoundEvent(
-                    holder.position, LevelSoundEventPacket.SOUND_SADDLE, -1,
-                    holder.getIdentifier(), false, false
+                holder.level!!.addLevelSoundEvent(
+                    holder.vector3, LevelSoundEventPacket.SOUND_SADDLE, -1,
+                    (holder as EntityHorse).getIdentifier(), false, false
                 )
-                holder.setDataFlag(EntityFlag.SADDLED)
-                holder.setDataFlag(EntityFlag.WASD_CONTROLLED)
-                holder.setDataFlag(EntityFlag.CAN_POWER_JUMP)
+                (holder as EntityHorse).setDataFlag(EntityFlag.SADDLED)
+                (holder as EntityHorse).setDataFlag(EntityFlag.WASD_CONTROLLED)
+                (holder as EntityHorse).setDataFlag(EntityFlag.CAN_POWER_JUMP)
             }
         } else if (index == 1) {
-            if (!horseArmor!!.isNothing) {
-                holder!!.level.addSound(holder.position, Sound.MOB_HORSE_ARMOR)
+            if (!horseArmor.isNothing) {
+                holder.level!!.addSound(holder.vector3, Sound.MOB_HORSE_ARMOR)
             }
             val mobArmorEquipmentPacket = MobArmorEquipmentPacket()
-            mobArmorEquipmentPacket.eid = holder.getId()
+            mobArmorEquipmentPacket.eid = (holder as EntityHorse).getUniqueID()
             mobArmorEquipmentPacket.slots = arrayOf(
                 Item.AIR,
                 horseArmor, Item.AIR, Item.AIR
@@ -67,11 +67,13 @@ class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.
 
     override fun onClose(who: Player) {
         val containerId = who.getWindowId(this)
-        who.dataPacket(ContainerClosePacket(
-            containerID = containerId,
-            containerType = type,
-            serverInitiatedClose = who.closingWindowId != containerId
-        ))
+        who.dataPacket(
+            ContainerClosePacket(
+                containerID = containerId,
+                containerType = type,
+                serverInitiatedClose = who.closingWindowId != containerId
+            )
+        )
         super.onClose(who)
     }
 
@@ -81,16 +83,10 @@ class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.
         sendContents(this.getViewers())
     }
 
-    override var holder: InventoryHolder?
-        get() = holder as EntityHorse
-        set(holder) {
-            super.holder = holder
-        }
-
     protected fun createUpdateEquipmentPacket(who: Player): UpdateEquipmentPacket {
         val slots = ListTag<CompoundTag>()
-        val saddle = saddle!!
-        val horseArmor = horseArmor!!
+        val saddle = saddle
+        val horseArmor = horseArmor
         if (!saddle.isNothing) {
             slots.add(
                 slot0.copy().putCompound(
@@ -110,8 +106,8 @@ class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.
         val nbt = CompoundTag().putList("slots", slots)
         val updateEquipmentPacket = UpdateEquipmentPacket()
         updateEquipmentPacket.windowId = who.getWindowId(this)
-        updateEquipmentPacket.windowType = getType().networkType
-        updateEquipmentPacket.eid = holder.getId()
+        updateEquipmentPacket.windowType = type.networkType
+        updateEquipmentPacket.eid = (holder as EntityHorse).getUniqueID()
         try {
             updateEquipmentPacket.namedtag = NBTIO.writeNetwork(nbt)
         } catch (e: IOException) {
@@ -133,7 +129,7 @@ class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.
                 )
             )
             val horseArmor = ListTag<CompoundTag>()
-            for (h in List.of<String>(
+            for (h in listOf(
                 ItemID.LEATHER_HORSE_ARMOR,
                 ItemID.IRON_HORSE_ARMOR,
                 ItemID.GOLDEN_HORSE_ARMOR,
@@ -143,7 +139,7 @@ class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.
                     CompoundTag().putCompound(
                         "slotItem", CompoundTag().putShort("Aux", Short.MAX_VALUE.toInt()).putString(
                             "Name",
-                            h!!
+                            h
                         )
                     )
                 )

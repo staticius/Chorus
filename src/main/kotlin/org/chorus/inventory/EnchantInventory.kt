@@ -11,7 +11,7 @@ import org.chorus.network.protocol.PlayerEnchantOptionsPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 
-class EnchantInventory(table: BlockEntityEnchantTable?) : ContainerInventory(table, InventoryType.ENCHANTMENT, 2),
+class EnchantInventory(table: BlockEntityEnchantTable) : ContainerInventory(table, InventoryType.ENCHANTMENT, 2),
     BlockEntityInventoryNameable, CraftTypeInventory, SoleInventory {
     override fun networkSlotMap(): BiMap<Int, Int> {
         val map = super.networkSlotMap()
@@ -32,7 +32,7 @@ class EnchantInventory(table: BlockEntityEnchantTable?) : ContainerInventory(tab
             if (before.isNothing) {
                 for (viewer in this.getViewers()) {
                     val options = EnchantmentHelper.getEnchantOptions(
-                        holder,
+                        (holder as BlockEntityEnchantTable),
                         first, viewer.getEnchantmentSeed()
                     )
 
@@ -55,11 +55,11 @@ class EnchantInventory(table: BlockEntityEnchantTable?) : ContainerInventory(tab
 
     override fun onClose(who: Player) {
         super.onClose(who)
-        var drops = arrayOf<Item?>(getItem(0), getItem(1))
+        var drops = arrayOf(getItem(0), getItem(1))
         drops = who.inventory.addItem(*drops)
         for (drop in drops) {
             if (!who.dropItem(drop)) {
-                holder.level.dropItem(holder.vector3.add(0.5, 0.5, 0.5), drop)
+                (holder as BlockEntityEnchantTable).level.dropItem(holder.vector3.add(0.5, 0.5, 0.5), drop)
             }
         }
 
@@ -73,12 +73,6 @@ class EnchantInventory(table: BlockEntityEnchantTable?) : ContainerInventory(tab
     val second: Item
         get() = this.getItem(1)
 
-    override var holder: InventoryHolder?
-        get() = super.getHolder() as BlockEntityEnchantTable
-        set(holder) {
-            super.holder = holder
-        }
-
-    override val blockEntityInventoryHolder: BlockEntityNameable?
-        get() = holder
+    override val blockEntityInventoryHolder: BlockEntityNameable
+        get() = holder as BlockEntityEnchantTable
 }

@@ -33,7 +33,6 @@ import org.chorus.network.protocol.AnimateEntityPacket.Animation
 import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.network.protocol.TakeItemEntityPacket
 import org.chorus.utils.*
-import java.util.*
 import java.util.concurrent.*
 import java.util.function.Consumer
 import java.util.function.Function

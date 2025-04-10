@@ -14,9 +14,6 @@ import org.chorus.math.BlockFace.Companion.horizontals
 import org.chorus.utils.Faceable
 import java.util.function.Supplier
 
-/**
- * @implNote Faceable since FUTURE
- */
 class BlockLoom @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockState), Faceable, BlockInventoryHolder {
     override val name: String

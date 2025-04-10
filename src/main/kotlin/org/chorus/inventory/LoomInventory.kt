@@ -6,10 +6,10 @@ import org.chorus.item.Item
 import org.chorus.network.protocol.ContainerOpenPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-class LoomInventory(blockLoom: BlockLoom?) : BaseInventory(blockLoom, InventoryType.LOOM, 3) {
+class LoomInventory(blockLoom: BlockLoom) : BaseInventory(blockLoom, InventoryType.LOOM, 3) {
     override fun init() {
         val map = super.networkSlotMap()
-        for (i in 0..<getSize()) {
+        for (i in 0..<size) {
             map[i] = 9 + i
         }
 

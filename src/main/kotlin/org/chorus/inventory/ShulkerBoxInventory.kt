@@ -1,6 +1,8 @@
 package org.chorus.inventory
 
 import org.chorus.Player
+import org.chorus.block.BlockBlackShulkerBox
+import org.chorus.block.BlockUndyedShulkerBox
 import org.chorus.blockentity.BlockEntityShulkerBox
 import org.chorus.item.*
 import org.chorus.level.Sound
@@ -8,19 +10,10 @@ import org.chorus.network.protocol.BlockEventPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus.tags.BlockTags
 
-/**
- * @author PetteriM1
- */
-class ShulkerBoxInventory(box: BlockEntityShulkerBox?) : ContainerInventory(box, InventoryType.CONTAINER, 27) {
-    override var holder: InventoryHolder
-        get() = holder as BlockEntityShulkerBox
-        set(holder) {
-            super.holder = holder
-        }
-
+class ShulkerBoxInventory(box: BlockEntityShulkerBox) : ContainerInventory(box, InventoryType.CONTAINER, 27) {
     override fun init() {
         val map = super.slotTypeMap()
-        for (i in 0..<getSize()) {
+        for (i in 0..<size) {
             map[i] = ContainerSlotType.SHULKER_BOX
         }
     }
@@ -37,7 +30,7 @@ class ShulkerBoxInventory(box: BlockEntityShulkerBox?) : ContainerInventory(box,
 
             val level = holder.level
             if (level != null) {
-                level.addSound(holder.position.add(0.5, 0.5, 0.5), Sound.RANDOM_SHULKERBOXOPEN)
+                level.addSound(holder.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_SHULKERBOXOPEN)
                 level.addChunkPacket(
                     holder.vector3.x.toInt() shr 4,
                     holder.vector3.z.toInt() shr 4, pk
@@ -56,7 +49,7 @@ class ShulkerBoxInventory(box: BlockEntityShulkerBox?) : ContainerInventory(box,
 
             val level = holder.level
             if (level != null) {
-                level.addSound(holder.position.add(0.5, 0.5, 0.5), Sound.RANDOM_SHULKERBOXCLOSED)
+                level.addSound(holder.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_SHULKERBOXCLOSED)
                 level.addChunkPacket(
                     holder.vector3.x.toInt() shr 4,
                     holder.vector3.z.toInt() shr 4, pk
@@ -68,7 +61,7 @@ class ShulkerBoxInventory(box: BlockEntityShulkerBox?) : ContainerInventory(box,
     }
 
     override fun canAddItem(item: Item): Boolean {
-        if (item.isBlock && item.blockUnsafe.`is`(BlockTags.PNX_SHULKERBOX)) {
+        if (item.isBlock() && item.blockUnsafe is BlockUndyedShulkerBox) {
             // Do not allow nested shulker boxes.
             return false
         }

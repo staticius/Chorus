@@ -20,7 +20,6 @@ import org.chorus.entity.ai.route.posevaluator.FlyingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestItemSensor
 import org.chorus.entity.ai.sensor.NearestPlayerSensor
-import org.chorus.entity.item.EntityItem
 import org.chorus.inventory.*
 import org.chorus.item.*
 import org.chorus.level.Sound
@@ -29,7 +28,6 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 
 
-import java.util.Set
 import java.util.function.Function
 
 class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityFlyable, EntityOwnable,

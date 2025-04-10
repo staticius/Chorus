@@ -25,7 +25,6 @@ import org.chorus.item.*
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 /**
  * @author PikyCZ

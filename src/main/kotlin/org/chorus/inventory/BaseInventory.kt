@@ -308,7 +308,7 @@ abstract class BaseInventory(
         return itemSlots.toTypedArray()
     }
 
-    override fun removeItem(vararg slots: Item): Array<Item?> {
+    override fun removeItem(vararg slots: Item): Array<Item> {
         val itemSlots: MutableList<Item> = ArrayList()
         for (slot in slots) {
             if (!slot.isNothing) {
