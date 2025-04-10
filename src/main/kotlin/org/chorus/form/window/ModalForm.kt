@@ -7,9 +7,6 @@ import org.chorus.form.response.ModalResponse
 import java.util.function.BiConsumer
 import java.util.function.Consumer
 
-
-@Accessors(chain = true, fluent = true)
-
 class ModalForm : Form<ModalResponse?> {
     protected var content: String = ""
 
@@ -29,6 +26,7 @@ class ModalForm : Form<ModalResponse?> {
     constructor(title: String, content: String) : super(title) {
         this.content = content
     }
+
 
     override fun title(title: String): ModalForm {
         return super.title(title) as ModalForm
@@ -74,8 +72,8 @@ class ModalForm : Form<ModalResponse?> {
         return super.onSubmit(submitted) as ModalForm
     }
 
-    override fun onClose(callback: Consumer<Player?>?): ModalForm {
-        return super.onClose(callback) as ModalForm
+    override fun onClose(closed: Consumer<Player?>?): ModalForm {
+        return super.onClose(closed) as ModalForm
     }
 
     override fun send(player: Player): ModalForm {
@@ -119,7 +117,7 @@ class ModalForm : Form<ModalResponse?> {
         return response
     }
 
-    override fun <M> putMeta(key: String, `object`: M): ModalForm {
+    override fun <M : Any> putMeta(key: String, `object`: M): ModalForm {
         return super.putMeta(key, `object`) as ModalForm
     }
 }

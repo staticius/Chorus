@@ -35,6 +35,11 @@ abstract class Form<T : Response?>(title: String) {
         this.title = title
     }
 
+    open fun title(title: String): Form<T> {
+        this.title = title
+        return this
+    }
+
     /**
      * Internally used to accept the consumer to execute when the form was closed
      * @param player The player who closed the form

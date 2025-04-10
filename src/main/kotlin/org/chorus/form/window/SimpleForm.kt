@@ -7,7 +7,6 @@ import org.chorus.form.element.simple.ElementButton
 import org.chorus.form.response.SimpleResponse
 import java.util.function.BiConsumer
 import java.util.function.Consumer
-import java.util.function.IntFunction
 
 class SimpleForm : Form<SimpleResponse?> {
     protected var content: String = ""
@@ -43,10 +42,10 @@ class SimpleForm : Form<SimpleResponse?> {
     }
 
     fun updateElement(index: Int, newElement: ElementButton): ElementButton? {
-        if (buttons.size() > index) {
-            return buttons.keySet().toArray<ElementButton>(ElementButton.Companion.EMPTY_LIST).get(index)
-                .text(newElement.text())
-                .image(newElement.image())
+        if (buttons.size > index) {
+            return buttons.keys.toTypedArray()[index]
+                .text(newElement.text)
+                .image(newElement.image)
         }
         return null
     }
@@ -59,7 +58,7 @@ class SimpleForm : Form<SimpleResponse?> {
     }
 
     fun removeElement(index: Int) {
-        this.removeElement(buttons.keySet().toArray<ElementButton>(ElementButton.Companion.EMPTY_LIST).get(index))
+        this.removeElement(buttons.keys.toTypedArray()[index])
     }
 
     fun removeElement(elementButton: ElementButton) {
@@ -96,8 +95,8 @@ class SimpleForm : Form<SimpleResponse?> {
         `object`.addProperty("content", this.content)
 
         val buttons = JsonArray()
-        this.buttons()
-            .keySet()
+        this.buttons
+            .keys
             .forEach(Consumer { element: ElementButton -> buttons.add(element.toJson()) })
         `object`.add("buttons", buttons)
 
@@ -111,9 +110,7 @@ class SimpleForm : Form<SimpleResponse?> {
         }
 
 
-        val entries: Array<Map.Entry<ElementButton, Consumer<Player>>> =
-            buttons.entrySet().toArray<Map.Entry<*, *>>(
-                IntFunction<Array<Map.Entry<*, *>>> { _Dummy_.__Array__() })
+        val entries = buttons.entries.toTypedArray()
 
         var clickedId = -1
         try {
@@ -127,17 +124,14 @@ class SimpleForm : Form<SimpleResponse?> {
 
         val entry = entries[clickedId]
 
-        val action: Consumer<Player> = entry.getValue()
-        if (action != null) {
-            action.accept(player)
-        }
+        entry.value?.accept(player)
 
-        val response = SimpleResponse(clickedId, entry.getKey())
+        val response = SimpleResponse(clickedId, entry.key)
         this.supplySubmitted(player, response)
         return response
     }
 
-    override fun <M> putMeta(key: String, `object`: M): SimpleForm {
+    override fun <M : Any> putMeta(key: String, `object`: M): SimpleForm {
         return super.putMeta(key, `object`) as SimpleForm
     }
 }

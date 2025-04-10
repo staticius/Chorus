@@ -2,6 +2,7 @@ package org.chorus.form.element.simple
 
 import com.google.gson.JsonObject
 import org.chorus.form.element.Element
+import java.awt.Image
 
 
 /**
@@ -18,7 +19,15 @@ class ElementButton(
      */
     var image: ButtonImage? = null,
 ) : Element() {
+    fun text(text: String?): ElementButton {
+        this.text = text
+        return this
+    }
 
+    fun image(image: ButtonImage?): ElementButton {
+        this.image = image
+        return this
+    }
 
     @JvmOverloads
     constructor(text: String? = "") : this(text, null)
