@@ -11,9 +11,11 @@ import org.chorus.item.enchantment.Enchantment
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.types.itemstack.request.action.CraftGrindstoneAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.utils.Loggable
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.stream.Stream
+import kotlin.math.ceil
 import kotlin.math.max
 
 /**
@@ -37,7 +39,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
         val inventory = topWindow.get() as GrindstoneInventory
         val firstItem = inventory.firstItem
         val secondItem = inventory.secondItem
-        if ((firstItem == null || firstItem.isNothing) && (secondItem == null || secondItem.isNothing)) {
+        if ((firstItem.isNothing) && (secondItem.isNothing)) {
             return context.error()
         }
         val pair = updateGrindstoneResult(player, inventory) ?: return context.error()
@@ -117,21 +119,23 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
                 if (item.isNothing) {
                     return@flatMap Stream.empty<Enchantment>()
                 } else if (item.getCount() == 1) {
-                    return@flatMap Arrays.stream<Enchantment>(item.enchantments)
+                    return@flatMap item.enchantments.toList().stream()
                 } else {
-                    val enchantments: Array<Array<Enchantment>> = arrayOfNulls(item.getCount())
-                    Arrays.fill(enchantments, item.enchantments)
-                    return@flatMap Arrays.stream<Array<Enchantment>>(enchantments)
-                        .flatMap<Enchantment> { array: Array<Enchantment>? -> Arrays.stream(array) }
+                    val enchantments: Array<Array<Enchantment>> = Array(item.getCount()) {
+                        item.enchantments
+                    }
+                    return@flatMap enchantments.toList().stream().flatMap { it.toList().stream() }
                 }
             }
             .mapToInt { enchantment: Enchantment -> enchantment.getMinEnchantAbility(enchantment.level) }
             .sum()
 
         resultExperience = ThreadLocalRandom.current().nextInt(
-            ceil(resultExperience.toDouble() / 2),
+            ceil(resultExperience.toDouble() / 2).toInt(),
             resultExperience + 1
         )
         return resultExperience
     }
+
+    companion object : Loggable
 }

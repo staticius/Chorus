@@ -692,13 +692,13 @@ abstract class Item : Cloneable, ItemID, Loggable {
         } else return false
     }
 
-    val orCreateNamedTag: CompoundTag?
+    val orCreateNamedTag: CompoundTag
         get() {
             if (!hasCompoundTag()) {
                 setNamedTag(CompoundTag())
-                return cachedNBT
+                return cachedNBT!!
             }
-            return namedTag
+            return namedTag!!
         }
 
     fun clearNamedTag(): Item {

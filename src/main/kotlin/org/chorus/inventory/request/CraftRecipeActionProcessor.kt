@@ -3,9 +3,6 @@ package org.chorus.inventory.request
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.entity.mob.villagers.EntityVillagerV2
-import org.chorus.entity.mob.villagers.EntityVillagerV2.addExperience
-import org.chorus.entity.mob.villagers.EntityVillagerV2.addGossip
-import org.chorus.entity.mob.villagers.EntityVillagerV2.getReputation
 import org.chorus.event.inventory.CraftItemEvent
 import org.chorus.event.inventory.EnchantItemEvent
 import org.chorus.inventory.EnchantInventory
@@ -26,16 +23,11 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import org.chorus.recipe.SmithingTransformRecipe
 import org.chorus.recipe.SmithingTrimRecipe
 import org.chorus.registry.Registries
+import org.chorus.utils.Loggable
 import org.chorus.utils.TradeRecipeBuildUtils
 
 import java.util.*
 import kotlin.math.max
-
-/**
- * Allay Project 2023/12/1
- *
- * @author daoge_cmd | Cool_Loong
- */
 
 class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAction> {
     fun checkTrade(recipeInput: CompoundTag, input: Item, subtract: Int): Boolean {
@@ -85,7 +77,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             var item = first.clone().autoAssignStackNetworkId()
             if (item.id == ItemID.BOOK) item = Item.get(ItemID.ENCHANTED_BOOK)
             val enchantments = enchantOptionData.enchantments
-            item.addEnchantment(*enchantments.toArray(Enchantment.EMPTY_ARRAY))
+            item.addEnchantment(*enchantments.toTypedArray())
             val event = EnchantItemEvent(
                 inventory as EnchantInventory,
                 first.clone().autoAssignStackNetworkId(),
@@ -115,7 +107,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             val output = NBTIO.getItemHelper(tradeRecipe.getCompound("sell"))
             var reputation = 0
             if (inventory.holder is EntityVillagerV2) {
-                reputation = villager.getReputation(player)
+                reputation = (inventory.holder as EntityVillagerV2).getReputation(player)
             }
             output.setCount(output.getCount() * action.numberOfRequestedCrafts)
             if (first.isNothing && second.isNothing) {
@@ -156,8 +148,9 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 player.addExperience(rewardExp * action.numberOfRequestedCrafts)
                 tradeRecipe.putInt("uses", tradeRecipe.getInt("uses") + action.numberOfRequestedCrafts)
                 if (inventory.holder is EntityVillagerV2) {
+                    val villager = inventory.holder as EntityVillagerV2
                     villager.addExperience(traderExp * action.numberOfRequestedCrafts)
-                    villager.addGossip(player.loginChainData.xuid, EntityVillagerV2.Gossip.TRADING, 2)
+                    villager.addGossip(player.loginChainData.xuid!!, EntityVillagerV2.Gossip.TRADING, 2)
                 }
             }
             return null
@@ -246,9 +239,10 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             CraftRecipeActionProcessor.log.error("the player's haven't open smithing inventory! Instead " + topWindow.get().javaClass.simpleName)
             return context.error()
         }
-        val equipment: Item = smithingInventory.getEquipment()
-        val ingredient: Item = smithingInventory.getIngredient()
-        val template: Item = smithingInventory.getTemplate()
+        val smithingInventory = topWindow.get() as SmithingInventory
+        val equipment: Item = smithingInventory.equipment
+        val ingredient: Item = smithingInventory.ingredient
+        val template: Item = smithingInventory.template
 
         val expectEquipment = recipe.base
         val expectIngredient = recipe.addition
@@ -278,9 +272,10 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             CraftRecipeActionProcessor.log.error("the player's haven't open smithing inventory!")
             return context.error()
         }
-        val equipment: Item = smithingInventory.getEquipment()
-        val ingredient: Item = smithingInventory.getIngredient()
-        val template: Item = smithingInventory.getTemplate()
+        val smithingInventory = topWindow.get() as SmithingInventory
+        val equipment: Item = smithingInventory.equipment
+        val ingredient: Item = smithingInventory.ingredient
+        val template: Item = smithingInventory.template
 
         if (!ingredient.isNothing && !template.isNothing) {
             val find1 = TrimData.trimPatterns.stream()
@@ -296,9 +291,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             val trim = CompoundTag().putString("Material", trimMaterial.materialId)
                 .putString("Pattern", trimPattern.patternId)
             var compound = ingredient.namedTag
-            compound = if (compound == null) {
-                result.getOrCreateNamedTag()
-            } else compound.copy() // Ensure no cached CompoundTags are used double
+            compound = compound?.copy() ?: result.orCreateNamedTag // Ensure no cached CompoundTags are used double
 
             compound.putCompound("Trim", trim)
             result.setNamedTag(compound)
@@ -311,11 +304,11 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_RECIPE
 
-    companion object {
+    companion object : Loggable {
         const val RECIPE_DATA_KEY: String = "recipe"
         const val ENCH_RECIPE_KEY: String = "ench_recipe"
 
-        fun findAllConsumeActions(actions: Array<ItemStackRequestAction?>, startIndex: Int): List<ConsumeAction> {
+        fun findAllConsumeActions(actions: Array<ItemStackRequestAction>, startIndex: Int): List<ConsumeAction> {
             val found = ArrayList<ConsumeAction>()
             for (i in startIndex..<actions.size) {
                 val action = actions[i]

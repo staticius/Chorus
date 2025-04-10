@@ -20,19 +20,19 @@ class SmithingInventory(blockSmithingTable: BlockSmithingTable) :
         map2[2] = ContainerSlotType.SMITHING_TABLE_TEMPLATE
     }
 
-    var equipment: Item?
+    var equipment: Item
         get() = getItem(EQUIPMENT)
         set(equipment) {
             setItem(EQUIPMENT, equipment!!)
         }
 
-    var ingredient: Item?
+    var ingredient: Item
         get() = getItem(INGREDIENT)
         set(ingredient) {
             setItem(INGREDIENT, ingredient!!)
         }
 
-    var template: Item?
+    var template: Item
         get() = getItem(TEMPLATE)
         set(template) {
             setItem(TEMPLATE, template!!)
