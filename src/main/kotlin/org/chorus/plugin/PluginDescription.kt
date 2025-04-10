@@ -294,8 +294,6 @@ class PluginDescription {
      *
      * @return 这个插件所使用的特征。<br></br>The features of this plugin.
      * @see PluginDescription
-     *
-     * @since PowerNukkitX 1.6.0.0-PNX | Nukkit API 1.0.14
      */
     var features: List<String>? = ArrayList()
         private set
