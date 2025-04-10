@@ -7,20 +7,18 @@ import org.chorus.form.element.Element
 /**
  * The button object used to add buttons within [org.chorus.form.window.SimpleForm]
  */
-
-
-@Accessors(chain = true, fluent = true)
-
-class ElementButton : Element {
+class ElementButton(
     /**
      * The button text shown
      */
-    var text: String? = null
+    var text: String? = null,
 
     /**
      * An optional image to send with the button
      */
-    var image: ButtonImage? = null
+    var image: ButtonImage? = null,
+) : Element() {
+
 
     @JvmOverloads
     constructor(text: String? = "") : this(text, null)

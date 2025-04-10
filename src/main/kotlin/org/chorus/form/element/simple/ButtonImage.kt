@@ -1,13 +1,12 @@
 package org.chorus.form.element.simple
 
 import com.google.gson.JsonObject
+import java.util.*
 
 
 /**
  * The image of a [ElementButton]
  */
-
-@Accessors(chain = true, fluent = true)
 class ButtonImage(type: Type, data: String?) {
     protected val `object`: JsonObject = JsonObject()
 
@@ -21,7 +20,7 @@ class ButtonImage(type: Type, data: String?) {
 
     fun type(type: Type): ButtonImage {
         this.type = type
-        `object`.addProperty("type", type.name().toLowerCase())
+        `object`.addProperty("type", type.name.lowercase(Locale.getDefault()))
         return this
     }
 

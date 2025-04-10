@@ -132,13 +132,13 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                 }
 
                 val ev = PlayerBucketFillEvent(
-                    player,
+                    player!!,
                     this, blockFace,
                     this, item, get(newBucketID, 0, 1, item.compoundTag)
                 )
                 Server.instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
-                    replaceBucket(item, player!!, ev.item)
+                    replaceBucket(item, player, ev.item)
                     this.setFillLevel(CommonBlockProperties.FILL_LEVEL.min, player) // empty
                     level.setBlock(this.position, this, true)
                     cauldron.clearCustomColor()
@@ -153,7 +153,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                 }
 
                 val ev = PlayerBucketEmptyEvent(
-                    player,
+                    player!!,
                     this, blockFace,
                     this, item, get(ItemID.BUCKET, 0, 1, item.compoundTag)
                 )
@@ -442,7 +442,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                         }
 
                         val ev = PlayerBucketFillEvent(
-                            player,
+                            player!!,
                             this, blockFace,
                             this, item, get(ItemID.LAVA_BUCKET, 0, 1, bucket.compoundTag)
                         )
@@ -460,7 +460,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                         }
 
                         val ev = PlayerBucketEmptyEvent(
-                            player,
+                            player!!,
                             this, blockFace,
                             this, item, get(ItemID.BUCKET, 0, 1, bucket.compoundTag)
                         )
