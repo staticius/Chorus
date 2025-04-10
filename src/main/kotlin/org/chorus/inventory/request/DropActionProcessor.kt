@@ -9,12 +9,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 
-/**
- * Allay Project 2023/9/23
- *
- * @author daoge_cmd
- */
-
 class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.DROP

@@ -1,9 +1,5 @@
 package org.chorus.item
 
-/**
- * @author Leonidius20
- * @since 18.08.18
- */
 class ItemSpiderEyeFermented(meta: Int, count: Int) :
     Item(ItemID.Companion.FERMENTED_SPIDER_EYE, meta, count, "Fermented Spider Eye") {
     @JvmOverloads

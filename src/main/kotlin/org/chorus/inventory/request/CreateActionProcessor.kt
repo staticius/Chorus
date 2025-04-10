@@ -6,14 +6,9 @@ import org.chorus.network.protocol.types.itemstack.request.action.CreateAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.registry.Registries
+import org.chorus.utils.Loggable
 
 import java.util.*
-
-/**
- * Allay Project 2023/12/2
- *
- * @author daoge_cmd
- */
 
 class CreateActionProcessor : ItemStackRequestActionProcessor<CreateAction> {
     override val type: ItemStackRequestActionType
@@ -33,4 +28,6 @@ class CreateActionProcessor : ItemStackRequestActionProcessor<CreateAction> {
         createdOutput.setItem(0, output, false)
         return null
     }
+
+    companion object : Loggable
 }

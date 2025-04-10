@@ -27,10 +27,6 @@ import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author Kaooot
- * @since 2020-08-14
- */
 class EntityFox(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.FOX

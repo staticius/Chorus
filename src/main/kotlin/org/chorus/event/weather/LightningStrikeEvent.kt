@@ -6,9 +6,6 @@ import org.chorus.event.HandlerList
 import org.chorus.event.level.WeatherEvent
 import org.chorus.level.Level
 
-/**
- * @author funcraft (Nukkit Project)
- */
 class LightningStrikeEvent(
     level: Level,
     /**

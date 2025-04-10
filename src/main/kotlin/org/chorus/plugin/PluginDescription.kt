@@ -102,15 +102,9 @@ import org.yaml.snakeyaml.Yaml
  * List, the list of features used.
  *
  *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author iNevet(code and javadoc) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
- * @author superice666(code) @ PowerNukkitX Project
  * @see Plugin
  *
  * @see PluginLoadOrder
- *
- *
  */
 class PluginDescription {
     /**

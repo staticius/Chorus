@@ -9,9 +9,6 @@ import org.chorus.utils.ServerException
  *
  *
  * Attributes are buffs/debuffs systems that act on [Entity].
- *
- * @author Box, MagicDroidX(code), PeratX @ Nukkit Project
- *
  */
 class Attribute private constructor(
     private val id: Int,

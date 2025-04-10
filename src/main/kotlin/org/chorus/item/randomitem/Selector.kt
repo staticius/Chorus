@@ -2,10 +2,6 @@ package org.chorus.item.randomitem
 
 import java.util.function.Consumer
 
-/**
- * @author Snake1999
- * @since 2016/1/15
- */
 open class Selector(parent: Selector?) {
     var parent: Selector? = null
         private set

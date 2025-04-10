@@ -5,8 +5,6 @@ package org.chorus.lang
  *
  *
  * A placeholder interpolation text container with multi-language functionality,the multilingualism is implemented via [BaseLang].
- *
- * @author MagicDroidX (Nukkit Project)
  */
 class TranslationContainer : TextContainer {
     /**

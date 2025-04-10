@@ -4,12 +4,6 @@ import org.chorus.entity.Entity
 import org.chorus.entity.item.EntityVehicle
 import org.chorus.event.HandlerList
 
-/**
- * Is called when an entity damages a vehicle
- *
- * @author TrainmasterHD
- * @since 09.09.2019
- */
 class VehicleDamageByEntityEvent
 /**
  * Constructor for the VehicleDamageByEntityEvent

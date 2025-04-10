@@ -29,9 +29,6 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PikyCZ
- */
 open class EntitySkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable,
     EntitySmite {
     override fun getIdentifier(): String {

@@ -6,9 +6,6 @@ import org.chorus.nbt.tag.IntTag
 import java.io.IOException
 import java.util.concurrent.atomic.AtomicBoolean
 
-/**
- * @author Cool_Loong
- */
 class BlockState2ItemMetaRegistry : IRegistry<String, Int?, Int> {
     override fun init() {
         if (isLoad.getAndSet(true)) return

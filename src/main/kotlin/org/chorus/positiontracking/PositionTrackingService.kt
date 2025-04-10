@@ -22,15 +22,10 @@ import java.util.function.Consumer
 import java.util.function.IntConsumer
 import java.util.regex.Pattern
 import java.util.stream.IntStream
-import javax.annotation.ParametersAreNonnullByDefault
 
 /**
  * A position tracking db service. It holds file resources that needs to be closed when not needed anymore.
- *
- * @author joserobjr
  */
-@ParametersAreNonnullByDefault
-
 class PositionTrackingService(folder: File) : Closeable {
     private val storage = TreeMap<Int, WeakReference<PositionTrackingStorage?>>(Comparator.reverseOrder())
     private val closed = AtomicBoolean(false)

@@ -26,10 +26,7 @@ import javax.annotation.ParametersAreNonnullByDefault
  * This object holds a file handler and must be closed when it is no longer needed.
  *
  * Once closed the instance cannot be reused.
- *
- * @author joserobjr
  */
-@ParametersAreNonnullByDefault
 class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persistenceFile: File, maxStorage: Int = 0) :
     Closeable {
     val startingHandler: Int

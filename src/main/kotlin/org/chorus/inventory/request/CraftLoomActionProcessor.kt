@@ -12,11 +12,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import org.chorus.utils.DyeColor
 import org.chorus.utils.Loggable
 
-
-/**
- * @author CoolLoong
- */
-
 class CraftLoomActionProcessor : ItemStackRequestActionProcessor<CraftLoomAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_LOOM

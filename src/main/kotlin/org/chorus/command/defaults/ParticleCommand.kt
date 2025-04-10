@@ -10,10 +10,6 @@ import org.chorus.level.Locator
 import org.chorus.level.ParticleEffect
 import kotlin.collections.set
 
-/**
- * @author xtypr
- * @since 2015/11/12
- */
 class ParticleCommand(name: String) : VanillaCommand(name, "commands.particle.description") {
     init {
         this.permission = "chorus.command.particle"

@@ -18,9 +18,6 @@ import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PikyCZ
- */
 open class EntitySquid(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntitySwimmable {
     override fun getIdentifier(): String {
         return EntityID.SQUID

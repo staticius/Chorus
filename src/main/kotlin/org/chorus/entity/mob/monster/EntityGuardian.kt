@@ -41,9 +41,6 @@ import org.chorus.utils.Utils
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 
-/**
- * @author PikyCZ
- */
 class EntityGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntitySwimmable {
     override fun getIdentifier(): String {
         return EntityID.GUARDIAN

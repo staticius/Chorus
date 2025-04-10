@@ -1,9 +1,5 @@
 package org.chorus.item
 
-/**
- * @author Snake1999
- * @since 2016/1/14
- */
 open class ItemSalmon : ItemFish {
     constructor() : super(ItemID.Companion.SALMON, 0, 1)
 

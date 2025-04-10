@@ -12,10 +12,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlin.concurrent.Volatile
 import kotlin.math.max
 
-/**
- * @author Nukkit Project Team
- */
-
 class ServerScheduler {
     @get:ApiStatus.Internal
     val asyncTaskThreadPool: AsyncPool = AsyncPool(WORKERS)

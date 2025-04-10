@@ -16,9 +16,6 @@ import org.chorus.entity.ai.route.posevaluator.FlyingPosEvaluator
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PikyCZ
- */
 class EntityBat(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
         return EntityID.BAT

@@ -23,10 +23,6 @@ import java.util.function.IntConsumer
 import java.util.function.Supplier
 import kotlin.math.max
 
-/**
- * @author boybook
- * @since 2016/2/27
- */
 class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt),
     EntityLightningStrike {
     override fun getIdentifier(): String {

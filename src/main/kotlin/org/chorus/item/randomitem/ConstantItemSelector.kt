@@ -3,10 +3,6 @@ package org.chorus.item.randomitem
 import org.chorus.entity.effect.PotionType.Companion.get
 import org.chorus.item.*
 
-/**
- * @author Snake1999
- * @since 2016/1/15
- */
 open class ConstantItemSelector(val item: Item, parent: Selector?) : Selector(parent) {
     constructor(id: String?, parent: Selector?) : this(id, 0, parent)
 

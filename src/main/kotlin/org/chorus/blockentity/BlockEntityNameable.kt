@@ -3,10 +3,6 @@ package org.chorus.blockentity
 /**
  * 表达一个能被命名的事物的接口。<br></br>
  * An interface describes an object that can be named.
- *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
- *
  */
 interface BlockEntityNameable {
     /**

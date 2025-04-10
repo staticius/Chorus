@@ -30,9 +30,6 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author Box.
- */
 class EntityEndermite(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityArthropod {
     override fun getIdentifier(): String {
         return EntityID.ENDERMITE

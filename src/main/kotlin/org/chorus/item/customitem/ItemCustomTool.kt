@@ -4,9 +4,6 @@ import org.chorus.item.ItemTool
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.registry.Registries
 
-/**
- * @author lt_name
- */
 abstract class ItemCustomTool(id: String) : ItemTool(id), CustomItem {
     override val maxDurability: Int
         get() = DURABILITY_WOODEN

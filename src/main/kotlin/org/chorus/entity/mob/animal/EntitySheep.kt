@@ -36,9 +36,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.DyeColor
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author BeYkeRYkt (Nukkit Project)
- */
 class EntitySheep(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityShearable {
     override fun getIdentifier(): String {
         return EntityID.SHEEP

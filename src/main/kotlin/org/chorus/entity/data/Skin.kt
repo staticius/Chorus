@@ -2,12 +2,12 @@ package org.chorus.entity.data
 
 
 import com.google.common.base.Preconditions
-import org.chorus.nbt.stream.FastByteArrayOutputStream
 import org.chorus.utils.*
 import org.jose4j.json.internal.json_simple.JSONObject
 import org.jose4j.json.internal.json_simple.JSONValue
 import java.awt.Color
 import java.awt.image.BufferedImage
+import java.io.ByteArrayOutputStream
 import java.nio.charset.StandardCharsets
 import java.util.*
 
@@ -304,7 +304,7 @@ class Skin {
         const val SKIN_128_128_SIZE: Int = 128 * 128 * PIXEL_SIZE
 
         private fun parseBufferedImage(image: BufferedImage): SerializedImage {
-            val outputStream = FastByteArrayOutputStream()
+            val outputStream = ByteArrayOutputStream()
             for (y in 0..<image.height) {
                 for (x in 0..<image.width) {
                     val color: Color = Color(image.getRGB(x, y), true)

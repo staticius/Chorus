@@ -5,9 +5,6 @@ import org.chorus.entity.EntitySwimmable
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PetteriM1
- */
 class EntityPufferfish(chunk: IChunk?, nbt: CompoundTag) : EntityFish(chunk, nbt), EntitySwimmable {
     override fun getIdentifier(): String {
         return EntityID.PUFFERFISH

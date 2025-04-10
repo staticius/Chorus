@@ -11,10 +11,6 @@ import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author Pub4Game
- * @since 21.06.2016
- */
 class EntityVillager(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt) {
     override fun getIdentifier(): String {
         return EntityID.VILLAGER

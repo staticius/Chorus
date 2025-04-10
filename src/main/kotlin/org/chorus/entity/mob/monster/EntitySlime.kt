@@ -29,9 +29,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Utils
 import java.util.function.Function
 
-/**
- * @author PikyCZ
- */
 class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!!), EntityWalkable, EntityVariant {
     override fun getIdentifier(): String {
         return EntityID.SLIME

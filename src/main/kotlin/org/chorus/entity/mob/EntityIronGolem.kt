@@ -44,10 +44,6 @@ import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author joserobjr
- * @since 2021-01-13
- */
 class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt), EntityOwnable {
     override fun getIdentifier(): String {
         return EntityID.IRON_GOLEM

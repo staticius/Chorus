@@ -4,10 +4,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.BlockColor
 import org.chorus.utils.DyeColor
 
-/**
- * @author fromgate
- * @since 27.03.2016
- */
 abstract class ItemColorArmor : ItemArmor {
     constructor(id: String) : super(id)
 

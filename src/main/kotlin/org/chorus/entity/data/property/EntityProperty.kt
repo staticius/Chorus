@@ -7,9 +7,6 @@ import org.chorus.nbt.tag.StringTag
 import org.chorus.network.protocol.SyncEntityPropertyPacket
 import java.io.IOException
 
-/**
- * @author Peng_Lx
- */
 abstract class EntityProperty(private val identifier: String) {
     fun getIdentifier(): String {
         return identifier

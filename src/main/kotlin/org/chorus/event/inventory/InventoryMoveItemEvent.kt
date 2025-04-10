@@ -7,9 +7,6 @@ import org.chorus.inventory.InventoryHolder
 import org.chorus.item.Item
 
 /**
- * @author CreeperFace
- *
- *
  * Called when inventory transaction is not caused by a player
  */
 class InventoryMoveItemEvent(

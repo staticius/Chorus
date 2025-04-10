@@ -6,9 +6,6 @@ import org.chorus.level.generator.`object`.BlockManager
 import org.chorus.utils.ChorusRandom
 import kotlin.math.abs
 
-/**
- * @author DaPorkchop_ (Nukkit Project)
- */
 class LegacyBigSpruceTree(private val leafStartHeightMultiplier: Float, private val baseLeafRadius: Int) :
     LegacySpruceTree() {
     fun setRandomTreeHeight(random: ChorusRandom) {

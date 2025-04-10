@@ -32,9 +32,6 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-/**
- * @author PetteriM1
- */
 class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, shootingEntity: Entity? = null) :
     SlenderProjectile(chunk, nbt, shootingEntity) {
     override fun getIdentifier(): String {

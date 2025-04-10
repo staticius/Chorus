@@ -2,12 +2,6 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-/**
- * @author joserobjr
- */
-
-
 class PositionTrackingDBClientRequestPacket : DataPacket() {
     var action: Action? = null
     var trackingId: Int = 0

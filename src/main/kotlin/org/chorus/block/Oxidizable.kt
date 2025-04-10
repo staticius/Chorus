@@ -11,10 +11,6 @@ import org.chorus.level.particle.ScrapeParticle
 import org.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author joserobjr
- * @since 2021-06-14
- */
 interface Oxidizable {
     val locator: Locator
 

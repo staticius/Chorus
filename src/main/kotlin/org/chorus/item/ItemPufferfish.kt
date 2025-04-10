@@ -3,10 +3,6 @@ package org.chorus.item
 import org.chorus.Player
 import org.chorus.entity.effect.EffectType
 
-/**
- * @author Snake1999
- * @since 2016/1/14
- */
 class ItemPufferfish @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemFish(ItemID.Companion.PUFFERFISH, meta, count) {
     override val foodRestore: Int

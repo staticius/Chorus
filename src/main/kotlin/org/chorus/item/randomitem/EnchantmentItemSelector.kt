@@ -7,9 +7,6 @@ import org.chorus.utils.*
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author LT_Name
- */
 open class EnchantmentItemSelector(item: Item, parent: Selector?) :
     ConstantItemSelector(item, parent) {
     constructor(id: String?, parent: Selector?) : this(id, 0, parent)

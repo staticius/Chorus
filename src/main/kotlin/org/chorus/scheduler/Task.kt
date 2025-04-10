@@ -17,10 +17,6 @@ import org.chorus.utils.Loggable
  * For plugin developers: To make sure your task will only be executed in the case of safety
  * (such as: prevent this task from running if its owner plugin is disabled),
  * it's suggested to use [PluginTask] instead of extend this class.
- *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
- *
  */
 
 abstract class Task : Runnable {

@@ -8,9 +8,6 @@ import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PikyCZ
- */
 class EntitySkeletonHorse(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, nbt), EntitySmite, EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.SKELETON_HORSE

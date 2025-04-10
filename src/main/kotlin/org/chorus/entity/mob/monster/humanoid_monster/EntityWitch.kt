@@ -32,9 +32,6 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author PikyCZ
- */
 class EntityWitch(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.WITCH

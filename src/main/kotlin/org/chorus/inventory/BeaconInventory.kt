@@ -6,9 +6,6 @@ import org.chorus.blockentity.BlockEntityNameable
 import org.chorus.network.protocol.ContainerOpenPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-/**
- * @author Rover656
- */
 class BeaconInventory(blockBeacon: BlockEntityBeacon) : BaseInventory(blockBeacon, InventoryType.BEACON, 1),
     BlockEntityInventoryNameable {
     override fun init() {

@@ -33,8 +33,6 @@ import org.chorus.plugin.Plugin
  * If you want Nukkit to execute this task with delay or repeat, use [ServerScheduler].
  *
  * @param <T> 这个任务所属的插件。<br></br>The plugin that owns this task.
- * @author MagicDroidX(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
  *
 </T> */
 abstract class PluginTask<T : Plugin?>

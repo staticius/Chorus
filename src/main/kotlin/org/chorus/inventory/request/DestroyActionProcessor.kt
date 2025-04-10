@@ -9,12 +9,6 @@ import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseCon
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import java.util.List
 
-/**
- * Allay Project 2023/7/28
- *
- * @author daoge_cmd
- */
-
 class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.DESTROY

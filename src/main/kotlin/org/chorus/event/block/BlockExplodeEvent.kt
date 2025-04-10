@@ -5,10 +5,6 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.level.Locator
 
-/**
- * @author joserobjr
- * @since 2020-10-06
- */
 class BlockExplodeEvent(
     block: Block,
     val position: Locator,

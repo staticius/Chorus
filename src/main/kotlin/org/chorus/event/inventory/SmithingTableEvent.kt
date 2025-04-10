@@ -23,10 +23,6 @@ import org.chorus.event.HandlerList
 import org.chorus.inventory.SmithingInventory
 import org.chorus.item.Item
 
-/**
- * @author joserobjr
- * @since 2021-05-16
- */
 class SmithingTableEvent(
     inventory: SmithingInventory,
     val equipmentItem: Item,

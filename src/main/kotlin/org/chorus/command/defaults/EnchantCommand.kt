@@ -13,10 +13,6 @@ import org.chorus.item.ItemID
 import org.chorus.item.enchantment.Enchantment
 import kotlin.collections.set
 
-/**
- * @author Pub4Game
- * @since 23.01.2016
- */
 class EnchantCommand(name: String) :
     VanillaCommand(name, "commands.enchant.description", "chorus.command.enchant.usage") {
     init {

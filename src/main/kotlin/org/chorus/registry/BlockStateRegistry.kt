@@ -9,11 +9,6 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
-/**
- * Allay Project 12/16/2023
- *
- * @author Cool_Loong
- */
 class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
     override fun init() {
         try {

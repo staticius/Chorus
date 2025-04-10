@@ -10,12 +10,6 @@ import org.chorus.registry.Registries
 import org.chorus.utils.HashUtils
 import org.chorus.utils.Loggable
 
-
-/**
- * @author CreeperFace
- * @since 11.4.2017
- */
-
 class BlockEntityMovingBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     var movingBlock: Block? = null
         protected set

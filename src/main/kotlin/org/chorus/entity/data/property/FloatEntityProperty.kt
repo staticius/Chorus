@@ -2,9 +2,6 @@ package org.chorus.entity.data.property
 
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author Peng_Lx
- */
 class FloatEntityProperty(
     identifier: String,
     private val defaultValue: Float,

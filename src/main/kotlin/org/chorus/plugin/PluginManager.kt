@@ -32,10 +32,6 @@ import kotlin.addSuppressed
 import kotlin.also
 import kotlin.require
 
-/**
- * @author MagicDroidX
- */
-
 open class PluginManager(private val server: Server, private val commandMap: SimpleCommandMap) {
     val plugins: MutableMap<String, Plugin> = LinkedHashMap()
 

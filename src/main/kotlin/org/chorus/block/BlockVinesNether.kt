@@ -15,10 +15,6 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
-/**
- * Implements the main logic of all nether vines.
- * @author joserobjr
- */
 abstract class BlockVinesNether
 /**
  * Creates a nether vine from a meta compatible with [.getProperties].

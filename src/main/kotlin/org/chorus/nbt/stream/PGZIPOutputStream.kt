@@ -11,9 +11,7 @@ import java.util.zip.Deflater
 import java.util.zip.DeflaterOutputStream
 
 /**
- * A multi-threaded version of [java.util.zip.GZIPOutputStream].
- *
- * @author shevek
+ * A multithreaded version of [java.util.zip.GZIPOutputStream].
  */
 class PGZIPOutputStream(
     out: OutputStream?, // TODO: Share, daemonize.

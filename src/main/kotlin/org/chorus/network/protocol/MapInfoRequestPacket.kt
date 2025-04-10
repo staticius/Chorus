@@ -2,13 +2,6 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-/**
- * @author CreeperFace
- * @since 5.3.2017
- */
-
-
 class MapInfoRequestPacket : DataPacket() {
     var mapId: Long = 0
 

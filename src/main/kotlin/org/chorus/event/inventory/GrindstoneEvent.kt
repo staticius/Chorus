@@ -23,10 +23,6 @@ import org.chorus.event.HandlerList
 import org.chorus.inventory.GrindstoneInventory
 import org.chorus.item.Item
 
-/**
- * @author joserobjr
- * @since 2021-03-21
- */
 class GrindstoneEvent(
     inventory: GrindstoneInventory,
     val firstItem: Item,

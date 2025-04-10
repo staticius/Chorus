@@ -21,9 +21,6 @@ import org.chorus.utils.DyeColor
 import org.chorus.utils.Utils
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author PetteriM1
- */
 class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(chunk, nbt) {
     override fun getIdentifier(): String {
         return EntityID.TROPICALFISH

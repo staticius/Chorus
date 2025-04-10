@@ -4,11 +4,7 @@ package org.chorus.permission
  * 能成为服务器管理员(OP)的对象。<br></br>
  * Who can be an operator(OP).
  *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see org.chorus.permission.Permissible
- *
- *
  */
 interface ServerOperator {
     /**

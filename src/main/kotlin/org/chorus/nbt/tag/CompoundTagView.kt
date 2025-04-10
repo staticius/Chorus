@@ -2,11 +2,6 @@ package org.chorus.nbt.tag
 
 import java.util.*
 
-/**
- * Allay Project 12/17/2023
- *
- * @author Cool_Loong
- */
 class CompoundTagView(private val delegate: CompoundTag) : CompoundTag() {
     override val allTags: Collection<Tag<*>>
         get() = Collections.unmodifiableCollection(delegate.allTags)

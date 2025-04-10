@@ -26,10 +26,6 @@ import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
 
-/**
- * @author CoolLoong (PNX Project)
- */
-
 class LevelDBProvider(override val level: Level, override val path: String) : LevelProvider {
     private val lastChunk: ThreadLocal<WeakReference<IChunk>?> = ThreadLocal()
     protected val chunks: ConcurrentHashMap<Long, IChunk> = ConcurrentHashMap()

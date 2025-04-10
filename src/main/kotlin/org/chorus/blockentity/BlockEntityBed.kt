@@ -5,10 +5,6 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.DyeColor
 
-/**
- * @author CreeperFace
- * @since 2.6.2017
- */
 class BlockEntityBed(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
     var color: Int = 0
 

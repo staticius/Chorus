@@ -14,14 +14,11 @@ import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.types.itemstack.request.action.CraftRecipeOptionalAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
+import org.chorus.utils.Loggable
 import java.util.*
 import java.util.stream.Stream
 import kotlin.math.max
 import kotlin.math.min
-
-/**
- * @author CoolLoong
- */
 
 class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipeOptionalAction> {
     override fun handle(
@@ -199,8 +196,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
                         if (enchantedBook) {
                             rarity = max(1.0, (rarity / 2).toDouble()).toInt()
                         }
-
-                        (extraCost += rarity * max(0.0, (resultLevel - targetLevel).toDouble())).toInt()
+                        extraCost += rarity * max(0, (resultLevel - targetLevel))
                         if (target.getCount() > 1) {
                             extraCost = 40
                         }
@@ -255,7 +251,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
             namedTag.remove("ench")
             result.setNamedTag(namedTag)
             if (!enchantments.isEmpty()) {
-                result.addEnchantment(*enchantments.toArray(Enchantment.EMPTY_ARRAY))
+                result.addEnchantment(*enchantments.toTypedArray())
             }
         }
         resultPair.left(result)
@@ -304,7 +300,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
 
         if (input.id == ItemID.FILLED_MAP && additional.id == ItemID.PAPER) {
             val item = input.clone() as ItemFilledMap
-            val level = server.getLevel(item.mapWorld)
+            val level = server.getLevel(item.mapWorld)!!
             val startX = item.mapStartX
             val startZ = item.mapStartZ
             val scale = item.mapScale + 1
@@ -324,7 +320,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
         return result
     }
 
-    companion object {
+    companion object : Loggable {
         private fun getRepairCost(item: Item): Int {
             return if (item.hasCompoundTag() && item.namedTag!!.contains("RepairCost")) item.namedTag!!.getInt("RepairCost") else 0
         }

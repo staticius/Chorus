@@ -27,10 +27,6 @@ import kotlin.concurrent.Volatile
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author Cool_Loong
- */
-
 class Chunk : IChunk {
     @Volatile
     override var x: Int = 0

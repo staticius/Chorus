@@ -3,12 +3,6 @@ package org.chorus.recipe
 import org.chorus.item.Item
 import org.chorus.recipe.descriptor.ItemDescriptor
 
-/**
- * The type Smithing recipe for upgrade equipment.
- *
- * @author joserobjr
- * @since 2020 -09-28
- */
 class SmithingTransformRecipe(
     recipeId: String,
     result: Item?,

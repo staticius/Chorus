@@ -5,9 +5,6 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import java.util.*
 
-/**
- * @author KCodeYT (Nukkit Project)
- */
 class StructureGrowEvent(val block: Block, private val blocks: MutableList<Block>) :
     LevelEvent(Objects.requireNonNull(block.level)), Cancellable {
     var blockList: List<Block>

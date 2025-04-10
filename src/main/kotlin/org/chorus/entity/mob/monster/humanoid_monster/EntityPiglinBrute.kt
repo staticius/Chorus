@@ -30,10 +30,6 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import java.util.function.Function
 
-/**
- * @author joserobjr
- * @since 2020-11-20
- */
 class EntityPiglinBrute(chunk: IChunk?, nbt: CompoundTag?) : EntityPiglin(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.PIGLIN_BRUTE

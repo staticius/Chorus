@@ -26,9 +26,6 @@ import org.chorus.level.format.IChunk
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PetteriM1
- */
 class EntityTurtle(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntitySwimmable, EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.TURTLE

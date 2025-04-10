@@ -7,9 +7,6 @@ import org.chorus.network.protocol.types.BannerPattern
 import org.chorus.utils.DyeColor
 import java.util.*
 
-/**
- * @author PetteriM1
- */
 class ItemBanner @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.BANNER, meta, count, "Banner") {
     override fun internalAdjust() {

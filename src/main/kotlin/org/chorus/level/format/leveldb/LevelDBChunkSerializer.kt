@@ -26,11 +26,6 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.*
 
-/**
- * Allay Project 8/23/2023
- *
- * @author Cool_Loong
- */
 class LevelDBChunkSerializer private constructor() {
     fun serialize(writeBatch: WriteBatch, chunk: IChunk) {
         chunk.batchProcess { unsafeChunk ->

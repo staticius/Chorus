@@ -6,10 +6,6 @@ import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.utils.ChorusRandom
 
-/**
- * @author CreeperFace
- * @since 23. 10. 2016
- */
 class ObjectDarkOakTree : TreeGenerator() {
     /**
      * The metadata value of the wood to use in tree generation.

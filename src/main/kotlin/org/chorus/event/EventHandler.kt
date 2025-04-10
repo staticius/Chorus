@@ -13,13 +13,9 @@ package org.chorus.event
  * 处理器可以选择忽略或不忽略被取消的事件，这种特性可以在[.ignoreCancelled]中定义。<br></br>
  * A handler can choose to ignore a cancelled event or not, that can be defined in [.ignoreCancelled].
  *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author null(javadoc) @ Nukkit Project
  * @see org.chorus.event.Listener
  *
  * @see org.chorus.event.Event
- *
- *
  */
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY_GETTER, AnnotationTarget.PROPERTY_SETTER)
 @Retention(

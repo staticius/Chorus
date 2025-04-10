@@ -1,8 +1,5 @@
 package org.chorus.item.enchantment
 
-/**
- * @author Rover656
- */
 class EnchantmentMending :
     Enchantment(ID_MENDING, "mending", Rarity.RARE, EnchantmentType.BREAKABLE) {
     init {

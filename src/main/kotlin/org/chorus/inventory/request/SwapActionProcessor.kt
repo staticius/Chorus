@@ -8,12 +8,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.SwapAction
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 
-/**
- * Allay Project 2023/10/7
- *
- * @author daoge_cmd
- */
-
 class SwapActionProcessor : ItemStackRequestActionProcessor<SwapAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.SWAP

@@ -39,9 +39,6 @@ import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.Utils
 
-/**
- * @author Erik Miller | EinBexiii
- */
 class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.HOGLIN

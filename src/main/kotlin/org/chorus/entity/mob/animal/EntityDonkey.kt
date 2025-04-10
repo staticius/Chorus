@@ -27,9 +27,6 @@ import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PikyCZ
- */
 class EntityDonkey(chunk: IChunk?, nbt: CompoundTag) : EntityHorse(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.DONKEY

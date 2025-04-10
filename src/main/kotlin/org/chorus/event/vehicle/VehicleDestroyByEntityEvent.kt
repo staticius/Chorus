@@ -2,12 +2,6 @@ package org.chorus.event.vehicle
 
 import org.chorus.entity.Entity
 
-/**
- * Is called when an entity destroyed a vehicle
- *
- * @author TrainmasterHD
- * @since 09.09.2019
- */
 class VehicleDestroyByEntityEvent
 /**
  * Constructor for the VehicleDestroyByEntityEvent

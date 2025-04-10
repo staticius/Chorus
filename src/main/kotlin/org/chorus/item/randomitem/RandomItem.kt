@@ -5,10 +5,6 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
 
-/**
- * @author Snake1999
- * @since 2016/1/15
- */
 object RandomItem {
     private val selectors: MutableMap<Selector, Float> = HashMap()
 

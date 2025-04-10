@@ -12,10 +12,6 @@ import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.*
 
-/**
- * @author yescallop
- * @since 2016/2/13
- */
 open class ItemBoat : Item {
     @JvmOverloads
     constructor(meta: Int = 0, count: Int = 1) : super(ItemID.Companion.BOAT, meta, count)

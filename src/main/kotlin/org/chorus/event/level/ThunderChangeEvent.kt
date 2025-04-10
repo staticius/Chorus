@@ -4,9 +4,6 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 import org.chorus.level.Level
 
-/**
- * @author funcraft (Nukkit Project)
- */
 class ThunderChangeEvent(level: Level, private val to: Boolean) : WeatherEvent(level), Cancellable {
     /**
      * Gets the state of thunder that the world is being set to

@@ -5,10 +5,6 @@ import org.chorus.block.Block
 import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
-/**
- * @author joserobjr
- * @since 2020-010-06
- */
 class BlockExplosionPrimeEvent @JvmOverloads constructor(
     block: Block,
     val player: Player?,

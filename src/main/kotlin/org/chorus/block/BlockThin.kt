@@ -6,11 +6,6 @@ import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.math.VectorMath.calculateFace
 import org.chorus.utils.LevelException
 
-/**
- * @author xtypr
- * @since 2015/12/6
- * @apiNote Implements BlockConnectable only in PowerNukkit
- */
 abstract class BlockThin(blockState: BlockState) : BlockTransparent(blockState), BlockConnectable {
     override val isSolid: Boolean
         get() = false

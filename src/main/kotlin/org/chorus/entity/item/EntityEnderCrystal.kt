@@ -17,18 +17,11 @@ import org.chorus.level.format.IChunk
 import org.chorus.math.BlockVector3
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PetteriM1
- */
 class EntityEnderCrystal(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt), EntityExplosive {
     override fun getIdentifier(): String {
         return EntityID.ENDER_CRYSTAL
     }
 
-
-    /**
-     * @since 1.2.1.0-PN
-     */
     protected var detonated: Boolean = false
 
     override fun initEntity() {

@@ -16,11 +16,7 @@ import java.io.InputStream
  * 一般的Nukkit插件需要继承的类。<br></br>
  * A class to be extended by a normal Nukkit plugin.
  *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see org.chorus.plugin.PluginDescription
- *
- *
  */
 
 abstract class PluginBase : Plugin {

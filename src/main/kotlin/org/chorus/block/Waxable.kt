@@ -8,10 +8,6 @@ import org.chorus.level.particle.WaxOffParticle
 import org.chorus.level.particle.WaxOnParticle
 import org.chorus.math.BlockFace
 
-/**
- * @author joserobjr
- * @since 2021-06-14
- */
 interface Waxable {
     val locator: Locator
 

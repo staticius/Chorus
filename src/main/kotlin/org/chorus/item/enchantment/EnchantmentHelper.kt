@@ -13,9 +13,6 @@ import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 
-/**
- * @author BlusteryS
- */
 object EnchantmentHelper {
     private const val MAX_BOOKSHELF_COUNT = 15
 

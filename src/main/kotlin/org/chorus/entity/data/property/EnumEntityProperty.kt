@@ -4,9 +4,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.StringTag
 
-/**
- * @author Peng_Lx
- */
 class EnumEntityProperty(identifier: String, enums: Array<String>, defaultValue: String) :
     EntityProperty(identifier) {
     private val enums: Array<String>

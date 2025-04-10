@@ -7,10 +7,6 @@ import org.chorus.math.*
 import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.ChorusRandom
 
-/**
- * @author Leonidius20
- * @since 20.08.18
- */
 class ItemChorusFruit @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemFood(ItemID.Companion.CHORUS_FRUIT, meta, count, "Chorus Fruit") {
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {

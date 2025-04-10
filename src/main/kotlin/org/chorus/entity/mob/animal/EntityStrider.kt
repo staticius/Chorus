@@ -6,9 +6,6 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author Erik Miller | EinBexiii
- */
 class EntityStrider(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.STRIDER

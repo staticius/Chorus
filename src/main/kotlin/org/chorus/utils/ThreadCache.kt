@@ -1,6 +1,6 @@
 package org.chorus.utils
 
-import org.chorus.nbt.stream.FastByteArrayOutputStream
+import java.io.ByteArrayOutputStream
 
 object ThreadCache {
     fun clean() {
@@ -64,10 +64,10 @@ object ThreadCache {
         }
     }
 
-    val fbaos: IterableThreadLocal<FastByteArrayOutputStream> =
-        object : IterableThreadLocal<FastByteArrayOutputStream>() {
-            override fun init(): FastByteArrayOutputStream {
-                return FastByteArrayOutputStream(1024)
+    val fbaos: IterableThreadLocal<ByteArrayOutputStream> =
+        object : IterableThreadLocal<ByteArrayOutputStream>() {
+            override fun init(): ByteArrayOutputStream {
+                return ByteArrayOutputStream(1024)
             }
         }
 

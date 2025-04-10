@@ -4,9 +4,6 @@ import org.chorus.Player
 import org.chorus.entity.effect.EffectType
 import org.chorus.math.Vector3
 
-/**
- * @author joserobjr
- */
 class ItemHoneyBottle @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemFood(ItemID.Companion.HONEY_BOTTLE, meta, count, "Honey Bottle") {
     override val maxStackSize: Int

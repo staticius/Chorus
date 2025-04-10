@@ -20,9 +20,6 @@ import org.chorus.utils.MinecartType
 import java.util.concurrent.*
 import kotlin.math.sqrt
 
-/**
- * @author Adam Matthew [larryTheCoder] (Nukkit Project)
- */
 class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt), EntityExplosive {
     override fun getIdentifier(): String {
         return EntityID.TNT_MINECART

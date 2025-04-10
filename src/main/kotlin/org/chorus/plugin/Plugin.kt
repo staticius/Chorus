@@ -15,8 +15,6 @@ import java.io.InputStream
  * For plugin developers: it's recommended to use [org.chorus.plugin.PluginBase] for an actual plugin
  * instead of implement this interface.
  *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see org.chorus.plugin.PluginBase
  *
  * @see org.chorus.plugin.PluginDescription

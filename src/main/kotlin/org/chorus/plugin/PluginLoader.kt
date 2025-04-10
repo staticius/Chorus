@@ -7,11 +7,7 @@ import java.util.regex.Pattern
  * 描述一个插件加载器的接口。<br></br>
  * An interface to describe a plugin loader.
  *
- * @author iNevet(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see JavaPluginLoader
- *
- *
  */
 interface PluginLoader {
     /**

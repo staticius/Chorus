@@ -12,10 +12,6 @@ import java.io.IOException
 import java.util.jar.JarFile
 import java.util.regex.Pattern
 
-/**
- * @author Nukkit Team.
- */
-
 class JavaPluginLoader(private val server: Server) : PluginLoader {
     private val classes: MutableMap<String, Class<*>> = HashMap()
 

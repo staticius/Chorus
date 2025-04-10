@@ -2,11 +2,6 @@ package org.chorus.recipe
 
 import org.chorus.recipe.descriptor.ItemDescriptor
 
-/**
- * The type Smithing recipe for trim equipment.
- *
- * @author CoolLoong
- */
 class SmithingTrimRecipe(
     id: String,
     base: ItemDescriptor?,

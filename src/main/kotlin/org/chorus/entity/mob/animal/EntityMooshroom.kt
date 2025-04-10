@@ -33,9 +33,6 @@ import org.chorus.level.vibration.VibrationType
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author BeYkeRYkt (Nukkit Project)
- */
 class EntityMooshroom(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.MOOSHROOM

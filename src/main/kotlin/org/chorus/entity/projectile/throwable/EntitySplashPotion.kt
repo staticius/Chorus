@@ -19,9 +19,6 @@ import org.chorus.utils.BlockColor
 import java.awt.Color
 import kotlin.math.sqrt
 
-/**
- * @author xtypr
- */
 open class EntitySplashPotion : EntityThrowable {
     override fun getIdentifier(): String {
         return EntityID.SPLASH_POTION

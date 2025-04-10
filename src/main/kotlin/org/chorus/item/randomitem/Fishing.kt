@@ -6,10 +6,6 @@ import org.chorus.item.*
 import org.chorus.item.enchantment.*
 import org.chorus.item.randomitem.fishing.FishingEnchantmentItemSelector
 
-/**
- * @author Snake1999
- * @since 2016/1/15
- */
 object Fishing {
     val ROOT_FISHING: Selector = putSelector(Selector(RandomItem.ROOT))
     val FISHES: Selector = RandomItem.putSelector(Selector(ROOT_FISHING), 0.85f)

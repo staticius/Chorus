@@ -16,9 +16,6 @@ import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
-/**
- * @author PetteriM1
- */
 class ItemTrident @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemTool(ItemID.Companion.TRIDENT, meta, count, "Trident") {
     override val maxDurability: Int

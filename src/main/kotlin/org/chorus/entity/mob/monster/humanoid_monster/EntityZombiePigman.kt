@@ -34,11 +34,8 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PikyCZ, Buddelbubi
- */
 class EntityZombiePigman(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt), EntityWalkable, EntitySmite {
-    //Mojang seems to kept the old name?
+    // Mojang seems to kept the old name?
     override fun getIdentifier(): String {
         return EntityID.ZOMBIE_PIGMAN
     }

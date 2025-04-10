@@ -6,9 +6,6 @@ import org.chorus.entity.EntityWalkable
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PikyCZ
- */
 class EntityStray(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nbt), EntityWalkable, EntitySmite {
     override fun getIdentifier(): String {
         return EntityID.STRAY

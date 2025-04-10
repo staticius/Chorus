@@ -18,9 +18,6 @@ import org.chorus.level.vibration.VibrationType
 import org.chorus.nbt.tag.CompoundTag
 import kotlin.math.abs
 
-/**
- * @author MagicDroidX
- */
 class EntityTnt @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, protected var source: Entity? = null) :
     Entity(chunk, nbt), EntityExplosive {
     override fun getIdentifier(): String {

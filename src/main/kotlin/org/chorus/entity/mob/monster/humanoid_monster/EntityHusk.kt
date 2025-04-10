@@ -34,9 +34,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelSoundEventPacket
 import java.util.function.Function
 
-/**
- * @author PikyCZ
- */
 class EntityHusk(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt) {
     override fun getIdentifier(): String {
         return EntityID.HUSK

@@ -42,10 +42,6 @@ package org.chorus.event
  * 关于处理器的优先级和处理器是否忽略被取消的事件，请看：[EventHandler].<br></br>
  * For the priority of handler and whether the handler ignore cancelled events or not, See: [EventHandler].
  *
- * @author Unknown(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
  * @see org.chorus.event.Event
- *
- *
  */
 interface Listener 

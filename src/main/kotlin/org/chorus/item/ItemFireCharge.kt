@@ -8,9 +8,6 @@ import org.chorus.math.BlockFace
 import org.chorus.network.protocol.LevelEventPacket
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author PetteriM1
- */
 class ItemFireCharge @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
     Item(ItemID.Companion.FIRE_CHARGE, 0, count, "Fire Charge") {
     override fun canBeActivated(): Boolean {

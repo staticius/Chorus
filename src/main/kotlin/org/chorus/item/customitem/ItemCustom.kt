@@ -7,8 +7,6 @@ import org.chorus.item.Item
  *
  *
  * Inherit this class to implement a custom item, override the methods in the [Item] to control the feature of the item.
- *
- * @author lt_name
  */
 abstract class ItemCustom(id: String) : Item(id), CustomItem {
     /**

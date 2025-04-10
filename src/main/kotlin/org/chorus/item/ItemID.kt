@@ -1,9 +1,5 @@
 package org.chorus.item
 
-
-/**
- * @author Cool_Loong
- */
 interface ItemID {
     companion object {
         const val ACACIA_BOAT: String = "minecraft:acacia_boat"

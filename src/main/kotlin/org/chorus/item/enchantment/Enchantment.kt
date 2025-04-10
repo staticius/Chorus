@@ -42,11 +42,6 @@ import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set
 
-/**
- * An enchantment that can be to applied to an item.
- *
- * @author MagicDroidX (Nukkit Project)
- */
 abstract class Enchantment : Cloneable {
     /**
      * The ID of this enchantment.
@@ -864,19 +859,19 @@ abstract class Enchantment : Cloneable {
          * @return the enchantment
          */
         @JvmStatic
-        fun getEnchantment(name: String): Enchantment? {
-            return if (Identifier.isValid(name)) {
+        fun getEnchantment(name: String): Enchantment {
+            return (if (Identifier.isValid(name)) {
                 namedEnchantments[Identifier.tryParse(
                     name
-                )]?.clone()
+                )]
             } else namedEnchantments[Identifier(
                 Identifier.DEFAULT_NAMESPACE,
                 name
-            )]?.clone()
+            )])?.clone() ?: throw RuntimeException("Unknown Enchantment Name: $name")
         }
 
-        fun getEnchantment(name: Identifier): Enchantment? {
-            return namedEnchantments[name]?.clone()
+        fun getEnchantment(name: Identifier): Enchantment {
+            return namedEnchantments[name]?.clone() ?: throw RuntimeException("Unknown Enchantment Identifier: $name")
         }
 
         /**

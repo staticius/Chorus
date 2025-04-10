@@ -35,8 +35,6 @@ import java.util.function.Function
 import kotlin.math.max
 
 /**
- * @author BeYkeRYkt (Nukkit Project)
- * @author Cool_Loong (PowerNukkitX Project)
  * todo 野生狼不会被刷新
  */
 class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityOwnable,

@@ -2,9 +2,6 @@ package org.chorus.entity.effect
 
 import java.util.function.Function
 
-/**
- * @author MEFRREEX
- */
 @JvmRecord
 data class PotionEffects(val supplier: Function<Boolean, List<Effect>>) {
     fun getEffects(splash: Boolean): List<Effect> {

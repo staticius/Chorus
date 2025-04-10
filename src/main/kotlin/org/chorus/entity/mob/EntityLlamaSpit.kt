@@ -6,9 +6,6 @@ import org.chorus.entity.mob.animal.EntityAnimal
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
-/**
- * @author PikyCZ
- */
 class EntityLlamaSpit(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.LLAMA_SPIT

@@ -37,9 +37,6 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.Utils
 import java.util.function.Function
 
-/**
- * @author PikyCZ
- */
 class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nbt), EntityWalkable,
     EntitySmite {
     override fun getIdentifier(): String {

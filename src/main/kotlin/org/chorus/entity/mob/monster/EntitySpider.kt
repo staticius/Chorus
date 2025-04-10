@@ -34,9 +34,6 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import java.util.function.Function
 
-/**
- * @author PikyCZ
- */
 class EntitySpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityArthropod {
     override fun getIdentifier(): String {
         return EntityID.SPIDER

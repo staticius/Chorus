@@ -1,9 +1,5 @@
 package org.chorus.item
 
-/**
- * @author Leonidius20
- * @since 18.08.18
- */
 class ItemMagmaCream(meta: Int, count: Int) :
     Item(ItemID.Companion.MAGMA_CREAM, meta, count, "Magma Cream") {
     @JvmOverloads

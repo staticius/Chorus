@@ -1,8 +1,5 @@
 package org.chorus.item.enchantment
 
-/**
- * @author Nukkit Project Team
- */
 class EnchantmentList(size: Int) {
     private val enchantments = arrayOfNulls<EnchantmentEntry>(size)
 

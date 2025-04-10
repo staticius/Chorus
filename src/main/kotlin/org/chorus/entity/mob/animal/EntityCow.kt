@@ -30,9 +30,6 @@ import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Utils
 
-/**
- * @author BeYkeRYkt (Nukkit Project)
- */
 class EntityCow(chunk: IChunk?, nbt: CompoundTag?) : EntityAnimal(chunk, nbt!!), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.COW

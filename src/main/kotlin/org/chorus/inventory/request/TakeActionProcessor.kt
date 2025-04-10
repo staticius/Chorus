@@ -7,13 +7,6 @@ import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.network.protocol.types.itemstack.request.action.TakeAction
 
-
-/**
- * Allay Project 2023/7/28
- *
- * @author daoge_cmd
- */
-
 class TakeActionProcessor : TransferItemActionProcessor<TakeAction>() {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.TAKE

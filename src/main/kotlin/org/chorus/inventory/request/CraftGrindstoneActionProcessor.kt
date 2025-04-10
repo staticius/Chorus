@@ -18,10 +18,6 @@ import java.util.stream.Stream
 import kotlin.math.ceil
 import kotlin.math.max
 
-/**
- * @author CoolLoong
- */
-
 class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrindstoneAction?> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_REPAIR_AND_DISENCHANT

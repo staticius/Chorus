@@ -34,9 +34,6 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Utils
 import java.util.function.Function
 
-/**
- * @author PetteriM1
- */
 class EntityPhantom(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityFlyable, EntitySmite {
     override fun getIdentifier(): String {
         return EntityID.PHANTOM

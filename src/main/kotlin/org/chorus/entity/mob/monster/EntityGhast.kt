@@ -29,9 +29,6 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Utils
 
-/**
- * @author PikyCZ
- */
 class EntityGhast(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
         return EntityID.GHAST

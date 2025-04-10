@@ -19,9 +19,6 @@ import org.chorus.math.Vector3
 import org.chorus.utils.ChorusRandom
 import java.util.concurrent.ThreadLocalRandom
 
-/**
- * @author Angelic47 (Nukkit Project)
- */
 abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate), FlowerPotBlock {
     abstract fun getWoodType(): WoodType
 

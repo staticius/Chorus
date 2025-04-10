@@ -36,9 +36,6 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 
-/**
- * @author PikyCZ
- */
 class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.VINDICATOR

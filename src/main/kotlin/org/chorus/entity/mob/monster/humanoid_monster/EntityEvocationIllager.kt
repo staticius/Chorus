@@ -36,9 +36,6 @@ import org.chorus.utils.DyeColor
 import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 
-/**
- * @author PikyCZ
- */
 class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
         return EntityID.EVOCATION_ILLAGER

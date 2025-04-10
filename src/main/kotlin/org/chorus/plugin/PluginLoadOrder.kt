@@ -10,11 +10,6 @@ package org.chorus.plugin
  * 和 [org.chorus.plugin.PluginLoadOrder.POSTWORLD]。<br></br>
  * The load order of a Nukkit plugin can be [org.chorus.plugin.PluginLoadOrder.STARTUP]
  * or [org.chorus.plugin.PluginLoadOrder.POSTWORLD].
- *
- * @author MagicDroidX(code) @ Nukkit Project
- * @author iNevet(code) @ Nukkit Project
- * @author 粉鞋大妈(javadoc) @ Nukkit Project
- *
  */
 enum class PluginLoadOrder {
     /**

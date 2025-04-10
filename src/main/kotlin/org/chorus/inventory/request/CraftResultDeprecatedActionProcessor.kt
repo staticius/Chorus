@@ -6,13 +6,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import org.chorus.recipe.Recipe
 import org.chorus.recipe.RecipeType
 
-
-/**
- * Allay Project 2023/12/2
- *
- * @author daoge_cmd | CoolLoong
- */
-
 class CraftResultDeprecatedActionProcessor : ItemStackRequestActionProcessor<CraftResultsDeprecatedAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_RESULTS_DEPRECATED

@@ -3,11 +3,6 @@ package org.chorus.scheduler
 import org.chorus.plugin.Plugin
 import org.chorus.utils.Loggable
 
-
-/**
- * @author MagicDroidX
- */
-
 class TaskHandler(val plugin: Plugin?, val task: Runnable, val taskId: Int, val isAsynchronous: Boolean) {
     var delay: Int = 0
     var period: Int = 0
