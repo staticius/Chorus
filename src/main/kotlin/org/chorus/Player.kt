@@ -471,7 +471,7 @@ class Player(
      *
      * Gets crafting grid of the player.
      */
-    var craftingGrid: CraftingGridInventory? = null
+    lateinit var craftingGrid: CraftingGridInventory
         protected set
 
     /**
@@ -480,9 +480,9 @@ class Player(
      *
      * Gets cursor inventory of the player.
      */
-    var cursorInventory: PlayerCursorInventory? = null
+    lateinit var cursorInventory: PlayerCursorInventory
         protected set
-    var creativeOutputInventory: CreativeOutputInventory? = null
+    lateinit var creativeOutputInventory: CreativeOutputInventory
         protected set
 
     /**

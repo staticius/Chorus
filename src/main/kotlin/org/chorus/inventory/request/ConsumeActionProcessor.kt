@@ -1,21 +1,13 @@
 package org.chorus.inventory.request
 
-import com.google.common.collect.Lists
 import org.chorus.Player
-import org.chorus.entity.EntityHumanType.getInventory
 import org.chorus.inventory.*
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus.network.protocol.types.itemstack.request.action.ConsumeAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
-import java.util.List
-
-/**
- * Allay Project 2023/12/1
- *
- * @author daoge_cmd
- */
+import org.chorus.utils.Loggable
 
 class ConsumeActionProcessor : ItemStackRequestActionProcessor<ConsumeAction> {
     override fun handle(action: ConsumeAction, player: Player, context: ItemStackRequestContext): ActionResponse? {
@@ -27,10 +19,10 @@ class ConsumeActionProcessor : ItemStackRequestActionProcessor<ConsumeAction> {
             return context.error()
         }
 
-        val sourceContainer: Inventory = getInventory(player, action.source.container)
+        val sourceContainer: Inventory = NetworkMapping.getInventory(player, action.source.containerName.container)
         val slot = sourceContainer.fromNetworkSlot(action.source.slot)
         var item = sourceContainer.getItem(slot)
-        if (validateStackNetworkId(item.netId, action.source.stackNetworkId)) {
+        if (validateStackNetworkId(item.getNetId(), action.source.stackNetworkId)) {
             ConsumeActionProcessor.log.warn("mismatch stack network id!")
 
             return context.error()
@@ -56,24 +48,23 @@ class ConsumeActionProcessor : ItemStackRequestActionProcessor<ConsumeAction> {
             item = sourceContainer.getItem(slot)
         }
 
-        val isEnchRecipe = context.get<Boolean>(CraftRecipeActionProcessor.Companion.ENCH_RECIPE_KEY)
-        if (isEnchRecipe != null && isEnchRecipe && action.source.container == ContainerSlotType.ENCHANTING_INPUT) {
+        val isEnchRecipe = context.get<Boolean>(CraftRecipeActionProcessor.ENCH_RECIPE_KEY)
+        if (isEnchRecipe != null && isEnchRecipe && action.source.containerName.container == ContainerSlotType.ENCHANTING_INPUT) {
             return null
         }
 
         val containerSlotType = sourceContainer.getSlotType(slot)
-        checkNotNull(containerSlotType) { "Unknown slot type for slot " + slot + " in inventory " + sourceContainer.javaClass.simpleName }
 
         return context.success(
-            List.of(
+            listOf(
                 ItemStackResponseContainer(
                     containerSlotType,
-                    listOf(
+                    mutableListOf(
                         ItemStackResponseSlot(
                             sourceContainer.toNetworkSlot(slot),
                             sourceContainer.toNetworkSlot(slot),
                             item.getCount(),
-                            item.netId,
+                            item.getNetId(),
                             item.customName,
                             item.damage
                         )
@@ -86,4 +77,6 @@ class ConsumeActionProcessor : ItemStackRequestActionProcessor<ConsumeAction> {
 
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CONSUME
+
+    companion object : Loggable
 }

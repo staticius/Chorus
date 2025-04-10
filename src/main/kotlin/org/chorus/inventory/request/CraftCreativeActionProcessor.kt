@@ -4,6 +4,7 @@ import org.chorus.Player
 import org.chorus.network.protocol.types.itemstack.request.action.CraftCreativeAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.registry.Registries
+import org.chorus.utils.Loggable
 
 
 /**
@@ -41,7 +42,7 @@ class CraftCreativeActionProcessor : ItemStackRequestActionProcessor<CraftCreati
         return null
     }
 
-    companion object {
+    companion object : Loggable {
         const val CRAFT_CREATIVE_KEY: String = "craft_creative_key"
     }
 }

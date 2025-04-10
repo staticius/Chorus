@@ -61,15 +61,15 @@ class EntitySelectorAPI private constructor() {
         //根据选择器类型先确定实体检测范围
         var entities: MutableList<Entity>
         entities = if (selectorType != SelectorType.SELF) {
-            listOf(senderLocation.level.entities.values)
+            senderLocation.level.entities.values.toMutableList()
         } else {
-            if (sender.isEntity) listOf(sender.asEntity())
-            else return listOf()
+            if (sender.isEntity) mutableListOf(sender.asEntity()!!)
+            else return mutableListOf()
         }
         //若是NPC触发选择器，则只处理触发NPC对话的玩家
         if (selectorType == SelectorType.NPC_INITIATOR) {
-            if (sender is NPCCommandSender) entities = listOf<Entity>(sender.initiator)
-            else return listOf()
+            if (sender is NPCCommandSender) entities = mutableListOf(sender.initiator)
+            else return mutableListOf()
         }
         //对于确定的玩家类型选择器，排除掉不是玩家的实体
         when (selectorType) {
@@ -121,7 +121,7 @@ class EntitySelectorAPI private constructor() {
                 }
                 i++
             }
-            return listOf(currentEntity)
+            return  if (currentEntity != null) mutableListOf(currentEntity) else emptyList<Entity>().toMutableList()
         }
         //选择最近玩家
         if (selectorType == SelectorType.NEAREST_PLAYER && entities.size != 1) {
@@ -134,7 +134,7 @@ class EntitySelectorAPI private constructor() {
                     nearest = entity
                 }
             }
-            entities = listOf(nearest)
+            entities = if (nearest != null) mutableListOf(nearest) else emptyList<Entity>().toMutableList()
         }
         return entities
     }
@@ -178,7 +178,7 @@ class EntitySelectorAPI private constructor() {
 
                 if (!args.containsKey(argName)) {
                     args[argName] =
-                        listOf(if (split.size > 1) split[1] else "")
+                        mutableListOf(if (split.size > 1) split[1] else "")
                 } else {
                     args[argName]!!.add(if (split.size > 1) split[1] else "")
                 }

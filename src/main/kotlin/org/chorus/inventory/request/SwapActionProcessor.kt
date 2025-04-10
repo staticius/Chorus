@@ -8,7 +8,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import org.chorus.network.protocol.types.itemstack.request.action.SwapAction
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
-import java.util.List
 
 /**
  * Allay Project 2023/10/7
