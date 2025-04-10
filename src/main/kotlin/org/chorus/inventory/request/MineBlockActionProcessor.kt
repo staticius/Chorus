@@ -9,6 +9,7 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import org.chorus.network.protocol.types.itemstack.request.action.MineBlockAction
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
+import org.chorus.utils.Loggable
 import java.util.List
 
 
@@ -25,7 +26,7 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
         }
 
         val itemInHand = inventory.itemInHand
-        if (validateStackNetworkId(itemInHand.netId, action.stackNetworkId)) {
+        if (validateStackNetworkId(itemInHand.getNetId(), action.stackNetworkId)) {
             MineBlockActionProcessor.log.warn("mismatch source stack network id!")
             return context.error()
         }
@@ -45,12 +46,12 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
         val itemStackResponseSlot =
             ItemStackResponseContainer(
                 inventory.getSlotType(heldItemIndex),
-                listOf(
+                mutableListOf(
                     ItemStackResponseSlot(
                         inventory.toNetworkSlot(heldItemIndex),
                         inventory.toNetworkSlot(heldItemIndex),
                         itemInHand.getCount(),
-                        itemInHand.netId,
+                        itemInHand.getNetId(),
                         itemInHand.customName,
                         itemInHand.damage
                     )
@@ -60,6 +61,8 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
                     0 // I don't know the purpose of the dynamicId yet, this is why I leave it at 0 for the MineBlockAction
                 )
             )
-        return context.success(List.of(itemStackResponseSlot))
+        return context.success(listOf(itemStackResponseSlot))
     }
+
+    companion object : Loggable
 }

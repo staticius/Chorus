@@ -1,7 +1,6 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.EntityHumanType.getInventory
 import org.chorus.inventory.*
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
@@ -12,9 +11,9 @@ class TakeActionProcessor : TransferItemActionProcessor<TakeAction>() {
         get() = ItemStackRequestActionType.TAKE
 
     override fun handle(action: TakeAction, player: Player, context: ItemStackRequestContext): ActionResponse? {
-        val sourceSlotType = action.source.container
+        val sourceSlotType = action.source.containerName.container
         if (sourceSlotType == ContainerSlotType.CREATED_OUTPUT) {
-            val source: Inventory = getInventory(player, sourceSlotType)
+            val source: Inventory = NetworkMapping.getInventory(player, sourceSlotType)
             val sourItem = source.getUnclonedItem(0)
             val count = action.count
             if (sourItem.getCount() > count) {

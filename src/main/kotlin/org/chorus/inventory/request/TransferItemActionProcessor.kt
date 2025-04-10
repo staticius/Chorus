@@ -1,21 +1,19 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.EntityHumanType.getInventory
 import org.chorus.inventory.*
 import org.chorus.item.*
 import org.chorus.network.protocol.types.itemstack.request.action.TransferItemStackRequestAction
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
-import java.util.List
-
+import org.chorus.utils.Loggable
 
 abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> : ItemStackRequestActionProcessor<T> {
     override fun handle(action: T, player: Player, context: ItemStackRequestContext): ActionResponse? {
-        val sourceSlotType = action!!.source.container
-        val destinationSlotType = action.destination.container
-        val source: Inventory = getInventory(player, sourceSlotType)
-        val destination: Inventory = getInventory(player, destinationSlotType)
+        val sourceSlotType = action!!.source.containerName.container
+        val destinationSlotType = action.destination.containerName.container
+        val source: Inventory = NetworkMapping.getInventory(player, sourceSlotType)
+        val destination: Inventory = NetworkMapping.getInventory(player, destinationSlotType)
         val sourceSlot = source.fromNetworkSlot(action.source.slot)
         val sourceStackNetworkId = action.source.stackNetworkId
         val destinationSlot = destination.fromNetworkSlot(action.destination.slot)
@@ -27,7 +25,7 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
             TransferItemActionProcessor.log.warn("transfer an air item is not allowed")
             return context.error()
         }
-        if (validateStackNetworkId(sourItem.netId, sourceStackNetworkId)) {
+        if (validateStackNetworkId(sourItem.getNetId(), sourceStackNetworkId)) {
             TransferItemActionProcessor.log.warn("mismatch source stack network id!")
             return context.error()
         }
@@ -48,15 +46,15 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
                 sourItem = sourItem.clone().autoAssignStackNetworkId()
                 destination.setItem(destinationSlot, sourItem, false)
                 return context.success(
-                    List.of(
+                    listOf(
                         ItemStackResponseContainer(
                             destination.getSlotType(destinationSlot),
-                            listOf(
+                            mutableListOf(
                                 ItemStackResponseSlot(
                                     destination.toNetworkSlot(destinationSlot),
                                     destination.toNetworkSlot(destinationSlot),
                                     sourItem.getCount(),
-                                    sourItem.netId,
+                                    sourItem.getNetId(),
                                     sourItem.customName,
                                     sourItem.damage
                                 )
@@ -73,7 +71,7 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
             TransferItemActionProcessor.log.warn("transfer an item to a slot that has a different item is not allowed")
             return context.error()
         }
-        if (validateStackNetworkId(destItem.netId, destinationStackNetworkId)) {
+        if (validateStackNetworkId(destItem.getNetId(), destinationStackNetworkId)) {
             TransferItemActionProcessor.log.warn("mismatch destination stack network id!")
             return context.error()
         }
@@ -122,12 +120,12 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
         val destItemStackResponseSlot =
             ItemStackResponseContainer(
                 destination.getSlotType(destinationSlot),
-                listOf(
+                mutableListOf(
                     ItemStackResponseSlot(
                         destination.toNetworkSlot(destinationSlot),
                         destination.toNetworkSlot(destinationSlot),
                         resultDestItem.getCount(),
-                        resultDestItem.netId,
+                        resultDestItem.getNetId(),
                         resultDestItem.customName,
                         resultDestItem.damage
                     )
@@ -136,18 +134,18 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
             )
         //CREATED_OUTPUT不需要发source响应
         return if (source is CreativeOutputInventory) {
-            context.success(List.of(destItemStackResponseSlot))
+            context.success(listOf(destItemStackResponseSlot))
         } else {
             context.success(
-                List.of(
+                listOf(
                     ItemStackResponseContainer(
                         source.getSlotType(sourceSlot),
-                        listOf(
+                        mutableListOf(
                             ItemStackResponseSlot(
                                 source.toNetworkSlot(sourceSlot),
                                 source.toNetworkSlot(sourceSlot),
                                 resultSourItem.getCount(),
-                                resultSourItem.netId,
+                                resultSourItem.getNetId(),
                                 resultSourItem.customName,
                                 resultSourItem.damage
                             )
@@ -158,4 +156,6 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
             )
         }
     }
+
+    companion object : Loggable
 }

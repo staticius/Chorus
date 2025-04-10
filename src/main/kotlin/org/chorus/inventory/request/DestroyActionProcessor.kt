@@ -1,13 +1,12 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.EntityHumanType.getInventory
 import org.chorus.inventory.*
 import org.chorus.network.protocol.types.itemstack.request.action.DestroyAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
-import java.util.List
+import org.chorus.utils.Loggable
 
 class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyAction> {
     override val type: ItemStackRequestActionType
@@ -23,12 +22,12 @@ class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyAction> {
             DestroyActionProcessor.log.warn("only creative mode can destroy item")
             return context.error()
         }
-        val container = action.source.container
-        val sourceInventory: Inventory = getInventory(player, container)
+        val container = action.source.containerName.container
+        val sourceInventory: Inventory = NetworkMapping.getInventory(player, container)
         val count = action.count
         val slot = sourceInventory.fromNetworkSlot(action.source.slot)
         var item = sourceInventory.getItem(slot)
-        if (validateStackNetworkId(item.netId, action.source.stackNetworkId)) {
+        if (validateStackNetworkId(item.getNetId(), action.source.stackNetworkId)) {
             DestroyActionProcessor.log.warn("mismatch stack network id!")
             return context.error()
         }
@@ -48,15 +47,15 @@ class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyAction> {
             item = sourceInventory.getItem(slot)
         }
         return context.success(
-            List.of(
+            listOf(
                 ItemStackResponseContainer(
                     sourceInventory.getSlotType(slot),
-                    listOf(
+                    mutableListOf(
                         ItemStackResponseSlot(
                             sourceInventory.toNetworkSlot(slot),
                             sourceInventory.toNetworkSlot(slot),
                             item.getCount(),
-                            item.netId,
+                            item.getNetId(),
                             item.customName,
                             item.damage
                         )
@@ -66,4 +65,6 @@ class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyAction> {
             )
         )
     }
+
+    companion object : Loggable
 }

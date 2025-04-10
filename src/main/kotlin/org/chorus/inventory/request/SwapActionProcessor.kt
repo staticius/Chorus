@@ -1,47 +1,47 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.entity.EntityHumanType.getInventory
-import org.chorus.inventory.*
+import org.chorus.inventory.Inventory
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.network.protocol.types.itemstack.request.action.SwapAction
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
+import org.chorus.utils.Loggable
 
 class SwapActionProcessor : ItemStackRequestActionProcessor<SwapAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.SWAP
 
     override fun handle(action: SwapAction, player: Player, context: ItemStackRequestContext): ActionResponse {
-        val sourceSlotType = action.source.container
-        val destinationSlotType = action.destination.container
-        val source: Inventory = getInventory(player, sourceSlotType)
-        val destination: Inventory = getInventory(player, destinationSlotType)
+        val sourceSlotType = action.source.containerName.container
+        val destinationSlotType = action.destination.containerName.container
+        val source: Inventory = NetworkMapping.getInventory(player, sourceSlotType)
+        val destination: Inventory = NetworkMapping.getInventory(player, destinationSlotType)
 
         val sourceSlot = source.fromNetworkSlot(action.source.slot)
         val destinationSlot = destination.fromNetworkSlot(action.destination.slot)
         val sourceItem = source.getItem(sourceSlot)
         val destinationItem = destination.getItem(destinationSlot)
-        if (validateStackNetworkId(sourceItem.netId, action.source.stackNetworkId)) {
+        if (validateStackNetworkId(sourceItem.getNetId(), action.source.stackNetworkId)) {
             SwapActionProcessor.log.warn("mismatch stack network id!")
             return context.error()
         }
-        if (validateStackNetworkId(destinationItem.netId, action.destination.stackNetworkId)) {
+        if (validateStackNetworkId(destinationItem.getNetId(), action.destination.stackNetworkId)) {
             SwapActionProcessor.log.warn("mismatch stack network id!")
             return context.error()
         }
         source.setItem(sourceSlot, destinationItem, false)
         destination.setItem(destinationSlot, sourceItem, false)
         return context.success(
-            List.of(
+            listOf(
                 ItemStackResponseContainer(
                     source.getSlotType(sourceSlot),
-                    listOf(
+                    mutableListOf(
                         ItemStackResponseSlot(
                             source.toNetworkSlot(sourceSlot),
                             source.toNetworkSlot(sourceSlot),
                             destinationItem.getCount(),
-                            destinationItem.netId,
+                            destinationItem.getNetId(),
                             destinationItem.customName,
                             destinationItem.damage
                         )
@@ -50,12 +50,12 @@ class SwapActionProcessor : ItemStackRequestActionProcessor<SwapAction> {
                 ),
                 ItemStackResponseContainer(
                     destination.getSlotType(destinationSlot),
-                    listOf(
+                    mutableListOf(
                         ItemStackResponseSlot(
                             destination.toNetworkSlot(destinationSlot),
                             destination.toNetworkSlot(destinationSlot),
                             sourceItem.getCount(),
-                            sourceItem.netId,
+                            sourceItem.getNetId(),
                             sourceItem.customName,
                             sourceItem.damage
                         )
@@ -65,4 +65,6 @@ class SwapActionProcessor : ItemStackRequestActionProcessor<SwapAction> {
             )
         )
     }
+
+    companion object : Loggable
 }
