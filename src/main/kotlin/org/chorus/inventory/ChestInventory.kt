@@ -1,8 +1,8 @@
 package org.chorus.inventory
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.BlockTrappedChest
-import org.chorus.blockentity.BlockEntity.block
 import org.chorus.blockentity.BlockEntityChest
 import org.chorus.blockentity.BlockEntityNameable
 import org.chorus.event.redstone.RedstoneUpdateEvent
@@ -12,14 +12,13 @@ import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus.utils.LevelException
 import org.chorus.utils.RedstoneComponent
 
-
-class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, InventoryType.CONTAINER, 27),
+class ChestInventory(chest: BlockEntityChest) : ContainerInventory(chest, InventoryType.CONTAINER, 27),
     BlockEntityInventoryNameable {
     protected var doubleInventory: DoubleChestInventory? = null
 
     override fun init() {
         val map = super.slotTypeMap()
-        for (i in 0..<getSize()) {
+        for (i in 0..<size) {
             map[i] = ContainerSlotType.LEVEL_ENTITY
         }
     }
@@ -51,11 +50,11 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
             }
         }
         try {
-            if (holder.block is BlockTrappedChest) {
-                val event = RedstoneUpdateEvent(trappedChest)
-                holder.Server.instance.pluginManager.callEvent(event)
+            if ((holder as BlockEntityChest).block is BlockTrappedChest) {
+                val event = RedstoneUpdateEvent((holder as BlockEntityChest).block)
+                Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
-                    RedstoneComponent.updateAllAroundRedstone(this.holder)
+                    RedstoneComponent.updateAllAroundRedstone(this.holder as BlockEntityChest)
                 }
             }
         } catch (ignored: LevelException) {
@@ -71,7 +70,7 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
             )
             val level = holder.level
             if (level != null) {
-                level.addSound(holder.position.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTCLOSED)
+                level.addSound(holder.vector3.add(0.5, 0.5, 0.5), Sound.RANDOM_CHESTCLOSED)
                 level.addChunkPacket(
                     holder.vector3.x.toInt() shr 4,
                     holder.vector3.z.toInt() shr 4, pk
@@ -80,11 +79,11 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
         }
 
         try {
-            if (holder.block is BlockTrappedChest) {
-                val event = RedstoneUpdateEvent(trappedChest)
-                holder.Server.instance.pluginManager.callEvent(event)
+            if ((holder as BlockEntityChest).block is BlockTrappedChest) {
+                val event = RedstoneUpdateEvent((holder as BlockEntityChest).block)
+                Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled) {
-                    RedstoneComponent.updateAllAroundRedstone(this.holder)
+                    RedstoneComponent.updateAllAroundRedstone((holder as BlockEntityChest))
                 }
             }
         } catch (ignored: LevelException) {
@@ -113,5 +112,5 @@ class ChestInventory(chest: BlockEntityChest?) : ContainerInventory(chest, Inven
     }
 
     override val blockEntityInventoryHolder: BlockEntityNameable
-        get() = holder
+        get() = (holder as BlockEntityChest)
 }
