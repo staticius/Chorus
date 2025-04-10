@@ -4,7 +4,7 @@ import org.chorus.blockentity.BlockEntityFurnace
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 
-class FurnaceTypeInventory(furnace: BlockEntityFurnace?) : SmeltingInventory(furnace, InventoryType.FURNACE, 3) {
+class FurnaceTypeInventory(furnace: BlockEntityFurnace) : SmeltingInventory(furnace, InventoryType.FURNACE, 3) {
     override fun init() {
         val map = super.slotTypeMap()
         map[0] = ContainerSlotType.FURNACE_INGREDIENT

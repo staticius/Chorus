@@ -44,7 +44,7 @@ class SwapActionProcessor : ItemStackRequestActionProcessor<SwapAction> {
             List.of(
                 ItemStackResponseContainer(
                     source.getSlotType(sourceSlot),
-                    Lists.newArrayList(
+                    listOf(
                         ItemStackResponseSlot(
                             source.toNetworkSlot(sourceSlot),
                             source.toNetworkSlot(sourceSlot),
@@ -58,7 +58,7 @@ class SwapActionProcessor : ItemStackRequestActionProcessor<SwapAction> {
                 ),
                 ItemStackResponseContainer(
                     destination.getSlotType(destinationSlot),
-                    Lists.newArrayList(
+                    listOf(
                         ItemStackResponseSlot(
                             destination.toNetworkSlot(destinationSlot),
                             destination.toNetworkSlot(destinationSlot),

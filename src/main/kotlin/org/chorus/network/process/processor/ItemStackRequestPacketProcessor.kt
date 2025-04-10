@@ -5,7 +5,6 @@ import org.chorus.Server
 import org.chorus.event.inventory.ItemStackRequestActionEvent
 import org.chorus.event.player.PlayerTransferItemEvent
 import org.chorus.inventory.Inventory
-import org.chorus.inventory.fake.FakeInventory
 import org.chorus.inventory.request.*
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.ItemStackRequestPacket
@@ -44,10 +43,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
                 val event = ItemStackRequestActionEvent(player, action, context)
                 TransferItemEventCaller.call(event)
                 Server.instance.pluginManager.callEvent(event)
-                val topWindow = player.topWindow
-                if (topWindow.isPresent && topWindow.get() is FakeInventory) {
-                    (topWindow.get() as FakeInventory).handle(event)
-                }
+
                 val response = if (event.response != null) {
                     event.response
                 } else if (event.isCancelled) {

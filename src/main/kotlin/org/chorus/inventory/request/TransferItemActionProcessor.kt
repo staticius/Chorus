@@ -52,7 +52,7 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
                     List.of(
                         ItemStackResponseContainer(
                             destination.getSlotType(destinationSlot),
-                            Lists.newArrayList(
+                            listOf(
                                 ItemStackResponseSlot(
                                     destination.toNetworkSlot(destinationSlot),
                                     destination.toNetworkSlot(destinationSlot),
@@ -123,7 +123,7 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
         val destItemStackResponseSlot =
             ItemStackResponseContainer(
                 destination.getSlotType(destinationSlot),
-                Lists.newArrayList(
+                listOf(
                     ItemStackResponseSlot(
                         destination.toNetworkSlot(destinationSlot),
                         destination.toNetworkSlot(destinationSlot),
@@ -143,7 +143,7 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
                 List.of(
                     ItemStackResponseContainer(
                         source.getSlotType(sourceSlot),
-                        Lists.newArrayList(
+                        listOf(
                             ItemStackResponseSlot(
                                 source.toNetworkSlot(sourceSlot),
                                 source.toNetworkSlot(sourceSlot),

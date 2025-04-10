@@ -61,15 +61,15 @@ class EntitySelectorAPI private constructor() {
         //根据选择器类型先确定实体检测范围
         var entities: MutableList<Entity>
         entities = if (selectorType != SelectorType.SELF) {
-            Lists.newArrayList(senderLocation.level.entities.values)
+            listOf(senderLocation.level.entities.values)
         } else {
-            if (sender.isEntity) Lists.newArrayList(sender.asEntity())
-            else return Lists.newArrayList()
+            if (sender.isEntity) listOf(sender.asEntity())
+            else return listOf()
         }
         //若是NPC触发选择器，则只处理触发NPC对话的玩家
         if (selectorType == SelectorType.NPC_INITIATOR) {
-            if (sender is NPCCommandSender) entities = Lists.newArrayList<Entity>(sender.initiator)
-            else return Lists.newArrayList()
+            if (sender is NPCCommandSender) entities = listOf<Entity>(sender.initiator)
+            else return listOf()
         }
         //对于确定的玩家类型选择器，排除掉不是玩家的实体
         when (selectorType) {
@@ -121,7 +121,7 @@ class EntitySelectorAPI private constructor() {
                 }
                 i++
             }
-            return Lists.newArrayList(currentEntity)
+            return listOf(currentEntity)
         }
         //选择最近玩家
         if (selectorType == SelectorType.NEAREST_PLAYER && entities.size != 1) {
@@ -134,7 +134,7 @@ class EntitySelectorAPI private constructor() {
                     nearest = entity
                 }
             }
-            entities = Lists.newArrayList(nearest)
+            entities = listOf(nearest)
         }
         return entities
     }
@@ -178,7 +178,7 @@ class EntitySelectorAPI private constructor() {
 
                 if (!args.containsKey(argName)) {
                     args[argName] =
-                        Lists.newArrayList(if (split.size > 1) split[1] else "")
+                        listOf(if (split.size > 1) split[1] else "")
                 } else {
                     args[argName]!!.add(if (split.size > 1) split[1] else "")
                 }

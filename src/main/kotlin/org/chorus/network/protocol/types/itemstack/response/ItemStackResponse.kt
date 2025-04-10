@@ -11,7 +11,7 @@ data class ItemStackResponse(
     /**
      * Replaces the success boolean as of v419
      */
-    val result: ItemStackResponseStatus,
+    var result: ItemStackResponseStatus,
     /**
      * requestId is the unique ID of the request that this response is in reaction to. If rejected, the client
      * will undo the actions from the request with this ID.

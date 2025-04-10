@@ -40,7 +40,7 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     }
 
     override fun removeItem(vararg slots: Item): Array<Item> {
-        return arrayOfNulls(0)
+        return emptyArray()
     }
 
     override var contents: Map<Int, Item>

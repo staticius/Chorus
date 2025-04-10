@@ -46,7 +46,7 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
         val itemStackResponseSlot =
             ItemStackResponseContainer(
                 inventory.getSlotType(heldItemIndex),
-                Lists.newArrayList(
+                listOf(
                     ItemStackResponseSlot(
                         inventory.toNetworkSlot(heldItemIndex),
                         inventory.toNetworkSlot(heldItemIndex),

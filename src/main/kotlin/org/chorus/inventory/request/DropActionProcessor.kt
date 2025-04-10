@@ -60,7 +60,7 @@ class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
             listOf(
                 ItemStackResponseContainer(
                     inventory.getSlotType(slot),
-                    Lists.newArrayList(
+                    listOf(
                         ItemStackResponseSlot(
                             inventory.toNetworkSlot(slot),
                             inventory.toNetworkSlot(slot),

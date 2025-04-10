@@ -58,7 +58,7 @@ class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyAction> {
             List.of(
                 ItemStackResponseContainer(
                     sourceInventory.getSlotType(slot),
-                    Lists.newArrayList(
+                    listOf(
                         ItemStackResponseSlot(
                             sourceInventory.toNetworkSlot(slot),
                             sourceInventory.toNetworkSlot(slot),

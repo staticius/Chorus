@@ -68,7 +68,7 @@ class ConsumeActionProcessor : ItemStackRequestActionProcessor<ConsumeAction> {
             List.of(
                 ItemStackResponseContainer(
                     containerSlotType,
-                    Lists.newArrayList(
+                    listOf(
                         ItemStackResponseSlot(
                             sourceContainer.toNetworkSlot(slot),
                             sourceContainer.toNetworkSlot(slot),

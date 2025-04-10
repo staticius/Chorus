@@ -47,7 +47,6 @@ import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
 import org.chorus.event.server.DataPacketSendEvent
 import org.chorus.form.window.Form
 import org.chorus.inventory.*
-import org.chorus.inventory.fake.FakeInventory
 import org.chorus.item.*
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.lang.CommandOutputContainer
@@ -495,11 +494,6 @@ class Player(
      * Player open it own ender chest inventory
      */
     var enderChestOpen: Boolean = false
-
-    /**
-     * Player open a fake Inventory
-     */
-    var fakeInventoryOpen: Boolean = false
 
     /** */
     /**todo hack for receive an error position after teleport */
@@ -4873,7 +4867,7 @@ class Player(
             val value: Inventory
             if (topWindow.isPresent) {
                 value = topWindow.get()
-                if (value is CraftTypeInventory || (value is FakeInventory && value.fakeInventoryType.isCraftType)) {
+                if (value is CraftTypeInventory) {
                     puts.addAll(value.contents.values)
                     value.clearAll()
                 }
