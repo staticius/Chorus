@@ -6,11 +6,11 @@ import org.chorus.item.Item
 import org.chorus.network.protocol.ContainerOpenPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-class CartographyTableInventory(blockCartographyTable: BlockCartographyTable?) :
+class CartographyTableInventory(blockCartographyTable: BlockCartographyTable) :
     BaseInventory(blockCartographyTable, InventoryType.CARTOGRAPHY, 2) {
     override fun init() {
         val map = super.networkSlotMap()
-        for (i in 0..<getSize()) {
+        for (i in 0..<size) {
             map[i] = 12 + i
         }
 
@@ -33,14 +33,14 @@ class CartographyTableInventory(blockCartographyTable: BlockCartographyTable?) :
     override fun onClose(who: Player) {
         super.onClose(who)
 
-        var drops = arrayOf<Item?>(
+        var drops = arrayOf(
             input,
             additional
         )
         drops = who.inventory.addItem(*drops)
         for (drop in drops) {
             if (!who.dropItem(drop)) {
-                getHolder().level.dropItem(getHolder().vector3.add(0.5, 0.5, 0.5), drop)
+                holder.level!!.dropItem(holder.vector3.add(0.5, 0.5, 0.5), drop)
             }
         }
 

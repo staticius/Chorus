@@ -1,23 +1,14 @@
 package org.chorus.inventory
 
 import org.chorus.Player
-import org.chorus.blockentity.BlockEntity.scheduleUpdate
 import org.chorus.blockentity.BlockEntityCampfire
-import org.chorus.blockentity.BlockEntitySpawnable.spawnToAll
 import org.chorus.item.*
 
-
-class CampfireInventory(campfire: BlockEntityCampfire?) : ContainerInventory(campfire, InventoryType.NONE, 4) {
-    override var holder: InventoryHolder?
-        get() = holder as BlockEntityCampfire
-        set(holder) {
-            super.holder = holder
-        }
-
+class CampfireInventory(campfire: BlockEntityCampfire) : ContainerInventory(campfire, InventoryType.NONE, 4) {
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
         super.onSlotChange(index, before, send)
-        holder.scheduleUpdate()
-        holder.spawnToAll()
+        (holder as BlockEntityCampfire).scheduleUpdate()
+        (holder as BlockEntityCampfire).spawnToAll()
     }
 
     override var maxStackSize: Int
