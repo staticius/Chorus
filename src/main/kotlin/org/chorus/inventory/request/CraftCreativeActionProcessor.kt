@@ -6,13 +6,6 @@ import org.chorus.network.protocol.types.itemstack.request.action.ItemStackReque
 import org.chorus.registry.Registries
 import org.chorus.utils.Loggable
 
-
-/**
- * Allay Project 2023/7/26
- *
- * @author daoge_cmd | CoolLoong
- */
-
 class CraftCreativeActionProcessor : ItemStackRequestActionProcessor<CraftCreativeAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_CREATIVE

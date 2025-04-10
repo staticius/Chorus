@@ -23,8 +23,8 @@ import kotlin.math.ceil
 
 abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), IHuman {
     override lateinit var inventory: HumanInventory
-    protected var enderChestInventory: HumanEnderChestInventory? = null
-    protected var offhandInventory: HumanOffHandInventory? = null
+    protected lateinit var enderChestInventory: HumanEnderChestInventory
+    protected lateinit var offhandInventory: HumanOffHandInventory
 
     override fun getInventory(): HumanInventory {
         return inventory
@@ -40,8 +40,8 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
 
     override fun setInventories(inventory: Array<Inventory>) {
         this.inventory = inventory[0] as HumanInventory
-        this.offhandInventory = inventory[1] as HumanOffHandInventory?
-        this.enderChestInventory = inventory[2] as HumanEnderChestInventory?
+        this.offhandInventory = inventory[1] as HumanOffHandInventory
+        this.enderChestInventory = inventory[2] as HumanEnderChestInventory
     }
 
     override fun getDrops(): Array<Item> {
@@ -49,7 +49,7 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
             val drops: MutableList<Item> = ArrayList(
                 inventory.contents.values
             )
-            drops.addAll(offhandInventory!!.contents.values)
+            drops.addAll(offhandInventory.contents.values)
             return drops.stream().filter { item: Item -> !item.keepOnDeath() }.toList()
                 .toTypedArray()
         }

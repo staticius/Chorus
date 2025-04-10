@@ -3582,7 +3582,7 @@ class Player(
      */
     @JvmOverloads
     fun close(message: TextContainer, reason: String = "generic") {
-        var reason = reason
+        var reason1 = reason
         if (!connected.compareAndSet(true, false) && this.closed) {
             return
         }
@@ -3593,7 +3593,7 @@ class Player(
                 TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
                 this.address,
                 port.toString(),
-                Server.instance.baseLang.tr(reason)
+                Server.instance.baseLang.tr(reason1)
             )
         )
 
@@ -3620,17 +3620,17 @@ class Player(
 
         //send disconnection packet
         val packet = DisconnectPacket()
-        if (reason.isBlank()) {
+        if (reason1.isBlank()) {
             packet.hideDisconnectionScreen = true
-            reason = BedrockDisconnectReasons.DISCONNECTED
+            reason1 = BedrockDisconnectReasons.DISCONNECTED
         }
-        packet.message = reason
+        packet.message = reason1
         session.sendPacketSync(packet)
 
         //call quit event
         var ev: PlayerQuitEvent? = null
         if (getName().isNotEmpty()) {
-            Server.instance.pluginManager.callEvent(PlayerQuitEvent(this, message, true, reason).also { ev = it })
+            Server.instance.pluginManager.callEvent(PlayerQuitEvent(this, message, true, reason1).also { ev = it })
             if (this.fishing != null) {
                 this.stopFishing(false)
             }
@@ -3666,23 +3666,10 @@ class Player(
             perm!!.clearPermissions()
             this.perm = null
         }
-        if (this.offhandInventory != null) {
-            this.offhandInventory = null
-        }
-        if (this.enderChestInventory != null) {
-            this.enderChestInventory = null
-        }
-        if (this.creativeOutputInventory != null) {
-            this.creativeOutputInventory = null
-        }
-        if (this.cursorInventory != null) {
-            this.cursorInventory = null
-        }
 
-        //close player network session
+        // close player network session
         log.debug("Closing player network session")
-        log.debug(reason)
-        checkNotNull(this.session)
+        log.debug(reason1)
         session.close(null)
     }
 
