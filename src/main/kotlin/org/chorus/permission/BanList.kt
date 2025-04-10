@@ -13,11 +13,11 @@ import java.util.*
 
 
 class BanList(private val file: String) : Loggable {
-    private var list = LinkedHashMap<String?, BanEntry>()
+    private var list = LinkedHashMap<String, BanEntry>()
 
     var enabled: Boolean = true
 
-    val entries: LinkedHashMap<String?, BanEntry>
+    val entries: LinkedHashMap<String, BanEntry>
         get() {
             removeExpired()
             return this.list
@@ -83,7 +83,7 @@ class BanList(private val file: String) : Loggable {
                 val list = Gson().fromJson<LinkedList<TreeMap<String, String>>>(
                     Utils.readFile(
                         this.file
-                    ), object : TypeToken<LinkedList<TreeMap<String?, String?>?>?>() {
+                    ), object : TypeToken<LinkedList<TreeMap<String, String>>>() {
                     }.type
                 )
                 for (map in list) {
