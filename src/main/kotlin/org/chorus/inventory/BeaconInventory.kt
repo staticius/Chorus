@@ -34,12 +34,14 @@ class BeaconInventory(blockBeacon: BlockEntityBeacon) : BaseInventory(blockBeaco
 
     override fun onOpen(who: Player) {
         super.onOpen(who)
-        who.dataPacket(ContainerOpenPacket(
-            containerID = who.getWindowId(this),
-            containerType = type.networkType,
-            position = holder.vector3.asBlockVector3(),
-            targetActorID = who.getRuntimeID()
-        ))
+        who.dataPacket(
+            ContainerOpenPacket(
+                containerID = who.getWindowId(this),
+                containerType = type.networkType,
+                position = holder.vector3.asBlockVector3(),
+                targetActorID = who.getRuntimeID()
+            )
+        )
         this.sendContents(who)
     }
 

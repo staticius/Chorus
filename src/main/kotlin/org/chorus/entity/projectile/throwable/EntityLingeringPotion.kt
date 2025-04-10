@@ -1,11 +1,15 @@
 package org.chorus.entity.projectile.throwable
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityFlag
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.PotionType
 import org.chorus.entity.item.EntityAreaEffectCloud
 import org.chorus.level.format.IChunk
-import org.chorus.nbt.tag.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
 
 class EntityLingeringPotion : EntitySplashPotion {
     override fun getIdentifier(): String {

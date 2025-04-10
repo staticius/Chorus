@@ -15,7 +15,6 @@ import org.chorus.entity.ai.route.posevaluator.SwimmingPosEvaluator
 import org.chorus.entity.mob.EntityMob
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 class EntityTadpole(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(chunk, nbt), EntitySwimmable {
     override fun getIdentifier(): String {

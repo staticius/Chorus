@@ -9,9 +9,8 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
 import org.chorus.level.tickingarea.TickingArea
 import org.chorus.level.tickingarea.manager.TickingAreaManager
-import org.chorus.math.*
+import org.chorus.math.Vector2
 import org.chorus.utils.TextFormat
-import java.util.stream.Collectors
 import kotlin.collections.set
 import kotlin.math.max
 import kotlin.math.min

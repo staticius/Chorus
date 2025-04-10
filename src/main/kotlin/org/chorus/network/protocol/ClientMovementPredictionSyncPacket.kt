@@ -4,7 +4,6 @@ import org.chorus.entity.data.EntityFlag
 import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.ActorUniqueID
-import java.math.BigInteger
 
 data class ClientMovementPredictionSyncPacket(
     val flags: MutableSet<EntityFlag>,

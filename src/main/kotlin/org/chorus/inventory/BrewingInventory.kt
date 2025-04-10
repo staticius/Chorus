@@ -2,7 +2,7 @@ package org.chorus.inventory
 
 import org.chorus.blockentity.BlockEntityBrewingStand
 import org.chorus.blockentity.BlockEntityNameable
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.jetbrains.annotations.Range
 

@@ -3001,13 +3001,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
      * @param players    可视玩家 Visible Player
      */
     fun playActionAnimation(action: AnimatePacket.Action, rowingTime: Float, players: Collection<Player>) {
-        Server.broadcastPacket(players, AnimatePacket(
-            action = action,
-            targetRuntimeID = this.getRuntimeID(),
-            actionData = AnimatePacket.Action.RowingData(
-                rowingTime = rowingTime
+        Server.broadcastPacket(
+            players, AnimatePacket(
+                action = action,
+                targetRuntimeID = this.getRuntimeID(),
+                actionData = AnimatePacket.Action.RowingData(
+                    rowingTime = rowingTime
+                )
             )
-        ))
+        )
     }
 
     fun getLookingAngleAt(location: Vector3): Double {
@@ -3317,7 +3319,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
          *
          * @return the identifier
          */
-        fun getIdentifier(networkID: Int): Identifier? {
+        fun getIdentifier(networkID: Int): Identifier {
             val entityIdentifier = Registries.ENTITY.getEntityIdentifier(networkID)
             return Identifier(entityIdentifier)
         }

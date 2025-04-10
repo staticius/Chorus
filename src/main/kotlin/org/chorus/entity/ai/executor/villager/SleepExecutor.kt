@@ -8,8 +8,11 @@ import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.villagers.EntityVillagerV2
-import org.chorus.level.*
-import org.chorus.math.*
+import org.chorus.level.Transform
+import org.chorus.math.BVector3
+import org.chorus.math.BlockFace
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
 
 class SleepExecutor : EntityControl, IBehaviorExecutor {
     override fun execute(entity: EntityMob): Boolean {

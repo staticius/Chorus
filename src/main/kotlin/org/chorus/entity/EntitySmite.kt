@@ -1,8 +1,8 @@
 package org.chorus.entity
 
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.EffectType
 import org.chorus.inventory.EntityInventoryHolder
-import org.chorus.level.*
+import org.chorus.level.Level
 
 /**
  * 这个接口代表亡灵类的怪物实体

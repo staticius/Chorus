@@ -1,10 +1,11 @@
 package org.chorus.entity.mob.water_animal.fish
 
 import org.chorus.entity.EntityID
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
+import org.chorus.utils.Utils
 
 /**
  * @author PetteriM1
@@ -55,7 +56,10 @@ class EntitySalmon(chunk: IChunk?, nbt: CompoundTag) : EntityFish(chunk, nbt) {
         } else if (!this.isLarge()) {
             //只有25%获得骨头 来自wiki https://zh.minecraft.wiki/w/%E9%B2%91%E9%B1%BC
             if (rand == 1) {
-                return arrayOf(Item.get(ItemID.BONE), Item.get((if (this.isOnFire()) ItemID.COOKED_SALMON else ItemID.SALMON)))
+                return arrayOf(
+                    Item.get(ItemID.BONE),
+                    Item.get((if (this.isOnFire()) ItemID.COOKED_SALMON else ItemID.SALMON))
+                )
             }
         }
         return arrayOf(Item.get((if (this.isOnFire()) ItemID.COOKED_SALMON else ItemID.SALMON)))

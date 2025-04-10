@@ -2,7 +2,7 @@ package org.chorus.inventory
 
 import org.chorus.Player
 import org.chorus.entity.IHuman
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.network.protocol.InventoryContentPacket
 import org.chorus.network.protocol.MobEquipmentPacket
 import org.chorus.network.protocol.types.inventory.FullContainerName

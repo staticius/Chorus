@@ -5,7 +5,7 @@ import org.chorus.entity.ai.memory.codec.IMemoryCodec
 import org.chorus.utils.Identifier
 import java.util.function.Supplier
 
-class MemoryType <Data : Any> (
+class MemoryType<Data : Any>(
     override val identifier: Identifier,
     private val defaultDataSupplier: Supplier<Data>
 ) : IMemoryType<Data> {

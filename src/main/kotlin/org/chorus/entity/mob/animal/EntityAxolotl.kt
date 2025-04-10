@@ -2,7 +2,7 @@ package org.chorus.entity.mob.animal
 
 import it.unimi.dsi.fastutil.Pair
 import org.chorus.Player
-import org.chorus.block.*
+import org.chorus.block.BlockFlowingWater
 import org.chorus.entity.*
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
@@ -19,17 +19,19 @@ import org.chorus.entity.ai.route.finder.impl.SimpleSpaceAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.SwimmingPosEvaluator
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.*
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
+import org.chorus.utils.Utils
 import java.util.function.Function
 import java.util.function.Predicate
 
@@ -148,7 +150,9 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
                                                 player.removeEffect(EffectType.MINING_FATIGUE)
                                                 player.addEffect(
                                                     Effect.get(EffectType.REGENERATION).setDuration(
-                                                        (if (player.hasEffect(EffectType.REGENERATION)) player.getEffect(EffectType.REGENERATION)!!.getDuration() else 0) + 100
+                                                        (if (player.hasEffect(EffectType.REGENERATION)) player.getEffect(
+                                                            EffectType.REGENERATION
+                                                        )!!.getDuration() else 0) + 100
                                                     )
                                                 )
                                             }

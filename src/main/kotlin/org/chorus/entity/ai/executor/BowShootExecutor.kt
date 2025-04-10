@@ -2,7 +2,9 @@ package org.chorus.entity.ai.executor
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
@@ -11,7 +13,8 @@ import org.chorus.entity.projectile.EntityProjectile
 import org.chorus.entity.projectile.abstract_arrow.EntityArrow
 import org.chorus.event.entity.EntityShootBowEvent
 import org.chorus.event.entity.ProjectileLaunchEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBow
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.item.enchantment.bow.EnchantmentBow
 import org.chorus.level.Sound

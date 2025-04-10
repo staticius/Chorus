@@ -1,16 +1,20 @@
 package org.chorus.entity.mob.monster
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityVariant
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.HoppingController
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.executor.FlatRandomRoamExecutor
 import org.chorus.entity.ai.executor.MeleeAttackExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
@@ -18,12 +22,11 @@ import org.chorus.entity.ai.sensor.NearestTargetEntitySensor
 import org.chorus.entity.mob.EntityGolem
 import org.chorus.entity.mob.animal.EntityFrog
 import org.chorus.event.entity.EntityDamageByEntityEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
-import java.util.List
-import java.util.Set
+import org.chorus.utils.Utils
 import java.util.function.Function
 
 /**

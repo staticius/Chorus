@@ -8,7 +8,9 @@ import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.RandomSoundEvaluator
 import org.chorus.entity.ai.executor.BowShootExecutor
@@ -21,7 +23,8 @@ import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestEntitySensor
 import org.chorus.entity.ai.sensor.NearestPlayerSensor
 import org.chorus.entity.mob.EntityGolem
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag

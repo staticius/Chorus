@@ -4,7 +4,7 @@ import org.chorus.Server
 import org.chorus.entity.Entity
 import org.chorus.event.level.VibrationArriveEvent
 import org.chorus.event.level.VibrationOccurEvent
-import org.chorus.level.*
+import org.chorus.level.Level
 import org.chorus.math.Vector3
 import org.chorus.math.Vector3f
 import org.chorus.math.VectorMath

@@ -2,7 +2,6 @@ package org.chorus.command.defaults
 
 import org.chorus.block.Block
 import org.chorus.block.BlockID
-import org.chorus.block.BlockState
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType

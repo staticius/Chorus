@@ -13,7 +13,7 @@ import org.chorus.level.Locator
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 import org.chorus.utils.RedstoneComponent
-import java.util.EnumSet
+import java.util.*
 import kotlin.math.max
 
 class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
@@ -144,7 +144,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
         if (level.getBlockIdAt(pos.floorX, pos.floorY, pos.floorZ) != this.id) {
             return maxStrength
         } else {
-            val strength = level.getBlockStateAt(pos.floorX, pos.floorY, pos.floorZ)!!.getPropertyValue(
+            val strength = level.getBlockStateAt(pos.floorX, pos.floorY, pos.floorZ).getPropertyValue(
                 CommonBlockProperties.REDSTONE_SIGNAL
             )
             return max(strength.toDouble(), maxStrength.toDouble()).toInt()

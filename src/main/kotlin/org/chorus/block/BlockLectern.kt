@@ -5,10 +5,13 @@ import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.block.property.type.BooleanPropertyType
-import org.chorus.blockentity.*
+import org.chorus.blockentity.BlockEntityID
+import org.chorus.blockentity.BlockEntityLectern
 import org.chorus.event.block.BlockRedstoneEvent
 import org.chorus.event.block.LecternDropBookEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.Sound
 import org.chorus.math.BlockFace
@@ -28,44 +31,44 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState = Companion.
     }
 
     override val waterloggingLevel: Int
-    get() = 1
+        get() = 1
 
     override fun canBeActivated(): Boolean {
         return true
     }
 
     override val hardness: Double
-    get() = 2.5
+        get() = 2.5
 
     override val resistance: Double
-    get() = 12.5
+        get() = 12.5
 
     override val toolType: Int
-    get() = ItemTool.TYPE_AXE
+        get() = ItemTool.TYPE_AXE
 
     override var maxY: Double
-    get() = position.y + 0.89999
-    set(maxY) {
-        super.maxY = maxY
-    }
+        get() = position.y + 0.89999
+        set(maxY) {
+            super.maxY = maxY
+        }
 
     override fun hasComparatorInputOverride(): Boolean {
         return true
     }
 
     override val comparatorInputOverride: Int
-    get() {
-        var power = 0
-        val page: Int
-        val maxPage: Int
-        val lectern = blockEntity
-        if (lectern != null && lectern.hasBook()) {
-            maxPage = lectern.totalPages
-            page = lectern.leftPage + 1
-            power = ((page.toFloat() / maxPage) * 16).toInt()
+        get() {
+            var power = 0
+            val page: Int
+            val maxPage: Int
+            val lectern = blockEntity
+            if (lectern != null && lectern.hasBook()) {
+                maxPage = lectern.totalPages
+                page = lectern.leftPage + 1
+                power = ((page.toFloat() / maxPage) * 16).toInt()
+            }
+            return power
         }
-        return power
-    }
 
     override var blockFace: BlockFace
         get() = CommonPropertyMap.CARDINAL_BLOCKFACE[getPropertyValue(
@@ -123,13 +126,13 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState = Companion.
     }
 
     override val isPowerSource: Boolean
-    get() = true
+        get() = true
 
     var isActivated: Boolean
-    get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT)
-    set(activated) {
-        setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT, activated)
-    }
+        get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT)
+        set(activated) {
+            setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.POWERED_BIT, activated)
+        }
 
     fun executeRedstonePulse() {
         if (isActivated) {

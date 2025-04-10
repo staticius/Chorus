@@ -10,7 +10,6 @@ import org.chorus.entity.ai.EntityAI
 import org.chorus.item.ItemFilledMap
 import org.chorus.plugin.InternalPlugin
 import org.chorus.scheduler.AsyncTask
-import java.util.*
 import kotlin.collections.set
 
 class DebugCommand(name: String) : TestCommand(name, "commands.debug.description"),
@@ -24,7 +23,8 @@ class DebugCommand(name: String) : TestCommand(name, "commands.debug.description
                 CommandParameter.Companion.newEnum("entity", arrayOf("entity")),
                 CommandParameter.Companion.newEnum(
                     "option",
-                    EntityAI.DebugOption.entries.map { option: EntityAI.DebugOption -> option.name.lowercase() }.toTypedArray()
+                    EntityAI.DebugOption.entries.map { option: EntityAI.DebugOption -> option.name.lowercase() }
+                        .toTypedArray()
                 ),
                 CommandParameter.Companion.newEnum("value", false, CommandEnum.Companion.ENUM_BOOLEAN)
             )

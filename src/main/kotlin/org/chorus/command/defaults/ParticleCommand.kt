@@ -1,6 +1,5 @@
 package org.chorus.command.defaults
 
-import org.chorus.Player
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType
@@ -19,7 +18,7 @@ class ParticleCommand(name: String) : VanillaCommand(name, "commands.particle.de
     init {
         this.permission = "chorus.command.particle"
         commandParameters.clear()
-        val particles =  ParticleEffect.entries.map { it.identifier }
+        val particles = ParticleEffect.entries.map { it.identifier }
         commandParameters["default"] = arrayOf(
             CommandParameter.Companion.newEnum("effect", CommandEnum("particle", particles, true)),
             CommandParameter.Companion.newType("position", CommandParamType.POSITION),

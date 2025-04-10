@@ -2,8 +2,9 @@ package org.chorus.entity.item
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.BlockID
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.projectile.SlenderProjectile
 import org.chorus.event.entity.EntityDamageByChildEntityEvent
@@ -12,21 +13,22 @@ import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.ProjectileHitEvent
 import org.chorus.event.player.PlayerFishEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.item.randomitem.Fishing
 import org.chorus.level.MovingObjectPosition
 import org.chorus.level.format.IChunk
 import org.chorus.level.particle.BubbleParticle
 import org.chorus.level.particle.WaterParticle
-import org.chorus.math.*
+import org.chorus.math.Vector3
+import org.chorus.math.Vector3f
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.AddActorPacket
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.types.EntityLink
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 import kotlin.math.sqrt
 

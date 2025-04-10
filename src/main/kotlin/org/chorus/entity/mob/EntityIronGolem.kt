@@ -1,15 +1,22 @@
-
 package org.chorus.entity.mob
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
+import org.chorus.block.BlockIronBlock
+import org.chorus.block.BlockPumpkin
+import org.chorus.entity.Attribute
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityOwnable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.executor.FlatRandomRoamExecutor
@@ -21,19 +28,21 @@ import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestEntitySensor
 import org.chorus.entity.mob.monster.EntityMonster
 import org.chorus.event.entity.EntityDamageEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.item.ItemIronIngot
 import org.chorus.level.GameRule
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.level.particle.DestroyBlockParticle
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
-import org.chorus.math.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
-import java.util.Set
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * @author joserobjr

@@ -2,7 +2,6 @@ package org.chorus.command.selector
 
 import com.github.benmanes.caffeine.cache.Cache
 import com.github.benmanes.caffeine.cache.Caffeine
-import com.google.common.collect.Lists
 import com.google.common.collect.Maps
 import org.chorus.Player
 import org.chorus.command.CommandSender
@@ -121,7 +120,7 @@ class EntitySelectorAPI private constructor() {
                 }
                 i++
             }
-            return  if (currentEntity != null) mutableListOf(currentEntity) else emptyList<Entity>().toMutableList()
+            return if (currentEntity != null) mutableListOf(currentEntity) else emptyList<Entity>().toMutableList()
         }
         //选择最近玩家
         if (selectorType == SelectorType.NEAREST_PLAYER && entities.size != 1) {

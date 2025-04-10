@@ -12,7 +12,6 @@ import org.chorus.plugin.InternalPlugin
 import org.chorus.utils.Loggable
 import org.chorus.utils.TextFormat
 import org.chorus.utils.Utils
-import java.util.*
 import kotlin.collections.component1
 import kotlin.collections.component2
 import kotlin.collections.set

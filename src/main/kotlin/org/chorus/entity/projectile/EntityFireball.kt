@@ -1,16 +1,20 @@
 package org.chorus.entity.projectile
 
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityExplosive
+import org.chorus.entity.EntityID
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityExplosionPrimeEvent
-import org.chorus.level.*
+import org.chorus.level.Explosion
+import org.chorus.level.GameRule
+import org.chorus.level.Locator
 import org.chorus.level.format.IChunk
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 
 class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(chunk, nbt), EntityExplosive {

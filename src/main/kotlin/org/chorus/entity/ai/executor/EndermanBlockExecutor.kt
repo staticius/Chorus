@@ -1,10 +1,12 @@
 package org.chorus.entity.ai.executor
 
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
+import org.chorus.block.Natural
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.EntityEnderman
-import org.chorus.item.*
+import org.chorus.item.Item
 import java.util.*
 
 class EndermanBlockExecutor : IBehaviorExecutor {

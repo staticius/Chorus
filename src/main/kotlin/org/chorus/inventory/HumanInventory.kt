@@ -8,7 +8,9 @@ import org.chorus.entity.IHuman
 import org.chorus.event.entity.EntityArmorChangeEvent
 import org.chorus.event.entity.EntityInventoryChangeEvent
 import org.chorus.event.player.PlayerItemHeldEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemArmor
+import org.chorus.item.ItemFilledMap
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
 import org.chorus.network.protocol.*
@@ -503,7 +505,7 @@ class HumanInventory(human: IHuman) //9+27+4
                 val pk2 = PlayerArmorDamagePacket()
                 for (i in 0..3) {
                     val item = armor[i]
-                    if (item!!.isNothing) {
+                    if (item.isNothing) {
                         pk2.damage[i] = 0
                     } else {
                         pk2.flags.add(PlayerArmorDamageFlag.entries.toTypedArray()[i])
@@ -589,7 +591,7 @@ class HumanInventory(human: IHuman) //9+27+4
     override fun sendContents(vararg players: Player) {
         val pk = InventoryContentPacket()
         val inventoryAndHotBarSize = this.size - 4
-        pk.slots = Array(inventoryAndHotBarSize) {i ->
+        pk.slots = Array(inventoryAndHotBarSize) { i ->
             this.getItem(i)
         }
 
@@ -649,22 +651,26 @@ class HumanInventory(human: IHuman) //9+27+4
     override fun onOpen(who: Player) {
         super.onOpen(who)
         if (who.spawned) {
-            who.dataPacket(ContainerOpenPacket(
-                containerID = who.getWindowId(this),
-                containerType = type.networkType,
-                position = who.vector3.asBlockVector3(),
-                targetActorID = who.getRuntimeID()
-            ))
+            who.dataPacket(
+                ContainerOpenPacket(
+                    containerID = who.getWindowId(this),
+                    containerType = type.networkType,
+                    position = who.vector3.asBlockVector3(),
+                    targetActorID = who.getRuntimeID()
+                )
+            )
         }
     }
 
     override fun onClose(who: Player) {
         val containerId = who.getWindowId(this)
-        who.dataPacket(ContainerClosePacket(
-            containerID = containerId,
-            containerType = type,
-            serverInitiatedClose = who.closingWindowId != containerId
-        ))
+        who.dataPacket(
+            ContainerClosePacket(
+                containerID = containerId,
+                containerType = type,
+                serverInitiatedClose = who.closingWindowId != containerId
+            )
+        )
         // player can never stop viewing their own inventory
         if (who !== holder) {
             super.onClose(who)

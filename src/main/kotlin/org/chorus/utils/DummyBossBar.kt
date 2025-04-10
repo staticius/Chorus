@@ -93,29 +93,31 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun createBossEntity() {
-        player.dataPacket(AddActorPacket(
-            targetActorID = this.bossBarId,
-            targetRuntimeID = this.bossBarId,
-            actorType = EntityID.CREEPER,
-            position = player.position.asVector3f().setY(-74f),
-            velocity = Vector3f(),
-            rotation = Vector2f(),
-            yHeadRotation = 0f,
-            yBodyRotation = 0f,
-            attributeList = emptyArray(),
-            actorData = run {
-                val entityDataMap = EntityDataMap()
-                entityDataMap.getOrCreateFlags()
-                entityDataMap[EntityDataTypes.AIR_SUPPLY] = 400
-                entityDataMap[EntityDataTypes.AIR_SUPPLY_MAX] = 400
-                entityDataMap[EntityDataTypes.LEASH_HOLDER] = -1
-                entityDataMap[EntityDataTypes.NAME] = text
-                entityDataMap[EntityDataTypes.SCALE] = 0
-                entityDataMap
-            },
-            syncedProperties = PropertySyncData(intArrayOf(), floatArrayOf()),
-            actorLinks = emptyArray()
-        ))
+        player.dataPacket(
+            AddActorPacket(
+                targetActorID = this.bossBarId,
+                targetRuntimeID = this.bossBarId,
+                actorType = EntityID.CREEPER,
+                position = player.position.asVector3f().setY(-74f),
+                velocity = Vector3f(),
+                rotation = Vector2f(),
+                yHeadRotation = 0f,
+                yBodyRotation = 0f,
+                attributeList = emptyArray(),
+                actorData = run {
+                    val entityDataMap = EntityDataMap()
+                    entityDataMap.getOrCreateFlags()
+                    entityDataMap[EntityDataTypes.AIR_SUPPLY] = 400
+                    entityDataMap[EntityDataTypes.AIR_SUPPLY_MAX] = 400
+                    entityDataMap[EntityDataTypes.LEASH_HOLDER] = -1
+                    entityDataMap[EntityDataTypes.NAME] = text
+                    entityDataMap[EntityDataTypes.SCALE] = 0
+                    entityDataMap
+                },
+                syncedProperties = PropertySyncData(intArrayOf(), floatArrayOf()),
+                actorLinks = emptyArray()
+            )
+        )
     }
 
     private fun sendAttributes() {
@@ -129,58 +131,68 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun sendShowBossBar() {
-        player.dataPacket(BossEventPacket(
-            targetActorID = bossBarId,
-            eventType = BossEventPacket.EventType.ADD,
-            eventData = BossEventPacket.EventType.Companion.AddData(
-                name = text,
-                filteredName = text,
-                healthPercent = this.length / 100,
-                darkenScreen = 0,
-                color = 0,
-                overlay = 0
+        player.dataPacket(
+            BossEventPacket(
+                targetActorID = bossBarId,
+                eventType = BossEventPacket.EventType.ADD,
+                eventData = BossEventPacket.EventType.Companion.AddData(
+                    name = text,
+                    filteredName = text,
+                    healthPercent = this.length / 100,
+                    darkenScreen = 0,
+                    color = 0,
+                    overlay = 0
+                )
             )
-        ))
+        )
     }
 
     private fun sendHideBossBar() {
-        player.dataPacket(BossEventPacket(
-            targetActorID = bossBarId,
-            eventType = BossEventPacket.EventType.REMOVE,
-            eventData = null,
-        ))
+        player.dataPacket(
+            BossEventPacket(
+                targetActorID = bossBarId,
+                eventType = BossEventPacket.EventType.REMOVE,
+                eventData = null,
+            )
+        )
     }
 
     private fun sendSetBossBarTexture() {
-        player.dataPacket(BossEventPacket(
-            targetActorID = this.bossBarId,
-            eventType = BossEventPacket.EventType.UPDATE_STYLE,
-            eventData = BossEventPacket.EventType.Companion.UpdateStyleData(
-                color = if (color != null) color!!.ordinal else 0,
-                overlay = 0,
+        player.dataPacket(
+            BossEventPacket(
+                targetActorID = this.bossBarId,
+                eventType = BossEventPacket.EventType.UPDATE_STYLE,
+                eventData = BossEventPacket.EventType.Companion.UpdateStyleData(
+                    color = if (color != null) color!!.ordinal else 0,
+                    overlay = 0,
+                )
             )
-        ))
+        )
     }
 
     private fun sendSetBossBarTitle() {
-        player.dataPacket(BossEventPacket(
-            targetActorID = bossBarId,
-            eventType = BossEventPacket.EventType.UPDATE_NAME,
-            eventData = BossEventPacket.EventType.Companion.UpdateNameData(
-                name = text,
-                filteredName = text,
+        player.dataPacket(
+            BossEventPacket(
+                targetActorID = bossBarId,
+                eventType = BossEventPacket.EventType.UPDATE_NAME,
+                eventData = BossEventPacket.EventType.Companion.UpdateNameData(
+                    name = text,
+                    filteredName = text,
+                )
             )
-        ))
+        )
     }
 
     private fun sendSetBossBarLength() {
-        player.dataPacket(BossEventPacket(
-            targetActorID = bossBarId,
-            eventType = BossEventPacket.EventType.UPDATE_PERCENT,
-            eventData = BossEventPacket.EventType.Companion.UpdatePercentData(
-                healthPercent = this.length / 100
+        player.dataPacket(
+            BossEventPacket(
+                targetActorID = bossBarId,
+                eventType = BossEventPacket.EventType.UPDATE_PERCENT,
+                eventData = BossEventPacket.EventType.Companion.UpdatePercentData(
+                    healthPercent = this.length / 100
+                )
             )
-        ))
+        )
     }
 
     /**

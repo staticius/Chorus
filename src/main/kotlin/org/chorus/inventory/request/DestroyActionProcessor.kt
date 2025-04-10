@@ -1,6 +1,5 @@
 package org.chorus.inventory.request
 
-import com.google.common.collect.Lists
 import org.chorus.Player
 import org.chorus.entity.EntityHumanType.getInventory
 import org.chorus.inventory.*

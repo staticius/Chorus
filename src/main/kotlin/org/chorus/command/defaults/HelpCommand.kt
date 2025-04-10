@@ -1,7 +1,9 @@
 package org.chorus.command.defaults
 
 import org.chorus.Server
-import org.chorus.command.*
+import org.chorus.command.Command
+import org.chorus.command.CommandSender
+import org.chorus.command.ConsoleCommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
 import org.chorus.lang.TranslationContainer
@@ -10,7 +12,8 @@ import kotlin.collections.set
 import kotlin.math.min
 
 
-class HelpCommand(name: String) : VanillaCommand(name, "commands.help.description", "%commands.help.usage", arrayOf<String>("?")) {
+class HelpCommand(name: String) :
+    VanillaCommand(name, "commands.help.description", "%commands.help.usage", arrayOf<String>("?")) {
     init {
         this.permission = "chorus.command.help"
         commandParameters.clear()

@@ -6,12 +6,16 @@ import org.chorus.block.BlockID
 import org.chorus.block.BlockPortal
 import org.chorus.block.BlockRespawnAnchor
 import org.chorus.block.BlockWarpedFungus
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
@@ -23,15 +27,17 @@ import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestPlayerSensor
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.level.Level
+import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.IVector3
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.LevelSoundEventPacket
-import org.chorus.utils.*
-import java.util.Set
+import org.chorus.utils.Utils
 
 /**
  * @author Erik Miller | EinBexiii
@@ -166,7 +172,13 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get((if (this.isOnFire()) ItemID.COOKED_PORKCHOP else ItemID.PORKCHOP), 0, Utils.rand(1, 3)))
+        return arrayOf(
+            Item.get(
+                (if (this.isOnFire()) ItemID.COOKED_PORKCHOP else ItemID.PORKCHOP),
+                0,
+                Utils.rand(1, 3)
+            )
+        )
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {

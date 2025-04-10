@@ -1,7 +1,8 @@
 package org.chorus.command.defaults
 
 import org.chorus.Server
-import org.chorus.command.*
+import org.chorus.command.Command
+import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
 import org.chorus.scheduler.Task

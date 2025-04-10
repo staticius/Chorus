@@ -1,7 +1,7 @@
 package org.chorus.inventory.request
 
 import org.chorus.Player
-import org.chorus.inventory.*
+import org.chorus.inventory.Inventory
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus.network.protocol.types.itemstack.request.action.ConsumeAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType

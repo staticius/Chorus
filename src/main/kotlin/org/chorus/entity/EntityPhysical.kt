@@ -2,14 +2,17 @@ package org.chorus.entity
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockFlowingLava
+import org.chorus.block.BlockID
+import org.chorus.block.BlockLiquid
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.player.EntityFreezeEvent
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
-import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.stream.Stream
 import kotlin.math.abs
@@ -70,7 +73,8 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
     override fun entityBaseTick(tickDiff: Int): Boolean {
         val hasUpdate: Boolean = super.entityBaseTick(tickDiff)
         //handle human entity freeze
-        val collidedWithPowderSnow: Boolean = getTickCachedCollisionBlocks()!!.stream().anyMatch { block: Block -> block.id === BlockID.POWDER_SNOW }
+        val collidedWithPowderSnow: Boolean =
+            getTickCachedCollisionBlocks()!!.stream().anyMatch { block: Block -> block.id === BlockID.POWDER_SNOW }
         if (this.getFreezingTicks() < 140 && collidedWithPowderSnow) {
             this.addFreezingTicks(1)
             val event = EntityFreezeEvent(this)
@@ -191,7 +195,8 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         var blockLiquid: BlockLiquid? = null
         for (each: Block? in level!!.getCollisionBlocks(
             getOffsetBoundingBox(),
-            targetFirst = false, ignoreCollidesCheck = true)
+            targetFirst = false, ignoreCollidesCheck = true
+        )
         { block: Block? -> block is BlockLiquid }) {
             blockLiquid = each as BlockLiquid?
             val flowVector: Vector3 = blockLiquid!!.getFlowVector()
@@ -298,12 +303,16 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
                 dzNegatives.add((targetAABB.maxZ - targetAABB.minZ) + (selfAABB.maxZ - selfAABB.minZ) * 0.5 + centerZWidth)
             }
         }
-        val resultX: Double = (if (size > 4) dxPositives.parallelStream() else dxPositives.stream()).mapToDouble { it }.max()
-            .orElse(0.0) - (if (size > 4) dxNegatives.parallelStream() else dxNegatives.stream()).mapToDouble { it }.max()
-            .orElse(0.0)
-        val resultZ: Double = (if (size > 4) dzPositives.parallelStream() else dzPositives.stream()).mapToDouble { it }.max()
-            .orElse(0.0) - (if (size > 4) dzNegatives.parallelStream() else dzNegatives.stream()).mapToDouble { it }.max()
-            .orElse(0.0)
+        val resultX: Double =
+            (if (size > 4) dxPositives.parallelStream() else dxPositives.stream()).mapToDouble { it }.max()
+                .orElse(0.0) - (if (size > 4) dxNegatives.parallelStream() else dxNegatives.stream()).mapToDouble { it }
+                .max()
+                .orElse(0.0)
+        val resultZ: Double =
+            (if (size > 4) dzPositives.parallelStream() else dzPositives.stream()).mapToDouble { it }.max()
+                .orElse(0.0) - (if (size > 4) dzNegatives.parallelStream() else dzNegatives.stream()).mapToDouble { it }
+                .max()
+                .orElse(0.0)
         val len: Double = sqrt(resultX * resultX + resultZ * resultZ)
         previousCollideMotion.setX(-(resultX / len * 0.2 * 0.32))
         previousCollideMotion.setZ(-(resultZ / len * 0.2 * 0.32))

@@ -9,7 +9,7 @@ import org.chorus.event.Event
 import org.chorus.event.block.BlockRedstoneEvent
 import org.chorus.event.entity.EntityInteractEvent
 import org.chorus.event.player.PlayerInteractEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.ItemTool.Companion.getBestTool
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB

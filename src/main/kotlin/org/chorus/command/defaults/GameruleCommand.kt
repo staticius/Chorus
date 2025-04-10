@@ -19,7 +19,7 @@ class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.de
         val rules: GameRules = GameRules.default
         val boolGameRules: MutableList<String> = mutableListOf()
         val intGameRules: MutableList<String> = mutableListOf()
-        val floatGameRules: MutableList<String> =  mutableListOf()
+        val floatGameRules: MutableList<String> = mutableListOf()
         val unknownGameRules: MutableList<String> = mutableListOf()
 
         rules.getGameRules().forEach { (rule, value) ->
@@ -114,7 +114,8 @@ class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.de
             }
         }
         val str = list.getResult<Any>(1)
-        log.addSuccess("commands.gamerule.success", optionalRule.get().gameRuleName.lowercase(), str.toString()).output()
+        log.addSuccess("commands.gamerule.success", optionalRule.get().gameRuleName.lowercase(), str.toString())
+            .output()
         return 1
     }
 }

@@ -2,7 +2,7 @@ package org.chorus.entity
 
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.utils.DyeColor
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 
 interface EntityColor : EntityComponent {
     fun setColor(color: DyeColor) {

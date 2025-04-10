@@ -19,6 +19,7 @@ class DistanceEvaluator @JvmOverloads constructor(
                 val distance = entity.position.distance(location)
                 distance in minDistance..maxDistance
             }
+
             is NullableMemoryType -> {
                 if (entity.memoryStorage.isEmpty(type)) {
                     false

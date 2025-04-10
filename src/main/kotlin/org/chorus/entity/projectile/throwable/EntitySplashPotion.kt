@@ -1,16 +1,19 @@
 package org.chorus.entity.projectile.throwable
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataTypes
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.PotionType
 import org.chorus.entity.mob.monster.EntityBlaze
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.potion.PotionCollideEvent
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.level.particle.*
+import org.chorus.level.particle.Particle
+import org.chorus.level.particle.SpellParticle
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.BlockColor
 import java.awt.Color

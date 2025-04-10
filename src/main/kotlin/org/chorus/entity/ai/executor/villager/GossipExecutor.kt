@@ -1,16 +1,16 @@
 package org.chorus.entity.ai.executor.villager
 
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.BlockID
+import org.chorus.entity.Entity
 import org.chorus.entity.ai.executor.EntityControl
 import org.chorus.entity.ai.executor.IBehaviorExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.villagers.EntityVillagerV2
-import org.chorus.item.*
-import org.chorus.math.*
-import org.chorus.utils.*
+import org.chorus.item.Item
+import org.chorus.math.Vector3
+import org.chorus.utils.Utils
 
 class GossipExecutor(
     val type: NullableMemoryType<out EntityVillagerV2>

@@ -1,6 +1,5 @@
 package org.chorus.blockentity
 
-import org.chorus.block.Block
 import org.chorus.block.BlockID
 import org.chorus.item.Item
 import org.chorus.item.ItemMusicDisc

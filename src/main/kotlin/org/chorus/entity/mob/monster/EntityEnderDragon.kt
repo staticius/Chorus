@@ -2,8 +2,12 @@ package org.chorus.entity.mob.monster
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockEndGateway
+import org.chorus.block.BlockID
+import org.chorus.entity.Attribute
+import org.chorus.entity.EntityFlyable
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
@@ -31,18 +35,18 @@ import org.chorus.entity.item.EntityEnderCrystal
 import org.chorus.entity.mob.EntityMob
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.BVector3
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector2
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.*
 import org.chorus.network.protocol.types.EntityLink
 import org.chorus.plugin.InternalPlugin
 import java.util.*
-import kotlin.collections.first
-import kotlin.collections.setOf
-import kotlin.collections.toTypedArray
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -136,6 +140,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
             DamageCause.SUFFOCATION, DamageCause.MAGIC -> {
                 return false
             }
+
             else -> Unit
         }
         return super.attack(source)
@@ -269,18 +274,20 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
     }
 
     override fun addBossbar(player: Player) {
-        player.dataPacket(BossEventPacket(
-            targetActorID = this.runtimeId,
-            eventType = BossEventPacket.EventType.ADD,
-            eventData = BossEventPacket.EventType.Companion.AddData(
-                name = this.getName(),
-                filteredName = this.getName(),
-                color = 5,
-                healthPercent = health / maxHealth,
-                darkenScreen = 0,
-                overlay = 0
+        player.dataPacket(
+            BossEventPacket(
+                targetActorID = this.runtimeId,
+                eventType = BossEventPacket.EventType.ADD,
+                eventData = BossEventPacket.EventType.Companion.AddData(
+                    name = this.getName(),
+                    filteredName = this.getName(),
+                    color = 5,
+                    healthPercent = health / maxHealth,
+                    darkenScreen = 0,
+                    overlay = 0
+                )
             )
-        ))
+        )
     }
 
     override fun getExperienceDrops(): Int {

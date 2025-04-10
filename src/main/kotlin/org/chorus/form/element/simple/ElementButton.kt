@@ -2,7 +2,6 @@ package org.chorus.form.element.simple
 
 import com.google.gson.JsonObject
 import org.chorus.form.element.Element
-import java.awt.Image
 
 
 /**

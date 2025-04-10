@@ -6,12 +6,14 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.event.block.BlockRedstoneEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.level.Level
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
-import org.chorus.math.*
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
+import org.chorus.math.Vector3
 import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.RedstoneComponent
 import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone

@@ -14,13 +14,15 @@ abstract class EntityBoss(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
 
     override fun setHealth(health: Float) {
         super.setHealth(health)
-        Server.broadcastPacket(getViewers().values, BossEventPacket(
-            targetActorID = this.runtimeId,
-            eventType = BossEventPacket.EventType.UPDATE_PERCENT,
-            eventData = BossEventPacket.EventType.Companion.UpdatePercentData(
-                healthPercent = health / maxHealth
+        Server.broadcastPacket(
+            getViewers().values, BossEventPacket(
+                targetActorID = this.runtimeId,
+                eventType = BossEventPacket.EventType.UPDATE_PERCENT,
+                eventData = BossEventPacket.EventType.Companion.UpdatePercentData(
+                    healthPercent = health / maxHealth
+                )
             )
-        ))
+        )
     }
 
     override fun spawnTo(player: Player) {
@@ -50,6 +52,7 @@ abstract class EntityBoss(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
             BlockID.RESPAWN_ANCHOR,
             BlockID.SOUL_FIRE,
             BlockID.STRUCTURE_BLOCK -> false
+
             else -> true
         }
     }

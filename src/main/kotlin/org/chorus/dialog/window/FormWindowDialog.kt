@@ -78,7 +78,10 @@ class FormWindowDialog @JvmOverloads constructor(
     var buttonJSONData: String?
         get() = JSONUtils.to(this.buttons)
         set(json) {
-            val buttons = JSONUtils.from<MutableList<ElementDialogButton>?>(json, object : TypeToken<List<ElementDialogButton>?>() {}.type) ?: mutableListOf()
+            val buttons = JSONUtils.from<MutableList<ElementDialogButton>?>(
+                json,
+                object : TypeToken<List<ElementDialogButton>?>() {}.type
+            ) ?: mutableListOf()
             this.setButtons(buttons)
         }
 

@@ -5,9 +5,7 @@ import org.chorus.block.Block
 import org.chorus.block.BlockID
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntityCommandBlock
-import org.chorus.blockentity.ICommandBlock
 import org.chorus.level.Level
-import org.chorus.math.Vector3
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.CommandBlockUpdatePacket
 import org.chorus.network.protocol.ProtocolInfo

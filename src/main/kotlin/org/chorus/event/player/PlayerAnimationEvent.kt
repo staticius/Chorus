@@ -21,6 +21,7 @@ class PlayerAnimationEvent : PlayerEvent, Cancellable {
                 val actionData = animatePacket.actionData as AnimatePacket.Action.RowingData
                 actionData.rowingTime
             }
+
             else -> null
         }
     }

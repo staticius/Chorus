@@ -720,12 +720,14 @@ class Player(
 
     //todo a lot on dimension
     private fun setDimension(dimension: Int) {
-        this.dataPacket(ChangeDimensionPacket(
-            dimension = dimension,
-            position = position.asVector3f(),
-            respawn = false,
-            loadingScreenID = loadingScreenId++
-        ))
+        this.dataPacket(
+            ChangeDimensionPacket(
+                dimension = dimension,
+                position = position.asVector3f(),
+                respawn = false,
+                loadingScreenID = loadingScreenId++
+            )
+        )
 
         level!!.sendChunks(this)
 
@@ -1672,7 +1674,7 @@ class Player(
         getAdventureSettings().update()
         inventory.sendContents(this)
         inventory.sendArmorContents(this)
-        offhandInventory!!.sendContents(this)
+        offhandInventory.sendContents(this)
         this.teleport(
             Transform.fromObject(
                 respawnPos!!.position.add(
@@ -1758,20 +1760,20 @@ class Player(
         getInventory().open(this)
         permanentWindows.add(SpecialWindowId.PLAYER.id)
 
-        this.addWindow(creativeOutputInventory!!, SpecialWindowId.CREATIVE.id)
-        creativeOutputInventory!!.open(this)
+        this.addWindow(creativeOutputInventory, SpecialWindowId.CREATIVE.id)
+        creativeOutputInventory.open(this)
         permanentWindows.add(SpecialWindowId.CREATIVE.id)
 
         this.addWindow(getOffhandInventory()!!, SpecialWindowId.OFFHAND.id)
         getOffhandInventory()!!.open(this)
         permanentWindows.add(SpecialWindowId.OFFHAND.id)
 
-        this.addWindow(craftingGrid!!, SpecialWindowId.NONE.id)
-        craftingGrid!!.open(this)
+        this.addWindow(craftingGrid, SpecialWindowId.NONE.id)
+        craftingGrid.open(this)
         permanentWindows.add(SpecialWindowId.NONE.id)
 
-        this.addWindow(cursorInventory!!, SpecialWindowId.CURSOR.id)
-        cursorInventory!!.open(this)
+        this.addWindow(cursorInventory, SpecialWindowId.CURSOR.id)
+        cursorInventory.open(this)
         permanentWindows.add(SpecialWindowId.CURSOR.id)
     }
 
@@ -2470,11 +2472,13 @@ class Player(
 
             level!!.sleepTicks = 0
 
-            this.dataPacket(AnimatePacket(
-                targetRuntimeID = this.getRuntimeID(),
-                action = AnimatePacket.Action.WAKE_UP,
-                actionData = null,
-            ))
+            this.dataPacket(
+                AnimatePacket(
+                    targetRuntimeID = this.getRuntimeID(),
+                    action = AnimatePacket.Action.WAKE_UP,
+                    actionData = null,
+                )
+            )
         }
     }
 
@@ -2763,9 +2767,11 @@ class Player(
      * Send camera presets to cilent
      */
     fun sendCameraPresets() {
-        dataPacket(CameraPresetsPacket(
-            presets = presets.values.toMutableList()
-        ))
+        dataPacket(
+            CameraPresetsPacket(
+                presets = presets.values.toMutableList()
+            )
+        )
     }
 
     override fun getHeight(): Float {
@@ -3116,7 +3122,7 @@ class Player(
                     Server.instance.broadcastMessage(
                         Server.instance.baseLang.tr(
                             chatEvent.format, *arrayOf<String>(
-                                chatEvent.player!!.getDisplayName(), chatEvent.message!!
+                                chatEvent.player.getDisplayName(), chatEvent.message!!
                             )
                         ), chatEvent.getRecipients()
                     )
@@ -3218,9 +3224,11 @@ class Player(
     fun setViewDistance(distance: Int) {
         this.chunkRadius = distance
 
-        this.dataPacket(ChunkRadiusUpdatedPacket(
-            radius = distance
-        ))
+        this.dataPacket(
+            ChunkRadiusUpdatedPacket(
+                radius = distance
+            )
+        )
     }
 
     /**
@@ -3808,11 +3816,13 @@ class Player(
                                 params.add(e.getDisplayName())
                                 return@switch
                             }
+
                             is EntityLiving -> {
                                 message = "death.attack.mob"
                                 params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
                                 return@switch
                             }
+
                             else -> params.add("Unknown")
                         }
                     }
@@ -3825,11 +3835,13 @@ class Player(
                                 message = "death.attack.arrow"
                                 params.add(e.getDisplayName())
                             }
+
                             is EntityLiving -> {
                                 message = "death.attack.arrow"
                                 params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
                                 return@switch
                             }
+
                             else -> params.add("Unknown")
                         }
                     }
@@ -3879,11 +3891,13 @@ class Player(
                                 message = "death.attack.explosion.player"
                                 params.add(e.getDisplayName())
                             }
+
                             is EntityLiving -> {
                                 message = "death.attack.explosion.player"
                                 params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
                                 return@switch
                             }
+
                             else -> message = "death.attack.explosion"
                         }
                     } else {
@@ -3931,9 +3945,9 @@ class Player(
                 }
 
                 if (this.offhandInventory != null) {
-                    offhandInventory!!.contents.forEach { (slot, item) ->
+                    offhandInventory.contents.forEach { (slot, item) ->
                         if (!item.keepOnDeath()) {
-                            offhandInventory!!.clear(slot)
+                            offhandInventory.clear(slot)
                         }
                     }
                 }
@@ -4841,13 +4855,13 @@ class Player(
     @ApiStatus.Internal
     fun resetInventory() {
         if (spawned) {
-            val contents = craftingGrid!!.contents
-            craftingGrid!!.clearAll()
+            val contents = craftingGrid.contents
+            craftingGrid.clearAll()
             val puts: MutableList<Item> = ArrayList(contents.values)
 
             val contents2 =
-                cursorInventory!!.contents
-            cursorInventory!!.clearAll()
+                cursorInventory.contents
+            cursorInventory.clearAll()
             puts.addAll(contents2.values)
 
             val topWindow = topWindow
@@ -4942,15 +4956,17 @@ class Player(
             this.dataPacket(gameRulesChanged)
 
             if (level.dimension == this.level!!.dimension) {
-                this.dataPacket(ChangeDimensionPacket(
-                    dimension = when (this.level!!.dimension) {
-                        Level.DIMENSION_NETHER -> Level.DIMENSION_OVERWORLD
-                        else -> Level.DIMENSION_NETHER
-                    },
-                    position = Vector3f(),
-                    respawn = false,
-                    loadingScreenID = loadingScreenId++
-                ))
+                this.dataPacket(
+                    ChangeDimensionPacket(
+                        dimension = when (this.level!!.dimension) {
+                            Level.DIMENSION_NETHER -> Level.DIMENSION_OVERWORLD
+                            else -> Level.DIMENSION_NETHER
+                        },
+                        position = Vector3f(),
+                        respawn = false,
+                        loadingScreenID = loadingScreenId++
+                    )
+                )
             }
 
             this.setDimension(level.dimension)
@@ -5019,7 +5035,7 @@ class Player(
                 val item = if (entity.getArrowItem() != null) entity.getArrowItem() else ItemArrow()
                 if (!this.isCreative) {
                     // Should only collect to the offhand slot if the item matches what is already there
-                    if (offhandInventory!!.getItem(0).id == item!!.id && offhandInventory!!.canAddItem(
+                    if (offhandInventory.getItem(0).id == item!!.id && offhandInventory.canAddItem(
                             item
                         )
                     ) {
@@ -5370,10 +5386,12 @@ class Player(
 
 
     fun completeUsingItem(itemId: Short, action: CompletedUsingItemPacket.ItemUseMethod) {
-        this.dataPacket(CompletedUsingItemPacket(
-            itemID = itemId,
-            itemUseMethod = action
-        ))
+        this.dataPacket(
+            CompletedUsingItemPacket(
+                itemID = itemId,
+                itemUseMethod = action
+            )
+        )
     }
 
 
@@ -5433,12 +5451,14 @@ class Player(
      * @param shakeAction the shake action
      */
     fun shakeCamera(intensity: Float, duration: Float, shakeType: CameraShakeType, shakeAction: CameraShakeAction) {
-        this.dataPacket(CameraShakePacket(
-            intensity = intensity,
-            seconds = duration,
-            shakeType = shakeType,
-            shakeAction = shakeAction
-        ))
+        this.dataPacket(
+            CameraShakePacket(
+                intensity = intensity,
+                seconds = duration,
+                shakeType = shakeType,
+                shakeAction = shakeAction
+            )
+        )
     }
 
     /**

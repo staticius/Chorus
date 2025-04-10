@@ -1,7 +1,10 @@
 package org.chorus.blockentity
 
+
 import org.chorus.Player
-import org.chorus.block.*
+import org.chorus.block.BlockBeehive
+import org.chorus.block.BlockID
+import org.chorus.block.BlockLiquid
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.entity.Entity
 import org.chorus.entity.mob.animal.EntityBee
@@ -13,9 +16,8 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
-import org.chorus.utils.*
-
-
+import org.chorus.utils.Identifier
+import org.chorus.utils.Loggable
 import java.util.*
 import kotlin.math.atan
 
@@ -42,7 +44,7 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
             namedTag.putList("Occupants", ListTag<Tag<*>>())
         } else {
             val occupantsTag = namedTag.getList("Occupants", CompoundTag::class.java)
-            for (i in 0..< occupantsTag.size()) {
+            for (i in 0..<occupantsTag.size()) {
                 occupants.add(Occupant(occupantsTag[i]))
             }
         }

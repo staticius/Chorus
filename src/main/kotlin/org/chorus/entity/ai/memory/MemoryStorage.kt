@@ -35,7 +35,7 @@ class MemoryStorage(override var entity: EntityMob) : IMemoryStorage {
     }
 
     override val all: Map<IMemoryType<*>, Any>
-        get()  = memoryMap
+        get() = memoryMap
 
     override fun clear(type: IMemoryType<*>) {
         memoryMap.remove(type)

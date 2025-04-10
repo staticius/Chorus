@@ -106,7 +106,8 @@ class ObjectMangroveTree : TreeGenerator() {
     }
 
     companion object {
-        private val LOG: BlockState = BlockMangroveLog.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
+        private val LOG: BlockState =
+            BlockMangroveLog.properties.getBlockState(CommonBlockProperties.PILLAR_AXIS.createValue(BlockFace.Axis.Y))
         private val ROOTS: BlockState = BlockMangroveRoots.properties.defaultState
         private val MANGROVE_LEAVES: BlockState = BlockMangroveLeaves.properties.defaultState
     }

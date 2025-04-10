@@ -40,6 +40,7 @@ data class CommandBlockUpdatePacket(
                 byteBuf.writeBoolean(commandBlockData.redstoneMode)
                 byteBuf.writeBoolean(commandBlockData.isConditional)
             }
+
             false -> {
                 val commandBlockActorData = this.commandBlockHolderData as CommandBlockActorData
 
@@ -75,6 +76,7 @@ data class CommandBlockUpdatePacket(
                         redstoneMode = byteBuf.readBoolean(),
                         isConditional = byteBuf.readBoolean(),
                     )
+
                     false -> CommandBlockActorData(
                         targetRuntimeID = byteBuf.readActorRuntimeID(),
                     )

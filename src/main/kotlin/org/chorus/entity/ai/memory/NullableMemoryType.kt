@@ -3,9 +3,8 @@ package org.chorus.entity.ai.memory
 import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.codec.IMemoryCodec
 import org.chorus.utils.Identifier
-import java.util.function.Supplier
 
-class NullableMemoryType <Data : Any> (
+class NullableMemoryType<Data : Any>(
     override val identifier: Identifier
 ) : IMemoryType<Data?> {
     override var codec: IMemoryCodec<Data?>? = null

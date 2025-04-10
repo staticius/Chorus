@@ -3,11 +3,14 @@ package org.chorus.blockentity
 import com.google.common.base.Strings
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.BlockChainCommandBlock
+import org.chorus.block.BlockCommandBlock
+import org.chorus.block.BlockID
 import org.chorus.command.CommandSender
 import org.chorus.command.ConsoleCommandSender
 import org.chorus.event.command.CommandBlockExecuteEvent
-import org.chorus.inventory.*
+import org.chorus.inventory.CommandBlockInventory
+import org.chorus.inventory.Inventory
 import org.chorus.lang.CommandOutputContainer
 import org.chorus.lang.TextContainer
 import org.chorus.lang.TranslationContainer
@@ -19,9 +22,12 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.StringTag
-import org.chorus.permission.*
+import org.chorus.permission.PermissibleBase
+import org.chorus.permission.Permission
+import org.chorus.permission.PermissionAttachment
 import org.chorus.plugin.Plugin
-import org.chorus.utils.*
+import org.chorus.utils.Faceable
+import org.chorus.utils.TextFormat
 import java.util.function.Consumer
 
 

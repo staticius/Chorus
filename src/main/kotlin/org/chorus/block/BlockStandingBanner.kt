@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntity.Companion.getDefaultCompound
 import org.chorus.blockentity.BlockEntityBanner
 import org.chorus.blockentity.BlockEntityID
@@ -14,14 +13,12 @@ import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
 import org.chorus.math.CompassRoseDirection
-import org.chorus.math.CompassRoseDirection.Companion.from
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.IntTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.utils.DyeColor
 import org.chorus.utils.Faceable
 import org.chorus.utils.Loggable
-
 import kotlin.math.floor
 
 

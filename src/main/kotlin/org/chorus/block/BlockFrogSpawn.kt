@@ -3,7 +3,7 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.entity.Entity
 import org.chorus.entity.item.EntityFallingBlock
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Locator
 import org.chorus.math.BlockFace
 

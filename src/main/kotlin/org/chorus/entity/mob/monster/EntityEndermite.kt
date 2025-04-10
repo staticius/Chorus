@@ -9,7 +9,9 @@ import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.RandomSoundEvaluator
 import org.chorus.entity.ai.executor.FlatRandomRoamExecutor
@@ -27,7 +29,6 @@ import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 /**
  * @author Box.

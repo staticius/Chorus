@@ -4,7 +4,8 @@ import org.chorus.Player
 import org.chorus.Server.Companion.instance
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.event.block.BlockGrowEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Level
 import org.chorus.level.particle.BoneMealParticle
 import org.chorus.math.BlockFace

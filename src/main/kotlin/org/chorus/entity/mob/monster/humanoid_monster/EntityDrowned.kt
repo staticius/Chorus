@@ -1,13 +1,16 @@
 package org.chorus.entity.mob.monster.humanoid_monster
 
 import org.chorus.Player
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockTurtleEgg
 import org.chorus.entity.*
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
@@ -21,13 +24,15 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.animal.EntityAxolotl
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.inventory.EntityInventoryHolder
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTrident
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
-import java.util.concurrent.*
+import org.chorus.utils.Utils
+import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 import kotlin.math.min
 

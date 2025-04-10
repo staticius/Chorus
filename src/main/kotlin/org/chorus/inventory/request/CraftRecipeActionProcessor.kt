@@ -8,8 +8,8 @@ import org.chorus.event.inventory.EnchantItemEvent
 import org.chorus.inventory.EnchantInventory
 import org.chorus.inventory.InputInventory
 import org.chorus.inventory.SmithingInventory
-import org.chorus.item.*
-import org.chorus.item.enchantment.Enchantment
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.PlayerEnchantOptionsPacket
@@ -25,7 +25,6 @@ import org.chorus.recipe.SmithingTrimRecipe
 import org.chorus.registry.Registries
 import org.chorus.utils.Loggable
 import org.chorus.utils.TradeRecipeBuildUtils
-
 import java.util.*
 import kotlin.math.max
 

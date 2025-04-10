@@ -30,7 +30,7 @@ class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
         if (playerCommandPreprocessEvent.isCancelled) {
             return
         }
-        Server.instance.executeCommand(playerCommandPreprocessEvent.player!!, playerCommandPreprocessEvent.message!!)
+        Server.instance.executeCommand(playerCommandPreprocessEvent.player, playerCommandPreprocessEvent.message!!)
     }
 
     override val packetId: Int

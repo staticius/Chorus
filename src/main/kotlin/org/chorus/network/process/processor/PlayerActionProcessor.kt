@@ -227,7 +227,8 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                         return@switch
                     }
 
-                    val riptideLevel = player.getInventory().itemInHand.getEnchantmentLevel(Enchantment.ID_TRIDENT_RIPTIDE)
+                    val riptideLevel =
+                        player.getInventory().itemInHand.getEnchantmentLevel(Enchantment.ID_TRIDENT_RIPTIDE)
                     if (riptideLevel < 1) {
                         player.sendPosition(
                             player.position,

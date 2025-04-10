@@ -23,9 +23,8 @@ import org.chorus.entity.ai.sensor.NearestFeedingPlayerSensor
 import org.chorus.entity.ai.sensor.NearestPlayerSensor
 import org.chorus.entity.mob.EntityMob
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 /**
  * @author PetteriM1

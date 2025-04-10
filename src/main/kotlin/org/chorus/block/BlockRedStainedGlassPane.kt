@@ -4,7 +4,7 @@ import org.chorus.utils.DyeColor
 
 class BlockRedStainedGlassPane @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockGlassPaneStained(blockstate) {
-    override fun getDyeColor()  = DyeColor.RED
+    override fun getDyeColor() = DyeColor.RED
 
     override val properties: BlockProperties
         get() = Companion.properties

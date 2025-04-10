@@ -1,14 +1,22 @@
 package org.chorus.blockentity
 
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.BlockComposter
+import org.chorus.block.BlockHopper
 import org.chorus.block.BlockHopper.IHopper
+import org.chorus.block.BlockID
+import org.chorus.block.BlockState
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.event.block.HopperSearchItemEvent
 import org.chorus.event.inventory.InventoryMoveItemEvent
-import org.chorus.inventory.*
-import org.chorus.item.*
+import org.chorus.inventory.HopperInventory
+import org.chorus.inventory.Inventory
+import org.chorus.inventory.InventoryHolder
+import org.chorus.inventory.RecipeInventoryHolder
+import org.chorus.item.Item
+import org.chorus.item.ItemPotion
+import org.chorus.item.ItemSplashPotion
 import org.chorus.level.Locator
 import org.chorus.level.format.IChunk
 import org.chorus.math.AxisAlignedBB

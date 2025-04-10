@@ -17,7 +17,7 @@ class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
         //若sceneName字段为空，则为玩家在编辑NPC，我们并不需要记录对话框，直接通过entityRuntimeId获取实体即可
         val entity = player.level!!.getEntity(pk.entityRuntimeId)
         if (pk.sceneName.isEmpty() && entity is EntityNPC) {
-            val dialog: FormWindowDialog = entity.getDialog()!!
+            val dialog: FormWindowDialog = entity.getDialog()
 
             val response = FormResponseDialog(pk, dialog)
             for (handler in dialog.getHandlers()) {

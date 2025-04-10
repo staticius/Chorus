@@ -1,8 +1,10 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.blockentity.*
-import org.chorus.item.*
+import org.chorus.blockentity.BlockEntityID
+import org.chorus.blockentity.BlockEntitySmoker
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 
 open class BlockLitSmoker @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockLitFurnace(blockstate) {

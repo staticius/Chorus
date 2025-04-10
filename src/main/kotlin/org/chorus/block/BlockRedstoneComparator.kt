@@ -8,7 +8,8 @@ import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.blockentity.BlockEntityComparator
 import org.chorus.blockentity.BlockEntityID
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemComparator
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag

@@ -3,7 +3,8 @@ package org.chorus.block
 import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.event.redstone.RedstoneUpdateEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.utils.RedstoneComponent

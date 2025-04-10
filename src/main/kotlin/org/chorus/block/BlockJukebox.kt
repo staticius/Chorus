@@ -3,7 +3,9 @@ package org.chorus.block
 import org.chorus.Player
 import org.chorus.blockentity.BlockEntityID
 import org.chorus.blockentity.BlockEntityJukebox
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemMusicDisc
 import org.chorus.math.BlockFace
 
 class BlockJukebox @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
@@ -37,7 +39,7 @@ class BlockJukebox @JvmOverloads constructor(blockstate: BlockState = Companion.
         fz: Float
     ): Boolean {
         val jukebox = getOrCreateBlockEntity()
-        if (!jukebox.getRecordItem()!!.isNothing) {
+        if (!jukebox.getRecordItem().isNothing) {
             jukebox.dropItem()
             return true
         }

@@ -2,13 +2,15 @@ package org.chorus.entity.item
 
 import org.chorus.Server
 import org.chorus.block.BlockID
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityFlag
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.event.entity.ItemDespawnEvent
 import org.chorus.event.entity.ItemSpawnEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
@@ -127,7 +129,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
                             continue
                         }
                         val closeItem: Item = entity.getItem()
-                        if (!closeItem!!.equals(getItem(), true, true)) {
+                        if (!closeItem.equals(getItem(), true, true)) {
                             continue
                         }
                         if (!entity.isOnGround()) {

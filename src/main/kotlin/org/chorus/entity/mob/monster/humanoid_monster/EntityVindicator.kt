@@ -1,12 +1,16 @@
 package org.chorus.entity.mob.monster.humanoid_monster
 
 import org.chorus.Player
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.RandomSoundEvaluator
 import org.chorus.entity.ai.executor.FlatRandomRoamExecutor
@@ -23,15 +27,14 @@ import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityHoglin
 import org.chorus.entity.mob.EntityMob
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelSoundEventPacket
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
-import kotlin.collections.forEach
-import kotlin.collections.setOf
 
 /**
  * @author PikyCZ
@@ -162,9 +165,12 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
                 false
             )
             entity.level!!.entities.values.filter { entity1: Entity ->
-                entity1 is EntityPiglin && entity1.position.distance(entity.position) < 16 && entity1.memoryStorage.isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
+                entity1 is EntityPiglin && entity1.position.distance(entity.position) < 16 && entity1.memoryStorage.isEmpty(
+                    CoreMemoryTypes.Companion.ATTACK_TARGET
+                )
             }.forEach { entity1: Entity ->
-                (entity1 as EntityPiglin).memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET] = entity.memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET]
+                (entity1 as EntityPiglin).memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET] =
+                    entity.memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET]
             }
             if (entity.memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) is EntityHoglin) {
                 entity.memoryStorage.set<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)

@@ -26,14 +26,16 @@ class ContainerCloseProcessor : DataPacketProcessor<ContainerClosePacket>() {
         }
 
         if (pk.containerID == -1) {
-            player.addWindow(player.craftingGrid!!, SpecialWindowId.NONE.id)
+            player.addWindow(player.craftingGrid, SpecialWindowId.NONE.id)
         }
         if (inventory != null) {
-            player.dataPacket(ContainerClosePacket(
-                containerID = pk.containerID,
-                containerType = inventory.type,
-                serverInitiatedClose = false,
-            ))
+            player.dataPacket(
+                ContainerClosePacket(
+                    containerID = pk.containerID,
+                    containerType = inventory.type,
+                    serverInitiatedClose = false,
+                )
+            )
             player.resetInventory()
         }
     }

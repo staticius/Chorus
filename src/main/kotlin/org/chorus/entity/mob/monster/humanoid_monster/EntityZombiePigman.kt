@@ -1,7 +1,8 @@
 package org.chorus.entity.mob.monster.humanoid_monster
 
 import org.chorus.Player
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockTurtleEgg
 import org.chorus.entity.EntityID
 import org.chorus.entity.EntitySmite
 import org.chorus.entity.EntityWalkable
@@ -9,7 +10,9 @@ import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator

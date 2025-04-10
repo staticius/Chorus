@@ -2,7 +2,7 @@ package org.chorus.inventory
 
 import org.chorus.Player
 import org.chorus.blockentity.BlockEntityCampfire
-import org.chorus.item.*
+import org.chorus.item.Item
 
 class CampfireInventory(campfire: BlockEntityCampfire) : ContainerInventory(campfire, InventoryType.NONE, 4) {
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {

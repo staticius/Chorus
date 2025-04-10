@@ -1,6 +1,8 @@
 package org.chorus.level.generator.`object`
 
-import org.chorus.block.*
+import org.chorus.block.BlockID
+import org.chorus.block.BlockState
+import org.chorus.block.BlockVine
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3

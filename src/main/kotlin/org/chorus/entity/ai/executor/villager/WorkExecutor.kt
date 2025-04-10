@@ -1,13 +1,15 @@
 package org.chorus.entity.ai.executor.villager
 
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockCrops
 import org.chorus.entity.ai.executor.NearbyFlatRandomRoamExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.data.profession.Profession
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.villagers.EntityVillagerV2
-import org.chorus.item.*
-import org.chorus.math.*
+import org.chorus.item.Item
+import org.chorus.math.Vector2
+import org.chorus.math.Vector3
 import java.util.*
 import java.util.function.Consumer
 

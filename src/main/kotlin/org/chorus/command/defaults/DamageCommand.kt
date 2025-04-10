@@ -10,7 +10,6 @@ import org.chorus.entity.item.EntityItem
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.lang.TranslationContainer
-import java.util.*
 import java.util.stream.Collectors
 
 class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.description") {
@@ -25,7 +24,8 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
                 CommandParameter.Companion.newEnum(
                     "cause",
                     true,
-                    EntityDamageEvent.DamageCause.entries.map { e: EntityDamageEvent.DamageCause -> e.name.lowercase() }.toList().toTypedArray()
+                    EntityDamageEvent.DamageCause.entries.map { e: EntityDamageEvent.DamageCause -> e.name.lowercase() }
+                        .toList().toTypedArray()
                 )
             )
         )
@@ -37,7 +37,8 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
                 CommandParameter.Companion.newEnum(
                     "cause",
                     false,
-                    EntityDamageEvent.DamageCause.entries.map { e: EntityDamageEvent.DamageCause -> e.name.lowercase() }.toList().toTypedArray()
+                    EntityDamageEvent.DamageCause.entries.map { e: EntityDamageEvent.DamageCause -> e.name.lowercase() }
+                        .toList().toTypedArray()
                 ),
                 CommandParameter.Companion.newEnum("entity", false, arrayOf("entity")),
                 CommandParameter.Companion.newType("damager", false, CommandParamType.TARGET)

@@ -99,7 +99,7 @@ class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater> {
         fun match(name: String?, match: String, regex: Boolean): Builder {
             val pattern = if (regex) Pattern.compile(match) else null
 
-            filters.add(Predicate<CompoundTagEditHelper> add@ { helper: CompoundTagEditHelper ->
+            filters.add(Predicate<CompoundTagEditHelper> add@{ helper: CompoundTagEditHelper ->
                 val tag = helper.tag as? Map<*, *> ?: return@add false
                 val compound = tag as Map<String?, Any>
                 if (!compound.containsKey(name)) {

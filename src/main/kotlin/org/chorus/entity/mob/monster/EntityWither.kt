@@ -236,7 +236,8 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
             yBodyRotation = this.rotation.yaw.toFloat(),
             attributeList = run {
                 this.attributes.values.add(
-                    Attribute.getAttribute(Attribute.MAX_HEALTH).setMaxValue(getMaxDiffHealth().toFloat()).setValue(getMaxDiffHealth().toFloat())
+                    Attribute.getAttribute(Attribute.MAX_HEALTH).setMaxValue(getMaxDiffHealth().toFloat())
+                        .setValue(getMaxDiffHealth().toFloat())
                 )
                 this.attributes.values.toTypedArray()
             },
@@ -301,18 +302,20 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
     }
 
     override fun addBossbar(player: Player) {
-        player.dataPacket(BossEventPacket(
-            targetActorID = this.runtimeId,
-            eventType = BossEventPacket.EventType.ADD,
-            eventData = BossEventPacket.EventType.Companion.AddData(
-                name = this.getName(),
-                filteredName = this.getName(),
-                color = 6,
-                darkenScreen = 1,
-                healthPercent = 0f,
-                overlay = 0
+        player.dataPacket(
+            BossEventPacket(
+                targetActorID = this.runtimeId,
+                eventType = BossEventPacket.EventType.ADD,
+                eventData = BossEventPacket.EventType.Companion.AddData(
+                    name = this.getName(),
+                    filteredName = this.getName(),
+                    color = 6,
+                    darkenScreen = 1,
+                    healthPercent = 0f,
+                    overlay = 0
+                )
             )
-        ))
+        )
     }
 
     override fun getOriginalName(): String {
@@ -434,7 +437,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                                         .add(FloatTag(0f))
                                 )
 
-                            val wither = Entity.createEntity(
+                            val wither = createEntity(
                                 EntityID.WITHER,
                                 check.level.getChunk(check.position.chunkX, check.position.chunkZ),
                                 nbt

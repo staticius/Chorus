@@ -2,7 +2,9 @@ package org.chorus.inventory.request
 
 import org.chorus.Player
 import org.chorus.inventory.LoomInventory
-import org.chorus.item.*
+import org.chorus.item.ItemBanner
+import org.chorus.item.ItemBannerPattern
+import org.chorus.item.ItemDye
 import org.chorus.network.protocol.types.BannerPattern
 import org.chorus.network.protocol.types.BannerPatternType
 import org.chorus.network.protocol.types.itemstack.request.action.CraftLoomAction

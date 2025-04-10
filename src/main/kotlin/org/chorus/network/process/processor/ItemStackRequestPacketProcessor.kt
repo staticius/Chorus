@@ -104,7 +104,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
             val transferResult = handleAction(action) ?: return
 
             val player = event.player
-            val sourceInventory = NetworkMapping.getInventory(player, transferResult.source.containerName.container)!!
+            val sourceInventory = NetworkMapping.getInventory(player, transferResult.source.containerName.container)
             val sourceSlot = sourceInventory.fromNetworkSlot(transferResult.source.slot)
 
             val destinationInventory = transferResult.destination

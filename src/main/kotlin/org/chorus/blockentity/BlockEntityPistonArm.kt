@@ -2,7 +2,9 @@ package org.chorus.blockentity
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
+import org.chorus.block.BlockPistonArmCollision
 import org.chorus.entity.Entity
 import org.chorus.event.entity.EntityMoveByPistonEvent
 import org.chorus.level.Level
@@ -15,7 +17,9 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.IntTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
-import org.chorus.utils.*
+import org.chorus.utils.Faceable
+import org.chorus.utils.RedstoneComponent
+import org.chorus.utils.Utils
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min

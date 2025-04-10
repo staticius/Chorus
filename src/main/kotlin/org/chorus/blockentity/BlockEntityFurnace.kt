@@ -1,11 +1,13 @@
 package org.chorus.blockentity
 
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.event.inventory.FurnaceBurnEvent
 import org.chorus.event.inventory.FurnaceSmeltEvent
 import org.chorus.inventory.*
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemLavaBucket
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.NBTIO
@@ -207,19 +209,19 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     protected fun setBurning(burning: Boolean) {
         if (burning) {
             if (this.block.id == this.idleBlockId) {
-                    level.setBlock(
-                        this.position, Block.getWithState(
-                            burningBlockId, this.block.blockState
-                        ), true
-                    )
-                }
-        } else if (this.block.id == this.burningBlockId) {
                 level.setBlock(
                     this.position, Block.getWithState(
-                        idleBlockId, this.block.blockState
+                        burningBlockId, this.block.blockState
                     ), true
                 )
             }
+        } else if (this.block.id == this.burningBlockId) {
+            level.setBlock(
+                this.position, Block.getWithState(
+                    idleBlockId, this.block.blockState
+                ), true
+            )
+        }
     }
 
     protected fun checkFuel(fuel: Item) {

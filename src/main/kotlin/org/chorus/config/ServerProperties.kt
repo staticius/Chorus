@@ -79,6 +79,7 @@ class ServerProperties(dataPath: String) {
                     defaultValue
                 }
             }
+
             is Int -> value
             else -> defaultValue
         }
@@ -110,6 +111,7 @@ class ServerProperties(dataPath: String) {
                     defaultValue
                 }
             }
+
             is Long -> value
             else -> defaultValue
         }

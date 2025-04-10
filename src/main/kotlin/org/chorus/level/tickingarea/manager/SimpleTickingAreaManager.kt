@@ -1,6 +1,6 @@
 package org.chorus.level.tickingarea.manager
 
-import org.chorus.level.*
+import org.chorus.level.Locator
 import org.chorus.level.tickingarea.TickingArea
 import org.chorus.level.tickingarea.storage.TickingAreaStorage
 import kotlin.collections.set

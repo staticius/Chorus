@@ -20,7 +20,6 @@ import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestPlayerSensor
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 class EntityRavager(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {

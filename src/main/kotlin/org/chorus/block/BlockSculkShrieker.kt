@@ -1,7 +1,6 @@
 package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityID
 import org.chorus.blockentity.BlockEntitySculkShrieker
 import org.chorus.item.ItemTool

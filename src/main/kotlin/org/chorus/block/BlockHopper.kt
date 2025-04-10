@@ -14,8 +14,10 @@ import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.Locator
-import org.chorus.math.*
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
 import org.chorus.nbt.tag.Tag
@@ -32,16 +34,16 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
     }
 
     override val name: String
-    get() = "Hopper Block"
+        get() = "Hopper Block"
 
     override val hardness: Double
-    get() = 3.0
+        get() = 3.0
 
     override val resistance: Double
-    get() = 24.0
+        get() = 24.0
 
     override val waterloggingLevel: Int
-    get() = 1
+        get() = 1
 
     override fun place(
         item: Item?,
@@ -111,7 +113,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
         get() = !getPropertyValue(CommonBlockProperties.TOGGLE_BIT)
         set(enabled) {
             setPropertyValue(CommonBlockProperties.TOGGLE_BIT, !enabled)
-    }
+        }
 
     override fun onUpdate(type: Int): Int {
         if (!Server.instance.settings.levelSettings.enableRedstone) {

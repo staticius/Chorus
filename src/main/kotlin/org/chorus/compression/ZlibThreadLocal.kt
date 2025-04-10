@@ -2,7 +2,6 @@ package org.chorus.compression
 
 import org.chorus.utils.ThreadCache
 import java.io.IOException
-import java.util.function.Supplier
 import java.util.zip.DataFormatException
 import java.util.zip.Deflater
 import java.util.zip.Inflater

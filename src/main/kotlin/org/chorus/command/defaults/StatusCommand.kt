@@ -4,7 +4,6 @@ import com.sun.jna.platform.win32.COM.WbemcliUtil
 import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus.Chorus
 import org.chorus.Server
-import org.chorus.camera.instruction.impl.ClearInstruction.get
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParameter
 import org.chorus.utils.TextFormat
@@ -16,6 +15,9 @@ import java.io.IOException
 import java.lang.management.ManagementFactory
 import java.nio.file.Files
 import java.util.concurrent.TimeUnit
+import kotlin.collections.HashMap
+import kotlin.collections.MutableMap
+import kotlin.collections.set
 import kotlin.math.round
 
 

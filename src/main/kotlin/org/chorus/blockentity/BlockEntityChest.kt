@@ -9,7 +9,6 @@ import org.chorus.inventory.Inventory
 import org.chorus.level.format.IChunk
 import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
-import java.util.*
 import java.util.function.Consumer
 
 

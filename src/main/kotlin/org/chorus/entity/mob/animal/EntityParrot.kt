@@ -2,7 +2,8 @@ package org.chorus.entity.mob.animal
 
 import org.chorus.entity.EntityFlyable
 import org.chorus.entity.EntityID
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 

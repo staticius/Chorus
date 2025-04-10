@@ -3,7 +3,7 @@ package org.chorus.blockentity
 import org.chorus.block.BlockUndyedShulkerBox
 import org.chorus.inventory.BaseInventory
 import org.chorus.inventory.ShulkerBoxInventory
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag

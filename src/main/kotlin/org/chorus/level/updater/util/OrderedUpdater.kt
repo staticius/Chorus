@@ -6,16 +6,16 @@ package org.chorus.level.updater.util
  */
 
 class OrderedUpdater
-    /**
-     * Creates an OrderedUpdater whose values are provided by the ordered array.
-     *
-     * @param oldProperty the old state property
-     * @param newProperty the new state property
-     * @param offset      the difference between a value's old integer type and the value's index in the array.
-     * If the first element has an old value of n, then the offset is n.
-     * @param order       an array of ordered values
-     */
-    constructor(val oldProperty: String, val newProperty: String, private val offset: Int, vararg order: String) {
+/**
+ * Creates an OrderedUpdater whose values are provided by the ordered array.
+ *
+ * @param oldProperty the old state property
+ * @param newProperty the new state property
+ * @param offset      the difference between a value's old integer type and the value's index in the array.
+ * If the first element has an old value of n, then the offset is n.
+ * @param order       an array of ordered values
+ */
+constructor(val oldProperty: String, val newProperty: String, private val offset: Int, vararg order: String) {
     private val order: Array<String>
 
     /**

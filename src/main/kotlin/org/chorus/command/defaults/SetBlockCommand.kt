@@ -66,7 +66,8 @@ class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.de
             when (oldBlockHandling) {
                 "destroy" -> {
                     if (sender.isPlayer) {
-                        level.useBreakOn(locator.position, null, Item.AIR, sender.asPlayer(),
+                        level.useBreakOn(
+                            locator.position, null, Item.AIR, sender.asPlayer(),
                             createParticles = true,
                             immediateDestroy = true
                         )

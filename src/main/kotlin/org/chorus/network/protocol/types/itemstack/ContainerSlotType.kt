@@ -1,7 +1,5 @@
 package org.chorus.network.protocol.types.itemstack
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap
-
 enum class ContainerSlotType(val id: Int) {
     ANVIL_INPUT(0),
     ANVIL_MATERIAL(1),

@@ -25,7 +25,6 @@ import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 class EntityShulkerBullet(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {

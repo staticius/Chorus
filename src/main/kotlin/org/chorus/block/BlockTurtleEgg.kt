@@ -22,7 +22,8 @@ import org.chorus.event.block.TurtleEggHatchEvent
 import org.chorus.event.entity.CreatureSpawnEvent
 import org.chorus.event.entity.EntityInteractEvent
 import org.chorus.event.player.PlayerInteractEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.Level
 import org.chorus.level.Sound

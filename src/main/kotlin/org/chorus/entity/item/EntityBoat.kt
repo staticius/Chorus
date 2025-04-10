@@ -2,26 +2,32 @@ package org.chorus.entity.item
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockFlowingWater
 import org.chorus.entity.*
-import org.chorus.entity.data.EntityDataType
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.vehicle.VehicleMoveEvent
 import org.chorus.event.vehicle.VehicleUpdateEvent
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.level.GameRule
+import org.chorus.level.Transform
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
 import org.chorus.math.AxisAlignedBB.BBConsumer
+import org.chorus.math.Vector3
+import org.chorus.math.Vector3f
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.AddActorPacket
 import org.chorus.network.protocol.AnimatePacket
 import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.types.EntityLink
-import kotlin.math.*
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sqrt
 
 open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, nbt) {
     override fun getIdentifier(): String {
@@ -466,7 +472,8 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
     }
 
     fun onPaddle(animation: AnimatePacket.Action, value: Float) {
-        val propertyId = if (animation == AnimatePacket.Action.ROW_RIGHT) EntityDataTypes.ROW_TIME_RIGHT else EntityDataTypes.ROW_TIME_LEFT
+        val propertyId =
+            if (animation == AnimatePacket.Action.ROW_RIGHT) EntityDataTypes.ROW_TIME_RIGHT else EntityDataTypes.ROW_TIME_LEFT
 
         if (getDataProperty(propertyId).compareTo(value) != 0) {
             this.setDataProperty(propertyId, value)

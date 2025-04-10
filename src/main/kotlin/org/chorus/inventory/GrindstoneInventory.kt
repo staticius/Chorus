@@ -5,7 +5,7 @@ import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.BlockGrindstone
 import org.chorus.event.inventory.InventoryCloseEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class GrindstoneInventory(blockGrindstone: BlockGrindstone) :

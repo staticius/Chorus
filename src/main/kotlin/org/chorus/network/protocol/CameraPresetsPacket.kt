@@ -1,7 +1,6 @@
 package org.chorus.network.protocol
 
 import org.chorus.camera.data.CameraPreset
-import org.chorus.math.Vector2f
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.camera.aimassist.CameraAimAssist
 import org.chorus.network.protocol.types.camera.aimassist.CameraPresetAimAssist

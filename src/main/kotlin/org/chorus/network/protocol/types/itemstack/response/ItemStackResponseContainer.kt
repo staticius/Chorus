@@ -6,7 +6,7 @@ import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 /**
  * ContainerEntry holds information on what slots in a container have what item stack in them.
  */
-data class ItemStackResponseContainer (
+data class ItemStackResponseContainer(
     /**
      * container that the slots that follow are in.
      *

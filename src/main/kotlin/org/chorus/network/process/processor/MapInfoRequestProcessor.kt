@@ -4,7 +4,8 @@ import org.chorus.PlayerHandle
 import org.chorus.Server
 import org.chorus.blockentity.BlockEntityItemFrame
 import org.chorus.event.player.PlayerMapInfoRequestEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemFilledMap
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.MapInfoRequestPacket
 import org.chorus.network.protocol.ProtocolInfo

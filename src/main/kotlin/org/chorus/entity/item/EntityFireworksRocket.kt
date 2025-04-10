@@ -1,15 +1,19 @@
 package org.chorus.entity.item
 
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.item.Item
+import org.chorus.item.ItemFireworkRocket
+import org.chorus.level.Locator
+import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.Vector3
+import org.chorus.math.Vector3f
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
@@ -17,7 +21,7 @@ import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.DyeColor
 import java.util.*
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.sqrt

@@ -15,7 +15,8 @@ import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus.event.player.*
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.item.enchantment.Enchantment
 import org.chorus.level.GameRule
 import org.chorus.level.Sound
@@ -30,7 +31,6 @@ import org.chorus.network.protocol.types.inventory.transaction.ReleaseItemData
 import org.chorus.network.protocol.types.inventory.transaction.UseItemData
 import org.chorus.network.protocol.types.inventory.transaction.UseItemOnEntityData
 import org.chorus.utils.Loggable
-
 import java.util.*
 
 class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPacket>() {

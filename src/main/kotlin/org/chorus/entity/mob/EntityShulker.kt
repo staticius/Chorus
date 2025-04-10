@@ -1,12 +1,15 @@
 package org.chorus.entity.mob
 
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityVariant
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.LookAtTargetExecutor
 import org.chorus.entity.ai.executor.PlaySoundExecutor
@@ -21,17 +24,18 @@ import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.projectile.EntityProjectile
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.player.PlayerTeleportEvent.TeleportCause
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.level.Locator
+import org.chorus.level.Sound
+import org.chorus.level.Transform
 import org.chorus.level.format.IChunk
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelSoundEventPacket
-import org.chorus.utils.*
+import org.chorus.utils.Utils
 import java.util.*
-import java.util.Set
 import java.util.function.Consumer
-import kotlin.collections.List
 
 class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityVariant {
     override var color: Byte = 0

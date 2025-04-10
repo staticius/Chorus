@@ -1,6 +1,5 @@
 package org.chorus.command.defaults
 
-import org.chorus.camera.instruction.impl.ClearInstruction.get
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
@@ -8,10 +7,7 @@ import org.chorus.command.data.GenericParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.PlayersNode
 import org.chorus.command.utils.CommandLogger
-import org.chorus.inventory.HumanInventory
-import org.chorus.inventory.HumanOffHandInventory
 import org.chorus.item.Item
-import java.util.List
 import kotlin.math.min
 
 class ClearCommand(name: String) : VanillaCommand(name, "commands.clear.description", "commands.clear.usage") {
@@ -160,7 +156,8 @@ class ClearCommand(name: String) : VanillaCommand(name, "commands.clear.descript
                     log.addError("commands.clear.failure.no.items", target.getName()).output()
                     return 0
                 } else {
-                    log.addSuccess("commands.clear.success", target.getName(), (maxCount - remaining).toString()).output()
+                    log.addSuccess("commands.clear.success", target.getName(), (maxCount - remaining).toString())
+                        .output()
                 }
             }
         }

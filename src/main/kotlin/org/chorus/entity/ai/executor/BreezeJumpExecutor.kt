@@ -1,11 +1,12 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityLiving
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.mob.EntityMob
 import org.chorus.network.protocol.EntityEventPacket
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 
 class BreezeJumpExecutor : EntityControl, IBehaviorExecutor {
     private var prepareTick: Long = -1

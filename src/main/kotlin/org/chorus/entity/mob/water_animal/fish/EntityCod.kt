@@ -1,10 +1,11 @@
 package org.chorus.entity.mob.water_animal.fish
 
 import org.chorus.entity.EntityID
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
+import org.chorus.utils.Utils
 
 /**
  * @author PetteriM1

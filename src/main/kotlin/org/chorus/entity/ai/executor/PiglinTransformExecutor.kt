@@ -1,10 +1,11 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.entity.data.EntityFlag
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.humanoid_monster.EntityZombiePigman
-import org.chorus.inventory.*
+import org.chorus.inventory.Inventory
 import org.chorus.level.Sound
 
 class PiglinTransformExecutor : EntityControl, IBehaviorExecutor {

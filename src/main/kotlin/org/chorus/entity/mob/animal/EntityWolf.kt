@@ -6,11 +6,13 @@ import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.FluctuateController
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.route.finder.impl.SimpleFlatAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.*
@@ -18,16 +20,17 @@ import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.mob.EntityMob
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemDye
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.level.particle.ItemBreakParticle
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.EntityEventPacket
-import org.chorus.utils.*
-import java.util.List
-import java.util.Set
+import org.chorus.utils.DyeColor
+import org.chorus.utils.Utils
 import java.util.function.Function
 import kotlin.math.max
 
@@ -76,14 +79,16 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                             //已驯服
                             if (storage.notEmpty(CoreMemoryTypes.Companion.ENTITY_ATTACKING_OWNER) && storage.get<Entity>(
                                     CoreMemoryTypes.Companion.ENTITY_ATTACKING_OWNER
-                                )!!.isAlive() && (storage.get<Entity>(CoreMemoryTypes.Companion.ENTITY_ATTACKING_OWNER) != this)
+                                )!!
+                                    .isAlive() && (storage.get<Entity>(CoreMemoryTypes.Companion.ENTITY_ATTACKING_OWNER) != this)
                             ) {
                                 //攻击攻击主人的生物(排除自己)
                                 attackTarget = storage.get<Entity>(CoreMemoryTypes.Companion.ENTITY_ATTACKING_OWNER)
                                 storage.clear(CoreMemoryTypes.Companion.ENTITY_ATTACKING_OWNER)
                             } else if (storage.notEmpty(CoreMemoryTypes.Companion.ENTITY_ATTACKED_BY_OWNER) && storage.get<Entity>(
                                     CoreMemoryTypes.Companion.ENTITY_ATTACKED_BY_OWNER
-                                )!!.isAlive() && (storage.get<Entity>(CoreMemoryTypes.Companion.ENTITY_ATTACKED_BY_OWNER) != this)
+                                )!!
+                                    .isAlive() && (storage.get<Entity>(CoreMemoryTypes.Companion.ENTITY_ATTACKED_BY_OWNER) != this)
                             ) {
                                 //攻击主人攻击的生物
                                 attackTarget = storage.get<Entity>(CoreMemoryTypes.Companion.ENTITY_ATTACKED_BY_OWNER)

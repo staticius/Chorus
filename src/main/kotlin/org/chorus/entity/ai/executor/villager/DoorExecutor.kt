@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.executor.villager
 
-import org.chorus.block.*
+import org.chorus.block.BlockWoodenDoor
 import org.chorus.entity.ai.executor.EntityControl
 import org.chorus.entity.ai.executor.IBehaviorExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes

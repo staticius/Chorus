@@ -6,7 +6,7 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.floor
 

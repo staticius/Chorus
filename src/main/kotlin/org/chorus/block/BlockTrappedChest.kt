@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityChest
 import org.chorus.blockentity.BlockEntityID
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus.nbt.tag.CompoundTag

@@ -1,7 +1,6 @@
 package org.chorus.command.defaults
 
 import org.chorus.Player
-import org.chorus.camera.instruction.impl.ClearInstruction.get
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
@@ -12,6 +11,9 @@ import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.utils.TextFormat
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.stream.Collectors
+import kotlin.collections.Map
+import kotlin.collections.MutableList
+import kotlin.collections.set
 
 class KillCommand(name: String) : VanillaCommand(name, "commands.kill.description") {
     init {

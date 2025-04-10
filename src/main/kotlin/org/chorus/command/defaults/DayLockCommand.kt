@@ -1,14 +1,11 @@
 package org.chorus.command.defaults
 
-import org.chorus.Server
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.GameRule
-import org.chorus.level.GameRules
-import org.chorus.level.Level
 
 class DayLockCommand(name: String) :
     VanillaCommand(name, "commands.daylock.description", "", arrayOf<String>("alwaysday")) {

@@ -5,7 +5,6 @@ import org.chorus.item.Item
 import org.chorus.item.ItemTool
 import org.chorus.math.BlockFace
 import org.chorus.utils.RedstoneComponent
-import org.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 class BlockRedstoneBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockSolid(blockstate), RedstoneComponent {

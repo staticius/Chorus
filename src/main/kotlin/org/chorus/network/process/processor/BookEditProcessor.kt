@@ -3,8 +3,11 @@ package org.chorus.network.process.processor
 import org.chorus.PlayerHandle
 import org.chorus.Server
 import org.chorus.event.player.PlayerEditBookEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
+import org.chorus.item.ItemID
+import org.chorus.item.ItemWritableBook
+import org.chorus.item.ItemWrittenBook
 import org.chorus.network.process.DataPacketProcessor
 import org.chorus.network.protocol.BookEditPacket
 import org.chorus.network.protocol.ProtocolInfo
@@ -29,19 +32,25 @@ class BookEditProcessor : DataPacketProcessor<BookEditPacket>() {
 
                 success = (newBook as ItemWritableBook).setPageText(actionData.pageIndex.toInt(), actionData.text)
             }
+
             BookEditPacket.Action.ADD_PAGE -> {
                 val actionData = pk.actionData as BookEditPacket.AddPageData
                 if (actionData.text.length > 512) return
 
                 success = (newBook as ItemWritableBook).insertPage(actionData.pageIndex.toInt(), actionData.text)
             }
+
             BookEditPacket.Action.DELETE_PAGE -> {
                 val actionData = pk.actionData as BookEditPacket.DeletePageData
                 success = (newBook as ItemWritableBook).deletePage(actionData.pageIndex.toInt())
             }
+
             BookEditPacket.Action.SWAP_PAGES -> {
                 val actionData = pk.actionData as BookEditPacket.SwapPagesData
-                success = (newBook as ItemWritableBook).swapPages(actionData.pageIndexA.toInt(), actionData.pageIndexB.toInt())
+                success = (newBook as ItemWritableBook).swapPages(
+                    actionData.pageIndexA.toInt(),
+                    actionData.pageIndexB.toInt()
+                )
             }
 
             BookEditPacket.Action.FINALIZE -> {

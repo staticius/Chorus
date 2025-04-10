@@ -6,7 +6,6 @@ import org.chorus.entity.Entity
 import org.chorus.entity.EntityCanAttack
 import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.ai.memory.MemoryType
 import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.effect.Effect
 import org.chorus.entity.mob.EntityMob

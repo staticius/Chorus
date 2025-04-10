@@ -271,7 +271,8 @@ interface Inventory {
 
     @ApiStatus.Internal
     fun getSlotType(nativeSlot: Int): ContainerSlotType {
-        val type = slotTypeMap()[fromNetworkSlot(nativeSlot)] ?: throw RuntimeException("ContainerSlotType $nativeSlot does not exist!")
+        val type = slotTypeMap()[fromNetworkSlot(nativeSlot)]
+            ?: throw RuntimeException("ContainerSlotType $nativeSlot does not exist!")
         return type
     }
 

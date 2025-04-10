@@ -4,7 +4,7 @@ import org.chorus.Player
 import org.chorus.block.BlockLever.Companion.isSupportValid
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.TorchFacingDirection
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Level
 import org.chorus.math.BlockFace
 import org.chorus.utils.Faceable

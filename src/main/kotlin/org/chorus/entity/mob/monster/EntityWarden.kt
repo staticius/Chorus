@@ -2,12 +2,18 @@ package org.chorus.entity.mob.monster
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityCreature
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.FluctuateController
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator
 import org.chorus.entity.ai.evaluator.RandomTimeRangeEvaluator
@@ -18,7 +24,8 @@ import org.chorus.entity.ai.route.posevaluator.WalkingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.RouteUnreachableTimeSensor
 import org.chorus.entity.data.EntityDataTypes
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.projectile.EntityProjectile
 import org.chorus.event.entity.EntityDamageByEntityEvent
@@ -28,7 +35,7 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationListener
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.EntityEventPacket
 import org.chorus.network.protocol.LevelSoundEventPacket

@@ -95,14 +95,14 @@ class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState = Companio
     val instrument: Instrument
         get() = when (this.down()) {
             is BlockWool -> Instrument.GUITAR
-            
+
             is BlockConcretePowder,
             is BlockSand,
             is BlockGravel,
             is BlockGlass,
             is BlockSeaLantern,
             is BlockBeacon -> Instrument.SNARE_DRUM
-                
+
             is BlockStone,
             is BlockBlackstone,
             is BlockNetherrack,

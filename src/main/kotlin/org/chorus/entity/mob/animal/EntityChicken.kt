@@ -6,7 +6,10 @@ import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.FluctuateController
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator
 import org.chorus.entity.ai.evaluator.PassByTimeEvaluator
@@ -19,11 +22,11 @@ import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestFeedingPlayerSensor
 import org.chorus.entity.ai.sensor.NearestPlayerSensor
 import org.chorus.entity.mob.EntityMob
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 /**
  * @author BeYkeRYkt (Nukkit Project)
@@ -140,7 +143,10 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     }
 
     override fun getDrops(): Array<Item> {
-        return arrayOf(Item.get((if (this.isOnFire()) ItemID.COOKED_CHICKEN else ItemID.CHICKEN)), Item.get(ItemID.FEATHER))
+        return arrayOf(
+            Item.get((if (this.isOnFire()) ItemID.COOKED_CHICKEN else ItemID.CHICKEN)),
+            Item.get(ItemID.FEATHER)
+        )
     }
 
 

@@ -1,7 +1,9 @@
 package org.chorus.entity.item
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityExplosive
+import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.event.entity.EntityDamageEvent

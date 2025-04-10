@@ -1,9 +1,12 @@
 package org.chorus.entity.item
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityLiving
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.PotionType
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
@@ -327,7 +330,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             if ((tickDiff.let { nextApply -= it; nextApply }) <= 0) {
                 nextApply = reapplicationDelay + 10
 
-                val collidingEntities= level!!.getCollidingEntities(getBoundingBox())
+                val collidingEntities = level!!.getCollidingEntities(getBoundingBox())
                 if (collidingEntities.size > 0) {
                     radius += radiusOnUse
                     radiusOnUse /= 2f

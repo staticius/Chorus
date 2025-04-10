@@ -26,9 +26,11 @@ class NumberMemoryCodec<Data : Number?>(key: String) : MemoryCodec<Data>(
                     is ByteTag -> {
                         data.toByte() as Data
                     }
+
                     is ShortTag -> {
                         data.toShort() as Data
                     }
+
                     else -> tag.data as Data
                 }
             }

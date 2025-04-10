@@ -11,11 +11,13 @@ enum class Platform(val platformName: String, val id: Int) {
     WINDOWS_10("Windows", 7),
     WINDOWS("Windows", 8),
     DEDICATED("Dedicated", 9),
+
     @Deprecated("tvOS_Deprecated")
     TVOS("TVOS", 10),
     PLAYSTATION("PlayStation", 11),
     SWITCH("Switch", 12),
     XBOX_ONE("Xbox One", 13),
+
     @Deprecated("WindowsPhone_Deprecated")
     WINDOWS_PHONE("Windows Phone", 14),
     LINUX("Linux", 15);

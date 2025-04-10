@@ -7,9 +7,9 @@ import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.item.EntityEnderCrystal
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.monster.EntityEnderDragon
-import org.chorus.math.*
-import org.chorus.utils.*
-
+import org.chorus.math.Vector2
+import org.chorus.math.Vector3
+import org.chorus.utils.Utils
 import kotlin.math.cos
 import kotlin.math.sin
 

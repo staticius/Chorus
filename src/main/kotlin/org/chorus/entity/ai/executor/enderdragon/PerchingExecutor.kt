@@ -1,15 +1,18 @@
 package org.chorus.entity.ai.executor.enderdragon
 
 import org.chorus.Player
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.executor.EntityControl
 import org.chorus.entity.ai.executor.IBehaviorExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.PotionType
 import org.chorus.entity.item.EntityAreaEffectCloud
 import org.chorus.entity.mob.EntityMob
-import org.chorus.math.*
-import org.chorus.nbt.tag.*
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
 
 class PerchingExecutor : EntityControl, IBehaviorExecutor {
     private var stayTick = -1

@@ -141,7 +141,9 @@ class StartGamePacket : DataPacket() {
         byteBuf.writeString(worldName!!)
         byteBuf.writeString(this.premiumWorldTemplateId)
         byteBuf.writeBoolean(this.isTrial)
-        byteBuf.writeVarInt(this.serverAuthoritativeMovement ?: if (this.isMovementServerAuthoritative) 1 else 0) // 2 - rewind
+        byteBuf.writeVarInt(
+            this.serverAuthoritativeMovement ?: if (this.isMovementServerAuthoritative) 1 else 0
+        ) // 2 - rewind
         byteBuf.writeVarInt(0) // RewindHistorySize
         if (this.serverAuthoritativeMovement != null) {
             byteBuf.writeBoolean(serverAuthoritativeMovement!! > 0) // isServerAuthoritativeBlockBreaking

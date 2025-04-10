@@ -57,24 +57,28 @@ data class BookEditPacket(
             return BookEditPacket(
                 action = Action.entries[byteBuf.readByte().toInt()].also { action = it },
                 bookSlot = byteBuf.readByte(),
-                actionData = when(action) {
+                actionData = when (action) {
                     Action.REPLACE_PAGE -> ReplacePageData(
                         pageIndex = byteBuf.readByte(),
                         text = byteBuf.readString(),
                         photoName = byteBuf.readString(),
                     )
+
                     Action.ADD_PAGE -> AddPageData(
                         pageIndex = byteBuf.readByte(),
                         text = byteBuf.readString(),
                         photoName = byteBuf.readString(),
                     )
+
                     Action.DELETE_PAGE -> DeletePageData(
                         pageIndex = byteBuf.readByte(),
                     )
+
                     Action.SWAP_PAGES -> SwapPagesData(
                         pageIndexA = byteBuf.readByte(),
                         pageIndexB = byteBuf.readByte(),
                     )
+
                     Action.FINALIZE -> FinalizeData(
                         title = byteBuf.readString(),
                         author = byteBuf.readString(),

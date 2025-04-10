@@ -1,4 +1,3 @@
-
 package org.chorus.recipe
 
 import org.chorus.item.Item

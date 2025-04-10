@@ -1,6 +1,6 @@
 package org.chorus.entity.ai.sensor
 
-import org.chorus.entity.*
+import org.chorus.entity.EntityOwnable
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 

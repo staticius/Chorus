@@ -802,6 +802,7 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
                 val commandData = commandOrigin.commandData as CommandOriginData.Origin.PlayerIDData
                 this.writeVarLong(commandData.playerID)
             }
+
             else -> Unit
         }
     }
@@ -816,6 +817,7 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
                 CommandOriginData.Origin.TEST, CommandOriginData.Origin.DEV_CONSOLE -> CommandOriginData.Origin.PlayerIDData(
                     playerID = this.readVarLong()
                 )
+
                 else -> null
             }
         )
@@ -1224,6 +1226,7 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
                 this.writeString(deferredDescriptor.fullName)
                 this.writeShortLE(deferredDescriptor.auxValue)
             }
+
             else -> Unit
         }
 

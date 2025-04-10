@@ -6,9 +6,9 @@ class BlockWaxedChiseledCopper @JvmOverloads constructor(blockstate: BlockState 
     BlockChiseledCopperBase(blockstate) {
     override val oxidizationLevel: OxidizationLevel
         get() = OxidizationLevel.UNAFFECTED
-    
+
     override val isWaxed
-        get() =  true
+        get() = true
 
     override val properties: BlockProperties
         get() = Companion.properties

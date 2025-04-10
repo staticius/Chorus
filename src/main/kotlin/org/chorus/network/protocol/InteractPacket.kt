@@ -26,7 +26,8 @@ class InteractPacket(
 
         companion object {
             fun fromOrdinal(ordinal: Byte): Action {
-                return entries.find { it.netOrdinal == ordinal } ?: throw RuntimeException("Unknown InteractPacketAction ID: $ordinal")
+                return entries.find { it.netOrdinal == ordinal }
+                    ?: throw RuntimeException("Unknown InteractPacketAction ID: $ordinal")
             }
         }
     }
@@ -50,12 +51,13 @@ class InteractPacket(
             return InteractPacket(
                 action = action,
                 targetRuntimeID = byteBuf.readActorRuntimeID(),
-                actionData = when(action) {
+                actionData = when (action) {
                     Action.INTERACT_UPDATE, Action.STOP_RIDING -> Action.PositionData(
                         positionX = byteBuf.readFloat(),
                         positionY = byteBuf.readFloat(),
                         positionZ = byteBuf.readFloat(),
                     )
+
                     else -> null
                 }
             )

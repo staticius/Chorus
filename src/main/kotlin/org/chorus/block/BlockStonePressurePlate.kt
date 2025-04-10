@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.entity.EntityLiving
 import org.chorus.item.ItemTool
-import org.chorus.math.AxisAlignedBB
 
 open class BlockStonePressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockPressurePlateBase(blockstate) {

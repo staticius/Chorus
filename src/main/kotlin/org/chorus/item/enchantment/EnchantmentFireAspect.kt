@@ -24,7 +24,7 @@ class EnchantmentFireAspect :
         val entity = event.entity
         val attacker = event.damager
         if ((entity !is Player || !entity.isCreative)) {
-            val duration = max((entity!!.fireTicks / 20).toDouble(), (getLevel() shl 2).toDouble()).toInt()
+            val duration = max((entity.fireTicks / 20).toDouble(), (getLevel() shl 2).toDouble()).toInt()
 
             val ev = EntityCombustByEntityEvent(attacker, entity, duration)
             Server.instance.pluginManager.callEvent(ev)

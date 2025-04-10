@@ -10,7 +10,8 @@ import org.chorus.network.protocol.ServerSettingsResponsePacket
 
 class ServerSettingsRequestProcessor : DataPacketProcessor<ServerSettingsRequestPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: ServerSettingsRequestPacket) {
-        val settingsRequestEvent = PlayerServerSettingsRequestEvent(playerHandle.player, HashMap(playerHandle.serverSettings))
+        val settingsRequestEvent =
+            PlayerServerSettingsRequestEvent(playerHandle.player, HashMap(playerHandle.serverSettings))
         Server.instance.pluginManager.callEvent(settingsRequestEvent)
 
         if (!settingsRequestEvent.isCancelled) {

@@ -1,9 +1,9 @@
 package org.chorus.blockentity
 
-import org.chorus.block.*
+import org.chorus.block.Block
 import org.chorus.level.Locator
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.registry.Registries
 import org.chorus.scheduler.Task

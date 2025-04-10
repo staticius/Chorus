@@ -2,7 +2,7 @@ package org.chorus.inventory
 
 import org.chorus.Player
 import org.chorus.blockentity.BlockEntityChest
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Sound
 import org.chorus.network.protocol.BlockEventPacket
 import org.chorus.network.protocol.InventorySlotPacket

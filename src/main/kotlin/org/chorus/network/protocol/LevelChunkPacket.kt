@@ -34,8 +34,7 @@ class LevelChunkPacket : DataPacket() {
                 byteBuf.writeUnsignedVarInt(-2)
                 byteBuf.writeUnsignedVarInt(this.subChunkLimit)
             }
-        }
-        else {
+        } else {
             byteBuf.writeUnsignedVarInt(this.subChunkCount)
         }
         byteBuf.writeBoolean(cacheEnabled)

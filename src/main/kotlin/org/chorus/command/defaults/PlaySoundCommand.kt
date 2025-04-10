@@ -1,6 +1,5 @@
 package org.chorus.command.defaults
 
-import com.google.common.collect.Lists
 import org.chorus.Player
 import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
@@ -31,7 +30,8 @@ class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.
                 CommandParameter.Companion.newType("volume", true, CommandParamType.FLOAT),
                 CommandParameter.Companion.newType("pitch", true, CommandParamType.FLOAT),
                 CommandParameter.Companion.newType("minimumVolume", true, CommandParamType.FLOAT)
-            ))
+            )
+        )
         this.enableParamTree()
     }
 

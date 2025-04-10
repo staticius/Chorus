@@ -22,7 +22,13 @@ class WolfAttackExecutor
  * @param maxSenseRange     最大获取攻击目标范围
  * @param clearDataWhenLose 失去目标时清空记忆
  * @param coolDown          攻击冷却时间(单位tick)
- */(memory: NullableMemoryType<out Entity>, speed: Float, maxSenseRange: Int, clearDataWhenLose: Boolean, coolDown: Int) :
+ */(
+    memory: NullableMemoryType<out Entity>,
+    speed: Float,
+    maxSenseRange: Int,
+    clearDataWhenLose: Boolean,
+    coolDown: Int
+) :
     MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
     override fun execute(entity: EntityMob): Boolean {
         val wolf = entity as EntityWolf

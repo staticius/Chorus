@@ -2,13 +2,11 @@ package org.chorus.block
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.Block.Companion.get
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.CommonPropertyMap
 import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.item.Item
-import org.chorus.item.Item.Companion.get
 import org.chorus.item.ItemRepeater
 import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromHorizontalIndex

@@ -2,7 +2,8 @@ package org.chorus.compression
 
 import cn.powernukkitx.libdeflate.Libdeflate
 import org.chorus.Server
-import org.chorus.utils.*
+import org.chorus.utils.Loggable
+import org.chorus.utils.TextFormat
 
 
 object ZlibChooser : Loggable {

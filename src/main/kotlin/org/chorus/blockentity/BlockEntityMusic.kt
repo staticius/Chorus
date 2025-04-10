@@ -1,6 +1,5 @@
 package org.chorus.blockentity
 
-import org.chorus.block.Block
 import org.chorus.block.BlockID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag

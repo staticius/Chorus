@@ -1,7 +1,8 @@
 package org.chorus.blockentity
 
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.BlockCreakingHeart
+import org.chorus.block.BlockID
 import org.chorus.entity.Entity
 import org.chorus.entity.EntityID
 import org.chorus.entity.mob.monster.EntityCreaking
@@ -12,7 +13,7 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.math.BlockFace
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
+import org.chorus.utils.Utils
 
 
 class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
@@ -83,7 +84,12 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
             val ent = Entity.createEntity(EntityID.CREAKING, pos)
             if (ent != null) {
                 val ev =
-                    CreatureSpawnEvent(ent.getNetworkID(), pos, CompoundTag(), CreatureSpawnEvent.SpawnReason.CREAKING_HEART)
+                    CreatureSpawnEvent(
+                        ent.getNetworkID(),
+                        pos,
+                        CompoundTag(),
+                        CreatureSpawnEvent.SpawnReason.CREAKING_HEART
+                    )
                 Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
                     ent.close()

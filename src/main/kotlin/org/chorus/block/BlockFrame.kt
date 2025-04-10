@@ -9,12 +9,16 @@ import org.chorus.blockentity.BlockEntityID
 import org.chorus.blockentity.BlockEntityItemFrame
 import org.chorus.event.block.ItemFrameUseEvent
 import org.chorus.event.player.PlayerInteractEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Level
 import org.chorus.level.Sound
-import org.chorus.math.*
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.AxisDirection
 import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventPacket
 import org.chorus.utils.Faceable
@@ -70,7 +74,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState = Compani
     }
 
     override val waterloggingLevel: Int
-    get() = 1
+        get() = 1
 
     override fun onTouch(
         vector: Vector3,

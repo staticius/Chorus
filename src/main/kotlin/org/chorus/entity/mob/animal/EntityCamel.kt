@@ -5,7 +5,10 @@ import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.FluctuateController
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator
 import org.chorus.entity.ai.evaluator.PassByTimeEvaluator
@@ -20,7 +23,6 @@ import org.chorus.entity.ai.sensor.NearestPlayerSensor
 import org.chorus.entity.mob.EntityMob
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 class EntityCamel(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt) {
     override fun getIdentifier(): String {

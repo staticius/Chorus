@@ -41,13 +41,15 @@ open class EntityDamageByEntityEvent : EntityDamageEvent {
     protected fun addAttackerModifiers(damager: Entity) {
         if (damager.hasEffect(EffectType.STRENGTH)) {
             this.setDamage(
-                (this.getDamage(DamageModifier.BASE) * 0.3 * damager.getEffect(EffectType.STRENGTH)!!.getLevel()).toFloat(), DamageModifier.STRENGTH
+                (this.getDamage(DamageModifier.BASE) * 0.3 * damager.getEffect(EffectType.STRENGTH)!!
+                    .getLevel()).toFloat(), DamageModifier.STRENGTH
             )
         }
 
         if (damager.hasEffect(EffectType.WEAKNESS)) {
             this.setDamage(
-                -(this.getDamage(DamageModifier.BASE) * 0.2 * damager.getEffect(EffectType.WEAKNESS)!!.getLevel()).toFloat(), DamageModifier.WEAKNESS
+                -(this.getDamage(DamageModifier.BASE) * 0.2 * damager.getEffect(EffectType.WEAKNESS)!!
+                    .getLevel()).toFloat(), DamageModifier.WEAKNESS
             )
         }
     }

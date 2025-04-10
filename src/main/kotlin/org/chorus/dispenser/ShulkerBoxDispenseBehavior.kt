@@ -25,7 +25,16 @@ class ShulkerBoxDispenseBehavior : DefaultDispenseBehavior() {
 
         val shulkerBoxFace = if (shulkerBox.down().isTransparent) face else BlockFace.UP
 
-        if (shulkerBox.place(item, target, target.getSide(shulkerBoxFace.getOpposite()), shulkerBoxFace, 0.0, 0.0, 0.0, null)
+        if (shulkerBox.place(
+                item,
+                target,
+                target.getSide(shulkerBoxFace.getOpposite()),
+                shulkerBoxFace,
+                0.0,
+                0.0,
+                0.0,
+                null
+            )
                 .also { success = it }
         ) {
             block.level.updateComparatorOutputLevel(target.position)

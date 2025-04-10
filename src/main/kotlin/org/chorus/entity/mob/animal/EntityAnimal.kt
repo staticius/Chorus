@@ -5,12 +5,12 @@ import org.chorus.Server
 import org.chorus.block.BlockID
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.EntityEventPacket
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 
 
 abstract class EntityAnimal(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt) {

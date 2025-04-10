@@ -65,7 +65,9 @@ open class WalkController : IController {
             ) {
                 //note: 从对BDS的抓包信息来看，台阶的碰撞箱在服务端和半砖一样，高度都为0.5
                 val collisionBlocks = entity.level!!.getTickCachedCollisionBlocks(
-                    entity.offsetBoundingBox.getOffsetBoundingBox(dx, dy, dz), targetFirst = false, ignoreCollidesCheck = false
+                    entity.offsetBoundingBox.getOffsetBoundingBox(dx, dy, dz),
+                    targetFirst = false,
+                    ignoreCollidesCheck = false
                 ) { block: Block -> this.canJump(block) }
                 //计算出需要向上移动的高度
                 val maxY = Arrays.stream(collisionBlocks).map { b: Block -> b.collisionBoundingBox!!.maxY }

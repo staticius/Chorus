@@ -5,7 +5,8 @@ import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.LevelEventPacket
 import org.chorus.utils.BlockColor
 
-open class SpellParticle @JvmOverloads constructor(pos: Vector3, protected open val data: Int = 0) : Particle(pos.x, pos.y, pos.z) {
+open class SpellParticle @JvmOverloads constructor(pos: Vector3, protected open val data: Int = 0) :
+    Particle(pos.x, pos.y, pos.z) {
     constructor(pos: Vector3, blockColor: BlockColor) : this(pos, blockColor.red, blockColor.green, blockColor.blue)
 
     constructor(pos: Vector3, r: Int, g: Int, b: Int) : this(pos, r, g, b, 0x00)

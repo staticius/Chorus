@@ -1,10 +1,13 @@
 package org.chorus.entity
 
 import org.chorus.Player
-import org.chorus.entity.data.*
+import org.chorus.entity.data.EntityDataTypes
+import org.chorus.entity.data.EntityFlag
+import org.chorus.entity.data.PlayerFlag
+import org.chorus.entity.data.Skin
 import org.chorus.inventory.*
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.item.Item
+import org.chorus.level.Level
 import org.chorus.math.BlockVector3
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag

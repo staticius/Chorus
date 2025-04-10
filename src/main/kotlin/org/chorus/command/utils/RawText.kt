@@ -154,7 +154,8 @@ class RawText private constructor(base: Component) {
                 scorer = if (sender.isPlayer) PlayerScorer(sender.asPlayer()!!) else EntityScorer(sender.asEntity()!!)
             } else if (EntitySelectorAPI.api.checkValid(name_str)) {
                 val scorers: List<IScorer> =
-                    EntitySelectorAPI.api.matchEntities(sender, name_str).map { t -> if (t is Player) PlayerScorer(t) else EntityScorer(t) }.toList()
+                    EntitySelectorAPI.api.matchEntities(sender, name_str)
+                        .map { t -> if (t is Player) PlayerScorer(t) else EntityScorer(t) }.toList()
                 if (scorers.isEmpty()) return null
                 scorer = scorers[0]
             } else if (Server.instance.getPlayer(name_str) != null) {

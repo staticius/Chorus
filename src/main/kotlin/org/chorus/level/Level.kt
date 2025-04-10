@@ -86,7 +86,7 @@ import kotlin.also
 import kotlin.arrayOf
 import kotlin.arrayOfNulls
 import kotlin.code
-import kotlin.collections.HashMap
+import kotlin.emptyArray
 import kotlin.intArrayOf
 import kotlin.math.*
 import kotlin.require
@@ -782,11 +782,11 @@ class Level(
             if (!updateEntities.isEmpty()) {
                 CompletableFuture.runAsync({
                     updateEntities.keys.parallelStream().forEach(Consumer { id ->
-                            val entity = updateEntities[id]
-                            if (entity != null && entity.isInitialized() && entity is EntityAsyncPrepare) {
-                                entity.asyncPrepare(tick)
-                            }
-                        })
+                        val entity = updateEntities[id]
+                        if (entity != null && entity.isInitialized() && entity is EntityAsyncPrepare) {
+                            entity.asyncPrepare(tick)
+                        }
+                    })
                 }, Server.instance.computeThreadPool).join()
                 for (id in updateEntities.keys) {
                     val entity = updateEntities[id]
@@ -1646,7 +1646,8 @@ class Level(
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
                 for (y in minY..maxY) {
-                    val block = this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false)
+                    val block =
+                        this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false)
                     if (block.boundingBox != null && !block.canPassThrough() && block.collidesWithBB(bb)) {
                         collides.add(block.boundingBox!!)
                     }
@@ -1688,7 +1689,8 @@ class Level(
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {
                 for (y in minY..maxY) {
-                    val block = this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false)
+                    val block =
+                        this.getBlock(temporalVector.setComponents(x.toDouble(), y.toDouble(), z.toDouble()), false)
                     if (block.boundingBox != null && !block.canPassThrough() && block.collidesWithBB(bb)) {
                         collides.add(block.boundingBox!!)
                     }
@@ -2951,7 +2953,9 @@ class Level(
             }
 
             return allEntities.stream().filter { each ->
-                (entity == null || (each !== entity && entity.canCollideWith(each))) && each.boundingBox.intersectsWith(bb)
+                (entity == null || (each !== entity && entity.canCollideWith(each))) && each.boundingBox.intersectsWith(
+                    bb
+                )
             }
         } else {
             return Stream.empty()
@@ -3216,24 +3220,24 @@ class Level(
             antiXraySystem!!.reinitAntiXray(false)
 
             antiXraySystem!!.fakeOreDenominator = (
-                when (generatorConfig.antiXrayMode) {
-                    AntiXrayMode.HIGH -> 4
-                    AntiXrayMode.MEDIUM -> 8
-                    else -> 16
-                }
-            )
+                    when (generatorConfig.antiXrayMode) {
+                        AntiXrayMode.HIGH -> 4
+                        AntiXrayMode.MEDIUM -> 8
+                        else -> 16
+                    }
+                    )
             antiXraySystem!!.isPreDeObfuscate = (generatorConfig.preDeobfuscate)
         }
 
         this.name = name
         this.folderPath = path
         this.time = levelProvider.time.toFloat()
-        
+
         this.rainTime = requireProvider().rainTime
         if (this.rainTime <= 0) {
             rainTime = ThreadLocalRandom.current().nextInt(168000) + 12000
         }
-        
+
         this.thunderTime = levelProvider.thunderTime
         if (this.thunderTime <= 0) {
             thunderTime = ThreadLocalRandom.current().nextInt(168000) + 12000

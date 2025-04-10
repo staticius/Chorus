@@ -1,14 +1,12 @@
 package org.chorus.inventory
 
 import org.chorus.Player
-import org.chorus.block.BlockBlackShulkerBox
 import org.chorus.block.BlockUndyedShulkerBox
 import org.chorus.blockentity.BlockEntityShulkerBox
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Sound
 import org.chorus.network.protocol.BlockEventPacket
 import org.chorus.network.protocol.types.itemstack.ContainerSlotType
-import org.chorus.tags.BlockTags
 
 class ShulkerBoxInventory(box: BlockEntityShulkerBox) : ContainerInventory(box, InventoryType.CONTAINER, 27) {
     override fun init() {

@@ -1,12 +1,12 @@
 package org.chorus.blockentity
 
 import org.chorus.Player
-import org.chorus.block.*
+import org.chorus.block.BlockID
 import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 import org.chorus.inventory.BeaconInventory
 import org.chorus.inventory.Inventory
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
@@ -158,8 +158,8 @@ class BlockEntityBeacon(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             for (queryX in tileX - powerLevel..tileX + powerLevel) {
                 for (queryZ in tileZ - powerLevel..tileZ + powerLevel) {
                     val testBlockID = level.getBlockIdAt(queryX, queryY, queryZ)
-                    if (testBlockID!== BlockID.IRON_BLOCK && testBlockID !== BlockID.GOLD_BLOCK && testBlockID!== BlockID.EMERALD_BLOCK && testBlockID !== BlockID.DIAMOND_BLOCK && testBlockID !== BlockID.NETHERITE_BLOCK
-                            ) {
+                    if (testBlockID !== BlockID.IRON_BLOCK && testBlockID !== BlockID.GOLD_BLOCK && testBlockID !== BlockID.EMERALD_BLOCK && testBlockID !== BlockID.DIAMOND_BLOCK && testBlockID !== BlockID.NETHERITE_BLOCK
+                    ) {
                         return powerLevel - 1
                     }
                 }

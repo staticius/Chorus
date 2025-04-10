@@ -1,7 +1,8 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.entity.data.EntityFlag
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.EntityZoglin
 import org.chorus.level.Sound

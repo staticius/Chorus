@@ -33,7 +33,8 @@ class BanEntry(name: String) {
             map["name"] = name
             map["creationDate"] = SimpleDateFormat(FORMAT).format(creationDate)
             map["source"] = source
-            map["expireDate"] = if (expirationDate != null) SimpleDateFormat(FORMAT).format(expirationDate) else "Forever"
+            map["expireDate"] =
+                if (expirationDate != null) SimpleDateFormat(FORMAT).format(expirationDate) else "Forever"
             map["reason"] = reason
             return map
         }

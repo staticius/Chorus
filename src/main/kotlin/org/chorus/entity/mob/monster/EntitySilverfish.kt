@@ -23,7 +23,6 @@ import org.chorus.entity.ai.sensor.NearestPlayerSensor
 import org.chorus.entity.mob.EntityGolem
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 /**
  * @author PikyCZ

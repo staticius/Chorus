@@ -1,9 +1,9 @@
 package org.chorus.blockentity
 
-import com.google.common.base.Strings
 import org.chorus.block.BlockID
 import org.chorus.block.property.enums.StructureBlockType
-import org.chorus.inventory.*
+import org.chorus.inventory.Inventory
+import org.chorus.inventory.StructBlockInventory
 import org.chorus.level.format.IChunk
 import org.chorus.math.BlockVector3
 import org.chorus.nbt.tag.CompoundTag

@@ -23,7 +23,8 @@ class InventoryTransactionPacket(
 
         companion object {
             fun fromOrdinal(ordinal: Int): TransactionType {
-                return entries.find { it.ordinal == ordinal } ?: throw RuntimeException("Unknown TransactionType Ordinal: $ordinal")
+                return entries.find { it.ordinal == ordinal }
+                    ?: throw RuntimeException("Unknown TransactionType Ordinal: $ordinal")
             }
         }
     }
@@ -107,6 +108,7 @@ class InventoryTransactionPacket(
                             byteBuf.readByteArray()
                         )
                     }
+
                     false -> emptyList()
                 },
                 transactionType = TransactionType.fromOrdinal(byteBuf.readUnsignedVarInt())

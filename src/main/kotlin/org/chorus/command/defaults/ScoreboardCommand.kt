@@ -9,7 +9,6 @@ import org.chorus.command.selector.EntitySelectorAPI
 import org.chorus.command.tree.ParamList
 import org.chorus.command.tree.node.WildcardIntNode
 import org.chorus.command.utils.CommandLogger
-import org.chorus.entity.Entity
 import org.chorus.scoreboard.IScoreboard
 import org.chorus.scoreboard.Scoreboard
 import org.chorus.scoreboard.ScoreboardLine
@@ -23,7 +22,6 @@ import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.utils.TextFormat
 import java.util.*
 import java.util.function.Consumer
-import java.util.stream.Collectors
 import kotlin.math.max
 import kotlin.math.min
 
@@ -447,14 +445,14 @@ class ScoreboardCommand(name: String) :
                     } else {
                         val scorerNames: MutableSet<String> = LinkedHashSet()
                         manager.scoreboards.values.forEach { scoreboard: IScoreboard ->
-                                scoreboard.lines.values.forEach(
-                                    Consumer { line ->
-                                        scorerNames.add(
-                                            TextFormat.WHITE.toString() + line.scorer.name
-                                        )
-                                    }
-                                )
-                            }
+                            scoreboard.lines.values.forEach(
+                                Consumer { line ->
+                                    scorerNames.add(
+                                        TextFormat.WHITE.toString() + line.scorer.name
+                                    )
+                                }
+                            )
+                        }
                         log.addSuccess(
                             TextFormat.GREEN.toString() + "%commands.scoreboard.players.list.count",
                             scorerNames.size.toString()
@@ -864,7 +862,7 @@ class ScoreboardCommand(name: String) :
             }
         } else if (EntitySelectorAPI.api.checkValid(wildcardTargetStr)) {
             scorers = EntitySelectorAPI.api.matchEntities(sender, wildcardTargetStr)
-                .map { t  -> if (t is Player) PlayerScorer(t) else EntityScorer(t) }
+                .map { t -> if (t is Player) PlayerScorer(t) else EntityScorer(t) }
                 .toMutableSet()
         } else if (Server.instance.getPlayer(wildcardTargetStr) != null) {
             scorers.add(PlayerScorer(Server.instance.getPlayer(wildcardTargetStr)!!))

@@ -1,11 +1,13 @@
 package org.chorus.entity.ai.executor.enderdragon
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.executor.EntityControl
 import org.chorus.entity.ai.executor.IBehaviorExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
-import org.chorus.math.*
+import org.chorus.math.BVector3
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag

@@ -12,7 +12,8 @@ import org.chorus.entity.effect.EffectType
 import org.chorus.event.block.BlockFallEvent
 import org.chorus.event.block.CauldronFilledByDrippingLiquidEvent
 import org.chorus.event.entity.EntityDamageEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.level.GameRule
 import org.chorus.level.Level
 import org.chorus.level.Sound
@@ -225,7 +226,8 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
                 CommonBlockProperties.HANGING
             )
         ) {
-            val jumpBoost = if (entity.hasEffect(EffectType.JUMP_BOOST)) Effect.get(EffectType.JUMP_BOOST).getLevel() else 0
+            val jumpBoost =
+                if (entity.hasEffect(EffectType.JUMP_BOOST)) Effect.get(EffectType.JUMP_BOOST).getLevel() else 0
             val damage = (fallDistance - jumpBoost) * 2 - 2
             if (damage > 0) entity.attack(EntityDamageEvent(entity, EntityDamageEvent.DamageCause.FALL, damage))
         }

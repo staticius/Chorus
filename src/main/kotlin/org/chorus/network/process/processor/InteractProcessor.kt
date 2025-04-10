@@ -83,6 +83,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
                     playerHandle.inventoryOpen = player.getInventory().open(player)
                 }
             }
+
             else -> Unit
         }
     }

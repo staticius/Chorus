@@ -12,7 +12,10 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
 import org.chorus.level.Locator
 import org.chorus.level.Transform
-import org.chorus.math.*
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.BVector3
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
 import org.chorus.scoreboard.scorer.EntityScorer
 import org.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus.utils.StringUtils
@@ -309,7 +312,8 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val pos = list.getResult<Vector3>(1)
                 val chainCommand = list.getResult<String>(2)!!
                 val source = sender.getTransform()
-                val bv = BVector3.fromPos(pos!!.x - source.position.x, pos.y - source.position.y, pos.z - source.position.z)
+                val bv =
+                    BVector3.fromPos(pos!!.x - source.position.x, pos.y - source.position.y, pos.z - source.position.z)
                 source.setPitch(bv.pitch)
                 source.setYaw(bv.yaw)
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), source)
@@ -496,7 +500,8 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                         begin.y, end.y
                     ), max(begin.z, end.z)
                 )
-                val size = floor((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
+                val size =
+                    floor((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
 
                 if (size > 16 * 16 * 256 * 8) {
                     log.addError("commands.fill.tooManyBlocks", size.toString(), (16 * 16 * 256 * 8).toString())

@@ -2,14 +2,20 @@ package org.chorus.entity.item
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockActivatorRail
+import org.chorus.block.BlockComposter
 import org.chorus.block.BlockHopper.IHopper
-import org.chorus.entity.*
+import org.chorus.block.BlockID
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.event.block.HopperSearchItemEvent
 import org.chorus.event.entity.EntityDamageByEntityEvent
-import org.chorus.inventory.*
-import org.chorus.item.*
+import org.chorus.inventory.InventoryHolder
+import org.chorus.inventory.MinecartHopperInventory
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.math.*
 import org.chorus.nbt.NBTIO

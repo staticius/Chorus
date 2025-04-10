@@ -2,7 +2,10 @@ package org.chorus.entity.item
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityInteractable
+import org.chorus.entity.EntityLiving
+import org.chorus.entity.EntityRideable
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent

@@ -1,7 +1,10 @@
 package org.chorus.entity.item
 
 import org.chorus.Player
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityLiving
+import org.chorus.entity.EntitySwimmable
 import org.chorus.event.entity.EntityDamageByBlockEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.level.format.IChunk

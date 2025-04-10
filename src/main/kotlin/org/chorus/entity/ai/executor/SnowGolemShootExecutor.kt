@@ -2,7 +2,9 @@ package org.chorus.entity.ai.executor
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityLiving
 import org.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.projectile.EntityProjectile
@@ -12,7 +14,7 @@ import org.chorus.level.Sound
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.cos
 import kotlin.math.sin
 

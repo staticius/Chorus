@@ -1,6 +1,5 @@
 package org.chorus.entity.ai.memory.codec
 
-import org.chorus.nbt.tag.CompoundTag
 import java.util.function.BiConsumer
 import java.util.function.Function
 

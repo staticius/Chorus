@@ -1,6 +1,8 @@
 package org.chorus.level.generator.`object`.legacytree
 
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockAir
+import org.chorus.block.BlockID
 import org.chorus.level.generator.`object`.BlockManager
 import org.chorus.utils.ChorusRandom
 import kotlin.math.abs

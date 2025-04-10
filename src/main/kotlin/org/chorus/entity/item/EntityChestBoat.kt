@@ -3,10 +3,13 @@ package org.chorus.entity.item
 import org.chorus.Player
 import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataTypes
-import org.chorus.inventory.*
-import org.chorus.item.*
+import org.chorus.inventory.ChestBoatInventory
+import org.chorus.inventory.InventoryHolder
+import org.chorus.inventory.InventoryType
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag

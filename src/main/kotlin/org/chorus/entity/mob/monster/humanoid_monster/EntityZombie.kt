@@ -2,13 +2,19 @@ package org.chorus.entity.mob.monster.humanoid_monster
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockTurtleEgg
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntitySmite
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator
@@ -27,13 +33,14 @@ import org.chorus.entity.mob.animal.EntityTurtle
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus.inventory.EntityInventoryHolder
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.TakeItemEntityPacket
-import org.chorus.utils.*
-import java.util.concurrent.*
+import org.chorus.utils.Utils
+import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import java.util.function.Function
 
@@ -177,7 +184,11 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         val drops = ThreadLocalRandom.current().nextFloat(100f)
         if (drops < 0.83) {
             return when (Utils.rand(0, 2)) {
-                0 -> arrayOf<Item>(Item.get(ItemID.IRON_INGOT, 0, 1), Item.get(ItemID.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
+                0 -> arrayOf<Item>(
+                    Item.get(ItemID.IRON_INGOT, 0, 1),
+                    Item.get(ItemID.ROTTEN_FLESH, 0, Utils.rand(0, 2))
+                )
+
                 1 -> arrayOf<Item>(Item.get(ItemID.CARROT, 0, 1), Item.get(ItemID.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
                 else -> arrayOf<Item>(Item.get(ItemID.POTATO, 0, 1), Item.get(ItemID.ROTTEN_FLESH, 0, Utils.rand(0, 2)))
             }

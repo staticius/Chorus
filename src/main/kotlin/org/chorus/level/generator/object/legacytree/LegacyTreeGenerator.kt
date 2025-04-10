@@ -3,7 +3,6 @@ package org.chorus.level.generator.`object`.legacytree
 import org.chorus.block.*
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.WoodType
-import org.chorus.block.property.type.EnumPropertyType
 import org.chorus.level.generator.`object`.BlockManager
 import org.chorus.math.BlockFace
 import org.chorus.utils.ChorusRandom

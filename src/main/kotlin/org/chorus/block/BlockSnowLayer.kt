@@ -19,10 +19,8 @@ import org.chorus.math.SimpleAxisAlignedBB
 import org.chorus.math.Vector3
 import org.chorus.network.protocol.UpdateBlockPacket
 import org.chorus.plugin.InternalPlugin
-import org.chorus.registry.BiomeRegistry
 import org.chorus.registry.Registries
 import org.chorus.tags.BiomeTags
-import java.util.*
 import java.util.stream.Stream
 import kotlin.math.min
 
@@ -106,7 +104,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
                         other.position.x + 1, other.position.y + 1, other.position.z + 1
                     )
                 ).stream()
-                .anyMatch { e: Entity? -> e is EntityLiving }
+                    .anyMatch { e: Entity? -> e is EntityLiving }
             ) {
                 return false
             }

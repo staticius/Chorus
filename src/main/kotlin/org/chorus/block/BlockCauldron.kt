@@ -159,7 +159,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                 )
                 Server.instance.pluginManager.callEvent(ev)
                 if (!ev.isCancelled) {
-                    if (player!!.isSurvival || player.isAdventure) {
+                    if (player.isSurvival || player.isAdventure) {
                         replaceBucket(item, player, ev.item)
                     }
                     if (cauldron.hasPotion()) { //if has potion
@@ -448,7 +448,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                         )
                         Server.instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
-                            replaceBucket(bucket, player!!, ev.item)
+                            replaceBucket(bucket, player, ev.item)
                             this.setFillLevel(CommonBlockProperties.FILL_LEVEL.min, player) //empty
                             level.setBlock(this.position, BlockCauldron(), true)
                             be.clearCustomColor()
@@ -466,7 +466,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                         )
                         Server.instance.pluginManager.callEvent(ev)
                         if (!ev.isCancelled) {
-                            replaceBucket(bucket, player!!, ev.item)
+                            replaceBucket(bucket, player, ev.item)
 
                             if (be.hasPotion()) { //if has potion
                                 clearWithFizz(be)

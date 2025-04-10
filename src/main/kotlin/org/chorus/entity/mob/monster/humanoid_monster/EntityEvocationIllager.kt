@@ -1,12 +1,16 @@
 package org.chorus.entity.mob.monster.humanoid_monster
 
 import org.chorus.Player
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.executor.evocation.ColorConversionExecutor
@@ -22,14 +26,14 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.animal.EntitySheep
 import org.chorus.entity.mob.monster.EntityCreaking
 import org.chorus.entity.mob.monster.EntityVex
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.GameRule
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.DyeColor
-import java.util.Set
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 
 /**

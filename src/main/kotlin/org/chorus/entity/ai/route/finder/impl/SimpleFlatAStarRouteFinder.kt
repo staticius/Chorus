@@ -1,18 +1,17 @@
 package org.chorus.entity.ai.route.finder.impl
 
-import org.chorus.Player
+
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.Block
 import org.chorus.entity.ai.EntityAI
 import org.chorus.entity.ai.route.data.Node
 import org.chorus.entity.ai.route.finder.SimpleRouteFinder
 import org.chorus.entity.ai.route.posevaluator.IPosEvaluator
 import org.chorus.entity.mob.EntityMob
-import org.chorus.level.*
+import org.chorus.level.Level
 import org.chorus.level.particle.BlockForceFieldParticle
-import org.chorus.math.*
-
-
+import org.chorus.math.Vector3
+import org.chorus.math.VectorMath
 import java.util.*
 import java.util.function.Consumer
 import kotlin.math.abs

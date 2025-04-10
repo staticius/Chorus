@@ -53,6 +53,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
                         playerHandle.onBlockBreakAbort(blockPos.asVector3())
                         playerHandle.onBlockBreakComplete(blockPos, blockFace)
                     }
+
                     else -> Unit
                 }
                 playerHandle.lastBlockAction = action

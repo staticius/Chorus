@@ -2,13 +2,20 @@ package org.chorus.entity.mob.monster.humanoid_monster
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockDoor
+import org.chorus.block.BlockID
+import org.chorus.block.BlockSoulFire
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.*
 import org.chorus.entity.ai.executor.*
 import org.chorus.entity.ai.memory.CoreMemoryTypes
@@ -25,21 +32,20 @@ import org.chorus.entity.mob.EntityZoglin
 import org.chorus.entity.mob.monster.EntityWither
 import org.chorus.inventory.EntityInventoryHolder
 import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.level.GameRule
+import org.chorus.level.Level
+import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.IVector3
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.AnimateEntityPacket.Animation
 import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.network.protocol.TakeItemEntityPacket
-import org.chorus.utils.*
-import java.util.concurrent.*
+import org.chorus.utils.Utils
+import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 import java.util.function.Function
-import kotlin.collections.ArrayList
-import kotlin.collections.MutableList
-import kotlin.collections.forEach
-import kotlin.collections.setOf
 
 open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable {
     override fun getIdentifier(): String {
@@ -118,7 +124,8 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         IBehaviorEvaluator {
                             val player = memoryStorage[CoreMemoryTypes.NEAREST_PLAYER]
                             player is Player && !
-                                player.getInventory().armorContents.toList().stream().anyMatch { item -> !item.isNothing && item is ItemArmor && item.tier == ItemArmor.TIER_GOLD }
+                            player.getInventory().armorContents.toList().stream()
+                                .anyMatch { item -> !item.isNothing && item is ItemArmor && item.tier == ItemArmor.TIER_GOLD }
                         },
                         IBehaviorEvaluator { itemInHand is ItemCrossbow }
                     ), 8, 1),
@@ -152,7 +159,8 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         IBehaviorEvaluator {
                             val player = memoryStorage[CoreMemoryTypes.Companion.NEAREST_PLAYER]
                             player is Player && !
-                                player.getInventory().armorContents.toList().stream().anyMatch { item: Item -> !item.isNothing && item is ItemArmor && item.tier == ItemArmor.TIER_GOLD }
+                            player.getInventory().armorContents.toList().stream()
+                                .anyMatch { item: Item -> !item.isNothing && item is ItemArmor && item.tier == ItemArmor.TIER_GOLD }
                         }
                     ), 5, 1),
                 Behavior(
@@ -416,7 +424,8 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 entity1 is EntityPiglin && entity1.position.distance(entity.position) < 16 && entity1.memoryStorage
                     .isEmpty(CoreMemoryTypes.Companion.ATTACK_TARGET)
             }.forEach { entity1: Entity ->
-                (entity1 as EntityPiglin).memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET] = entity.memoryStorage[memory]
+                (entity1 as EntityPiglin).memoryStorage[CoreMemoryTypes.Companion.ATTACK_TARGET] =
+                    entity.memoryStorage[memory]
             }
             if (entity.memoryStorage.get(memory) is EntityHoglin) {
                 entity.memoryStorage.set<Int>(CoreMemoryTypes.Companion.LAST_HOGLIN_ATTACK_TIME, entity.level!!.tick)
@@ -464,6 +473,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                 BlockID.NETHER_GOLD_ORE,
                 BlockID.GOLDEN_RAIL,
                 ItemID.RAW_GOLD -> true
+
                 else -> false
             }
         }

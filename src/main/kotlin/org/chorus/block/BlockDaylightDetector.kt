@@ -104,7 +104,7 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = C
     }
 
     override fun getWeakPower(face: BlockFace): Int {
-        return level.getBlockStateAt(floorX, floorY, floorZ)!!.getPropertyValue(CommonBlockProperties.REDSTONE_SIGNAL)
+        return level.getBlockStateAt(floorX, floorY, floorZ).getPropertyValue(CommonBlockProperties.REDSTONE_SIGNAL)
     }
 
     override val isPowerSource: Boolean
@@ -135,7 +135,7 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = C
             i = i.coerceIn(0, 15)
         } else i = 0
 
-        if (i != level.getBlockStateAt(floorX, floorY, floorZ)!!
+        if (i != level.getBlockStateAt(floorX, floorY, floorZ)
                 .getPropertyValue(CommonBlockProperties.REDSTONE_SIGNAL)
         ) {
             this.setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.REDSTONE_SIGNAL, i)

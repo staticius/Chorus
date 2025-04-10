@@ -6,7 +6,7 @@ import org.chorus.network.protocol.types.itemstack.ContainerSlotType
 /**
  * Holds information on a specific slot client-side.
  */
-data class ItemStackRequestSlotData (
+data class ItemStackRequestSlotData(
     /**
      * container that the slots that follow are in.
      *

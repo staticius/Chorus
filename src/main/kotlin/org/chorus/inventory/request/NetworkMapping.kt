@@ -18,8 +18,8 @@ object NetworkMapping {
                 }
             }
 
-            ContainerSlotType.CREATED_OUTPUT -> player.creativeOutputInventory!!
-            ContainerSlotType.CURSOR -> player.cursorInventory!!
+            ContainerSlotType.CREATED_OUTPUT -> player.creativeOutputInventory
+            ContainerSlotType.CURSOR -> player.cursorInventory
             ContainerSlotType.INVENTORY, ContainerSlotType.HOTBAR, ContainerSlotType.HOTBAR_AND_INVENTORY -> player.inventory
             ContainerSlotType.ARMOR -> player.inventory.armorInventory!!
             ContainerSlotType.OFFHAND -> player.getOffhandInventory()!!
@@ -37,7 +37,7 @@ object NetworkMapping {
                 if (player.topWindow.isPresent && player.topWindow.get() is CraftingTableInventory) {
                     player.topWindow.get()
                 } else {
-                    player.craftingGrid!!
+                    player.craftingGrid
                 }
             }
 

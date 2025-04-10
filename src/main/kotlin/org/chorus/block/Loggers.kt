@@ -1,4 +1,3 @@
-
 package org.chorus.block
 
 import org.apache.logging.log4j.LogManager

@@ -2,13 +2,18 @@ package org.chorus.entity.mob.monster
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.BlockID
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntitySwimmable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.DiveController
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.SpaceMoveController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.evaluator.PassByTimeEvaluator
@@ -24,18 +29,20 @@ import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestPlayerSensor
 import org.chorus.entity.ai.sensor.NearestTargetEntitySensor
 import org.chorus.entity.data.EntityFlag
-import org.chorus.entity.effect.*
+import org.chorus.entity.effect.Effect
+import org.chorus.entity.effect.EffectType
 import org.chorus.entity.mob.EntityMob
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.LevelEventPacket
-import org.chorus.utils.*
-import java.util.concurrent.*
+import org.chorus.utils.Utils
+import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 
 /**
@@ -152,7 +159,11 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
             ) else Item.AIR,
             if (ThreadLocalRandom.current().nextInt(1000) < 25) Item.get(ItemID.COD, 0, 1) else Item.AIR,
             if (secondLoot <= 2) Item.get(ItemID.COD, 0, Utils.rand(0, 1)) else Item.AIR,
-            if (secondLoot > 2 && secondLoot <= 4) Item.get(ItemID.PRISMARINE_CRYSTALS, 0, Utils.rand(0, 1)) else Item.AIR
+            if (secondLoot > 2 && secondLoot <= 4) Item.get(
+                ItemID.PRISMARINE_CRYSTALS,
+                0,
+                Utils.rand(0, 1)
+            ) else Item.AIR
         )
     }
 
@@ -165,7 +176,7 @@ class EntityElderGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
                 source.damager.attack(
                     EntityDamageByEntityEvent(
                         this,
-                        source.entity!!,
+                        source.entity,
                         DamageCause.THORNS,
                         (if (Server.instance.getDifficulty() == 3) 2 else 3).toFloat()
                     )

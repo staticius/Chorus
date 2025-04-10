@@ -2,21 +2,24 @@ package org.chorus.entity.item
 
 import com.google.common.collect.Sets
 import org.chorus.Player
-import org.chorus.block.*
+import org.chorus.block.Block
 import org.chorus.blockentity.BlockEntityPistonArm
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityHanging
+import org.chorus.entity.EntityID
 import org.chorus.entity.item.EntityPainting.PaintingPlacePredicate
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.item.ItemPainting
-import org.chorus.level.*
+import org.chorus.level.GameRule
+import org.chorus.level.Level
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.BlockFace
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.AddPaintingPacket
 import org.chorus.network.protocol.DataPacket
-import java.util.function.BiFunction
-import java.util.function.BinaryOperator
 import java.util.function.Function
 import java.util.function.Predicate
 

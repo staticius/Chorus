@@ -5,7 +5,7 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.blockentity.BlockEntityFlowerPot
 import org.chorus.blockentity.BlockEntityID
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.Item.Companion.get
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB

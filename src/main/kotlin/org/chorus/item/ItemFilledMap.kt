@@ -125,6 +125,7 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                             Utils.toABGR(image.getRGB(x, y)).toInt()
                         }
                     }
+
                     false -> listOf()
                 }
             )

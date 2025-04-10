@@ -1,6 +1,7 @@
 package org.chorus.entity.ai.sensor
 
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 

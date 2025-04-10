@@ -1,12 +1,19 @@
 package org.chorus.entity.mob
 
+
 import org.chorus.Player
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityFlyable
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityOwnable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LiftController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.SpaceMoveController
 import org.chorus.entity.ai.evaluator.ConditionalProbabilityEvaluator
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator
@@ -20,14 +27,14 @@ import org.chorus.entity.ai.route.posevaluator.FlyingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestItemSensor
 import org.chorus.entity.ai.sensor.NearestPlayerSensor
-import org.chorus.inventory.*
-import org.chorus.item.*
+import org.chorus.inventory.EntityInventoryHolder
+import org.chorus.inventory.Inventory
+import org.chorus.inventory.InventorySlice
+import org.chorus.item.Item
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
-
-
 import java.util.function.Function
 
 class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityFlyable, EntityOwnable,
@@ -146,7 +153,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
                         if (currentItem.isNothing) {
                             getInventory().setItem(0, item)
                         } else {
-                            item!!.setCount(item.getCount() + currentItem.getCount())
+                            item.setCount(item.getCount() + currentItem.getCount())
                             getInventory().setItem(0, item)
                         }
                         level!!.addSound(this.position, Sound.RANDOM_POP)

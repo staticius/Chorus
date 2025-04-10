@@ -71,7 +71,11 @@ class WalkingPosEvaluator : IPosEvaluator {
                     if ((collisionInfo.toInt() and 3) - 2 == j) continue  // 获取z轴的碰撞信息并比较
 
                     // 由于已经缓存了方块，检测速度还是可以接受的
-                    if (!Utils.hasCollisionTickCachedBlocks(entity.getLevel(), bb.clone().offset(i * dr, 0.0, j * dr))) {
+                    if (!Utils.hasCollisionTickCachedBlocks(
+                            entity.getLevel(),
+                            bb.clone().offset(i * dr, 0.0, j * dr)
+                        )
+                    ) {
                         return true
                     }
                 }

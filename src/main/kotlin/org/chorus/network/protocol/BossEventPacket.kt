@@ -21,7 +21,8 @@ data class BossEventPacket(
 
         companion object {
             fun fromOrdinal(ordinal: Int): EventType {
-                return entries.find { it.ordinal == ordinal } ?: throw RuntimeException("Unknown BossEventUpdateType Ordinal: $ordinal")
+                return entries.find { it.ordinal == ordinal }
+                    ?: throw RuntimeException("Unknown BossEventUpdateType Ordinal: $ordinal")
             }
 
             interface EventData
@@ -139,8 +140,8 @@ data class BossEventPacket(
             val eventType: EventType
             return BossEventPacket(
                 targetActorID = byteBuf.readActorUniqueID(),
-                eventType = EventType.fromOrdinal(byteBuf.readUnsignedVarInt()).also { eventType = it  },
-                eventData = when(eventType) {
+                eventType = EventType.fromOrdinal(byteBuf.readUnsignedVarInt()).also { eventType = it },
+                eventData = when (eventType) {
                     EventType.ADD -> EventType.Companion.AddData(
                         name = byteBuf.readString(),
                         filteredName = byteBuf.readString(),

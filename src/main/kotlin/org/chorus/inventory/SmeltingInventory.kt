@@ -1,7 +1,7 @@
 package org.chorus.inventory
 
 import org.chorus.blockentity.BlockEntityFurnace
-import org.chorus.item.*
+import org.chorus.item.Item
 
 abstract class SmeltingInventory(holder: BlockEntityFurnace, type: InventoryType, size: Int) :
     ContainerInventory(holder, type, size) {

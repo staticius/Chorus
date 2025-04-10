@@ -3,12 +3,12 @@ package org.chorus.command.defaults
 import com.google.gson.JsonArray
 import com.google.gson.JsonParser
 import org.chorus.Server
-import org.chorus.command.*
+import org.chorus.command.Command
+import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
 import org.chorus.lang.TranslationContainer
 import org.chorus.network.protocol.ProtocolInfo
-import org.chorus.plugin.Plugin
 import org.chorus.utils.TextFormat
 import java.io.IOException
 import java.net.URI

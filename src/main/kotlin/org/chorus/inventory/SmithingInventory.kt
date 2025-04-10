@@ -1,4 +1,3 @@
-
 package org.chorus.inventory
 
 import org.chorus.Player
@@ -23,19 +22,19 @@ class SmithingInventory(blockSmithingTable: BlockSmithingTable) :
     var equipment: Item
         get() = getItem(EQUIPMENT)
         set(equipment) {
-            setItem(EQUIPMENT, equipment!!)
+            setItem(EQUIPMENT, equipment)
         }
 
     var ingredient: Item
         get() = getItem(INGREDIENT)
         set(ingredient) {
-            setItem(INGREDIENT, ingredient!!)
+            setItem(INGREDIENT, ingredient)
         }
 
     var template: Item
         get() = getItem(TEMPLATE)
         set(template) {
-            setItem(TEMPLATE, template!!)
+            setItem(TEMPLATE, template)
         }
 
     override fun onClose(who: Player) {

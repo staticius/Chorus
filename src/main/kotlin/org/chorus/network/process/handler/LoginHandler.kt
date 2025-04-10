@@ -1,5 +1,6 @@
 package org.chorus.network.process.handler
 
+
 import org.chorus.Server
 import org.chorus.config.ServerPropertiesKeys
 import org.chorus.network.connection.BedrockSession
@@ -12,13 +13,13 @@ import org.chorus.network.process.SessionState
 import org.chorus.network.protocol.LoginPacket
 import org.chorus.network.protocol.PlayStatusPacket
 import org.chorus.network.protocol.ServerToClientHandshakePacket
-import org.chorus.network.protocol.types.*
+import org.chorus.network.protocol.types.InputMode
+import org.chorus.network.protocol.types.Platform
+import org.chorus.network.protocol.types.PlayerInfo
+import org.chorus.network.protocol.types.XboxLivePlayerInfo
 import org.chorus.utils.ClientChainData
 import org.chorus.utils.Loggable
-
-
 import java.net.InetSocketAddress
-import java.util.*
 import java.util.function.Consumer
 import java.util.regex.Pattern
 

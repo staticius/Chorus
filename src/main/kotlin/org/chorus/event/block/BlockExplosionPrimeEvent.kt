@@ -1,4 +1,3 @@
-
 package org.chorus.event.block
 
 import org.chorus.Player

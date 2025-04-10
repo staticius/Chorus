@@ -1,10 +1,10 @@
 package org.chorus.blockentity
 
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.BlockID
 import org.chorus.inventory.SmeltingInventory
 import org.chorus.inventory.SmokerInventory
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.recipe.SmeltingRecipe

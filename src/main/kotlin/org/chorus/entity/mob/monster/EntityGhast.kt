@@ -1,11 +1,16 @@
 package org.chorus.entity.mob.monster
 
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityFlyable
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LiftController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.SpaceMoveController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.RandomSoundEvaluator
 import org.chorus.entity.ai.executor.GhastShootExecutor
@@ -17,14 +22,12 @@ import org.chorus.entity.ai.route.posevaluator.FlyingPosEvaluator
 import org.chorus.entity.ai.sensor.ISensor
 import org.chorus.entity.ai.sensor.NearestPlayerSensor
 import org.chorus.entity.projectile.EntityFireball
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import org.chorus.utils.*
-import java.util.*
-import java.util.Set
-import kotlin.collections.forEach
+import org.chorus.utils.Utils
 
 /**
  * @author PikyCZ

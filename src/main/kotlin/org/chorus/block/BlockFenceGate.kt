@@ -9,8 +9,11 @@ import org.chorus.block.property.enums.MinecraftCardinalDirection
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.event.block.BlockRedstoneEvent
 import org.chorus.event.block.DoorToggleEvent
-import org.chorus.item.*
-import org.chorus.level.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
+import org.chorus.level.Level
+import org.chorus.level.Locator
+import org.chorus.level.Sound
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
 import org.chorus.math.BlockFace

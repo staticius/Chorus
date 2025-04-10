@@ -10,7 +10,8 @@ data class BannerPattern(
 ) {
     companion object {
         fun fromCompoundTag(compoundTag: CompoundTag): BannerPattern {
-            val bannerPatternType = BannerPatternType.fromCode(if (compoundTag.contains("Pattern")) compoundTag.getString("Pattern") else "bo")
+            val bannerPatternType =
+                BannerPatternType.fromCode(if (compoundTag.contains("Pattern")) compoundTag.getString("Pattern") else "bo")
             return BannerPattern(
                 bannerPatternType,
                 if (compoundTag.contains("Color")) DyeColor.getByDyeData(compoundTag.getInt("Color"))

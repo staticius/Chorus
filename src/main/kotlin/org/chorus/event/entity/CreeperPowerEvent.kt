@@ -7,13 +7,14 @@ import org.chorus.event.Cancellable
 import org.chorus.event.HandlerList
 
 
-class CreeperPowerEvent(creeper: EntityCreeper,
-                        /**
-                         * Gets the cause of the creeper being (un)powered.
-                         *
-                         * @return A PowerCause value detailing the cause of change in power.
-                         */
-                        val cause: PowerCause?
+class CreeperPowerEvent(
+    creeper: EntityCreeper,
+    /**
+     * Gets the cause of the creeper being (un)powered.
+     *
+     * @return A PowerCause value detailing the cause of change in power.
+     */
+    val cause: PowerCause?
 ) : EntityEvent(), Cancellable {
 
     /**

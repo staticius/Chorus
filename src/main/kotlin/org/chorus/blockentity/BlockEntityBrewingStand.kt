@@ -7,7 +7,6 @@ import org.chorus.block.property.CommonBlockProperties
 import org.chorus.event.inventory.BrewEvent
 import org.chorus.event.inventory.StartBrewEvent
 import org.chorus.inventory.BrewingInventory
-import org.chorus.inventory.Inventory
 import org.chorus.inventory.InventorySlice
 import org.chorus.inventory.RecipeInventoryHolder
 import org.chorus.item.Item

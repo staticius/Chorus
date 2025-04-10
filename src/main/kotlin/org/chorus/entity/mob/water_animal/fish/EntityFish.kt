@@ -15,7 +15,6 @@ import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.water_animal.EntityWaterAnimal
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 /**
  * 所有鱼的基类

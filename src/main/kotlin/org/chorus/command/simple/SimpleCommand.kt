@@ -1,10 +1,10 @@
 package org.chorus.command.simple
 
-import org.chorus.command.*
 import org.chorus.command.Command
+import org.chorus.command.CommandSender
+import org.chorus.command.ConsoleCommandSender
 import org.chorus.lang.TranslationContainer
 import org.chorus.utils.Loggable
-
 import java.lang.reflect.Method
 
 class SimpleCommand(

@@ -34,7 +34,8 @@ data class CommandOriginData(
 
         companion object {
             fun fromOrdinal(ordinal: Int): Origin {
-                return entries.getOrNull(ordinal) ?: throw IllegalArgumentException("Unknown CommandOriginData Ordinal: $ordinal")
+                return entries.getOrNull(ordinal)
+                    ?: throw IllegalArgumentException("Unknown CommandOriginData Ordinal: $ordinal")
             }
         }
     }

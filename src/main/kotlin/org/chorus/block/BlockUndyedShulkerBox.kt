@@ -12,7 +12,6 @@ import org.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus.nbt.NBTIO.putItemHelper
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
-import org.chorus.nbt.tag.Tag
 import org.chorus.tags.BlockTags
 
 open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(blockState),

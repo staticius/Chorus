@@ -17,7 +17,8 @@ object XblUtils {
     private val log: InternalLogger = InternalLoggerFactory.getInstance(XblUtils::class.java)
 
     private const val TOKEN_URL_STRING = "https://login.live.com/oauth20.srf"
-    private const val REQUEST_URL_STRING = "https://login.live.com/oauth20_authorize.srf?client_id=00000000441cc96b&redirect_uri=https://login.live.com/oauth20_desktop.srf&response_type=token&display=touch&scope=service::user.auth.xboxlive.com::MBI_SSL&locale=en"
+    private const val REQUEST_URL_STRING =
+        "https://login.live.com/oauth20_authorize.srf?client_id=00000000441cc96b&redirect_uri=https://login.live.com/oauth20_desktop.srf&response_type=token&display=touch&scope=service::user.auth.xboxlive.com::MBI_SSL&locale=en"
     private var TOKEN_URL: URL
     private var REQUEST_URL: URL
 

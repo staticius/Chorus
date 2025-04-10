@@ -2,12 +2,18 @@ package org.chorus.entity.mob.monster
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityInteractable
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.FluctuateController
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.WalkController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator
@@ -28,12 +34,13 @@ import org.chorus.entity.mob.animal.EntityOcelot
 import org.chorus.entity.weather.EntityLightningStrike
 import org.chorus.event.entity.CreeperPowerEvent
 import org.chorus.event.entity.EntityDamageByEntityEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 
 class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityInteractable {
     override fun getIdentifier(): String {
@@ -105,13 +112,18 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
                     val memoryStorage = entity.memoryStorage
                     var attacker = memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
                     if (attacker == null) attacker = memoryStorage.get<Player>(CoreMemoryTypes.Companion.NEAREST_PLAYER)
-                    if (attacker != null && (attacker !is Player || attacker.isSurvival) && attacker.position.distanceSquared(entity.position) <= 3 * 3 && (!memoryStorage[CoreMemoryTypes.SHOULD_EXPLODE])) {
+                    if (attacker != null && (attacker !is Player || attacker.isSurvival) && attacker.position.distanceSquared(
+                            entity.position
+                        ) <= 3 * 3 && (!memoryStorage[CoreMemoryTypes.SHOULD_EXPLODE])
+                    ) {
                         memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, true)
                         return@ISensor
                     }
                     if ((attacker == null || (attacker is Player && !attacker.isSurvival) || attacker.position.distanceSquared(
                             entity.position
-                        ) >= 7 * 7) && memoryStorage[CoreMemoryTypes.SHOULD_EXPLODE] && memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.EXPLODE_CANCELLABLE)
+                        ) >= 7 * 7) && memoryStorage[CoreMemoryTypes.SHOULD_EXPLODE] && memoryStorage.get<Boolean>(
+                            CoreMemoryTypes.Companion.EXPLODE_CANCELLABLE
+                        )
                     ) {
                         memoryStorage.set<Boolean>(CoreMemoryTypes.Companion.SHOULD_EXPLODE, false)
                     }

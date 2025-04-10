@@ -14,10 +14,6 @@ import org.chorus.network.protocol.ModalFormResponsePacket
 import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.utils.Loggable
 
-import kotlin.Boolean
-import kotlin.Float
-import kotlin.Int
-
 class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: ModalFormResponsePacket) {
         val player = playerHandle.player

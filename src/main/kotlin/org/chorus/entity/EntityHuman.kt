@@ -163,40 +163,42 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
                 arrayOf(player)
             )
 
-            player.dataPacket(AddPlayerPacket(
-                uuid = this.uuid,
-                playerName = this.getName(),
-                targetRuntimeID = this.getRuntimeID(),
-                platformChatID = "", // TODO: platformChatID
-                position = this.position.asVector3f(),
-                velocity = this.motion.asVector3f(),
-                rotation = this.rotation.asVector2f(),
-                yHeadRotation = this.headYaw.toFloat(),
-                carriedItem = this.itemInHand,
-                playerGameType = Server.instance.gamemode,
-                entityDataMap = this.entityDataMap,
-                abilitiesData = SerializedAbilitiesData(
-                    this.getUniqueID(),
-                    PlayerPermission.VISITOR,
-                    CommandPermission.ANY,
-                    emptyArray() // TODO: AbilityLayers
-                ),
-                actorLinks = Array(this.passengers.size) { i ->
-                    EntityLink(
+            player.dataPacket(
+                AddPlayerPacket(
+                    uuid = this.uuid,
+                    playerName = this.getName(),
+                    targetRuntimeID = this.getRuntimeID(),
+                    platformChatID = "", // TODO: platformChatID
+                    position = this.position.asVector3f(),
+                    velocity = this.motion.asVector3f(),
+                    rotation = this.rotation.asVector2f(),
+                    yHeadRotation = this.headYaw.toFloat(),
+                    carriedItem = this.itemInHand,
+                    playerGameType = Server.instance.gamemode,
+                    entityDataMap = this.entityDataMap,
+                    abilitiesData = SerializedAbilitiesData(
                         this.getUniqueID(),
-                        this.passengers[i].uniqueId,
-                        if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
-                        immediate = false,
-                        riderInitiated = false
-                    )
-                },
-                syncedProperties = this.propertySyncData(),
-                buildPlatform = Platform.UNKNOWN, // TODO: buildPlatform
-                deviceID = "" // TODO: DeviceID
-            ))
+                        PlayerPermission.VISITOR,
+                        CommandPermission.ANY,
+                        emptyArray() // TODO: AbilityLayers
+                    ),
+                    actorLinks = Array(this.passengers.size) { i ->
+                        EntityLink(
+                            this.getUniqueID(),
+                            this.passengers[i].uniqueId,
+                            if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
+                            immediate = false,
+                            riderInitiated = false
+                        )
+                    },
+                    syncedProperties = this.propertySyncData(),
+                    buildPlatform = Platform.UNKNOWN, // TODO: buildPlatform
+                    deviceID = "" // TODO: DeviceID
+                )
+            )
 
             inventory.sendArmorContents(player)
-            offhandInventory!!.sendContents(player)
+            offhandInventory.sendContents(player)
 
             if (this.riding != null) {
                 val pkk: SetEntityLinkPacket = SetEntityLinkPacket()

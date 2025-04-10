@@ -115,12 +115,14 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override fun onOpen(who: Player) {
         if (who.isOp && who.isCreative) {
             viewers.add(who)
-            who.dataPacket(ContainerOpenPacket(
-                containerID = who.getWindowId(this),
-                containerType = type.networkType,
-                position = holder.vector3.asBlockVector3(),
-                targetActorID = who.getRuntimeID()
-            ))
+            who.dataPacket(
+                ContainerOpenPacket(
+                    containerID = who.getWindowId(this),
+                    containerType = type.networkType,
+                    position = holder.vector3.asBlockVector3(),
+                    targetActorID = who.getRuntimeID()
+                )
+            )
         }
     }
 
@@ -145,11 +147,13 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
 
     override fun onClose(who: Player) {
         val containerId = who.getWindowId(this)
-        who.dataPacket(ContainerClosePacket(
-            containerID = containerId,
-            containerType = type,
-            serverInitiatedClose = who.closingWindowId != containerId
-        ))
+        who.dataPacket(
+            ContainerClosePacket(
+                containerID = containerId,
+                containerType = type,
+                serverInitiatedClose = who.closingWindowId != containerId
+            )
+        )
         viewers.remove(who)
     }
 

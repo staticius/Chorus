@@ -8,7 +8,9 @@ import org.chorus.command.data.CommandParameter
 import org.chorus.command.tree.ParamList
 import org.chorus.command.utils.CommandLogger
 import org.chorus.level.Locator
-import org.chorus.math.*
+import org.chorus.math.AxisAlignedBB
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector3
 import org.chorus.utils.Utils
 import kotlin.math.floor
 import kotlin.math.max
@@ -86,7 +88,8 @@ class CloneCommand(name: String) : VanillaCommand(name, "commands.clone.descript
                 begin.y, end.y
             ), max(begin.z, end.z)
         )
-        val size = floor((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
+        val size =
+            floor((blocksAABB.maxX - blocksAABB.minX + 1) * (blocksAABB.maxY - blocksAABB.minY + 1) * (blocksAABB.maxZ - blocksAABB.minZ + 1))
 
         if (size > 16 * 16 * 256 * 8) {
             log.addError("commands.clone.tooManyBlocks", size.toString(), (16 * 16 * 256 * 8).toString())

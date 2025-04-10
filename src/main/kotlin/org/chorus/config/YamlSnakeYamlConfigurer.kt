@@ -1,15 +1,13 @@
 package org.chorus.config
 
+
 import eu.okaeri.configs.configurer.Configurer
-import eu.okaeri.configs.postprocessor.ConfigLineFilter
 import eu.okaeri.configs.postprocessor.ConfigLineInfo
 import eu.okaeri.configs.postprocessor.format.YamlSectionWalker
 import eu.okaeri.configs.schema.ConfigDeclaration
 import eu.okaeri.configs.schema.FieldDeclaration
 import eu.okaeri.configs.schema.GenericsDeclaration
 import eu.okaeri.configs.serdes.SerdesContext
-
-
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.LoaderOptions
 import org.yaml.snakeyaml.Yaml

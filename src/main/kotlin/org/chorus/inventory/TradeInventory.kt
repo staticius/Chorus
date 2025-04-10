@@ -8,7 +8,7 @@ class TradeInventory(holder: EntityVillagerV2) : BaseInventory(holder, Inventory
     var displayName: String? = null
 
     init {
-        this.holder = holder!!
+        this.holder = holder
     }
 
     override fun init() {

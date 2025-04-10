@@ -10,11 +10,12 @@ import org.chorus.event.block.BlockIgniteEvent
 import org.chorus.event.entity.EntityCombustByBlockEvent
 import org.chorus.event.entity.EntityDamageByBlockEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.level.GameRule
 import org.chorus.level.Level
-import org.chorus.math.*
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.math.Vector3
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 

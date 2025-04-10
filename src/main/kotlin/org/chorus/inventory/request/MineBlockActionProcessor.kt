@@ -1,6 +1,5 @@
 package org.chorus.inventory.request
 
-import com.google.common.collect.Lists
 import org.chorus.Player
 import org.chorus.inventory.SpecialWindowId
 import org.chorus.network.protocol.InventorySlotPacket

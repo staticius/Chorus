@@ -91,7 +91,8 @@ class ItemUpdater_1_21_30 : Updater {
                 val states = block["states"] as? MutableMap<*, *> ?: return@edit
 
                 val allowUnderwater = states.remove("allow_underwater_bit")
-                val toggled = allowUnderwater is Byte && allowUnderwater.toInt() == 1 || allowUnderwater is Boolean && allowUnderwater
+                val toggled =
+                    allowUnderwater is Byte && allowUnderwater.toInt() == 1 || allowUnderwater is Boolean && allowUnderwater
                 helper.rootTag["Name"] = if (toggled) "minecraft:tnt" else "minecraft:underwater_tnt"
             }
     }

@@ -7,7 +7,9 @@ import org.chorus.block.property.type.IntPropertyType
 import org.chorus.entity.Entity
 import org.chorus.event.block.BlockGrowEvent
 import org.chorus.event.block.BlockSpreadEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace

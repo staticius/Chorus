@@ -130,7 +130,8 @@ class CommandEnum {
 
         val ENUM_BOOLEAN: CommandEnum = CommandEnum("Boolean", listOf("true", "false"))
 
-        val ENUM_GAMEMODE: CommandEnum = CommandEnum("GameMode", listOf("survival", "creative", "s", "c", "adventure", "a", "spectator"))
+        val ENUM_GAMEMODE: CommandEnum =
+            CommandEnum("GameMode", listOf("survival", "creative", "s", "c", "adventure", "a", "spectator"))
 
         val ENUM_BLOCK: CommandEnum = CommandEnum("Block", emptyList())
 

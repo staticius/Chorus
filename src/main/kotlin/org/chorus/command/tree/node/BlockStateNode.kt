@@ -50,7 +50,8 @@ class BlockStateNode : ParamNode<BlockState?>() {
                         }
                     } else if (propertyType.getType() == BlockPropertyType.Type.BOOLEAN) {
                         if (value == "true" || value == "false") {
-                            result = result.setPropertyValue(properties, propertyType.tryCreateValue(value.toBoolean())!!)
+                            result =
+                                result.setPropertyValue(properties, propertyType.tryCreateValue(value.toBoolean())!!)
                             break
                         } else {
                             this.error()

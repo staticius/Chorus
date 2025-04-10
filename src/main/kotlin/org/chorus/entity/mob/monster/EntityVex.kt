@@ -1,12 +1,18 @@
 package org.chorus.entity.mob.monster
 
+
 import org.chorus.Player
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityFlyable
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LiftController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.SpaceMoveController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.evaluator.PassByTimeEvaluator
@@ -27,13 +33,13 @@ import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager
 import org.chorus.entity.mob.villagers.EntityVillager
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.item.ItemTool
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-
-
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 
 class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityFlyable {

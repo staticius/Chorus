@@ -1,7 +1,7 @@
 package org.chorus.entity
 
 import org.chorus.entity.ai.memory.CoreMemoryTypes
-import org.chorus.utils.*
+import org.chorus.utils.Utils
 
 /**
  * 实现这个接口的实体拥有变种属性

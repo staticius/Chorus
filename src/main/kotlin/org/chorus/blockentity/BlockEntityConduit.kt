@@ -2,7 +2,8 @@ package org.chorus.blockentity
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
 import org.chorus.entity.Entity
 import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
@@ -13,11 +14,11 @@ import org.chorus.event.entity.EntityDamageByBlockEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.SimpleAxisAlignedBB
+import org.chorus.math.Vector2
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.tags.BiomeTags
 import org.chorus.tags.BlockTags
-import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 

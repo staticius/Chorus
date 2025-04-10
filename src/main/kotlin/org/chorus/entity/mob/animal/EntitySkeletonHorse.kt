@@ -3,7 +3,8 @@ package org.chorus.entity.mob.animal
 import org.chorus.entity.EntityID
 import org.chorus.entity.EntitySmite
 import org.chorus.entity.EntityWalkable
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 

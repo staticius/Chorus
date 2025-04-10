@@ -1,7 +1,6 @@
 package org.chorus.block
 
 import org.chorus.Server
-import org.chorus.blockentity.BlockEntity
 import org.chorus.blockentity.BlockEntityID
 import org.chorus.blockentity.BlockEntityTarget
 import org.chorus.entity.Entity
@@ -11,7 +10,8 @@ import org.chorus.entity.projectile.abstract_arrow.EntityThrownTrident
 import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.Locator
-import org.chorus.math.*
+import org.chorus.math.BlockFace
+import org.chorus.math.Vector3
 import org.chorus.utils.RedstoneComponent
 import java.util.*
 import kotlin.math.ceil

@@ -10,7 +10,7 @@ import java.nio.file.Path
 class Function private constructor(private val fullPath: Path) {
     val commands: List<String> =
         try {
-             Files.readAllLines(fullPath)
+            Files.readAllLines(fullPath)
                 .filter { it.isNotBlank() }
                 .map { s -> s.split("#".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[0] }
                 .filter { it.isNotEmpty() }.toList()

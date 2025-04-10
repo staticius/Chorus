@@ -1,7 +1,5 @@
 package org.chorus.entity.ai.evaluator
 
-import org.chorus.entity.mob.EntityMob
-
 /**
  * 提供部分实用方法封装
  * <br></br>

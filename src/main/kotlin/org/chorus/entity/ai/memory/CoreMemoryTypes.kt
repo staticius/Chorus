@@ -9,8 +9,6 @@ import org.chorus.entity.Entity
 import org.chorus.entity.ai.memory.codec.BooleanMemoryCodec
 import org.chorus.entity.ai.memory.codec.MemoryCodec
 import org.chorus.entity.ai.memory.codec.NumberMemoryCodec
-import org.chorus.entity.ai.memory.codec.NumberMemoryCodec.Companion.newTag
-import org.chorus.entity.ai.memory.codec.NumberMemoryCodec.TagReader
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
 import org.chorus.entity.item.EntityItem
@@ -21,9 +19,6 @@ import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.item.Item
 import org.chorus.math.BlockVector3
 import org.chorus.math.Vector3
-import org.chorus.nbt.tag.CompoundTag
-import org.chorus.nbt.tag.NumberTag
-import java.util.function.Supplier
 
 /**
  * 核心使用到的记忆类型枚举
@@ -326,8 +321,7 @@ interface CoreMemoryTypes {
                     { data, tag ->
                         if (data != null) {
                             tag.putString("OwnerName", data)
-                        }
-                        else tag.remove("OwnerName")
+                        } else tag.remove("OwnerName")
                     }
                 ).onInit { data, entity ->
                     if (data == null) {
@@ -357,16 +351,15 @@ interface CoreMemoryTypes {
                     { data, tag ->
                         if (data != null) {
                             tag.putString("RiderName", data)
-                        }
-                        else tag.remove("RiderName")
+                        } else tag.remove("RiderName")
                     }
                 ).onInit { data: String?, entity: EntityMob ->
-                        if (data == null) {
-                            entity.setDataFlag(EntityFlag.WASD_CONTROLLED, false)
-                        } else {
-                            entity.setDataFlag(EntityFlag.WASD_CONTROLLED)
-                        }
+                    if (data == null) {
+                        entity.setDataFlag(EntityFlag.WASD_CONTROLLED, false)
+                    } else {
+                        entity.setDataFlag(EntityFlag.WASD_CONTROLLED)
                     }
+                }
             )
 
         /**

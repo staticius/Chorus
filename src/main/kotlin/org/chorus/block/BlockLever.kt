@@ -6,7 +6,8 @@ import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.enums.LeverDirection
 import org.chorus.event.block.BlockRedstoneEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.level.Level
 import org.chorus.level.Sound
 import org.chorus.level.vibration.VibrationEvent

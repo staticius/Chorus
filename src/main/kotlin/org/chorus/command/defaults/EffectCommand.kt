@@ -1,6 +1,7 @@
 package org.chorus.command.defaults
 
-import org.chorus.command.*
+import org.chorus.command.Command
+import org.chorus.command.CommandSender
 import org.chorus.command.data.CommandEnum
 import org.chorus.command.data.CommandParamType
 import org.chorus.command.data.CommandParameter
@@ -81,7 +82,8 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
                 for (entity in entities) {
                     if (duration == 0) {
                         if (!entity.hasEffect(effect.getType())) {
-                            log.addError("commands.effect.failure.notActive", effect.getName(), entity.getName()).output()
+                            log.addError("commands.effect.failure.notActive", effect.getName(), entity.getName())
+                                .output()
                             continue
                         }
                         entity.removeEffect(effect.getType())

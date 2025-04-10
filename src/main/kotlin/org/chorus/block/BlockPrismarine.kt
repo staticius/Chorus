@@ -1,7 +1,9 @@
 package org.chorus.block
 
 import org.chorus.block.property.enums.PrismarineBlockType
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemTool
 
 open class BlockPrismarine : BlockSolid {
     constructor() : super(Companion.properties.defaultState)

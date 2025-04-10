@@ -1,17 +1,17 @@
 package org.chorus.entity.projectile.abstract_arrow
 
 import org.chorus.Server
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.data.EntityFlag
-import org.chorus.entity.effect.*
 import org.chorus.entity.projectile.EntityProjectile
 import org.chorus.item.ItemArrow
 import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.EntityEventPacket
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Consumer
 
 

@@ -5,7 +5,10 @@ import org.chorus.Server
 import org.chorus.block.property.CommonBlockProperties
 import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.entity.Entity
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
+import org.chorus.item.ItemShears
+import org.chorus.item.ItemString
 import org.chorus.level.Level
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType

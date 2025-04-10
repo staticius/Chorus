@@ -3,7 +3,6 @@ package org.chorus.block
 import org.chorus.item.Item
 import org.chorus.item.ItemShulkerBox
 import org.chorus.tags.BlockTags
-import java.util.Set
 
 class BlockLightGrayShulkerBox @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockUndyedShulkerBox(blockstate) {

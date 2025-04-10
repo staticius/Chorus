@@ -29,6 +29,7 @@ enum class EntityDataFormat {
                 Long::class.java -> return LONG
                 Vector3::class.java,
                 Vector3f::class.java -> return VECTOR3F
+
                 else -> throw IllegalArgumentException("Unknown EntityDataType: $clazz")
             }
         }

@@ -15,12 +15,14 @@ abstract class ContainerInventory(holder: InventoryHolder, type: InventoryType, 
     override fun onOpen(who: Player) {
         if (!who.adventureSettings[AdventureSettings.Type.OPEN_CONTAINERS]) return
         super.onOpen(who)
-        who.dataPacket(ContainerOpenPacket(
-            containerID = who.getWindowId(this),
-            containerType = type.networkType,
-            position = holder.vector3.asBlockVector3(),
-            targetActorID = who.getRuntimeID()
-        ))
+        who.dataPacket(
+            ContainerOpenPacket(
+                containerID = who.getWindowId(this),
+                containerType = type.networkType,
+                position = holder.vector3.asBlockVector3(),
+                targetActorID = who.getRuntimeID()
+            )
+        )
         this.sendContents(who)
 
         if (canCauseVibration() && holder is Vector3) {

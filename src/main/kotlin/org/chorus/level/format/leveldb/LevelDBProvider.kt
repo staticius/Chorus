@@ -418,7 +418,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                             d.getInt("LimitedWorldOriginY"),
                             d.getInt("LimitedWorldOriginZ")
                         )
-                    )
+                        )
                 levelDatBuilder.minimumCompatibleClientVersion = (
                         SemVersion.from(
                             d.getList(
@@ -426,7 +426,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                                 IntTag::class.java
                             )
                         )
-                    )
+                        )
                 levelDatBuilder.multiplayerGame = (d.getBoolean("MultiplayerGame"))
                 levelDatBuilder.multiplayerGameIntent = (d.getBoolean("MultiplayerGameIntent"))
                 levelDatBuilder.netherScale = (d.getInt("NetherScale"))
@@ -462,7 +462,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                             return@run levelAbilities
                         }
 
-                    )
+                        )
                 levelDatBuilder.baseGameVersion = (d.getString("baseGameVersion"))
                 levelDatBuilder.bonusChestEnabled = (d.getBoolean("bonusChestEnabled"))
                 levelDatBuilder.bonusChestSpawned = (d.getBoolean("bonusChestSpawned"))
@@ -479,14 +479,18 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                             levelExperiments.cameras = (experiments.getBoolean("cameras"))
                             levelExperiments.dataDrivenBiomes = (experiments.getBoolean("data_driven_biomes"))
                             levelExperiments.dataDrivenItems = (experiments.getBoolean("data_driven_items"))
-                            levelExperiments.experimentalMolangFeatures = (experiments.getBoolean("experimental_molang_features"))
+                            levelExperiments.experimentalMolangFeatures =
+                                (experiments.getBoolean("experimental_molang_features"))
                             levelExperiments.experimentsEverUsed = (experiments.getBoolean("experiments_ever_used"))
-                            levelExperiments.savedWithToggledExperiments = (experiments.getBoolean("saved_with_toggled_experiments"))
-                            levelExperiments.upcomingCreatorFeatures = (experiments.getBoolean("upcoming_creator_features"))
-                            levelExperiments.villagerTradesRebalance = (experiments.getBoolean("villager_trades_rebalance"))
+                            levelExperiments.savedWithToggledExperiments =
+                                (experiments.getBoolean("saved_with_toggled_experiments"))
+                            levelExperiments.upcomingCreatorFeatures =
+                                (experiments.getBoolean("upcoming_creator_features"))
+                            levelExperiments.villagerTradesRebalance =
+                                (experiments.getBoolean("villager_trades_rebalance"))
                             return@run levelExperiments
                         }
-                    )
+                        )
                 levelDatBuilder.hasBeenLoadedInCreative = (d.getBoolean("hasBeenLoadedInCreative"))
                 levelDatBuilder.hasLockedBehaviorPack = (d.getBoolean("hasLockedBehaviorPack"))
                 levelDatBuilder.hasLockedResourcePack = (d.getBoolean("hasLockedResourcePack"))
@@ -498,7 +502,8 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                 levelDatBuilder.isRandomSeedAllowed = (d.getBoolean("isRandomSeedAllowed"))
                 levelDatBuilder.isSingleUseWorld = (d.getBoolean("isSingleUseWorld"))
                 levelDatBuilder.isWorldTemplateOptionLocked = (d.getBoolean("isWorldTemplateOptionLocked"))
-                levelDatBuilder.lastOpenedWithVersion = (SemVersion.from(d.getList("lastOpenedWithVersion", IntTag::class.java)))
+                levelDatBuilder.lastOpenedWithVersion =
+                    (SemVersion.from(d.getList("lastOpenedWithVersion", IntTag::class.java)))
                 levelDatBuilder.lightningLevel = (d.getFloat("lightningLevel"))
                 levelDatBuilder.lightningTime = (d.getInt("lightningTime"))
                 levelDatBuilder.limitedWorldDepth = (d.getInt("limitedWorldDepth"))

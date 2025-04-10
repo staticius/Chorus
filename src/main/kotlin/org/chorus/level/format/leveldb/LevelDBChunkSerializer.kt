@@ -63,7 +63,8 @@ class LevelDBChunkSerializer private constructor() {
 
     @Throws(IOException::class)
     fun deserialize(db: DB, builder: IChunkBuilder) {
-        var versionValue = db[LevelDBKeyUtil.VERSION.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)] ?: return
+        var versionValue =
+            db[LevelDBKeyUtil.VERSION.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)] ?: return
         val finalized =
             db[LevelDBKeyUtil.FINALIZED_STATE.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)]
         if (finalized == null) {
@@ -137,10 +138,12 @@ class LevelDBChunkSerializer private constructor() {
                         if (layers <= 2) {
                             section = ChunkSection(sectionY.toByte())
                         } else {
-                            val palettes = Array(layers) { BlockPalette(
-                                BlockAir.properties.defaultState,
-                                BitArrayVersion.V2
-                            ) }
+                            val palettes = Array(layers) {
+                                BlockPalette(
+                                    BlockAir.properties.defaultState,
+                                    BitArrayVersion.V2
+                                )
+                            }
                             section = ChunkSection(sectionY.toByte(), palettes)
                         }
                         var layer = 0
@@ -288,7 +291,8 @@ class LevelDBChunkSerializer private constructor() {
                             .order(ByteOrder.LITTLE_ENDIAN)
                             .getLong()
 
-                        val entityBytes = db[LevelDBKeyUtil.getEntityKey(entityId)] ?: throw IOException("Failed to read entity key")
+                        val entityBytes =
+                            db[LevelDBKeyUtil.getEntityKey(entityId)] ?: throw IOException("Failed to read entity key")
 
                         entityTags.add(NBTIO.read(entityBytes, ByteOrder.LITTLE_ENDIAN))
                     }

@@ -19,7 +19,7 @@ class EntityDespawnEvent(entity: Entity) : EntityEvent(), Cancellable {
     }
 
     val position: Locator
-        get() = entity!!.getLocator()
+        get() = entity.getLocator()
 
     val isCreature: Boolean
         get() = entity is EntityCreature

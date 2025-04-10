@@ -10,7 +10,8 @@ import org.chorus.block.property.type.BooleanPropertyType
 import org.chorus.block.property.type.IntPropertyType
 import org.chorus.event.block.BlockRedstoneEvent
 import org.chorus.event.block.DoorToggleEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemTool
 import org.chorus.level.Level
 import org.chorus.level.Locator
 import org.chorus.level.Sound

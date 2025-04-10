@@ -6,15 +6,17 @@ import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.DiveController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.SpaceMoveController
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.executor.SpaceRandomRoamExecutor
 import org.chorus.entity.ai.route.finder.impl.SimpleSpaceAStarRouteFinder
 import org.chorus.entity.ai.route.posevaluator.SwimmingPosEvaluator
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
-import java.util.Set
 
 /**
  * @author PikyCZ

@@ -2,7 +2,6 @@ package org.chorus.blockentity
 
 import org.chorus.Player
 import org.chorus.Server
-import org.chorus.block.Block
 import org.chorus.block.BlockFlowable
 import org.chorus.block.BlockID
 import org.chorus.entity.Entity

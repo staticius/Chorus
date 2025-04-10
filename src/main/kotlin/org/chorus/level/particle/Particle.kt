@@ -122,14 +122,16 @@ abstract class Particle : Vector3 {
             val name1: String = name.uppercase(Locale.ENGLISH)
 
             try {
-                val field = Particle::class.java.getDeclaredField(if (name1.startsWith("TYPE_")) name1 else "TYPE_$name1")
+                val field =
+                    Particle::class.java.getDeclaredField(if (name1.startsWith("TYPE_")) name1 else "TYPE_$name1")
 
                 val type = field.type
 
                 if (type == Int::class.javaPrimitiveType) {
                     return field.getInt(null)
                 }
-            } catch (_: Exception) {}
+            } catch (_: Exception) {
+            }
             return null
         }
 

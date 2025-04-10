@@ -1,13 +1,16 @@
 package org.chorus.entity.projectile
 
-import org.chorus.entity.*
-import org.chorus.entity.effect.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.effect.PotionType
 import org.chorus.entity.item.EntityAreaEffectCloud
 import org.chorus.entity.mob.monster.EntityEnderDragon
-import org.chorus.level.*
+import org.chorus.level.Locator
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
-import org.chorus.nbt.tag.*
+import org.chorus.math.Vector3
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.FloatTag
+import org.chorus.nbt.tag.ListTag
 
 class EntityDragonFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile(chunk, nbt) {
     override fun getIdentifier(): String {

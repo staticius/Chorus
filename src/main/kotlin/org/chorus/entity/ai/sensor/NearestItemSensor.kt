@@ -3,7 +3,6 @@ package org.chorus.entity.ai.sensor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.item.EntityItem
 import org.chorus.entity.mob.EntityMob
-import org.chorus.item.Item
 
 
 //存储最近的玩家的Memory

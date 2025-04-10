@@ -2,7 +2,6 @@ package org.chorus.blockentity
 
 import org.chorus.block.BlockAir
 import org.chorus.inventory.EjectableInventory
-import org.chorus.inventory.Inventory
 import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.level.format.IChunk

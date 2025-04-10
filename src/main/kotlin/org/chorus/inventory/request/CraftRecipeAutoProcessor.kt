@@ -3,14 +3,14 @@ package org.chorus.inventory.request
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.event.inventory.CraftItemEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.network.protocol.types.itemstack.request.action.AutoCraftRecipeAction
 import org.chorus.network.protocol.types.itemstack.request.action.ConsumeAction
 import org.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus.recipe.descriptor.DefaultDescriptor
-import org.chorus.recipe.descriptor.ItemDescriptor
 import org.chorus.recipe.descriptor.ItemTagDescriptor
 import org.chorus.registry.Registries
+import org.chorus.utils.Loggable
 
 
 class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipeAction> {
@@ -24,8 +24,7 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
     ): ActionResponse? {
         val recipe = Registries.RECIPE.getRecipeByNetworkId(action.recipeNetworkId)
 
-        val eventItems = action.ingredients.stream().map<Item> { obj: ItemDescriptor -> obj.toItem() }
-            .toArray<Item> { _Dummy_.__Array__() }
+        val eventItems = action.ingredients.map { it.toItem() }.toTypedArray()
 
         val craftItemEvent = CraftItemEvent(player, eventItems, recipe, 1)
         Server.instance.pluginManager.callEvent(craftItemEvent)
@@ -84,4 +83,6 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
         }
         return null
     }
+
+    companion object : Loggable
 }

@@ -40,6 +40,7 @@ data class AnimatePacket(
                 val actionData = this.actionData as Action.RowingData
                 byteBuf.writeFloatLE(actionData.rowingTime)
             }
+
             else -> Unit
         }
 
@@ -59,11 +60,12 @@ data class AnimatePacket(
             return AnimatePacket(
                 action = Action.fromId(byteBuf.readVarInt()).also { action = it },
                 targetRuntimeID = byteBuf.readActorRuntimeID(),
-                actionData = when(action) {
+                actionData = when (action) {
                     Action.ROW_LEFT,
                     Action.ROW_RIGHT -> Action.RowingData(
                         rowingTime = byteBuf.readFloatLE()
                     )
+
                     else -> null
                 }
             )

@@ -2,14 +2,19 @@ package org.chorus.entity.ai.executor.villager
 
 import org.chorus.Server
 import org.chorus.block.BlockBed
-import org.chorus.entity.*
+import org.chorus.entity.Entity
 import org.chorus.entity.ai.executor.EntityBreedingExecutor
 import org.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus.entity.mob.EntityMob
 import org.chorus.entity.mob.villagers.EntityVillagerV2
 import org.chorus.network.protocol.EntityEventPacket
 
-class VillagerBreedingExecutor(entityClass: Class<out EntityMob>, findingRangeSquared: Int, duration: Int, moveSpeed: Float) :
+class VillagerBreedingExecutor(
+    entityClass: Class<out EntityMob>,
+    findingRangeSquared: Int,
+    duration: Int,
+    moveSpeed: Float
+) :
     EntityBreedingExecutor<EntityMob>(entityClass, findingRangeSquared, duration, moveSpeed) {
     override fun onStart(entity: EntityMob) {
         super.onStart(entity)

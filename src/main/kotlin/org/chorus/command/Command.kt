@@ -17,7 +17,6 @@ import org.chorus.plugin.InternalPlugin
 import org.chorus.plugin.Plugin
 import org.chorus.plugin.PluginBase
 import org.chorus.utils.TextFormat
-import java.util.*
 import java.util.stream.Collectors
 import kotlin.collections.component1
 import kotlin.collections.set

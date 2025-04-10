@@ -9,7 +9,8 @@ import org.chorus.command.utils.CommandLogger
 import org.chorus.entity.Entity
 import org.chorus.level.Locator
 import org.chorus.level.Transform
-import org.chorus.math.*
+import org.chorus.math.BVector3
+import org.chorus.math.Vector3
 import org.chorus.network.protocol.types.PlayerAbility
 import kotlin.collections.set
 
@@ -110,7 +111,11 @@ class TeleportCommand(name: String) :
                         sender.asEntity()!!.teleport(target)
                         log.addSuccess("commands.tp.successVictim", destination[0].getName()).output()
                     } else {
-                        log.addError("commands.tp.safeTeleportFail", sender.asEntity()!!.getName(), destination[0].getName())
+                        log.addError(
+                            "commands.tp.safeTeleportFail",
+                            sender.asEntity()!!.getName(),
+                            destination[0].getName()
+                        )
                             .output()
                         return 0
                     }
@@ -146,7 +151,9 @@ class TeleportCommand(name: String) :
                     sb.append(victim.name).append(" ")
                 }
                 if (checkForBlocks) {
-                    if (!target.getLocator().levelBlock.isSolid && !target.getLocator().add(0.0, 1.0, 0.0).levelBlock.isSolid) {
+                    if (!target.getLocator().levelBlock.isSolid && !target.getLocator()
+                            .add(0.0, 1.0, 0.0).levelBlock.isSolid
+                    ) {
                         for (victim in victims) {
                             victim.teleport(
                                 target.getTransform().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch)
@@ -159,7 +166,9 @@ class TeleportCommand(name: String) :
                     }
                 } else {
                     for (victim in victims) {
-                        victim.teleport(target.getTransform().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch))
+                        victim.teleport(
+                            target.getTransform().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch)
+                        )
                     }
                     log.addSuccess("commands.tp.success", sb.toString(), target.getName())
                 }

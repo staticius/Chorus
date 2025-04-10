@@ -10,14 +10,16 @@ import org.chorus.blockentity.BlockEntityID
 import org.chorus.blockentity.BlockEntityMovingBlock
 import org.chorus.blockentity.BlockEntityPistonArm
 import org.chorus.event.block.BlockPistonEvent
-import org.chorus.item.*
+import org.chorus.item.Item
 import org.chorus.item.ItemTool.Companion.getBestTool
 import org.chorus.level.Level
 import org.chorus.level.Sound
 import org.chorus.level.vibration.VibrationEvent
 import org.chorus.level.vibration.VibrationType
-import org.chorus.math.*
+import org.chorus.math.BlockFace
 import org.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus.math.BlockVector3
+import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Faceable
 import org.chorus.utils.RedstoneComponent
@@ -338,105 +340,178 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.FACING_DIRECTION, face.index)
         }
 
-        override val isSolid: Boolean
+    override val isSolid: Boolean
         get() = false
 
-        inner class BlocksCalculator(private val extending: Boolean) {
-            private val pistonPos = position
-            private var blockToMove: Block? = null
-            private var moveDirection: BlockFace? = null
-            private val toMove: MutableList<Block> = object : CopyOnWriteArrayList<Block>() {
-                override fun indexOf(element: Block?): Int {
-                    if (element == null) {
-                        for (i in 0..<size) if (get(i) == null) return i
-                    } else {
-                        for (i in 0..<size) {
-                            if (element == get(i)) return i
-                        }
-                    }
-                    return -1
-                }
-
-                //以防万一
-                override fun contains(element: Block?): Boolean {
-                    return indexOf(element) >= 0
-                }
-            }
-
-            private val toDestroy: MutableList<Block> = ArrayList()
-            private var armPos: Vector3? = null
-
-            init {
-                val face = blockFace
-                if (!extending) {
-                    this.armPos = pistonPos.getSideVec(face)
-                }
-
-                if (extending) {
-                    this.moveDirection = face
-                    this.blockToMove = getSide(face)
+    inner class BlocksCalculator(private val extending: Boolean) {
+        private val pistonPos = position
+        private var blockToMove: Block? = null
+        private var moveDirection: BlockFace? = null
+        private val toMove: MutableList<Block> = object : CopyOnWriteArrayList<Block>() {
+            override fun indexOf(element: Block?): Int {
+                if (element == null) {
+                    for (i in 0..<size) if (get(i) == null) return i
                 } else {
-                    this.moveDirection = face.getOpposite()
-                    if (sticky) {
-                        this.blockToMove = getSide(face, 2)
-                    } else {
-                        this.blockToMove = null
+                    for (i in 0..<size) {
+                        if (element == get(i)) return i
                     }
                 }
+                return -1
             }
 
-            fun canMove(): Boolean {
-                if (!sticky && !extending) {
-                    return true
+            //以防万一
+            override fun contains(element: Block?): Boolean {
+                return indexOf(element) >= 0
+            }
+        }
+
+        private val toDestroy: MutableList<Block> = ArrayList()
+        private var armPos: Vector3? = null
+
+        init {
+            val face = blockFace
+            if (!extending) {
+                this.armPos = pistonPos.getSideVec(face)
+            }
+
+            if (extending) {
+                this.moveDirection = face
+                this.blockToMove = getSide(face)
+            } else {
+                this.moveDirection = face.getOpposite()
+                if (sticky) {
+                    this.blockToMove = getSide(face, 2)
+                } else {
+                    this.blockToMove = null
+                }
+            }
+        }
+
+        fun canMove(): Boolean {
+            if (!sticky && !extending) {
+                return true
+            }
+
+            toMove.clear()
+            toDestroy.clear()
+            val block = this.blockToMove
+            if (!canPush(block!!, this.moveDirection, true, extending)) {
+                return false
+            }
+
+            if (block.breaksWhenMoved()) {
+                if (extending || block.sticksToPiston()) toDestroy.add(this.blockToMove!!)
+                return true
+            }
+
+            if (!this.addBlockLine(
+                    blockToMove!!,
+                    blockToMove!!.getSide(moveDirection!!), true
+                )
+            ) {
+                return false
+            }
+
+            for (b in this.toMove) {
+                if (b.canSticksBlock() && !this.addBranchingBlocks(b)) {
+                    return false
+                }
+            }
+            return true
+        }
+
+        protected fun addBlockLine(origin: Block, from: Block, mainBlockLine: Boolean): Boolean {
+            var block: Block? = origin.clone()
+            if (block!!.isAir) {
+                return true
+            }
+
+            if (!mainBlockLine && block.canSticksBlock() && from.canSticksBlock() && (block.id != from.id)) {
+                return true
+            }
+
+            if (!canPush(origin, this.moveDirection, false, extending)) {
+                return true
+            }
+
+            if (origin == this.pistonPos) {
+                return true
+            }
+
+            if (toMove.contains(origin)) {
+                return true
+            }
+
+            if (toMove.size >= Companion.MOVE_BLOCK_LIMIT) {
+                return false
+            }
+
+            toMove.add(block)
+
+            var count = 1
+            val beStuck: MutableList<Block> = ArrayList()
+            while (block!!.canSticksBlock()) {
+                val oldBlock = block.clone()
+                block = origin.getSide(moveDirection!!.getOpposite(), count)
+                if ((!extending || !mainBlockLine) && block.canSticksBlock() && oldBlock.canSticksBlock() && (block.id != oldBlock.id)) {
+                    break
                 }
 
-                toMove.clear()
-                toDestroy.clear()
-                val block = this.blockToMove
-                if (!canPush(block!!, this.moveDirection, true, extending)) {
+                if (block.isAir || !canPush(
+                        block,
+                        this.moveDirection, false, extending
+                    ) || block == this.pistonPos
+                ) {
+                    break
+                }
+
+                if (block.breaksWhenMoved() && block.sticksToPiston()) {
+                    toDestroy.add(block)
+                    break
+                }
+
+                if (count + toMove.size > Companion.MOVE_BLOCK_LIMIT) {
                     return false
                 }
 
-                if (block.breaksWhenMoved()) {
-                    if (extending || block.sticksToPiston()) toDestroy.add(this.blockToMove!!)
+                count++
+                beStuck.add(block)
+            }
+
+            var beStuckCount = beStuck.size
+            if (beStuckCount > 0) {
+                toMove.addAll(beStuck.reversed())
+            }
+
+            var step = 1
+            while (true) {
+                val nextBlock = origin.getSide(moveDirection!!, step)
+                val index = toMove.indexOf(nextBlock)
+                if (index > -1) {
+                    this.reorderListAtCollision(beStuckCount, index)
+                    for (i in 0..index + beStuckCount) {
+                        val b = toMove[i]
+                        if ((b.canSticksBlock()) && !this.addBranchingBlocks(b)) {
+                            return false
+                        }
+                    }
                     return true
                 }
 
-                if (!this.addBlockLine(
-                        blockToMove!!,
-                        blockToMove!!.getSide(moveDirection!!), true
-                    )
+                if (nextBlock.isAir || nextBlock == armPos) {
+                    return true
+                }
+
+                if (!canPush(
+                        nextBlock,
+                        this.moveDirection, true, extending
+                    ) || nextBlock == this.pistonPos
                 ) {
                     return false
                 }
 
-                for (b in this.toMove) {
-                    if (b.canSticksBlock() && !this.addBranchingBlocks(b)) {
-                        return false
-                    }
-                }
-                return true
-            }
-
-            protected fun addBlockLine(origin: Block, from: Block, mainBlockLine: Boolean): Boolean {
-                var block: Block? = origin.clone()
-                if (block!!.isAir) {
-                    return true
-                }
-
-                if (!mainBlockLine && block.canSticksBlock() && from.canSticksBlock() && (block.id != from.id)) {
-                    return true
-                }
-
-                if (!canPush(origin, this.moveDirection, false, extending)) {
-                    return true
-                }
-
-                if (origin == this.pistonPos) {
-                    return true
-                }
-
-                if (toMove.contains(origin)) {
+                if (nextBlock.breaksWhenMoved()) {
+                    toDestroy.add(nextBlock)
                     return true
                 }
 
@@ -444,148 +519,75 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
                     return false
                 }
 
-                toMove.add(block)
-
-                var count = 1
-                val beStuck: MutableList<Block> = ArrayList()
-                while (block!!.canSticksBlock()) {
-                    val oldBlock = block.clone()
-                    block = origin.getSide(moveDirection!!.getOpposite(), count)
-                    if ((!extending || !mainBlockLine) && block.canSticksBlock() && oldBlock.canSticksBlock() && (block.id != oldBlock.id)) {
-                        break
-                    }
-
-                    if (block.isAir || !canPush(
-                            block,
-                            this.moveDirection, false, extending
-                        ) || block == this.pistonPos
-                    ) {
-                        break
-                    }
-
-                    if (block.breaksWhenMoved() && block.sticksToPiston()) {
-                        toDestroy.add(block)
-                        break
-                    }
-
-                    if (count + toMove.size > Companion.MOVE_BLOCK_LIMIT) {
-                        return false
-                    }
-
-                    count++
-                    beStuck.add(block)
-                }
-
-                var beStuckCount = beStuck.size
-                if (beStuckCount > 0) {
-                    toMove.addAll(beStuck.reversed())
-                }
-
-                var step = 1
-                while (true) {
-                    val nextBlock = origin.getSide(moveDirection!!, step)
-                    val index = toMove.indexOf(nextBlock)
-                    if (index > -1) {
-                        this.reorderListAtCollision(beStuckCount, index)
-                        for (i in 0..index + beStuckCount) {
-                            val b = toMove[i]
-                            if ((b.canSticksBlock()) && !this.addBranchingBlocks(b)) {
-                                return false
-                            }
-                        }
-                        return true
-                    }
-
-                    if (nextBlock.isAir || nextBlock == armPos) {
-                        return true
-                    }
-
-                    if (!canPush(
-                            nextBlock,
-                            this.moveDirection, true, extending
-                        ) || nextBlock == this.pistonPos
-                    ) {
-                        return false
-                    }
-
-                    if (nextBlock.breaksWhenMoved()) {
-                        toDestroy.add(nextBlock)
-                        return true
-                    }
-
-                    if (toMove.size >= Companion.MOVE_BLOCK_LIMIT) {
-                        return false
-                    }
-
-                    toMove.add(nextBlock)
-                    ++beStuckCount
-                    ++step
-                }
+                toMove.add(nextBlock)
+                ++beStuckCount
+                ++step
             }
-
-            private fun reorderListAtCollision(count: Int, index: Int) {
-                val list: List<Block> = ArrayList(toMove.subList(0, index))
-                val list1: List<Block> = ArrayList(
-                    toMove.subList(
-                        toMove.size - count, toMove.size
-                    )
-                )
-                val list2: List<Block> = ArrayList(
-                    toMove.subList(
-                        index,
-                        toMove.size - count
-                    )
-                )
-                toMove.clear()
-                toMove.addAll(list)
-                toMove.addAll(list1)
-                toMove.addAll(list2)
-            }
-
-            protected fun addBranchingBlocks(block: Block): Boolean {
-                for (face in BlockFace.entries) {
-                    if (face.axis != moveDirection!!.axis && !this.addBlockLine(
-                            block.getSide(face),
-                            block,
-                            false
-                        )
-                    ) return false
-                }
-                return true
-            }
-
-            val blocksToMove: List<Block>
-                get() = this.toMove
-
-            val blocksToDestroy: List<Block>
-                get() = this.toDestroy
         }
 
-        companion object {
-            /**
-             * @return 指定方块是否能向指定方向推动<br></br>Whether the specified square can be pushed in the specified direction
-             */
-            fun canPush(block: Block, face: BlockFace?, destroyBlocks: Boolean, extending: Boolean): Boolean {
-                val min = block.level.minHeight
-                val max = block.level.maxHeight - 1
-                if (block.y >= min && (face != BlockFace.DOWN || block.y != min.toDouble()) && block.y <= max && (face != BlockFace.UP || block.y != max.toDouble())
-                ) {
-                    if (extending && !block.canBePushed() || !extending && !block.canBePulled()) return false
-                    if (block.breaksWhenMoved()) return destroyBlocks || block.sticksToPiston()
-                    val blockEntity = block.levelBlockEntity
-                    return blockEntity == null || blockEntity.isMovable
-                }
-
-                return false
-            }
-
-            private var MOVE_BLOCK_LIMIT = 12
-
-            var moveBlockLimit: Int
-                get() = MOVE_BLOCK_LIMIT
-                set(moveBlockLimit) {
-                    require(moveBlockLimit >= 0) { "The move block limit must be greater than or equal to 0" }
-                    MOVE_BLOCK_LIMIT = moveBlockLimit
-                }
+        private fun reorderListAtCollision(count: Int, index: Int) {
+            val list: List<Block> = ArrayList(toMove.subList(0, index))
+            val list1: List<Block> = ArrayList(
+                toMove.subList(
+                    toMove.size - count, toMove.size
+                )
+            )
+            val list2: List<Block> = ArrayList(
+                toMove.subList(
+                    index,
+                    toMove.size - count
+                )
+            )
+            toMove.clear()
+            toMove.addAll(list)
+            toMove.addAll(list1)
+            toMove.addAll(list2)
         }
+
+        protected fun addBranchingBlocks(block: Block): Boolean {
+            for (face in BlockFace.entries) {
+                if (face.axis != moveDirection!!.axis && !this.addBlockLine(
+                        block.getSide(face),
+                        block,
+                        false
+                    )
+                ) return false
+            }
+            return true
+        }
+
+        val blocksToMove: List<Block>
+            get() = this.toMove
+
+        val blocksToDestroy: List<Block>
+            get() = this.toDestroy
     }
+
+    companion object {
+        /**
+         * @return 指定方块是否能向指定方向推动<br></br>Whether the specified square can be pushed in the specified direction
+         */
+        fun canPush(block: Block, face: BlockFace?, destroyBlocks: Boolean, extending: Boolean): Boolean {
+            val min = block.level.minHeight
+            val max = block.level.maxHeight - 1
+            if (block.y >= min && (face != BlockFace.DOWN || block.y != min.toDouble()) && block.y <= max && (face != BlockFace.UP || block.y != max.toDouble())
+            ) {
+                if (extending && !block.canBePushed() || !extending && !block.canBePulled()) return false
+                if (block.breaksWhenMoved()) return destroyBlocks || block.sticksToPiston()
+                val blockEntity = block.levelBlockEntity
+                return blockEntity == null || blockEntity.isMovable
+            }
+
+            return false
+        }
+
+        private var MOVE_BLOCK_LIMIT = 12
+
+        var moveBlockLimit: Int
+            get() = MOVE_BLOCK_LIMIT
+            set(moveBlockLimit) {
+                require(moveBlockLimit >= 0) { "The move block limit must be greater than or equal to 0" }
+                MOVE_BLOCK_LIMIT = moveBlockLimit
+            }
+    }
+}

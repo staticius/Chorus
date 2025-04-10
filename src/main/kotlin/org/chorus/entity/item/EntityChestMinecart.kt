@@ -1,14 +1,18 @@
 package org.chorus.entity.item
 
 import org.chorus.Player
-import org.chorus.block.*
-import org.chorus.entity.*
+import org.chorus.block.Block
+import org.chorus.block.BlockID
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.event.entity.EntityDamageByEntityEvent
-import org.chorus.inventory.*
-import org.chorus.item.*
+import org.chorus.inventory.InventoryHolder
+import org.chorus.inventory.MinecartChestInventory
+import org.chorus.item.Item
+import org.chorus.item.ItemID
 import org.chorus.level.format.IChunk
-import org.chorus.math.*
+import org.chorus.math.Vector3
 import org.chorus.nbt.NBTIO
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag

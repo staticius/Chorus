@@ -9,7 +9,9 @@ import org.chorus.block.property.type.IntPropertyType
 import org.chorus.entity.Entity
 import org.chorus.event.block.BlockFromToEvent
 import org.chorus.event.block.LiquidFlowEvent
-import org.chorus.item.*
+import org.chorus.item.Item
+import org.chorus.item.ItemBlock
+import org.chorus.item.ItemID
 import org.chorus.level.Level
 import org.chorus.level.Level.Companion.blockHash
 import org.chorus.level.Sound

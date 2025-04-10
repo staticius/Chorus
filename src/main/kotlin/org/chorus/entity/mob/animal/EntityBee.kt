@@ -1,13 +1,21 @@
 package org.chorus.entity.mob.animal
 
-import org.chorus.block.*
+import org.chorus.block.Block
+import org.chorus.block.BlockBeehive
+import org.chorus.block.BlockFlower
+import org.chorus.block.BlockWitherRose
 import org.chorus.blockentity.BlockEntityBeehive
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityFlyable
+import org.chorus.entity.EntityID
 import org.chorus.entity.ai.behavior.Behavior
 import org.chorus.entity.ai.behavior.IBehavior
 import org.chorus.entity.ai.behaviorgroup.BehaviorGroup
 import org.chorus.entity.ai.behaviorgroup.IBehaviorGroup
-import org.chorus.entity.ai.controller.*
+import org.chorus.entity.ai.controller.IController
+import org.chorus.entity.ai.controller.LiftController
+import org.chorus.entity.ai.controller.LookController
+import org.chorus.entity.ai.controller.SpaceMoveController
 import org.chorus.entity.ai.evaluator.EntityCheckEvaluator
 import org.chorus.entity.ai.evaluator.IBehaviorEvaluator
 import org.chorus.entity.ai.evaluator.MemoryCheckNotEmptyEvaluator
@@ -28,7 +36,6 @@ import org.chorus.level.Sound
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 import java.util.*
-import kotlin.collections.setOf
 
 class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityFlyable {
     override fun getIdentifier(): String {
@@ -142,7 +149,8 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
             }
         }
         if (currentTick % 20 == 0 && hasSting()) {
-            memoryStorage[CoreMemoryTypes.LOOKING_BLOCK] = if (shouldSearchBeehive()) BlockBeehive::class.java else BlockFlower::class.java
+            memoryStorage[CoreMemoryTypes.LOOKING_BLOCK] =
+                if (shouldSearchBeehive()) BlockBeehive::class.java else BlockFlower::class.java
             val blockClass = this.memoryStorage[CoreMemoryTypes.LOOKING_BLOCK]!!
             if (blockClass.isAssignableFrom(BlockFlower::class.java)) {
                 Arrays.stream(level!!.getCollisionBlocks(getBoundingBox().grow(1.5, 1.5, 1.5), false, true))

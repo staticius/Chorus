@@ -34,11 +34,13 @@ object TagUtils {
                 }
                 compoundTag
             }
+
             is List<*> -> {
                 val listTag = ListTag<Tag<*>>()
                 mutable.forEach { listTag.add(toImmutable(it)) }
                 listTag
             }
+
             else -> byClass(mutable)
         }
     }

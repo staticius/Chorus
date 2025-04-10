@@ -1,7 +1,9 @@
 package org.chorus.entity.mob.monster
 
 import org.chorus.Player
-import org.chorus.entity.*
+import org.chorus.entity.Entity
+import org.chorus.entity.EntityID
+import org.chorus.entity.EntityWalkable
 import org.chorus.entity.data.EntityDataTypes
 import org.chorus.entity.mob.monster.humanoid_monster.EntityEvocationIllager
 import org.chorus.entity.mob.monster.humanoid_monster.EntityIllager

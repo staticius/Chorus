@@ -40,6 +40,7 @@ class AnimateProcessor : DataPacketProcessor<AnimatePacket>() {
                 }
                 return
             }
+
             else -> Unit
         }
 

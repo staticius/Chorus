@@ -1,11 +1,11 @@
 package org.chorus.entity.data.property
 
 import org.chorus.nbt.NBTIO
-import org.chorus.nbt.tag.*
+import org.chorus.nbt.tag.CompoundTag
+import org.chorus.nbt.tag.ListTag
+import org.chorus.nbt.tag.StringTag
 import org.chorus.network.protocol.SyncEntityPropertyPacket
 import java.io.IOException
-import java.util.function.Consumer
-import java.util.function.IntFunction
 
 /**
  * @author Peng_Lx
