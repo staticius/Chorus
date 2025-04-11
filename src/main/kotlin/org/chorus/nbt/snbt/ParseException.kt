@@ -16,7 +16,7 @@ class ParseException : RuntimeException, SNBTConstants {
         private set
 
     //We were expecting one of these token types
-    private var expectedTypes: EnumSet<SNBTConstants.TokenType?>? = null
+    private var expectedTypes: EnumSet<SNBTConstants.TokenType>? = null
     private var callStack: List<NonTerminalCall>? = null
     private var alreadyAdjusted = false
     var parser: SNBTParserImplement? = null
@@ -25,7 +25,7 @@ class ParseException : RuntimeException, SNBTConstants {
     private fun setInfo(
         parser: SNBTParserImplement,
         token: Token?,
-        expectedTypes: EnumSet<SNBTConstants.TokenType?>?,
+        expectedTypes: EnumSet<SNBTConstants.TokenType>?,
         callStack: List<NonTerminalCall>
     ) {
         var token = token
@@ -39,13 +39,13 @@ class ParseException : RuntimeException, SNBTConstants {
     }
 
     fun hitEOF(): Boolean {
-        return token != null && token.getType() == SNBTConstants.TokenType.EOF
+        return token != null && token!!.type == SNBTConstants.TokenType.EOF
     }
 
     constructor(
         parser: SNBTParserImplement,
         token: Token?,
-        expectedTypes: EnumSet<SNBTConstants.TokenType?>?,
+        expectedTypes: EnumSet<SNBTConstants.TokenType>?,
         callStack: List<NonTerminalCall>
     ) {
         setInfo(parser, token, expectedTypes, callStack)
@@ -57,7 +57,7 @@ class ParseException : RuntimeException, SNBTConstants {
 
     constructor(
         parser: SNBTParserImplement,
-        expectedTypes: EnumSet<SNBTConstants.TokenType?>?,
+        expectedTypes: EnumSet<SNBTConstants.TokenType>?,
         callStack: List<NonTerminalCall>
     ) : this(parser, parser.lastConsumedToken, expectedTypes, callStack)
 
@@ -80,12 +80,9 @@ class ParseException : RuntimeException, SNBTConstants {
             val buf = StringBuilder()
             if (msg != null) buf.append(msg)
             buf.append(
-                """
-                    
-                    Encountered an error at (or somewhere around) ${token.getLocation()}
-                    """.trimIndent()
+                "Encountered an error at (or somewhere around) ${token!!.location}"
             )
-            if (expectedTypes != null && token != null && expectedTypes!!.contains(token.getType())) {
+            if (expectedTypes != null && token != null && expectedTypes!!.contains(token!!.type)) {
                 return buf.toString()
             }
             if (expectedTypes != null) {
@@ -97,12 +94,12 @@ class ParseException : RuntimeException, SNBTConstants {
                     buf.append(type)
                 }
             }
-            var content = token!!.image
+            var content = token!!.getImage()
             if (content == null) content = ""
             if (content.length > 32) content = content.substring(0, 32) + "..."
             buf.append(
                 """
-Found string "${SNBTLexer.Companion.addEscapes(content)}" of type ${token.getType()}"""
+Found string "${SNBTLexer.Companion.addEscapes(content)}" of type ${token!!.type}"""
             )
             return buf.toString()
         }
@@ -134,8 +131,7 @@ Found string "${SNBTLexer.Companion.addEscapes(content)}" of type ${token.getTyp
             }
             fullTrace.add(regularEntry)
         }
-        val result = arrayOfNulls<StackTraceElement>(fullTrace.size)
-        setStackTrace(fullTrace.toArray(result))
+        setStackTrace(fullTrace.toTypedArray())
         alreadyAdjusted = true
     }
 

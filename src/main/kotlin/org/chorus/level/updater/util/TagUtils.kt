@@ -19,7 +19,7 @@ object TagUtils {
 
             is ByteTag -> (immutable.parseValue() and 0xff).toByte()
             is ShortTag -> (immutable.parseValue().toInt() and 0xffff).toShort()
-            else -> immutable.parseValue<Any>()
+            else -> immutable.parseValue()
         }
     }
 

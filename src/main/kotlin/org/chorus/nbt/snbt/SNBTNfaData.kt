@@ -9,7 +9,7 @@ import java.util.*
  * to do the NFA thang
  */
 internal object SNBTNfaData : SNBTConstants {
-    private var nfaFunctions: Array<NfaFunction>
+    private lateinit var nfaFunctions: Array<NfaFunction>
 
     /**
      * @param lexicalState the lexical state
@@ -27,8 +27,8 @@ internal object SNBTNfaData : SNBTConstants {
 
     // The functional interface that represents 
     // the acceptance method of an NFA state
-    internal interface NfaFunction {
-        fun apply(ch: Int, bs: BitSet?, validTypes: EnumSet<SNBTConstants.TokenType?>?): SNBTConstants.TokenType?
+    internal fun interface NfaFunction {
+        fun apply(ch: Int, bs: BitSet, validTypes: EnumSet<SNBTConstants.TokenType>): SNBTConstants.TokenType?
     }
 
     /**
@@ -38,7 +38,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_0(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == '"'.code) {
@@ -113,7 +113,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_1(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if ((ch >= 0x0 && ch <= '&'.code) || (ch >= '('.code)) {
@@ -130,7 +130,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_2(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch >= '1'.code && ch <= '9'.code) {
@@ -142,7 +142,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_3(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch >= '0'.code && ch <= '9'.code) {
@@ -158,7 +158,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_4(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch >= '0'.code && ch <= '9'.code) {
@@ -170,7 +170,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_5(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch >= '0'.code && ch <= '9'.code) {
@@ -183,7 +183,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_6(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == 'r'.code) {
@@ -195,7 +195,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_7(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if ((ch == '+'.code) || (ch == '-'.code)) {
@@ -209,7 +209,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_8(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch >= '0'.code && ch <= '9'.code) {
@@ -221,7 +221,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_9(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == '\t'.code) {
@@ -243,7 +243,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_10(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == '.'.code) {
@@ -263,7 +263,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_11(
             ch: Int,
             nextStates: BitSet?,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == 'B'.code) {
@@ -277,7 +277,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_12(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if ((ch >= 0x0 && ch <= '!'.code) || (ch >= '#'.code)) {
@@ -294,7 +294,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_13(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == '"'.code) {
@@ -306,7 +306,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_14(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == 'u'.code) {
@@ -318,7 +318,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_15(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == 's'.code) {
@@ -330,7 +330,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_16(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == '0'.code) {
@@ -344,7 +344,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_17(
             ch: Int,
             nextStates: BitSet?,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == 'S'.code) {
@@ -358,7 +358,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_18(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch >= '1'.code && ch <= '9'.code) {
@@ -370,7 +370,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_19(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == '0'.code) {
@@ -385,7 +385,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_20(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == 'a'.code) {
@@ -397,7 +397,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_21(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == '0'.code) {
@@ -411,7 +411,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_22(
             ch: Int,
             nextStates: BitSet?,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == 'e'.code) {
@@ -423,7 +423,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_23(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch >= '0'.code && ch <= '9'.code) {
@@ -439,7 +439,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_24(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch >= '1'.code && ch <= '9'.code) {
@@ -455,7 +455,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_25(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == 'l'.code) {
@@ -467,7 +467,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_26(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == '.'.code) {
@@ -485,7 +485,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_27(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch >= '0'.code && ch <= '9'.code) {
@@ -503,7 +503,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_28(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == '0'.code) {
@@ -517,7 +517,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_29(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch >= '0'.code && ch <= '9'.code) {
@@ -535,7 +535,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_30(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if ((ch == '+'.code) || (ch == '-'.code)) {
@@ -549,7 +549,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_31(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == '0'.code) {
@@ -563,7 +563,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_32(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == '.'.code) {
@@ -581,7 +581,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_33(
             ch: Int,
             nextStates: BitSet?,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == 'L'.code) {
@@ -595,7 +595,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_34(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == '.'.code) {
@@ -615,7 +615,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_35(
             ch: Int,
             nextStates: BitSet?,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch == 'e'.code) {
@@ -627,7 +627,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_36(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == '\''.code) {
@@ -639,7 +639,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_37(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch >= '0'.code && ch <= '9'.code) {
@@ -655,7 +655,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_38(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>?
+            validTypes: EnumSet<SNBTConstants.TokenType>?
         ): SNBTConstants.TokenType? {
             val type: SNBTConstants.TokenType? = null
             if (ch == '0'.code) {
@@ -669,7 +669,7 @@ internal object SNBTNfaData : SNBTConstants {
         fun NFA_SNBT_39(
             ch: Int,
             nextStates: BitSet,
-            validTypes: EnumSet<SNBTConstants.TokenType?>
+            validTypes: EnumSet<SNBTConstants.TokenType>
         ): SNBTConstants.TokenType? {
             var type: SNBTConstants.TokenType? = null
             if (ch >= '1'.code && ch <= '9'.code) {
@@ -684,242 +684,282 @@ internal object SNBTNfaData : SNBTConstants {
 
         fun NFA_FUNCTIONS_init() {
             nfaFunctions = arrayOf(
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj: Int, ch, nextStates ->
                     NFA_SNBT_0(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_1(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_2(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_3(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_4(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_5(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_6(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_7(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_8(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_9(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_10(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_11(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_12(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_13(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_14(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_15(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_16(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_17(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_18(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_19(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_20(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_21(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_22(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_23(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_24(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_25(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_26(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_27(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_28(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_29(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_30(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_31(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_32(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_33(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_34(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_35(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_36(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_37(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_38(
+                        obj,
                         ch,
                         nextStates
                     )
                 },
-                NfaFunction { obj: Int, ch: BitSet?, nextStates: EnumSet<SNBTConstants.TokenType?>? ->
+                NfaFunction { obj, ch, nextStates ->
                     NFA_SNBT_39(
+                        obj,
                         ch,
                         nextStates
                     )

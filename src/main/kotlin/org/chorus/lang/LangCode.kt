@@ -1,5 +1,6 @@
 package org.chorus.lang
 
+import org.chorus.utils.Loggable
 
 enum class LangCode(private val string: String) {
     en_US("English (United States)"),
@@ -36,7 +37,7 @@ enum class LangCode(private val string: String) {
         return this.string
     }
 
-    companion object {
+    companion object : Loggable {
         @JvmStatic
         fun from(name: String): LangCode? {
             try {

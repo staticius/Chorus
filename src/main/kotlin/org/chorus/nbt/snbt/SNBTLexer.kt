@@ -31,14 +31,14 @@ class SNBTLexer @JvmOverloads constructor(
     val DUMMY_START_TOKEN: Token = Token()
 
     // Munged content, possibly replace unicode escapes, tabs, or CRLF with LF.
-    private var content: CharSequence? = null
+    private var content: CharSequence
 
     // The source of the raw characters that we are scanning  
     // Typically a filename, I suppose.
     var inputSource: String = "input"
 
     // A list of offsets of the beginning of lines
-    private var lineOffsets: IntArray
+    private lateinit var lineOffsets: IntArray
 
     // The starting line and column, usually 1,1
     // that is used to report a file position 
@@ -52,7 +52,7 @@ class SNBTLexer @JvmOverloads constructor(
 
     // A BitSet that stores where the tokens are located.
     // This is not strictly necessary, I suppose...
-    private var tokenOffsets: BitSet? = null
+    private var tokenOffsets: BitSet
 
     //  A Bitset that stores the line numbers that
     // contain either hard tabs or extended (beyond 0xFFFF) unicode
@@ -286,9 +286,9 @@ class SNBTLexer @JvmOverloads constructor(
         if (bufferPosition >= content!!.length) {
             return -1
         }
-        val ch = content[bufferPosition++]
-        if (Character.isHighSurrogate(ch) && bufferPosition < content.length) {
-            val nextChar = content[bufferPosition]
+        val ch = content!![bufferPosition++]
+        if (Character.isHighSurrogate(ch) && bufferPosition < content!!.length) {
+            val nextChar = content!![bufferPosition]
             if (Character.isLowSurrogate(nextChar)) {
                 ++bufferPosition
                 return Character.toCodePoint(ch, nextChar)
@@ -415,7 +415,7 @@ class SNBTLexer @JvmOverloads constructor(
     fun uncacheTokens(lastToken: Token) {
         val endOffset = lastToken.endOffset
         if (endOffset < tokenOffsets!!.length()) {
-            tokenOffsets.clear(lastToken.endOffset, tokenOffsets.length())
+            tokenOffsets!!.clear(lastToken.endOffset, tokenOffsets!!.length())
         }
         lastToken.unsetAppendedToken()
     }
@@ -482,17 +482,16 @@ class SNBTLexer @JvmOverloads constructor(
     init {
         this.inputSource = inputSource
         this.content = mungeContent(input, true, false, false, false)
-        this.inputSource = inputSource
         createLineOffsetsTable()
-        tokenLocationTable = arrayOfNulls(content.length + 1)
-        tokenOffsets = BitSet(content.length + 1)
+        this.tokenLocationTable = arrayOfNulls(content.length + 1)
+        this.tokenOffsets = BitSet(content.length + 1)
         this.startingLine = startingLine
         this.startingColumn = startingColumn
         switchTo(lexState)
     }
 
     companion object {
-        private val nfaFunctions: Array<NfaFunction?> = SNBTNfaData.getFunctionTableMap(null)
+        private val nfaFunctions = SNBTNfaData.getFunctionTableMap(null)
         const val DEFAULT_TAB_SIZE: Int = 1
 
         // Just a dummy Token value that we put in the tokenLocationTable
@@ -637,7 +636,7 @@ class SNBTLexer @JvmOverloads constructor(
             if (ch == '\t'.code) return "\'\\t\'"
             if (ch == '\r'.code) return "\'\\r\'"
             if (ch == '\n'.code) return "\'\\n\'"
-            if (ch == '\f'.code) return "\'\\f\'"
+            if (ch == '\u000c'.code) return "\'\\f\'"
             if (ch == ' '.code) return "\' \'"
             if (ch < 128 && !Character.isWhitespace(ch) && !Character.isISOControl(ch)) return "\'" + ch.toChar() + "\'"
             if (ch < 10) return "" + ch
@@ -648,42 +647,42 @@ class SNBTLexer @JvmOverloads constructor(
             val retval = StringBuilder()
             for (ch in str.codePoints().toArray()) {
                 when (ch) {
-                    '\b' -> {
+                    '\b'.code -> {
                         retval.append("\\b")
                         continue
                     }
 
-                    '\t' -> {
+                    '\t'.code -> {
                         retval.append("\\t")
                         continue
                     }
 
-                    '\n' -> {
+                    '\n'.code -> {
                         retval.append("\\n")
                         continue
                     }
 
-                    '\f' -> {
+                    '\u000c'.code -> {
                         retval.append("\\f")
                         continue
                     }
 
-                    '\r' -> {
+                    '\r'.code -> {
                         retval.append("\\r")
                         continue
                     }
 
-                    '\"' -> {
+                    '\"'.code -> {
                         retval.append("\\\"")
                         continue
                     }
 
-                    '\'' -> {
+                    '\''.code -> {
                         retval.append("\\\'")
                         continue
                     }
 
-                    '\\' -> {
+                    '\\'.code -> {
                         retval.append("\\\\")
                         continue
                     }

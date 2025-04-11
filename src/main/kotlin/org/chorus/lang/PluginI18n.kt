@@ -6,6 +6,7 @@ import io.netty.util.internal.EmptyArrays
 import org.chorus.Server
 import org.chorus.plugin.PluginBase
 import org.chorus.utils.JSONUtils
+import org.chorus.utils.Loggable
 import java.io.*
 import java.nio.charset.StandardCharsets
 import java.util.*
@@ -95,7 +96,7 @@ class PluginI18n(private val plugin: PluginBase) {
      * @return the string
      */
     fun tr(lang: LangCode?, c: TextContainer): String {
-        var baseText = this.parseLanguageText(lang, c.getText())
+        var baseText = this.parseLanguageText(lang, c.text)
         if (c is TranslationContainer) {
             for (i in c.parameters.indices) {
                 baseText = baseText.replace("{%$i}", this.parseLanguageText(lang, c.parameters[i]))
@@ -114,21 +115,11 @@ class PluginI18n(private val plugin: PluginBase) {
      * @return the string
      */
     fun get(lang: LangCode?, id: String): String? {
-        val map: Map<String, String> = MULTI_LANGUAGE[lang]!!
-        val fallbackMap: Map<String, String>
-        return if (Optional.ofNullable(map).map { t: Map<String, String> ->
-                t.containsKey(
-                    id
-                )
-            }.orElse(false)) {
+        val map = MULTI_LANGUAGE[lang]
+        val fallbackMap = MULTI_LANGUAGE[fallbackLanguage]
+        return if (map?.containsKey(id) == true) {
             map[id]
-        } else if (Optional.ofNullable<Map<String?, String?>>(
-                MULTI_LANGUAGE[fallbackLanguage].also { fallbackMap = it!! }).map { t: Map<String?, String?> ->
-                t.containsKey(
-                    id
-                )
-            }.orElse(false)
-        ) {
+        } else if (fallbackMap?.containsKey(id) == true) {
             fallbackMap[id]
         } else {
             Server.instance.baseLang.internalGet(id)
@@ -313,9 +304,7 @@ class PluginI18n(private val plugin: PluginBase) {
 
     private fun reloadLang(lang: LangCode?, reader: BufferedReader): Boolean {
         val d = MULTI_LANGUAGE[lang]
-        val map: MutableMap<String, String> =
-            JSONUtils.from<Map<String, String>>(reader, object : TypeToken<Map<String?, String?>?>() {
-            })
+        val map: MutableMap<String, String> = JSONUtils.from(reader, object : TypeToken<MutableMap<String, String>>() {})
         if (d == null) {
             MULTI_LANGUAGE[lang] = map
         } else {
@@ -327,8 +316,9 @@ class PluginI18n(private val plugin: PluginBase) {
 
     @Throws(IOException::class)
     private fun parseLang(reader: BufferedReader): MutableMap<String, String> {
-        return JSONUtils.from<Map<String, String>>(reader, object : TypeToken<Map<String?, String?>?>() {
-        })
+        return JSONUtils.from(reader, object : TypeToken<MutableMap<String, String>>() {})
     }
+
+    companion object : Loggable
 }
 

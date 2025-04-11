@@ -13,7 +13,6 @@ import org.chorus.math.BlockVector3
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.NumberTag
 import org.chorus.utils.Loggable
-import sun.jvm.hotspot.oops.CellTypeState.value
 import java.io.IOException
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicLong

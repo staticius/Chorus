@@ -241,7 +241,7 @@ open class CompoundTag @JvmOverloads constructor(val tags: MutableMap<String, Ta
         )
 
         for ((key, value1) in tags) {
-            value[key] = value1.parseValue<Any>()
+            value[key] = value1.parseValue()
         }
 
         return value

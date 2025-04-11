@@ -62,7 +62,7 @@ open class Token : SNBTConstants, Node {
      * programmer would use this method. It needs to
      * be public because it is part of the org.chorus.nbt.snbt.Node interface.
      */
-    override fun setBeginOffset(beginOffset: Int) {
+    fun setBeginOffset(beginOffset: Int) {
         this.beginOffset = beginOffset
     }
 
@@ -71,7 +71,7 @@ open class Token : SNBTConstants, Node {
      * programmer would use this method. It needs to
      * be public because it is part of the org.chorus.nbt.snbt.Node interface.
      */
-    override fun setEndOffset(endOffset: Int) {
+    fun setEndOffset(endOffset: Int) {
         this.endOffset = endOffset
     }
 
@@ -79,7 +79,7 @@ open class Token : SNBTConstants, Node {
      * @return the SNBTLexer object that handles
      * location info for the tokens.
      */
-    override fun getTokenSource(): SNBTLexer? {
+    fun getTokenSource(): SNBTLexer? {
         var flm = this.tokenSource
         // If this is null and we have chained tokens,
         // we try to get it from there! (Why not?)
@@ -98,7 +98,7 @@ open class Token : SNBTConstants, Node {
      * It should be exceedingly rare that an application
      * programmer needs to use this method.
      */
-    override fun setTokenSource(tokenSource: SNBTLexer?) {
+    fun setTokenSource(tokenSource: SNBTLexer?) {
         this.tokenSource = tokenSource
     }
 
@@ -114,11 +114,11 @@ open class Token : SNBTConstants, Node {
          */
         get() = false
 
-    override fun getBeginOffset(): Int {
+    fun getBeginOffset(): Int {
         return beginOffset
     }
 
-    override fun getEndOffset(): Int {
+    fun getEndOffset(): Int {
         return endOffset
     }
 
@@ -232,7 +232,7 @@ open class Token : SNBTConstants, Node {
      * @return An iterator of the tokens preceding this one.
      */
     fun precedingTokens(): Iterator<Token> {
-        return object : MutableIterator<Token?> {
+        return object : Iterator<Token> {
             var currentPoint: Token = this@Token
 
             override fun hasNext(): Boolean {
@@ -249,22 +249,21 @@ open class Token : SNBTConstants, Node {
     /**
      * @return a list of the unparsed tokens preceding this one in the order they appear in the input
      */
-    fun precedingUnparsedTokens(): List<Token?> {
-        val result: MutableList<Token?> = ArrayList()
+    fun precedingUnparsedTokens(): List<Token> {
+        val result: MutableList<Token> = ArrayList()
         var t = this.previousCachedToken()
         while (t != null && t.isUnparsed) {
             result.add(t)
             t = t.previousCachedToken()
         }
-        Collections.reverse(result)
-        return result
+        return result.reversed()
     }
 
     /**
      * @return An iterator of the (cached) tokens that follow this one.
      */
     fun followingTokens(): Iterator<Token> {
-        return object : MutableIterator<Token?> {
+        return object : Iterator<Token> {
             var currentPoint: Token = this@Token
 
             override fun hasNext(): Boolean {

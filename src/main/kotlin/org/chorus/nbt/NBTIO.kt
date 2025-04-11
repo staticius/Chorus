@@ -217,7 +217,8 @@ object NBTIO {
         endianness: ByteOrder = ByteOrder.BIG_ENDIAN,
         network: Boolean = false
     ): ByteArray {
-        val baos = ThreadCache.fbaos.get()!!.reset()
+        ThreadCache.fbaos.get()?.reset()
+        val baos = ThreadCache.fbaos.get()!!
         NBTOutputStream(baos, endianness, network).use { stream ->
             for (tag in tags) {
                 stream.writeTag(tag)
@@ -229,7 +230,8 @@ object NBTIO {
     @JvmOverloads
     @Throws(IOException::class)
     fun write(tag: CompoundTag, endianness: ByteOrder = ByteOrder.BIG_ENDIAN, network: Boolean = false): ByteArray {
-        val baos = ThreadCache.fbaos.get()!!.reset()
+        ThreadCache.fbaos.get()?.reset()
+        val baos = ThreadCache.fbaos.get()!!
         NBTOutputStream(baos, endianness, network).use { stream ->
             stream.writeTag(tag)
             return baos.toByteArray()
@@ -267,7 +269,8 @@ object NBTIO {
 
     @Throws(IOException::class)
     fun writeNetwork(tag: CompoundTag): ByteArray {
-        val baos = ThreadCache.fbaos.get()!!.reset()
+        ThreadCache.fbaos.get()?.reset()
+        val baos = ThreadCache.fbaos.get()!!
         NBTOutputStream(baos, ByteOrder.LITTLE_ENDIAN, true).use { stream ->
             stream.writeTag(tag)
         }
@@ -277,7 +280,8 @@ object NBTIO {
     @JvmOverloads
     @Throws(IOException::class)
     fun writeGZIPCompressed(tag: CompoundTag, endianness: ByteOrder = ByteOrder.BIG_ENDIAN): ByteArray {
-        val baos = ThreadCache.fbaos.get()!!.reset()
+        ThreadCache.fbaos.get()?.reset()
+        val baos = ThreadCache.fbaos.get()!!
         writeGZIPCompressed(tag, baos, endianness)
         return baos.toByteArray()
     }
@@ -297,7 +301,8 @@ object NBTIO {
     @JvmOverloads
     @Throws(IOException::class)
     fun writeNetworkGZIPCompressed(tag: CompoundTag, endianness: ByteOrder = ByteOrder.BIG_ENDIAN): ByteArray {
-        val baos = ThreadCache.fbaos.get()!!.reset()
+        ThreadCache.fbaos.get()?.reset()
+        val baos = ThreadCache.fbaos.get()!!
         writeNetworkGZIPCompressed(tag, baos, endianness)
         return baos.toByteArray()
     }
@@ -359,7 +364,8 @@ object NBTIO {
         endianness: ByteOrder = ByteOrder.BIG_ENDIAN,
         network: Boolean = false
     ): ByteArray {
-        val baos = ThreadCache.fbaos.get()!!.reset()
+        ThreadCache.fbaos.get()?.reset()
+        val baos = ThreadCache.fbaos.get()!!
         NBTOutputStream(baos, endianness, network).use { stream ->
             stream.writeValue(tag)
             return baos.toByteArray()

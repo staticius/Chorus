@@ -134,8 +134,7 @@ class NBTOutputStream @JvmOverloads constructor(
 
     @JvmOverloads
     @Throws(IOException::class)
-    fun writeTag(tag: Tag, maxDepth: Int = 16) {
-        Objects.requireNonNull(tag, "tag")
+    fun writeTag(tag: Tag<*>, maxDepth: Int = 16) {
         check(!closed.get()) { "closed" }
         val type = tag.id.toInt()
         this.writeByte(type)
@@ -145,31 +144,30 @@ class NBTOutputStream @JvmOverloads constructor(
 
     @JvmOverloads
     @Throws(IOException::class)
-    fun writeValue(tag: Tag, maxDepth: Int = 16) {
-        Objects.requireNonNull(tag, "tag")
+    fun writeValue(tag: Tag<*>, maxDepth: Int = 16) {
         check(!closed.get()) { "closed" }
         this.serialize(tag, tag.id.toInt(), maxDepth)
     }
 
     @Throws(IOException::class)
-    private fun serialize(tag: Tag, type: Int, maxDepth: Int) {
+    private fun serialize(tag: Tag<*>, type: Int, maxDepth: Int) {
         require(maxDepth >= 0) { "Reached depth limit" }
-        when (type) {
-            Tag.Companion.TAG_BYTE -> this.writeByte(tag.parseValue()!!)
-            Tag.Companion.TAG_SHORT -> this.writeShort(tag.parseValue()!!)
-            Tag.Companion.TAG_INT -> this.writeInt(tag.parseValue()!!)
-            Tag.Companion.TAG_LONG -> this.writeLong(tag.parseValue()!!)
-            Tag.Companion.TAG_FLOAT -> this.writeFloat(tag.parseValue()!!)
-            Tag.Companion.TAG_DOUBLE -> this.writeDouble(tag.parseValue()!!)
+        when (type.toByte()) {
+            Tag.Companion.TAG_BYTE -> this.writeByte((tag.parseValue() as Byte).toInt())
+            Tag.Companion.TAG_SHORT -> this.writeShort((tag.parseValue() as Short).toInt())
+            Tag.Companion.TAG_INT -> this.writeInt(tag.parseValue() as Int)
+            Tag.Companion.TAG_LONG -> this.writeLong(tag.parseValue() as Long)
+            Tag.Companion.TAG_FLOAT -> this.writeFloat(tag.parseValue() as Float)
+            Tag.Companion.TAG_DOUBLE -> this.writeDouble(tag.parseValue() as Double)
             Tag.Companion.TAG_BYTE_ARRAY -> {
-                val byteArray = tag.parseValue<ByteArray>()
-                this.writeInt(byteArray!!.size)
+                val byteArray = tag.parseValue() as ByteArray
+                this.writeInt(byteArray.size)
                 this.write(byteArray)
             }
 
             Tag.Companion.TAG_STRING -> {
-                val string = tag.parseValue<String>()
-                this.writeUTF(string!!)
+                val string = tag.parseValue() as String
+                this.writeUTF(string)
             }
 
             Tag.Companion.TAG_COMPOUND -> {
@@ -183,7 +181,7 @@ class NBTOutputStream @JvmOverloads constructor(
             }
 
             Tag.Companion.TAG_LIST -> {
-                val list = tag as ListTag<out Tag>
+                val list = tag as ListTag<out Tag<*>>
                 this.writeByte(list.type.toInt())
                 this.writeInt(list.size())
                 for (t in list.all) {

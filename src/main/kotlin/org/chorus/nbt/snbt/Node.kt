@@ -361,7 +361,7 @@ interface Node : Comparable<Node> {
          * @return a String that gives the starting location of this Node. This is a default
          * implementation that could be overridden
          */
-        get() = inputSource + ":" + beginLine + ":" + beginColumn
+        get() = "$inputSource:$beginLine:$beginColumn"
 
     /**
      * Mark whether this Node is unparsed, i.e. *not* the result of
@@ -369,7 +369,7 @@ interface Node : Comparable<Node> {
      *
      * @param b whether to set the Node as unparsed or parsed.
      */
-    var isUnparsed: Boolean
+    val isUnparsed: Boolean
         /**
          * @return whether this Node was created by regular operations of the
          * parsing machinery.
@@ -479,13 +479,13 @@ interface Node : Comparable<Node> {
         get() {
             val first = firstChild ?: return null
             if (first is Token) {
-                var tok = first
+                var tok: Token = first
                 while (tok.previousCachedToken() != null && tok.previousCachedToken()!!.isUnparsed) {
-                    tok = tok.previousCachedToken()
+                    tok = tok.previousCachedToken()!!
                 }
                 return tok
             }
-            return first.getFirstToken()
+            return first.firstToken
         }
 
     val lastToken: Token?
@@ -494,7 +494,7 @@ interface Node : Comparable<Node> {
             if (last is Token) {
                 return last
             }
-            return last.getLastToken()
+            return last.lastToken
         }
 
     /**
@@ -589,7 +589,6 @@ interface Node : Comparable<Node> {
         return result
     }
 
-    @JvmOverloads
     fun dump(prefix: String = "") {
         val output = if (this is Token) {
             toString().trim { it <= ' ' }
@@ -616,13 +615,13 @@ interface Node : Comparable<Node> {
     // NB: This is not thread-safe
     // If the node's children could change out from under you,
     // you could have a problem.
-    fun iterator(): ListIterator<Node> {
-        return object : MutableListIterator<Node?> {
+    fun iterator(): MutableListIterator<Node> {
+        return object : MutableListIterator<Node> {
             private var current = -1
             private var justModified = false
 
             override fun hasNext(): Boolean {
-                return current + 1 < this.childCount
+                return current + 1 < childCount
             }
 
             override fun next(): Node {
@@ -660,8 +659,8 @@ interface Node : Comparable<Node> {
                 return current
             }
 
-            override fun set(n: Node) {
-                setChild(current, n)
+            override fun set(element: Node) {
+                setChild(current, element)
             }
         }
     }
@@ -673,7 +672,7 @@ interface Node : Comparable<Node> {
             this.methodCache = mapLookup!![javaClass]
             if (methodCache == null) {
                 methodCache = ConcurrentHashMap()
-                mapLookup!![javaClass] = methodCache
+                mapLookup!![javaClass] = methodCache!!
             }
         }
 

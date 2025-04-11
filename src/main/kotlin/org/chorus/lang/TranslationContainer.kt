@@ -15,14 +15,14 @@ class TranslationContainer : TextContainer {
      */
     var parameters: Array<String>
 
-    constructor(text: String?) : this(text, *arrayOf<String>())
+    constructor(text: String) : this(text, *arrayOf<String>())
 
     constructor(text: String, params: String) : super(text) {
         this.parameters = arrayOf(params)
     }
 
-    constructor(text: String?, vararg params: String) : super(text!!) {
-        this.parameters = params
+    constructor(text: String, vararg params: String) : super(text) {
+        this.parameters = params.toList().toTypedArray()
     }
 
     fun getParameter(i: Int): String? {

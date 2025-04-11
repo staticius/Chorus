@@ -1,6 +1,7 @@
 package org.chorus.lang
 
 import org.chorus.plugin.PluginBase
+import org.chorus.utils.Loggable
 
 import java.io.*
 import java.util.jar.JarFile
@@ -21,7 +22,7 @@ import java.util.jar.JarFile
  * Only support Java Plugin [PluginBase]
  */
 
-object PluginI18nManager {
+object PluginI18nManager : Loggable {
     private val PLUGINS_MULTI_LANGUAGE = HashMap<String, PluginI18n>()
 
     /**

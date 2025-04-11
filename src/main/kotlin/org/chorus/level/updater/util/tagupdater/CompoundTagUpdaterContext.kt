@@ -45,13 +45,13 @@ class CompoundTagUpdaterContext {
             return tag
         } else {
             updated["version"] = latestVersion
-            return TagUtils.toImmutable(updated)
+            return TagUtils.toImmutable(updated) as CompoundTag
         }
     }
 
     fun updateStates(tag: CompoundTag, version: Int): CompoundTag {
         val updated: Map<String, Any?>? = this.updateStates0(tag, version)
-        return if (updated == null) tag else TagUtils.toImmutable(updated)
+        return if (updated == null) tag else TagUtils.toImmutable(updated) as CompoundTag
     }
 
     private fun updateStates0(tag: CompoundTag, version: Int): MutableMap<String, Any?>? {

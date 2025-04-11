@@ -9,7 +9,6 @@ import org.chorus.math.IVector3
 import org.chorus.math.Vector3
 import org.chorus.positiontracking.NamedPosition
 
-
 open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) : NamedPosition, IVector3, Cloneable {
     constructor(level: Level) : this(0.0, 0.0, 0.0, level)
 
@@ -31,7 +30,7 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
         get() = this.clone()
 
     override fun clone(): Locator {
-        return super.clone() as Locator
+        return super<Cloneable>.clone() as Locator
     }
 
     fun setLevel(level: Level): Locator {

@@ -1292,12 +1292,12 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
 
     fun writeGameRules(gameRules: GameRules) {
         // LinkedHashMap gives mutability and is faster in iteration
-        val rules = LinkedHashMap(gameRules.getGameRules())
+        val rules = gameRules.getGameRules().toMutableMap()
         rules.keys.removeIf(GameRule::isDeprecated)
 
         this.writeUnsignedVarInt(rules.size)
-        rules.forEach { (gameRule: GameRule?, value: GameRules.Value<*>?) ->
-            this.writeString(gameRule!!.gameRuleName.lowercase())
+        rules.forEach { (gameRule, value) ->
+            this.writeString(gameRule.gameRuleName.lowercase())
             value.write(this)
         }
     }

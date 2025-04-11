@@ -35,7 +35,7 @@ class SNBTParserImplement(
         isCancelled = true
     }
 
-    var inputSource: String?
+    var inputSource: String
         get() = token_source.inputSource
         set(inputSource) {
             token_source.inputSource = inputSource
@@ -53,7 +53,7 @@ class SNBTParserImplement(
      * will be used in error messages and so on.
      * @param path        The location (typically the filename) from which to get the input to parse
      */
-    constructor(inputSource: String?, path: Path) : this(inputSource, stringFromBytes(Files.readAllBytes(path)))
+    constructor(inputSource: String, path: Path) : this(inputSource, SNBTLexer.stringFromBytes(Files.readAllBytes(path)))
 
     constructor(inputSource: String, path: Path, charset: Charset?) : this(
         inputSource, SNBTLexer.Companion.stringFromBytes(
@@ -110,7 +110,7 @@ class SNBTParserImplement(
             t = nextToken(t)
         }
         for (i in 0 downTo index + 1) {
-            t = t.getPrevious()
+            t = t?.previousToken
             if (t == null) break
         }
         return t
@@ -287,7 +287,7 @@ class SNBTParserImplement(
         this.currentlyParsedProduction = "ByteArrayNBT"
         var ByteArrayNBT3: ByteArrayNBT? = null
         if (isTreeBuildingEnabled) {
-            ByteArrayNBT3 = ByteArrayNBT()
+            ByteArrayNBT3 = org.chorus.nbt.snbt.ast.ByteArrayNBT()
             openNodeScope(ByteArrayNBT3)
         }
         var parseException126: ParseException? = null
@@ -358,7 +358,7 @@ class SNBTParserImplement(
         this.currentlyParsedProduction = "IntArrayNBT"
         var IntArrayNBT4: IntArrayNBT? = null
         if (isTreeBuildingEnabled) {
-            IntArrayNBT4 = IntArrayNBT()
+            IntArrayNBT4 = org.chorus.nbt.snbt.ast.IntArrayNBT()
             openNodeScope(IntArrayNBT4)
         }
         var parseException220: ParseException? = null
@@ -413,7 +413,7 @@ class SNBTParserImplement(
         this.currentlyParsedProduction = "ListNBT"
         var ListNBT5: ListNBT? = null
         if (isTreeBuildingEnabled) {
-            ListNBT5 = ListNBT()
+            ListNBT5 = org.chorus.nbt.snbt.ast.ListNBT()
             openNodeScope(ListNBT5)
         }
         var parseException280: ParseException? = null
@@ -469,7 +469,7 @@ class SNBTParserImplement(
         this.currentlyParsedProduction = "CompoundNBT"
         var CompoundNBT6: CompoundNBT? = null
         if (isTreeBuildingEnabled) {
-            CompoundNBT6 = CompoundNBT()
+            CompoundNBT6 = org.chorus.nbt.snbt.ast.CompoundNBT()
             openNodeScope(CompoundNBT6)
         }
         var parseException320: ParseException? = null
@@ -577,7 +577,7 @@ class SNBTParserImplement(
         return true
     }
 
-    private fun scanToken(types: EnumSet<SNBTConstants.TokenType?>): Boolean {
+    private fun scanToken(types: EnumSet<SNBTConstants.TokenType>): Boolean {
         val peekedToken = nextToken(currentLookaheadToken)
         val type = peekedToken.type
         if (!types.contains(type)) return false
@@ -1134,11 +1134,11 @@ class SNBTParserImplement(
     private fun closeNodeScope(n: Node, num: Int) {
         n.endOffset = lastConsumedToken.endOffset
         currentNodeScope.close()
-        val nodes = ArrayList<Node?>()
+        val nodes = ArrayList<Node>()
         for (i in 0..<num) {
             nodes.add(popNode())
         }
-        Collections.reverse(nodes)
+        nodes.reverse()
         for (child in nodes) {
             // FIXME deal with the UNPARSED_TOKENS_ARE_NODES case
             n.addChild(child)
@@ -1159,11 +1159,11 @@ class SNBTParserImplement(
             n.endOffset = lastConsumedToken.endOffset
             var a = nodeArity()
             currentNodeScope.close()
-            val nodes = ArrayList<Node?>()
+            val nodes = ArrayList<Node>()
             while (a-- > 0) {
                 nodes.add(popNode())
             }
-            Collections.reverse(nodes)
+            nodes.reverse()
             for (child in nodes) {
                 if (unparsedTokensAreNodes && child is Token) {
                     var tok: Token? = child
@@ -1262,12 +1262,12 @@ class SNBTParserImplement(
 
     companion object {
         const val UNLIMITED: Int = Int.MAX_VALUE
-        private val enumSetCache = HashMap<Array<SNBTConstants.TokenType?>, EnumSet<SNBTConstants.TokenType?>>()
+        private val enumSetCache = HashMap<Array<SNBTConstants.TokenType?>, EnumSet<SNBTConstants.TokenType>>()
 
         private fun tokenTypeSet(
             first: SNBTConstants.TokenType,
             vararg rest: SNBTConstants.TokenType
-        ): EnumSet<SNBTConstants.TokenType?> {
+        ): EnumSet<SNBTConstants.TokenType> {
             val key = arrayOfNulls<SNBTConstants.TokenType>(1 + rest.size)
             key[0] = first
             if (rest.size > 0) {
@@ -1288,7 +1288,7 @@ class SNBTParserImplement(
         //=================================
         private val Value_FIRST_SET = Value_FIRST_SET_init()
 
-        private fun Value_FIRST_SET_init(): EnumSet<SNBTConstants.TokenType?> {
+        private fun Value_FIRST_SET_init(): EnumSet<SNBTConstants.TokenType> {
             return tokenTypeSet(
                 SNBTConstants.TokenType.OPEN_BRACKET,
                 SNBTConstants.TokenType.OPEN_BRACE,
@@ -1305,7 +1305,7 @@ class SNBTParserImplement(
 
         private val `first_set$SNBT_javacc$81$34` = `first_set$SNBT_javacc$81$34_init`()
 
-        private fun `first_set$SNBT_javacc$81$34_init`(): EnumSet<SNBTConstants.TokenType?> {
+        private fun `first_set$SNBT_javacc$81$34_init`(): EnumSet<SNBTConstants.TokenType> {
             return tokenTypeSet(
                 SNBTConstants.TokenType.OPEN_BRACKET,
                 SNBTConstants.TokenType.OPEN_BRACE,
@@ -1326,7 +1326,7 @@ class SNBTParserImplement(
             tokenTypeSet(SNBTConstants.TokenType.BOOLEAN, SNBTConstants.TokenType.BYTE)
         private val `first_set$SNBT_javacc$90$21` = `first_set$SNBT_javacc$90$21_init`()
 
-        private fun `first_set$SNBT_javacc$90$21_init`(): EnumSet<SNBTConstants.TokenType?> {
+        private fun `first_set$SNBT_javacc$90$21_init`(): EnumSet<SNBTConstants.TokenType> {
             return tokenTypeSet(
                 SNBTConstants.TokenType.OPEN_BRACKET,
                 SNBTConstants.TokenType.OPEN_BRACE,

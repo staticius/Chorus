@@ -323,19 +323,18 @@ class Vector3f @JvmOverloads constructor(var x: Float = 0f, var y: Float = 0f, v
         return "Vector3(x=" + this.x + ",y=" + this.y + ",z=" + this.z + ")"
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (obj !is Vector3f) {
+    override fun equals(other: Any?): Boolean {
+        if (other !is Vector3f) {
             return false
         }
 
-        return this.x == obj.x && this.y == obj.y && this.z == obj.z
+        return this.x == other.x && this.y == other.y && this.z == other.z
     }
 
     fun rawHashCode(): Int {
         return super.hashCode()
     }
 
-    @SneakyThrows
     public override fun clone(): Vector3f {
         return super.clone() as Vector3f
     }
@@ -346,6 +345,10 @@ class Vector3f @JvmOverloads constructor(var x: Float = 0f, var y: Float = 0f, v
 
     fun asBlockVector3(): BlockVector3 {
         return BlockVector3(floorX, floorY, floorZ)
+    }
+
+    override fun hashCode(): Int {
+        return javaClass.hashCode()
     }
 
     companion object {

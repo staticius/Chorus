@@ -17,14 +17,14 @@ class TreeMapCompoundTag : CompoundTag {
     override fun parseValue(): MutableMap<String, Any> {
         val value: MutableMap<String, Any> = TreeMap()
         for ((key, value1) in tags) {
-            value[key] = value1.parseValue<Any>()
+            value[key] = value1.parseValue()
         }
         return value
     }
 
     override fun copy(): TreeMapCompoundTag {
         val nbt = TreeMapCompoundTag()
-        getTags().forEach { (key: String?, value: Tag<*>?) -> nbt.put(key, value.copy()) }
+        getTags().forEach { (key, value) -> nbt.put(key, value.copy()) }
         return nbt
     }
 }
