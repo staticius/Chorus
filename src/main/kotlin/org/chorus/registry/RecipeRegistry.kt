@@ -427,7 +427,12 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
 
     fun rebuildPacket() {
         val buf = ByteBufAllocator.DEFAULT.ioBuffer(64)
-        val pk = CraftingDataPacket()
+        val pk = CraftingDataPacket(
+            listOf(),
+            listOf(),
+            listOf(),
+            listOf()
+        )
         pk.cleanRecipes = true
 
         pk.addNetworkIdRecipe(networkIdRecipeList)
@@ -979,7 +984,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
         val priority = Utils.toInt(recipeObject["priority"]!!)
         val primaryResult = parseRecipeItem(first)
 
-        val extraResults: MutableList<Item?> = ArrayList()
+        val extraResults: MutableList<Item> = ArrayList()
         for (data in outputs) {
             val output = parseRecipeItem(data)
             extraResults.add(output.toItem())

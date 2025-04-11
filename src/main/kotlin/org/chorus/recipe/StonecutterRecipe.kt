@@ -8,7 +8,7 @@ import java.util.*
 
 class StonecutterRecipe(
     recipeId: String?,
-    val uuid: UUID?,
+    override var uuid: UUID?,
     priority: Int,
     result: Item,
     ingredient: Item,

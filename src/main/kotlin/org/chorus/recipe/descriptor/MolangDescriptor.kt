@@ -2,7 +2,8 @@ package org.chorus.recipe.descriptor
 
 import org.chorus.item.Item
 
-class MolangDescriptor(val tagExpression: String, val molangVersion: Int, override val count: Int) : ItemDescriptor {
+class MolangDescriptor(val tagExpression: String, val molangVersion: Int, override val count: Int) : ItemDescriptor,
+    Cloneable {
     override val type: ItemDescriptorType
         get() = ItemDescriptorType.MOLANG
 
@@ -12,7 +13,7 @@ class MolangDescriptor(val tagExpression: String, val molangVersion: Int, overri
 
     @Throws(CloneNotSupportedException::class)
     override fun clone(): ItemDescriptor {
-        return super.clone()
+        return super<Cloneable>.clone() as ItemDescriptor
     }
 
     override fun equals(o: Any?): Boolean {

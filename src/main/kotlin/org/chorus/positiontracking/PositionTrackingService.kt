@@ -212,7 +212,7 @@ class PositionTrackingService(folder: File) : Closeable {
             }
         }
 
-        toRemove.forEach { (player: Player?, list: IntList?) ->
+        toRemove.forEach { (player, list) ->
             list.forEach(IntConsumer { handler: Int ->
                 stopTracking(
                     player,
@@ -396,15 +396,15 @@ class PositionTrackingService(folder: File) : Closeable {
         if (!storage.isEmpty()) {
             val trackingStorage = loadStorage(storage.firstKey())
             val handler = trackingStorage.addNewPosition(position, enabled)
-            if (handler.isPresent) {
-                return handler.asInt
+            if (handler != null) {
+                return handler
             }
             next = trackingStorage.maxHandler
         }
 
         val trackingStorage = PositionTrackingStorage(next, File(folder, "$next.pnt"))
         storage[next] = WeakReference(trackingStorage)
-        return trackingStorage.addNewPosition(position, enabled).orElseThrow { InternalError() }
+        return trackingStorage.addNewPosition(position, enabled) ?: throw RuntimeException()
     }
 
     @Throws(IOException::class)

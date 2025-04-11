@@ -2,7 +2,7 @@ package org.chorus.recipe.descriptor
 
 import org.chorus.item.Item
 
-class DefaultDescriptor(@JvmField val item: Item) : ItemDescriptor {
+class DefaultDescriptor(@JvmField val item: Item) : ItemDescriptor, Cloneable {
     override val type: ItemDescriptorType
         get() = ItemDescriptorType.DEFAULT
 
@@ -12,7 +12,7 @@ class DefaultDescriptor(@JvmField val item: Item) : ItemDescriptor {
 
     @Throws(CloneNotSupportedException::class)
     override fun clone(): ItemDescriptor {
-        return super.clone()
+        return super<Cloneable>.clone() as ItemDescriptor
     }
 
     override val count: Int

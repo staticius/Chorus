@@ -16,7 +16,7 @@ abstract class CraftingRecipe protected constructor(
     val priority: Int, recipeUnlockingRequirement: RecipeUnlockingRequirement?
 ) :
     BaseRecipe(id) {
-    var uuid: UUID? = null
+    open var uuid: UUID? = null
     val requirement: RecipeUnlockingRequirement =
         recipeUnlockingRequirement ?: RecipeUnlockingRequirement(RecipeUnlockingRequirement.UnlockingContext.NONE)
 }

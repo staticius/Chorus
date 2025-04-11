@@ -19,7 +19,7 @@ class Scoreboard @JvmOverloads constructor(
     override var sortOrder: SortOrder? = SortOrder.ASCENDING
 ) : IScoreboard {
     private var viewers: MutableMap<DisplaySlot, MutableSet<IScoreboardViewer>> = EnumMap(DisplaySlot::class.java)
-    override var lines: Map<IScorer, IScoreboardLine> = HashMap()
+    override var lines: MutableMap<IScorer, IScoreboardLine> = HashMap()
 
     init {
         for (slot in DisplaySlot.entries) {

@@ -4,9 +4,9 @@ import org.chorus.recipe.descriptor.ItemDescriptor
 
 class SmithingTrimRecipe(
     id: String,
-    base: ItemDescriptor?,
-    addition: ItemDescriptor?,
-    template: ItemDescriptor?,
+    base: ItemDescriptor,
+    addition: ItemDescriptor,
+    template: ItemDescriptor,
     tag: String
 ) :
     BaseRecipe(id) {

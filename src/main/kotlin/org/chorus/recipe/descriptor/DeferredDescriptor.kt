@@ -2,7 +2,7 @@ package org.chorus.recipe.descriptor
 
 import org.chorus.item.Item
 
-class DeferredDescriptor(val fullName: String, val auxValue: Int, override val count: Int) : ItemDescriptor {
+class DeferredDescriptor(val fullName: String, val auxValue: Int, override val count: Int) : ItemDescriptor, Cloneable {
     override val type: ItemDescriptorType
         get() = ItemDescriptorType.DEFERRED
 
@@ -12,7 +12,7 @@ class DeferredDescriptor(val fullName: String, val auxValue: Int, override val c
 
     @Throws(CloneNotSupportedException::class)
     override fun clone(): ItemDescriptor {
-        return super.clone()
+        return super<Cloneable>.clone() as ItemDescriptor
     }
 
     override fun equals(o: Any?): Boolean {

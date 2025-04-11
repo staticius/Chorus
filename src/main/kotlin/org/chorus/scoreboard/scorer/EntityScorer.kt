@@ -13,7 +13,7 @@ class EntityScorer : IScorer {
     val uniqueID: Long
 
     constructor(uuid: UUID) {
-        this.uniqueID = uuid
+        this.uniqueID = uuid.mostSignificantBits
     }
 
     constructor(entity: Entity) {

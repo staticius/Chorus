@@ -2,7 +2,7 @@ package org.chorus.recipe.descriptor
 
 import org.chorus.item.Item
 
-class InvalidDescriptor private constructor() : ItemDescriptor {
+class InvalidDescriptor private constructor() : ItemDescriptor, Cloneable {
     override var count: Int = 0
 
     override val type: ItemDescriptorType
@@ -14,7 +14,7 @@ class InvalidDescriptor private constructor() : ItemDescriptor {
 
     @Throws(CloneNotSupportedException::class)
     override fun clone(): ItemDescriptor {
-        return super.clone()
+        return super<Cloneable>.clone() as ItemDescriptor
     }
 
     override fun toString(): String {

@@ -3,7 +3,7 @@ package org.chorus.recipe.descriptor
 import org.chorus.item.Item
 import org.chorus.tags.ItemTags
 
-class ItemTagDescriptor(@JvmField val itemTag: String, override val count: Int) : ItemDescriptor {
+class ItemTagDescriptor(@JvmField val itemTag: String, override val count: Int) : ItemDescriptor, Cloneable {
     override val type: ItemDescriptorType
         get() = ItemDescriptorType.ITEM_TAG
 
@@ -17,7 +17,7 @@ class ItemTagDescriptor(@JvmField val itemTag: String, override val count: Int) 
 
     @Throws(CloneNotSupportedException::class)
     override fun clone(): ItemDescriptor {
-        return super.clone()
+        return super<Cloneable>.clone() as ItemDescriptor
     }
 
     override fun equals(o: Any?): Boolean {
