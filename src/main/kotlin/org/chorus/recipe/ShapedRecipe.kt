@@ -1,7 +1,5 @@
 package org.chorus.recipe
 
-import com.google.common.collect.Lists
-import com.google.common.collect.Maps
 import io.netty.util.collection.CharObjectHashMap
 import org.chorus.item.Item
 import org.chorus.network.protocol.types.RecipeUnlockingRequirement
@@ -17,16 +15,16 @@ class ShapedRecipe @JvmOverloads constructor(
     primaryResult: Item,
     shape: Array<String>,
     ingredients: Map<Char, ItemDescriptor>,
-    extraResults: Collection<Item?>,
+    extraResults: Collection<Item>,
     mirror: Boolean,
     recipeUnlockingRequirement: RecipeUnlockingRequirement? = null
 ) :
     CraftingRecipe(
         recipeId
             ?: RecipeRegistry.computeRecipeId(
-                Lists.asList<Item>(
+                listOf(
                     primaryResult,
-                    extraResults.toTypedArray()
+                    *extraResults.toTypedArray()
                 ), ingredients.values, RecipeType.SHAPED
             ), priority, recipeUnlockingRequirement
     ) {
@@ -37,50 +35,12 @@ class ShapedRecipe @JvmOverloads constructor(
     val isMirror: Boolean
 
     constructor(
-        primaryResult: Item,
-        shape: Array<String>,
-        ingredients: Map<Char, Item>,
-        extraResults: List<Item?>
-    ) : this(null, 1, primaryResult, shape, ingredients, extraResults)
-
-    /**
-     * Constructs a ShapedRecipe instance.
-     *
-     * @param primaryResult Primary result of the recipe
-     * @param shape         <br></br>        Array of 1, 2, or 3 strings representing the rows of the recipe.
-     * This accepts an array of 1, 2 or 3 strings. Each string should be of the same length and must be at most 3
-     * characters long. Each character represents a unique type of ingredient. Spaces are interpreted as air.
-     * @param ingredients   <br></br>  Char =&gt; Item map of items to be set into the shape.
-     * This accepts an array of Items, indexed by character. Every unique character (except space) in the shape
-     * array MUST have a corresponding item in this list. Space character is automatically treated as air.
-     * @param extraResults  <br></br> List of additional result items to leave in the crafting grid afterwards. Used for things like cake recipe
-     * empty buckets.
-     *
-     *
-     * Note: Recipes do not need to be square. Do NOT add padding for empty rows/columns.
-     */
-    constructor(
-        recipeId: String?,
-        priority: Int,
-        primaryResult: Item,
-        shape: Array<String>,
-        ingredients: Map<Char, Item>,
-        extraResults: List<Item?>
-    ) : this(
-        recipeId, priority, primaryResult, shape,
-        Maps.transformEntries<Char, Item, ItemDescriptor>(
-            ingredients,
-            Maps.EntryTransformer<Char, Item, ItemDescriptor> { k: Char?, v: Item -> DefaultDescriptor(v) }),
-        extraResults
-    )
-
-    constructor(
         recipeId: String?,
         priority: Int,
         primaryResult: Item,
         shape: Array<String>,
         ingredients: Map<Char, ItemDescriptor>,
-        extraResults: Collection<Item?>
+        extraResults: Collection<Item>
     ) : this(recipeId, null, priority, primaryResult, shape, ingredients, extraResults, false)
 
     init {
@@ -175,16 +135,16 @@ class ShapedRecipe @JvmOverloads constructor(
 
     override fun match(input: Input): Boolean {
         var mirrorInput: Input? = null
-        if (isMirror && input.getCol() == 3 && input.getRow() == 3) {
-            mirrorInput = Input(3, 3, mirrorItemArray(input.getData()))
+        if (isMirror && input.col == 3 && input.row == 3) {
+            mirrorInput = Input(3, 3, mirrorItemArray(input.data))
         }
         tryShrinkMatrix(input)
 
         var checkMirror = false
-        next@ for (i in 0..<input.getRow()) {
-            for (j in 0..<input.getCol()) {
+        next@ for (i in 0..<input.row) {
+            for (j in 0..<input.col) {
                 val ingredient = getIngredient(j, i)
-                if (!ingredient.match(input.getData()[i][j])) {
+                if (!ingredient.match(input.data[i][j])) {
                     if (mirrorInput != null) {
                         checkMirror = true
                         break@next
@@ -196,10 +156,10 @@ class ShapedRecipe @JvmOverloads constructor(
         }
         if (checkMirror) {
             tryShrinkMatrix(mirrorInput!!)
-            for (i in 0..<mirrorInput.getRow()) {
-                for (j in 0..<mirrorInput.getCol()) {
+            for (i in 0..<mirrorInput.row) {
+                for (j in 0..<mirrorInput.col) {
                     val ingredient = getIngredient(j, i)
-                    if (!ingredient.match(mirrorInput.getData()[i][j])) {
+                    if (!ingredient.match(mirrorInput.data[i][j])) {
                         return false
                     }
                 }
@@ -212,11 +172,10 @@ class ShapedRecipe @JvmOverloads constructor(
         get() = RecipeType.SHAPED
 
     companion object {
-        private fun mirrorItemArray(data: Array<Array<Item?>?>): Array<Array<Item>> {
-            val clone = Array(3) { arrayOfNulls<Item>(3) }
-            System.arraycopy(data[0], 0, clone[0], 0, 3)
-            System.arraycopy(data[1], 0, clone[1], 0, 3)
-            System.arraycopy(data[2], 0, clone[2], 0, 3)
+        private fun mirrorItemArray(data: Array<Array<Item>>): Array<Array<Item>> {
+            val clone = Array(3) { i ->
+                data[i]
+            }
             var tmp: Item?
             for (i in 0..2) {
                 tmp = clone[i][2]
@@ -245,59 +204,57 @@ class ShapedRecipe @JvmOverloads constructor(
          * @param input the input
          */
         fun tryShrinkMatrix(input: Input) {
-            val inputs = input.getData()
+            val inputs = input.data
             var startRow = 0
-            var endRow = inputs!!.size - 1
-            for (row in inputs!!.indices) {
-                if (notAllEmptyRow(inputs!![row])) {
+            var endRow = inputs.size - 1
+            for (row in inputs.indices) {
+                if (notAllEmptyRow(inputs[row])) {
                     startRow = row
                     break
                 }
                 // 发现全部都是空气，直接返回空数组
-                if (row == inputs!!.size - 1) {
-                    input.setCol(0)
-                    input.setRow(0)
-                    input.setData(Input.Companion.EMPTY_INPUT_ARRAY)
+                if (row == inputs.size - 1) {
+                    input.col = (0)
+                    input.row = (0)
+                    input.data = (Input.Companion.EMPTY_INPUT_ARRAY)
                     return
                 }
             }
-            for (row in inputs!!.indices.reversed()) {
-                if (notAllEmptyRow(inputs!![row])) {
+            for (row in inputs.indices.reversed()) {
+                if (notAllEmptyRow(inputs[row])) {
                     endRow = row
                     break
                 }
             }
             var startColumn = 0
-            var endColumn = inputs!![0]!!.size - 1
-            for (column in inputs!![0]!!.indices) {
+            var endColumn = inputs[0].size - 1
+            for (column in inputs[0].indices) {
                 if (notAllEmptyColumn(inputs, column)) {
                     startColumn = column
                     break
                 }
             }
-            for (column in inputs!![0]!!.indices.reversed()) {
+            for (column in inputs[0].indices.reversed()) {
                 if (notAllEmptyColumn(inputs, column)) {
                     endColumn = column
                     break
                 }
             }
 
-            if (startRow == 0 && endRow == inputs!!.size - 1 && startColumn == 0 && endColumn == inputs!![0]!!.size - 1) {
-                input.setData(inputs)
+            if (startRow == 0 && endRow == inputs.size - 1 && startColumn == 0 && endColumn == inputs[0].size - 1) {
+                input.data = (inputs)
                 return
             }
             val newRow = endRow - startRow + 1
             val newCol = endColumn - startColumn + 1
-            val result = Array(newRow) { arrayOfNulls<Item>(newCol) }
-            for (row in startRow..endRow) {
-                if (endColumn + 1 - startColumn >= 0) System.arraycopy(
-                    inputs!![row], startColumn,
-                    result[row - startRow], 0, endColumn + 1 - startColumn
-                )
+            val result = Array(newRow) { row ->
+                Array(newCol) { col ->
+                    inputs[startRow + row][startColumn + col]
+                }
             }
-            input.setRow(newRow)
-            input.setCol(newCol)
-            input.setData(result)
+            input.row = (newRow)
+            input.col = (newCol)
+            input.data = (result)
         }
 
         private fun notAllEmptyRow(inputs: Array<Item>): Boolean {
@@ -309,9 +266,9 @@ class ShapedRecipe @JvmOverloads constructor(
             return false
         }
 
-        private fun notAllEmptyColumn(inputs: Array<Array<Item?>>, column: Int): Boolean {
+        private fun notAllEmptyColumn(inputs: Array<Array<Item>>, column: Int): Boolean {
             for (row in inputs) {
-                if (!row[column]!!.isNothing) {
+                if (!row[column].isNothing) {
                     return true
                 }
             }

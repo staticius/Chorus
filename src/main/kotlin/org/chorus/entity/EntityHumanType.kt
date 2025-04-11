@@ -30,11 +30,11 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
         return inventory
     }
 
-    override fun getOffhandInventory(): HumanOffHandInventory? {
+    override fun getOffhandInventory(): HumanOffHandInventory {
         return offhandInventory
     }
 
-    override fun getEnderChestInventory(): HumanEnderChestInventory? {
+    override fun getEnderChestInventory(): HumanEnderChestInventory {
         return enderChestInventory
     }
 

@@ -5,10 +5,10 @@ import org.chorus.recipe.descriptor.ItemDescriptor
 
 class SmithingTransformRecipe(
     recipeId: String,
-    result: Item?,
-    base: ItemDescriptor?,
-    addition: ItemDescriptor?,
-    template: ItemDescriptor?
+    result: Item,
+    base: ItemDescriptor,
+    addition: ItemDescriptor,
+    template: ItemDescriptor
 ) :
     BaseRecipe(recipeId) {
     init {

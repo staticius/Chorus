@@ -335,15 +335,15 @@ class PluginDescription {
         }
 
         if (plugin.containsKey("depend")) {
-            this.depend = plugin["depend"] as MutableList<String>?
+            this.depend = plugin["depend"] as MutableList<String>
         }
 
         if (plugin.containsKey("softdepend")) {
-            this.softDepend = plugin["softdepend"] as MutableList<String>?
+            this.softDepend = plugin["softdepend"] as MutableList<String>
         }
 
         if (plugin.containsKey("loadbefore")) {
-            this.loadBefore = plugin["loadbefore"] as List<String>?
+            this.loadBefore = plugin["loadbefore"] as List<String>
         }
 
         if (plugin.containsKey("website")) {

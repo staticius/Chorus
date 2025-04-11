@@ -5,23 +5,20 @@ import com.google.common.collect.MapMaker
 import it.unimi.dsi.fastutil.ints.IntArrayList
 import it.unimi.dsi.fastutil.ints.IntList
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet
-import it.unimi.dsi.fastutil.ints.IntSet
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.inventory.Inventory
 import org.chorus.item.Item
 import org.chorus.item.ItemID
 import org.chorus.item.ItemLodestoneCompass
-import org.chorus.network.protocol.DataPacket
 import org.chorus.network.protocol.PositionTrackingDBServerBroadcastPacket
+import org.chorus.utils.Loggable
 import java.io.*
 import java.lang.ref.WeakReference
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
 import java.util.function.IntConsumer
-import java.util.regex.Pattern
-import java.util.stream.IntStream
 
 /**
  * A position tracking db service. It holds file resources that needs to be closed when not needed anymore.
@@ -30,7 +27,7 @@ class PositionTrackingService(folder: File) : Closeable {
     private val storage = TreeMap<Int, WeakReference<PositionTrackingStorage?>>(Comparator.reverseOrder())
     private val closed = AtomicBoolean(false)
     private val folder: File
-    private val tracking: MutableMap<Player, MutableMap<PositionTrackingStorage, IntSet>> =
+    private val tracking: MutableMap<Player, MutableMap<PositionTrackingStorage, MutableSet<Int>>> =
         MapMaker().weakKeys().makeMap()
 
     /**
@@ -148,16 +145,9 @@ class PositionTrackingService(folder: File) : Closeable {
 
     @Synchronized
     fun stopTracking(player: Player): Boolean {
-        val toRemove: Map<PositionTrackingStorage, IntSet>? = tracking.remove(player)
+        val toRemove = tracking.remove(player)
         if (toRemove != null && player.isOnline) {
-            val packets = toRemove.values.stream()
-                .flatMapToInt { handlers: IntSet -> IntStream.of(*handlers.toIntArray()) }
-                .mapToObj<PositionTrackingDBServerBroadcastPacket> { trackingHandler: Int ->
-                    this.destroyPacket(
-                        trackingHandler
-                    )
-                }
-                .toArray<DataPacket> { _Dummy_.__Array__() }
+            val packets = toRemove.values.flatMap { it.toIntArray().asSequence() }.map { this.destroyPacket(it) }.toTypedArray()
             for (p in packets) {
                 player.dataPacket(p)
             }
@@ -205,7 +195,7 @@ class PositionTrackingService(folder: File) : Closeable {
         val toRemove: MutableMap<Player, IntList> = HashMap(2)
         for ((player, value) in tracking) {
             for ((_, value1) in value) {
-                value1.forEach(IntConsumer { trackingHandler: Int ->
+                value1.forEach { trackingHandler: Int ->
                     try {
                         if (!hasTrackingDevice(player, trackingHandler)) {
                             toRemove.computeIfAbsent(player) { p: Player? -> IntArrayList(2) }.add(trackingHandler)
@@ -218,7 +208,7 @@ class PositionTrackingService(folder: File) : Closeable {
                             e
                         )
                     }
-                })
+                }
             }
         }
 
@@ -235,16 +225,16 @@ class PositionTrackingService(folder: File) : Closeable {
     }
 
     private fun inventories(player: Player): Iterable<Inventory> {
-        return Iterable<Inventory> {
-            object : MutableIterator<Inventory?> {
+        return Iterable {
+            object : Iterator<Inventory> {
                 var next: Int = 0
 
                 override fun hasNext(): Boolean {
-                    return@Iterable next <= 4
+                    return next <= 4
                 }
 
                 override fun next(): Inventory {
-                    return@Iterable when (next++) {
+                    return when (next++) {
                         0 -> player.getInventory()
                         1 -> player.cursorInventory
                         2 -> player.getOffhandInventory()
@@ -288,12 +278,11 @@ class PositionTrackingService(folder: File) : Closeable {
     }
 
     fun forceRecheck(player: Player) {
-        val tracking: Map<PositionTrackingStorage, IntSet>? =
-            tracking[player]
+        val tracking = tracking[player]
         if (tracking != null) {
             val toRemove: IntList = IntArrayList(2)
             for ((_, value) in tracking) {
-                value.forEach(IntConsumer { trackingHandler: Int ->
+                value.forEach { trackingHandler: Int ->
                     try {
                         if (!hasTrackingDevice(player, trackingHandler)) {
                             toRemove.add(trackingHandler)
@@ -306,7 +295,7 @@ class PositionTrackingService(folder: File) : Closeable {
                             e
                         )
                     }
-                })
+                }
             }
             toRemove.forEach(IntConsumer { handler: Int -> stopTracking(player, handler) })
         }
@@ -589,10 +578,10 @@ class PositionTrackingService(folder: File) : Closeable {
         }
     }
 
-    companion object {
-        private val FILENAME_PATTERN: Pattern = Pattern.compile("^\\d+\\.pnt$", Pattern.CASE_INSENSITIVE)
-        private val FILENAME_FILTER = FilenameFilter { dir: File?, name: String? ->
-            FILENAME_PATTERN.matcher(name).matches() && File(
+    companion object : Loggable {
+        private val FILENAME_PATTERN = Regex("^\\d+\\.pnt$", RegexOption.IGNORE_CASE)
+        private val FILENAME_FILTER = FilenameFilter { dir, name ->
+            FILENAME_PATTERN.matches(name) && File(
                 dir,
                 name
             ).isFile

@@ -323,9 +323,9 @@ interface IHuman : InventoryHolder {
 
     fun getInventory(): HumanInventory
 
-    fun getOffhandInventory(): HumanOffHandInventory?
+    fun getOffhandInventory(): HumanOffHandInventory
 
-    fun getEnderChestInventory(): HumanEnderChestInventory?
+    fun getEnderChestInventory(): HumanEnderChestInventory
 
     fun getLevel(): Level
 

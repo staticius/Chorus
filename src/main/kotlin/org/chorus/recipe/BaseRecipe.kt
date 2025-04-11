@@ -6,13 +6,13 @@ import org.chorus.recipe.descriptor.ItemDescriptor
 
 abstract class BaseRecipe protected constructor(id: String) : Recipe {
     override val recipeId: String = id
-    override val results: MutableList<Item> = ArrayList()
-    override val ingredients: MutableList<ItemDescriptor> = ArrayList()
+    final override val results: MutableList<Item> = ArrayList()
+    final override val ingredients: MutableList<ItemDescriptor> = ArrayList()
 
-    override fun equals(o: Any?): Boolean {
-        if (this === o) return true
-        if (o !is BaseRecipe) return false
-        return Objects.equal(recipeId, o.recipeId)
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is BaseRecipe) return false
+        return Objects.equal(recipeId, other.recipeId)
     }
 
     override fun hashCode(): Int {

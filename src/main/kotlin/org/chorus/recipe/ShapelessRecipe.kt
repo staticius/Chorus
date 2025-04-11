@@ -56,12 +56,12 @@ open class ShapelessRecipe @JvmOverloads constructor(
         get() = RecipeType.SHAPELESS
 
     override fun match(input: Input): Boolean {
-        val data = input.getData()
-        val flatInputItem: MutableList<Item?> = ArrayList()
-        for (i in 0..<input.getRow()) {
-            for (j in 0..<input.getCol()) {
-                if (!data!![j]!![i]!!.isNull) {
-                    flatInputItem.add(data!![j]!![i])
+        val data = input.data
+        val flatInputItem: MutableList<Item> = ArrayList()
+        for (i in 0..<input.row) {
+            for (j in 0..<input.col) {
+                if (!data[j][i].isNothing) {
+                    flatInputItem.add(data[j][i])
                 }
             }
         }

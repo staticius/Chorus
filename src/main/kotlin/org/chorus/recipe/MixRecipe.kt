@@ -3,9 +3,8 @@ package org.chorus.recipe
 import org.chorus.item.Item
 import org.chorus.recipe.descriptor.DefaultDescriptor
 
-abstract class MixRecipe(recipeId: String?, input: Item, ingredient: Item, output: Item?) :
-    BaseRecipe(recipeId!!) {
-    constructor(input: Item, ingredient: Item, output: Item?) : this(null, input, ingredient, output)
+abstract class MixRecipe(recipeId: String, input: Item, ingredient: Item, output: Item) :
+    BaseRecipe(recipeId) {
 
     init {
         ingredients.add(DefaultDescriptor(input))

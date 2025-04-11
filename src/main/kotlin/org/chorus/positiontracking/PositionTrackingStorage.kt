@@ -3,15 +3,12 @@ package org.chorus.positiontracking
 import com.google.common.base.Preconditions
 import com.google.common.cache.Cache
 import com.google.common.cache.CacheBuilder
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.ints.IntList
 import java.io.*
 import java.nio.ByteBuffer
 import java.nio.charset.StandardCharsets
 import java.util.*
 import java.util.concurrent.ExecutionException
 import java.util.concurrent.TimeUnit
-import javax.annotation.ParametersAreNonnullByDefault
 
 /**
  * 在一个文件中存储[PositionTracking]对象的顺序范围。读取操作被缓存。
@@ -34,8 +31,7 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
     private var garbagePos: Long = 0
     private var stringHeapPos: Long = 0
     private val persistence: RandomAccessFile
-    private val cache: Cache<Int, Optional<PositionTracking?>> =
-        CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).concurrencyLevel(1).build()
+    private val cache: Cache<Int, PositionTracking?> = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).concurrencyLevel(1).build()
     private var nextIndex = 0
 
     /**
@@ -180,9 +176,7 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
     fun getPosition(trackingHandler: Int): PositionTracking? {
         validateHandler(trackingHandler)
         try {
-            return cache[trackingHandler, { loadPosition(trackingHandler, true) }]
-                .map { obj: PositionTracking? -> obj!!.clone() }
-                .orElse(null)
+            return cache[trackingHandler, { loadPosition(trackingHandler, true) }]?.clone()
         } catch (e: ExecutionException) {
             throw handleExecutionException(e)
         }
@@ -207,7 +201,7 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
             return getPosition(trackingHandler)
         }
         validateHandler(trackingHandler)
-        return loadPosition(trackingHandler, false).orElse(null)
+        return loadPosition(trackingHandler, false)
     }
 
     /**
@@ -219,9 +213,9 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
      * @throws IOException If an error occurred while reading or writing the file
      */
     @Throws(IOException::class)
-    fun addOrReusePosition(position: NamedPosition): OptionalInt {
+    fun addOrReusePosition(position: NamedPosition): Int? {
         val handler = findTrackingHandler(position)
-        if (handler.isPresent) {
+        if (handler != null) {
             return handler
         }
         return addNewPosition(position)
@@ -236,7 +230,7 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
      */
     @Synchronized
     @Throws(IOException::class)
-    fun addNewPosition(position: NamedPosition): OptionalInt {
+    fun addNewPosition(position: NamedPosition): Int? {
         return addNewPosition(position, true)
     }
 
@@ -250,39 +244,34 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
      */
     @Synchronized
     @Throws(IOException::class)
-    fun addNewPosition(position: NamedPosition, enabled: Boolean): OptionalInt {
-        val handler = addNewPos(position, enabled)
-        if (!handler.isPresent) {
-            return handler
-        }
+    fun addNewPosition(position: NamedPosition, enabled: Boolean): Int? {
+        val handler = addNewPos(position, enabled) ?: return null
         if (enabled) {
-            cache.put(handler.asInt, Optional.of(PositionTracking(position)))
+            cache.put(handler, PositionTracking(position))
         }
         return handler
     }
 
     @Throws(IOException::class)
-    fun findTrackingHandler(position: NamedPosition): OptionalInt {
-        val cached = cache.asMap().entries.stream()
-            .filter { e: Map.Entry<Int, Optional<PositionTracking?>> ->
-                e.value.filter { position: PositionTracking? ->
-                    position!!.matchesNamedPosition(
-                        position
-                    )
-                }.isPresent
+    fun findTrackingHandler(position: NamedPosition): Int? {
+        val cached = cache.asMap().entries
+            .filter { e ->
+                e.value?.matchesNamedPosition(
+                    position
+                ) ?: false
             }
-            .mapToInt { java.util.Map.Entry.key }
-            .findFirst()
-        if (cached.isPresent) {
+            .map { it.key }
+            .first()
+        if (cached != null) {
             return cached
         }
         val handlers = findTrackingHandlers(position, true, 1)
         if (handlers.isEmpty()) {
-            return OptionalInt.empty()
+            return null
         }
-        val found = handlers.getInt(0)
-        cache.put(found, Optional.of(PositionTracking(position)))
-        return OptionalInt.of(found)
+        val found = handlers[0]
+        cache.put(found, PositionTracking(position))
+        return found
     }
 
     private fun handleExecutionException(e: ExecutionException): IOException {
@@ -357,7 +346,7 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
         val nameLen = buffer.getInt()
         persistence.seek(pos + 1)
         persistence.write(ByteArray(8 + 4))
-        cache.put(trackingHandler, Optional.empty())
+        cache.put(trackingHandler, null)
         addGarbage(namePos, nameLen)
     }
 
@@ -450,15 +439,15 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
 
     @Synchronized
     @Throws(IOException::class)
-    private fun addNewPos(pos: NamedPosition, enabled: Boolean): OptionalInt {
+    private fun addNewPos(pos: NamedPosition, enabled: Boolean): Int? {
         if (nextIndex - startingHandler >= maxStorage) {
-            return OptionalInt.empty()
+            return null
         }
         val handler = nextIndex++
         writePos(handler, pos, enabled)
         persistence.seek((HEADER.size + 4).toLong())
         persistence.writeInt(nextIndex)
-        return OptionalInt.of(handler)
+        return handler
     }
 
     @Synchronized
@@ -490,26 +479,26 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
 
     @Synchronized
     @Throws(IOException::class)
-    fun findTrackingHandlers(pos: NamedPosition): IntList {
+    fun findTrackingHandlers(pos: NamedPosition): List<Int> {
         return findTrackingHandlers(pos, true)
     }
 
     @Synchronized
     @Throws(IOException::class)
-    fun findTrackingHandlers(pos: NamedPosition, onlyEnabled: Boolean): IntList {
+    fun findTrackingHandlers(pos: NamedPosition, onlyEnabled: Boolean): List<Int> {
         return findTrackingHandlers(pos, onlyEnabled, Int.MAX_VALUE)
     }
 
     @Synchronized
     @Throws(IOException::class)
-    fun findTrackingHandlers(pos: NamedPosition, onlyEnabled: Boolean, limit: Int): IntList {
+    fun findTrackingHandlers(pos: NamedPosition, onlyEnabled: Boolean, limit: Int): List<Int> {
         persistence.seek((HEADER.size + 4 + 4 + 4).toLong())
         var handler = startingHandler - 1
         val lookingX = pos.x
         val lookingY = pos.y
         val lookingZ = pos.z
         val lookingName = pos.levelName.toByteArray(StandardCharsets.UTF_8)
-        val results: IntList = IntArrayList(clamp(limit, 1, 16))
+        val results = mutableListOf(limit.coerceIn(1, 16))
         val buf = ByteArray(8 + 4 + 8 + 8 + 8)
         val buffer = ByteBuffer.wrap(buf)
         while (true) {
@@ -549,9 +538,9 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
 
     @Synchronized
     @Throws(IOException::class)
-    private fun loadPosition(trackingHandler: Int, onlyEnabled: Boolean): Optional<PositionTracking?> {
+    private fun loadPosition(trackingHandler: Int, onlyEnabled: Boolean): PositionTracking? {
         if (trackingHandler >= nextIndex) {
-            return Optional.empty()
+            return null
         }
 
         persistence.seek(getAxisPos(trackingHandler))
@@ -559,14 +548,14 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
         persistence.readFully(buf)
         val enabled = buf[0].toInt() == 1
         if (!enabled && onlyEnabled) {
-            return Optional.empty()
+            return null
         }
 
         val buffer = ByteBuffer.wrap(buf, 1, buf.size - 1)
 
         val namePos = buffer.getLong()
         if (namePos == 0L) {
-            return Optional.empty()
+            return null
         }
         val nameLen = buffer.getInt()
 
@@ -578,7 +567,7 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
         persistence.seek(namePos)
         persistence.readFully(nameBytes)
         val name = String(nameBytes, StandardCharsets.UTF_8)
-        return Optional.of(PositionTracking(name, x, y, z))
+        return PositionTracking(name, x, y, z)
     }
 
     val maxHandler: Int
