@@ -5,6 +5,7 @@ import org.chorus.Server
 import org.chorus.command.*
 import org.chorus.utils.Config
 import org.chorus.utils.ConfigSection
+import org.chorus.utils.Loggable
 import org.chorus.utils.Utils
 import org.yaml.snakeyaml.DumperOptions
 import org.yaml.snakeyaml.Yaml
@@ -20,12 +21,12 @@ import java.io.InputStream
  */
 
 abstract class PluginBase : Plugin {
-    override var pluginLoader: PluginLoader? = null
-        private set
-    override var pluginClassLoader: ClassLoader? = null
-        private set
-    override var server: Server? = null
-        private set
+    override lateinit var pluginLoader: PluginLoader
+        protected set
+    override lateinit var pluginClassLoader: ClassLoader
+        protected set
+    override lateinit var server: Server
+        protected set
     override var isEnabled: Boolean = false
 
     /**
@@ -37,12 +38,12 @@ abstract class PluginBase : Plugin {
      */
     var isInitialized: Boolean = false
         private set
-    override var description: PluginDescription = null
-        private set
+    override lateinit var description: PluginDescription
+        protected set
     override var dataFolder: File? = null
-        private set
+        protected set
     override var config: Config? = null
-    private var configFile: File? = null
+    private lateinit var configFile: File
 
     /**
      * 返回这个插件的文件`File`对象。对于jar格式的插件，就是jar文件本身。<br></br>
@@ -51,10 +52,10 @@ abstract class PluginBase : Plugin {
      * @return 这个插件的文件 `File`对象。<br></br>The `File` object of this plugin itself.
      *
      */
-    override var file: File = null
-        private set
-    override var logger: PluginLogger? = null
-        private set
+    override lateinit var file: File
+        protected set
+    override lateinit var logger: PluginLogger
+        protected set
 
 
     override fun onLoad() {
@@ -66,7 +67,7 @@ abstract class PluginBase : Plugin {
     override fun onDisable() {
     }
 
-    override fun isEnabled(): Boolean {
+    fun isEnabled(): Boolean {
         return isEnabled
     }
 
@@ -136,12 +137,12 @@ abstract class PluginBase : Plugin {
      *
      */
     fun init(
-        loader: PluginLoader?,
-        classLoader: ClassLoader?,
-        server: Server?,
-        description: PluginDescription?,
-        dataFolder: File?,
-        file: File?
+        loader: PluginLoader,
+        classLoader: ClassLoader,
+        server: Server,
+        description: PluginDescription,
+        dataFolder: File,
+        file: File
     ) {
         if (!isInitialized) {
             isInitialized = true
@@ -162,7 +163,7 @@ abstract class PluginBase : Plugin {
     fun getCommand(name: String): PluginIdentifiableCommand? {
         var command = Server.instance.getPluginCommand(name)
         if (command == null || !command.plugin.equals(this)) {
-            command = Server.instance.getPluginCommand(description.getName().lowercase() + ":" + name)
+            command = Server.instance.getPluginCommand(description.name.lowercase() + ":" + name)
         }
 
         return if (command != null && command.plugin.equals(this)) {
@@ -227,7 +228,7 @@ abstract class PluginBase : Plugin {
                     filename,
                     outputName,
                     replace,
-                    description.getName(),
+                    description.name,
                     e
                 )
             }
@@ -235,7 +236,7 @@ abstract class PluginBase : Plugin {
         return false
     }
 
-    override fun getConfig(): Config? {
+    fun getConfig(): Config? {
         if (this.config == null) {
             this.reloadConfig()
         }
@@ -258,24 +259,22 @@ abstract class PluginBase : Plugin {
         this.config = Config(this.configFile)
         try {
             getResource("config.yml").use { configStream ->
-                if (configStream != null) {
-                    val dumperOptions = DumperOptions()
-                    dumperOptions.defaultFlowStyle = DumperOptions.FlowStyle.BLOCK
-                    val yaml = Yaml(dumperOptions)
-                    try {
-                        config!!.setDefault(
-                            yaml.loadAs(
-                                Utils.readFile(this.configFile),
-                                ConfigSection::class.java
-                            )
+                val dumperOptions = DumperOptions()
+                dumperOptions.defaultFlowStyle = DumperOptions.FlowStyle.BLOCK
+                val yaml = Yaml(dumperOptions)
+                try {
+                    config!!.setDefault(
+                        yaml.loadAs(
+                            Utils.readFile(this.configFile),
+                            ConfigSection::class.java
                         )
-                    } catch (e: IOException) {
-                        PluginBase.log.error(
-                            "Error while reloading configs for the plugin {}",
-                            description.getName(),
-                            e
-                        )
-                    }
+                    )
+                } catch (e: IOException) {
+                    PluginBase.log.error(
+                        "Error while reloading configs for the plugin {}",
+                        description.name,
+                        e
+                    )
                 }
             }
         } catch (e: IOException) {
@@ -284,7 +283,7 @@ abstract class PluginBase : Plugin {
     }
 
     override val name: String
-        get() = description.getName()
+        get() = description.name
 
     val fullName: String
         /**
@@ -303,5 +302,7 @@ abstract class PluginBase : Plugin {
          *
          *
          */
-        get() = description.getFullName()
+        get() = description.fullName
+
+    companion object : Loggable
 }

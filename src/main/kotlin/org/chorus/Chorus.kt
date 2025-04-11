@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  */
 object Chorus : Loggable {
     val GIT_INFO: Properties? = gitInfo
-    val VERSION: String? = version
+    val VERSION: String = version
     val CODENAME: String = dynamic("Chorus")
     val GIT_COMMIT: String = gitCommit
     val API_VERSION: String = dynamic("0.0.1")
@@ -209,7 +209,7 @@ object Chorus : Loggable {
             return properties
         }
 
-    private val version: String?
+    private val version: String
         get() {
             val resourceAsStream: InputStream? = try {
                 Chorus::class.java.module.getResourceAsStream("git.properties")

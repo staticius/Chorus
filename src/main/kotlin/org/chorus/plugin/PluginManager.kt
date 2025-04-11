@@ -1,7 +1,6 @@
 package org.chorus.plugin
 
 
-import io.netty.util.internal.EmptyArrays
 import org.chorus.Server
 import org.chorus.command.PluginCommand
 import org.chorus.command.SimpleCommandMap
@@ -10,6 +9,7 @@ import org.chorus.event.HandlerList.Companion.unregisterAll
 import org.chorus.level.Level
 import org.chorus.permission.Permissible
 import org.chorus.permission.Permission
+import org.chorus.utils.Loggable
 import org.chorus.utils.PluginException
 import org.chorus.utils.Utils
 import java.io.File
@@ -29,7 +29,6 @@ import kotlin.Throwable
 import kotlin.Throws
 import kotlin.UnsupportedOperationException
 import kotlin.addSuppressed
-import kotlin.also
 import kotlin.require
 
 open class PluginManager(private val server: Server, private val commandMap: SimpleCommandMap) {
@@ -74,14 +73,14 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
     }
 
     fun loadInternalPlugin() {
-        val pluginLoader = fileAssociations[JavaPluginLoader::class.java.name]
+        val pluginLoader = fileAssociations[JavaPluginLoader::class.java.name]!!
         val plugin: InternalPlugin = InternalPlugin.Companion.INSTANCE
         val info: MutableMap<String, Any> = HashMap()
         info["name"] = "PowerNukkitX"
         info["version"] = server.nukkitVersion
         info["website"] = "https://github.com/PowerNukkitX/PowerNukkitX"
         info["main"] = InternalPlugin::class.java.name
-        var file = try {
+        val file = try {
             File(Server::class.java.protectionDomain.codeSource.location.toURI())
         } catch (e: Exception) {
             File(".")
@@ -95,7 +94,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
         enablePlugin(plugin)
     }
 
-    fun getPlugins(): Map<String?, Plugin> {
+    fun getPlugins(): Map<String, Plugin> {
         return plugins
     }
 
@@ -139,25 +138,25 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
         return null
     }
 
-    fun loadPlugins(dictionary: String): Map<String?, Plugin> {
+    fun loadPlugins(dictionary: String): Map<String, Plugin> {
         return this.loadPlugins(File(dictionary))
     }
 
-    fun loadPlugins(dictionary: String, newLoaders: List<String>?): Map<String?, Plugin> {
+    fun loadPlugins(dictionary: String, newLoaders: List<String>?): Map<String, Plugin> {
         return this.loadPlugins(File(dictionary), newLoaders)
     }
 
     @JvmOverloads
-    fun loadPlugins(dictionary: File, newLoaders: List<String>? = null): Map<String?, Plugin> {
+    fun loadPlugins(dictionary: File, newLoaders: List<String>? = null): Map<String, Plugin> {
         return this.loadPlugins(dictionary, newLoaders, false)
     }
 
-    fun loadPlugins(dictionary: File, newLoaders: List<String>?, includeDir: Boolean): Map<String?, Plugin> {
+    fun loadPlugins(dictionary: File, newLoaders: List<String>?, includeDir: Boolean): Map<String, Plugin> {
         if (dictionary.isDirectory) {
             val plugins: MutableMap<String, File> = LinkedHashMap()
-            val loadedPlugins: MutableMap<String?, Plugin> = LinkedHashMap()
-            val dependencies: MutableMap<String?, MutableList<String?>?> = LinkedHashMap()
-            val softDependencies: MutableMap<String?, MutableList<String?>?> = LinkedHashMap()
+            val loadedPlugins: MutableMap<String, Plugin> = LinkedHashMap()
+            val dependencies: MutableMap<String, MutableList<String>?> = LinkedHashMap()
+            val softDependencies: MutableMap<String, MutableList<String>?> = LinkedHashMap()
             var loaders: MutableMap<String, PluginLoader> = LinkedHashMap()
             if (newLoaders != null) {
                 for (key in newLoaders) {
@@ -170,7 +169,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             }
 
             for (loader in loaders.values) {
-                for (file in Objects.requireNonNull<Array<File>>(dictionary.listFiles { dir: File?, name: String? ->
+                for (file in Objects.requireNonNull<Array<File>>(dictionary.listFiles { _, name ->
                     for (pattern in loader.pluginFilters) {
                         if (pattern.matcher(name).matches()) {
                             return@listFiles true
@@ -258,7 +257,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                 }
                             }
 
-                            plugins[name!!] = file
+                            plugins[name] = file
 
                             softDependencies[name] = description.softDepend
 
@@ -268,7 +267,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                 if (softDependencies.containsKey(before)) {
                                     softDependencies[before]!!.add(name)
                                 } else {
-                                    val list: MutableList<String?> = ArrayList()
+                                    val list: MutableList<String> = ArrayList()
                                     list.add(name)
                                     softDependencies[before] = list
                                 }
@@ -288,14 +287,14 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
 
             while (!plugins.isEmpty()) {
                 var missingDependency = true
-                for (name in ArrayList<String>(plugins.keys)) {
+                for (name in ArrayList(plugins.keys)) {
                     val file = plugins[name]
                     if (dependencies.containsKey(name)) {
-                        for (dependency in ArrayList<String>(dependencies[name])) {
+                        for (dependency in ArrayList(dependencies[name]!!)) {
                             if (loadedPlugins.containsKey(dependency) || this.getPlugin(dependency) != null) {
                                 dependencies[name]!!.remove(dependency)
                             } else if (!plugins.containsKey(dependency)) {
-                                val language = server.language
+                                val language = server.baseLang
                                 val cause = language.tr("chorus.plugin.missingDependency", dependency)
                                 PluginManager.log.error(language.tr("chorus.plugin.loadError", name, cause))
                                 break
@@ -308,7 +307,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                     }
 
                     if (softDependencies.containsKey(name)) {
-                        softDependencies[name]!!.removeIf { dependency: String? ->
+                        softDependencies[name]!!.removeIf { dependency ->
                             loadedPlugins.containsKey(dependency) || this.getPlugin(
                                 dependency
                             ) != null
@@ -508,9 +507,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
     protected fun parseYamlCommands(plugin: Plugin): List<PluginCommand<*>> {
         val pluginCmds: MutableList<PluginCommand<*>> = ArrayList()
 
-        for ((key1, value) in plugin.description.commands) {
-            val key = key1 as String
-            val data = value!!
+        for ((key, value) in plugin.description.commands) {
             if (key.contains(":")) {
                 PluginManager.log.error(
                     server.baseLang.tr(
@@ -521,22 +518,22 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 )
                 continue
             }
-            if (data is Map<*, *>) {
+            if (value is Map<*, *>) {
                 val newCmd = PluginCommand(key, plugin)
 
-                if (data.containsKey("description")) {
-                    newCmd.description = (data["description"] as String?)!!
+                if (value.containsKey("description")) {
+                    newCmd.description = (value["description"] as String?)!!
                 }
 
-                if (data.containsKey("usage")) {
-                    newCmd.usage = (data["usage"] as String?)!!
+                if (value.containsKey("usage")) {
+                    newCmd.usage = (value["usage"] as String?)!!
                 }
 
-                if (data.containsKey("aliases")) {
-                    val aliases = data["aliases"]
+                if (value.containsKey("aliases")) {
+                    val aliases = value["aliases"]
                     if (aliases is List<*>) {
                         val aliasList: MutableList<String> = ArrayList()
-                        for (alias in aliases) {
+                        for (alias in aliases as List<String>) {
                             if (alias.contains(":")) {
                                 PluginManager.log.error(
                                     server.baseLang.tr(
@@ -550,16 +547,16 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             aliasList.add(alias)
                         }
 
-                        newCmd.setAliases(aliasList.toArray(EmptyArrays.EMPTY_STRINGS))
+                        newCmd.setAliases(aliasList.toTypedArray())
                     }
                 }
 
-                if (data.containsKey("permission")) {
-                    newCmd.permission = data["permission"]
+                if (value.containsKey("permission")) {
+                    newCmd.permission = value["permission"] as String
                 }
 
-                if (data.containsKey("permission-message")) {
-                    newCmd.permissionMessage = data["permission-message"]
+                if (value.containsKey("permission-message")) {
+                    newCmd.permissionMessage = value["permission-message"] as String
                 }
 
                 pluginCmds.add(newCmd)
@@ -662,11 +659,8 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             if (method.isBridge || method.isSynthetic) {
                 continue
             }
-            val checkClass: Class<*>
-
-            if (method.parameterTypes.size != 1 || !Event::class.java.isAssignableFrom(method.parameterTypes[0].also {
-                    checkClass = it
-                })) {
+            val checkClass: Class<*> = method.parameterTypes[0]
+            if (method.parameterTypes.size != 1 || !Event::class.java.isAssignableFrom(checkClass)) {
                 plugin.logger.error(plugin.description.fullName + " attempted to register an invalid EventHandler method signature \"" + method.toGenericString() + "\" in " + listener.javaClass)
                 continue
             }
@@ -678,7 +672,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             while (Event::class.java.isAssignableFrom(clazz)) {
                 // This loop checks for extending deprecated events
                 if (clazz.getAnnotation<Deprecated?>(Deprecated::class.java) != null) {
-                    if (java.lang.String.valueOf(server.settings.baseSettings().deprecatedVerbose()).toBoolean()) {
+                    if (java.lang.String.valueOf(server.settings.baseSettings.deprecatedVerbose).toBoolean()) {
                         PluginManager.log.warn(
                             server.baseLang.tr(
                                 "chorus.plugin.deprecatedEvent",
@@ -692,7 +686,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 }
                 clazz = clazz.superclass
             }
-            var eventExecutor: EventExecutor = MethodEventExecutor.Companion.compile(listener.javaClass, method)
+            var eventExecutor = MethodEventExecutor.Companion.compile(listener.javaClass, method)
             if (eventExecutor == null) {
                 eventExecutor = MethodEventExecutor(method)
                 PluginManager.log.debug("Compile fast EventExecutor {} for {} failed!", eventClass.name, plugin.name)
@@ -756,4 +750,6 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             }
         }
     }
+
+    companion object : Loggable
 }

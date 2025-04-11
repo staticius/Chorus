@@ -382,7 +382,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                 item.getCount().toString(),
                 item.compoundTag.contentToString()
             )
-            if (recipe.uUID == null) recipe.uUID = id
+            if (recipe.uuid == null) recipe.uuid = id
         }
         if (allRecipeMaps.putIfAbsent(recipe.recipeId, recipe) != null) {
             throw RegisterException("Duplicate recipe ${recipe.recipeId} type ${recipe.type}")

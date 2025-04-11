@@ -22,12 +22,12 @@ class RegisteredListener(
             executor.execute(listener, event)
         } catch (e: IllegalAccessError) { // 动态编译的字节码调用失败时的逃生门
             if (executor is CompiledExecutor) {
-                executor = MethodEventExecutor(executor.getOriginMethod())
+                executor = MethodEventExecutor((executor as CompiledExecutor).originMethod)
                 executor.execute(listener, event)
             }
         } catch (e: NoSuchMethodError) {
             if (executor is CompiledExecutor) {
-                executor = MethodEventExecutor(executor.getOriginMethod())
+                executor = MethodEventExecutor((executor as CompiledExecutor).originMethod)
                 executor.execute(listener, event)
             }
         }

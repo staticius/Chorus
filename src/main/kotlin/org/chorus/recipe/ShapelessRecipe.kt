@@ -18,7 +18,7 @@ open class ShapelessRecipe @JvmOverloads constructor(
     CraftingRecipe(
         recipeId
             ?: RecipeRegistry.computeRecipeId(
-                java.util.List.of(result),
+                listOf(result),
                 ingredients,
                 RecipeType.SHAPELESS
             ), priority, recipeUnlockingRequirement

@@ -3,6 +3,7 @@ package org.chorus.plugin
 import org.chorus.Server
 import org.chorus.event.plugin.PluginDisableEvent
 import org.chorus.event.plugin.PluginEnableEvent
+import org.chorus.utils.Loggable
 import org.chorus.utils.PluginException
 import org.chorus.utils.Utils
 
@@ -23,7 +24,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
         val description = this.getPluginDescription(file)
         if (description != null) {
             JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.load", description.fullName))
-            val dataFolder = File(file.parentFile, description.name)
+            val dataFolder = File(file.parentFile, description.name!!)
             check(!(dataFolder.exists() && !dataFolder.isDirectory)) { "Projected dataFolder '" + dataFolder + "' for " + description.name + " exists and is not a directory" }
 
             val className = description.main
@@ -38,9 +39,9 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
                 }
 
                 try {
-                    val pluginClass = javaClass.asSubclass(PluginBase::class.java) as Class<PluginBase?>
+                    val pluginClass = javaClass.asSubclass(PluginBase::class.java) as Class<PluginBase>
 
-                    plugin = pluginClass.newInstance()
+                    plugin = pluginClass.getDeclaredConstructor().newInstance()
                     this.initPlugin(plugin, classLoader, description, dataFolder, file)
 
                     return plugin
@@ -120,7 +121,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
 
     override fun enablePlugin(plugin: Plugin) {
         if (plugin is PluginBase && !plugin.isEnabled()) {
-            JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.enable", plugin.getDescription().fullName))
+            JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.enable", plugin.description.fullName))
             plugin.isEnabled = true
             server.pluginManager.callEvent(PluginEnableEvent(plugin))
         }
@@ -133,9 +134,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
                 throw UnsupportedOperationException("The PowerNukkitX Internal Plugin cannot be disabled")
             }
 
-            JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.disable", plugin.getDescription().fullName))
-
-            server.serviceManager.cancel(plugin)
+            JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.disable", plugin.description.fullName))
 
             server.pluginManager.callEvent(PluginDisableEvent(plugin))
 
@@ -172,4 +171,6 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
     private fun removeClass(name: String) {
         val clazz = classes.remove(name)!!
     }
+
+    companion object : Loggable
 }

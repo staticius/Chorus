@@ -66,8 +66,6 @@ import org.chorus.network.protocol.types.XboxLivePlayerInfo
 import org.chorus.permission.BanList
 import org.chorus.permission.DefaultPermissions.registerCorePermissions
 import org.chorus.plugin.*
-import org.chorus.plugin.service.NKServiceManager
-import org.chorus.plugin.service.ServiceManager
 import org.chorus.positiontracking.PositionTrackingService
 import org.chorus.recipe.Recipe
 import org.chorus.registry.RecipeRegistry
@@ -287,7 +285,6 @@ class Server internal constructor(
         }
     }
     private lateinit var levelArray: Array<Level>
-    val serviceManager: ServiceManager = NKServiceManager()
 
     val thread: Thread = Thread.currentThread()
     val launchTime: Long = System.currentTimeMillis()
@@ -1605,10 +1602,7 @@ class Server internal constructor(
          */
         get() = "Chorus"
 
-    val nukkitVersion: String?
-        get() = Chorus.VERSION
-
-    val bStatsNukkitVersion: String?
+    val nukkitVersion
         get() = Chorus.VERSION
 
     val gitCommit: String

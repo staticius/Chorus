@@ -116,7 +116,7 @@ class PluginDescription {
      *
      *
      */
-    var name: String? = null
+    lateinit var name: String
         private set
 
     /**
@@ -146,7 +146,7 @@ class PluginDescription {
      *
      *
      */
-    var compatibleAPIs: List<String?>? = null
+    lateinit var compatibleAPIs: List<String>
         private set
 
     /**
@@ -177,19 +177,19 @@ class PluginDescription {
      *
      *
      */
-    var depend: MutableList<String>? = ArrayList()
+    var depend: MutableList<String> = ArrayList()
         private set
 
     /**
      * TODO finish javadoc
      */
-    var softDepend: MutableList<String>? = ArrayList()
+    var softDepend: MutableList<String> = ArrayList()
         private set
 
     /**
      * TODO finish javadoc
      */
-    var loadBefore: List<String>? = ArrayList()
+    var loadBefore: List<String> = ArrayList()
         private set
 
     /**
@@ -213,7 +213,7 @@ class PluginDescription {
      *
      *
      */
-    var commands: Map<String, Any>? = HashMap()
+    var commands: Map<String, Any> = HashMap()
         private set
 
     /**
@@ -315,15 +315,15 @@ class PluginDescription {
         if (this.name == "") {
             throw PluginException("Invalid PluginDescription name")
         }
-        this.name = name!!.replace(" ", "_")
+        this.name = name.replace(" ", "_")
         this.version = plugin["version"].toString()
         this.main = plugin["main"] as String?
         val api = plugin["api"]
         if (api is List<*>) {
-            this.compatibleAPIs = api as List<String?>
+            this.compatibleAPIs = api as List<String>
         } else {
-            val list: MutableList<String?> = ArrayList()
-            list.add(api as String?)
+            val list: MutableList<String> = ArrayList()
+            list.add(api as String)
             this.compatibleAPIs = list
         }
         if (main!!.startsWith("org.chorus.") && (this.main != "org.chorus.plugin.InternalPlugin") && (name != "PowerNukkit")) {
@@ -331,7 +331,7 @@ class PluginDescription {
         }
 
         if (plugin.containsKey("commands") && plugin["commands"] is Map<*, *>) {
-            this.commands = plugin["commands"] as Map<String, Any>?
+            this.commands = plugin["commands"] as Map<String, Any>
         }
 
         if (plugin.containsKey("depend")) {

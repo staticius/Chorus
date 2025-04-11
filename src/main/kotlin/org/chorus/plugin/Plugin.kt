@@ -268,7 +268,7 @@ interface Plugin : CommandExecutor {
      *
      *
      */
-    val server: Server?
+    val server: Server
 
     /**
      * 返回这个插件的名字。<br></br>
@@ -296,7 +296,7 @@ interface Plugin : CommandExecutor {
      *
      *
      */
-    val logger: PluginLogger?
+    val logger: PluginLogger
 
     /**
      * 返回这个插件的加载器为[org.chorus.plugin.PluginLoader]对象。<br></br>
@@ -306,9 +306,9 @@ interface Plugin : CommandExecutor {
      *
      *
      */
-    val pluginLoader: PluginLoader?
+    val pluginLoader: PluginLoader
 
-    val pluginClassLoader: ClassLoader?
+    val pluginClassLoader: ClassLoader
 
     /**
      * 返回这个插件的文件`File`对象。<br></br>

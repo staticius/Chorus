@@ -26,7 +26,7 @@ class ShapedRecipe @JvmOverloads constructor(
             ?: RecipeRegistry.computeRecipeId(
                 Lists.asList<Item>(
                     primaryResult,
-                    extraResults.toArray<Item>(Item.EMPTY_ARRAY)
+                    extraResults.toTypedArray()
                 ), ingredients.values, RecipeType.SHAPED
             ), priority, recipeUnlockingRequirement
     ) {

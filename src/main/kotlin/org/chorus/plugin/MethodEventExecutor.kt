@@ -3,6 +3,7 @@ package org.chorus.plugin
 import org.chorus.event.Event
 import org.chorus.event.Listener
 import org.chorus.utils.EventException
+import org.chorus.utils.Loggable
 
 import org.objectweb.asm.*
 import java.lang.ref.WeakReference
@@ -35,7 +36,7 @@ class MethodEventExecutor(val method: Method?) : EventExecutor {
         }
     }
 
-    companion object {
+    companion object : Loggable {
         val compileTime: AtomicInteger = AtomicInteger(0)
 
         fun compile(listenerClass: Class<out Listener?>, method: Method): EventExecutor? {
@@ -212,13 +213,12 @@ class MethodEventExecutor(val method: Method?) : EventExecutor {
             } else {
                 method = defineClassMethodRef.get()
             }
-            Objects.requireNonNull(method).isAccessible = true
+            method!!.isAccessible = true
             try {
-                val args =
-                    arrayOf<Any>("org.chorus.plugin.PNXMethodEventExecutor$" + compileTime.get(), b, 0, b.size)
-                clazz = method!!.invoke(loader, *args) as Class<*>
+                val args = arrayOf<Any>("org.chorus.plugin.PNXMethodEventExecutor$" + compileTime.get(), b, 0, b.size)
+                clazz = method.invoke(loader, *args) as Class<*>
             } finally {
-                method!!.isAccessible = false
+                method.isAccessible = false
             }
             return clazz
         }

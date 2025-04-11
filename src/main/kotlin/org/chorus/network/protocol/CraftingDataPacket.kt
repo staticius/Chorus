@@ -15,18 +15,15 @@ data class CraftingDataPacket(
     val containerMixes: List<ContainerRecipe>,
     val materialReducers: List<MaterialReducerDataEntry>
 ) : DataPacket() {
-    private val entries: MutableList<Recipe> = ArrayList()
-    private val brewingEntries: List<BrewingRecipe> = ArrayList()
-    private val containerEntries: List<ContainerRecipe> = ArrayList()
+    private val entries: MutableList<Recipe> = mutableListOf()
+    private val brewingEntries: MutableList<BrewingRecipe> = mutableListOf()
+    private val containerEntries: MutableList<ContainerRecipe> = mutableListOf()
 
     @JvmField
     var cleanRecipes: Boolean = false
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeArray(craftingEntries) { buf, entry ->
-
-        }
-
+        byteBuf.writeArray(craftingEntries) { _, _ -> }
         byteBuf.writeUnsignedVarInt(entries.size)
 
         var recipeNetworkId = 1
@@ -57,12 +54,13 @@ data class CraftingDataPacket(
                     }
                     byteBuf.writeUnsignedVarInt(1)
                     byteBuf.writeSlot(shapeless.result, true)
-                    byteBuf.writeUUID(shapeless.uUID)
+                    byteBuf.writeUUID(shapeless.uuid)
                     when (recipe.type) {
                         RecipeType.CARTOGRAPHY -> byteBuf.writeString(CRAFTING_TAG_CARTOGRAPHY_TABLE)
                         RecipeType.SHAPELESS, RecipeType.USER_DATA_SHAPELESS_RECIPE -> byteBuf.writeString(
                             CRAFTING_TAG_CRAFTING_TABLE
                         )
+                        else -> Unit
                     }
                     byteBuf.writeVarInt(shapeless.priority)
                     this.writeRequirement(byteBuf, shapeless.requirement)
@@ -170,27 +168,27 @@ data class CraftingDataPacket(
         entries.addAll(recipes)
     }
 
-    fun addFurnaceRecipe(vararg recipe: FurnaceRecipe?) {
-        Collections.addAll(entries, *recipe)
+    fun addFurnaceRecipe(vararg recipe: FurnaceRecipe) {
+        entries.addAll(recipe)
     }
 
-    fun addSmokerRecipe(vararg recipe: SmokerRecipe?) {
-        Collections.addAll(entries, *recipe)
+    fun addSmokerRecipe(vararg recipe: SmokerRecipe) {
+        entries.addAll(recipe)
     }
 
-    fun addBlastFurnaceRecipe(vararg recipe: BlastFurnaceRecipe?) {
-        Collections.addAll(entries, *recipe)
+    fun addBlastFurnaceRecipe(vararg recipe: BlastFurnaceRecipe) {
+        entries.addAll(recipe)
     }
 
-    fun addCampfireRecipeRecipe(vararg recipe: CampfireRecipe?) {
-        Collections.addAll(entries, *recipe)
+    fun addCampfireRecipeRecipe(vararg recipe: CampfireRecipe) {
+        entries.addAll(recipe)
     }
 
-    fun addBrewingRecipe(vararg recipe: BrewingRecipe?) {
-        Collections.addAll(brewingEntries, *recipe)
+    fun addBrewingRecipe(vararg recipe: BrewingRecipe) {
+        brewingEntries.addAll(recipe)
     }
 
-    fun addContainerRecipe(vararg recipe: ContainerRecipe?) {
+    fun addContainerRecipe(vararg recipe: ContainerRecipe) {
         Collections.addAll(containerEntries, *recipe)
     }
 
