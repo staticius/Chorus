@@ -6,12 +6,6 @@ import org.chorus.network.protocol.types.TrimMaterial
 import org.chorus.network.protocol.types.TrimPattern
 import java.util.function.Consumer
 
-(doNotUseGetters = true, callSuper = false)
-
-
-
-(doNotUseGetters = true)
-
 class TrimDataPacket : DataPacket() {
     val patterns: MutableList<TrimPattern> = ObjectArrayList()
     val materials: MutableList<TrimMaterial> = ObjectArrayList()

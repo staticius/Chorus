@@ -9,7 +9,7 @@ import java.util.*
 
 class UserDataShapelessRecipe(
     recipeId: String?,
-    uuid: UUID?,
+    uuid: UUID,
     priority: Int,
     result: Item,
     ingredients: List<ItemDescriptor>,
@@ -18,7 +18,7 @@ class UserDataShapelessRecipe(
     ShapelessRecipe(
         recipeId
             ?: RecipeRegistry.computeRecipeId(
-                java.util.List.of(result),
+                listOf(result),
                 ingredients,
                 RecipeType.USER_DATA_SHAPELESS_RECIPE
             ), uuid, priority, result, ingredients, recipeUnlockingRequirement
@@ -36,15 +36,15 @@ class UserDataShapelessRecipe(
 
     constructor(recipeId: String?, priority: Int, result: Item, ingredients: List<ItemDescriptor>) : this(
         recipeId,
-        null,
+        UUID.randomUUID(),
         priority,
         result,
         ingredients
     )
 
-    constructor(recipeId: String?, uuid: UUID?, priority: Int, result: Item, ingredients: List<ItemDescriptor>) : this(
+    constructor(recipeId: String?, uuid: UUID, priority: Int, result: Item, ingredients: List<ItemDescriptor>) : this(
         recipeId,
-        null,
+        uuid,
         priority,
         result,
         ingredients,

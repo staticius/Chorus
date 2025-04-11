@@ -9,7 +9,7 @@ import java.util.*
 
 class CartographyRecipe(
     recipeId: String?,
-    uuid: UUID?,
+    uuid: UUID,
     priority: Int,
     result: Item,
     ingredients: List<ItemDescriptor>,
@@ -18,7 +18,7 @@ class CartographyRecipe(
     ShapelessRecipe(
         recipeId
             ?: RecipeRegistry.computeRecipeId(
-                java.util.List.of(result),
+                listOf(result),
                 ingredients,
                 RecipeType.CARTOGRAPHY
             ), uuid, priority, result, ingredients, recipeUnlockingRequirement
@@ -36,15 +36,15 @@ class CartographyRecipe(
 
     constructor(recipeId: String?, priority: Int, result: Item, ingredients: List<ItemDescriptor>) : this(
         recipeId,
-        null,
+        UUID.randomUUID(),
         priority,
         result,
         ingredients
     )
 
-    constructor(recipeId: String?, uuid: UUID?, priority: Int, result: Item, ingredients: List<ItemDescriptor>) : this(
+    constructor(recipeId: String?, uuid: UUID, priority: Int, result: Item, ingredients: List<ItemDescriptor>) : this(
         recipeId,
-        null,
+        uuid,
         priority,
         result,
         ingredients,

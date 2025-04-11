@@ -49,6 +49,6 @@ interface ResourcePack {
         get() = ""
 
     companion object {
-        val EMPTY_ARRAY: Array<ResourcePack?> = arrayOfNulls(0)
+        val EMPTY_ARRAY: Array<ResourcePack> = emptyArray()
     }
 }

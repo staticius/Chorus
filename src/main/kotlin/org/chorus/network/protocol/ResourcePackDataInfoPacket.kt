@@ -5,17 +5,13 @@ import org.chorus.utils.Version
 
 import java.util.*
 
-
-(exclude = ["sha256"])
-
-
 class ResourcePackDataInfoPacket : AbstractResourcePackDataPacket() {
     override var packId: UUID? = null
     override var packVersion: Version? = null
     var maxChunkSize: Int = 0
     var chunkCount: Int = 0
     var compressedPackSize: Long = 0
-    var sha256: ByteArray
+    var sha256: ByteArray = byteArrayOf()
     var premium: Boolean = false
     var type: Int = TYPE_RESOURCE
 

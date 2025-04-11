@@ -10,8 +10,7 @@ class SetEntityDataPacket : DataPacket() {
     @JvmField
     var eid: Long = 0
 
-    @JvmField
-    var entityData: EntityDataMap? = null
+    var entityData: EntityDataMap = EntityDataMap()
     var syncedProperties: PropertySyncData = PropertySyncData(intArrayOf(), floatArrayOf())
     var frame: Long = 0
 

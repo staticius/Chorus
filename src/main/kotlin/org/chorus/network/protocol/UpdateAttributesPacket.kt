@@ -5,8 +5,7 @@ import org.chorus.network.connection.util.HandleByteBuf
 
 
 class UpdateAttributesPacket : DataPacket() {
-    @JvmField
-    var entries: Array<Attribute>?
+    var entries: Array<Attribute> = emptyArray()
 
     @JvmField
     var entityId: Long = 0
@@ -18,20 +17,16 @@ class UpdateAttributesPacket : DataPacket() {
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(this.entityId)
 
-        if (this.entries == null) {
-            byteBuf.writeUnsignedVarInt(0)
-        } else {
-            byteBuf.writeUnsignedVarInt(entries!!.size)
-            for (entry in entries!!) {
-                byteBuf.writeFloatLE(entry.getMinValue())
-                byteBuf.writeFloatLE(entry.getMaxValue())
-                byteBuf.writeFloatLE(entry.getValue())
-                byteBuf.writeFloatLE(entry.getDefaultMinimum())
-                byteBuf.writeFloatLE(entry.getDefaultMaximum())
-                byteBuf.writeFloatLE(entry.getDefaultValue())
-                byteBuf.writeString(entry.getName())
-                byteBuf.writeUnsignedVarInt(0) // Modifiers
-            }
+        byteBuf.writeUnsignedVarInt(entries.size)
+        for (entry in entries) {
+            byteBuf.writeFloatLE(entry.getMinValue())
+            byteBuf.writeFloatLE(entry.getMaxValue())
+            byteBuf.writeFloatLE(entry.getValue())
+            byteBuf.writeFloatLE(entry.getDefaultMinimum())
+            byteBuf.writeFloatLE(entry.getDefaultMaximum())
+            byteBuf.writeFloatLE(entry.getDefaultValue())
+            byteBuf.writeString(entry.getName())
+            byteBuf.writeUnsignedVarInt(0) // Modifiers
         }
         byteBuf.writeUnsignedVarInt(frame.toInt())
     }

@@ -2,16 +2,12 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-(exclude = ["namedtag"])
-
-
 class UpdateEquipmentPacket : DataPacket() {
     var windowId: Int = 0
     var windowType: Int = 0
     var size: Int = 0
     var eid: Long = 0
-    var namedtag: ByteArray
+    var namedtag: ByteArray = byteArrayOf()
 
     override fun decode(byteBuf: HandleByteBuf) {
     }

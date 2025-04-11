@@ -3,6 +3,7 @@ package org.chorus.network.protocol
 import org.chorus.nbt.NBTIO.write
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.utils.Loggable
 
 
 import java.io.IOException
@@ -48,4 +49,6 @@ class UpdateTradePacket : DataPacket() {
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
+
+    companion object : Loggable
 }

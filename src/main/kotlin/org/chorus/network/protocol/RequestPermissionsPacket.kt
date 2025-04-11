@@ -35,8 +35,8 @@ class RequestPermissionsPacket : DataPacket() {
 
     val targetPlayer: Player?
         get() {
-            for (player in Server.instance.onlinePlayers.values()) {
-                if (player.getId() == this.uniqueEntityId) return player
+            for (player in Server.instance.onlinePlayers.values) {
+                if (player.getUniqueID() == this.uniqueEntityId) return player
             }
             return null
         }

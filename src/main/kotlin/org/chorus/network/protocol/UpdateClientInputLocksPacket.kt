@@ -3,14 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.math.Vector3f
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-(doNotUseGetters = true, callSuper = false)
-
-
-
-(doNotUseGetters = true)
-
-
 class UpdateClientInputLocksPacket : DataPacket() {
     var lockComponentData: Int = 0
     var serverPosition: Vector3f? = null

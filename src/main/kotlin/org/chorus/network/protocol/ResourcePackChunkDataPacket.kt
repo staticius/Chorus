@@ -10,7 +10,7 @@ class ResourcePackChunkDataPacket : AbstractResourcePackDataPacket() {
     override var packVersion: Version? = null
     var chunkIndex: Int = 0
     var progress: Long = 0
-    var data: ByteArray
+    var data: ByteArray = ByteArray(0)
 
     override fun decode(byteBuf: HandleByteBuf) {
         decodePackInfo(byteBuf)

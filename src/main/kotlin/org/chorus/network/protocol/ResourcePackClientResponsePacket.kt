@@ -8,23 +8,20 @@ import java.util.*
 
 class ResourcePackClientResponsePacket : DataPacket() {
     var responseStatus: Byte = 0
-    var packEntries: Array<Entry>
+    var packEntries: Array<Entry> = emptyArray()
 
     override fun decode(byteBuf: HandleByteBuf) {
         this.responseStatus = byteBuf.readByte()
-        this.packEntries = arrayOfNulls(byteBuf.readShortLE().toInt())
-        for (i in packEntries.indices) {
-            val entry: Array<String> = byteBuf.readString().split("_")
+        this.packEntries = Array(byteBuf.readShortLE().toInt()) {
+            val entry = byteBuf.readString().split("_")
 
             if (UUIDValidator.isValidUUID(entry[0])) {
-                // Literally a server crash if spammed.
-                // @Zwuiix
-                packEntries[i] = Entry(
+                Entry(
                     UUID.fromString(
                         entry[0]
                     ), entry[1]
                 )
-            }
+            } else throw RuntimeException("Invalid UUID format")
         }
     }
 
