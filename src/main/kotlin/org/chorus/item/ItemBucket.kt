@@ -1,6 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.Entity.Companion.createEntity
 import org.chorus.entity.EntityID
@@ -92,25 +93,25 @@ open class ItemBucket : Item {
     }
 
     val isEmpty: Boolean
-        get() = getId() == ItemID.Companion.BUCKET && meta == 0
+        get() = this.id == ItemID.Companion.BUCKET && meta == 0
 
     val isWater: Boolean
-        get() = when (getId()) {
+        get() = when (this.id) {
             ItemID.Companion.COD_BUCKET, ItemID.Companion.SALMON_BUCKET, ItemID.Companion.TROPICAL_FISH_BUCKET, ItemID.Companion.PUFFERFISH_BUCKET, ItemID.Companion.WATER_BUCKET, ItemID.Companion.AXOLOTL_BUCKET, ItemID.Companion.TADPOLE_BUCKET -> true
             else -> false
         }
 
     val isMilk: Boolean
-        get() = getId() == ItemID.Companion.MILK_BUCKET
+        get() = this.id == ItemID.Companion.MILK_BUCKET
 
     val isLava: Boolean
-        get() = getId() == ItemID.Companion.LAVA_BUCKET
+        get() = this.id == ItemID.Companion.LAVA_BUCKET
 
     val isPowderSnow: Boolean
-        get() = getId() == ItemID.Companion.POWDER_SNOW_BUCKET
+        get() = this.id == ItemID.Companion.POWDER_SNOW_BUCKET
 
     val fishEntityId: String?
-        get() = when (this.getId()) {
+        get() = when (this.id) {
             ItemID.Companion.COD_BUCKET -> EntityID.COD
             ItemID.Companion.SALMON_BUCKET -> EntityID.SALMON
             ItemID.Companion.TROPICAL_FISH_BUCKET -> EntityID.TROPICALFISH
@@ -121,7 +122,7 @@ open class ItemBucket : Item {
         }
 
     override val maxStackSize: Int
-        get() = if (meta == 0 && getId() == ItemID.Companion.BUCKET) 16 else 1
+        get() = if (meta == 0 && this.id == ItemID.Companion.BUCKET) 16 else 1
 
     override fun canBeActivated(): Boolean {
         return true
@@ -131,7 +132,7 @@ open class ItemBucket : Item {
         /**
          * get the placed block for this bucket
          */
-        get() = Block.get(getDamageByTarget(getId()))
+        get() = Block.get(getDamageByTarget(this.id))
 
 
     override fun onActivate(
@@ -159,13 +160,13 @@ open class ItemBucket : Item {
         if (targetBlock is BlockAir) {
             if (target !is BlockPowderSnow) {
                 //                                       is liquid and state is
-                if (target !is BlockLiquid || !target.isDefaultState()) {
+                if (target !is BlockLiquid || !target.isDefaultState) {
                     target = target.getLevelBlockAtLayer(1)
                 }
-                if (target !is BlockLiquid || !target.isDefaultState()) {
+                if (target !is BlockLiquid || !target.isDefaultState) {
                     target = block
                 }
-                if (target !is BlockLiquid || !target.isDefaultState()) {
+                if (target !is BlockLiquid || !target.isDefaultState) {
                     target = block.getLevelBlockAtLayer(1)
                 }
             }
@@ -376,8 +377,8 @@ open class ItemBucket : Item {
             val fishEntity = createEntity(fishEntityId, spawnPos)
             if (fishEntity != null) if (fishEntity is EntityVariant) {
                 if (namedTag != null) {
-                    if (namedTag.containsInt("Variant")) {
-                        fishEntity.setVariant(namedTag.getInt("Variant"))
+                    if (namedTag!!.containsInt("Variant")) {
+                        fishEntity.setVariant(namedTag!!.getInt("Variant"))
                     }
                 }
             }
@@ -386,7 +387,7 @@ open class ItemBucket : Item {
     }
 
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
-        return getId() == ItemID.Companion.BUCKET && isMilk // Milk
+        return this.id == ItemID.Companion.BUCKET && isMilk // Milk
     }
 
     companion object {

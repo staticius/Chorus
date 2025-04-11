@@ -1,7 +1,6 @@
 package org.chorus.item.enchantment
 
 import org.chorus.block.BlockID
-import org.chorus.entity.effect.PotionType.equals
 import org.chorus.item.*
 import org.chorus.level.Locator
 import org.chorus.network.protocol.PlayerEnchantOptionsPacket.EnchantOptionData
@@ -198,9 +197,9 @@ object EnchantmentHelper {
     private fun getPrimaryEnchantmentsForItem(item: Item): List<Enchantment> {
         val list: MutableList<Enchantment> = ArrayList()
 
-        for (ench in Enchantment.Companion.getEnchantments()) {
-            if (ench.getIdentifier() == null && ench.canEnchant(item)) {
-                list.add(ench)
+        for (enchant in Enchantment.getEnchantments()) {
+            if (enchant.identifier == null && enchant.canEnchant(item)) {
+                list.add(enchant)
             }
         }
 

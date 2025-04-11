@@ -21,7 +21,7 @@ class EnchantmentBreach : Enchantment(ID_BREACH, "breach", Rarity.RARE, Enchantm
     }
 
     val armorEfficiencyReduction: Float
-        get() = (100 - (getLevel() * 15)) / 100f
+        get() = (100 - (this.level * 15)) / 100f
 
     override fun doAttack(event: EntityDamageByEntityEvent) {
         val reduction = armorEfficiencyReduction

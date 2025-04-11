@@ -1,6 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.entity.Entity.Companion.createEntity
 import org.chorus.event.entity.CreatureSpawnEvent
@@ -64,7 +65,7 @@ open class ItemSpawnEgg : Item {
             .putList(
                 "Pos", ListTag<FloatTag>()
                     .add(FloatTag(block.x + 0.5))
-                    .add(FloatTag(if (target.boundingBox == null) block.y else target.boundingBox.maxY + 0.0001f))
+                    .add(FloatTag(if (target.boundingBox == null) block.y else target.boundingBox!!.maxY + 0.0001f))
                     .add(FloatTag(block.z + 0.5))
             )
             .putList(

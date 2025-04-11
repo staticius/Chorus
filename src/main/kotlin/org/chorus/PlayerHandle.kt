@@ -133,7 +133,7 @@ class PlayerHandle(val player: Player) {
     val isCheckMovement: Boolean
         get() = player.isCheckingMovement
 
-    fun setFoodData(foodData: PlayerFood?) {
+    fun setFoodData(foodData: PlayerFood) {
         player.foodData = foodData
     }
 

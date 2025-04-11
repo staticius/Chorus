@@ -7,6 +7,7 @@ import org.chorus.math.*
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.network.protocol.ClientboundMapItemDataPacket
 import org.chorus.plugin.InternalPlugin
+import org.chorus.utils.Loggable
 import org.chorus.utils.Utils
 
 import java.awt.image.BufferedImage
@@ -25,7 +26,7 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     init {
         updateName()
-        if (!hasCompoundTag() || !namedTag.contains("map_uuid")) {
+        if (!hasCompoundTag() || !namedTag!!.contains("map_uuid")) {
             val tag = CompoundTag()
             tag.putLong("map_uuid", (mapCount++).toLong())
             this.setNamedTag(tag)
@@ -67,7 +68,7 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             val baos = ByteArrayOutputStream()
             ImageIO.write(this.image, "png", baos)
 
-            this.setNamedTag(this.namedTag.putByteArray("Colors", baos.toByteArray()))
+            this.setNamedTag(this.namedTag!!.putByteArray("Colors", baos.toByteArray()))
         } catch (e: IOException) {
             ItemFilledMap.log.error("Error while adding an image to an ItemMap", e)
         }
@@ -75,7 +76,7 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     protected fun loadImageFromNBT(): BufferedImage? {
         try {
-            val data = namedTag.getByteArray("Colors")
+            val data = namedTag!!.getByteArray("Colors")
             image = ImageIO.read(ByteArrayInputStream(data))
             return image
         } catch (e: IOException) {
@@ -86,19 +87,19 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     }
 
     val mapId: Long
-        get() = namedTag.getLong("map_uuid")
+        get() = namedTag!!.getLong("map_uuid")
 
     val mapWorld: Int
-        get() = namedTag.getInt("map_level")
+        get() = namedTag!!.getInt("map_level")
 
     val mapStartX: Int
-        get() = namedTag.getInt("map_startX")
+        get() = namedTag!!.getInt("map_startX")
 
     val mapStartZ: Int
-        get() = namedTag.getInt("map_startZ")
+        get() = namedTag!!.getInt("map_startZ")
 
     val mapScale: Int
-        get() = namedTag.getInt("map_scale")
+        get() = namedTag!!.getInt("map_scale")
 
     @JvmOverloads
     fun sendImage(player: Player, scale: Int = 1) {
@@ -162,10 +163,10 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             val image = BufferedImage(128, 128, BufferedImage.TYPE_INT_ARGB)
             image.setRGB(0, 0, 128, 128, pixels, 0, 128)
 
-            this.setNamedTag(this.namedTag.putInt("map_level", level.id))
-            this.setNamedTag(this.namedTag.putInt("map_startX", startX))
-            this.setNamedTag(this.namedTag.putInt("map_startZ", startZ))
-            this.setNamedTag(this.namedTag.putInt("map_scale", zoom))
+            this.setNamedTag(this.namedTag!!.putInt("map_level", level.id))
+            this.setNamedTag(this.namedTag!!.putInt("map_startX", startX))
+            this.setNamedTag(this.namedTag!!.putInt("map_startZ", startZ))
+            this.setNamedTag(this.namedTag!!.putInt("map_scale", zoom))
 
             setImage(image)
         } catch (ex: Exception) {
@@ -183,13 +184,13 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
         if (getDamage() == 6) return false
         val server: Server = Server.instance
-        renderMap(server.getLevel(mapWorld), mapStartX, mapStartZ, mapScale)
+        renderMap(server.getLevel(mapWorld)!!, mapStartX, mapStartZ, mapScale)
         player.getInventory().setItemInHand(this)
         sendImage(player, mapScale)
         return true
     }
 
-    companion object {
+    companion object : Loggable {
         var mapCount: Int = 0
     }
 }

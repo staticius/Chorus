@@ -216,7 +216,7 @@ abstract class ItemBookWritable : Item {
         }
 
     companion object {
-        protected fun createPageTag(pageText: String = ""): CompoundTag {
+        fun createPageTag(pageText: String = ""): CompoundTag {
             return CompoundTag()
                 .putString("text", pageText)
                 .putString("photoname", "")

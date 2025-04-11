@@ -27,7 +27,7 @@ open class Selector(parent: Selector?) {
             val flag = floatArrayOf(0f)
             val found = booleanArrayOf(false)
             val temp = arrayOf<Selector?>(null)
-            selectorChanceMap.forEach { (o: Selector?, f: Float?) ->
+            selectorChanceMap.forEach { (o, f) ->
                 flag[0] += f
                 if (flag[0] > resultChance && !found[0]) {
                     temp[0] = o

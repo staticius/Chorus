@@ -18,7 +18,7 @@ class EnchantmentDamageAll :
         get() = 5
 
     override fun getDamageBonus(target: Entity, damager: Entity): Double {
-        val level = getLevel()
+        val level = this.level
         if (level <= 0) {
             return 0.0
         }

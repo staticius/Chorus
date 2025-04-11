@@ -45,7 +45,7 @@ abstract class EnchantmentProtection protected constructor(
         get() = 4
 
     override fun getName(): String {
-        return "%enchantment.protect." + this.name
+        return "%enchantment.protect." + this.getName()
     }
 
     open val typeModifier: Double

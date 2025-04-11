@@ -1,6 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
+import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 
 class ItemRottenFlesh @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
@@ -13,7 +14,7 @@ class ItemRottenFlesh @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     override fun onEaten(player: Player): Boolean {
         if (0.8f >= Math.random()) {
-            player.addEffect(get(EffectType.HUNGER).setDuration(30 * 20))
+            player.addEffect(Effect.get(EffectType.HUNGER).setDuration(30 * 20))
         }
 
         return true

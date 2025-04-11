@@ -18,7 +18,7 @@ class ItemLodestoneCompass @JvmOverloads constructor(meta: Int = 0, count: Int =
             if (trackingHandle == 0) {
                 return null
             }
-            return Server.instance.positionTrackingService.getPosition(trackingHandle)
+            return Server.instance.getPositionTrackingService().getPosition(trackingHandle)
         }
         set(position) {
             if (position == null) {
@@ -26,17 +26,17 @@ class ItemLodestoneCompass @JvmOverloads constructor(meta: Int = 0, count: Int =
                 return
             }
             trackingHandle =
-                Server.instance.positionTrackingService.addOrReusePosition(position)
+                Server.instance.getPositionTrackingService().addOrReusePosition(position)
         }
 
     var trackingHandle: Int
-        get() = if (hasCompoundTag()) namedTag.getInt("trackingHandle") else 0
+        get() = if (hasCompoundTag()) namedTag!!.getInt("trackingHandle") else 0
         set(trackingHandle) {
             var tag = namedTag
             if (tag == null) {
                 tag = CompoundTag()
             }
             tag.putInt("trackingHandle", trackingHandle)
-            namedTag = tag
+            setCompoundTag(tag)
         }
 }

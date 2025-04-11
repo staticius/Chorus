@@ -290,7 +290,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             val trim = CompoundTag().putString("Material", trimMaterial.materialId)
                 .putString("Pattern", trimPattern.patternId)
             var compound = ingredient.namedTag
-            compound = compound?.copy() ?: result.orCreateNamedTag // Ensure no cached CompoundTags are used double
+            compound = compound?.copy() ?: result.getOrCreateNamedTag() // Ensure no cached CompoundTags are used double
 
             compound.putCompound("Trim", trim)
             result.setNamedTag(compound)

@@ -30,7 +30,7 @@ abstract class EnchantmentDamage protected constructor(
         get() = 5
 
     override fun getName(): String {
-        return "%enchantment.damage." + this.name
+        return "%enchantment.damage." + this.getName()
     }
 
     override val isMajor: Boolean

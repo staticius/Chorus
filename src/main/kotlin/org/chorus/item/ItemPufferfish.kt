@@ -1,6 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
+import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 
 class ItemPufferfish @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
@@ -13,17 +14,17 @@ class ItemPufferfish @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     override fun onEaten(player: Player): Boolean {
         player.addEffect(
-            get(EffectType.HUNGER)
+            Effect.get(EffectType.HUNGER)
                 .setDuration(15 * 20)
                 .setAmplifier(2)
         )
         player.addEffect(
-            get(EffectType.POISON)
+            Effect.get(EffectType.POISON)
                 .setDuration(60 * 20)
                 .setAmplifier(1)
         )
         player.addEffect(
-            get(EffectType.NAUSEA)
+            Effect.get(EffectType.NAUSEA)
                 .setDuration(15 * 20)
                 .setAmplifier(1)
         )

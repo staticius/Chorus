@@ -63,8 +63,8 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
         var arrowTransform: Transform = player.getTransform()
         val directionVector = player.getDirectionVector().multiply(1.1)
-        arrowTransform = arrowTransform.add(directionVector.getX(), 0.0, directionVector.getZ())
-        arrowTransform.setY(player.position.y + player.getEyeHeight() + directionVector.getY())
+        arrowTransform = arrowTransform.add(directionVector.x, 0.0, directionVector.z)
+        arrowTransform.setY(player.position.y + player.getEyeHeight() + directionVector.y)
 
         val itemArrow =
             (if (offhandOptional.isPresent) offhandOptional.get().value else if (inventoryOptional.isPresent) inventoryOptional.get().value else ItemArrow()) as ItemArrow
@@ -95,13 +95,10 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         val maxForce = 3.5
         val f = min((p * p + p * 2) / 3, 1.0) * maxForce
 
-        val arrow = createEntity(Entity.ARROW, player.chunk, nbt, player, f == maxForce) as EntityArrow?
+        val arrow = createEntity(EntityID.ARROW, player.chunk!!, nbt, player, f == maxForce) as EntityArrow? ?: return false
         val copy = itemArrow.clone() as ItemArrow
         copy.setCount(1)
-        arrow!!.setItem(copy)
-        if (arrow == null) {
-            return false
-        }
+        arrow.setItem(copy)
         val entityShootBowEvent = EntityShootBowEvent(player, this, arrow, f)
 
         if (f < 0.1 || ticksUsed < 3) {
@@ -118,9 +115,9 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                 .setMotion(entityShootBowEvent.getProjectile().getMotion().multiply(entityShootBowEvent.force))
             val infinityEnchant = this.getEnchantment(Enchantment.Companion.ID_BOW_INFINITY)
             val infinity = infinityEnchant != null && infinityEnchant.level > 0
-            val projectile: EntityProjectile
-            if (infinity && (entityShootBowEvent.getProjectile().also { projectile = it }) is EntityArrow) {
-                (projectile as EntityArrow).setPickupMode(EntityProjectile.PICKUP_CREATIVE)
+            val projectile = entityShootBowEvent.getProjectile()
+            if (infinity && (projectile is EntityArrow)) {
+                projectile.setPickupMode(EntityProjectile.PICKUP_CREATIVE)
             }
 
             for (enc in this.enchantments) {

@@ -73,8 +73,8 @@ class ItemWood @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     }
 
     override fun equalItemBlock(item: Item): Boolean {
-        if (this.isBlock && item.isBlock) {
-            return this.blockUnsafe.properties == item.blockUnsafe.properties
+        if (this.isBlock() && item.isBlock()) {
+            return this.blockUnsafe!!.properties == item.blockUnsafe!!.properties
         }
         return true
     }

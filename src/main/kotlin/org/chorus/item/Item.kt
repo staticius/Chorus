@@ -701,6 +701,10 @@ abstract class Item : Cloneable, ItemID, Loggable {
             return namedTag!!
         }
 
+    fun getOrCreateNamedTag(): CompoundTag {
+        return orCreateNamedTag
+    }
+
     fun clearNamedTag(): Item {
         this.compoundTag = EmptyArrays.EMPTY_BYTES
         this.cachedNBT = null
@@ -840,6 +844,14 @@ abstract class Item : Cloneable, ItemID, Loggable {
             this.hasMeta = true
             internalAdjust()
         }
+
+    fun setDamage(damage: Int) {
+        this.damage = damage
+    }
+
+    fun getDamage(): Int {
+        return this.damage
+    }
 
     /**
      * 创建一个通配配方物品,即该物品可以不限制数据值应用到配方中

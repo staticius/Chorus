@@ -1,13 +1,12 @@
 package org.chorus.item.randomitem
 
 import org.chorus.block.BlockID
-import org.chorus.entity.effect.PotionType.Companion.get
 import org.chorus.item.*
 import org.chorus.item.enchantment.*
 import org.chorus.item.randomitem.fishing.FishingEnchantmentItemSelector
 
 object Fishing {
-    val ROOT_FISHING: Selector = putSelector(Selector(RandomItem.ROOT))
+    val ROOT_FISHING: Selector = RandomItem.putSelector(Selector(RandomItem.ROOT))
     val FISHES: Selector = RandomItem.putSelector(Selector(ROOT_FISHING), 0.85f)
     val TREASURES: Selector = RandomItem.putSelector(Selector(ROOT_FISHING), 0.05f)
     val JUNKS: Selector = RandomItem.putSelector(Selector(ROOT_FISHING), 0.1f)
@@ -33,7 +32,7 @@ object Fishing {
         RandomItem.putSelector(ConstantItemSelector(ItemID.Companion.POTION, 0, JUNKS), 0.12f)
     val JUNK_BONE: Selector = RandomItem.putSelector(ConstantItemSelector(ItemID.Companion.BONE, JUNKS), 0.12f)
     val JUNK_TRIPWIRE_HOOK: Selector =
-        RandomItem.putSelector(ConstantItemSelector(get(BlockID.TRIPWIRE_HOOK), JUNKS), 0.12f)
+        RandomItem.putSelector(ConstantItemSelector(Item.get(BlockID.TRIPWIRE_HOOK), JUNKS), 0.12f)
 
     fun getFishingResult(rod: Item?): Item {
         var fortuneLevel = 0

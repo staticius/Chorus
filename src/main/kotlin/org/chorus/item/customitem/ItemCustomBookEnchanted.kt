@@ -29,6 +29,6 @@ abstract class ItemCustomBookEnchanted(id: String) : ItemEnchantedBook(id), Cust
             }
             )
 
-    val enchantment: Enchantment?
-        get() = Enchantment.Companion.getEnchantment(this.getId())
+    val enchantment: Enchantment
+        get() = Enchantment.getEnchantment(this.id)
 }

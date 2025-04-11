@@ -24,10 +24,10 @@ class EnchantmentVanishingCurse : Enchantment(
 
     override fun canEnchant(item: Item): Boolean {
         return when (item.id) {
-            BlockID.SKULL, ItemID.Companion.COMPASS -> true
+            BlockID.SKULL, ItemID.COMPASS -> true
             else -> {
-                if (item.isBlock && item.block.id == BlockID.CARVED_PUMPKIN) {
-                    true
+                if (item.isBlock() && item.getBlock().id == BlockID.CARVED_PUMPKIN) {
+                    return true
                 }
                 super.canEnchant(item)
             }

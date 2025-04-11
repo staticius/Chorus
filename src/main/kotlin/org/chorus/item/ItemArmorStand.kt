@@ -66,9 +66,7 @@ class ItemArmorStand : Item(ItemID.Companion.ARMOR_STAND) {
             return false
         }
 
-        val entity: Entity =
-            createEntity(Entity.ARMOR_STAND, chunk, nbt)
-                ?: return false
+        val entity: Entity = createEntity(EntityID.ARMOR_STAND, chunk, nbt) ?: return false
 
         if (!player.isCreative) {
             player.getInventory().decreaseCount(player.getInventory().heldItemIndex)

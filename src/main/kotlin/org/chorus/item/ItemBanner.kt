@@ -15,7 +15,7 @@ class ItemBanner @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                 damage
             )
         ).toBlock()
-        name = baseDyeColor.getName() + " Banner"
+        name = baseDyeColor.name + " Banner"
     }
 
     override val maxStackSize: Int
@@ -29,7 +29,7 @@ class ItemBanner @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     }
 
     val baseDyeColor: DyeColor
-        get() = Objects.requireNonNull(DyeColor.getByDyeData(baseColor))
+        get() = DyeColor.getByDyeData(baseColor)!!
 
     var type: Int
         get() = getOrCreateNamedTag().getInt("Type")
@@ -72,11 +72,11 @@ class ItemBanner @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     }
 
     val patternsSize: Int
-        get() = (if (this.hasCompoundTag()) this.namedTag else CompoundTag()).getList(
+        get() = (if (this.hasCompoundTag()) this.namedTag!! else CompoundTag()).getList(
             "Patterns"
         ).size()
 
     fun hasPattern(): Boolean {
-        return (if (this.hasCompoundTag()) this.namedTag else CompoundTag()).contains("Patterns")
+        return (if (this.hasCompoundTag()) this.namedTag!! else CompoundTag()).contains("Patterns")
     }
 }

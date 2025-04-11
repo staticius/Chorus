@@ -270,8 +270,7 @@ class Player(
      *
      * @return the food data
      */
-    @JvmField
-    var foodData: PlayerFood? = null
+    lateinit var foodData: PlayerFood
     protected var enableClientCommand: Boolean = true
     var formWindowCount: Int = 0
     var formWindows: MutableMap<Int, Form<*>> = HashMap()

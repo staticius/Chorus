@@ -116,8 +116,8 @@ object NBTIO {
         } else {
             if (item.isNothing) { //write unknown item
                 item = UnknownItem(BlockID.UNKNOWN, damage, amount)
-                item.orCreateNamedTag.putCompound("Item", CompoundTag().putString("Name", name))
-            } else if (item.id == BlockID.UNKNOWN && item.orCreateNamedTag.containsCompound("Item")) { //restore unknown item
+                item.getOrCreateNamedTag().putCompound("Item", CompoundTag().putString("Name", name))
+            } else if (item.id == BlockID.UNKNOWN && item.getOrCreateNamedTag().containsCompound("Item")) { //restore unknown item
                 val removeTag = item.namedTag!!.removeAndGet<CompoundTag>("Item")
                 val originItemName = removeTag!!.getString("Name")
                 val originItem = get(originItemName, damage, amount)

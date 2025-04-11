@@ -21,8 +21,8 @@ class ItemShield : ItemTool {
     protected constructor(id: String, meta: Int, count: Int, name: String?) : super(id, meta, count, name)
 
     fun hasBannerPattern(): Boolean {
-        return this.hasCompoundTag() && (this.namedTag.containsInt("Base") ||
-                this.namedTag.containsInt("Type") || this.namedTag.containsList("Patterns"))
+        return this.hasCompoundTag() && (this.namedTag!!.containsInt("Base") ||
+                this.namedTag!!.containsInt("Type") || this.namedTag!!.containsList("Patterns"))
     }
 
     var bannerPattern: ItemBanner?
@@ -32,12 +32,11 @@ class ItemShield : ItemTool {
             }
             val tag = this.namedTag
             val item = ItemBanner()
-            for ((key, value) in item.namedTag
-                .getEntrySet()) {
+            for ((key, value) in item.namedTag!!.entrySet) {
                 tag!!.put(key, value)
             }
-            if (this.namedTag.containsInt("Base")) {
-                item.setBaseColor(DyeColor.getByDyeData(this.namedTag.getInt("Base")))
+            if (this.namedTag!!.containsInt("Base")) {
+                item.setBaseColor(DyeColor.getByDyeData(this.namedTag!!.getInt("Base")))
             }
             return item
         }
@@ -51,8 +50,7 @@ class ItemShield : ItemTool {
             } else {
                 this.namedTag
             }
-            for ((key, value): Map.Entry<String?, Tag?> in banner.namedTag
-                .getEntrySet()) {
+            for ((key, value) in banner.namedTag!!.entrySet) {
                 tag!!.put(key, value)
             }
             tag!!.putInt("Base", banner.baseColor)

@@ -31,15 +31,15 @@ enum class EnchantmentType {
         }
 
         if (item is ItemArmor) {
-            if (this == WEARABLE || this == ARMOR && item.isArmor()) {
+            if (this == WEARABLE || this == ARMOR && item.isArmor) {
                 return true
             }
 
             return when (this) {
-                ARMOR_HEAD -> item.isHelmet()
-                ARMOR_TORSO -> item.isChestplate()
-                ARMOR_LEGS -> item.isLeggings()
-                ARMOR_FEET -> item.isBoots()
+                ARMOR_HEAD -> item.isHelmet
+                ARMOR_TORSO -> item.isChestplate
+                ARMOR_LEGS -> item.isLeggings
+                ARMOR_FEET -> item.isBoots
                 else -> false
             }
         }
@@ -49,7 +49,7 @@ enum class EnchantmentType {
             DIGGER -> item.isPickaxe || item.isShovel || item.isAxe || item.isHoe
             BOW -> item is ItemBow
             FISHING_ROD -> item is ItemFishingRod
-            WEARABLE -> item is ItemHead || item.block is BlockCarvedPumpkin
+            WEARABLE -> item is ItemHead || item.getBlock() is BlockCarvedPumpkin
             TRIDENT -> item is ItemTrident
             CROSSBOW -> item is ItemCrossbow
             MACE -> item is ItemMace

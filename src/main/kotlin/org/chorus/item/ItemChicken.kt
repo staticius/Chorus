@@ -1,6 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
+import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 
 class ItemChicken : ItemFood {
@@ -16,7 +17,7 @@ class ItemChicken : ItemFood {
 
     override fun onEaten(player: Player): Boolean {
         if (0.3f >= Math.random()) {
-            player.addEffect(get(EffectType.HUNGER).setDuration(30 * 20))
+            player.addEffect(Effect.get(EffectType.HUNGER).setDuration(30 * 20))
         }
 
         return true

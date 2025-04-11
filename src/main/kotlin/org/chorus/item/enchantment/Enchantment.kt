@@ -897,7 +897,7 @@ abstract class Enchantment : Cloneable {
         fun getRegisteredEnchantments(allowCustom: Boolean): Collection<Enchantment> {
             if (!allowCustom) {
                 val enchantments: MutableCollection<Enchantment> = LinkedHashSet()
-                namedEnchantments.forEach { (i: Identifier?, v: Enchantment?) ->
+                namedEnchantments.forEach { (i, v) ->
                     if (i.namespace == Identifier.DEFAULT_NAMESPACE) {
                         enchantments.add(v)
                     }

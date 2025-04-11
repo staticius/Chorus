@@ -26,7 +26,7 @@ abstract class ItemTool @JvmOverloads constructor(id: String, meta: Int = 0, cou
         } else if (!this.isShears && block.calculateBreakTime(this) > 0) {
             incDamage(2)
         } else if (this.isHoe) {
-            if (block.id == Block.GRASS_BLOCK || block.id == Block.DIRT) {
+            if (block.id == BlockID.GRASS_BLOCK || block.id == BlockID.DIRT) {
                 incDamage(1)
             }
         } else {

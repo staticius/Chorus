@@ -13,7 +13,7 @@ open class ItemDye : Item {
         ItemID.Companion.DYE,
         meta,
         amount,
-        if (meta <= 15) DyeColor.getByDyeData(meta).dyeName else DyeColor.getByDyeData(meta).getName() + " Dye"
+        if (meta <= 15) DyeColor.getByDyeData(meta).dyeName else DyeColor.getByDyeData(meta).name + " Dye"
     )
 
     constructor(id: String) : super(id)

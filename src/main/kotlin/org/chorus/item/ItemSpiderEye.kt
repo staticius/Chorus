@@ -1,6 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
+import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 
 class ItemSpiderEye @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
@@ -12,7 +13,7 @@ class ItemSpiderEye @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         get() = 3.2f
 
     override fun onEaten(player: Player): Boolean {
-        player.addEffect(get(EffectType.POISON).setDuration(5 * 20))
+        player.addEffect(Effect.get(EffectType.POISON).setDuration(5 * 20))
 
         return true
     }

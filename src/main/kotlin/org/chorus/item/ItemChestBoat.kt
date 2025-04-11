@@ -62,7 +62,7 @@ open class ItemChestBoat : Item {
     ): Boolean {
         if (face != BlockFace.UP || block is BlockFlowingWater) return false
         val boat = createEntity(
-            Entity.CHEST_BOAT,
+            EntityID.CHEST_BOAT,
             level.getChunk(block.position.floorX shr 4, block.position.floorZ shr 4), CompoundTag()
                 .putList(
                     "Pos", ListTag<FloatTag>()

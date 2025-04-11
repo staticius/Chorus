@@ -33,7 +33,7 @@ class ItemWrittenBook @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) 
 
     fun signBook(title: String, author: String, xuid: String, generation: Int): Boolean {
         this.setNamedTag(
-            (if (this.hasCompoundTag()) this.namedTag else CompoundTag())
+            (if (this.hasCompoundTag()) this.namedTag!! else CompoundTag())
                 .putString("title", title)
                 .putString("author", author)
                 .putInt("generation", generation)
@@ -47,13 +47,13 @@ class ItemWrittenBook @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) 
          * Returns the generation of the book.
          * Generations higher than 1 can not be copied.
          */
-        get() = if (this.hasCompoundTag()) this.namedTag.getInt("generation") else -1
+        get() = if (this.hasCompoundTag()) this.namedTag!!.getInt("generation") else -1
         /**
          * Sets the generation of a book.
          */
         set(generation) {
             this.setNamedTag(
-                (if (this.hasCompoundTag()) this.namedTag else CompoundTag()).putInt(
+                (if (this.hasCompoundTag()) this.namedTag!! else CompoundTag()).putInt(
                     "generation",
                     generation
                 )
@@ -66,13 +66,13 @@ class ItemWrittenBook @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) 
          * This is not a reliable way to get the name of the player who signed this book.
          * The author can be set to anything when signing a book.
          */
-        get() = if (this.hasCompoundTag()) this.namedTag.getString("author") else ""
+        get() = if (this.hasCompoundTag()) this.namedTag!!.getString("author") else ""
         /**
          * Sets the author of this book.
          */
         set(author) {
             this.setNamedTag(
-                (if (this.hasCompoundTag()) this.namedTag else CompoundTag()).putString(
+                (if (this.hasCompoundTag()) this.namedTag!! else CompoundTag()).putString(
                     "author",
                     author
                 )
@@ -83,14 +83,14 @@ class ItemWrittenBook @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) 
         /**
          * Returns the title of this book.
          */
-        get() = if (this.hasCompoundTag()) this.namedTag
+        get() = if (this.hasCompoundTag()) this.namedTag!!
             .getString("title") else "Written Book"
         /**
          * Sets the title of this book.
          */
         set(title) {
             this.setNamedTag(
-                (if (this.hasCompoundTag()) this.namedTag else CompoundTag()).putString(
+                (if (this.hasCompoundTag()) this.namedTag!! else CompoundTag()).putString(
                     "title",
                     title
                 )
@@ -101,13 +101,13 @@ class ItemWrittenBook @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) 
         /**
          * Returns the author's XUID of this book.
          */
-        get() = if (this.hasCompoundTag()) this.namedTag.getString("xuid") else ""
+        get() = if (this.hasCompoundTag()) this.namedTag!!.getString("xuid") else ""
         /**
          * Sets the author's XUID of this book.
          */
         set(title) {
             this.setNamedTag(
-                (if (this.hasCompoundTag()) this.namedTag else CompoundTag()).putString(
+                (if (this.hasCompoundTag()) this.namedTag!! else CompoundTag()).putString(
                     "xuid",
                     title
                 )

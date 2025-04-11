@@ -8,7 +8,7 @@ import org.chorus.utils.DyeColor
 class ItemBed @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(BlockID.BED, meta, count) {
     override fun internalAdjust() {
-        name = DyeColor.getByWoolData(meta).getName() + " Bed"
+        name = DyeColor.getByWoolData(meta).name + " Bed"
         block = BlockBed.properties.defaultState.toBlock()
     }
 

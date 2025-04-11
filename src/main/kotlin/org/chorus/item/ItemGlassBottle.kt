@@ -22,7 +22,7 @@ class ItemGlassBottle @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     override fun onActivate(
         level: Level,
-        player: Player?,
+        player: Player,
         block: Block,
         target: Block,
         face: BlockFace,
@@ -31,23 +31,19 @@ class ItemGlassBottle @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         fz: Double
     ): Boolean {
         var filled: Item? = null
-        if (player != null && Arrays.stream<Entity>(
-                level.getCollidingEntities(
-                    player.getBoundingBox().grow(1.1, 1.1, 1.1)
-                )
-            ).anyMatch { entity: Entity -> entity is EntityAreaEffectCloud && entity.isDragonBreath() }
-        ) {
+        if (level.getCollidingEntities(player.getBoundingBox().grow(1.1, 1.1, 1.1)).any { entity: Entity -> entity is EntityAreaEffectCloud && entity.isDragonBreath() }) {
             filled = ItemDragonBreath()
-            Arrays.stream(
-                level.getCollidingEntities(
-                    player.getBoundingBox().grow(1.1, 1.1, 1.1)
-                )
-            ).filter { entity: Entity -> entity is EntityAreaEffectCloud && entity.isDragonBreath() }.findAny()
-                .ifPresent { entity: Entity ->
-                    (entity as EntityAreaEffectCloud).setRadius(
-                        entity.getRadius() - 1,
-                        true
-                    )
+
+            level.getCollidingEntities(
+                player.getBoundingBox().grow(1.1, 1.1, 1.1)
+            ).firstOrNull { entity: Entity -> entity is EntityAreaEffectCloud && entity.isDragonBreath() }
+                .also { entity ->
+                    if (entity is EntityAreaEffectCloud) {
+                        entity.setRadius(
+                            entity.getRadius() - 1,
+                            true
+                        )
+                    }
                 }
         } else if (target.id == BlockID.FLOWING_WATER || target.id == BlockID.WATER) {
             filled = ItemPotion()

@@ -17,11 +17,11 @@ class ItemEnderPearl @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
 
     override fun correctProjectile(player: Player, projectile: Entity): Entity? {
         if (projectile is EntityEnderPearl) {
-            if (!player.isItemCoolDownEnd(this.getIdentifier())) {
+            if (!player.isItemCoolDownEnd(this.identifier)) {
                 projectile.kill()
                 return null
             }
-            player.setItemCoolDown(20, this.getIdentifier())
+            player.setItemCoolDown(20, this.identifier)
             return projectile
         }
         return null

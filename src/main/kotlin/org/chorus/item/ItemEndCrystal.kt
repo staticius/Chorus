@@ -69,8 +69,7 @@ class ItemEndCrystal @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             nbt.putString("CustomName", this.customName)
         }
 
-        val entity: Entity = createEntity(Entity.ENDER_CRYSTAL, chunk, nbt)
-
+        val entity = createEntity(EntityID.ENDER_CRYSTAL, chunk, nbt)
         if (entity != null) {
             if (player.isAdventure || player.isSurvival) {
                 val item = player.getInventory().itemInHand

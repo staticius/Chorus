@@ -2,6 +2,7 @@ package org.chorus.item
 
 import org.chorus.Player
 import org.chorus.block.*
+import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 
 class ItemPoisonousPotato @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
@@ -12,7 +13,7 @@ class ItemPoisonousPotato @JvmOverloads constructor(meta: Int = 0, count: Int = 
 
     override fun onEaten(player: Player): Boolean {
         if (0.6f >= Math.random()) {
-            player.addEffect(get(EffectType.POISON).setDuration(80))
+            player.addEffect(Effect.get(EffectType.POISON).setDuration(80))
         }
         return true
     }

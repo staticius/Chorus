@@ -19,9 +19,9 @@ class ItemGoatHorn(aux: Int, count: Int) : Item(ItemID.Companion.GOAT_HORN) {
         get() = 1
 
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
-        if (player.isItemCoolDownEnd(this.getIdentifier())) {
+        if (player.isItemCoolDownEnd(this.identifier)) {
             playSound(player)
-            player.setItemCoolDown(coolDownTick, this.getIdentifier())
+            player.setItemCoolDown(coolDownTick, this.identifier)
             return true
         } else return false
     }

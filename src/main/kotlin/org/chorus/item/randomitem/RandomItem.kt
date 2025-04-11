@@ -20,7 +20,7 @@ object RandomItem {
     fun selectFrom(selector: Selector?): Any? {
         Objects.requireNonNull(selector)
         val child: MutableMap<Selector, Float> = HashMap()
-        selectors.forEach { (s: Selector?, f: Float?) ->
+        selectors.forEach { (s, f) ->
             if (s.parent === selector) child[s] =
                 f
         }

@@ -16,7 +16,7 @@ class EnchantmentDamageSmite :
 
     override fun getDamageBonus(target: Entity, damager: Entity): Double {
         if (target is EntitySmite) {
-            return getLevel() * 2.5
+            return this.level * 2.5
         }
 
         return 0.0

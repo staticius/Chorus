@@ -86,7 +86,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     }
 
     protected fun canLoad(item: Item): Boolean {
-        return when (item.getId()) {
+        return when (item.id) {
             ItemID.Companion.ARROW, ItemID.Companion.FIREWORK_ROCKET -> true
             else -> false
         }
@@ -99,13 +99,13 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             val mZ: Double
             val nbt = (CompoundTag())
                 .putList(
-                    "Pos", ListTag<Tag>()
+                    "Pos", ListTag<FloatTag>()
                         .add(FloatTag(player.position.x))
                         .add(FloatTag(player.position.y + player.getEyeHeight().toDouble()))
                         .add(FloatTag(player.position.z))
                 )
                 .putList(
-                    "Motion", ListTag<Tag>()
+                    "Motion", ListTag<FloatTag>()
                         .add(FloatTag((-sin(player.rotation.yaw / 180.0 * 3.141592653589793) * cos(player.rotation.pitch / 180.0 * 3.141592653589793)).also {
                             mX = it
                         }))
@@ -115,12 +115,12 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                         }))
                 )
                 .putList(
-                    "Rotation", ListTag<Tag>()
+                    "Rotation", ListTag<FloatTag>()
                         .add(FloatTag((if (player.rotation.yaw > 180.0) 360 else 0).toFloat() - player.rotation.yaw.toFloat()))
                         .add(FloatTag((-player.rotation.pitch).toFloat()))
                 )
-            val item = get(this.namedTag.getCompound("chargedItem").getString("Name"))
-            if (item.getId() == ItemID.Companion.FIREWORK_ROCKET) {
+            val item = get(this.namedTag!!.getCompound("chargedItem").getString("Name"))
+            if (item.id == ItemID.FIREWORK_ROCKET) {
                 val entity = EntityCrossbowFirework(player.chunk, nbt)
                 entity.setMotion(Vector3(mX, mY, mZ))
                 entity.spawnToAll()
@@ -128,7 +128,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                 removeChargedItem(player)
             } else {
                 val entity = EntityArrow(player.chunk, nbt, player, true)
-                val chargedItem = this.namedTag.getCompound("chargedItem")
+                val chargedItem = this.namedTag!!.getCompound("chargedItem")
                 entity.setItem(
                     get(
                         chargedItem.getString("Name"),
@@ -142,19 +142,16 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                     entityShootBowEvent.getProjectile(0).close()
                     player.getInventory().sendContents(player)
                 } else {
-                    entityShootBowEvent.getProjectile(0)
-                        .setMotion(entityShootBowEvent.getProjectile(0).getMotion().multiply(3.5))
-                    if (entityShootBowEvent.getProjectile(0) != null) {
-                        val proj = entityShootBowEvent.getProjectile(0)
-                        val projectile = ProjectileLaunchEvent(proj, player)
-                        Server.instance.pluginManager.callEvent(projectile)
-                        if (projectile.isCancelled) {
-                            proj.close()
-                        } else {
-                            proj.spawnToAll()
-                            player.level!!.addSound(player.position, Sound.CROSSBOW_SHOOT)
-                            removeChargedItem(player)
-                        }
+                    val proj = entityShootBowEvent.getProjectile(0)
+                    proj.setMotion(proj.getMotion().multiply(3.5))
+                    val projectile = ProjectileLaunchEvent(proj, player)
+                    Server.instance.pluginManager.callEvent(projectile)
+                    if (projectile.isCancelled) {
+                        proj.close()
+                    } else {
+                        proj.spawnToAll()
+                        player.level!!.addSound(player.position, Sound.CROSSBOW_SHOOT)
+                        removeChargedItem(player)
                     }
                 }
             }
@@ -163,7 +160,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     }
 
     fun removeChargedItem(player: Player) {
-        this.setCompoundTag(this.namedTag.remove("chargedItem"))
+        this.setCompoundTag(this.namedTag!!.remove("chargedItem"))
         player.getInventory().setItemInHand(this)
     }
 
@@ -179,7 +176,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                 "chargedItem", CompoundTag()
                     .putByte("Count", arrow.getCount())
                     .putShort("Damage", arrow.damage)
-                    .putString("Name", arrow.getId())
+                    .putString("Name", arrow.id)
                     .putByte("WasPickedUp", 0)
             )
             this.setCompoundTag(tag)

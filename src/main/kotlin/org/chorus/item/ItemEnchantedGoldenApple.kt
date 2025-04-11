@@ -1,6 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
+import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 import org.chorus.math.*
 
@@ -17,21 +18,21 @@ class ItemEnchantedGoldenApple : ItemFood(ItemID.Companion.ENCHANTED_GOLDEN_APPL
 
     override fun onEaten(player: Player): Boolean {
         player.addEffect(
-            get(EffectType.ABSORPTION)
+            Effect.get(EffectType.ABSORPTION)
                 .setAmplifier(3)
                 .setDuration(120 * 20)
         )
         player.addEffect(
-            get(EffectType.REGENERATION).setAmplifier
+            Effect.get(EffectType.REGENERATION).setAmplifier
                 (4).setDuration
                 (30 * 20)
         )
         player.addEffect(
-            get(EffectType.FIRE_RESISTANCE)
+            Effect.get(EffectType.FIRE_RESISTANCE)
                 .setDuration(5 * 60 * 20)
         )
         player.addEffect(
-            get(EffectType.RESISTANCE)
+            Effect.get(EffectType.RESISTANCE)
                 .setDuration(5 * 60 * 20)
         )
 

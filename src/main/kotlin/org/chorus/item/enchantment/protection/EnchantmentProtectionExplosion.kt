@@ -25,6 +25,6 @@ class EnchantmentProtectionExplosion :
             return 0f
         }
 
-        return (getLevel() * typeModifier).toFloat()
+        return (this.level * typeModifier).toFloat()
     }
 }

@@ -49,7 +49,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
             .getString("default")
 
     val runtimeId: Int
-        get() = INTERNAL_ALLOCATION_ID_MAP.getInt(identifier)
+        get() = INTERNAL_ALLOCATION_ID_MAP[identifier]!!
 
     open class SimpleBuilder(customItem: CustomItem) {
         protected val identifier: String = (customItem as Item).id
@@ -189,15 +189,11 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
          * @return the simple builder
          */
         fun tag(vararg tags: String): SimpleBuilder {
-            Arrays.stream(tags).forEach { id: String? -> Identifier.assertValid(id) }
+            Arrays.stream(tags).forEach { id -> Identifier.assertValid(id) }
             val list = nbt.getCompound("components").getList(
                 "item_tags",
                 StringTag::class.java
             )
-            if (list == null) {
-                nbt.getCompound("components").putList("item_tags", ListTag())
-                return this
-            }
             for (s in tags) {
                 list.add(StringTag(s))
             }
@@ -259,9 +255,9 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
             if (!INTERNAL_ALLOCATION_ID_MAP.containsKey(result.identifier)) {
                 while (INTERNAL_ALLOCATION_ID_MAP.containsValue(nextRuntimeId.getAndIncrement().also { id = it })) {
                 }
-                INTERNAL_ALLOCATION_ID_MAP.put(result.identifier, id)
+                INTERNAL_ALLOCATION_ID_MAP[result.identifier] = id
             } else {
-                id = INTERNAL_ALLOCATION_ID_MAP.getInt(result.identifier)
+                id = INTERNAL_ALLOCATION_ID_MAP[result.identifier]!!
             }
             result.nbt.putString("name", result.identifier)
             result.nbt.putInt("id", id)
@@ -334,7 +330,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
         private val blockTags: MutableList<String> = ArrayList()
         private val diggerRoot: CompoundTag = CompoundTag()
             .putBoolean("use_efficiency", true)
-            .putList("destroy_speeds", ListTag(Tag.TAG_COMPOUND.toInt()))
+            .putList("destroy_speeds", ListTag<CompoundTag>(Tag.TAG_COMPOUND.toInt()))
         private var speed: Int? = null
 
         init {
@@ -453,7 +449,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
          */
         fun addExtraBlocks(blockName: String, property: DigProperty): ToolBuilder {
             val propertySpeed: Int?
-            if ((property.speed.also { propertySpeed = it }) != null && propertySpeed!! < 0) {
+            if ((property.getSpeed().also { propertySpeed = it }) != null && propertySpeed!! < 0) {
                 CustomItemDefinition.log.error("speed has an invalid value!")
                 return this
             }
@@ -568,8 +564,8 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
                 }
             }
             if (type != null) {
-                toolBlocks[type]!!.forEach { (k: String?, v: DigProperty?) ->
-                    if (v.speed == null) v.setSpeed(speed!!)
+                toolBlocks[type]!!.forEach { (k, v) ->
+                    if (v.getSpeed() == null) v.setSpeed(speed!!)
                     blocks.add(
                         CompoundTag()
                             .putCompound(
@@ -578,7 +574,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
                                     .putCompound("states", v.states)
                                     .putString("tags", "")
                             )
-                            .putInt("speed", v.speed!!)
+                            .putInt("speed", v.getSpeed()!!)
                     )
                 }
             }
@@ -609,7 +605,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
             return calculateID()
         }
 
-        companion object {
+        companion object : Loggable {
             var toolBlocks: MutableMap<String, Map<String, DigProperty>> = HashMap()
 
             init {
@@ -1227,8 +1223,8 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
         }
     }
 
-    companion object {
-        private val INTERNAL_ALLOCATION_ID_MAP = HashMap<String?, Int>()
+    companion object : Loggable {
+        private val INTERNAL_ALLOCATION_ID_MAP: HashMap<String, Int> = HashMap()
         private val nextRuntimeId = AtomicInteger(10000)
 
         /**
@@ -1292,8 +1288,8 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
             return EdibleBuilder(item)
         }
 
-        fun getRuntimeId(identifier: String?): Int {
-            return INTERNAL_ALLOCATION_ID_MAP.getInt(identifier)
+        fun getRuntimeId(identifier: String): Int {
+            return INTERNAL_ALLOCATION_ID_MAP.get(identifier) ?: throw RuntimeException("Unknown Identifier: $identifier")
         }
     }
 }

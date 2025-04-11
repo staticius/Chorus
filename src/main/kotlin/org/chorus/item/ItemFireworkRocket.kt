@@ -87,7 +87,7 @@ class ItemFireworkRocket @JvmOverloads constructor(meta: Int = 0, count: Int = 1
             fds[i] = fades[i].dyeData.toByte()
         }
 
-        val explosions = this.namedTag.getCompound("Fireworks").getList(
+        val explosions = this.namedTag!!.getCompound("Fireworks").getList(
             "Explosions",
             CompoundTag::class.java
         )
@@ -102,7 +102,7 @@ class ItemFireworkRocket @JvmOverloads constructor(meta: Int = 0, count: Int = 1
     }
 
     fun clearExplosions() {
-        this.namedTag.getCompound("Fireworks").putList("Explosions", ListTag<CompoundTag>())
+        this.namedTag!!.getCompound("Fireworks").putList("Explosions", ListTag<CompoundTag>())
     }
 
     private fun spawnFirework(level: Level, pos: Vector3) {
@@ -127,7 +127,7 @@ class ItemFireworkRocket @JvmOverloads constructor(meta: Int = 0, count: Int = 1
             .putCompound("FireworkItem", NBTIO.putItemHelper(this))
 
         val entity = createEntity(
-            Entity.FIREWORKS_ROCKET,
+            EntityID.FIREWORKS_ROCKET,
             level.getChunk(pos.floorX shr 4, pos.floorZ shr 4),
             nbt
         ) as EntityFireworksRocket?
@@ -155,7 +155,7 @@ class ItemFireworkRocket @JvmOverloads constructor(meta: Int = 0, count: Int = 1
             )
             .putCompound("FireworkItem", NBTIO.putItemHelper(this))
 
-        val entity = EntityElytraFirework(player.getLocator().getChunk(), nbt, player)
+        val entity = EntityElytraFirework(player.getLocator().chunk, nbt, player)
         entity.spawnToAll()
     }
 

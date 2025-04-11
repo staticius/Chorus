@@ -10,11 +10,11 @@ import org.chorus.utils.ChorusRandom
 class ItemChorusFruit @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     ItemFood(ItemID.Companion.CHORUS_FRUIT, meta, count, "Chorus Fruit") {
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
-        return player.isItemCoolDownEnd(this.getIdentifier())
+        return player.isItemCoolDownEnd(this.identifier)
     }
 
     override fun afterUse(player: Player) {
-        player.setItemCoolDown(20, this.getIdentifier()) //ban 20tick for the item
+        player.setItemCoolDown(20, this.identifier) // ban 20 tick for the item
     }
 
     override fun onEaten(player: Player): Boolean {

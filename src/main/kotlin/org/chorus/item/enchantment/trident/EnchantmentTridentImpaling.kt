@@ -18,7 +18,7 @@ class EnchantmentTridentImpaling :
 
     override fun getDamageBonus(target: Entity, damager: Entity): Double {
         if (target.isTouchingWater() || (target.level!!.isRaining && target.level!!.canBlockSeeSky(target.position))) {
-            return 2.5 * getLevel()
+            return 2.5 * this.level
         }
 
         return 0.0

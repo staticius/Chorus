@@ -1,6 +1,7 @@
 package org.chorus.item.enchantment.damage
 
 import org.chorus.entity.*
+import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.item.enchantment.*
@@ -19,7 +20,7 @@ class EnchantmentDamageArthropods :
 
     override fun getDamageBonus(target: Entity, damager: Entity): Double {
         if (target is EntityArthropod) {
-            return getLevel() * 2.5
+            return this.level * 2.5
         }
 
         return 0.0
@@ -29,7 +30,7 @@ class EnchantmentDamageArthropods :
         val entity = event.entity
         if (entity is EntityArthropod) {
             val duration = 20 + ThreadLocalRandom.current().nextInt(10 * this.level)
-            entity.addEffect(get(EffectType.SLOWNESS).setDuration(duration).setAmplifier(3))
+            entity.addEffect(Effect.get(EffectType.SLOWNESS).setDuration(duration).setAmplifier(3))
         }
     }
 }

@@ -1,6 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.entity.effect.PotionType
 import org.chorus.event.player.PlayerItemConsumeEvent
 import org.chorus.level.vibration.VibrationEvent
@@ -22,7 +23,7 @@ class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     private fun updateName() {
         val potion = this.potion
-        name = if (PotionType.WATER.equals(potion)) {
+        name = if (PotionType.WATER == potion) {
             buildName(potion, "Bottle", true)
         } else {
             buildName(potion!!, "Potion", true)

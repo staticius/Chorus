@@ -1,6 +1,7 @@
 package org.chorus.item
 
 import org.chorus.Player
+import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.event.block.BlockIgniteEvent
 import org.chorus.level.Level
@@ -48,7 +49,7 @@ class ItemFlintAndSteel @JvmOverloads constructor(meta: Int = 0, count: Int = 1)
 
             if (fire.isBlockTopFacingSurfaceSolid(fire.down()) || fire.canNeighborBurn()) {
                 val e = BlockIgniteEvent(block, null, player, BlockIgniteEvent.BlockIgniteCause.FLINT_AND_STEEL)
-                block.Server.instance.pluginManager.callEvent(e)
+                Server.instance.pluginManager.callEvent(e)
 
                 if (!e.isCancelled) {
                     level.setBlock(fire.position, fire, true)

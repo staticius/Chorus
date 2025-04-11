@@ -101,7 +101,7 @@ class ItemPainting @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
             )
 
         val entity =
-            createEntity(Entity.PAINTING, chunk, nbt) as EntityPainting?
+            createEntity(EntityID.PAINTING, chunk, nbt) as EntityPainting?
                 ?: return false
 
         if (player.isSurvival) {
