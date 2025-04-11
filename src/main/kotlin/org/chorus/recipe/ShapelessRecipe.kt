@@ -9,7 +9,7 @@ import java.util.*
 
 open class ShapelessRecipe @JvmOverloads constructor(
     recipeId: String?,
-    uuid: UUID?,
+    override var uuid: UUID,
     priority: Int,
     result: Item,
     ingredients: List<ItemDescriptor>,
@@ -36,14 +36,13 @@ open class ShapelessRecipe @JvmOverloads constructor(
 
     constructor(recipeId: String?, priority: Int, result: Item, ingredients: List<ItemDescriptor>) : this(
         recipeId,
-        null,
+        UUID.randomUUID(),
         priority,
         result,
         ingredients
     )
 
     init {
-        this.uuid = uuid
         results.add(result.clone())
         require(ingredients.size <= 9) { "Shapeless recipes cannot have more than 9 ingredients" }
         this.ingredients.addAll(ingredients)

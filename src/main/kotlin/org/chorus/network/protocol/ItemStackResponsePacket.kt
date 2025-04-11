@@ -15,7 +15,7 @@ class ItemStackResponsePacket : DataPacket() {
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeArray(entries) { r: ItemStackResponse ->
-            byteBuf.writeByte(r.result.ordinal().toByte().toInt())
+            byteBuf.writeByte(r.result.ordinal)
             byteBuf.writeVarInt(r.requestId)
             if (r.result != ItemStackResponseStatus.OK) return@writeArray
             byteBuf.writeArray(
@@ -25,9 +25,9 @@ class ItemStackResponsePacket : DataPacket() {
                 byteBuf.writeArray(
                     container.items
                 ) { item: ItemStackResponseSlot ->
-                    byteBuf.writeByte(item.slot.toByte().toInt())
-                    byteBuf.writeByte(item.hotbarSlot.toByte().toInt())
-                    byteBuf.writeByte(item.count.toByte().toInt())
+                    byteBuf.writeByte(item.slot)
+                    byteBuf.writeByte(item.hotbarSlot)
+                    byteBuf.writeByte(item.count)
                     byteBuf.writeVarInt(item.stackNetworkId)
                     byteBuf.writeString(item.customName)
                     byteBuf.writeString(item.filteredCustomName)

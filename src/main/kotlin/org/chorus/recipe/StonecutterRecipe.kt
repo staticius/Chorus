@@ -8,7 +8,7 @@ import java.util.*
 
 class StonecutterRecipe(
     recipeId: String?,
-    override var uuid: UUID?,
+    override var uuid: UUID,
     priority: Int,
     result: Item,
     ingredient: Item,
@@ -22,19 +22,18 @@ class StonecutterRecipe(
                 RecipeType.STONECUTTER
             ), priority, recipeUnlockingRequirement
     ) {
-    constructor(result: Item, ingredient: Item) : this(null, 10, result, ingredient)
 
     constructor(recipeId: String?, priority: Int, result: Item, ingredient: Item) : this(
         recipeId,
-        null,
+        UUID.randomUUID(),
         priority,
         result,
         ingredient
     )
 
-    constructor(recipeId: String?, uuid: UUID?, priority: Int, result: Item, ingredient: Item) : this(
+    constructor(recipeId: String?, uuid: UUID, priority: Int, result: Item, ingredient: Item) : this(
         recipeId,
-        null,
+        uuid,
         priority,
         result,
         ingredient,

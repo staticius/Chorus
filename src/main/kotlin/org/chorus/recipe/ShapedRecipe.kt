@@ -10,7 +10,7 @@ import java.util.*
 
 class ShapedRecipe @JvmOverloads constructor(
     recipeId: String?,
-    uuid: UUID?,
+    uuid: UUID,
     priority: Int,
     primaryResult: Item,
     shape: Array<String>,
@@ -41,7 +41,7 @@ class ShapedRecipe @JvmOverloads constructor(
         shape: Array<String>,
         ingredients: Map<Char, ItemDescriptor>,
         extraResults: Collection<Item>
-    ) : this(recipeId, null, priority, primaryResult, shape, ingredients, extraResults, false)
+    ) : this(recipeId, UUID.randomUUID(), priority, primaryResult, shape, ingredients, extraResults, false)
 
     init {
         this.uuid = uuid
