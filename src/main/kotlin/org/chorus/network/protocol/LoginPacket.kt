@@ -23,17 +23,6 @@ class LoginPacket(
     var buffer: BinaryStream? = null
         private set
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.protocol = byteBuf.readInt()
-        if (protocol == 0) {
-            byteBuf.readerIndex(byteBuf.readerIndex() + 2)
-            this.protocol = byteBuf.readInt()
-        }
-        buffer = BinaryStream(byteBuf.readByteArray(), 0)
-        decodeChainData(buffer!!)
-        decodeSkinData(buffer!!)
-    }
-
     private fun decodeChainData(binaryStream: BinaryStream) {
         val map: Map<String, List<String>> = JSONUtils.from(
             String(
@@ -177,14 +166,25 @@ class LoginPacket(
         handler.handle(this)
     }
 
-    companion object /*: PacketDecoder<LoginPacket>*/ {
-//        override fun decode(byteBuf: HandleByteBuf): LoginPacket {
-//            val protocol = byteBuf.readInt(),
-//            val
-//            return LoginPacket(
-//                protocol = byteBuf.readInt(),
-//            )
-//        }
+    companion object : PacketDecoder<LoginPacket> {
+        override fun decode(byteBuf: HandleByteBuf): LoginPacket {
+            val packet = LoginPacket(
+                protocol = run {
+                    var protocol = byteBuf.readInt()
+                    if (protocol == 0) {
+                        byteBuf.readerIndex(byteBuf.readerIndex() + 2)
+                        protocol = byteBuf.readInt()
+                    }
+                    protocol
+                }
+            )
+
+            val buffer = BinaryStream(byteBuf.readByteArray(), 0)
+            packet.decodeChainData(buffer)
+            packet.decodeSkinData(buffer)
+
+            return packet
+        }
 
         private fun getAnimation(element: JsonObject): SkinAnimation {
             val frames = element["Frames"].asFloat
