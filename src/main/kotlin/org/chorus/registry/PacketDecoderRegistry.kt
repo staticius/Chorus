@@ -50,9 +50,9 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.BOOK_EDIT_PACKET, BookEditPacket) // 97
         this.register(ProtocolInfo.ANVIL_DAMAGE_PACKET, AnvilDamagePacket) // 141
 
-        this.register(ProtocolInfo.LOGIN_PACKET, LoginPacket)
+        this.register(ProtocolInfo.LOGIN_PACKET, LoginPacket) // 1
+        this.register(ProtocolInfo.MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket) // 68
 
-        this.register(ProtocolInfo.MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket)
         this.register(ProtocolInfo.MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket)
         this.register(ProtocolInfo.MOB_EQUIPMENT_PACKET, MobEquipmentPacket)
         this.register(ProtocolInfo.MODAL_FORM_REQUEST_PACKET, ModalFormRequestPacket)

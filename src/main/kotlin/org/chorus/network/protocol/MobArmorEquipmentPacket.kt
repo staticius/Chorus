@@ -3,7 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.item.Item
 import org.chorus.network.connection.util.HandleByteBuf
 
-
 class MobArmorEquipmentPacket : DataPacket() {
     var eid: Long = 0
     lateinit var slots: Array<Item>
@@ -27,7 +26,7 @@ class MobArmorEquipmentPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.MOB_ARMOR_EQUIPMENT_PACKET
+        return ProtocolInfo.MOB_ARMOR_EQUIPMENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
