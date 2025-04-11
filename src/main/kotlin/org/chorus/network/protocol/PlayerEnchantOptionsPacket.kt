@@ -1,7 +1,6 @@
 package org.chorus.network.protocol
 
 import org.chorus.item.enchantment.Enchantment
-import org.chorus.nbt.tag.ListTag.size
 import org.chorus.network.connection.util.HandleByteBuf
 
 import java.util.concurrent.ConcurrentHashMap
@@ -15,11 +14,11 @@ class PlayerEnchantOptionsPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeUnsignedVarInt(options.size())
+        byteBuf.writeUnsignedVarInt(options.size)
         for (option in this.options) {
             byteBuf.writeUnsignedVarInt(option.minLevel)
             byteBuf.writeInt(0)
-            byteBuf.writeUnsignedVarInt(option.enchantments.size())
+            byteBuf.writeUnsignedVarInt(option.enchantments.size)
             for (data in option.enchantments) {
                 byteBuf.writeByte(data.id.toByte().toInt())
                 byteBuf.writeByte(data.level.toByte().toInt())
@@ -35,13 +34,11 @@ class PlayerEnchantOptionsPacket : DataPacket() {
 
     @JvmRecord
     data class EnchantOptionData(
-        minLevel: Int, enchantName: String, enchantments: List<Enchantment>, entry: Int
-    ) {
-        val minLevel: Int = minLevel
-        val enchantName: String = enchantName
-        val enchantments: List<Enchantment> = enchantments
-        val entry: Int = entry
-    }
+        val minLevel: Int,
+        val enchantName: String,
+        val enchantments: List<Enchantment>,
+        val entry: Int
+    )
 
     override fun pid(): Int {
         return ProtocolInfo.Companion.PLAYER_ENCHANT_OPTIONS_PACKET

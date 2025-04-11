@@ -6,7 +6,7 @@ import org.chorus.network.protocol.types.MovementEffectType
 
 class MovementEffectPacket : DataPacket() {
     var targetRuntimeID: Long = 0
-    var effectType: MovementEffectType? = null
+    lateinit var effectType: MovementEffectType
     var effectDuration: Int = 0
     var tick: Long = 0
 
@@ -15,7 +15,7 @@ class MovementEffectPacket : DataPacket() {
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarLong(this.targetRuntimeID)
-        byteBuf.writeUnsignedVarInt(effectType.getId())
+        byteBuf.writeUnsignedVarInt(this.effectType.id)
         byteBuf.writeUnsignedVarInt(this.effectDuration)
         byteBuf.writeUnsignedVarLong(this.tick)
     }

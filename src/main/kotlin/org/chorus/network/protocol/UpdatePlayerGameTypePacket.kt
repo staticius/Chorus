@@ -19,7 +19,7 @@ class UpdatePlayerGameTypePacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeVarInt(gameType!!.ordinal())
+        byteBuf.writeVarInt(gameType!!.ordinal)
         byteBuf.writeVarLong(entityId)
         byteBuf.writeUnsignedVarLong(tick)
     }

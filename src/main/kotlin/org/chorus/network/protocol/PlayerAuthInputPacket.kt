@@ -80,11 +80,14 @@ class PlayerAuthInputPacket : DataPacket() {
         if (this.inputData.contains(AuthInputAction.PERFORM_BLOCK_ACTIONS)) {
             val arraySize = byteBuf.readVarInt()
             for (i in 0..<arraySize) {
-                when (val type: PlayerActionType = PlayerActionType.Companion.from(byteBuf.readVarInt())) {
-                    PlayerActionType.START_DESTROY_BLOCK, PlayerActionType.ABORT_DESTROY_BLOCK, PlayerActionType.CRACK_BLOCK, PlayerActionType.PREDICT_DESTROY_BLOCK, PlayerActionType.CONTINUE_DESTROY_BLOCK -> blockActionData[type] =
-                        PlayerBlockActionData(type, byteBuf.readSignedBlockPosition(), byteBuf.readVarInt())
-
-                    else -> blockActionData[type] = PlayerBlockActionData(type, null, -1)
+                when (val type: PlayerActionType = PlayerActionType.from(byteBuf.readVarInt())) {
+                    PlayerActionType.START_DESTROY_BLOCK,
+                    PlayerActionType.ABORT_DESTROY_BLOCK,
+                    PlayerActionType.CRACK_BLOCK,
+                    PlayerActionType.PREDICT_DESTROY_BLOCK,
+                    PlayerActionType.CONTINUE_DESTROY_BLOCK ->
+                        blockActionData[type] = PlayerBlockActionData(type, byteBuf.readSignedBlockPosition(), byteBuf.readVarInt())
+                    else -> Unit
                 }
             }
         }

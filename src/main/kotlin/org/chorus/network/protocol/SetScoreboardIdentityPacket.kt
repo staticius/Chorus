@@ -13,7 +13,7 @@ class SetScoreboardIdentityPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeByte(action!!.ordinal().toByte().toInt())
+        byteBuf.writeByte(action!!.ordinal.toByte().toInt())
 
         for (entry in this.entries) {
             byteBuf.writeVarLong(entry.scoreboardId)

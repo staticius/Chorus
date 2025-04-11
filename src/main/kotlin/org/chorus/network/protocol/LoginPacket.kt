@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets
 import java.util.*
 
 class LoginPacket(
-    val protocol: Int,
+    var protocol: Int,
 ) : DataPacket() {
     var username: String? = null
     var titleId: String? = null

@@ -17,8 +17,8 @@ class PacketViolationWarningPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeVarInt(type!!.ordinal() - 1)
-        byteBuf.writeVarInt(severity!!.ordinal())
+        byteBuf.writeVarInt(type!!.ordinal - 1)
+        byteBuf.writeVarInt(severity!!.ordinal)
         byteBuf.writeVarInt(this.packetId)
         byteBuf.writeString(context!!)
     }

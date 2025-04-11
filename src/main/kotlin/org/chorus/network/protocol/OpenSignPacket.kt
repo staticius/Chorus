@@ -3,14 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.math.BlockVector3
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-(doNotUseGetters = true, callSuper = false)
-
-
-
-(doNotUseGetters = true)
-
-
 class OpenSignPacket : DataPacket() {
     @JvmField
     var position: BlockVector3? = null

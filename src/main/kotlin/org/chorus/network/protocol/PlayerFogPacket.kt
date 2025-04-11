@@ -23,10 +23,10 @@ class PlayerFogPacket : DataPacket() {
      * @param userProvidedId User-specified feature id
      */
     @JvmRecord
-    data class Fog(identifier: Identifier, userProvidedId: String) {
-        val identifier: Identifier = identifier
-        val userProvidedId: String = userProvidedId
-    }
+    data class Fog(
+        val identifier: Identifier,
+        val userProvidedId: String
+    )
 
     override fun pid(): Int {
         return ProtocolInfo.Companion.PLAYER_FOG_PACKET

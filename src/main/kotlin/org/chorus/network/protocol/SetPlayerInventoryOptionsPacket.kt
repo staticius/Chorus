@@ -22,11 +22,11 @@ class SetPlayerInventoryOptionsPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeVarInt(leftTab!!.ordinal())
-        byteBuf.writeVarInt(rightTab!!.ordinal())
+        byteBuf.writeVarInt(leftTab!!.ordinal)
+        byteBuf.writeVarInt(rightTab!!.ordinal)
         byteBuf.writeBoolean(this.filtering)
-        byteBuf.writeVarInt(layout!!.ordinal())
-        byteBuf.writeVarInt(craftingLayout!!.ordinal())
+        byteBuf.writeVarInt(layout!!.ordinal)
+        byteBuf.writeVarInt(craftingLayout!!.ordinal)
     }
 
     override fun pid(): Int {

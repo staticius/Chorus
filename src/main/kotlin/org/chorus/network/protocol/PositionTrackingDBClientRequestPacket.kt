@@ -13,7 +13,7 @@ class PositionTrackingDBClientRequestPacket : DataPacket() {
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeByte(action!!.ordinal().toByte().toInt())
+        byteBuf.writeByte(action!!.ordinal.toByte().toInt())
         byteBuf.writeVarInt(trackingId)
     }
 

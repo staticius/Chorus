@@ -24,12 +24,12 @@ class PlayerArmorDamagePacket : DataPacket() {
     override fun encode(byteBuf: HandleByteBuf) {
         var outflags = 0
         for (flag in this.flags) {
-            outflags = outflags or (1 shl flag.ordinal())
+            outflags = outflags or (1 shl flag.ordinal)
         }
         byteBuf.writeByte(outflags)
 
         for (flag in this.flags) {
-            byteBuf.writeVarInt(damage[flag.ordinal()])
+            byteBuf.writeVarInt(damage[flag.ordinal])
         }
     }
 
