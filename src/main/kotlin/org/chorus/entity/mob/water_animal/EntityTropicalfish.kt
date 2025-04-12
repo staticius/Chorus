@@ -27,6 +27,12 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
     }
 
     override var color: Byte = 0
+        set(value) {
+            field = value
+            this.setDataProperty(EntityDataTypes.COLOR, field)
+            namedTag!!.putByte("Color", field.toInt())
+        }
+
     override var variant: Int = 0
     private var mark_variant = 0
     override var color2: Byte = 0
@@ -57,9 +63,9 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
             this.mark_variant = getRandomMarkVariant()
         }
         if (!namedTag!!.contains("Color")) {
-            this.setColor(getRandomColor().toByte())
+            this.color = (getRandomColor().toByte())
         } else {
-            this.setColor(namedTag!!.getByte("Color"))
+            this.color = (namedTag!!.getByte("Color"))
         }
         if (namedTag!!.contains("Color2")) {
             this.color2 = namedTag!!.getByte("Color2")
@@ -98,16 +104,6 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
             return arrayOf(Item.get(ItemID.TROPICAL_FISH), Item.get(ItemID.BONE, 0, Utils.rand(1, 2)))
         }
         return arrayOf(Item.get(ItemID.TROPICAL_FISH))
-    }
-
-    fun getColor(): Int {
-        return namedTag!!.getByte("Color").toInt()
-    }
-
-    fun setColor(color: Byte) {
-        this.color = color
-        this.setDataProperty(EntityDataTypes.COLOR, color)
-        namedTag!!.putByte("Color", this.color.toInt())
     }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
