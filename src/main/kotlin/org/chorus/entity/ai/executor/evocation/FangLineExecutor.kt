@@ -45,7 +45,7 @@ open class FangLineExecutor : EntityControl, IBehaviorExecutor {
 
     override fun onStop(entity: EntityMob) {
         entity.setMovementSpeedF(EntityLiving.DEFAULT_SPEED)
-        entity.setEnablePitch(false)
+        entity.isEnablePitch = (false)
         stopSpell(entity)
     }
 

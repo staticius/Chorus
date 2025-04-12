@@ -38,7 +38,7 @@ class WolfAttackExecutor
         wolf.setAngry(true)
 
         if (entity.memoryStorage.notEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
-            if (!entity.isEnablePitch()) entity.setEnablePitch(true)
+            if (!entity.isEnablePitch) entity.isEnablePitch = (true)
             val vector3 = entity.memoryStorage.get(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)
             if (vector3 != null) {
                 this.lookTarget = vector3.position.clone()

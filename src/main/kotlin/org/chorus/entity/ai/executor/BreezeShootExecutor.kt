@@ -45,7 +45,7 @@ class BreezeShootExecutor(
         if (tick2 == 0) {
             tick1++
         }
-        if (!entity.isEnablePitch()) entity.setEnablePitch(true)
+        if (!entity.isEnablePitch) entity.isEnablePitch = (true)
         if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
         val newTarget = entity.behaviorGroup.memoryStorage[memory]
         if (this.target == null) target = newTarget

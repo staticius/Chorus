@@ -120,9 +120,9 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
         }
     }
 
-    override val viewers: Set<Player>
+    override val viewers: MutableSet<Player> = super.viewers
         get() {
-            val viewers: MutableSet<Player> = HashSet(this.viewers)
+            val viewers: MutableSet<Player> = HashSet(field)
             viewers.addAll(entity.viewers.values)
             return viewers
         }

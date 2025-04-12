@@ -31,7 +31,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
     private val ticks = 0
 
     override fun execute(entity: EntityMob): Boolean {
-        if (entity.isEnablePitch()) entity.setEnablePitch(false)
+        if (entity.isEnablePitch) entity.isEnablePitch = (false)
         if (needUpdateTarget(entity)) {
             circleLoc++
             val target = next(entity)
@@ -69,7 +69,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
     protected fun stop(entity: EntityMob) {
         removeRouteTarget(entity)
         removeLookTarget(entity)
-        entity.setEnablePitch(true)
+        entity.isEnablePitch = (true)
     }
 
     protected fun needUpdateTarget(entity: EntityMob): Boolean {

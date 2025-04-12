@@ -328,9 +328,4 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
             else -> false
         }
     }
-
-    override val diffHandDamage: FloatArray
-        get() {
-            return diffHandDamage
-        }
 }

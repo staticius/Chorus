@@ -24,7 +24,7 @@ class LookController(protected var lookAtTarget: Boolean, protected var lookAtRo
             entity.rotation.yaw = (yaw)
             if (!lookAtTarget) {
                 entity.headYaw = (yaw)
-                if (entity.isEnablePitch()) entity.rotation.pitch = (BVector3.getPitchFromVector(routeDirectionVector))
+                if (entity.isEnablePitch) entity.rotation.pitch = (BVector3.getPitchFromVector(routeDirectionVector))
             }
         }
         if (lookAtTarget && lookTarget != null) {
@@ -34,10 +34,10 @@ class LookController(protected var lookAtTarget: Boolean, protected var lookAtRo
                 lookTarget.y - entity.position.y,
                 lookTarget.z - entity.position.z
             )
-            if (entity.isEnablePitch()) entity.rotation.pitch = (BVector3.getPitchFromVector(toPlayerVector))
+            if (entity.isEnablePitch) entity.rotation.pitch = (BVector3.getPitchFromVector(toPlayerVector))
             entity.headYaw = (BVector3.getYawFromVector(toPlayerVector))
         }
-        if (!entity.isEnablePitch()) entity.rotation.pitch = (0).toDouble()
+        if (!entity.isEnablePitch) entity.rotation.pitch = (0).toDouble()
         return true
     }
 }

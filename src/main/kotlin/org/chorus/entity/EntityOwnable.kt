@@ -13,22 +13,20 @@ interface EntityOwnable : EntityComponent {
         memoryStorage[CoreMemoryTypes.OWNER_NAME] = playerName
     }
 
-    fun getOwner(): Player? {
-        var owner = memoryStorage[CoreMemoryTypes.OWNER]
-        if (owner != null && owner.isOnline) return owner
-        else {
-            val ownerName: String = getOwnerName() ?: return null
-            owner = Server.instance.getPlayerExact(ownerName)
-        }
-        return owner
-    }
-
     val owner: Player?
-        get() = getOwner()
+        get() {
+            var owner = memoryStorage[CoreMemoryTypes.OWNER]
+            if (owner != null && owner.isOnline) return owner
+            else {
+                val ownerName: String = getOwnerName() ?: return null
+                owner = Server.instance.getPlayerExact(ownerName)
+            }
+            return owner
+        }
 
     fun hasOwner(checkOnline: Boolean = true): Boolean {
         return if (checkOnline) {
-            getOwner() != null
+            owner != null
         } else {
             getOwnerName() != null
         }

@@ -74,7 +74,7 @@ class StrafeExecutor : EntityControl, IBehaviorExecutor {
     }
 
     override fun onStop(entity: EntityMob) {
-        entity.setEnablePitch(false)
+        entity.isEnablePitch = (false)
         entity.memoryStorage.clear(CoreMemoryTypes.LAST_ENDER_CRYSTAL_DESTROY)
     }
 

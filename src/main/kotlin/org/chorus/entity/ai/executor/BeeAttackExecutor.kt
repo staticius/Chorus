@@ -21,7 +21,7 @@ class BeeAttackExecutor(
     override fun execute(entity: EntityMob): Boolean {
         if (entity is EntityBee) {
             if (entity.memoryStorage.notEmpty(CoreMemoryTypes.ATTACK_TARGET)) {
-                if (!entity.isEnablePitch()) entity.setEnablePitch(true)
+                if (!entity.isEnablePitch) entity.isEnablePitch = true
                 val entity1 = entity.memoryStorage[CoreMemoryTypes.ATTACK_TARGET]
                 if (entity1 != null) {
                     this.lookTarget = entity1.position.clone()

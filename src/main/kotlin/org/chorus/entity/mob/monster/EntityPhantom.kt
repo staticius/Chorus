@@ -106,9 +106,7 @@ class EntityPhantom(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         )
     }
 
-    override fun isEnablePitch(): Boolean {
-        return false
-    }
+    override var isEnablePitch: Boolean = false
 
     override fun initEntity() {
         this.maxHealth = 20

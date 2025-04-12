@@ -68,7 +68,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
                 ),
                 Behavior(EntityMoveToOwnerExecutor(0.4f, true, 64, -1), IBehaviorEvaluator { entity: EntityMob? ->
                     if (this.hasOwner()) {
-                        val player: Player? = getOwner()
+                        val player: Player? = owner
                         val distanceSquared: Double = position.distanceSquared(player!!.position)
                         return@IBehaviorEvaluator distanceSquared >= 100
                     } else return@IBehaviorEvaluator false
@@ -137,10 +137,11 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
         } else memoryStorage[CoreMemoryTypes.Companion.LOOKING_ITEM] = item.javaClass
     }
 
-    fun getInventory(): Inventory {
-        //0 = hand, 1 = offhand
-        return InventorySlice(equipment, 2, 3) // TODO
-    }
+    override val inventory: Inventory
+        get() {
+            //0 = hand, 1 = offhand
+            return InventorySlice(equipment, 2, 3) // TODO
+        }
 
     override fun onUpdate(currentTick: Int): Boolean {
         if (currentTick % 10 == 0) {
@@ -148,13 +149,13 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
             if (nearestItem != null && !nearestItem.closed) {
                 if (nearestItem.position.distance(this.position) < 1 && currentTick - lastItemDropTick > dropCollectCooldown) {
                     val item: Item = nearestItem.getItem()
-                    val currentItem: Item = getInventory().getItem(0).clone()
-                    if (getInventory().canAddItem(item)) {
+                    val currentItem: Item = inventory.getItem(0).clone()
+                    if (inventory.canAddItem(item)) {
                         if (currentItem.isNothing) {
-                            getInventory().setItem(0, item)
+                            inventory.setItem(0, item)
                         } else {
                             item.setCount(item.getCount() + currentItem.getCount())
-                            getInventory().setItem(0, item)
+                            inventory.setItem(0, item)
                         }
                         level!!.addSound(this.position, Sound.RANDOM_POP)
                         nearestItem.close()
@@ -162,7 +163,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
                 }
             } else {
                 if (hasOwner()) {
-                    if (position.distance(getOwner()!!.position) < 2) {
+                    if (position.distance(owner!!.position) < 2) {
                         dropItem(currentTick)
                     }
                 }
@@ -175,17 +176,17 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
         if (!this.isAlive()) {
             return false
         }
-        val item: Item = getInventory().getItem(0)
+        val item: Item = inventory.getItem(0)
         if (item.isNothing) return true
         val motion: Vector3 = getDirectionVector().multiply(0.4)
         level!!.dropItem(position.add(0.0, 1.3, 0.0), item, motion, 40)
-        getInventory().clearAll()
+        inventory.clearAll()
         this.lastItemDropTick = currentTick
         return true
     }
 
     override fun getDrops(): Array<Item> {
-        return getInventory().contents.values.toTypedArray()
+        return inventory.contents.values.toTypedArray()
     }
 
     companion object {

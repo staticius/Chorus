@@ -192,10 +192,6 @@ class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
         return false
     }
 
-    fun getDialog(): FormWindowDialog {
-        return dialog
-    }
-
     companion object {
         const val TAG_ACTIONS: String = "Actions"
         const val TAG_INTERACTIVE_TEXT: String = "InterativeText"

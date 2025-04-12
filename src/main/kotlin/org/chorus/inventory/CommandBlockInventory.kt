@@ -105,11 +105,6 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override val isEmpty: Boolean
         get() = true
 
-    override val viewers: Set<Player>
-        get() {
-            return emptySet()
-        }
-
     override val type: InventoryType
         get() = InventoryType.COMMAND_BLOCK
 
