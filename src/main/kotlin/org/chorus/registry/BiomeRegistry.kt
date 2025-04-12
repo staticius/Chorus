@@ -36,7 +36,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
             BiomeRegistry::class.java.classLoader.getResourceAsStream("biome_definitions.nbt").use { stream ->
                 stream ?: throw RuntimeException("Could not load biome_definitions.nbt")
                 val compoundTag = readTreeMapCompoundTag(stream, ByteOrder.BIG_ENDIAN, true)
-                val tags: Map<String, Tag<*>> = compoundTag.getTags()
+                val tags: Map<String, Tag<*>> = compoundTag.tags
                 for ((key, value1) in tags) {
                     val id = NAME2ID[key]!!
                     val value = value1 as CompoundTag?

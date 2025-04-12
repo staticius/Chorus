@@ -105,7 +105,7 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String, Tag<*>> = item.customBlockData!!.getTags()
+            val customData: Map<String, Tag<*>> = item.customBlockData!!.tags
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }

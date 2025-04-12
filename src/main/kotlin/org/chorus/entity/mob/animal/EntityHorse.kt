@@ -82,11 +82,11 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
             }
         } else {
             for (attribute in randomizeAttributes()) {
-                attributeMap[attribute.getName()] = attribute
+                attributeMap[attribute.name] = attribute
             }
         }
         this.maxHealth =
-            ceil(attributeMap["minecraft:health"]!!.getMaxValue().toDouble()).toInt()
+            ceil(attributeMap["minecraft:health"]!!.maxValue.toDouble()).toInt()
         super.initEntity()
 
         this.inventory = HorseInventory(this)

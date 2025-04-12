@@ -124,14 +124,6 @@ class BehaviorGroup(
 
     override var isForceUpdateRoute: Boolean = false
 
-    override fun setForceUpdateRoute(forceUpdateRoute: Boolean) {
-        this.isForceUpdateRoute = forceUpdateRoute
-    }
-
-    override fun isForceUpdateRoute(): Boolean {
-        return isForceUpdateRoute
-    }
-
     init {
         this.initPeriodTimer()
     }
@@ -280,7 +272,7 @@ class BehaviorGroup(
             return
         }
         //到达更新周期时，开始重新计算新路径
-        if (isForceUpdateRoute() || (reachUpdateCycle && shouldUpdateRoute(entity))) {
+        if (isForceUpdateRoute || (reachUpdateCycle && shouldUpdateRoute(entity))) {
             //若有路径目标，则计算新路径
             var reSubmit = false
             //         第一次计算                       上一次计算已完成                                         超时，重新提交任务
@@ -294,13 +286,13 @@ class BehaviorGroup(
                         override fun onFinish(task: RouteFindingTask?) {
                             updateMoveDirection(entity)
                             entity.isShouldUpdateMoveDirection = false
-                            setForceUpdateRoute(false)
+                            isForceUpdateRoute = (false)
                             //写入section变更记录
                             cacheSectionBlockChange(
                                 entity.level!!,
                                 calPassByChunkSections(
                                     routeFinder.route.stream()
-                                        .map { it.getVector3() }
+                                        .map { it.vector3 }
                                         .toList(),
                                     entity.level!!))
                         }
@@ -338,7 +330,7 @@ class BehaviorGroup(
         if (routeFinder!!.target == null || hasNewUnCalMoveTarget(entity)) return true
         val passByChunkSections =
             calPassByChunkSections(
-                routeFinder.route.stream().map { it.getVector3() }.toList(),
+                routeFinder.route.stream().map { it.vector3 }.toList(),
                 entity.level!!
             )
         val total = passByChunkSections.stream().mapToLong { vector3: ChunkSectionVector ->
@@ -498,7 +490,7 @@ class BehaviorGroup(
         val next = routeFinder?.next()
         if (next != null) {
             entity.moveDirectionStart = end
-            entity.moveDirectionEnd = next.getVector3()
+            entity.moveDirectionEnd = next.vector3
         }
     }
 

@@ -62,7 +62,7 @@ class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState = Compa
         }
 
         if (item.hasCustomBlockData()) {
-            val customData: Map<String, Tag<*>> = item.customBlockData!!.getTags()
+            val customData: Map<String, Tag<*>> = item.customBlockData!!.tags
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }

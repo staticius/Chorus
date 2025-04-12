@@ -6,9 +6,10 @@ import kotlin.collections.set
 
 class LinkedCompoundTag @JvmOverloads constructor(tags: MutableMap<String, Tag<*>> = LinkedHashMap()) :
     CompoundTag(tags) {
-    override fun getTags(): MutableMap<String, Tag<*>> {
-        return LinkedHashMap(this.tags)
-    }
+    override val tags: MutableMap<String, Tag<*>>
+        get() {
+            return LinkedHashMap(this.tags)
+        }
 
     override fun parseValue(): MutableMap<String, Any> {
         val value: MutableMap<String, Any> = LinkedHashMap(
@@ -24,7 +25,7 @@ class LinkedCompoundTag @JvmOverloads constructor(tags: MutableMap<String, Tag<*
 
     override fun copy(): LinkedCompoundTag {
         val nbt = LinkedCompoundTag()
-        getTags().forEach { (key, value) -> nbt.put(key, value.copy()) }
+        tags.forEach { (key, value) -> nbt.put(key, value.copy()) }
         return nbt
     }
 }

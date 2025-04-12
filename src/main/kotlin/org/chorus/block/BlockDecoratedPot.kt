@@ -37,7 +37,7 @@ class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntity
         nbt.putByte("isMovable", 1)
 
         if (item!!.namedTag != null) {
-            val customData = item.namedTag!!.getTags()
+            val customData = item.namedTag!!.tags
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }

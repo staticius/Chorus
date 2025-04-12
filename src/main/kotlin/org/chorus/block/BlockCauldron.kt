@@ -583,7 +583,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
             .putByte("SplashPotion", 0)
 
         if (item!!.hasCustomBlockData()) {
-            val customData = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.tags
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }

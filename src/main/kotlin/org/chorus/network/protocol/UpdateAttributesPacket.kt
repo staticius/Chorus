@@ -16,13 +16,13 @@ class UpdateAttributesPacket : DataPacket() {
 
         byteBuf.writeUnsignedVarInt(entries.size)
         for (entry in entries) {
-            byteBuf.writeFloatLE(entry.getMinValue())
-            byteBuf.writeFloatLE(entry.getMaxValue())
+            byteBuf.writeFloatLE(entry.minValue)
+            byteBuf.writeFloatLE(entry.maxValue)
             byteBuf.writeFloatLE(entry.getValue())
-            byteBuf.writeFloatLE(entry.getDefaultMinimum())
-            byteBuf.writeFloatLE(entry.getDefaultMaximum())
-            byteBuf.writeFloatLE(entry.getDefaultValue())
-            byteBuf.writeString(entry.getName())
+            byteBuf.writeFloatLE(entry.defaultMinimum)
+            byteBuf.writeFloatLE(entry.defaultMaximum)
+            byteBuf.writeFloatLE(entry.defaultValue)
+            byteBuf.writeString(entry.name)
             byteBuf.writeUnsignedVarInt(0) // Modifiers
         }
         byteBuf.writeUnsignedVarInt(frame.toInt())

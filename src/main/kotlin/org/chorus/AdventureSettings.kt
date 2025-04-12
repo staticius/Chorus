@@ -184,7 +184,7 @@ class AdventureSettings : Cloneable {
      */
     private fun readNBT(nbt: CompoundTag) {
         val abilityTag = nbt.getCompound(KEY_ABILITIES)
-        for ((key, value) in abilityTag.getTags()) {
+        for ((key, value) in abilityTag.tags) {
             if (value is IntTag) {
                 set(Type.valueOf(key), value.data == 1)
             }

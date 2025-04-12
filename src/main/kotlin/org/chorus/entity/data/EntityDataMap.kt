@@ -19,7 +19,7 @@ class EntityDataMap : MutableMap<EntityDataType<Any>, Any> {
     }
 
     fun getFlags(): EnumSet<EntityFlag> {
-        return get<EnumSet<EntityFlag>>(EntityDataTypes.FLAGS)
+        return getType<EnumSet<EntityFlag>>(EntityDataTypes.FLAGS)
     }
 
     fun setFlag(flag: EntityFlag, value: Boolean): EntityFlag {
@@ -47,7 +47,7 @@ class EntityDataMap : MutableMap<EntityDataType<Any>, Any> {
         return flags
     }
 
-    fun <T : Any> get(type: EntityDataType<T>): T {
+    fun <T : Any> getType(type: EntityDataType<T>): T {
         return map.getOrDefault(type, type.getDefaultValue()) as T
     }
 

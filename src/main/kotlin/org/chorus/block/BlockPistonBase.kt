@@ -262,7 +262,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
                 //移动方块实体
                 if (blockEntity != null && blockEntity !is BlockEntityMovingBlock) {
                     blockEntity.saveNBT()
-                    nbt.putCompound("movingEntity", CompoundTag(blockEntity.namedTag.getTags()))
+                    nbt.putCompound("movingEntity", CompoundTag(blockEntity.namedTag.tags))
                     blockEntity.close()
                 }
                 oldPosList.add(oldPos)

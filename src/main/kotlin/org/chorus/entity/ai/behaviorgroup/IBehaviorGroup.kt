@@ -125,21 +125,6 @@ interface IBehaviorGroup {
      */
     fun updateRoute(entity: EntityMob)
 
-    /**
-     * @return 下一gt是否强制更新路径<br></br>Whether the next gt is forced to update the path
-     */
-    fun isForceUpdateRoute(): Boolean
-
-    /**
-     * 要求下一gt立即更新路径
-     *
-     *
-     * Ask the next gt to update the path immediately
-     *
-     * @param forceUpdateRoute 立即更新路径
-     */
-    fun setForceUpdateRoute(forceUpdateRoute: Boolean)
-
     var isForceUpdateRoute: Boolean
 
     /**

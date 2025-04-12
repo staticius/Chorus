@@ -762,10 +762,10 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
     fun writeAttributeList(attributes: Array<Attribute>) {
         this.writeUnsignedVarInt(attributes.size)
         for (attribute in attributes) {
-            this.writeString(attribute.getName())
-            this.writeFloatLE(attribute.getMinValue())
+            this.writeString(attribute.name)
+            this.writeFloatLE(attribute.minValue)
             this.writeFloatLE(attribute.getValue())
-            this.writeFloatLE(attribute.getMaxValue())
+            this.writeFloatLE(attribute.maxValue)
         }
     }
 

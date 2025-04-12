@@ -31,7 +31,7 @@ class Node(
     }
 
     override fun toString(): String {
-        return vector3.toString() + "| G:" + this.cost + " H:" + this.heuristicCost + " F" + this.finalCost + (if (this.parent != null) "\tparent:" + parent!!.getVector3() else "")
+        return vector3.toString() + "| G:" + this.cost + " H:" + this.heuristicCost + " F" + this.finalCost + (if (this.parent != null) "\tparent:" + parent!!.vector3 else "")
     }
 
     override fun equals(other: Any?): Boolean {
@@ -43,9 +43,5 @@ class Node(
 
     override fun hashCode(): Int {
         return Objects.hash(vector3, parent, cost, heuristicCost, finalCost)
-    }
-
-    fun getVector3(): Vector3 {
-        return this.vector3
     }
 }

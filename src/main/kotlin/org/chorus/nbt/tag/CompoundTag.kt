@@ -8,7 +8,7 @@ import kotlin.collections.component2
 import kotlin.collections.set
 import kotlin.math.max
 
-open class CompoundTag @JvmOverloads constructor(val tags: MutableMap<String, Tag<*>> = HashMap()) :
+open class CompoundTag @JvmOverloads constructor(open val tags: MutableMap<String, Tag<*>> = HashMap()) :
     Tag<MutableMap<String, Any>>() {
     open val allTags: Collection<Tag<*>>
         get() = tags.values
@@ -224,10 +224,6 @@ open class CompoundTag @JvmOverloads constructor(val tags: MutableMap<String, Ta
     open fun <T : Tag<*>> getList(name: String, type: Class<T>): ListTag<T> {
         @Suppress("UNCHECKED_CAST")
         return tags[name] as? ListTag<T> ?: ListTag()
-    }
-
-    open fun getTags(): MutableMap<String, Tag<*>> {
-        return HashMap(this.tags)
     }
 
     val entrySet: @UnmodifiableView MutableSet<Map.Entry<String, Tag<*>>>

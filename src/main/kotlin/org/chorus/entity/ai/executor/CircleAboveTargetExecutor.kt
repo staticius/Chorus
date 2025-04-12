@@ -52,7 +52,7 @@ class CircleAboveTargetExecutor @JvmOverloads constructor(//指示执行器应�
         if (updateRouteImmediatelyWhenTargetChange) {
             val floor = target.floor()
 
-            if (oldTarget == null || oldTarget == floor) entity.behaviorGroup.setForceUpdateRoute(true)
+            if (oldTarget == null || oldTarget == floor) entity.behaviorGroup.isForceUpdateRoute = (true)
 
             oldTarget = floor
         }

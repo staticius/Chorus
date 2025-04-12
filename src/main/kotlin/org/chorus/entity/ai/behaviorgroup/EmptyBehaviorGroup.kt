@@ -57,14 +57,8 @@ class EmptyBehaviorGroup(entity: EntityMob) : IBehaviorGroup {
     override fun updateRoute(entity: EntityMob) {
     }
 
-    override fun isForceUpdateRoute(): Boolean {
-        return false
-    }
-
     override var isForceUpdateRoute: Boolean = false
         set(value) {
             throw UnsupportedOperationException("Cannot set isForceUpdateRoute")
         }
-
-    override fun setForceUpdateRoute(forceUpdateRoute: Boolean) {}
 }

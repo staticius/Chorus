@@ -14,10 +14,29 @@ import java.util.function.Consumer
 
 class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Handle<BedrockBatchWrapper>) :
     AbstractReferenceCounted() {
+
     var compressed: ByteBuf? = null
-    var algorithm: CompressionAlgorithm? = null
+        set(value) {
+            if (field != null) {
+                field!!.release()
+            }
+
+            field = value
+            if (value == null) {
+                this.algorithm = null
+            }
+        }
 
     var uncompressed: ByteBuf? = null
+        set(value) {
+            if (field != null) {
+                field!!.release()
+                field = value
+            }
+        }
+
+    var algorithm: CompressionAlgorithm? = null
+
     private val packets: MutableList<BedrockPacketWrapper?> = ObjectArrayList()
 
     var modified = false
@@ -45,17 +64,6 @@ class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Han
         this.modified = true
     }
 
-    fun setCompressed(compressed: ByteBuf?) {
-        if (this.compressed != null) {
-            this.compressed!!.release()
-        }
-
-        this.compressed = compressed
-        if (compressed == null) {
-            this.algorithm = null
-        }
-    }
-
     fun setCompressed(compressed: ByteBuf?, algorithm: CompressionAlgorithm?) {
         if (this.compressed != null) {
             this.compressed!!.release()
@@ -63,13 +71,6 @@ class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Han
 
         this.compressed = compressed
         this.algorithm = algorithm
-    }
-
-    fun setUncompressed(uncompressed: ByteBuf?) {
-        if (this.uncompressed != null) {
-            this.uncompressed!!.release()
-        }
-        this.uncompressed = uncompressed
     }
 
     fun setFlag(flag: BatchFlag) {

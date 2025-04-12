@@ -708,8 +708,4 @@ class ConfigSection() : LinkedHashMap<String?, Any?>() {
         }
         return keys
     }
-
-    fun getKeys(): Set<String> {
-        return this.getKeys()
-    }
 }

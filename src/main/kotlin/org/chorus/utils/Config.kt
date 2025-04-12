@@ -506,7 +506,7 @@ class Config {
     }
 
     fun getKeys(): Set<String?> {
-        if (this.isCorrect) return rootSection.getKeys()
+        if (this.isCorrect) return rootSection.keys
         return HashSet()
     }
 

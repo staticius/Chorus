@@ -14,7 +14,7 @@ import org.chorus.utils.RedstoneComponent
 
 class ChestInventory(chest: BlockEntityChest) : ContainerInventory(chest, InventoryType.CONTAINER, 27),
     BlockEntityInventoryNameable {
-    protected var doubleInventory: DoubleChestInventory? = null
+    var doubleInventory: DoubleChestInventory? = null
 
     override fun init() {
         val map = super.slotTypeMap()
@@ -89,14 +89,6 @@ class ChestInventory(chest: BlockEntityChest) : ContainerInventory(chest, Invent
         } catch (ignored: LevelException) {
         }
         super.onClose(who)
-    }
-
-    fun setDoubleInventory(doubleInventory: DoubleChestInventory) {
-        this.doubleInventory = doubleInventory
-    }
-
-    fun getDoubleInventory(): DoubleChestInventory? {
-        return doubleInventory
     }
 
     override fun sendSlot(index: Int, vararg players: Player) {

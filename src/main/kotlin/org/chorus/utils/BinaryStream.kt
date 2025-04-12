@@ -18,6 +18,9 @@ import kotlin.math.min
 class BinaryStream {
     var offset: Int
     var buffer: ByteArray
+        get() {
+            return field.copyOf(count)
+        }
         private set
     var count: Int
         private set
@@ -49,10 +52,6 @@ class BinaryStream {
     fun setBuffer(buffer: ByteArray, offset: Int) {
         this.setBuffer(buffer)
         this.offset = offset
-    }
-
-    fun getBuffer(): ByteArray {
-        return buffer.copyOf(count)
     }
 
     @JvmOverloads

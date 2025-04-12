@@ -83,7 +83,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
             .permit(SessionState.LOGIN, SessionState.LOGIN)
 
         cfg.configure(SessionState.LOGIN).onEntry(Action {
-            this.setPacketHandler(
+            this.packetHandler = (
                 LoginHandler(
                     this
                 ) { info: PlayerInfo? ->
@@ -99,14 +99,14 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         cfg.configure(SessionState.ENCRYPTION)
             .onEntry(Action {
                 log.debug("Player {} enter ENCRYPTION stage", peer.socketAddress.toString())
-                this.setPacketHandler(HandshakePacketHandler(this))
+                this.packetHandler = (HandshakePacketHandler(this))
             })
             .permit(SessionState.RESOURCE_PACK, SessionState.RESOURCE_PACK)
 
         cfg.configure(SessionState.RESOURCE_PACK)
             .onEntry(Action {
                 log.debug("Player {} enter RESOURCE_PACK stage", peer.socketAddress.toString())
-                this.setPacketHandler(ResourcePackHandler(this))
+                this.packetHandler = (ResourcePackHandler(this))
             })
             .permit(SessionState.PRE_SPAWN, SessionState.PRE_SPAWN)
 
@@ -124,7 +124,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
                 }
                 this.onPlayerCreated(player)
                 player.processLogin()
-                this.setPacketHandler(SpawnResponseHandler(this))
+                this.packetHandler = (SpawnResponseHandler(this))
                 // The reason why teleport player to their position is for gracefully client-side spawn,
                 // although we need some hacks, It is definitely a fairly worthy trade.
                 handle!!.player.setImmobile(true) // TODO: HACK: fix client-side falling pre-spawn
@@ -133,7 +133,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
             .permit(SessionState.IN_GAME, SessionState.IN_GAME)
 
         cfg.configure(SessionState.IN_GAME)
-            .onEntry(Action { this.setPacketHandler(InGamePacketHandler(this)) })
+            .onEntry(Action { this.packetHandler = (InGamePacketHandler(this)) })
             .onExit(Action { this.onServerDeath() })
             .permit(SessionState.DEATH, SessionState.DEATH)
 
@@ -142,7 +142,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
             .permit(SessionState.IN_GAME, SessionState.IN_GAME)
 
         machine = StateMachine(SessionState.START, cfg)
-        this.setPacketHandler(SessionStartHandler(this))
+        this.packetHandler = (SessionStartHandler(this))
     }
 
     fun setNettyThreadOwned(immediatelyHandle: Boolean) {
@@ -528,10 +528,6 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
 
     val player: Player?
         get() = if (this.handle == null) null else handle!!.player
-
-    fun setPacketHandler(packetHandler: PacketHandler?) {
-        this.packetHandler = packetHandler
-    }
 
     val dataPacketManager: DataPacketManager?
         get() {

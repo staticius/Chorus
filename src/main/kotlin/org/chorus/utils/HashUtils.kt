@@ -57,7 +57,7 @@ object HashUtils {
         } else {
             TreeMapCompoundTag()
         }
-        for ((key, value) in tag.getCompound("states").getTags()) {
+        for ((key, value) in tag.getCompound("states").tags) {
             states.put(key, value)
         }
         tag.put("states", states)

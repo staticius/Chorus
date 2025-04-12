@@ -45,7 +45,7 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockState: BlockState = 
             nbt.putString("CustomName", item.customName)
         }
         if (item.hasCustomBlockData()) {
-            val customData = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.tags
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }

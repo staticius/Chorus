@@ -11,14 +11,14 @@ import org.chorus.utils.ServerException
  * Attributes are buffs/debuffs systems that act on [Entity].
  */
 class Attribute private constructor(
-    private val id: Int,
-    protected var name: String,
-    protected var minValue: Float,
-    protected var maxValue: Float,
-    protected var defaultMinimum: Float,
-    protected var defaultMaximum: Float,
-    protected var defaultValue: Float,
-    protected var shouldSend: Boolean
+    val id: Int,
+    var name: String,
+    var minValue: Float,
+    var maxValue: Float,
+    var defaultMinimum: Float,
+    var defaultMaximum: Float,
+    var defaultValue: Float,
+    var shouldSend: Boolean
 ) :
     Cloneable {
     protected var currentValue: Float
@@ -27,32 +27,20 @@ class Attribute private constructor(
         this.currentValue = this.defaultValue
     }
 
-    fun getMinValue(): Float {
-        return this.minValue
-    }
-
     fun setMinValue(minValue: Float): Attribute {
-        require(!(minValue > this.getMaxValue())) { "Value " + minValue + " is bigger than the maxValue!" }
+        require(!(minValue > this.maxValue)) { "Value " + minValue + " is bigger than the maxValue!" }
         this.minValue = minValue
         return this
     }
 
-    fun getMaxValue(): Float {
-        return this.maxValue
-    }
-
     fun setMaxValue(maxValue: Float): Attribute {
-        require(!(maxValue < this.getMinValue())) { "Value " + maxValue + " is bigger than the minValue!" }
+        require(!(maxValue < this.minValue)) { "Value " + maxValue + " is bigger than the minValue!" }
         this.maxValue = maxValue
         return this
     }
 
-    fun getDefaultValue(): Float {
-        return this.defaultValue
-    }
-
     fun setDefaultValue(defaultValue: Float): Attribute {
-        require(!(defaultValue > this.getMaxValue() || defaultValue < this.getMinValue())) { "Value " + defaultValue + " exceeds the range!" }
+        require(!(defaultValue > this.maxValue || defaultValue < this.minValue)) { "Value " + defaultValue + " exceeds the range!" }
         this.defaultValue = defaultValue
         return this
     }
@@ -66,33 +54,17 @@ class Attribute private constructor(
     }
 
     fun setValue(value: Float, fit: Boolean): Attribute {
-        var value: Float = value
-        if (value > this.getMaxValue() || value < this.getMinValue()) {
-            require(fit) { "Value " + value + " exceeds the range!" }
-            value = value.coerceAtLeast(this.getMinValue()).coerceAtMost(this.getMaxValue())
+        var value1: Float = value
+        if (value1 > this.maxValue || value1 < this.minValue) {
+            require(fit) { "Value " + value1 + " exceeds the range!" }
+            value1 = value1.coerceAtLeast(this.minValue).coerceAtMost(this.maxValue)
         }
-        this.currentValue = value
+        this.currentValue = value1
         return this
-    }
-
-    fun getName(): String {
-        return this.name
-    }
-
-    fun getId(): Int {
-        return this.id
     }
 
     fun isSyncable(): Boolean {
         return this.shouldSend
-    }
-
-    fun getDefaultMinimum(): Float {
-        return defaultMinimum
-    }
-
-    fun getDefaultMaximum(): Float {
-        return defaultMaximum
     }
 
     public override fun clone(): Attribute {
@@ -261,13 +233,13 @@ class Attribute private constructor(
          * @return the compound tag
          */
         fun toNBT(attribute: Attribute): CompoundTag {
-            return CompoundTag().putString("Name", attribute.getName())
-                .putFloat("Base", attribute.getDefaultValue())
+            return CompoundTag().putString("Name", attribute.name)
+                .putFloat("Base", attribute.defaultValue)
                 .putFloat("Current", attribute.getValue())
-                .putFloat("DefaultMax", attribute.getDefaultMaximum())
-                .putFloat("DefaultMin", attribute.getDefaultMinimum())
-                .putFloat("Max", attribute.getMaxValue())
-                .putFloat("Min", attribute.getMinValue())
+                .putFloat("DefaultMax", attribute.defaultMaximum)
+                .putFloat("DefaultMin", attribute.defaultMinimum)
+                .putFloat("Max", attribute.maxValue)
+                .putFloat("Min", attribute.minValue)
         }
 
         /**
@@ -341,7 +313,7 @@ class Attribute private constructor(
          */
         fun getAttributeByName(name: String): Attribute? {
             for (a: Attribute in attributes.values) {
-                if (a.getName() == name) {
+                if (a.name == name) {
                     return a.clone()
                 }
             }

@@ -173,9 +173,10 @@ class CompoundTagView(private val delegate: CompoundTag) : CompoundTag() {
         return delegate.getList(name, type)
     }
 
-    override fun getTags(): MutableMap<String, Tag<*>> {
-        return Collections.unmodifiableMap(delegate.getTags())
-    }
+    override val tags: MutableMap<String, Tag<*>>
+        get() {
+            return delegate.tags
+        }
 
     override fun parseValue(): MutableMap<String, Any> {
         return delegate.parseValue()
@@ -202,7 +203,7 @@ class CompoundTagView(private val delegate: CompoundTag) : CompoundTag() {
         get() = delegate.isEmpty
 
     override fun copy(): LinkedCompoundTag {
-        return LinkedCompoundTag(delegate.copy().getTags())
+        return LinkedCompoundTag(delegate.copy().tags)
     }
 
     override fun equals(other: Any?): Boolean {

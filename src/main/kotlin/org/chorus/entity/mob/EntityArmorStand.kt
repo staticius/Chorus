@@ -234,7 +234,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
     }
 
     private fun getPose(): Int {
-        return entityDataMap.get<Int>(EntityDataTypes.Companion.ARMOR_STAND_POSE_INDEX)
+        return entityDataMap.getType<Int>(EntityDataTypes.Companion.ARMOR_STAND_POSE_INDEX)
     }
 
     private fun setPose(pose: Int) {

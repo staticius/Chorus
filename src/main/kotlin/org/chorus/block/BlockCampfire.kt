@@ -110,7 +110,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
             val nbt = CompoundTag()
 
             if (item!!.hasCustomBlockData()) {
-                val customData: Map<String, Tag<*>> = item.customBlockData!!.getTags()
+                val customData: Map<String, Tag<*>> = item.customBlockData!!.tags
                 for ((key, value) in customData) {
                     nbt.put(key, value)
                 }

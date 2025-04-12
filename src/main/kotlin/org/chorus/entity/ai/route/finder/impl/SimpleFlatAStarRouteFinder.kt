@@ -128,7 +128,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
         var reachableNode: Node? = null
         reachableTarget = if (currentReachable) target else (getNearestNodeFromCloseList(target!!).also {
             reachableNode = it
-        })!!.getVector3()
+        })!!.vector3
         var findingPath: List<Node> = if (currentReachable) getPathRoute(targetNode) else getPathRoute(reachableNode)
         //使用floyd平滑路径
         if (enableFloydSmooth) findingPath = floydSmooth(findingPath)

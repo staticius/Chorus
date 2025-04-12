@@ -16,8 +16,8 @@ class BlockState2ItemMetaRegistry : IRegistry<String, Int?, Int> {
                         throw RuntimeException("Failed to load item_meta_block_state_bimap.nbt")
                     }
                     val compoundTag = readCompressed(input)
-                    for ((key, value) in compoundTag.getTags()) {
-                        for ((key1, value1) in (value as CompoundTag).getTags()) {
+                    for ((key, value) in compoundTag.tags) {
+                        for ((key1, value1) in (value as CompoundTag).tags) {
                             MAP["$key#$key1"] = (value1 as IntTag).data
                         }
                     }

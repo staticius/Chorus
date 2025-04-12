@@ -98,7 +98,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(bloc
 
         // This code gets executed when the player has copied the shulker box in creative mode
         if (item.hasCustomBlockData()) {
-            val customData = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.tags
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }

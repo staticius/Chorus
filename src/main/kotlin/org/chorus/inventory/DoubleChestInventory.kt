@@ -49,10 +49,10 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
         }
 
     init {
-        leftSide.setDoubleInventory(this)
+        leftSide.doubleInventory = (this)
 
         this.rightSide = right.realInventory
-        rightSide.setDoubleInventory(this)
+        rightSide.doubleInventory = (this)
 
         val items: MutableMap<Int, Item> = HashMap()
         // First we add the items from the left chest

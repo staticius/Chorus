@@ -27,7 +27,7 @@ abstract class EntityProperty(private val identifier: String) {
             try {
                 EntityProperty::class.java.getClassLoader().getResourceAsStream("entity_properties.nbt").use { stream ->
                     val root: CompoundTag = NBTIO.readCompressed(stream)
-                    root.getTags().values.forEach({ uncast ->
+                    root.tags.values.forEach({ uncast ->
                         if (uncast is CompoundTag) {
                             val properties: ListTag<CompoundTag> = uncast.getList("properties", CompoundTag::class.java)
                             for (property: CompoundTag in properties.all) {

@@ -128,7 +128,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
         }
 
         if (item.hasCustomBlockData()) {
-            val customData = item.customBlockData!!.getTags()
+            val customData = item.customBlockData!!.tags
             for ((key, value) in customData) {
                 nbt.put(key, value)
             }
