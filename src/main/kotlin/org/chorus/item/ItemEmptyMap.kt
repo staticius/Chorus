@@ -12,12 +12,12 @@ class ItemEmptyMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     override var damage: Int
         get() = super.damage
         set(meta) {
-            super.setDamage(meta)
+            super.damage = (meta)
             updateName()
         }
 
     private fun updateName() {
-        name = if (getDamage() == 2) {
+        name = if (damage == 2) {
             "Empty Locator Map"
         } else {
             "Empty Map"

@@ -73,7 +73,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
 
     override fun attack(source: EntityDamageEvent): Boolean {
         //false?
-        source.setDamage(0f)
+        source.damage = (0f)
         return super.attack(source)
     }
 

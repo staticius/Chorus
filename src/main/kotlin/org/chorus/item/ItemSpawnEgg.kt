@@ -28,7 +28,7 @@ open class ItemSpawnEgg : Item {
     override var damage: Int
         get() = super.damage
         set(meta) {
-            super.setDamage(meta)
+            super.damage = (meta)
             updateName()
         }
 

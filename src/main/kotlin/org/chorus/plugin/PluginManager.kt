@@ -625,7 +625,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 } catch (e: Exception) {
                     PluginManager.log.error(
                         server.baseLang.tr(
-                            "chorus.plugin.eventError", event.getEventName(), registration.plugin.description.fullName,
+                            "chorus.plugin.eventError", event.getSafeEventName(), registration.plugin.description.fullName,
                             e.message!!, registration.listener.javaClass.name
                         ), e
                     )

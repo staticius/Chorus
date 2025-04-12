@@ -63,7 +63,7 @@ class Network @JvmOverloads constructor(
         server.motd,
         server.subMotd,
         server.onlinePlayers.size,
-        server.getMaxPlayers(),
+        server.maxPlayers,
         server.serverID.mostSignificantBits,
         Server.getGamemodeString(server.defaultGamemode, true),
         false,

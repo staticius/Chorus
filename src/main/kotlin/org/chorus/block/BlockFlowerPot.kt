@@ -81,7 +81,7 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
             removeFlower()
             return true
         }
-        val potBlock = item.getBlock()
+        val potBlock = item.getSafeBlock()
         if (potBlock is FlowerPotBlock && potBlock.isPotBlockState) {
             val blockEntity = getOrCreateBlockEntity()
             blockEntity.namedTag.putCompound("PlantBlock", potBlock.plantBlockTag)

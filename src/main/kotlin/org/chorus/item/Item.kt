@@ -98,10 +98,6 @@ abstract class Item : Cloneable, ItemID, Loggable {
     open fun internalAdjust() {
     }
 
-    fun setMeta(meta: Int) {
-        this.meta = meta
-    }
-
     fun hasMeta(): Boolean {
         return hasMeta
     }
@@ -692,17 +688,12 @@ abstract class Item : Cloneable, ItemID, Loggable {
         } else return false
     }
 
-    val orCreateNamedTag: CompoundTag
-        get() {
-            if (!hasCompoundTag()) {
-                setNamedTag(CompoundTag())
-                return cachedNBT!!
-            }
-            return namedTag!!
-        }
-
     fun getOrCreateNamedTag(): CompoundTag {
-        return orCreateNamedTag
+        if (!hasCompoundTag()) {
+            setNamedTag(CompoundTag())
+            return cachedNBT!!
+        }
+        return namedTag!!
     }
 
     fun clearNamedTag(): Item {
@@ -767,7 +758,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
         return ItemTags.getTagSet(this.blockId).contains(itemTag)
     }
 
-    fun getName(): String {
+    fun getItemName(): String {
         return if (this.hasCustomName()) customName else idConvertToName()
     }
 
@@ -778,7 +769,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
         return ((this.block != null) && block!!.canBePlaced())
     }
 
-    open fun getBlock(): Block {
+    open fun getSafeBlock(): Block {
         return if (this.block != null) {
             block!!.clone()
         } else {
@@ -844,14 +835,6 @@ abstract class Item : Cloneable, ItemID, Loggable {
             this.hasMeta = true
             internalAdjust()
         }
-
-    fun setDamage(damage: Int) {
-        this.damage = damage
-    }
-
-    fun getDamage(): Int {
-        return this.damage
-    }
 
     /**
      * 创建一个通配配方物品,即该物品可以不限制数据值应用到配方中
@@ -1307,7 +1290,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
      * Controls what block types this block may be placed on.
      */
     fun addCanPlaceOn(block: Block) {
-        val tag = orCreateNamedTag
+        val tag = getOrCreateNamedTag()
         val canPlaceOn = tag.getList("CanPlaceOn", StringTag::class.java)
         tag.putList("CanPlaceOn", canPlaceOn.add(StringTag(block.toItem().id)))
         this.setCompoundTag(tag)
@@ -1320,7 +1303,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
     }
 
     open fun setCanPlaceOn(blocks: Array<Block>) {
-        val tag = orCreateNamedTag
+        val tag = getOrCreateNamedTag()
         val canPlaceOn = ListTag<StringTag>()
         for (block in blocks) {
             canPlaceOn.add(StringTag(block.toItem().id))
@@ -1331,7 +1314,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
 
     val canPlaceOn: ListTag<StringTag>
         get() {
-            val tag = orCreateNamedTag
+            val tag = getOrCreateNamedTag()
             return tag.getList("CanPlaceOn", StringTag::class.java)
         }
 
@@ -1342,7 +1325,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
      * Controls what block types can destroy
      */
     fun addCanDestroy(block: Block) {
-        val tag = orCreateNamedTag
+        val tag = getOrCreateNamedTag()
         val canDestroy = tag.getList("CanDestroy", StringTag::class.java)
         tag.putList("CanDestroy", canDestroy.add(StringTag(block.toItem().id)))
         this.setCompoundTag(tag)
@@ -1355,7 +1338,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
     }
 
     open fun setCanDestroy(blocks: Array<Block>) {
-        val tag = orCreateNamedTag
+        val tag = getOrCreateNamedTag()
         val canDestroy = ListTag<StringTag>()
         for (block in blocks) {
             canDestroy.add(StringTag(block.toItem().id))
@@ -1366,7 +1349,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
 
     val canDestroy: ListTag<StringTag>
         get() {
-            val tag = orCreateNamedTag
+            val tag = getOrCreateNamedTag()
             return tag.getList("CanDestroy", StringTag::class.java)
         }
 
@@ -1396,14 +1379,14 @@ abstract class Item : Cloneable, ItemID, Loggable {
          * @return
          */
         get() {
-            val tag = orCreateNamedTag
+            val tag = getOrCreateNamedTag()
             if (tag.contains("minecraft:item_lock")) {
                 return ItemLockMode.entries[tag.getByte("minecraft:item_lock").toInt()]
             }
             return ItemLockMode.NONE
         }
         set(mode) {
-            val tag = orCreateNamedTag
+            val tag = getOrCreateNamedTag()
             if (mode == ItemLockMode.NONE) {
                 tag.remove("minecraft:item_lock")
             } else {
@@ -1413,7 +1396,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
         }
 
     open fun setKeepOnDeath(keepOnDeath: Boolean) {
-        val tag = orCreateNamedTag
+        val tag = getOrCreateNamedTag()
         if (keepOnDeath) {
             tag.putByte("minecraft:keep_on_death", 1)
         } else {
@@ -1431,7 +1414,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
      * @return
      */
     fun keepOnDeath(): Boolean {
-        val tag = orCreateNamedTag
+        val tag = getOrCreateNamedTag()
         return tag.contains("minecraft:keep_on_death")
     }
 

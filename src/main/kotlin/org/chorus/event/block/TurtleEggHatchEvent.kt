@@ -12,7 +12,7 @@ class TurtleEggHatchEvent(turtleEgg: BlockTurtleEgg, @JvmField var eggsHatching:
     var isRecalculateOnFailure: Boolean = true
 
     fun recalculateNewState() {
-        var turtleEgg = getBlock()
+        var turtleEgg = block
         val eggCount = turtleEgg.eggCount.ordinal + 1
         val eggsHatching = this.eggsHatching
         if (eggCount <= eggsHatching) {
@@ -24,9 +24,10 @@ class TurtleEggHatchEvent(turtleEgg: BlockTurtleEgg, @JvmField var eggsHatching:
         }
     }
 
-    override fun getBlock(): BlockTurtleEgg {
-        return super.getBlock() as BlockTurtleEgg
-    }
+    override val block: BlockTurtleEgg
+        get() {
+            return super.block as BlockTurtleEgg
+        }
 
     companion object {
         val handlers: HandlerList = HandlerList()

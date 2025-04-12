@@ -75,7 +75,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.getBlock() != null && item.blockId == BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
+        if (item.getSafeBlock() != null && item.blockId == BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
             val eggCount = eggCount
             if (eggCount == TurtleEggCount.FOUR_EGG) {
                 return false
@@ -92,10 +92,10 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
             if (placeEvent.isCancelled) {
                 return false
             }
-            if (!level.setBlock(this.position, placeEvent.getBlock(), true, true)) {
+            if (!level.setBlock(this.position, placeEvent.block, true, true)) {
                 return false
             }
-            val placeBlock = placeEvent.getBlock()
+            val placeBlock = placeEvent.block
             level.addLevelSoundEvent(
                 this.position,
                 LevelSoundEventPacket.SOUND_PLACE,

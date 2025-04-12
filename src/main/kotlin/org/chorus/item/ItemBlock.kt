@@ -24,7 +24,7 @@ open class ItemBlock @JvmOverloads constructor(block: Block, aux: Int = 0, count
         return block
     }
 
-    override fun getBlock(): Block {
+    override fun getSafeBlock(): Block {
         return block!!.clone()
     }
 

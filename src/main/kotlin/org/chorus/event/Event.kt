@@ -37,8 +37,8 @@ abstract class Event {
             field = value
         }
 
-    fun getEventName(): String {
-        return if (eventName == null) javaClass.name else eventName!!
+    fun getSafeEventName(): String {
+        return eventName ?: javaClass.name
     }
 
     open fun setCancelled() {

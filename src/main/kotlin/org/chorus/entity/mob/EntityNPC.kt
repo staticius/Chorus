@@ -35,7 +35,7 @@ class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
         return EntityID.NPC
     }
 
-    protected lateinit var dialog: FormWindowDialog
+    lateinit var dialog: FormWindowDialog
 
     init {
         nbt.putIfNull(TAG_RAWTEXT_NAME, StringTag("NPC"))

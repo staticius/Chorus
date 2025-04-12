@@ -117,7 +117,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     override fun setOnFire(seconds: Int) {}
 
     override fun attack(source: EntityDamageEvent): Boolean {
-        if (health - source.getDamage() < getMaxHealth() / 2f) {
+        if (health - source.damage < getMaxHealth() / 2f) {
             if (Utils.rand(0, 4) == 0) {
                 teleport()
                 return true

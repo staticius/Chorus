@@ -241,7 +241,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         if (invulnerable) {
             return false
         } else {
-            source.setDamage(source.getDamage() * 15)
+            source.damage = (source.damage * 15)
 
             val attack: Boolean = super.attack(source)
 

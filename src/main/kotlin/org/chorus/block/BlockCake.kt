@@ -107,7 +107,7 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState = Companion.pro
         fz: Float
     ): Boolean {
         if (isNotActivate(player)) return false
-        if (item.getBlock() is BlockCandle && this.biteCount == 0) {
+        if (item.getSafeBlock() is BlockCandle && this.biteCount == 0) {
             return false
         }
         val damage = biteCount

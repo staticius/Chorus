@@ -29,7 +29,7 @@ class ConstAirItem : Item("minecraft:air") {
         set(block) {
         }
 
-    override fun getBlock(): Block {
+    override fun getSafeBlock(): Block {
         return BlockAir()
     }
 

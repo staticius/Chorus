@@ -24,12 +24,12 @@ open class ItemChestBoat : Item {
     override var damage: Int
         get() = super.damage
         set(meta) {
-            super.setDamage(meta)
+            super.damage = (meta)
             adjustName()
         }
 
     private fun adjustName() {
-        name = when (getDamage()) {
+        name = when (damage) {
             0 -> "Oak Chest Boat"
             1 -> "Spruce Chest Boat"
             2 -> "Birch Chest Boat"

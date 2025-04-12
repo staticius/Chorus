@@ -12,12 +12,12 @@ class ItemSplashPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) 
     override var damage: Int
         get() = super.damage
         set(meta) {
-            super.setDamage(meta)
+            super.damage = (meta)
             updateName()
         }
 
     private fun updateName() {
-        val potion = PotionType.get(getDamage())
+        val potion = PotionType.get(damage)
         name = if (PotionType.WATER.equals(potion)) {
             "Splash Water Bottle"
         } else {

@@ -103,7 +103,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         if (invulnerable) {
             return false
         } else {
-            source.setDamage(source.getDamage() * 2)
+            source.damage = (source.damage * 2)
 
             val attack: Boolean = super.attack(source)
 

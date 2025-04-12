@@ -18,9 +18,10 @@ class BlockPistonEvent(
         return ArrayList(blocks)
     }
 
-    override fun getBlock(): Block {
-        return super.getBlock() as BlockPistonBase
-    }
+    override val block: Block
+        get() {
+            return super.block as BlockPistonBase
+        }
 
     companion object {
         val handlers: HandlerList = HandlerList()

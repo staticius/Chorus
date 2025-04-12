@@ -16,7 +16,7 @@ class ShulkerBoxDispenseBehavior : DefaultDispenseBehavior() {
             return null
         }
 
-        val shulkerBox = item.getBlock().clone() as BlockUndyedShulkerBox
+        val shulkerBox = item.getSafeBlock().clone() as BlockUndyedShulkerBox
         shulkerBox.level = block.level
         shulkerBox.layer = 0
         shulkerBox.position.x = target.position.x

@@ -750,7 +750,7 @@ class Player(
         super.initEntity()
         val level = if (namedTag!!.containsString("SpawnLevel")) {
             Server.instance.getLevelByName(namedTag!!.getString("SpawnLevel"))
-        } else Server.instance.getDefaultLevel()
+        } else Server.instance.defaultLevel
         if (namedTag!!.containsInt("SpawnX") && namedTag!!.containsInt("SpawnY") && namedTag!!.containsInt("SpawnZ")) {
             this.spawnPoint = Locator(
                 namedTag!!.getInt("SpawnX").toDouble(),

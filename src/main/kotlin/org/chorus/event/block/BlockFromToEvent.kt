@@ -6,7 +6,7 @@ import org.chorus.event.HandlerList
 
 class BlockFromToEvent(block: Block, @JvmField var to: Block) : BlockEvent(block), Cancellable {
     val from: Block
-        get() = getBlock()
+        get() = block
 
     companion object {
         val handlers: HandlerList = HandlerList()

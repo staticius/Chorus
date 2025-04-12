@@ -33,9 +33,9 @@ class EndermanBlockExecutor : IBehaviorExecutor {
                     ).filter { block: Block -> block.isSolid && block.up().canBeReplaced() }.findAny()
                     if (optionalBlock.isPresent) {
                         val block = optionalBlock.get()
-                        block.level.setBlock(block.up().position, entity.itemInHand.getBlock())
+                        block.level.setBlock(block.up().position, entity.itemInHand.getSafeBlock())
                         entity.setItemInHand(Item.AIR)
-                        entity.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, Item.AIR.getBlock())
+                        entity.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, Item.AIR.getSafeBlock())
                     }
                 }
             }

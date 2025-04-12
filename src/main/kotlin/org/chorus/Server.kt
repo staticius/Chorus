@@ -298,6 +298,11 @@ class Server internal constructor(
 
     /**default levels */
     var defaultLevel: Level? = null
+        set(value) {
+            if (value == null || (this.isLevelLoaded(value.getName()) && value != field)) {
+                field = value
+            }
+        }
     var defaultNether: Level? = null
     var defaultEnd: Level? = null
 
@@ -319,7 +324,7 @@ class Server internal constructor(
             }
         }
 
-        if (this.getDefaultLevel() == null) {
+        if (this.defaultLevel == null) {
             var levelFolder = properties.get(ServerPropertiesKeys.LEVEL_NAME, "world")
             if (levelFolder.trim { it <= ' ' }.isEmpty()) {
                 log.warn("level-name cannot be null, using default")
@@ -353,7 +358,7 @@ class Server internal constructor(
                 val levelConfig = LevelConfig("leveldb", true, generatorConfig)
                 this.generateLevel(levelFolder, levelConfig)
             }
-            this.setDefaultLevel(this.getLevelByName("$levelFolder Dim0"))
+            this.defaultLevel = (this.getLevelByName("$levelFolder Dim0"))
         }
     }
 
@@ -765,7 +770,7 @@ class Server internal constructor(
         var title = (0x1b.toChar().toString() + "]0;" + this.name + " "
                 + this.nukkitVersion
                 + " | " + this.gitCommit
-                + " | Online " + players.size + "/" + this.getMaxPlayers()
+                + " | Online " + players.size + "/" + this.maxPlayers
                 + " | Memory " + usage)
         if (!Chorus.shortTitle) {
             title += (" | U " + round((network.upload / 1024 * 1000))
@@ -1393,7 +1398,7 @@ class Server internal constructor(
             if (settings.playerSettings.savePlayerData) {
                 log.info(this.baseLang.tr("chorus.data.playerNotFound", uuid))
             }
-            val spawn = getDefaultLevel()!!.safeSpawn
+            val spawn = defaultLevel!!.safeSpawn
             val nbt = CompoundTag()
                 .putLong("firstPlayed", System.currentTimeMillis() / 1000)
                 .putLong("lastPlayed", System.currentTimeMillis() / 1000)
@@ -1403,7 +1408,7 @@ class Server internal constructor(
                         .add(FloatTag(spawn.position.y))
                         .add(FloatTag(spawn.position.z))
                 )
-                .putString("Level", getDefaultLevel()!!.getName())
+                .putString("Level", defaultLevel!!.getName())
                 .putList("Inventory", ListTag<Tag<*>>())
                 .putCompound("Achievements", CompoundTag())
                 .putInt("playerGameType", this.gamemode)
@@ -1654,22 +1659,6 @@ class Server internal constructor(
 
     // endregion
     // region Levels - 游戏世界相关
-
-    /**
-     * @return Get the default overworld
-     */
-    fun getDefaultLevel(): Level? {
-        return defaultLevel
-    }
-
-    /**
-     * Set default overworld
-     */
-    fun setDefaultLevel(defaultLevel: Level?) {
-        if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getName()) && defaultLevel != this.defaultLevel)) {
-            this.defaultLevel = defaultLevel
-        }
-    }
 
     var defaultNetherLevel: Level?
         /**
@@ -1945,7 +1934,7 @@ class Server internal constructor(
 
         properties.save()
 
-        if (this.getDefaultLevel() == null) {
+        if (this.defaultLevel == null) {
             log.error(this.baseLang.tr("chorus.level.defaultError"))
             this.forceShutdown()
 
@@ -2040,7 +2029,7 @@ class Server internal constructor(
      */
     @JvmOverloads
     fun unloadLevel(level: Level, forceUnload: Boolean = false): Boolean {
-        check(!(level == this.getDefaultLevel() && !forceUnload)) { "The default level cannot be unloaded while running, please switch levels." }
+        check(!(level == this.defaultLevel && !forceUnload)) { "The default level cannot be unloaded while running, please switch levels." }
 
         return level.unload(forceUnload)
     }
@@ -2257,9 +2246,6 @@ class Server internal constructor(
 
     // endregion
     // region configs - 配置相关
-    fun getMaxPlayers(): Int {
-        return maxPlayers
-    }
 
     /**
      * Set the players count is allowed

@@ -36,7 +36,7 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     override var damage: Int
         get() = super.damage
         set(meta) {
-            super.setDamage(meta)
+            super.damage = (meta)
             updateName()
         }
 
@@ -182,7 +182,7 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         get() = 1
 
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
-        if (getDamage() == 6) return false
+        if (damage == 6) return false
         val server: Server = Server.instance
         renderMap(server.getLevel(mapWorld)!!, mapStartX, mapStartZ, mapScale)
         player.getInventory().setItemInHand(this)

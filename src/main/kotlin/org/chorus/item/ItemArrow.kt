@@ -12,12 +12,12 @@ class ItemArrow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     override var damage: Int
         get() = super.damage
         set(meta) {
-            super.setDamage(meta)
+            super.damage = (meta)
             updateName()
         }
 
     private fun updateName() {
-        val type = getDamage()
+        val type = damage
         if (type <= 0) {
             name = GENERIC_NAME
             return
@@ -33,7 +33,7 @@ class ItemArrow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     val tippedArrowPotion: PotionType?
         get() {
-            val damage = getDamage()
+            val damage = damage
             if (damage > 0) {
                 return PotionType.get(damage - 1)
             }

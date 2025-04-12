@@ -12,12 +12,12 @@ class ItemLingeringPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 
     override var damage: Int
         get() = super.damage
         set(meta) {
-            super.setDamage(meta)
+            super.damage = (meta)
             updateName()
         }
 
     private fun updateName() {
-        val potion = PotionType.get(getDamage())
+        val potion = PotionType.get(damage)
         name = if (PotionType.WATER.equals(potion)) {
             "Lingering Water Bottle"
         } else {

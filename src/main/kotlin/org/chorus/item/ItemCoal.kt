@@ -10,5 +10,5 @@ class ItemCoal @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     }
 
     val isCharcoal: Boolean
-        get() = super.getDamage() == 1
+        get() = super.damage == 1
 }

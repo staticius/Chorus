@@ -17,7 +17,7 @@ class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     override var damage: Int
         get() = super.damage
         set(meta) {
-            super.setDamage(meta)
+            super.damage = (meta)
             updateName()
         }
 
@@ -46,7 +46,7 @@ class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         if (consumeEvent.isCancelled) {
             return false
         }
-        val potion = PotionType.get(this.getDamage())
+        val potion = PotionType.get(this.damage)
 
         player.level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
@@ -69,7 +69,7 @@ class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     }
 
     val potion: PotionType?
-        get() = PotionType.get(getDamage())
+        get() = PotionType.get(damage)
 
     companion object {
         fun buildName(potion: PotionType, type: String, includeLevel: Boolean): String {

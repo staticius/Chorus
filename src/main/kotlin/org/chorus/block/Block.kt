@@ -1087,7 +1087,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
                         }
                         val entry = Item.get(v.data)
                         if (!entry.isNothing &&
-                            entry.getBlock().id == this.id
+                            entry.getSafeBlock().id == this.id
                         ) {
                             canBreak = true
                             break
