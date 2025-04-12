@@ -45,7 +45,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
     protected var lastDetectTime: Int = level!!.tick
     protected var lastCollideTime: Int = level!!.tick
     protected var waitForVibration: Boolean = false
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.WARDEN
     }
 

@@ -988,7 +988,7 @@ class Player(
         if (endPortal) { //handle endPortal teleport
             if (!inEndPortal) {
                 inEndPortal = true
-                if (this.getRiding() == null && getPassengers().isEmpty()) {
+                if (this.getRiding() == null && passengers.isEmpty()) {
                     val ev = EntityPortalEnterEvent(this, PortalType.END)
                     Server.instance.pluginManager.callEvent(ev)
 

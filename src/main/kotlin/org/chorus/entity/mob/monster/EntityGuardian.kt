@@ -42,7 +42,7 @@ import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 
 class EntityGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntitySwimmable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.GUARDIAN
     }
 
@@ -177,7 +177,7 @@ class EntityGuardian(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
     }
 
     override fun attackTarget(entity: Entity): Boolean {
-        return when (entity.getIdentifier()) {
+        return when (entity.getEntityIdentifier()) {
             EntityID.SQUID, EntityID.GLOW_SQUID, EntityID.AXOLOTL -> true
             else -> false
         }

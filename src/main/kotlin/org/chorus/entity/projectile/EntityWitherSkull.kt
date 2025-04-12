@@ -20,7 +20,7 @@ import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 
 open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile(chunk, nbt), EntityExplosive {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.WITHER_SKULL
     }
 

@@ -20,7 +20,7 @@ import kotlin.math.abs
 
 class EntityTnt @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, protected var source: Entity? = null) :
     Entity(chunk, nbt), EntityExplosive {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.TNT
     }
 

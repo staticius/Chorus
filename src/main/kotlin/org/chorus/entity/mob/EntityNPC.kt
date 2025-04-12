@@ -31,7 +31,7 @@ import org.chorus.nbt.tag.StringTag
 import org.chorus.network.protocol.NPCRequestPacket
 
 class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityInteractable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.NPC
     }
 

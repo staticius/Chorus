@@ -34,7 +34,7 @@ import kotlin.math.sqrt
 
 class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, shootingEntity: Entity? = null) :
     SlenderProjectile(chunk, nbt, shootingEntity) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.FISHING_HOOK
     }
 
@@ -282,7 +282,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
         return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
-            actorType = this.getIdentifier(),
+            actorType = this.getEntityIdentifier(),
             position = this.position.asVector3f(),
             velocity = this.motion.asVector3f(),
             rotation = this.rotation.asVector2f(),

@@ -57,7 +57,7 @@ class EntityMoveToOwnerExecutor @JvmOverloads constructor(
                 //更新视线target
                 setLookTarget(entity, target.position)
 
-                if (entity.getMemoryStorage().notEmpty(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)) {
+                if (entity.memoryStorage.notEmpty(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)) {
                     entity.setDataFlag(EntityFlag.INTERESTED, true)
                 }
 

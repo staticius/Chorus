@@ -90,7 +90,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     override val equipment = EntityEquipment(this)
 
     override val memoryStorage: IMemoryStorage
-        get() = this.behaviorGroup.getMemoryStorage()
+        get() = this.behaviorGroup.memoryStorage
 
 
     override fun initEntity() {
@@ -128,7 +128,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
 
     override fun saveNBT() {
         super.saveNBT()
-        getBehaviorGroup().save(this)
+        behaviorGroup.save(this)
 
         if (activeEffects != null) namedTag!!.putList(TAG_ACTIVE_EFFECTS, ListTag(activeEffects!!))
         namedTag!!.putShort(TAG_AIR, air.toInt())
@@ -445,16 +445,6 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     }
 
     /**
-     * 返回此实体持有的行为组[IBehaviorGroup] <br></br>
-     * 默认实现只会返回一个空行为[EmptyBehaviorGroup]常量，若你想让实体具有AI，你需要覆写此方法
-     *
-     * @return 此实体持有的行为组
-     */
-    fun getBehaviorGroup(): IBehaviorGroup {
-        return behaviorGroup
-    }
-
-    /**
      * 请求一个行为组实例，此方法在实体初始化行为组时调用
      *
      * @return 新创建的行为组
@@ -468,7 +458,6 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         // 计算是否活跃
         isActive = level!!.isHighLightChunk(getChunkX(), getChunkZ())
         if (!this.isImmobile()) { // immobile会禁用实体AI
-            val behaviorGroup = getBehaviorGroup()
             behaviorGroup.collectSensorData(this)
             behaviorGroup.evaluateCoreBehaviors(this)
             behaviorGroup.evaluateBehaviors(this)
@@ -503,10 +492,6 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
                 return true
             } else return super.onInteract(player, item, clickedPos)
         }
-    }
-
-    override fun getMemoryStorage(): IMemoryStorage {
-        return getBehaviorGroup().getMemoryStorage()
     }
 
     /**

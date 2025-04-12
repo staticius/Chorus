@@ -7,7 +7,7 @@ import org.chorus.nbt.tag.CompoundTag
 import java.util.concurrent.ThreadLocalRandom
 
 class EntityStrider(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.STRIDER
     }
 

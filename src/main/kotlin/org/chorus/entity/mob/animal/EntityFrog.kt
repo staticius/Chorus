@@ -29,7 +29,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
 class EntityFrog(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityVariant {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.FROG
     }
 

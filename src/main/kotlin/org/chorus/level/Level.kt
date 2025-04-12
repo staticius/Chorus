@@ -790,12 +790,7 @@ class Level(
                 }, Server.instance.computeThreadPool).join()
                 for (id in updateEntities.keys) {
                     val entity = updateEntities[id]
-                    if (entity is EntityMob) {
-                        if (entity.getBehaviorGroup() == null) {
-                            updateEntities.remove(id)
-                            continue
-                        }
-                    }
+                    if (entity is EntityMob) {}
                     if (entity == null) {
                         updateEntities.remove(id)
                         continue
@@ -3298,8 +3293,8 @@ class Level(
         val block = getMapColoredBlockAt(x, z) ?: return VOID_BLOCK_COLOR
 
         //在z轴存在高度差的地方，颜色变深或变浅
-        val nzy = getMapColoredBlockAt(x, z - 1) ?: return block.getColor()
-        color = block.getColor().toAwtColor()
+        val nzy = getMapColoredBlockAt(x, z - 1) ?: return block.color!!
+        color = block.color!!.toAwtColor()
         if (nzy.position.floorY > block.position.floorY) {
             color = darker(color, 0.875 - 5.coerceAtMost(nzy.position.floorY - block.position.floorY) * 0.05)
         } else if (nzy.position.floorY < block.position.floorY) {
@@ -3380,8 +3375,8 @@ class Level(
         var y = chunk.getHeightMap(chunkX, chunkZ)
         while (y >= minHeight) {
             val block = getBlock(x, y, z)
-            if (block.color == null) return null
-            if (block.color!!.alpha == 0 /* || block instanceof BlockFlowingWater*/) {
+            if (block.color == BlockColor.VOID_BLOCK_COLOR) return null
+            if (block.color.alpha == 0 /* || block instanceof BlockFlowingWater*/) {
                 y--
             } else {
                 return block

@@ -22,7 +22,7 @@ import org.chorus.utils.Utils
 import java.util.concurrent.ThreadLocalRandom
 
 class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.TROPICALFISH
     }
 

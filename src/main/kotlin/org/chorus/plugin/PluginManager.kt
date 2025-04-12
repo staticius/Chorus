@@ -547,7 +547,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             aliasList.add(alias)
                         }
 
-                        newCmd.setAliases(aliasList.toTypedArray())
+                        newCmd.aliases = (aliasList.toTypedArray())
                     }
                 }
 

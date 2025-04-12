@@ -18,7 +18,7 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 class EntityEvocationFang(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable {
     var evocationIllager: EntityEvocationIllager? = null
 
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.EVOCATION_FANG
     }
 

@@ -48,7 +48,7 @@ import java.util.function.Consumer
 import java.util.function.Function
 
 open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.PIGLIN
     }
 
@@ -309,7 +309,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
     }
 
     override fun attackTarget(entity: Entity): Boolean {
-        return when (entity.getIdentifier()) {
+        return when (entity.getEntityIdentifier()) {
             EntityID.WITHER_SKELETON, EntityID.WITHER -> true
             EntityID.HOGLIN -> {
                 if (entity is EntityHoglin) {

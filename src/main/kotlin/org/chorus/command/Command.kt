@@ -37,7 +37,13 @@ abstract class Command @JvmOverloads constructor(
     var label: String?
         private set
 
-    var aliases: Array<String>
+    var aliases: Array<String> = emptyArray()
+        set(value) {
+            field = value
+            if (!this.isRegistered) {
+                this.activeAliases = value
+            }
+        }
 
     private var activeAliases: Array<String>
 
@@ -94,14 +100,6 @@ abstract class Command @JvmOverloads constructor(
         return commandParameters[key]!!
     }
 
-    fun getCommandParameters(): Map<String, Array<CommandParameter>> {
-        return commandParameters
-    }
-
-    fun setCommandParameters(commandParameters: MutableMap<String, Array<CommandParameter>>) {
-        this.commandParameters = commandParameters
-    }
-
     fun addCommandParameters(key: String, parameters: Array<CommandParameter>) {
         commandParameters[key] = parameters
     }
@@ -122,8 +120,8 @@ abstract class Command @JvmOverloads constructor(
 
         val customData = defaultCommandData.clone()
 
-        if (getAliases().size > 0) {
-            val aliases = getAliases().toMutableList()
+        if (aliases.isNotEmpty()) {
+            val aliases = aliases.toMutableList()
             if (!aliases.contains(this.name)) {
                 aliases.add(this.name)
             }
@@ -257,18 +255,13 @@ abstract class Command @JvmOverloads constructor(
     val isRegistered: Boolean
         get() = this.commandMap != null
 
-    fun getAliases(): Array<String> {
-        return this.activeAliases
-    }
-
     val commandFormatTips: String
         get() {
             val builder = StringBuilder()
-            for (form in getCommandParameters().keys) {
-                val commandParameters =
-                    getCommandParameters()[form]!!
+            for (form in commandParameters.keys) {
+                val commandParametersValue = commandParameters[form]!!
                 builder.append("- /" + this.name)
-                for (commandParameter in commandParameters) {
+                for (commandParameter in commandParametersValue) {
                     if (!commandParameter.optional) {
                         if (commandParameter.enumData == null) {
                             builder.append(" <")
@@ -303,13 +296,6 @@ abstract class Command @JvmOverloads constructor(
             }
             return builder.toString()
         }
-
-    fun setAliases(aliases: Array<String>) {
-        this.aliases = aliases
-        if (!this.isRegistered) {
-            this.activeAliases = aliases
-        }
-    }
 
     fun hasParamTree(): Boolean {
         return this.paramTree != null

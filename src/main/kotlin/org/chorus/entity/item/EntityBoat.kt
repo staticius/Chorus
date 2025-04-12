@@ -30,7 +30,7 @@ import kotlin.math.min
 import kotlin.math.sqrt
 
 open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.BOAT
     }
 
@@ -127,7 +127,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
-            actorType = this.getIdentifier(),
+            actorType = this.getEntityIdentifier(),
             position = this.position.asVector3f().add(0f, this.getBaseOffset(), 0f),
             velocity = this.motion.asVector3f(),
             rotation = this.rotation.asVector2f(),

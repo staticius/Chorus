@@ -114,7 +114,7 @@ class ParamTree {
 
     /**
      * 从给定输入参数匹配该命令节点树对应命令的命令重载，并且解析对应参数。<br></br>
-     * 返回值是一个[Map.Entry],它是成功匹配的命令重载，对应[Command.getCommandParameters]  commandParameters}。<br></br>
+     * 返回值是一个[Map.Entry],它是成功匹配的命令重载，对应[]  commandParameters}。<br></br>
      * 其Key对应commandParameters中的Key,值是一个[ParamList] 其中每个节点与commandParameters的Value一一对应，并且是解析之后的结果。
      *
      * @param sender 命令发送者

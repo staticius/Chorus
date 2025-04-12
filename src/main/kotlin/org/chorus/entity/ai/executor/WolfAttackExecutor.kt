@@ -33,13 +33,13 @@ class WolfAttackExecutor
     override fun execute(entity: EntityMob): Boolean {
         val wolf = entity as EntityWolf
 
-        //        target = entity.getBehaviorGroup().getMemoryStorage().get(memory);
+        //        target = entity.getBehaviorGroup().memoryStorage.get(memory);
 //        if ((target != null && !target.isAlive()) || (target != null && target.equals(entity))) return false;
         wolf.setAngry(true)
 
-        if (entity.getMemoryStorage().notEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
+        if (entity.memoryStorage.notEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
             if (!entity.isEnablePitch()) entity.setEnablePitch(true)
-            val vector3 = entity.getMemoryStorage().get(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)
+            val vector3 = entity.memoryStorage.get(CoreMemoryTypes.NEAREST_FEEDING_PLAYER)
             if (vector3 != null) {
                 this.lookTarget = vector3.position.clone()
                 entity.setDataFlag(EntityFlag.INTERESTED, true)
@@ -62,7 +62,7 @@ class WolfAttackExecutor
         val wolf = entity as EntityWolf
         entity.level!!.scheduler.scheduleDelayedTask(null, { wolf.setAngry(false) }, 5)
 
-        if (entity.getMemoryStorage().isEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
+        if (entity.memoryStorage.isEmpty(CoreMemoryTypes.Companion.NEAREST_FEEDING_PLAYER)) {
             entity.setDataFlag(EntityFlag.INTERESTED, false)
         }
     }

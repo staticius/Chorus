@@ -20,8 +20,8 @@ class FangCircleExecutor : FangLineExecutor() {
         tick++
         if (tick >= DURATION) {
             val tick = entity.level!!.tick
-            entity.getMemoryStorage().set(CoreMemoryTypes.LAST_ATTACK_CAST, tick)
-            entity.getMemoryStorage().set(CoreMemoryTypes.LAST_ATTACK_TIME, tick)
+            entity.memoryStorage.set(CoreMemoryTypes.LAST_ATTACK_CAST, tick)
+            entity.memoryStorage.set(CoreMemoryTypes.LAST_ATTACK_TIME, tick)
             return false
         } else return true
     }

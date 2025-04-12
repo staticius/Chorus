@@ -40,7 +40,7 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.utils.Utils
 
 class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.HOGLIN
     }
 
@@ -60,7 +60,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                 Behavior(
                     EntityBreedingExecutor<EntityHoglin>(EntityHoglin::class.java, 16, 100, 0.5f),
                     IBehaviorEvaluator { entity: EntityMob ->
-                        entity.getMemoryStorage().get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE)
+                        entity.memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.IS_IN_LOVE)
                     }, 9, 1
                 ),
                 Behavior(
@@ -83,7 +83,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                     HoglinMeleeAttackExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.5f, 40, true, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
                         not(IBehaviorEvaluator { entity: EntityMob? ->
-                            val player = getMemoryStorage().get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
+                            val player = memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
                             player is Player && isBreedingItem(
                                 player.getInventory().itemInHand
                             )
@@ -94,7 +94,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                     HoglinMeleeAttackExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 0.5f, 40, false, 30), all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
                         not(IBehaviorEvaluator { entity: EntityMob? ->
-                            val player = getMemoryStorage()[CoreMemoryTypes.Companion.NEAREST_PLAYER]
+                            val player = memoryStorage[CoreMemoryTypes.Companion.NEAREST_PLAYER]
                             player is Player && isBreedingItem(
                                 player.getInventory().itemInHand
                             )
@@ -181,8 +181,8 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         val superResult: Boolean = super.onInteract(player, item, clickedPos)
         if (isBreedingItem(item)) {
-            getMemoryStorage()[CoreMemoryTypes.Companion.LAST_FEED_PLAYER] = player
-            getMemoryStorage()[CoreMemoryTypes.Companion.LAST_BE_FEED_TIME] = level!!.tick
+            memoryStorage[CoreMemoryTypes.Companion.LAST_FEED_PLAYER] = player
+            memoryStorage[CoreMemoryTypes.Companion.LAST_BE_FEED_TIME] = level!!.tick
             sendBreedingAnimation(item)
             item.count--
             return player.getInventory().setItemInHand(item) && superResult
@@ -206,7 +206,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
         FleeFromTargetExecutor(memory, 0.5f, true, 8f) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            if (entity.position.distance(entity.getMemoryStorage()[memory]!!.vector3) < 8) {
+            if (entity.position.distance(entity.memoryStorage[memory]!!.vector3) < 8) {
                 entity.level!!.addSound(entity.position, Sound.MOB_HOGLIN_RETREAT)
             }
         }
@@ -224,7 +224,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
             super.onStart(entity)
             entity.setDataProperty(
                 EntityDataTypes.Companion.TARGET_EID,
-                entity.getMemoryStorage()[memory]!!.getRuntimeID()
+                entity.memoryStorage[memory]!!.getRuntimeID()
             )
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(

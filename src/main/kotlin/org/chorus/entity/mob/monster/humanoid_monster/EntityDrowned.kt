@@ -38,7 +38,7 @@ import kotlin.math.min
 
 class EntityDrowned(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt), EntitySwimmable, EntityWalkable,
     EntitySmite {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.DROWNED
     }
 

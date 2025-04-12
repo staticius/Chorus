@@ -34,7 +34,7 @@ import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 
 class EntityMooshroom(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.MOOSHROOM
     }
 

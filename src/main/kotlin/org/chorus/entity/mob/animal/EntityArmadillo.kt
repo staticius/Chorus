@@ -36,7 +36,7 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
 
     private var rollState = RollState.UNROLLED
 
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ARMADILLO
     }
 

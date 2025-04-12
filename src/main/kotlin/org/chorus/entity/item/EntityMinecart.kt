@@ -12,7 +12,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.MinecartType
 
 class EntityMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.MINECART
     }
 

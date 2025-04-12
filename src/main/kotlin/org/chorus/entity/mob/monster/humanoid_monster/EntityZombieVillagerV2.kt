@@ -9,7 +9,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 class EntityZombieVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable,
     EntitySmite {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ZOMBIE_VILLAGER_V2
     }
 

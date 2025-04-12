@@ -39,7 +39,7 @@ import java.util.function.Function
 
 class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityFlyable, EntityOwnable,
     EntityInventoryHolder {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ALLAY
     }
 
@@ -133,8 +133,8 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
     private fun updateMemory() {
         val item = itemInHand
         if (item.isNothing) {
-            getMemoryStorage().clear(CoreMemoryTypes.Companion.LOOKING_ITEM)
-        } else getMemoryStorage()[CoreMemoryTypes.Companion.LOOKING_ITEM] = item.javaClass
+            memoryStorage.clear(CoreMemoryTypes.Companion.LOOKING_ITEM)
+        } else memoryStorage[CoreMemoryTypes.Companion.LOOKING_ITEM] = item.javaClass
     }
 
     fun getInventory(): Inventory {
@@ -144,7 +144,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
 
     override fun onUpdate(currentTick: Int): Boolean {
         if (currentTick % 10 == 0) {
-            val nearestItem = getMemoryStorage()[CoreMemoryTypes.Companion.NEAREST_ITEM]
+            val nearestItem = memoryStorage[CoreMemoryTypes.Companion.NEAREST_ITEM]
             if (nearestItem != null && !nearestItem.closed) {
                 if (nearestItem.position.distance(this.position) < 1 && currentTick - lastItemDropTick > dropCollectCooldown) {
                     val item: Item = nearestItem.getItem()

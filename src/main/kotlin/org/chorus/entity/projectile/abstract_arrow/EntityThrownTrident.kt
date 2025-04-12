@@ -33,7 +33,7 @@ import java.util.concurrent.ThreadLocalRandom
 
 class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
     EntityAbstractArrow(chunk, nbt, shootingEntity) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.THROWN_TRIDENT
     }
 

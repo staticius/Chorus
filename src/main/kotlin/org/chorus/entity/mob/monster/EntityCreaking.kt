@@ -38,7 +38,7 @@ import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
 class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.CREAKING
     }
 

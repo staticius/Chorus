@@ -6,27 +6,27 @@ import java.util.concurrent.ThreadLocalRandom
 
 interface EntityColor : EntityComponent {
     fun setColor(color: DyeColor) {
-        getMemoryStorage()[CoreMemoryTypes.COLOR] = Integer.valueOf(color.woolData).toByte()
+        memoryStorage[CoreMemoryTypes.COLOR] = Integer.valueOf(color.woolData).toByte()
     }
 
     fun setColor2(color: DyeColor) {
-        getMemoryStorage()[CoreMemoryTypes.COLOR2] = Integer.valueOf(color.woolData).toByte()
+        memoryStorage[CoreMemoryTypes.COLOR2] = Integer.valueOf(color.woolData).toByte()
     }
 
     fun getColor(): DyeColor {
-        return DyeColor.getByWoolData(getMemoryStorage()[CoreMemoryTypes.COLOR]!!.toInt())
+        return DyeColor.getByWoolData(memoryStorage[CoreMemoryTypes.COLOR]!!.toInt())
     }
 
     fun getColor2(): DyeColor {
-        return DyeColor.getByWoolData(getMemoryStorage()[CoreMemoryTypes.COLOR2]!!.toInt())
+        return DyeColor.getByWoolData(memoryStorage[CoreMemoryTypes.COLOR2]!!.toInt())
     }
 
     fun hasColor(): Boolean {
-        return getMemoryStorage().notEmpty(CoreMemoryTypes.COLOR)
+        return memoryStorage.notEmpty(CoreMemoryTypes.COLOR)
     }
 
     fun hasColor2(): Boolean {
-        return getMemoryStorage().notEmpty(CoreMemoryTypes.COLOR2)
+        return memoryStorage.notEmpty(CoreMemoryTypes.COLOR2)
     }
 
     fun getRandomColor(): DyeColor {

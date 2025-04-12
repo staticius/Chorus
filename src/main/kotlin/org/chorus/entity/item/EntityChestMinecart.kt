@@ -20,7 +20,7 @@ import org.chorus.network.protocol.types.EntityLink
 import org.chorus.utils.MinecartType
 
 class EntityChestMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt), InventoryHolder {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.CHEST_MINECART
     }
 

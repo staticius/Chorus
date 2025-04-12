@@ -21,7 +21,7 @@ import java.util.concurrent.*
 import kotlin.math.sqrt
 
 class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt), EntityExplosive {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.TNT_MINECART
     }
 

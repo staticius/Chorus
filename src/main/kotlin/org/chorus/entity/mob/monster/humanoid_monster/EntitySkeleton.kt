@@ -31,7 +31,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 open class EntitySkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable,
     EntitySmite {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.SKELETON
     }
 

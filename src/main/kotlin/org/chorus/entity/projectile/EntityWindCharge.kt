@@ -24,7 +24,7 @@ open class EntityWindCharge @JvmOverloads constructor(
     EntityProjectile(chunk, nbt, shootingEntity) {
     var directionChanged: Entity? = null
 
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.WIND_CHARGE_PROJECTILE
     }
 

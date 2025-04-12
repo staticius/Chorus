@@ -6,7 +6,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
 class EntityGlowSquid(chunk: IChunk?, nbt: CompoundTag) : EntitySquid(chunk, nbt), EntitySwimmable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.GLOW_SQUID
     }
 

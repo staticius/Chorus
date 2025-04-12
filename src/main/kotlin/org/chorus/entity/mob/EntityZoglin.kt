@@ -28,7 +28,7 @@ import org.chorus.utils.Utils
 import java.util.function.Function
 
 class EntityZoglin(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt!!), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ZOGLIN
     }
 

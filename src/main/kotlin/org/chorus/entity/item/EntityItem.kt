@@ -20,7 +20,7 @@ import org.chorus.network.protocol.EntityEventPacket
 import kotlin.math.abs
 
 class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ITEM
     }
 

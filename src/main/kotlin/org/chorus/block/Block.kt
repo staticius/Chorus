@@ -42,7 +42,18 @@ import kotlin.math.pow
 abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!),
     Metadatable, AxisAlignedBB, IVector3, Loggable {
 
-    var color: BlockColor? = null
+    var color: BlockColor = BlockColor.VOID_BLOCK_COLOR
+        get() {
+            if (field == BlockColor.VOID_BLOCK_COLOR) {
+                field = VANILLA_BLOCK_COLOR_MAP[blockState.blockStateHash().toLong()] ?: BlockColor.VOID_BLOCK_COLOR
+                if (field == BlockColor.VOID_BLOCK_COLOR) {
+                    log.error("Failed to get color of block $name")
+                    log.error("Current block state hash: ${blockState.blockStateHash()}")
+                }
+            }
+            return field
+        }
+
     open val frictionFactor: Double = 0.6
 
     @JvmField
@@ -343,18 +354,6 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
 
     open fun canBeClimbed(): Boolean {
         return false
-    }
-
-    fun getColor(): BlockColor {
-        if (color != null) return color!!
-        else color = VANILLA_BLOCK_COLOR_MAP[blockState.blockStateHash()
-            .toLong()]
-        if (color == null) {
-            log.error("Failed to get color of block $name")
-            log.error("Current block state hash: " + blockState.blockStateHash())
-            color = BlockColor.VOID_BLOCK_COLOR
-        }
-        return color!!
     }
 
     open val name: String

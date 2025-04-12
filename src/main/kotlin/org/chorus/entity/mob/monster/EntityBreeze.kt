@@ -29,7 +29,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Utils
 
 class EntityBreeze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.BREEZE
     }
 

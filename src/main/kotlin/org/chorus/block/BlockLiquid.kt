@@ -130,7 +130,7 @@ abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
         flowCostVisited.clear()
     }
 
-    fun getFlowVector(): Vector3 {
+    fun getSafeFlowVector(): Vector3 {
         if (this.flowVector != null) {
             return flowVector!!
         }
@@ -217,7 +217,7 @@ abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
 
     override fun addVelocityToEntity(entity: Entity?, vector: Vector3?) {
         if (entity!!.canBeMovedByCurrents()) {
-            val flow = this.getFlowVector()
+            val flow = this.getSafeFlowVector()
             vector!!.x += flow.x
             vector!!.y += flow.y
             vector!!.z += flow.z

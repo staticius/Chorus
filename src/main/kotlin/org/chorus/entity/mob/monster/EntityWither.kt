@@ -44,7 +44,7 @@ import org.chorus.network.protocol.types.EntityLink
 import java.util.function.Function
 
 class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), EntityFlyable, EntitySmite {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.WITHER
     }
 
@@ -228,7 +228,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
         return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
-            actorType = this.getIdentifier(),
+            actorType = this.getEntityIdentifier(),
             position = this.position.asVector3f(),
             velocity = this.motion.asVector3f(),
             rotation = this.rotation.asVector2f(),

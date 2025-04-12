@@ -33,7 +33,7 @@ import org.chorus.nbt.tag.CompoundTag
 import java.util.concurrent.ThreadLocalRandom
 
 class EntityWitch(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonster(chunk, nbt), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.WITCH
     }
 

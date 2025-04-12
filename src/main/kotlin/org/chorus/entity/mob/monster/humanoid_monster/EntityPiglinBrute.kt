@@ -31,7 +31,7 @@ import org.chorus.nbt.tag.CompoundTag
 import java.util.function.Function
 
 class EntityPiglinBrute(chunk: IChunk?, nbt: CompoundTag?) : EntityPiglin(chunk, nbt), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.PIGLIN_BRUTE
     }
 
@@ -108,7 +108,7 @@ class EntityPiglinBrute(chunk: IChunk?, nbt: CompoundTag?) : EntityPiglin(chunk,
     }
 
     override fun attackTarget(entity: Entity): Boolean {
-        return when (entity.getIdentifier()) {
+        return when (entity.getEntityIdentifier()) {
             EntityID.WITHER_SKELETON, EntityID.WITHER -> true
             else -> false
         }

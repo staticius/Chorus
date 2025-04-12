@@ -20,7 +20,7 @@ import org.chorus.nbt.tag.CompoundTag
 class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(chunk, nbt), EntityExplosive {
     var directionChanged: Entity? = null
 
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.FIREBALL
     }
 

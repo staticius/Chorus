@@ -39,7 +39,7 @@ import java.util.function.Function
 
 class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(chunk, nbt), EntityWalkable,
     EntitySmite {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.WITHER_SKELETON
     }
 
@@ -102,7 +102,7 @@ class EntityWitherSkeleton(chunk: IChunk?, nbt: CompoundTag?) : EntitySkeleton(c
 
     //凋零骷髅会攻击距离他16格范围内的玩家、雪傀儡、小海龟、铁傀儡、猪灵或猪灵蛮兵
     override fun attackTarget(entity: Entity): Boolean {
-        return when (entity.getIdentifier()) {
+        return when (entity.getEntityIdentifier()) {
             EntityID.SNOW_GOLEM, EntityID.IRON_GOLEM, EntityID.TURTLE, EntityID.PIGLIN, EntityID.PIGLIN_BRUTE -> true
             else -> false
         }

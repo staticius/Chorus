@@ -8,7 +8,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Utils
 
 class EntitySalmon(chunk: IChunk?, nbt: CompoundTag) : EntityFish(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.SALMON
     }
 

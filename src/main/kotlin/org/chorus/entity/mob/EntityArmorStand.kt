@@ -29,7 +29,7 @@ import java.util.function.Consumer
 import kotlin.math.abs
 
 class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityInteractable, EntityNameable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ARMOR_STAND
     }
 

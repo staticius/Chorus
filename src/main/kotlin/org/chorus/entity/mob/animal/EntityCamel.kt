@@ -25,7 +25,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
 class EntityCamel(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.CAMEL
     }
 

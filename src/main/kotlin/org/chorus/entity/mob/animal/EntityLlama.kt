@@ -5,7 +5,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
 open class EntityLlama(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.LLAMA
     }
 

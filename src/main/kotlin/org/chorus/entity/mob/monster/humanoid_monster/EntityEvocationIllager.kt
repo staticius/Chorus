@@ -37,7 +37,7 @@ import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 
 class EntityEvocationIllager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, nbt), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.EVOCATION_ILLAGER
     }
 

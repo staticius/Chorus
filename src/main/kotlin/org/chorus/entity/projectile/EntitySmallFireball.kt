@@ -21,7 +21,7 @@ import org.chorus.math.Vector3
 import org.chorus.nbt.tag.CompoundTag
 
 open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.SMALL_FIREBALL
     }
 

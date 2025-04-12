@@ -25,7 +25,7 @@ import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
 
 class EntitySilverfish(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityArthropod {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.SILVERFISH
     }
 

@@ -37,7 +37,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
             val target = next(entity)
             lastLocation = target
             if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed)
-            entity.getBehaviorGroup().setForceUpdateRoute(updateRouteImmediatelyWhenTargetChange)
+            entity.behaviorGroup.setForceUpdateRoute(updateRouteImmediatelyWhenTargetChange)
         }
         setRouteTarget(entity, lastLocation)
         setLookTarget(entity, lastLocation)
@@ -61,7 +61,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
                         Vector2.ZERO
                     ) < 128
                 }) < 1) {
-                entity.getMemoryStorage()[CoreMemoryTypes.FORCE_PERCHING] = true
+                entity.memoryStorage[CoreMemoryTypes.FORCE_PERCHING] = true
             }
         }
     }
@@ -78,7 +78,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
     }
 
     protected fun next(entity: EntityMob): Vector3 {
-        val origin = entity.getBehaviorGroup().getMemoryStorage()[memory]!!
+        val origin = entity.behaviorGroup.memoryStorage[memory]!!
         val angleIncrement = 360.0 / sections
         val angle = Math.toRadians(((circleLoc + startLoc) * angleIncrement))
         val particleX = origin.x + cos(angle) * size

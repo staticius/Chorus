@@ -38,7 +38,7 @@ import org.chorus.nbt.tag.CompoundTag
 import java.util.*
 
 class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityFlyable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.BEE
     }
 

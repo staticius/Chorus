@@ -12,7 +12,7 @@ import org.chorus.nbt.tag.FloatTag
 import org.chorus.nbt.tag.ListTag
 
 class EntityLingeringPotion : EntitySplashPotion {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.LINGERING_POTION
     }
 

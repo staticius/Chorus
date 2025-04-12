@@ -95,16 +95,16 @@ class ChunkTest {
         ) as EntityItem?
         chunk.addEntity(itemEntity)
 
-        val list = chunk.entities.values.stream().filter { e: Entity -> e.getIdentifier() == EntityID.ITEM }.toList()
+        val list = chunk.entities.values.stream().filter { e: Entity -> e.getEntityIdentifier() == EntityID.ITEM }.toList()
         Assertions.assertFalse(list.isEmpty())
-        Assertions.assertEquals(EntityID.ITEM, list[0].getIdentifier())
+        Assertions.assertEquals(EntityID.ITEM, list[0].getEntityIdentifier())
 
         levelDBProvider.saveChunk(0, 0, chunk)
         val newChunk = levelDBProvider.getChunk(0, 0)
         Assertions.assertNotNull(newChunk)
-        val list2 = chunk.entities.values.stream().filter { e: Entity -> e.getIdentifier() == EntityID.ITEM }.toList()
+        val list2 = chunk.entities.values.stream().filter { e: Entity -> e.getEntityIdentifier() == EntityID.ITEM }.toList()
         Assertions.assertFalse(list2.isEmpty())
-        Assertions.assertEquals(EntityID.ITEM, list2[0].getIdentifier())
+        Assertions.assertEquals(EntityID.ITEM, list2[0].getEntityIdentifier())
     }
 
     @Test

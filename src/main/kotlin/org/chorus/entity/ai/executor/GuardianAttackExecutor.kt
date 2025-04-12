@@ -121,7 +121,7 @@ class GuardianAttackExecutor(
             entity.position,
             LevelSoundEventPacket.SOUND_MOB_WARNING,
             -1,
-            entity.getIdentifier(),
+            entity.getEntityIdentifier(),
             false,
             false
         )

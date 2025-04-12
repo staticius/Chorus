@@ -20,7 +20,7 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.SITE_BLOCK, 0.
 
     override fun execute(entity: EntityMob): Boolean {
         if (entity is EntityVillagerV2) {
-            val site = entity.getMemoryStorage()[CoreMemoryTypes.SITE_BLOCK]!!
+            val site = entity.memoryStorage[CoreMemoryTypes.SITE_BLOCK]!!
             if (stayTick < 100) {
                 if (site.position.distance(entity.position) < 1.5f) {
                     setLookTarget(entity, site.position)
@@ -111,11 +111,11 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.SITE_BLOCK, 0.
     override fun onStart(entity: EntityMob) {
         if (entity is EntityVillagerV2) {
             val shift = getShiftLength(entity.level!!.dayTime)
-            if (entity.getMemoryStorage()[CoreMemoryTypes.LAST_REFILL_SHIFT] != shift) {
+            if (entity.memoryStorage[CoreMemoryTypes.LAST_REFILL_SHIFT] != shift) {
                 this.stayTick = 100
                 this.walkTick = 200
                 entity.getRecipes().all.forEach(Consumer { it!!.putInt("uses", 0) })
-                entity.getMemoryStorage().set(CoreMemoryTypes.LAST_REFILL_SHIFT, shift)
+                entity.memoryStorage.set(CoreMemoryTypes.LAST_REFILL_SHIFT, shift)
             }
             if (stayTick < 100) setTarget(entity)
         }

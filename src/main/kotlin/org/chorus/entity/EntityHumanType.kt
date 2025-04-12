@@ -191,7 +191,7 @@ abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chu
         return IHuman.NETWORK_ID
     }
 
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.PLAYER
     }
 }

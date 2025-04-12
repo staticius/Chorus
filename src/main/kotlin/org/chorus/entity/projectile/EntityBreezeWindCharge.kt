@@ -11,7 +11,7 @@ class EntityBreezeWindCharge @JvmOverloads constructor(
     shootingEntity: Entity? = null
 ) :
     EntityWindCharge(chunk, nbt, shootingEntity) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.BREEZE_WIND_CHARGE_PROJECTILE
     }
 

@@ -10,11 +10,11 @@ import org.chorus.entity.data.EntityFlag
  */
 interface EntityCanSit : EntityComponent {
     fun isSitting(): Boolean {
-        return getMemoryStorage()[CoreMemoryTypes.IS_SITTING]
+        return memoryStorage[CoreMemoryTypes.IS_SITTING]
     }
 
     fun setSitting(sitting: Boolean) {
-        getMemoryStorage().set(CoreMemoryTypes.IS_SITTING, sitting)
+        memoryStorage.set(CoreMemoryTypes.IS_SITTING, sitting)
         asEntity()!!.setDataFlag(EntityFlag.SITTING, sitting)
     }
 }

@@ -32,7 +32,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Utils
 
 class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ENDERMAN
     }
 

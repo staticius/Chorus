@@ -40,7 +40,7 @@ import java.util.function.Consumer
 class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), EntityVariant {
     override var color: Byte = 0
 
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.SHULKER
     }
 
@@ -129,7 +129,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     override fun initEntity() {
         this.setMaxHealth(30)
         super.initEntity()
-        if (getMemoryStorage()[CoreMemoryTypes.Companion.VARIANT] == null) setVariant(16)
+        if (memoryStorage[CoreMemoryTypes.Companion.VARIANT] == null) setVariant(16)
         setDataProperty(
             EntityDataTypes.Companion.SHULKER_ATTACH_POS,
             getLocator().levelBlock.getSide(BlockFace.UP).position.asBlockVector3()
@@ -161,7 +161,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
                         this.position,
                         LevelSoundEventPacket.SOUND_TELEPORT,
                         -1,
-                        getIdentifier(),
+                        getEntityIdentifier(),
                         false,
                         false
                     )
@@ -170,7 +170,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
                         locator.position,
                         LevelSoundEventPacket.SOUND_SPAWN,
                         -1,
-                        getIdentifier(),
+                        getEntityIdentifier(),
                         false,
                         false
                     )

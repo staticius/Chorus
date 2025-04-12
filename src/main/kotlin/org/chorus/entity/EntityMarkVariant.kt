@@ -8,15 +8,15 @@ import org.chorus.utils.Utils
  */
 interface EntityMarkVariant : EntityComponent {
     fun getMarkVariant(): Int {
-        return getMemoryStorage()[CoreMemoryTypes.MARK_VARIANT]!!
+        return memoryStorage[CoreMemoryTypes.MARK_VARIANT]!!
     }
 
     fun setMarkVariant(variant: Int) {
-        getMemoryStorage().set(CoreMemoryTypes.MARK_VARIANT, variant)
+        memoryStorage.set(CoreMemoryTypes.MARK_VARIANT, variant)
     }
 
     fun hasMarkVariant(): Boolean {
-        return getMemoryStorage().notEmpty(CoreMemoryTypes.MARK_VARIANT)
+        return memoryStorage.notEmpty(CoreMemoryTypes.MARK_VARIANT)
     }
 
     /**

@@ -129,7 +129,7 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
 
     fun addOccupant(entity: Entity, ticksLeftToStay: Int, hasNectar: Boolean, playSound: Boolean): Occupant? {
         entity.saveNBT()
-        val occupant = Occupant(ticksLeftToStay, entity.getIdentifier(), hasNectar, entity.namedTag!!.copy())
+        val occupant = Occupant(ticksLeftToStay, entity.getEntityIdentifier(), hasNectar, entity.namedTag!!.copy())
         if (!addOccupant(occupant)) {
             return null
         }

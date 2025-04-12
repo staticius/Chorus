@@ -26,7 +26,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.FALLING_BLOCK
     }
 

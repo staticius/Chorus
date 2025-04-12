@@ -40,7 +40,7 @@ import org.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus.registry.Registries
 
 class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.SNOW_GOLEM
     }
 
@@ -55,7 +55,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                     SnowGolemShootExecutor(CoreMemoryTypes.Companion.ATTACK_TARGET, 0.4f, 16, true, 20, 0),
                     all(
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET),
-                        IBehaviorEvaluator { entity: EntityMob? -> getMemoryStorage().get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) !is EntitySnowGolem }),
+                        IBehaviorEvaluator { entity: EntityMob? -> memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET) !is EntitySnowGolem }),
                     3,
                     1
                 ),
@@ -65,7 +65,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY),
                         IBehaviorEvaluator {
                             attackTarget(
-                                getMemoryStorage().get(
+                                memoryStorage.get(
                                     CoreMemoryTypes.Companion.ATTACK_TARGET
                                 )!!
                             )

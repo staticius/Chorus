@@ -22,7 +22,7 @@ class EntityArrow @JvmOverloads constructor(
     critical: Boolean = false
 ) :
     EntityAbstractArrow(chunk, nbt, shootingEntity) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ARROW
     }
 

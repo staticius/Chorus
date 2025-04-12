@@ -51,7 +51,7 @@ import kotlin.math.cos
 import kotlin.math.sin
 
 class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), EntityFlyable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ENDER_DRAGON
     }
 
@@ -108,7 +108,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
-            actorType = this.getIdentifier(),
+            actorType = this.getEntityIdentifier(),
             position = this.position.asVector3f(),
             velocity = this.motion.asVector3f(),
             rotation = this.rotation.asVector2f(),
@@ -161,7 +161,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
             if (currentTick % (if (position.toHorizontal().distance(Vector2.ZERO) < 1) 10 else 20) == 0) {
                 level!!.addLevelSoundEvent(
                     this.position, LevelSoundEventPacket.SOUND_FLAP, -1,
-                    this.getIdentifier(), false, false
+                    this.getEntityIdentifier(), false, false
                 )
             }
             for (e in level!!.entities.values) {
@@ -187,7 +187,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
                 this.position,
                 LevelSoundEventPacket.SOUND_DEATH,
                 -1,
-                getIdentifier(),
+                getEntityIdentifier(),
                 false,
                 false
             )

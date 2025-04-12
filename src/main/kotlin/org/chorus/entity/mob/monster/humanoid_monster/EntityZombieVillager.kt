@@ -40,7 +40,7 @@ import org.chorus.nbt.tag.CompoundTag
 import java.util.function.Consumer
 
 class EntityZombieVillager(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt), EntityWalkable, EntitySmite {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ZOMBIE_VILLAGER
     }
 

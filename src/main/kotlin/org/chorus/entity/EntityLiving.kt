@@ -479,18 +479,6 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         }
     }
 
-    fun getAttackTime(): Short {
-        return attackTime
-    }
-
-    fun isAttackTimeByShieldKb(): Boolean {
-        return attackTimeByShieldKb
-    }
-
-    fun getAttackTimeBefore(): Short {
-        return attackTimeBefore
-    }
-
     companion object {
         const val DEFAULT_SPEED: Float = 0.1f
     }

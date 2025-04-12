@@ -43,7 +43,7 @@ import org.chorus.nbt.tag.CompoundTag
 import java.util.concurrent.ThreadLocalRandom
 
 class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityInteractable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.CREEPER
     }
 

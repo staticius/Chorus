@@ -16,6 +16,11 @@ class AdventureSettings : Cloneable {
         Type::class.java
     )
     var playerPermission: PlayerPermission? = null
+        set(value) {
+            field = value
+            player.isOp = value == PlayerPermission.OPERATOR
+        }
+
     var commandPermission: CommandPermission? = null
     var player: Player
 
@@ -27,11 +32,6 @@ class AdventureSettings : Cloneable {
     constructor(player: Player, nbt: CompoundTag?) {
         this.player = player
         init(nbt)
-    }
-
-    fun setPlayerPermission(playerPermission: PlayerPermission) {
-        this.playerPermission = playerPermission
-        player.isOp = playerPermission == PlayerPermission.OPERATOR
     }
 
     fun init(nbt: CompoundTag?) {

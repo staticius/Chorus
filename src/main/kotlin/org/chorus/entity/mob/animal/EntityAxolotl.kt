@@ -37,7 +37,7 @@ import java.util.function.Predicate
 
 class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntitySwimmable, EntityVariant,
     EntityCanAttack {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.AXOLOTL
     }
 
@@ -270,7 +270,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     }
 
     override fun attackTarget(entity: Entity): Boolean {
-        return when (entity.getIdentifier()) {
+        return when (entity.getEntityIdentifier()) {
             EntityID.COD, EntityID.ELDER_GUARDIAN, EntityID.GLOW_SQUID, EntityID.GUARDIAN, EntityID.PUFFERFISH, EntityID.SALMON, EntityID.TADPOLE, EntityID.TROPICALFISH, EntityID.DROWNED -> true
             else -> false
         }

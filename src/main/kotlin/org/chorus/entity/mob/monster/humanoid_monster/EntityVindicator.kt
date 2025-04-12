@@ -37,7 +37,7 @@ import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 
 class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, nbt), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.VINDICATOR
     }
 
@@ -97,7 +97,7 @@ class EntityVindicator(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk,
 
 
     override fun attackTarget(entity: Entity): Boolean {
-        return when (entity.getIdentifier()) {
+        return when (entity.getEntityIdentifier()) {
             EntityID.IRON_GOLEM, EntityID.SNOW_GOLEM, EntityID.VILLAGER, EntityID.WANDERING_TRADER -> true
             else -> super.attackTarget(entity) || isJohnny()
         }

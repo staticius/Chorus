@@ -43,7 +43,7 @@ import java.util.concurrent.ThreadLocalRandom
 import java.util.function.Function
 
 class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityFlyable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.VEX
     }
 
@@ -107,7 +107,7 @@ class EntityVex(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), E
     }
 
     override fun attackTarget(entity: Entity): Boolean {
-        return when (entity.getIdentifier()) {
+        return when (entity.getEntityIdentifier()) {
             EntityID.VILLAGER -> entity is EntityVillager && !entity.isBaby()
             EntityID.IRON_GOLEM, EntityID.WANDERING_TRADER -> true
             else -> false

@@ -57,10 +57,6 @@ class EmptyBehaviorGroup(entity: EntityMob) : IBehaviorGroup {
     override fun updateRoute(entity: EntityMob) {
     }
 
-    override fun getMemoryStorage(): IMemoryStorage {
-        return this.memoryStorage
-    }
-
     override fun isForceUpdateRoute(): Boolean {
         return false
     }

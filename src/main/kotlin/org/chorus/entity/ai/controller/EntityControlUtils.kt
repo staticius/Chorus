@@ -7,8 +7,6 @@ import org.chorus.math.Vector3
 interface EntityControlUtils {
     val memoryStorage: IMemoryStorage
 
-    fun getMemoryStorage(): IMemoryStorage
-
     var lookTarget: Vector3?
         get() = memoryStorage.get(CoreMemoryTypes.LOOK_TARGET)
         set(lookTarget) {
@@ -61,49 +59,49 @@ interface EntityControlUtils {
     //
     //
     //    public boolean isEnableYaw() {
-    //        return getMemoryStorage().get(CoreMemoryTypes.ENABLE_YAW);
+    //        return memoryStorage.get(CoreMemoryTypes.ENABLE_YAW);
     //    }
     //
     //
     //
     //    public void setEnableYaw(boolean enableYaw) {
-    //        getMemoryStorage().put(CoreMemoryTypes.ENABLE_YAW, enableYaw);
+    //        memoryStorage.put(CoreMemoryTypes.ENABLE_YAW, enableYaw);
     //    }
     //
     //
     //
     //    public boolean isEnableHeadYaw() {
-    //        return getMemoryStorage().get(CoreMemoryTypes.ENABLE_HEAD_YAW);
+    //        return memoryStorage.get(CoreMemoryTypes.ENABLE_HEAD_YAW);
     //    }
     //
     //
     //
     //    public void setEnableHeadYaw(boolean enableHeadYaw) {
-    //        getMemoryStorage().put(CoreMemoryTypes.ENABLE_HEAD_YAW, enableHeadYaw);
+    //        memoryStorage.put(CoreMemoryTypes.ENABLE_HEAD_YAW, enableHeadYaw);
     //    }
 
     //    Unused
     //
     //
     //    public boolean isEnableYaw() {
-    //        return getMemoryStorage().get(CoreMemoryTypes.ENABLE_YAW);
+    //        return memoryStorage.get(CoreMemoryTypes.ENABLE_YAW);
     //    }
     //
     //
     //
     //    public void setEnableYaw(boolean enableYaw) {
-    //        getMemoryStorage().put(CoreMemoryTypes.ENABLE_YAW, enableYaw);
+    //        memoryStorage.put(CoreMemoryTypes.ENABLE_YAW, enableYaw);
     //    }
     //
     //
     //
     //    public boolean isEnableHeadYaw() {
-    //        return getMemoryStorage().get(CoreMemoryTypes.ENABLE_HEAD_YAW);
+    //        return memoryStorage.get(CoreMemoryTypes.ENABLE_HEAD_YAW);
     //    }
     //
     //
     //
     //    public void setEnableHeadYaw(boolean enableHeadYaw) {
-    //        getMemoryStorage().put(CoreMemoryTypes.ENABLE_HEAD_YAW, enableHeadYaw);
+    //        memoryStorage.put(CoreMemoryTypes.ENABLE_HEAD_YAW, enableHeadYaw);
     //    }
 }

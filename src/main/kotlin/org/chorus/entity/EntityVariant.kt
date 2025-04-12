@@ -8,15 +8,15 @@ import org.chorus.utils.Utils
  */
 interface EntityVariant : EntityComponent {
     fun getVariant(): Int {
-        return getMemoryStorage()[CoreMemoryTypes.VARIANT]!!
+        return memoryStorage[CoreMemoryTypes.VARIANT]!!
     }
 
     fun setVariant(variant: Int) {
-        getMemoryStorage()[CoreMemoryTypes.VARIANT] = variant
+        memoryStorage[CoreMemoryTypes.VARIANT] = variant
     }
 
     fun hasVariant(): Boolean {
-        return getMemoryStorage().notEmpty(CoreMemoryTypes.VARIANT)
+        return memoryStorage.notEmpty(CoreMemoryTypes.VARIANT)
     }
 
     /**

@@ -52,7 +52,7 @@ import kotlin.math.ceil
 
 open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityVariant,
     EntityMarkVariant, EntityRideable, EntityOwnable, InventoryHolder {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.HORSE
     }
 
@@ -229,7 +229,6 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         if (this.getRider() == null || this.owner == null || getSaddle().isNothing) {
             isActive = level!!.isHighLightChunk(getChunkX(), getChunkZ())
             if (!this.isImmobile()) {
-                val behaviorGroup = getBehaviorGroup()
                 behaviorGroup.collectSensorData(this)
                 behaviorGroup.evaluateCoreBehaviors(this)
                 behaviorGroup.evaluateBehaviors(this)
@@ -490,7 +489,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
-            actorType = this.getIdentifier(),
+            actorType = this.getEntityIdentifier(),
             position = this.position.asVector3f().add(0f, this.getBaseOffset(), 0f),
             velocity = this.motion.asVector3f(),
             rotation = this.rotation.asVector2f(),

@@ -15,7 +15,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.ListTag
 
 class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt), InventoryHolder {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.CHEST_BOAT
     }
 

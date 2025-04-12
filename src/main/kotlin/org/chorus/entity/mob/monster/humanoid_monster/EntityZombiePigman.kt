@@ -36,7 +36,7 @@ import org.chorus.nbt.tag.CompoundTag
 
 class EntityZombiePigman(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt), EntityWalkable, EntitySmite {
     // Mojang seems to kept the old name?
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ZOMBIE_PIGMAN
     }
 

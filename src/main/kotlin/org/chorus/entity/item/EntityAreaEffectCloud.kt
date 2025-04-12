@@ -14,7 +14,7 @@ import org.chorus.nbt.tag.ListTag
 import java.awt.Color
 
 class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.AREA_EFFECT_CLOUD
     }
 

@@ -6,15 +6,15 @@ import org.chorus.entity.ai.memory.CoreMemoryTypes
 
 interface EntityOwnable : EntityComponent {
     fun getOwnerName(): String? {
-        return getMemoryStorage()[CoreMemoryTypes.OWNER_NAME]
+        return memoryStorage[CoreMemoryTypes.OWNER_NAME]
     }
 
     fun setOwnerName(playerName: String) {
-        getMemoryStorage()[CoreMemoryTypes.OWNER_NAME] = playerName
+        memoryStorage[CoreMemoryTypes.OWNER_NAME] = playerName
     }
 
     fun getOwner(): Player? {
-        var owner = getMemoryStorage()[CoreMemoryTypes.OWNER]
+        var owner = memoryStorage[CoreMemoryTypes.OWNER]
         if (owner != null && owner.isOnline) return owner
         else {
             val ownerName: String = getOwnerName() ?: return null

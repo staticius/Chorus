@@ -199,7 +199,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         )
         { block: Block? -> block is BlockLiquid }) {
             blockLiquid = each as BlockLiquid?
-            val flowVector: Vector3 = blockLiquid!!.getFlowVector()
+            val flowVector: Vector3 = blockLiquid!!.getSafeFlowVector()
             tmp.x += flowVector.x
             tmp.y += flowVector.y
             tmp.z += flowVector.z

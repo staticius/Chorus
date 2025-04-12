@@ -11,9 +11,9 @@ import org.chorus.entity.ai.memory.IMemoryStorage
  * The implementation of the entity component uses the default method to carry the logic, and the related values are stored in memory
  */
 interface EntityComponent {
-    fun getMemoryStorage(): IMemoryStorage
+    val memoryStorage: IMemoryStorage
 
     fun asEntity(): Entity? {
-        return getMemoryStorage().entity
+        return memoryStorage.entity
     }
 }

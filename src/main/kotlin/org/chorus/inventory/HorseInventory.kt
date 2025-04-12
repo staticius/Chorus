@@ -45,7 +45,7 @@ class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.
             } else {
                 holder.level!!.addLevelSoundEvent(
                     holder.vector3, LevelSoundEventPacket.SOUND_SADDLE, -1,
-                    (holder as EntityHorse).getIdentifier(), false, false
+                    (holder as EntityHorse).getEntityIdentifier(), false, false
                 )
                 (holder as EntityHorse).setDataFlag(EntityFlag.SADDLED)
                 (holder as EntityHorse).setDataFlag(EntityFlag.WASD_CONTROLLED)

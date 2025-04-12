@@ -31,7 +31,7 @@ import org.chorus.nbt.tag.CompoundTag
 import java.util.function.Function
 
 class EntityPillager(chunk: IChunk?, nbt: CompoundTag?) : EntityIllager(chunk, nbt), EntityWalkable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.PILLAGER
     }
 

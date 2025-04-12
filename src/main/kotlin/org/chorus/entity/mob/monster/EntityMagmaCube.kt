@@ -31,7 +31,7 @@ import org.chorus.utils.Utils
 import java.util.function.Function
 
 class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!!), EntityWalkable, EntityVariant {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.MAGMA_CUBE
     }
 
@@ -98,12 +98,10 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
     }
 
     override fun getWidth(): Float {
-        if (getBehaviorGroup() == null) return 0f
         return 0.51f + getVariant() * 0.51f
     }
 
     override fun getHeight(): Float {
-        if (getBehaviorGroup() == null) return 0f
         return 0.51f + getVariant() * 0.51f
     }
 

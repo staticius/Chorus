@@ -37,7 +37,7 @@ import org.chorus.utils.DyeColor
 import java.util.concurrent.ThreadLocalRandom
 
 class EntitySheep(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityShearable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.SHEEP
     }
 

@@ -33,7 +33,7 @@ import org.chorus.nbt.tag.CompoundTag
 import org.chorus.utils.Utils
 
 class EntityBlaze(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityFlyable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.BLAZE
     }
 

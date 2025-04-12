@@ -38,7 +38,7 @@ import kotlin.math.max
 
 class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityOwnable,
     EntityCanSit, EntityCanAttack, EntityHealable, EntityVariant, EntityColor {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.CAT
     }
 
@@ -177,7 +177,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     //攻击选择器
     //流浪猫会攻击兔子,小海龟
     override fun attackTarget(entity: Entity): Boolean {
-        return when (entity.getIdentifier().toString()) {
+        return when (entity.getEntityIdentifier().toString()) {
             EntityID.RABBIT, EntityID.TURTLE -> true
             else -> false
         }

@@ -20,7 +20,7 @@ import java.awt.Color
 import kotlin.math.sqrt
 
 open class EntitySplashPotion : EntityThrowable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.SPLASH_POTION
     }
 

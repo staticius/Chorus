@@ -18,7 +18,7 @@ import org.chorus.math.BlockVector3
 import org.chorus.nbt.tag.CompoundTag
 
 class EntityEnderCrystal(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt), EntityExplosive {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.ENDER_CRYSTAL
     }
 
@@ -97,7 +97,7 @@ class EntityEnderCrystal(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                 if (entity.position.distance(this.position) <= 28) {
                     entity.attack(EntityDamageEvent(entity, DamageCause.MAGIC, 10f))
                 }
-                entity.getMemoryStorage()[CoreMemoryTypes.LAST_ENDER_CRYSTAL_DESTROY] = position.asBlockVector3()
+                entity.memoryStorage[CoreMemoryTypes.LAST_ENDER_CRYSTAL_DESTROY] = position.asBlockVector3()
             }
         }
     }

@@ -115,10 +115,6 @@ class BehaviorGroup(
     //此参数用于错开各个实体路径更新的时间，避免在1gt内提交过多路径更新任务
     override val memoryStorage: IMemoryStorage = MemoryStorage(entity)
 
-    override fun getMemoryStorage(): IMemoryStorage {
-        return memoryStorage
-    }
-
     /**
      * 寻路任务
      */

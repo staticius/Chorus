@@ -61,7 +61,7 @@ class Type : CachedSimpleSelectorArgument() {
     protected fun isType(entity: Entity, type: String): Boolean {
         return if (entity is Player)  //player需要特判，因为EntityHuman的getNetworkId()返回-1
             type == "minecraft:player"
-        else if (entity is CustomEntity) entity.getIdentifier() == type
+        else if (entity is CustomEntity) entity.getEntityIdentifier() == type
         else ENTITY_TYPE2ID.containsKey(type) && entity.getNetworkID() == ENTITY_TYPE2ID[type]
     }
 

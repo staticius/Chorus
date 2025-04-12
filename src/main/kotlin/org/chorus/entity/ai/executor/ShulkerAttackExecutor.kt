@@ -80,7 +80,7 @@ class ShulkerAttackExecutor(
         nextAttack = 0
         if (entity is EntityShulker) {
             entity.setPeeking(40)
-            val target = entity.getMemoryStorage()[target] ?: return
+            val target = entity.memoryStorage[target] ?: return
             entity.setDataProperty(EntityDataTypes.TARGET_EID, target.getRuntimeID())
         }
     }

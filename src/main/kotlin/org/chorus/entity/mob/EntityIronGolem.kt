@@ -45,7 +45,7 @@ import org.chorus.nbt.tag.ListTag
 import java.util.concurrent.ThreadLocalRandom
 
 class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt), EntityOwnable {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.IRON_GOLEM
     }
 
@@ -64,7 +64,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                                 IBehaviorEvaluator { Server.instance.getDifficulty() == 0 },
                                 all(
                                     IBehaviorEvaluator {
-                                        attackingPlayer = getMemoryStorage()[CoreMemoryTypes.ATTACK_TARGET] is Player
+                                        attackingPlayer = memoryStorage[CoreMemoryTypes.ATTACK_TARGET] is Player
                                         attackingPlayer
                                     },
                                     IBehaviorEvaluator { hasOwner(false) }
@@ -75,7 +75,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                         EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY),
                         IBehaviorEvaluator {
                             attackTarget(
-                                getMemoryStorage()[CoreMemoryTypes.NEAREST_SHARED_ENTITY]!!
+                                memoryStorage[CoreMemoryTypes.NEAREST_SHARED_ENTITY]!!
                             )
                         },
                         not { !attackingPlayer }

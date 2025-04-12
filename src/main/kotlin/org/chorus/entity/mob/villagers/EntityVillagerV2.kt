@@ -64,7 +64,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt!!), InventoryHolder {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.VILLAGER_V2
     }
 
@@ -180,9 +180,9 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                         IBehaviorEvaluator { entity ->
                             memoryStorage.notEmpty(CoreMemoryTypes.NEAREST_ZOMBIE)
                                     && memoryStorage[CoreMemoryTypes.NEAREST_ZOMBIE]!! is EntityMob
-                                    && entity.getMemoryStorage()
+                                    && entity.memoryStorage
                                 .notEmpty(CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET)
-                                    && entity.getMemoryStorage()[CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET]!! === this
+                                    && entity.memoryStorage[CoreMemoryTypes.NEAREST_SUITABLE_ATTACK_TARGET]!! === this
                         },
                         IBehaviorEvaluator {
                             memoryStorage.notEmpty(CoreMemoryTypes.Companion.NEAREST_ZOMBIE) && level!!.raycastBlocks(

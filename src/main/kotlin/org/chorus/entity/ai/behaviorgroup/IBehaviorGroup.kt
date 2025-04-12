@@ -126,11 +126,6 @@ interface IBehaviorGroup {
     fun updateRoute(entity: EntityMob)
 
     /**
-     * @return 行为组的记忆存储器 [IMemoryStorage]<br></br>Behavior Group Memory Storage [IMemoryStorage]
-     */
-    fun getMemoryStorage(): IMemoryStorage
-
-    /**
      * @return 下一gt是否强制更新路径<br></br>Whether the next gt is forced to update the path
      */
     fun isForceUpdateRoute(): Boolean
@@ -158,6 +153,6 @@ interface IBehaviorGroup {
 
     fun save(entity: EntityMob) {
         //EmptyBehaviorGroup will return null
-        getMemoryStorage().encode()
+        memoryStorage.encode()
     }
 }

@@ -48,8 +48,8 @@ class BlazeShootExecutor(
             tick1++
         }
         if (!entity.isEnablePitch()) entity.setEnablePitch(true)
-        if (entity.getBehaviorGroup().getMemoryStorage().isEmpty(memory)) return false
-        val newTarget = entity.getBehaviorGroup().getMemoryStorage().get(memory) ?: return false
+        if (entity.behaviorGroup.memoryStorage.isEmpty(memory)) return false
+        val newTarget = entity.behaviorGroup.memoryStorage.get(memory) ?: return false
         if (this.target == null) target = newTarget
 
         if (!target!!.isAlive()) return false
@@ -105,7 +105,7 @@ class BlazeShootExecutor(
         removeLookTarget(entity)
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
-            entity.getBehaviorGroup().getMemoryStorage().clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.setEnablePitch(false)
         stopOnFire(entity)
@@ -117,7 +117,7 @@ class BlazeShootExecutor(
         removeLookTarget(entity)
         entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
-            entity.getBehaviorGroup().getMemoryStorage().clear(memory)
+            entity.behaviorGroup.memoryStorage.clear(memory)
         }
         entity.setEnablePitch(false)
         stopOnFire(entity)

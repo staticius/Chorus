@@ -75,24 +75,43 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     var invulnerable: Boolean = false
+    @JvmField
     var isAngry: Boolean = false
+    @JvmField
     var isAutonomous: Boolean = false
+    @JvmField
     var isBaby: Boolean = false
+    @JvmField
     var isEating: Boolean = false
+    @JvmField
     var isGliding: Boolean = false
+    @JvmField
     var isGlobal: Boolean = false
+    @JvmField
     var isIllagerCaptain: Boolean = false
+    @JvmField
     var isOrphaned: Boolean = false
+    @JvmField
     var isOutOfControl: Boolean = false
+    @JvmField
     var isRoaring: Boolean = false
+    @JvmField
     var isScared: Boolean = false
+    @JvmField
     var isStunned: Boolean = false
+    @JvmField
     var isSwimming: Boolean = false
+    @JvmField
     var isTamed: Boolean = false
+    @JvmField
     var isTrusting: Boolean = false
+    @JvmField
     var lastDimensionId: Int? = null
+    @JvmField
     var linksTag: CompoundTag? = null
+    @JvmField
     var lootDropped: Boolean = true
+    @JvmField
     var markVariant: Int = 0
 
     @JvmField
@@ -245,7 +264,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     protected val attributes: MutableMap<Int, Attribute> = HashMap()
 
     private fun idConvertToName(): String {
-        val path: String = getIdentifier().split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
+        val path: String = getEntityIdentifier().split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()[1]
         val result: StringBuilder = StringBuilder()
         val parts: Array<String> = path.split("_".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         for (part: String in parts) {
@@ -258,7 +277,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     init {
-        initEntityProperties(this.getIdentifier())
+        initEntityProperties(this.getEntityIdentifier())
 
         if (chunk != null) {
             this.level = chunk.provider.level
@@ -277,7 +296,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
      *
      * @return the identifier
      */
-    abstract fun getIdentifier(): String
+    abstract fun getEntityIdentifier(): String
 
     /**
      * 实体高度
@@ -595,10 +614,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return getHeight()
     }
 
-    fun getPassengers(): List<Entity?> {
-        return passengers
-    }
-
     fun getPassenger(): Entity? {
         return Iterables.getFirst(this.passengers, null)
     }
@@ -776,7 +791,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     open fun saveNBT() {
         if (this !is Player) {
-            namedTag!!.putString(TAG_IDENTIFIER, this.getIdentifier())
+            namedTag!!.putString(TAG_IDENTIFIER, this.getEntityIdentifier())
             if (getNameTag().isNotEmpty()) {
                 namedTag!!.putString(TAG_CUSTOM_NAME, this.getNameTag())
                 namedTag!!.putBoolean(TAG_CUSTOM_NAME_VISIBLE, this.isNameTagAlwaysVisible())
@@ -882,7 +897,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return AddActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
-            actorType = this.getIdentifier(),
+            actorType = this.getEntityIdentifier(),
             position = this.position.asVector3f(),
             velocity = this.motion.asVector3f(),
             rotation = this.rotation.asVector2f(),
@@ -1089,7 +1104,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     open fun getNetworkID(): Int {
-        return Registries.ENTITY.getEntityNetworkId(getIdentifier())
+        return Registries.ENTITY.getEntityNetworkId(getEntityIdentifier())
     }
 
     fun heal(source: EntityRegainHealthEvent) {
@@ -2346,7 +2361,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         if (endPortal) { //handle endPortal teleport
             if (!inEndPortal) {
                 inEndPortal = true
-                if (this.getRiding() == null && getPassengers().isEmpty() && (this !is EntityEnderDragon)) {
+                if (this.getRiding() == null && passengers.isEmpty() && (this !is EntityEnderDragon)) {
                     val ev = EntityPortalEnterEvent(this, PortalType.END)
                     Server.instance.pluginManager.callEvent(ev)
 
@@ -3061,7 +3076,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     fun setEnumEntityProperty(identifier: String, value: String): Boolean {
         if (!intProperties.containsKey(identifier)) return false
         val entityPropertyList: List<EntityProperty> = EntityProperty.getEntityProperty(
-            this.getIdentifier()
+            this.getEntityIdentifier()
         )
 
         for (property: EntityProperty in entityPropertyList) {
@@ -3093,7 +3108,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     fun getEnumEntityProperty(identifier: String): String? {
         val entityPropertyList: List<EntityProperty> = EntityProperty.getEntityProperty(
-            this.getIdentifier()
+            this.getEntityIdentifier()
         )
 
         for (property: EntityProperty in entityPropertyList) {

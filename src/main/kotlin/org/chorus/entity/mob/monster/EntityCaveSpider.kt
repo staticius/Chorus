@@ -36,7 +36,7 @@ import org.chorus.utils.Utils
 import java.util.function.Function
 
 class EntityCaveSpider(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt), EntityWalkable, EntityArthropod {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.CAVE_SPIDER
     }
 

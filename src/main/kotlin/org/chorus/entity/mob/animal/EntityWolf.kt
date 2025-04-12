@@ -39,7 +39,7 @@ import kotlin.math.max
  */
 class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, EntityOwnable,
     EntityCanAttack, EntityCanSit, EntityAngerable, EntityHealable, EntityColor {
-    override fun getIdentifier(): String {
+    override fun getEntityIdentifier(): String {
         return EntityID.WOLF
     }
 
@@ -185,7 +185,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
                         )
                     },
                     Function<Entity, Boolean> { entity: Entity ->
-                        when (entity.getIdentifier().toString()) {
+                        when (entity.getEntityIdentifier().toString()) {
                             EntityID.SKELETON, EntityID.WITHER_SKELETON, EntityID.STRAY -> true
                             else -> false
                         }
@@ -323,7 +323,7 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
 
     //兔子、狐狸、骷髅及其变种、羊驼、绵羊和小海龟。然而它们被羊驼啐唾沫时会逃跑。
     override fun attackTarget(entity: Entity): Boolean {
-        return when (entity.getIdentifier()) {
+        return when (entity.getEntityIdentifier()) {
             EntityID.RABBIT, EntityID.FOX, EntityID.SKELETON, EntityID.WITHER_SKELETON, EntityID.STRAY, EntityID.LLAMA, EntityID.SHEEP, EntityID.TURTLE -> true
             else -> false
         }
