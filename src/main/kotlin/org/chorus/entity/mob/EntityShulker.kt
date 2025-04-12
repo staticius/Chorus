@@ -98,7 +98,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
-        val block: Block = getLocator().levelBlock
+        val block: Block = locator.levelBlock
         if (!block.isAir || block.down().isAir) teleport()
         return super.onUpdate(currentTick)
     }
@@ -113,11 +113,11 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
         return 0f
     }
 
-    //Shulker cannot burn
+    // Shulker cannot burn
     override fun setOnFire(seconds: Int) {}
 
     override fun attack(source: EntityDamageEvent): Boolean {
-        if (getHealth() - source.getDamage() < getMaxHealth() / 2f) {
+        if (health - source.getDamage() < getMaxHealth() / 2f) {
             if (Utils.rand(0, 4) == 0) {
                 teleport()
                 return true
@@ -132,7 +132,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
         if (memoryStorage[CoreMemoryTypes.Companion.VARIANT] == null) setVariant(16)
         setDataProperty(
             EntityDataTypes.Companion.SHULKER_ATTACH_POS,
-            getLocator().levelBlock.getSide(BlockFace.UP).position.asBlockVector3()
+            locator.levelBlock.getSide(BlockFace.UP).position.asBlockVector3()
         )
     }
 

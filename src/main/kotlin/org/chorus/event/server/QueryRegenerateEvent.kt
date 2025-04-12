@@ -100,7 +100,7 @@ class QueryRegenerateEvent @JvmOverloads constructor(server: Server, var timeout
             buf.writeBytes(byteArrayOf(0x00, 0x00))
 
             for (player in this.playerList) {
-                buf.writeBytes(player.getName().toByteArray(StandardCharsets.UTF_8))
+                buf.writeBytes(player.getEntityName().toByteArray(StandardCharsets.UTF_8))
                 buf.writeByte(0x00.toByte().toInt())
             }
 

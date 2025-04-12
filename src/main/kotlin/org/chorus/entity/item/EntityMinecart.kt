@@ -33,7 +33,7 @@ class EntityMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(
     }
 
     override fun activate(x: Int, y: Int, z: Int, flag: Boolean) {
-        if (flag && this.getHealth() > 15 && this.attack(
+        if (flag && this.health > 15 && this.attack(
                 EntityDamageByBlockEvent(
                     level!!.getBlock(x, y, z), this, DamageCause.CONTACT, 1f
                 )

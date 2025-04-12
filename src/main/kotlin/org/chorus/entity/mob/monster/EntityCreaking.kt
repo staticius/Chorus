@@ -149,7 +149,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         tag.putFloat("HeartY", creakingHeart!!.position.y.toFloat())
         tag.putFloat("HeartZ", creakingHeart!!.position.z.toFloat())
         packet.tag = tag
-        Server.broadcastPacket(this.getViewers().values, packet)
+        Server.broadcastPacket(this.viewers.values, packet)
     }
 
     fun spawnResin() {}

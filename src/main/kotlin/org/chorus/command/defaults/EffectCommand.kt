@@ -82,12 +82,12 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
                 for (entity in entities) {
                     if (duration == 0) {
                         if (!entity.hasEffect(effect.getType())) {
-                            log.addError("commands.effect.failure.notActive", effect.getName(), entity.getName())
+                            log.addError("commands.effect.failure.notActive", effect.getName(), entity.getEntityName())
                                 .output()
                             continue
                         }
                         entity.removeEffect(effect.getType())
-                        log.addSuccess("commands.effect.success.removed", effect.getName(), entity.getName()).output()
+                        log.addSuccess("commands.effect.success.removed", effect.getName(), entity.getEntityName()).output()
                     } else {
                         effect.setDuration(duration).setAmplifier(amplification)
                         entity.addEffect(effect.clone())
@@ -95,7 +95,7 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
                             "%commands.effect.success",
                             effect.getName(),
                             effect.getAmplifier().toString(),
-                            entity.getName(),
+                            entity.getEntityName(),
                             (effect.getDuration() / 20).toString()
                         )
                             .output(true)
@@ -109,14 +109,14 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
                 var success = 0
                 for (entity in entities) {
                     if (entity.getEffects().isEmpty()) {
-                        log.addError("commands.effect.failure.notActive.all", entity.getName())
+                        log.addError("commands.effect.failure.notActive.all", entity.getEntityName())
                         continue
                     }
                     for (effect in entity.getEffects().values) {
                         entity.removeEffect(effect.getType())
                     }
                     success++
-                    log.addSuccess("commands.effect.success.removed.all", entity.getName())
+                    log.addSuccess("commands.effect.success.removed.all", entity.getEntityName())
                 }
                 log.successCount(success).output()
                 return success

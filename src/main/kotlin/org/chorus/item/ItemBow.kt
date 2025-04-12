@@ -61,7 +61,7 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         val flameEnchant = this.getEnchantment(Enchantment.Companion.ID_BOW_FLAME)
         val flame = flameEnchant != null && flameEnchant.level > 0
 
-        var arrowTransform: Transform = player.getTransform()
+        var arrowTransform: Transform = player.transform
         val directionVector = player.getDirectionVector().multiply(1.1)
         arrowTransform = arrowTransform.add(directionVector.x, 0.0, directionVector.z)
         arrowTransform.setY(player.position.y + player.getEyeHeight() + directionVector.y)

@@ -29,7 +29,7 @@ class ChorusConsoleCompleter(private val server: Server) : Completer {
         } else if (parsedLine.wordIndex() > 0 && parsedLine.word().isNotEmpty()) {
             val word = parsedLine.word()
             val names: SortedSet<String> = TreeSet()
-            server.onlinePlayers.values.forEach(Consumer<Player> { p: Player -> names.add(p.getName()) })
+            server.onlinePlayers.values.forEach(Consumer<Player> { p: Player -> names.add(p.getEntityName()) })
             for (match in names) {
                 if (!match.lowercase().startsWith(word.lowercase())) {
                     continue

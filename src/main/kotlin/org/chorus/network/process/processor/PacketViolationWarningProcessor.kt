@@ -24,7 +24,7 @@ class PacketViolationWarningProcessor : DataPacketProcessor<PacketViolationWarni
             }.map { obj: Field -> obj.name }.findFirst()
         PacketViolationWarningProcessor.log.warn(
             "Violation warning from {}{}",
-            playerHandle.player.getName(),
+            playerHandle.player.getEntityName(),
             packetName.map<String> { name: String -> " for packet $name" }
                 .orElse("") + ": " + pk)
     }

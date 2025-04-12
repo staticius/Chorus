@@ -52,7 +52,7 @@ class XpCommand(name: String) : Command(name, "commands.xp.description") {
                 }
                 for (player in players) {
                     player.addExperience(amount)
-                    log.addSuccess("commands.xp.success", amount.toString(), player.getName())
+                    log.addSuccess("commands.xp.success", amount.toString(), player.getEntityName())
                 }
                 log.successCount(players.size).output()
                 return players.size
@@ -76,7 +76,7 @@ class XpCommand(name: String) : Command(name, "commands.xp.description") {
                     } else {
                         player.setExperience(player.experience, newLevel, true)
                     }
-                    log.addSuccess("commands.xp.success.levels", level.toString(), player.getName())
+                    log.addSuccess("commands.xp.success.levels", level.toString(), player.getEntityName())
                 }
                 log.successCount(players.size).output()
                 return players.size

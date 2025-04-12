@@ -182,7 +182,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
      * @return 当前位置的流体阻力因子
      */
     fun getPassableBlockFrictionFactor(): Double {
-        val block: Block = getLocator().tickCachedLevelBlock
+        val block: Block = locator.tickCachedLevelBlock
         if (block.collidesWithBB(this.getBoundingBox(), true)) return block.passableBlockFrictionFactor
         return Block.DEFAULT_AIR_FLUID_FRICTION
     }

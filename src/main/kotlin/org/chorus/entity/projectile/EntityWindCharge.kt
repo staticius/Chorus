@@ -65,7 +65,7 @@ open class EntityWindCharge @JvmOverloads constructor(
         }
         entity.attack(EntityDamageByEntityEvent(this, entity, DamageCause.PROJECTILE, 1f))
         level!!.addLevelSoundEvent(
-            entity.getLocator().position.add(0.0, 1.0),
+            entity.locator.position.add(0.0, 1.0),
             LevelSoundEventPacket.SOUND_WIND_CHARGE_BURST
         )
         level!!.addParticle(GenericParticle(this.position, Particle.TYPE_WIND_EXPLOSION))

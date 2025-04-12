@@ -25,7 +25,7 @@ class NPCCommandSender(private val npc: EntityNPC, val initiator: Player) : Comm
 
     override fun sendCommandOutput(container: CommandOutputContainer) {}
 
-    override fun getName() = npc.getName()
+    override fun getName() = npc.getEntityName()
 
     override val isPlayer: Boolean
         get() = false
@@ -78,11 +78,11 @@ class NPCCommandSender(private val npc: EntityNPC, val initiator: Player) : Comm
     }
 
     override fun getLocator(): Locator {
-        return npc.getLocator()
+        return npc.locator
     }
 
     override fun getTransform(): Transform {
-        return npc.getTransform()
+        return npc.transform
     }
 
     override var isOp: Boolean = true

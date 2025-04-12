@@ -129,7 +129,7 @@ open class EntityZombie(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
-        if (getHealth() - source.finalDamage <= 1) {
+        if (health - source.finalDamage <= 1) {
             if (source.cause == DamageCause.DROWNING) {
                 transform()
                 return true

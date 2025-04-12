@@ -74,7 +74,7 @@ class PositionTrackingService(folder: File) : Closeable {
         }
 
         val position = getPosition(trackingHandler)
-        return position != null && position.levelName == player.getLocator().levelName
+        return position != null && position.levelName == player.locator.levelName
     }
 
     @Throws(IOException::class)
@@ -88,7 +88,7 @@ class PositionTrackingService(folder: File) : Closeable {
     }
 
     private fun sendTrackingUpdate(player: Player, trackingHandler: Int, pos: PositionTracking) {
-        if (player.getLocator().levelName == pos.levelName) {
+        if (player.locator.levelName == pos.levelName) {
             val packet = PositionTrackingDBServerBroadcastPacket()
             packet.setAction(PositionTrackingDBServerBroadcastPacket.Action.UPDATE)
             packet.setPosition(pos)
@@ -204,7 +204,7 @@ class PositionTrackingService(folder: File) : Closeable {
                         PositionTrackingService.log.error(
                             "Failed to update the tracking handler {} for player {}",
                             trackingHandler,
-                            player.getName(),
+                            player.getEntityName(),
                             e
                         )
                     }
@@ -261,7 +261,7 @@ class PositionTrackingService(folder: File) : Closeable {
                         val pos: PositionTracking?
                         try {
                             pos = getPosition(trackingHandle)
-                            if (pos != null && pos.levelName == player.getLocator().levelName) {
+                            if (pos != null && pos.levelName == player.locator.levelName) {
                                 startTracking(player, trackingHandle, false)
                             }
                         } catch (e: IOException) {
@@ -291,7 +291,7 @@ class PositionTrackingService(folder: File) : Closeable {
                         PositionTrackingService.log.error(
                             "Failed to update the tracking handler {} for player {}",
                             trackingHandler,
-                            player.getName(),
+                            player.getEntityName(),
                             e
                         )
                     }

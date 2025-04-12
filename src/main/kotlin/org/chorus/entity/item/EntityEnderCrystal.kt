@@ -76,7 +76,7 @@ class EntityEnderCrystal(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
         if (!this.detonated) {
             this.detonated = true
 
-            val pos: Locator = this.getLocator()
+            val pos: Locator = this.locator
             val explode: Explosion = Explosion(pos, 6.0, this)
 
             this.close()

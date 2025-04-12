@@ -110,7 +110,7 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
         if (event.isCancelled) {
             return
         }
-        val explosion: Explosion = Explosion(this.getLocator(), event.force, this)
+        val explosion: Explosion = Explosion(this.locator, event.force, this)
         explosion.fireChance = event.fireChance
         if (event.isBlockBreaking) {
             explosion.explodeA()

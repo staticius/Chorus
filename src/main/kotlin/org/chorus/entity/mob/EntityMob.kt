@@ -357,7 +357,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         if (this.onGround) {
             pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_ON_GROUND.toInt()).toShort()
         }
-        Server.broadcastPacket(this.getViewers().values, pk)
+        Server.broadcastPacket(this.viewers.values, pk)
     }
 
     fun enableHeadYaw(): Boolean {

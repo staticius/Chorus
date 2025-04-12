@@ -61,15 +61,15 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
 
         this.updatePickupArea()
 
-        val blockSide: Block = getLocator().getSide(BlockFace.UP).tickCachedLevelBlock
+        val blockSide: Block = locator.getSide(BlockFace.UP).tickCachedLevelBlock
         val blockEntity = level!!.getBlockEntity(temporalVector.setComponentsAdding(this.position, BlockFace.UP))
 
         val changed: Boolean = if (blockEntity is InventoryHolder || blockSide is BlockComposter) {
             //从容器中拉取物品
-            pullItems(this, this.getLocator())
+            pullItems(this, this.locator)
         } else {
             //收集掉落物
-            pickupItems(this, this.getLocator(), pickupArea!!)
+            pickupItems(this, this.locator, pickupArea!!)
         }
 
         if (changed) {
@@ -159,7 +159,7 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
     }
 
     fun checkDisabled() {
-        val rail = getLocator().levelBlock
+        val rail = locator.levelBlock
         if (rail is BlockActivatorRail) {
             setDisabled(rail.isActive())
         }

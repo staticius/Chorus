@@ -60,12 +60,12 @@ class BlazeShootExecutor(
             }
         }
 
-        if (target!!.getLocator() != newTarget.getLocator()) {
+        if (target!!.locator != newTarget.locator) {
             target = newTarget
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed)
-        val clone = target!!.getTransform()
+        val clone = target!!.transform
 
         if (entity.position.distanceSquared(target!!.position) > maxShootDistanceSquared) {
             setRouteTarget(entity, clone.position)
@@ -94,7 +94,7 @@ class BlazeShootExecutor(
                     { stopOnFire(entity) }, 20
                 )
                 tick2 = 0
-                return target!!.getHealth() != 0f
+                return target!!.health != 0f
             }
         }
         return true
@@ -125,7 +125,7 @@ class BlazeShootExecutor(
     }
 
     protected fun shootFireball(entity: EntityMob) {
-        val fireballTransform = entity.getTransform()
+        val fireballTransform = entity.transform
         val directionVector =
             entity.getDirectionVector().multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
         fireballTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.y)

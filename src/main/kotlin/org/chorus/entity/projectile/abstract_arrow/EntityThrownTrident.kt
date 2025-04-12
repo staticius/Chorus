@@ -264,7 +264,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
 
         if (this.hasChanneling) {
             if (level!!.isThundering() && level!!.canBlockSeeSky(this.position)) {
-                val pos: Locator = this.getLocator()
+                val pos: Locator = this.locator
                 val lighting = EntityLightningBolt(pos.chunk, getDefaultNBT(pos.position))
                 lighting.spawnToAll()
                 level!!.addSound(this.position, Sound.ITEM_TRIDENT_THUNDER)

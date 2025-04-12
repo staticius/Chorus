@@ -18,7 +18,7 @@ import java.util.concurrent.TimeoutException
 
 class PlayerChunkManager(private val player: Player) {
     private val chunkDistanceComparator = Comparator<Long> { chunkHash1, chunkHash2 ->
-        val floor: BlockVector3 = player.getLocator().position.asBlockVector3()
+        val floor: BlockVector3 = player.locator.position.asBlockVector3()
         val loaderChunkX = floor.x shr 4
         val loaderChunkZ = floor.z shr 4
         val chunkDX1: Int = loaderChunkX - Level.getHashX(chunkHash1)

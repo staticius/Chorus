@@ -57,7 +57,7 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
                     return 0
                 }
                 if (entities.size == 1) {
-                    log.addSuccess("commands.tag.add.success.single", tag, entities[0].getName())
+                    log.addSuccess("commands.tag.add.success.single", tag, entities[0].getEntityName())
                 } else {
                     log.addSuccess("commands.tag.add.success.multiple", tag, entities.size.toString())
                 }
@@ -78,7 +78,7 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
                     return 0
                 }
                 if (entities.size == 1) {
-                    log.addSuccess("commands.tag.remove.success.single", tag, entities[0].getName())
+                    log.addSuccess("commands.tag.remove.success.single", tag, entities[0].getEntityName())
                 } else {
                     log.addSuccess("commands.tag.remove.success.multiple", tag, entities.size.toString())
                 }
@@ -96,7 +96,7 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
 
                 if (tagStr.isEmpty()) {
                     if (entities.size == 1) {
-                        log.addError("commands.tag.list.single.empty", entities[0].getName())
+                        log.addError("commands.tag.list.single.empty", entities[0].getEntityName())
                     } else {
                         log.addError("commands.tag.list.multiple.empty", entities.size.toString())
                     }
@@ -106,7 +106,7 @@ class TagCommand(name: String) : VanillaCommand(name, "commands.tag.description"
                     if (entities.size == 1) {
                         log.addSuccess(
                             "commands.tag.list.single.success",
-                            entities[0].getName(),
+                            entities[0].getEntityName(),
                             tagCount.toString(),
                             tagStr
                         )

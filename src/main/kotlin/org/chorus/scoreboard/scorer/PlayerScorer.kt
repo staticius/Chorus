@@ -49,7 +49,7 @@ class PlayerScorer : IScorer {
 
     override val name: String
         get() = if (Server.instance.onlinePlayers[uuid] == null) uuid.mostSignificantBits
-            .toString() else Server.instance.onlinePlayers[uuid]!!.getName()
+            .toString() else Server.instance.onlinePlayers[uuid]!!.getEntityName()
 
     override fun toNetworkInfo(scoreboard: IScoreboard, line: IScoreboardLine): ScoreInfo? {
         return if (Server.instance.getPlayer(uuid).isPresent) ScoreInfo(

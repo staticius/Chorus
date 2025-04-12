@@ -49,7 +49,7 @@ class AnimateProcessor : DataPacketProcessor<AnimatePacket>() {
         }
 
         Server.broadcastPacket(
-            player.getViewers().values, AnimatePacket(
+            player.viewers.values, AnimatePacket(
                 targetRuntimeID = player.getRuntimeID(),
                 action = animationEvent.animationType,
                 actionData = null,

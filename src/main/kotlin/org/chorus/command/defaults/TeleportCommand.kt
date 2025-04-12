@@ -101,7 +101,7 @@ class TeleportCommand(name: String) :
                 val entity = destination[0]
                 entity.rotation.yaw = (victim.yaw)
                 entity.rotation.pitch = (victim.pitch)
-                val target = entity.getTransform()
+                val target = entity.transform
                 var checkForBlocks = false
                 if (list.hasResult(1)) {
                     checkForBlocks = list.getResult(1)!!
@@ -109,19 +109,19 @@ class TeleportCommand(name: String) :
                 if (checkForBlocks) {
                     if (!target.levelBlock.isSolid && !target.add(0.0, 1.0, 0.0).levelBlock.isSolid) {
                         sender.asEntity()!!.teleport(target)
-                        log.addSuccess("commands.tp.successVictim", destination[0].getName()).output()
+                        log.addSuccess("commands.tp.successVictim", destination[0].getEntityName()).output()
                     } else {
                         log.addError(
                             "commands.tp.safeTeleportFail",
-                            sender.asEntity()!!.getName(),
-                            destination[0].getName()
+                            sender.asEntity()!!.getEntityName(),
+                            destination[0].getEntityName()
                         )
                             .output()
                         return 0
                     }
                 } else {
                     sender.asEntity()!!.teleport(target)
-                    log.addSuccess("commands.tp.successVictim", destination[0].getName()).output()
+                    log.addSuccess("commands.tp.successVictim", destination[0].getEntityName()).output()
                 }
                 return 1
             }
@@ -151,26 +151,26 @@ class TeleportCommand(name: String) :
                     sb.append(victim.name).append(" ")
                 }
                 if (checkForBlocks) {
-                    if (!target.getLocator().levelBlock.isSolid && !target.getLocator()
+                    if (!target.locator.levelBlock.isSolid && !target.locator
                             .add(0.0, 1.0, 0.0).levelBlock.isSolid
                     ) {
                         for (victim in victims) {
                             victim.teleport(
-                                target.getTransform().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch)
+                                target.transform.setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch)
                             )
                         }
-                        log.addSuccess("commands.tp.success", sb.toString(), target.getName())
+                        log.addSuccess("commands.tp.success", sb.toString(), target.getEntityName())
                     } else {
-                        log.addError("commands.tp.safeTeleportFail ", sb.toString(), target.getName()).output()
+                        log.addError("commands.tp.safeTeleportFail ", sb.toString(), target.getEntityName()).output()
                         return 0
                     }
                 } else {
                     for (victim in victims) {
                         victim.teleport(
-                            target.getTransform().setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch)
+                            target.transform.setYaw(victim.rotation.yaw).setPitch(victim.rotation.pitch)
                         )
                     }
-                    log.addSuccess("commands.tp.success", sb.toString(), target.getName())
+                    log.addSuccess("commands.tp.success", sb.toString(), target.getEntityName())
                 }
                 log.output()
                 return victims.size
@@ -421,13 +421,13 @@ class TeleportCommand(name: String) :
                         sender.asEntity()!!.teleport(target)
                         log.addSuccess(
                             "commands.tp.success.coordinates",
-                            sender.asEntity()!!.getName(),
+                            sender.asEntity()!!.getEntityName(),
                             target.position.floorX.toString(),
                             target.position.floorY.toString(),
                             target.position.floorZ.toString()
                         )
                     } else {
-                        log.addError("commands.tp.safeTeleportFail ", sender.asEntity()!!.getName(), target.toString())
+                        log.addError("commands.tp.safeTeleportFail ", sender.asEntity()!!.getEntityName(), target.toString())
                             .output()
                         return 0
                     }
@@ -435,7 +435,7 @@ class TeleportCommand(name: String) :
                     sender.asEntity()!!.teleport(target)
                     log.addSuccess(
                         "commands.tp.success.coordinates",
-                        sender.asEntity()!!.getName(),
+                        sender.asEntity()!!.getEntityName(),
                         target.position.floorX.toString(),
                         target.position.floorY.toString(),
                         target.position.floorZ.toString()
@@ -472,13 +472,13 @@ class TeleportCommand(name: String) :
                         sender.asEntity()!!.teleport(target)
                         log.addSuccess(
                             "commands.tp.success.coordinates",
-                            sender.asEntity()!!.getName(),
+                            sender.asEntity()!!.getEntityName(),
                             target.position.floorX.toString(),
                             target.position.floorY.toString(),
                             target.position.floorZ.toString()
                         )
                     } else {
-                        log.addError("commands.tp.safeTeleportFail", sender.asEntity()!!.getName(), target.toString())
+                        log.addError("commands.tp.safeTeleportFail", sender.asEntity()!!.getEntityName(), target.toString())
                             .output()
                         return 0
                     }
@@ -486,7 +486,7 @@ class TeleportCommand(name: String) :
                     sender.asEntity()!!.teleport(target)
                     log.addSuccess(
                         "commands.tp.success.coordinates",
-                        sender.asEntity()!!.getName(),
+                        sender.asEntity()!!.getEntityName(),
                         target.position.floorX.toString(),
                         target.position.floorY.toString(),
                         target.position.floorZ.toString()

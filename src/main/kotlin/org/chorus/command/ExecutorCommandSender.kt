@@ -42,11 +42,11 @@ class ExecutorCommandSender(executor: CommandSender, entity: Entity?, executeTra
     override fun getName() = entity!!.name!!
 
     override fun getLocator(): Locator {
-        return entity!!.getLocator()
+        return entity!!.locator
     }
 
     override fun getTransform(): Transform {
-        return entity!!.getTransform()
+        return entity!!.transform
     }
 
     override val isPlayer: Boolean

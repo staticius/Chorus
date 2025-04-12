@@ -60,12 +60,12 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             namedTag!!.putFloat("Health", getMaxHealth().toFloat())
         }
 
-        setHealth(namedTag!!.getFloat("Health"))
+        setHealthSafe(namedTag!!.getFloat("Health"))
     }
 
-    override fun setHealth(health: Float) {
+    override fun setHealthSafe(health: Float) {
         val wasAlive: Boolean = this.isAlive()
-        super.setHealth(health)
+        super.setHealthSafe(health)
         if (this.isAlive() && !wasAlive) {
             val pk = EntityEventPacket()
             pk.eid = this.getRuntimeID()
@@ -76,7 +76,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
 
     override fun saveNBT() {
         super.saveNBT()
-        namedTag!!.putFloat("Health", this.getHealth())
+        namedTag!!.putFloat("Health", this.health)
     }
 
     fun hasLineOfSight(entity: Entity?): Boolean {
@@ -135,7 +135,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
             val pk: EntityEventPacket = EntityEventPacket()
             pk.eid = this.getRuntimeID()
             pk.event =
-                if (this.getHealth() <= 0) EntityEventPacket.DEATH_ANIMATION else EntityEventPacket.HURT_ANIMATION
+                if (this.health <= 0) EntityEventPacket.DEATH_ANIMATION else EntityEventPacket.HURT_ANIMATION
             Server.broadcastPacket(hasSpawned.values, pk)
 
             this.attackTime = source.attackCooldown

@@ -14,7 +14,7 @@ class EffectPoison :
 
     override fun apply(entity: Entity, tickCount: Double) {
         if (this.canTick()) {
-            if (entity.getHealth() > 1) {
+            if (entity.health > 1) {
                 entity.attack(EntityDamageEvent(entity, DamageCause.MAGIC, 1f))
             }
         }

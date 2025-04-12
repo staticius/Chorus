@@ -195,7 +195,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
         pk.event = EntityEventPacket.EATING_ITEM
         pk.eid = this.getRuntimeID()
         pk.data = item.fullId
-        Server.broadcastPacket(getViewers().values, pk)
+        Server.broadcastPacket(viewers.values, pk)
     }
 
     override fun getExperienceDrops(): Int {

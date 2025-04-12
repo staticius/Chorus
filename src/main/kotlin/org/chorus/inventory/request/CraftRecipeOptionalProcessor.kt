@@ -40,7 +40,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
             val filterStrings = itemStackRequest.filterStrings
             filterString = filterStrings[filteredStringIndex]
             if (filterString.isBlank() || filterString.length > 64) {
-                CraftRecipeOptionalProcessor.log.debug(player.getName() + ": FilterTextPacket with too long text")
+                CraftRecipeOptionalProcessor.log.debug(player.getEntityName() + ": FilterTextPacket with too long text")
                 return context.error()
             }
         }

@@ -35,7 +35,7 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
         if (player.isSpectator) {
             BlockPickRequestProcessor.log.debug(
                 "Got block-pick request from {} when in spectator mode",
-                player.getName()
+                player.getEntityName()
             )
             pickEvent.setCancelled()
         }

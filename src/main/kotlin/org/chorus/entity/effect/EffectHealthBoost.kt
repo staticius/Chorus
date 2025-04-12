@@ -10,8 +10,8 @@ class EffectHealthBoost : Effect(EffectType.HEALTH_BOOST, "%potion.healthBoost",
 
     override fun remove(entity: Entity) {
         entity.setMaxHealth(entity.getMaxHealth() - 4 * this.getLevel())
-        if (entity.getHealth() > entity.getMaxHealth()) {
-            entity.setHealth(entity.getMaxHealth().toFloat())
+        if (entity.health > entity.getMaxHealth()) {
+            entity.setHealthSafe(entity.getMaxHealth().toFloat())
         }
     }
 }

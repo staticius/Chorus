@@ -90,7 +90,7 @@ class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
     public override fun initEntity() {
         super.initEntity()
         this.setMaxHealth(Int.MAX_VALUE) // Should be Float max value
-        this.setHealth(20f)
+        this.setHealthSafe(20f)
         this.setNameTagVisible(true)
         this.setNameTagAlwaysVisible(true)
         this.setMovementSpeed(0.5f)

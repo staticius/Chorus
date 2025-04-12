@@ -110,7 +110,7 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
             if (damageEvent.isCancelled) return false
         }
 
-        if (instantKill || getHealth() - source.finalDamage < 1) {
+        if (instantKill || health - source.finalDamage < 1) {
             if (source is EntityDamageByEntityEvent) {
                 val damagingEntity: Entity = source.damager
 

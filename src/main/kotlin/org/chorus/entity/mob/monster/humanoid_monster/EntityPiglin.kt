@@ -314,7 +314,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
             EntityID.HOGLIN -> {
                 if (entity is EntityHoglin) {
                     if (!entity.isBaby()) {
-                        if (entity.getHealth() - getDiffHandDamage(Server.instance.getDifficulty()) <= 0) {
+                        if (entity.health - getDiffHandDamage(Server.instance.getDifficulty()) <= 0) {
                             val entities = level!!.entities.values.filter { entity1: Entity ->
                                 entity1 is EntityPiglin && entity1.position.distance(
                                     this.position

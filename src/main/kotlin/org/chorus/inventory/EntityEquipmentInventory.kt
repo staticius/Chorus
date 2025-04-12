@@ -31,7 +31,7 @@ class EntityEquipmentInventory(holder: InventoryHolder) :
 
     override fun getViewers(): Set<Player> {
         val viewers: MutableSet<Player> = HashSet(this.viewers)
-        viewers.addAll(entity.getViewers().values)
+        viewers.addAll(entity.viewers.values)
         return viewers
     }
 

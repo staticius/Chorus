@@ -215,7 +215,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.inventory.setItemInHand(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -240,7 +240,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.setItemInHand(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -269,7 +269,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.getOffhandInventory()!!.setItem(0, item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -294,7 +294,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.setItemInOffhand(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id,
                                 item.getCount().toString(),
@@ -323,7 +323,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.inventory.setHelmet(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -350,7 +350,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.setHelmet(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -379,7 +379,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.inventory.setChestplate(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -406,7 +406,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.setChestplate(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -435,7 +435,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.inventory.setLeggings(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -462,7 +462,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.setLeggings(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -491,7 +491,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.inventory.setBoots(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -518,7 +518,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.setBoots(item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -551,7 +551,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.getEnderChestInventory()!!.setItem(slotId, item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -592,7 +592,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.inventory.setItem(slotId, item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -638,7 +638,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.inventory.setItem(slotId, item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),
@@ -672,7 +672,7 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         if (entity.inventory.setItem(slotId, item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
-                                entity.getName(),
+                                entity.getEntityName(),
                                 slotType,
                                 old.id.toString(),
                                 item.getCount().toString(),

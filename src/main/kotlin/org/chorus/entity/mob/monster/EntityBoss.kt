@@ -12,10 +12,10 @@ import org.chorus.network.protocol.BossEventPacket
 abstract class EntityBoss(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt) {
     protected var blockBreakSound: Sound? = null
 
-    override fun setHealth(health: Float) {
-        super.setHealth(health)
+    override fun setHealthSafe(health: Float) {
+        super.setHealthSafe(health)
         Server.broadcastPacket(
-            getViewers().values, BossEventPacket(
+            viewers.values, BossEventPacket(
                 targetActorID = this.runtimeId,
                 eventType = BossEventPacket.EventType.UPDATE_PERCENT,
                 eventData = BossEventPacket.EventType.Companion.UpdatePercentData(

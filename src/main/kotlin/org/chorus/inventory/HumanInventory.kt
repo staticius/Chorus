@@ -117,7 +117,7 @@ class HumanInventory(human: IHuman) //9+27+4
                 this.sendHeldItem((holder as Player))
             }
 
-            this.sendHeldItem((holder as IHuman).getEntity().getViewers().values)
+            this.sendHeldItem((holder as IHuman).getEntity().viewers.values)
         }
     }
 

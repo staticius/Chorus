@@ -151,7 +151,7 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
             return
         }
 
-        val health = player.getHealth().toDouble()
+        val health = player.health.toDouble()
 
         this.foodTickTimer += tickDiff
         if (this.foodTickTimer >= 80) {

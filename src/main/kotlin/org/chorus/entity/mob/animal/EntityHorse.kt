@@ -137,8 +137,8 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         namedTag!!.putList("Attributes", compoundTagListTag)
     }
 
-    override fun setHealth(health: Float) {
-        super.setHealth(health)
+    override fun setHealthSafe(health: Float) {
+        super.setHealthSafe(health)
         if (this.isAlive()) {
             val attr = attributeMap["minecraft:health"]!!
                 .setDefaultValue(maxHealth.toFloat())

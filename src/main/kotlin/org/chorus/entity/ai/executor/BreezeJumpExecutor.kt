@@ -53,6 +53,6 @@ class BreezeJumpExecutor : EntityControl, IBehaviorExecutor {
         val pk = EntityEventPacket()
         pk.eid = entity.getRuntimeID()
         pk.event = EntityEventPacket.DUST_PARTICLES
-        Server.broadcastPacket(entity.getViewers().values, pk)
+        Server.broadcastPacket(entity.viewers.values, pk)
     }
 }

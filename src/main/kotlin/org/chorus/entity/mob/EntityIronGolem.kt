@@ -121,7 +121,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        if (item is ItemIronIngot && getHealth() <= getMaxHealth() * 0.75f) {
+        if (item is ItemIronIngot && health <= getMaxHealth() * 0.75f) {
             level!!.addSound(this.position, Sound.MOB_IRONGOLEM_REPAIR)
             if (player.gamemode != Player.CREATIVE) player.getInventory().itemInHand.decrement(1)
             heal(25f)
@@ -153,18 +153,18 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
-        val health: Float = getHealth()
+        val health: Float = health
         if (!super.attack(source)) return false
         for (i: Int in intArrayOf(74, 50, 25)) {
-            if (health > i && getHealth() <= i) {
+            if (health > i && health <= i) {
                 level!!.addSound(this.position, Sound.MOB_IRONGOLEM_CRACK)
             }
         }
         return true
     }
 
-    override fun setHealth(health: Float) {
-        super.setHealth(health)
+    override fun setHealthSafe(health: Float) {
+        super.setHealthSafe(health)
         syncAttribute(getHealthAttribute())
     }
 
@@ -262,7 +262,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                             irongolem!!.spawnToAll()
                             if (irongolem is EntityIronGolem) {
                                 if (player != null) {
-                                    irongolem.setOwnerName(player.getName())
+                                    irongolem.setOwnerName(player.getEntityName())
                                 }
                             }
                             return

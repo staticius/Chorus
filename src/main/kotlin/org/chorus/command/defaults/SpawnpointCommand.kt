@@ -71,7 +71,7 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
             return 0
         }
         if (players.isNotEmpty()) {
-            val pos = players[0].getLocator()
+            val pos = players[0].locator
             players[0].setSpawn(pos, SpawnPointType.PLAYER)
             log.addSuccess(
                 "commands.spawnpoint.success.single", sender.getName(),

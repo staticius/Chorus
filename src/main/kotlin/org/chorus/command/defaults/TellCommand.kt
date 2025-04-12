@@ -40,7 +40,7 @@ class TellCommand(name: String) :
                 log.addError("commands.message.sameTarget").output()
                 continue
             }
-            log.addSuccess("commands.message.display.outgoing", player.getName(), msg)
+            log.addSuccess("commands.message.display.outgoing", player.getEntityName(), msg)
             player.sendMessage(TranslationContainer("commands.message.display.incoming", sender.getName(), msg))
         }
         log.output()

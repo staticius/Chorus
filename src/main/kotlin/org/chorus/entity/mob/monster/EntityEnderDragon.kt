@@ -167,7 +167,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
             for (e in level!!.entities.values) {
                 if (e is EntityEnderCrystal) {
                     if (e.position.distance(this.position) <= 28) {
-                        val health = this.getHealth()
+                        val health = this.health
                         if (!(health > this.maxHealth) && health != 0f) {
                             this.heal(0.2f)
                         }
@@ -279,8 +279,8 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
                 targetActorID = this.runtimeId,
                 eventType = BossEventPacket.EventType.ADD,
                 eventData = BossEventPacket.EventType.Companion.AddData(
-                    name = this.getName(),
-                    filteredName = this.getName(),
+                    name = this.getEntityName(),
+                    filteredName = this.getEntityName(),
                     color = 5,
                     healthPercent = health / maxHealth,
                     darkenScreen = 0,

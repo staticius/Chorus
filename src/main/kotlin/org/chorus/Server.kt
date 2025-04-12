@@ -980,7 +980,7 @@ class Server internal constructor(
             }
         } else {
             for (cmd in commands) {
-                server.executeCommand(server.consoleSender, "execute as " + "\"" + sender.getName() + "\" run " + cmd)
+                server.executeCommand(server.consoleSender, "execute as " + "\"" + sender.getEntityName() + "\" run " + cmd)
             }
         }
 
@@ -1507,8 +1507,8 @@ class Server internal constructor(
         name1 = name1.lowercase()
         var delta = Int.MAX_VALUE
         for (player in onlinePlayers.values) {
-            if (player.getName().lowercase().startsWith(name1)) {
-                val curDelta: Int = player.getName().length - name1.length
+            if (player.getEntityName().lowercase().startsWith(name1)) {
+                val curDelta: Int = player.getEntityName().length - name1.length
                 if (curDelta < delta) {
                     found = player
                     delta = curDelta
@@ -1535,7 +1535,7 @@ class Server internal constructor(
         var name1 = name
         name1 = name1.lowercase()
         for (player in onlinePlayers.values) {
-            if (player.getName().lowercase() == name1) {
+            if (player.getEntityName().lowercase() == name1) {
                 return player
             }
         }
@@ -1557,9 +1557,9 @@ class Server internal constructor(
         partialName1 = partialName1.lowercase()
         val matchedPlayer: MutableList<Player> = ArrayList()
         for (player in onlinePlayers.values) {
-            if (player.getName().lowercase() == partialName1) {
+            if (player.getEntityName().lowercase() == partialName1) {
                 return arrayOf(player)
-            } else if (player.getName().lowercase().contains(partialName1)) {
+            } else if (player.getEntityName().lowercase().contains(partialName1)) {
                 matchedPlayer.add(player)
             }
         }

@@ -19,7 +19,7 @@ class CraftCreativeActionProcessor : ItemStackRequestActionProcessor<CraftCreati
         if (!player.isCreative) {
             CraftCreativeActionProcessor.log.warn(
                 "This player {} is get createitems in non-creative mode, which may be a hacker!",
-                player.getName()
+                player.getEntityName()
             )
             return context.error()
         }

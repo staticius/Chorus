@@ -119,7 +119,7 @@ class PotionThrowExecutor(
 
     protected fun throwPotion(entity: EntityMob) {
         val potionTransform = entity.transform
-        val directionVector = entity.directionVector
+        val directionVector = entity.getDirectionVector()
         potionTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.y)
         val nbt = CompoundTag()
             .putList(

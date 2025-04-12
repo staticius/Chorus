@@ -238,8 +238,8 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                     player.dataPacket(packet)
 
                     this.maxHealth = 10
-                    this.setHealth(10f)
-                    this.setOwnerName(player.getName())
+                    this.setHealthSafe(10f)
+                    this.setOwnerName(player.getEntityName())
                     this.setColor(DyeColor.RED)
                     this.saveNBT()
 
@@ -263,7 +263,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                 )
 
                 if (healable != 0) {
-                    this.setHealth(max(maxHealth.toDouble(), (this.getHealth() + healable).toDouble()).toFloat())
+                    this.setHealthSafe(max(maxHealth.toDouble(), (this.health + healable).toDouble()).toFloat())
                 }
                 memoryStorage.set<Int>(
                     CoreMemoryTypes.Companion.LAST_BE_FEED_TIME,
@@ -278,7 +278,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
                 this.setColor((item as ItemDye).dyeColor)
                 return true
             }
-        } else if (this.hasOwner() && player.getName() == getOwnerName() && !this.isTouchingWater()) {
+        } else if (this.hasOwner() && player.getEntityName() == getOwnerName() && !this.isTouchingWater()) {
             this.setSitting(!this.isSitting())
             return false
         }

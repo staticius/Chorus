@@ -1,6 +1,5 @@
 package org.chorus.entity
 
-import com.google.common.collect.Iterables
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.*
@@ -156,6 +155,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     protected val hasSpawned: MutableMap<Int, Player> = ConcurrentHashMap()
+    @JvmField
     protected val effects: MutableMap<EffectType, Effect> = ConcurrentHashMap()
 
     /**
@@ -202,7 +202,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     var inPortalTicks: Int = 0
+    @JvmField
     var freezingTicks: Int = 0 //0 - 140
+    @JvmField
     var scale: Float = 1f
 
     @JvmField
@@ -225,17 +227,19 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     var closed: Boolean = false
+    @JvmField
     var noClip: Boolean = false
 
 
     @Volatile
     protected var runtimeId: Long = 0
+    @JvmField
     protected var lastDamageCause: EntityDamageEvent? = null
 
     protected open var age: Int = 0
 
     var health: Float = 20f
-        protected set
+        private set
 
     @JvmField
     protected var absorption: Float = 0f
@@ -247,7 +251,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     protected var inEndPortal: Boolean = false
+    @JvmField
     val isPlayer: Boolean = this is Player
+    @JvmField
     var maxHealth: Int = 20
     var name: String? = null
         protected set
@@ -391,7 +397,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         entityDataMap.put(EntityDataTypes.SCALE, 1f)
         entityDataMap.put(EntityDataTypes.HEIGHT, this.getHeight())
         entityDataMap.put(EntityDataTypes.WIDTH, this.getWidth())
-        entityDataMap.put(EntityDataTypes.STRUCTURAL_INTEGRITY, getHealth().toInt())
+        entityDataMap.put(EntityDataTypes.STRUCTURAL_INTEGRITY, health.toInt())
         entityDataMap.put(EntityDataTypes.VARIANT, this.variant)
         this.sendData(hasSpawned.values.toTypedArray(), entityDataMap)
         this.setDataFlags(
@@ -615,7 +621,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     fun getPassenger(): Entity? {
-        return Iterables.getFirst(this.passengers, null)
+        return this.passengers.firstOrNull()
     }
 
     fun isPassenger(entity: Entity?): Boolean {
@@ -842,7 +848,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
      * Similar to [.getName], but if the name is blank or empty it returns the static name instead.
      */
     fun getVisibleName(): String {
-        val name: String = getName()
+        val name: String = getEntityName()
         return if (TextFormat.clean(name).trim { it <= ' ' }.isNotEmpty()) {
             name
         } else {
@@ -853,7 +859,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     /**
      * The current name used by this entity in the name tag, or the static name if the entity don't have nametag.
      */
-    open fun getName(): String {
+    open fun getEntityName(): String {
         return if (this.hasCustomName()) {
             this.getNameTag()
         } else {
@@ -919,10 +925,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                 )
             }
         )
-    }
-
-    fun getViewers(): Map<Int, Player> {
-        return hasSpawned
     }
 
     val viewers: Map<Int, Player>
@@ -1031,7 +1033,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         setLastDamageCause(source)
 
         //计算血量
-        val newHealth: Float = getHealth() - source.finalDamage
+        val newHealth: Float = health - source.finalDamage
 
         //only player
         if (newHealth < 1 && this is Player) {
@@ -1051,7 +1053,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
                     this.extinguish()
                     this.removeAllEffects()
-                    this.setHealth(1f)
+                    this.setHealthSafe(1f)
 
                     this.addEffect(
                         Effect.get(EffectType.REGENERATION).setDuration(800).setAmplifier(1)
@@ -1080,7 +1082,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
         val attacker: Entity? = if (source is EntityDamageByEntityEvent) source.damager else null
 
-        setHealth(newHealth)
+        setHealthSafe(newHealth)
 
         if (this !is EntityArmorStand) {
             level!!.vibrationManager.callVibrationEvent(
@@ -1098,11 +1100,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return this.attack(EntityDamageEvent(this, DamageCause.CUSTOM, damage))
     }
 
-
-    fun getAge(): Int {
-        return this.age
-    }
-
     open fun getNetworkID(): Int {
         return Registries.ENTITY.getEntityNetworkId(getEntityIdentifier())
     }
@@ -1112,18 +1109,14 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         if (source.isCancelled) {
             return
         }
-        this.setHealth(this.getHealth() + source.amount)
+        this.setHealthSafe(this.health + source.amount)
     }
 
     fun heal(amount: Float) {
         this.heal(EntityRegainHealthEvent(this, amount, EntityRegainHealthEvent.CAUSE_REGEN))
     }
 
-    fun getHealth(): Float {
-        return health
-    }
-
-    open fun setHealth(health: Float) {
+    open fun setHealthSafe(health: Float) {
         if (this.health == health) {
             return
         }
@@ -1519,7 +1512,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         if (this.onGround) {
             pk.flags = (pk.flags.toInt() or MoveEntityDeltaPacket.FLAG_ON_GROUND.toInt()).toShort()
         }
-        Server.broadcastPacket(getViewers().values, pk)
+        Server.broadcastPacket(viewers.values, pk)
     }
 
     /*
@@ -1563,9 +1556,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         val y: Double = cos(pitch)
         return Vector3(x, y, z).normalize()
     }
-
-    val directionVector: Vector3
-        get() = getDirectionVector()
 
     fun getDirectionPlane(): Vector2 {
         return (Vector2(
@@ -1742,7 +1732,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         val pk = UpdateAttributesPacket()
         pk.entries = arrayOf(attribute)
         pk.entityId = this.getRuntimeID()
-        Server.broadcastPacket(getViewers().values, pk)
+        Server.broadcastPacket(viewers.values, pk)
     }
 
     open fun syncAttributes() {
@@ -1750,7 +1740,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         pk.entries =
             attributes.values.stream().filter { obj: Attribute -> obj.isSyncable() }.toList().toTypedArray()
         pk.entityId = this.getRuntimeID()
-        Server.broadcastPacket(getViewers().values, pk)
+        Server.broadcastPacket(viewers.values, pk)
     }
 
 
@@ -1966,27 +1956,19 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return true
     }
 
-    fun getTransform(): Transform {
-        return Transform(
-            position.x,
-            position.y,
-            position.z, rotation.yaw, rotation.pitch, rotation.yaw,
-            level!!
-        )
-    }
-
     val transform: Transform
-        get() = getTransform()
-
-    fun getLocator(): Locator {
-        return Locator(
-            position.x, position.y, position.z,
-            level!!
-        )
-    }
+        get() = Transform(
+                    position.x,
+                    position.y,
+                    position.z, rotation.yaw, rotation.pitch, rotation.yaw,
+                    level!!
+                )
 
     val locator: Locator
-        get() = getLocator()
+        get() = Locator(
+                    position.x, position.y, position.z,
+                    level!!
+                )
 
     fun isTouchingWater(): Boolean {
         return hasWaterAt(0f) || hasWaterAt(this.getEyeHeight())
@@ -2079,7 +2061,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     fun isOnLadder(): Boolean {
-        val b: Block = getTransform().levelBlock
+        val b: Block = transform.levelBlock
 
         return BlockID.LADDER == b.id
     }
@@ -2092,7 +2074,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         var dy1: Double = dy
         var dz1: Double = dz
         if (dx1 == 0.0 && dz1 == 0.0 && dy1 == 0.0) {
-            val value: Locator = this.getTransform()
+            val value: Locator = this.transform
             value.position.setComponents(position.down())
             this.onGround = !value.tickCachedLevelBlock.canPassThrough()
             return true
@@ -2366,7 +2348,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                     Server.instance.pluginManager.callEvent(ev)
 
                     if (!ev.isCancelled && (level!!.dimension == Level.DIMENSION_OVERWORLD || level!!.dimension == Level.DIMENSION_THE_END)) {
-                        val newPos: Locator? = PortalHelper.moveToTheEnd(this.getTransform())
+                        val newPos: Locator? = PortalHelper.moveToTheEnd(this.transform)
                         if (newPos != null) {
                             if (newPos.level.dimension == Level.DIMENSION_THE_END) {
                                 if (teleport(newPos.add(0.5, 1.0, 0.5), TeleportCause.END_PORTAL)) {
@@ -2595,7 +2577,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         val yaw: Double = transform.rotation.yaw
         val pitch: Double = transform.rotation.pitch
 
-        val from: Transform = this.getTransform()
+        val from: Transform = this.transform
         var to: Transform = transform
         if (cause != null) {
             val ev = EntityTeleportEvent(this, from, to, cause)
@@ -2978,7 +2960,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
 
     fun playAnimation(animation: Animation) {
-        val viewers: HashSet<Player> = HashSet(getViewers().values)
+        val viewers: HashSet<Player> = HashSet(viewers.values)
         if (this.isPlayer) viewers.add(this as Player)
         playAnimation(animation, viewers)
     }
@@ -3000,7 +2982,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
 
     fun playActionAnimation(action: AnimatePacket.Action, rowingTime: Float) {
-        val viewers: HashSet<Player> = HashSet(getViewers().values)
+        val viewers: HashSet<Player> = HashSet(viewers.values)
         if (this.isPlayer) viewers.add(this as Player)
         playActionAnimation(action, rowingTime, viewers)
     }
@@ -3409,7 +3391,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         fun playAnimationOnEntities(animation: Animation, entities: Collection<Entity>) {
             val viewers: HashSet<Player> = HashSet()
             entities.forEach(Consumer { entity: Entity ->
-                viewers.addAll(entity.getViewers().values)
+                viewers.addAll(entity.viewers.values)
                 if (entity.isPlayer) viewers.add(entity as Player)
             })
             playAnimationOnEntities(animation, entities, viewers)

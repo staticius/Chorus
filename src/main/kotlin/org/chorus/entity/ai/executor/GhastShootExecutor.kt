@@ -122,7 +122,7 @@ class GhastShootExecutor(
     protected fun shootFireball(entity: EntityMob) {
         val fireballTransform = entity.transform
         val directionVector =
-            entity.directionVector.multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
+            entity.getDirectionVector().multiply((1 + ThreadLocalRandom.current().nextFloat(0.2f)).toDouble())
         fireballTransform.setY(entity.position.y + entity.getEyeHeight() + directionVector.y)
         val nbt = CompoundTag()
             .putList(

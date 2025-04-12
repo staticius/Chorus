@@ -42,7 +42,7 @@ class MessageStringNode : ParamNode<String?>() {
                     try {
                         for (entity in EntitySelectorAPI.Companion.api
                             .matchEntities(paramList.paramTree.sender!!, m)) {
-                            var name = entity.getName()
+                            var name = entity.getEntityName()
                             if (name.isBlank()) name = entity.getOriginalName()
                             join.add(name)
                         }

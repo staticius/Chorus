@@ -136,15 +136,15 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
     override fun onUpdate(currentTick: Int): Boolean {
         waterTicks++
         if (level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {
-            if (getLocator().levelBlock.isAir) {
-                val support: Block = getLocator().levelBlock.down()
+            if (locator.levelBlock.isAir) {
+                val support: Block = locator.levelBlock.down()
                 if (support.isFullBlock && !support.isAir) {
-                    level!!.setBlock(getLocator().levelBlock.position, Block.get(BlockID.SNOW_LAYER))
+                    level!!.setBlock(locator.levelBlock.position, Block.get(BlockID.SNOW_LAYER))
                 }
             }
         }
         if (this.waterTicks >= 20) {
-            if ((level!!.isRaining && !this.isUnderBlock()) || getLocator().levelBlock is BlockLiquid || Registries.BIOME.get(
+            if ((level!!.isRaining && !this.isUnderBlock()) || locator.levelBlock is BlockLiquid || Registries.BIOME.get(
                     level!!.getBiomeId(
                         position.floorX,
                         position.floorY, position.floorZ

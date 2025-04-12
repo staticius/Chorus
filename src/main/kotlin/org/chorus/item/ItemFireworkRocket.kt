@@ -155,7 +155,7 @@ class ItemFireworkRocket @JvmOverloads constructor(meta: Int = 0, count: Int = 1
             )
             .putCompound("FireworkItem", NBTIO.putItemHelper(this))
 
-        val entity = EntityElytraFirework(player.getLocator().chunk, nbt, player)
+        val entity = EntityElytraFirework(player.locator.chunk, nbt, player)
         entity.spawnToAll()
     }
 

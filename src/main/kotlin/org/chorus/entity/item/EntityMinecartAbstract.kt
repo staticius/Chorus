@@ -50,7 +50,7 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
 
     init {
         setMaxHealth(40)
-        setHealth(40f)
+        setHealthSafe(40f)
 
         if (nbt.contains(TAG_CUSTOM_DISPLAY_TILE)) {
             this.customDisplayTile = nbt.getBoolean(TAG_CUSTOM_DISPLAY_TILE)
@@ -116,8 +116,8 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
             super.onUpdate(currentTick)
 
             // The damage token
-            if (getHealth() < 20) {
-                setHealth(getHealth() + 1)
+            if (health < 20) {
+                setHealthSafe(health + 1)
             }
 
             // Entity variables

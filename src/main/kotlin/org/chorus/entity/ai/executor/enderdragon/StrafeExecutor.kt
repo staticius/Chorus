@@ -31,7 +31,7 @@ class StrafeExecutor : EntityControl, IBehaviorExecutor {
                 player.position.z - entity.position.z
             ).normalize()
 
-            val fireballTransform = entity.getTransform().add(toPlayerVector.multiply(5.0))
+            val fireballTransform = entity.transform.add(toPlayerVector.multiply(5.0))
             val yaw = BVector3.getYawFromVector(toPlayerVector)
             val pitch = BVector3.getPitchFromVector(toPlayerVector)
             val nbt = CompoundTag()

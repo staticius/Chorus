@@ -121,7 +121,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
             setOwnerName("")
             setItemInHand(Item.AIR)
         } else {
-            setOwnerName(player.getName())
+            setOwnerName(player.getEntityName())
             val itemInHand: Item = player.getInventory().itemInHand.clone().clearNamedTag()
             itemInHand.setCount(1)
             setItemInHand(itemInHand)

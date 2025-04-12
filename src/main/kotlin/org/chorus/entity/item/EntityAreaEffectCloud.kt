@@ -275,7 +275,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         }
 
         setMaxHealth(1)
-        setHealth(1f)
+        setHealthSafe(1f)
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {

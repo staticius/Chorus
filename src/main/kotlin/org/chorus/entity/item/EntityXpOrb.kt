@@ -50,10 +50,10 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         super.initEntity()
 
         setMaxHealth(5)
-        setHealth(5f)
+        setHealthSafe(5f)
 
         if (namedTag!!.contains("Health")) {
-            this.setHealth(namedTag!!.getShort("Health").toFloat())
+            this.setHealthSafe(namedTag!!.getShort("Health").toFloat())
         }
         if (namedTag!!.contains("Age")) {
             this.age = namedTag!!.getShort("Age").toInt()
@@ -121,7 +121,7 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
             if (this.closestPlayer == null || closestPlayer!!.position.distanceSquared(this.position) > 64.0) {
                 this.closestPlayer = null
                 var closestDistance: Double = 0.0
-                for (p: Player in getViewers().values) {
+                for (p: Player in viewers.values) {
                     if (!p.isSpectator && p.spawned && p.isAlive()) {
                         val d: Double = p.position.distanceSquared(this.position)
                         if (d <= 64.0 && (this.closestPlayer == null || d < closestDistance)) {
@@ -186,7 +186,7 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
 
     override fun saveNBT() {
         super.saveNBT()
-        namedTag!!.putShort("Health", getHealth().toInt())
+        namedTag!!.putShort("Health", health.toInt())
         namedTag!!.putShort("Age", age)
         namedTag!!.putShort("PickupDelay", pickupDelay)
         namedTag!!.putShort("Value", exp)

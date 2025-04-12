@@ -41,9 +41,9 @@ class KickCommand(name: String) : VanillaCommand(name, "commands.kick.descriptio
         for (player in players) {
             player.kick(PlayerKickEvent.Reason.KICKED_BY_ADMIN, reason)
             if (reason.isNotEmpty()) {
-                log.addSuccess("commands.kick.success.reason", player.getName(), reason.toString())
+                log.addSuccess("commands.kick.success.reason", player.getEntityName(), reason.toString())
             } else {
-                log.addSuccess("commands.kick.success", player.getName())
+                log.addSuccess("commands.kick.success", player.getEntityName())
             }
         }
         log.successCount(players.size).output(true)

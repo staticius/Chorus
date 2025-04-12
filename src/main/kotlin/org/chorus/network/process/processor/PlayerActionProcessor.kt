@@ -320,7 +320,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                     // TODO
                 }
 
-                else -> PlayerActionProcessor.log.warn("{} sent invalid action id {}", player.getName(), pk.action)
+                else -> PlayerActionProcessor.log.warn("{} sent invalid action id {}", player.getEntityName(), pk.action)
             }
         }
     }

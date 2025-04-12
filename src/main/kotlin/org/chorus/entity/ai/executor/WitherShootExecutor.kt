@@ -44,7 +44,7 @@ class WitherShootExecutor(protected var targetMemory: NullableMemoryType<out Ent
 
     protected fun spawn(entity: EntityMob, charged: Boolean) {
         val fireballTransform = entity.transform
-        fireballTransform.add(entity.directionVector)
+        fireballTransform.add(entity.getDirectionVector())
         val nbt = CompoundTag()
             .putList(
                 "Pos", ListTag<FloatTag>()

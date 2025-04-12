@@ -171,7 +171,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
     }
 
     fun fishBites() {
-        val viewers: Collection<Player> = getViewers().values
+        val viewers: Collection<Player> = viewers.values
 
         val pk: EntityEventPacket = EntityEventPacket()
         pk.eid = this.getRuntimeID()
@@ -261,7 +261,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
                 ) as EntityItem?
 
                 if (itemEntity != null) {
-                    itemEntity.setOwner(player.getName())
+                    itemEntity.setOwner(player.getEntityName())
                     itemEntity.spawnToAll()
                     player.level!!.dropExpOrb(player.position, event.experience)
                 }

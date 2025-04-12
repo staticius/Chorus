@@ -31,7 +31,7 @@ class EntityLingeringPotion : EntitySplashPotion {
         val pos: ListTag<*> = namedTag!!.getList("Pos", CompoundTag::class.java).copy() as ListTag<*>
         val entity: EntityAreaEffectCloud? = Entity.Companion.createEntity(
             EntityID.AREA_EFFECT_CLOUD,
-            getLocator().chunk,
+            locator.chunk,
             CompoundTag().putList("Pos", pos)
                 .putList(
                     "Rotation", ListTag<FloatTag>()

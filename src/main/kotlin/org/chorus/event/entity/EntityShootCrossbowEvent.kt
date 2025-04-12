@@ -26,7 +26,7 @@ class EntityShootCrossbowEvent(shooter: EntityLiving, val crossbow: Item, vararg
 
     fun setProjectile(projectile: EntityProjectile, array: Int) {
         if (projectile !== projectiles[array]) {
-            if (projectiles[array].getViewers().isEmpty()) {
+            if (projectiles[array].viewers.isEmpty()) {
                 projectiles[array].kill()
                 projectiles[array].close()
             }
@@ -37,7 +37,7 @@ class EntityShootCrossbowEvent(shooter: EntityLiving, val crossbow: Item, vararg
     fun setProjectiles(projectiles: Array<EntityProjectile>) {
         for (i in this.projectiles.indices) {
             if (projectiles[i] !== this.projectiles[i]) {
-                if (this.projectiles[i].getViewers().isEmpty()) {
+                if (this.projectiles[i].viewers.isEmpty()) {
                     this.projectiles[i].kill()
                     this.projectiles[i].close()
                 }

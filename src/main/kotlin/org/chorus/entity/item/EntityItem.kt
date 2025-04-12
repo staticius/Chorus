@@ -61,7 +61,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         super.initEntity()
 
         this.setMaxHealth(5)
-        this.setHealth(namedTag!!.getShort("Health").toFloat())
+        this.setHealthSafe(namedTag!!.getShort("Health").toFloat())
 
         if (namedTag!!.contains("Age")) {
             this.age = namedTag!!.getShort("Age").toInt()
@@ -145,7 +145,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
                         packet.eid = getRuntimeID()
                         packet.data = newAmount
                         packet.event = EntityEventPacket.MERGE_ITEMS
-                        Server.broadcastPacket(getViewers().values, packet)
+                        Server.broadcastPacket(viewers.values, packet)
                     }
                 }
             }
@@ -266,7 +266,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         super.saveNBT()
         if (this.item != null) { // Yes, a item can be null... I don't know what causes this, but it can happen.
             namedTag!!.putCompound("Item", NBTIO.putItemHelper(this.item, -1))
-            namedTag!!.putShort("Health", getHealth().toInt())
+            namedTag!!.putShort("Health", health.toInt())
             namedTag!!.putShort("Age", this.age)
             namedTag!!.putShort("PickupDelay", this.pickupDelay)
             if (this.owner != null) {
@@ -283,7 +283,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         return "Item"
     }
 
-    override fun getName(): String {
+    override fun getEntityName(): String {
         if (this.hasCustomName()) {
             return getNameTag()
         }

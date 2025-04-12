@@ -30,7 +30,7 @@ class EntityEventProcessor : DataPacketProcessor<EntityEventPacket>() {
             pk.data = predictedData
 
             player.dataPacket(pk)
-            Server.broadcastPacket(player.getViewers().values, pk)
+            Server.broadcastPacket(player.viewers.values, pk)
         } else if (pk.event == EntityEventPacket.ENCHANT) {
             if (pk.eid != player.getRuntimeID()) {
                 return

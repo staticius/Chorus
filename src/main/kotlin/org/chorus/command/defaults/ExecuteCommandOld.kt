@@ -51,7 +51,7 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
             "default" -> {
                 val command = list.getResult<String>(2)!!
                 for (entity in entities) {
-                    val pos = (list[1] as PositionNode).get<Locator>(entity.getLocator())
+                    val pos = (list[1] as PositionNode).get<Locator>(entity.locator)
                     val executeSender = ExecutorCommandSender(
                         sender, entity, Transform.fromObject(
                             pos!!.position, pos.level
@@ -59,7 +59,7 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
                     )
                     val n = Server.instance.executeCommand(executeSender, command)
                     if (n == 0) {
-                        log.addError("commands.execute.failed", command, entity.getName())
+                        log.addError("commands.execute.failed", command, entity.getEntityName())
                     } else num += n
                 }
             }
@@ -69,7 +69,7 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
                 val meta = list.getResult<Int>(5)!!
                 val command = list.getResult<String>(6)!!
                 for (entity in entities) {
-                    val pos = (list[1] as PositionNode).get<Locator>(entity.getLocator())
+                    val pos = (list[1] as PositionNode).get<Locator>(entity.locator)
                     val detect = (list[3] as PositionNode).get<Locator>(
                         pos!!
                     )
@@ -83,7 +83,7 @@ class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute comman
                         )
                         val n = Server.instance.executeCommand(executeSender, command)
                         if (n == 0) {
-                            log.addError("commands.execute.failed", command, entity.getName())
+                            log.addError("commands.execute.failed", command, entity.getEntityName())
                         } else num += n
                     }
                 }

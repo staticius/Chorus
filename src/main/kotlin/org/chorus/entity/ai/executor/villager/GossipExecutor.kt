@@ -37,7 +37,7 @@ class GossipExecutor(
                             item.setCount(item.getCount() / 2)
                             if (item.id === BlockID.WHEAT) item = Item.get(BlockID.WHEAT, 0, item.getCount() / 3)
                             entity.level!!.dropItem(
-                                entity.getLocator().position.add(
+                                entity.locator.position.add(
                                     0.0,
                                     entity.getEyeHeight().toDouble(),
                                     0.0

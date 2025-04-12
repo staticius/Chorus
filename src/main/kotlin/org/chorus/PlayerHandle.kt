@@ -76,7 +76,7 @@ class PlayerHandle(val player: Player) {
         get() = player.removeFormat
 
     val username: String
-        get() = player.getName()
+        get() = player.getEntityName()
 
     var displayName: String?
         get() = player.displayName

@@ -99,7 +99,7 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
             motion.x *= 1.15
             motion.z *= 1.15
             motion.y += 0.04
-            val locator: Locator = getLocator()
+            val locator: Locator = locator
             val motion: Vector3 = getMotion()
             this.move(this.motion.x, this.motion.y, this.motion.z)
 
@@ -137,7 +137,7 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
 
                 level!!.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_LARGE_BLAST, -1, getNetworkID())
 
-                Server.broadcastPacket(getViewers().values, pk)
+                Server.broadcastPacket(viewers.values, pk)
 
                 this.kill()
                 hasUpdate = true

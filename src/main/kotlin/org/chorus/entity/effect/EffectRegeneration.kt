@@ -13,7 +13,7 @@ class EffectRegeneration : Effect(EffectType.REGENERATION, "%potion.regeneration
     }
 
     override fun apply(entity: Entity, tickCount: Double) {
-        if (entity.getHealth() < entity.getMaxHealth()) {
+        if (entity.health < entity.getMaxHealth()) {
             entity.heal(EntityRegainHealthEvent(entity, 1f, EntityRegainHealthEvent.CAUSE_MAGIC))
         }
     }

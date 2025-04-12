@@ -45,7 +45,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
             )
 
             InteractProcessor.log.warn(
-                Server.instance.baseLang.tr("chorus.player.invalidEntity", player.getName())
+                Server.instance.baseLang.tr("chorus.player.invalidEntity", player.getEntityName())
             )
             return
         }
@@ -71,7 +71,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
                         player.addWindow(targetEntity.inventory)
                         return
                     } else if (targetEntity is EntityHorse) {
-                        if (targetEntity.hasOwner(false) && targetEntity.getOwnerName() == player.getName()) {
+                        if (targetEntity.hasOwner(false) && targetEntity.getOwnerName() == player.getEntityName()) {
                             player.addWindow(targetEntity.getInventory())
                             return
                         }

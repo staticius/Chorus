@@ -41,7 +41,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
 
     init {
         this.setMaxHealth(40)
-        this.setHealth(40f)
+        this.setHealthSafe(40f)
     }
 
     override fun initEntity() {

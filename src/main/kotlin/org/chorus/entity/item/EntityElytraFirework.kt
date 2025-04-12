@@ -52,7 +52,7 @@ class EntityElytraFirework(chunk: IChunk?, nbt: CompoundTag, private var followi
                         pk.event = 25
                         pk.eid = this.getRuntimeID()
                         level!!.addLevelSoundEvent(this.position, 58, -1, 72)
-                        Server.broadcastPacket(getViewers().values, pk)
+                        Server.broadcastPacket(viewers.values, pk)
                         this.kill()
                     }
                 }

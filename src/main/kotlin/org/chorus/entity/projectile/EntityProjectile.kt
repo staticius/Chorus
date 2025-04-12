@@ -120,7 +120,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
         super.initEntity()
 
         this.setMaxHealth(1)
-        this.setHealth(1f)
+        this.setHealthSafe(1f)
         if (namedTag!!.contains("Age") && !this.noAge) {
             this.age = namedTag!!.getShort("Age").toInt()
         }
@@ -220,7 +220,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
                 }
             }
 
-            val locator: Locator = getLocator()
+            val locator: Locator = locator
             val motion: Vector3 = getMotion()
             this.move(this.motion.x, this.motion.y, this.motion.z)
 

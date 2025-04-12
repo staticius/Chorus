@@ -32,7 +32,7 @@ class TestForCommand(name: String) : VanillaCommand(name, "commands.testfor.desc
             return 0
         } else {
             log.addSuccess("commands.testfor.success", targets.stream().map<String> { entity: Entity ->
-                var name = entity.getName()
+                var name = entity.getEntityName()
                 if (name.isBlank()) name = entity.getOriginalName()
                 name
             }.collect(Collectors.joining(","))).output()

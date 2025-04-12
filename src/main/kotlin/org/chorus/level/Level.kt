@@ -1024,7 +1024,7 @@ class Level(
         }
 
         if (!list.isEmpty()) {
-            return list[ThreadLocalRandom.current().nextInt(list.size)].getLocator().position
+            return list[ThreadLocalRandom.current().nextInt(list.size)].locator.position
         } else {
             if (pos.y == -1.0) {
                 pos = pos.up(2)
@@ -2793,7 +2793,7 @@ class Level(
                 ++realCount
             }
             if (player != null) {
-                val diff: Vector3 = player.nextPosition.position.subtract(player.getLocator().position)
+                val diff: Vector3 = player.nextPosition.position.subtract(player.locator.position)
                 val aabb: AxisAlignedBB = player.getBoundingBox().getOffsetBoundingBox(diff.x, diff.y, diff.z)
                 if (aabb.intersectsWith(hand.boundingBox!!.shrink(0.02, 0.02, 0.02))) {
                     ++realCount
@@ -3440,7 +3440,7 @@ class Level(
         }
 
     fun requestChunk(x: Int, z: Int, player: Player) {
-        Preconditions.checkArgument(player.loaderId > 0, player.getName() + " has no chunk loader")
+        Preconditions.checkArgument(player.loaderId > 0, player.getEntityName() + " has no chunk loader")
         val index = chunkHash(x, z)
         val playerInt2ObjectMap = chunkSendQueue.computeIfAbsent(index) { ConcurrentHashMap<Int, Player>() }
         playerInt2ObjectMap[player.loaderId] = player
@@ -3530,7 +3530,7 @@ class Level(
 
         if (entity is Player) {
             players.remove(entity.getRuntimeID())
-            playerWeatherShowMap.remove(entity.getName())
+            playerWeatherShowMap.remove(entity.getEntityName())
             this.checkSleep()
         } else {
             entity.close()
@@ -3547,7 +3547,7 @@ class Level(
 
         if (entity is Player) {
             players.put(entity.getRuntimeID(), entity)
-            playerWeatherShowMap.put(entity.getName(), 0)
+            playerWeatherShowMap.put(entity.getEntityName(), 0)
         }
         entities.put(entity.getRuntimeID(), entity)
     }
@@ -4125,7 +4125,7 @@ class Level(
         }
 
         for (p in getPlayers().values) {
-            playerWeatherShowMap.put(p.getName(), if (raining) 1 else 0)
+            playerWeatherShowMap.put(p.getEntityName(), if (raining) 1 else 0)
             p.dataPacket(pk)
         }
 
@@ -4164,7 +4164,7 @@ class Level(
         }
 
         for (p in getPlayers().values) {
-            playerWeatherShowMap.put(p.getName(), if (isRaining) 2 else 0)
+            playerWeatherShowMap.put(p.getEntityName(), if (isRaining) 2 else 0)
             p.dataPacket(pk)
         }
 

@@ -87,7 +87,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
         return "Human"
     }
 
-    override fun getName(): String {
+    override fun getEntityName(): String {
         return this.getNameTag()
     }
 
@@ -141,7 +141,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             pk.mode = MovePlayerPacket.MODE_PITCH
         }
 
-        Server.broadcastPacket(getViewers().values, pk)
+        Server.broadcastPacket(viewers.values, pk)
     }
 
     override fun spawnTo(player: Player) {
@@ -158,7 +158,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             else Server.instance.updatePlayerListData(
                 this.getUUID(),
                 this.getRuntimeID(),
-                this.getName(),
+                this.getEntityName(),
                 this.skin,
                 arrayOf(player)
             )
@@ -166,7 +166,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             player.dataPacket(
                 AddPlayerPacket(
                     uuid = this.uuid,
-                    playerName = this.getName(),
+                    playerName = this.getEntityName(),
                     targetRuntimeID = this.getRuntimeID(),
                     platformChatID = "", // TODO: platformChatID
                     position = this.position.asVector3f(),

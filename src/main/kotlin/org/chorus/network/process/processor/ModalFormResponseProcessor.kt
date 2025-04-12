@@ -57,7 +57,7 @@ class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>(
                     }
                 }
             }
-        } else ModalFormResponseProcessor.log.warn("{} sent unknown form id {}", player.getName(), pk.formId)
+        } else ModalFormResponseProcessor.log.warn("{} sent unknown form id {}", player.getEntityName(), pk.formId)
     }
 
     override val packetId: Int

@@ -89,7 +89,7 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
         } else if (getVariant() == SIZE_SMALL) {
             this.maxHealth = 1
         }
-        setHealth(maxHealth.toFloat())
+        setHealthSafe(maxHealth.toFloat())
         recalculateBoundingBox()
     }
 

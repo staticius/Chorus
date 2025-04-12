@@ -46,7 +46,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
     }
 
     override fun initEntity() {
-        this.setHealth(6f)
+        this.setHealthSafe(6f)
         this.setMaxHealth(6)
         this.setImmobile(true)
 
@@ -276,7 +276,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         val lastDamageCause: EntityDamageEvent? = this.lastDamageCause
         val byAttack: Boolean = lastDamageCause != null && lastDamageCause.cause == DamageCause.ENTITY_ATTACK
 
-        val pos: Vector3 = getLocator().position
+        val pos: Vector3 = locator.position
 
         pos.y += 0.2
         level!!.dropItem(pos, boots)
@@ -344,7 +344,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         setLastDamageCause(source)
 
         if (getDataProperty<Int>(EntityDataTypes.Companion.HURT_TICKS) > 0) {
-            setHealth(0f)
+            setHealthSafe(0f)
             return true
         }
 
@@ -398,8 +398,8 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         var hasUpdate: Boolean = entityBaseTick(tickDiff)
 
         if (isAlive()) {
-            if (getHealth() < getMaxHealth()) {
-                setHealth(getHealth() + 0.001f)
+            if (health < getMaxHealth()) {
+                setHealthSafe(health + 0.001f)
             }
             motion.y -= getGravity().toDouble()
 

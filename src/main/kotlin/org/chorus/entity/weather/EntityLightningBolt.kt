@@ -36,14 +36,14 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
     override fun initEntity() {
         super.initEntity()
 
-        this.setHealth(4f)
+        this.setHealthSafe(4f)
         this.setMaxHealth(4)
 
         this.state = 2
         this.liveTime = ThreadLocalRandom.current().nextInt(3) + 1
 
         if (isEffect && level!!.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && (Server.instance.getDifficulty() >= 2)) {
-            val block: Block = getLocator().levelBlock
+            val block: Block = locator.levelBlock
             if (block.isAir || block.id == BlockID.TALL_GRASS) {
                 val fire: BlockFire = Block.get(BlockID.FIRE) as BlockFire
                 fire.position = block.position.clone()
@@ -168,7 +168,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
                 this.state = 1
 
                 if (this.isEffect && level!!.gameRules.getBoolean(GameRule.DO_FIRE_TICK)) {
-                    val block: Block = getLocator().levelBlock
+                    val block: Block = locator.levelBlock
 
                     if (block.isAir || block.id == BlockID.TALL_GRASS) {
                         val event: BlockIgniteEvent =

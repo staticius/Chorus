@@ -14,7 +14,7 @@ class EntityShootBowEvent(shooter: EntityLiving, bow: Item, projectile: EntityPr
     var projectile: EntityProjectile = projectile
         set(value) {
             if (value !== field) {
-                if (field.getViewers().isEmpty()) {
+                if (field.viewers.isEmpty()) {
                     field.kill()
                     field.close()
                 }
@@ -38,7 +38,7 @@ class EntityShootBowEvent(shooter: EntityLiving, bow: Item, projectile: EntityPr
 
     fun setProjectile(projectile: Entity) {
         if (projectile !== this.projectile) {
-            if (this.projectile.getViewers().isEmpty()) {
+            if (this.projectile.viewers.isEmpty()) {
                 this.projectile.kill()
                 this.projectile.close()
             }

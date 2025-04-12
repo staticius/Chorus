@@ -266,7 +266,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 }
                 val chainCommand = list.getResult<String>(2)!!
                 for (executor in executors) {
-                    val executorCommandSender = ExecutorCommandSender(sender, executor, executor.getTransform())
+                    val executorCommandSender = ExecutorCommandSender(sender, executor, executor.transform)
                     val n = Server.instance.executeCommand(executorCommandSender, chainCommand)
                     if (n == 0) {
                         val names = mutableListOf<String>()
@@ -276,7 +276,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                         }
                         names.reverse()
                         for (name in names) {
-                            log.addError("commands.execute.failed", name, executor.getName())
+                            log.addError("commands.execute.failed", name, executor.getEntityName())
                         }
                     } else num += n
                 }
@@ -291,7 +291,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                     return 0
                 }
                 val chainCommand = list.getResult<String>(2)!!
-                for (transform in locations.stream().map<Transform> { obj: Entity -> obj.getTransform() }.toList()) {
+                for (transform in locations.stream().map<Transform> { obj: Entity -> obj.transform }.toList()) {
                     val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
                     num += Server.instance.executeCommand(executorCommandSender, chainCommand)
                 }

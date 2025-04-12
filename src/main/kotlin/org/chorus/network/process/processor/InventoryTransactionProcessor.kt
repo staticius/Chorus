@@ -70,7 +70,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     InventoryTransactionPacket.RELEASE_ITEM_ACTION_CONSUME -> {
                         InventoryTransactionProcessor.log.debug(
                             "Unexpected release item action consume from {}",
-                            player.getName()
+                            player.getEntityName()
                         )
                     }
                 }
@@ -166,7 +166,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
 
                     if (event.isKick) player.kick(PlayerKickEvent.Reason.INVALID_PVP, "Attempting to attack yourself")
 
-                    InventoryTransactionProcessor.log.warn(player.getName() + " tried to attack oneself")
+                    InventoryTransactionProcessor.log.warn(player.getEntityName() + " tried to attack oneself")
                     return
                 }
                 if (!player.canInteract(target.position, (if (player.isCreative) 8 else 5).toDouble())) {
@@ -300,7 +300,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                                 } else {
                                     logTriedToSetButHadInHand(playerHandle, i!!, oldItem)
                                 }
-                                player.getInventory().sendHeldItem(player.getViewers().values)
+                                player.getInventory().sendHeldItem(player.viewers.values)
                             }
                             return
                         }
@@ -348,7 +348,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                             } else {
                                 logTriedToSetButHadInHand(playerHandle, i!!, oldItem)
                             }
-                            player.getInventory().sendHeldItem(player.getViewers().values)
+                            player.getInventory().sendHeldItem(player.viewers.values)
                         }
                         return
                     }

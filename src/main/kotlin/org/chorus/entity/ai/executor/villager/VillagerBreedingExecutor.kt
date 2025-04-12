@@ -41,7 +41,7 @@ class VillagerBreedingExecutor(
         for (x in -range..range) {
             for (z in -range..range) {
                 for (y in -lookY..lookY) {
-                    val lookTransform = entity.getTransform().add(x.toDouble(), y.toDouble(), z.toDouble())
+                    val lookTransform = entity.transform.add(x.toDouble(), y.toDouble(), z.toDouble())
                     val lookBlock = lookTransform.levelBlock
                     if (lookBlock is BlockBed) {
                         if (!lookBlock.isHeadPiece && (entity.level!!.entities).values
@@ -65,7 +65,7 @@ class VillagerBreedingExecutor(
             sendInLoveParticles(another!!)
         }
 
-        val baby = Entity.Companion.createEntity(entity.getNetworkID(), entity.getLocator()) as EntityVillagerV2
+        val baby = Entity.Companion.createEntity(entity.getNetworkID(), entity.locator) as EntityVillagerV2
         baby.setBaby(true)
         //防止小屁孩去生baby
         baby.memoryStorage.set(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.level!!.tick)
@@ -90,13 +90,13 @@ class VillagerBreedingExecutor(
         val pk = EntityEventPacket()
         pk.eid = entity.getRuntimeID()
         pk.event = EntityEventPacket.LOVE_PARTICLES
-        Server.broadcastPacket(entity.getViewers().values, pk)
+        Server.broadcastPacket(entity.viewers.values, pk)
     }
 
     protected fun sendAngryParticles(entity: EntityMob) {
         val pk = EntityEventPacket()
         pk.eid = entity.getRuntimeID()
         pk.event = EntityEventPacket.VILLAGER_ANGRY
-        Server.broadcastPacket(entity.getViewers().values, pk)
+        Server.broadcastPacket(entity.viewers.values, pk)
     }
 }

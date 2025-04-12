@@ -56,7 +56,7 @@ class EntityDragonFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile
         this.close()
         val entity = Entity.Companion.createEntity(
             EntityID.AREA_EFFECT_CLOUD,
-            getLocator().chunk,
+            locator.chunk,
             CompoundTag().putList(
                 "Pos", ListTag<FloatTag>()
                     .add(FloatTag(position.x))

@@ -54,7 +54,7 @@ class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(ch
         var affect: Boolean = false
         for (collisionBlock: Block in level!!.getCollisionBlocks(getBoundingBox().grow(0.1, 0.1, 0.1))) affect =
             onCollideWithBlock(locator, motion, collisionBlock)
-        if (!affect && getLocator().levelBlock.isAir) {
+        if (!affect && locator.levelBlock.isAir) {
             explode()
         }
     }
@@ -80,7 +80,7 @@ class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(ch
         ev.fireChance = .4
         Server.instance.pluginManager.callEvent(ev)
         if (!ev.isCancelled) {
-            val explosion = Explosion(this.getLocator(), ev.force.toFloat().toDouble(), this.shootingEntity!!)
+            val explosion = Explosion(this.locator, ev.force.toFloat().toDouble(), this.shootingEntity!!)
             explosion.fireChance = ev.fireChance
             if (ev.isBlockBreaking && level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {
                 explosion.explodeA()

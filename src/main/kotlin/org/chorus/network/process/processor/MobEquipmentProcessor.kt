@@ -46,7 +46,7 @@ class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {
         if (inv == null) {
             MobEquipmentProcessor.log.debug(
                 "Player {} has no open container with window ID {}",
-                player.getName(),
+                player.getEntityName(),
                 pk.containerId
             )
             return

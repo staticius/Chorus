@@ -27,7 +27,7 @@ class EmoteProcessor : DataPacketProcessor<EmotePacket>() {
             return
         }
 
-        for (viewer in playerHandle.player.getViewers().values) {
+        for (viewer in playerHandle.player.viewers.values) {
             viewer.dataPacket(pk)
         }
     }

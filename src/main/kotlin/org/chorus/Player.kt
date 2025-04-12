@@ -611,7 +611,7 @@ class Player(
                 foodData!!.exhaust(0.005)
                 if (!i!!.equals(oldItem) || i.getCount() != oldItem!!.getCount()) {
                     inventory.setItemInHand(i)
-                    inventory.sendHeldItem(getViewers().values)
+                    inventory.sendHeldItem(viewers.values)
                 }
             }
             return
@@ -685,9 +685,9 @@ class Player(
                 if (clone.id == handItem.id || handItem.isNothing) {
                     inventory.setItemInHand(handItem, false)
                 } else {
-                    log.debug("Tried to set item " + handItem.id + " but " + this.getName() + " had item " + clone.id + " in their hand slot")
+                    log.debug("Tried to set item " + handItem.id + " but " + this.getEntityName() + " had item " + clone.id + " in their hand slot")
                 }
-                inventory.sendHeldItem(getViewers().values)
+                inventory.sendHeldItem(viewers.values)
             } else if (handItem == null) level!!.sendBlocks(
                 arrayOf(this), arrayOf(
                     level!!.getBlock(blockPos.asVector3())
@@ -761,7 +761,7 @@ class Player(
             this.spawnPoint = level!!.safeSpawn
             log.info(
                 "Player {} cannot find the saved spawnpoint, reset the spawnpoint to {} {} {} / {}",
-                this.getName(),
+                this.getEntityName(),
                 spawnPoint!!.position.x,
                 spawnPoint!!.position.y,
                 spawnPoint!!.position.z,
@@ -853,7 +853,7 @@ class Player(
         this.sendFogStack()
         this.sendCameraPresets()
 
-        log.debug("Send Player Spawn Status Packet to {},wait init packet", getName())
+        log.debug("Send Player Spawn Status Packet to {},wait init packet", getEntityName())
         this.sendPlayStatus(PlayStatusPacket.PLAYER_SPAWN)
 
         //客户端初始化完毕再传送玩家，避免下落 (x)
@@ -876,9 +876,9 @@ class Player(
         }
         this.teleport(pos, TeleportCause.PLAYER_SPAWN)
 
-        if (this.getHealth() < 1) {
-            this.setHealth(0f)
-        } else setHealth(getHealth()) //sends health to player
+        if (this.health < 1) {
+            this.setHealthSafe(0f)
+        } else setHealthSafe(health) //sends health to player
 
 
         this.level!!.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
@@ -993,7 +993,7 @@ class Player(
                     Server.instance.pluginManager.callEvent(ev)
 
                     if (!ev.isCancelled) {
-                        val newPos = moveToTheEnd(this.getLocator())
+                        val newPos = moveToTheEnd(this.locator)
                         if (newPos != null) {
                             if (newPos.level.dimension == Level.DIMENSION_THE_END) {
                                 if (teleport(newPos, TeleportCause.END_PORTAL)) {
@@ -1049,7 +1049,7 @@ class Player(
     fun handleMovement(clientPos: Transform) {
         if (this.firstMove) this.firstMove = false
         var invalidMotion = false
-        val revertPos = getTransform().clone()
+        val revertPos = transform.clone()
         val distance = clientPos.position.distanceSquared(this.position)
         //before check
         if (distance > 128) {
@@ -1094,7 +1094,7 @@ class Player(
                 val event = PlayerInvalidMoveEvent(this, true)
                 Server.instance.pluginManager.callEvent(event)
                 if (!event.isCancelled && (event.isRevert.also { invalidMotion = it })) {
-                    log.warn(Server.instance.baseLang.tr("chorus.player.invalidMove", this.getName()))
+                    log.warn(Server.instance.baseLang.tr("chorus.player.invalidMove", this.getEntityName()))
                 }
             }
             if (invalidMotion) {
@@ -1117,7 +1117,7 @@ class Player(
             prevPosition.z, prevRotation.yaw, prevRotation.pitch, this.prevHeadYaw,
             level!!
         )
-        val now = this.getTransform()
+        val now = this.transform
         prevPosition.x = now.position.x
         prevPosition.y = now.position.y
         prevPosition.z = now.position.z
@@ -1157,7 +1157,7 @@ class Player(
                                     this.vector3, VibrationType.ELYTRA_GLIDE
                                 )
                             )
-                        } else if (this.isOnGround() && (getLocator()
+                        } else if (this.isOnGround() && (locator
                                 .getSide(BlockFace.DOWN).levelBlock !is BlockWool) && !this.isSneaking()
                         ) {
                             level!!.vibrationManager.callVibrationEvent(
@@ -1170,7 +1170,7 @@ class Player(
                             level!!.vibrationManager.callVibrationEvent(
                                 VibrationEvent(
                                     this,
-                                    getTransform().clone().position, VibrationType.SWIM
+                                    transform.clone().position, VibrationType.SWIM
                                 )
                             )
                         }
@@ -1300,7 +1300,7 @@ class Player(
             //Handling Soul Speed Enchantment
             val soulSpeedLevel = getInventory().boots.getEnchantmentLevel(Enchantment.ID_SOUL_SPEED)
             if (soulSpeedLevel > 0) {
-                val levelBlock = getLocator().levelBlock
+                val levelBlock = locator.levelBlock
                 this.soulSpeedMultiplier = (soulSpeedLevel * 0.105f) + 1.3f
 
                 // levelBlock check is required because of soul sand being 1 pixel shorter than normal blocks
@@ -1355,8 +1355,8 @@ class Player(
 
         var oldPlayer: Player? = null
         for (p in ArrayList<Player>(Server.instance.onlinePlayers.values)) {
-            if (p !== this && p.getName()
-                    .equals(this.getName(), ignoreCase = true) || this.getUniqueID() == p.getUniqueID()
+            if (p !== this && p.getEntityName()
+                    .equals(this.getEntityName(), ignoreCase = true) || this.getUniqueID() == p.getUniqueID()
             ) {
                 oldPlayer = p
                 break
@@ -1368,9 +1368,9 @@ class Player(
             nbt = oldPlayer.namedTag
             oldPlayer.close("disconnectionScreen.loggedinOtherLocation")
         } else {
-            val existData: Boolean = Server.instance.hasOfflinePlayerData(this.getName())
+            val existData: Boolean = Server.instance.hasOfflinePlayerData(this.getEntityName())
             nbt = if (existData) {
-                Server.instance.getOfflinePlayerData(this.getName(), false)
+                Server.instance.getOfflinePlayerData(this.getEntityName(), false)
             } else {
                 Server.instance.getOfflinePlayerData(this.uuid, true)
             }
@@ -1386,7 +1386,7 @@ class Player(
         this.playedBefore = (nbt.getLong("lastPlayed") - nbt.getLong("firstPlayed")) > 1
 
 
-        nbt.putString("NameTag", this.getName())
+        nbt.putString("NameTag", this.getEntityName())
 
         val exp = nbt.getInt("EXP")
         val expLevel = nbt.getInt("expLevel")
@@ -1506,7 +1506,7 @@ class Player(
         log.info(
             Server.instance.baseLang.tr(
                 "chorus.player.logIn",
-                TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
+                TextFormat.AQUA.toString() + this.getEntityName() + TextFormat.WHITE,
                 this.address,
                 port.toString(),
                 getRuntimeID().toString(),
@@ -1567,7 +1567,7 @@ class Player(
         this.sendData(hasSpawned.values.toTypedArray(), entityDataMap)
         this.spawnToAll()
         Arrays.stream(level!!.getEntities()).filter { entity: Entity ->
-            entity.getViewers().containsKey(
+            entity.viewers.containsKey(
                 this.loaderId
             ) && entity is EntityBoss
         }.forEach { entity: Entity ->
@@ -1603,13 +1603,13 @@ class Player(
     }
 
     override var isBanned: Boolean
-        get() = Server.instance.bannedPlayers.isBanned(this.getName())
+        get() = Server.instance.bannedPlayers.isBanned(this.getEntityName())
         set(value) {
             if (value) {
-                Server.instance.bannedPlayers.addBan(this.getName(), null, null, null)
+                Server.instance.bannedPlayers.addBan(this.getEntityName(), null, null, null)
                 this.kick(PlayerKickEvent.Reason.NAME_BANNED, "Banned by admin")
             } else {
-                Server.instance.bannedPlayers.remove(this.getName())
+                Server.instance.bannedPlayers.remove(this.getEntityName())
             }
         }
 
@@ -1663,7 +1663,7 @@ class Player(
         this.noDamageTicks = 60
 
         this.removeAllEffects()
-        this.setHealth(getMaxHealth().toFloat())
+        this.setHealthSafe(getMaxHealth().toFloat())
         foodData!!.setFood(20, 20f)
 
         this.sendData(this)
@@ -1811,12 +1811,12 @@ class Player(
         )
 
     override var isWhitelisted: Boolean
-        get() = Server.instance.isWhitelisted(getName().lowercase())
+        get() = Server.instance.isWhitelisted(getEntityName().lowercase())
         set(value) {
             if (value) {
-                Server.instance.addWhitelist(getName().lowercase())
+                Server.instance.addWhitelist(getEntityName().lowercase())
             } else {
-                Server.instance.removeWhitelist(getName().lowercase())
+                Server.instance.removeWhitelist(getEntityName().lowercase())
             }
         }
 
@@ -1997,16 +1997,16 @@ class Player(
         get() = connected.get() && this.loggedIn
 
     override var isOp: Boolean
-        get() = Server.instance.isOp(this.getName())
+        get() = Server.instance.isOp(this.getEntityName())
         set(value) {
             if (value == isOp) {
                 return
             }
 
             if (value) {
-                Server.instance.addOp(this.getName())
+                Server.instance.addOp(this.getEntityName())
             } else {
-                Server.instance.removeOp(this.getName())
+                Server.instance.removeOp(this.getEntityName())
             }
         }
 
@@ -2203,7 +2203,7 @@ class Player(
             newPosition!!.y,
             newPosition!!.z,
             level!!
-        ) else getLocator()
+        ) else locator
 
     /**
      * 玩家是否在睡觉
@@ -2693,7 +2693,7 @@ class Player(
     override fun moveDelta() {
         this.sendPosition(
             this.position,
-            rotation.yaw, rotation.pitch, MovePlayerPacket.MODE_NORMAL, getViewers().values.toTypedArray()
+            rotation.yaw, rotation.pitch, MovePlayerPacket.MODE_NORMAL, viewers.values.toTypedArray()
         )
     }
 
@@ -2839,7 +2839,7 @@ class Player(
             this.entityBaseTick(tickDiff)
 
             if (Server.instance.getDifficulty() == 0 && level!!.gameRules.getBoolean(GameRule.NATURAL_REGENERATION)) {
-                if (this.getHealth() < this.getMaxHealth() && this.ticksLived % 20 == 0) {
+                if (this.health < this.getMaxHealth() && this.ticksLived % 20 == 0) {
                     this.heal(1f)
                 }
             }
@@ -3029,7 +3029,7 @@ class Player(
         try {
             val itr = BlockIterator(
                 level!!,
-                getLocator().position, getDirectionVector(), getEyeHeight().toDouble(), maxDistance
+                locator.position, getDirectionVector(), getEyeHeight().toDouble(), maxDistance
             )
             if (itr.hasNext()) {
                 var block: Block
@@ -3191,7 +3191,7 @@ class Player(
             ).also { ev = it })
         if (!ev.isCancelled) {
             val message = if (isAdmin) {
-                if (!Server.instance.bannedPlayers.isBanned(getName())) {
+                if (!Server.instance.bannedPlayers.isBanned(getEntityName())) {
                     "Kicked by admin." + (if (!reasonString.isEmpty()) " Reason: $reasonString" else "")
                 } else {
                     reasonString
@@ -3597,7 +3597,7 @@ class Player(
         log.info(
             Server.instance.baseLang.tr(
                 "chorus.player.logOut",
-                TextFormat.AQUA.toString() + this.getName() + TextFormat.WHITE,
+                TextFormat.AQUA.toString() + this.getEntityName() + TextFormat.WHITE,
                 this.address,
                 port.toString(),
                 Server.instance.baseLang.tr(reason1)
@@ -3636,7 +3636,7 @@ class Player(
 
         //call quit event
         var ev: PlayerQuitEvent? = null
-        if (getName().isNotEmpty()) {
+        if (getEntityName().isNotEmpty()) {
             Server.instance.pluginManager.callEvent(PlayerQuitEvent(this, message, true, reason1).also { ev = it })
             if (this.fishing != null) {
                 this.stopFishing(false)
@@ -3658,7 +3658,7 @@ class Player(
         Server.instance.pluginManager.unsubscribeFromPermission(Server.BROADCAST_CHANNEL_USERS, this)
         Server.instance.pluginManager.unsubscribeFromPermission(Server.BROADCAST_CHANNEL_ADMINISTRATIVE, this)
         // broadcast disconnection message
-        if (ev != null && (this.getName() != "") && this.spawned && (ev!!.quitMessage.toString() != "")) {
+        if (ev != null && (this.getEntityName() != "") && this.spawned && (ev!!.quitMessage.toString() != "")) {
             Server.instance.broadcastMessage(ev!!.quitMessage!!)
         }
 
@@ -3767,7 +3767,7 @@ class Player(
 
             namedTag!!.putInt("TimeSinceRest", this.timeSinceRest)
 
-            if (getName().isNotBlank() && this.namedTag != null) {
+            if (getEntityName().isNotBlank() && this.namedTag != null) {
                 Server.instance.saveOfflinePlayerData(
                     uuid,
                     namedTag!!, async
@@ -3780,7 +3780,7 @@ class Player(
         return "Player"
     }
 
-    override fun getName(): String {
+    override fun getEntityName(): String {
         return playerInfo.username
     }
 
@@ -3818,7 +3818,7 @@ class Player(
 
                             is EntityLiving -> {
                                 message = "death.attack.mob"
-                                params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
+                                params.add(if (e.getNameTag() != "") e.getNameTag() else e.getEntityName())
                                 return@switch
                             }
 
@@ -3837,7 +3837,7 @@ class Player(
 
                             is EntityLiving -> {
                                 message = "death.attack.arrow"
-                                params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
+                                params.add(if (e.getNameTag() != "") e.getNameTag() else e.getEntityName())
                                 return@switch
                             }
 
@@ -3865,7 +3865,7 @@ class Player(
                             }
                             if (killer is EntityHuman) {
                                 message += ".player"
-                                params.add(if (shooter!!.getNameTag() != "") shooter.getNameTag() else shooter.getName())
+                                params.add(if (shooter!!.getNameTag() != "") shooter.getNameTag() else shooter.getEntityName())
                             }
                         }
                     }
@@ -3893,7 +3893,7 @@ class Player(
 
                             is EntityLiving -> {
                                 message = "death.attack.explosion.player"
-                                params.add(if (e.getNameTag() != "") e.getNameTag() else e.getName())
+                                params.add(if (e.getNameTag() != "") e.getNameTag() else e.getEntityName())
                                 return@switch
                             }
 
@@ -3987,12 +3987,12 @@ class Player(
         }
     }
 
-    override fun setHealth(health: Float) {
+    override fun setHealthSafe(health: Float) {
         var health1 = health
         if (health1 < 1) {
             health1 = 0f
         }
-        super.setHealth(health1)
+        super.setHealthSafe(health1)
         val attribute = attributes.computeIfAbsent(Attribute.MAX_HEALTH) { getAttribute(it) }
         attribute.setMaxValue((if (this.getAbsorption() % 2 != 0f) this.getMaxHealth() + 1 else this.getMaxHealth()).toFloat())
             .setValue(if (health1 > 0) (if (health1 < getMaxHealth()) health1 else getMaxHealth().toFloat()) else 0f)
@@ -4253,7 +4253,7 @@ class Player(
             return false
         } else if (source.cause == DamageCause.FALL) {
             if (level!!.getBlock(
-                    getLocator().position.floor()
+                    locator.position.floor()
                         .add(0.5, -1.0, 0.5)
                 ).id == BlockID.SLIME
             ) {
@@ -4301,7 +4301,7 @@ class Player(
         }
 
         if (item.isNothing) {
-            log.debug("{} attempted to drop a null item ({})", this.getName(), item)
+            log.debug("{} attempted to drop a null item ({})", this.getEntityName(), item)
             return true
         }
 
@@ -4328,7 +4328,7 @@ class Player(
         }
 
         if (item.isNothing) {
-            log.debug("{} attempted to drop a null item ({})", this.getName(), item)
+            log.debug("{} attempted to drop a null item ({})", this.getEntityName(), item)
             return null
         }
 
@@ -4394,7 +4394,7 @@ class Player(
         if (!this.isOnline) {
             return false
         }
-        val from = this.getTransform()
+        val from = this.transform
         this.lastTeleportMessage = Pair(from, System.currentTimeMillis())
 
         var to = transform
@@ -5059,7 +5059,7 @@ class Player(
                 val pk = TakeItemEntityPacket()
                 pk.entityId = this.getRuntimeID()
                 pk.target = entity.getRuntimeID()
-                Server.broadcastPacket(entity.getViewers().values, pk)
+                Server.broadcastPacket(entity.viewers.values, pk)
                 this.dataPacket(pk)
 
                 if (!this.isCreative) {
@@ -5103,7 +5103,7 @@ class Player(
                 val pk = TakeItemEntityPacket()
                 pk.entityId = this.getRuntimeID()
                 pk.target = entity.getRuntimeID()
-                Server.broadcastPacket(entity.getViewers().values, pk)
+                Server.broadcastPacket(entity.viewers.values, pk)
                 this.dataPacket(pk)
 
                 if (!entity.isCreative()) {
@@ -5140,7 +5140,7 @@ class Player(
                         val pk = TakeItemEntityPacket()
                         pk.entityId = this.getRuntimeID()
                         pk.target = entity.getRuntimeID()
-                        Server.broadcastPacket(entity.getViewers().values, pk)
+                        Server.broadcastPacket(entity.viewers.values, pk)
                         this.dataPacket(pk)
 
                         this.inventory.addItem(item.clone())
@@ -5320,7 +5320,7 @@ class Player(
     }
 
     override fun toString(): String {
-        return "Player(name='" + getName() +
+        return "Player(name='" + getEntityName() +
                 "', location=" + super.toString() +
                 ')'
     }

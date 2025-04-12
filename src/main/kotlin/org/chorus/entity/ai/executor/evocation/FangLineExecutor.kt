@@ -68,7 +68,7 @@ open class FangLineExecutor : EntityControl, IBehaviorExecutor {
 
     protected fun spell(entity: EntityLiving, distance: Int) {
         if (!entity.getDataFlag(EntityFlag.CASTING)) return
-        var fangTransform = entity.getTransform()
+        var fangTransform = entity.transform
         val directionVector = entity.getDirectionVector().multiply(0.8 * (distance + 1))
         fangTransform = fangTransform.add(directionVector.x, 0.0, directionVector.z)
         spawn(entity as EntityEvocationIllager, fangTransform)

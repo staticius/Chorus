@@ -66,7 +66,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                             IBehaviorEvaluator { entity: EntityMob? -> getDataFlag(EntityFlag.CAN_DASH) }
                         ),
                         DistanceEvaluator(CoreMemoryTypes.Companion.ATTACK_TARGET, 65.0, 3.0),
-                        IBehaviorEvaluator { entity: EntityMob? -> getHealth() <= maxHealth / 2f },
+                        IBehaviorEvaluator { entity: EntityMob? -> health <= maxHealth / 2f },
                         IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
                     ), 10, 1),
                 Behavior(
@@ -77,7 +77,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                             IBehaviorEvaluator { entity: EntityMob? -> getDataFlag(EntityFlag.CAN_DASH) }
                         ),
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER, 65.0, 3.0),
-                        IBehaviorEvaluator { entity: EntityMob? -> getHealth() <= maxHealth / 2f },
+                        IBehaviorEvaluator { entity: EntityMob? -> health <= maxHealth / 2f },
                         IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
                     ), 9, 1),
                 Behavior(
@@ -95,7 +95,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                             IBehaviorEvaluator { entity: EntityMob? -> getDataFlag(EntityFlag.CAN_DASH) }
                         ),
                         DistanceEvaluator(CoreMemoryTypes.Companion.NEAREST_SUITABLE_ATTACK_TARGET, 65.0, 3.0),
-                        IBehaviorEvaluator { entity: EntityMob? -> getHealth() <= maxHealth / 2f },
+                        IBehaviorEvaluator { entity: EntityMob? -> health <= maxHealth / 2f },
                         IBehaviorEvaluator { entity: EntityMob? -> age >= 200 }
                     ),
                     8,
@@ -188,10 +188,10 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
         }
     }
 
-    override fun setHealth(health: Float) {
-        val healthBefore = getHealth()
+    override fun setHealthSafe(health: Float) {
+        val healthBefore = this.health
         val halfHealth = maxHealth / 2f
-        super.setHealth(health)
+        super.setHealthSafe(health)
         if (health <= halfHealth && healthBefore > halfHealth) {
             if (!isInvulnerable()) {
                 this.explode()
@@ -268,7 +268,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
         super.initEntity()
         this.blockBreakSound = Sound.MOB_WITHER_BREAK_BLOCK
         this.setInvulnerable(200)
-        this.setHealth(1f)
+        this.setHealthSafe(1f)
     }
 
     override fun onUpdate(currentTick: Int): Boolean {
@@ -287,7 +287,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
             }
             if (this.age == 200) {
                 this.explode()
-                setHealth(maxHealth.toFloat())
+                setHealthSafe(maxHealth.toFloat())
                 level!!.addSound(this.position, Sound.MOB_WITHER_SPAWN)
             } else if (age < 200) {
                 heal(maxHealth / 200f)
@@ -307,8 +307,8 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                 targetActorID = this.runtimeId,
                 eventType = BossEventPacket.EventType.ADD,
                 eventData = BossEventPacket.EventType.Companion.AddData(
-                    name = this.getName(),
-                    filteredName = this.getName(),
+                    name = this.getEntityName(),
+                    filteredName = this.getEntityName(),
                     color = 6,
                     darkenScreen = 1,
                     healthPercent = 0f,

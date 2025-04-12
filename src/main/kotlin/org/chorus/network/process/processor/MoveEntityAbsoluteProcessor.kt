@@ -26,9 +26,9 @@ class MoveEntityAbsoluteProcessor : DataPacketProcessor<MoveEntityAbsolutePacket
             return
         }
 
-        val from = movedEntity.getTransform()
+        val from = movedEntity.transform
         movedEntity.setPositionAndRotation(pos, pk.headYaw, 0.0)
-        val to = movedEntity.getTransform()
+        val to = movedEntity.transform
         if (from != to) {
             Server.instance.pluginManager.callEvent(VehicleMoveEvent(player, from, to))
         }

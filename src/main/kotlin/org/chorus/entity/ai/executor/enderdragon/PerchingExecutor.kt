@@ -25,7 +25,7 @@ class PerchingExecutor : EntityControl, IBehaviorExecutor {
         if (entity.position.distance(target) <= 1) {
             if (stayTick == -1) stayTick = 0
             if (stayTick == 25) {
-                entity.getViewers().values.stream()
+                entity.viewers.values.stream()
                     .filter { player: Player -> player.position.distance(Vector3(0.0, 64.0, 0.0)) <= 20 }.findAny()
                     .ifPresent { player: Player ->
                         removeRouteTarget(entity)
@@ -35,7 +35,7 @@ class PerchingExecutor : EntityControl, IBehaviorExecutor {
                             player.position.y - entity.position.y,
                             player.position.z - entity.position.z
                         ).normalize()
-                        val transform = entity.getTransform().add(toPlayerVector.multiply(10.0))
+                        val transform = entity.transform.add(toPlayerVector.multiply(10.0))
                         transform.position.y =
                             (transform.level.getHighestBlockAt(transform.position.toHorizontal()) + 1).toDouble()
                         val areaEffectCloud = Entity.Companion.createEntity(

@@ -66,7 +66,7 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone> {
             BlockLodestone.log.warn(
                 "Could not create a lodestone compass to {} for {}",
                 locator,
-                player.getName(),
+                player.getEntityName(),
                 e
             )
             return false
@@ -81,11 +81,11 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone> {
             player.getInventory().setItemInHand(clone)
             for (failed in player.getInventory().addItem(compass)) {
                 added = false
-                player.level!!.dropItem(player.getLocator().position, failed)
+                player.level!!.dropItem(player.locator.position, failed)
             }
         }
 
-        level.addSound(player.getLocator().position, Sound.LODESTONE_COMPASS_LINK_COMPASS_TO_LODESTONE)
+        level.addSound(player.locator.position, Sound.LODESTONE_COMPASS_LINK_COMPASS_TO_LODESTONE)
 
         if (added) {
             try {
@@ -93,7 +93,7 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone> {
             } catch (e: IOException) {
                 BlockLodestone.log.warn(
                     "Failed to make the player {} track {} at {}",
-                    player.getName(),
+                    player.getEntityName(),
                     trackingHandle,
                     locator,
                     e

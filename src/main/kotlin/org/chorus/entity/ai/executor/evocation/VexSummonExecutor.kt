@@ -50,7 +50,7 @@ class VexSummonExecutor : FangLineExecutor() {
 
     protected fun summon(entity: EntityMob) {
         if (!entity.getDataFlag(EntityFlag.CASTING)) return
-        val vexTransform = entity.getTransform()
+        val vexTransform = entity.transform
         vexTransform.position.x += ThreadLocalRandom.current().nextFloat(2f).toDouble()
         vexTransform.position.y += ThreadLocalRandom.current().nextFloat(2f).toDouble()
         vexTransform.position.z += ThreadLocalRandom.current().nextFloat(2f).toDouble()

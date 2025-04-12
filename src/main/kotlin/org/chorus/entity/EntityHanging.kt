@@ -12,7 +12,7 @@ abstract class EntityHanging(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
         super.initEntity()
 
         this.setMaxHealth(1)
-        this.setHealth(1f)
+        this.setHealthSafe(1f)
 
         if (namedTag!!.contains("Direction")) {
             this.direction = namedTag!!.getByte("Direction").toInt()

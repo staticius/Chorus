@@ -189,7 +189,7 @@ abstract class SlenderProjectile : EntityProjectile {
                         this.position
                     ).also { lastHitBlock = it })
             )
-            onCollideWithBlock(getLocator(), getMotion())
+            onCollideWithBlock(locator, getMotion())
             addHitEffect()
         }
         return true

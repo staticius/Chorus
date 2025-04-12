@@ -68,13 +68,13 @@ class BowShootExecutor(
             }
         }
 
-        if (target!!.getLocator() != newTarget!!.getLocator()) {
+        if (target!!.locator != newTarget!!.locator) {
             //更新目标
             target = newTarget
         }
 
         if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed)
-        val clone = target!!.getTransform()
+        val clone = target!!.transform
 
         if (entity.position.distanceSquared(target!!.position) > maxShootDistanceSquared) {
             //更新寻路target
@@ -99,7 +99,7 @@ class BowShootExecutor(
                     bowShoot(tool, entity)
                     stopBowAnimation(entity)
                     tick2 = 0
-                    return target!!.getHealth() != 0f
+                    return target!!.health != 0f
                 }
             }
         }
