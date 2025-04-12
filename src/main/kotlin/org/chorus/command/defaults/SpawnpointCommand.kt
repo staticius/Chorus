@@ -41,7 +41,7 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
                 log.addNoTargetMatch().output()
                 return 0
             }
-            val level = sender.getLocator().level
+            val level = sender.locator.level
             if (list.hasResult(1)) {
                 if (level != null) {
                     val locator = list.getResult<Locator>(1)
@@ -74,7 +74,7 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
             val pos = players[0].locator
             players[0].setSpawn(pos, SpawnPointType.PLAYER)
             log.addSuccess(
-                "commands.spawnpoint.success.single", sender.getName(),
+                "commands.spawnpoint.success.single", sender.name,
                 round2.format(pos.position.x),
                 round2.format(pos.position.y),
                 round2.format(pos.position.z)

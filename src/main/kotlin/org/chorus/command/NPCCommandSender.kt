@@ -25,7 +25,7 @@ class NPCCommandSender(private val npc: EntityNPC, val initiator: Player) : Comm
 
     override fun sendCommandOutput(container: CommandOutputContainer) {}
 
-    override fun getName() = npc.getEntityName()
+    override val name get() = npc.getEntityName()
 
     override val isPlayer: Boolean
         get() = false
@@ -77,13 +77,15 @@ class NPCCommandSender(private val npc: EntityNPC, val initiator: Player) : Comm
         perm.recalculatePermissions()
     }
 
-    override fun getLocator(): Locator {
-        return npc.locator
-    }
+    override val locator: Locator
+        get() {
+            return npc.locator
+        }
 
-    override fun getTransform(): Transform {
-        return npc.transform
-    }
+    override val transform: Transform
+        get() {
+            return npc.transform
+        }
 
     override var isOp: Boolean = true
         set(_) = throw UnsupportedOperationException("Can't set isOp of NPCCommandSender")

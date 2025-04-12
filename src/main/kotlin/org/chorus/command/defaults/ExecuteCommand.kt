@@ -302,7 +302,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val levelName = list.getResult<String>(1)!!
                 val level = Server.instance.getLevelByName(levelName) ?: return 0
                 val chainCommand = list.getResult<String>(2)!!
-                val transform = sender.getTransform()
+                val transform = sender.transform
                 transform.setLevel(level)
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
                 return Server.instance.executeCommand(executorCommandSender, chainCommand)
@@ -311,7 +311,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             "facing" -> {
                 val pos = list.getResult<Vector3>(1)
                 val chainCommand = list.getResult<String>(2)!!
-                val source = sender.getTransform()
+                val source = sender.transform
                 val bv =
                     BVector3.fromPos(pos!!.x - source.position.x, pos.y - source.position.y, pos.z - source.position.z)
                 source.setPitch(bv.pitch)
@@ -330,7 +330,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 val anchorAtEyes = anchor == "eyes"
                 val chainCommand = list.getResult<String>(4)!!
                 for (target in targets) {
-                    val source = sender.getTransform()
+                    val source = sender.transform
                     val bv = BVector3.fromPos(
                         target.position.x - source.position.x,
                         target.position.y + (if (anchorAtEyes) target.getEyeHeight() else 0f) - source.position.y,
@@ -345,12 +345,12 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             }
 
             "rotated" -> {
-                var yaw = sender.getTransform().rotation.yaw
+                var yaw = sender.transform.rotation.yaw
                 if (list.hasResult(1)) yaw = list.getResult(1)!!
-                var pitch = sender.getTransform().rotation.pitch
+                var pitch = sender.transform.rotation.pitch
                 if (list.hasResult(2)) pitch = list.getResult(2)!!
                 val chainCommand = list.getResult<String>(3)!!
-                val transform = sender.getTransform()
+                val transform = sender.transform
                 transform.setYaw(yaw)
                 transform.setPitch(pitch)
                 val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
@@ -365,7 +365,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 }
                 val chainCommand = list.getResult<String>(3)!!
                 for (executor in executors) {
-                    val transform = sender.getTransform()
+                    val transform = sender.transform
                     transform.setYaw(executor.rotation.yaw)
                     transform.setPitch(executor.rotation.pitch)
                     val executorCommandSender = ExecutorCommandSender(sender, sender.asEntity(), transform)
@@ -377,7 +377,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
             "align" -> {
                 val axes = list.getResult<String>(1)!!
                 val chainCommand = list.getResult<String>(2)!!
-                val transform = sender.getTransform()
+                val transform = sender.transform
                 for (c in axes.toCharArray()) {
                     when (c) {
                         'x' -> transform.position.x = transform.position.floorX.toDouble()
@@ -391,7 +391,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
             "anchored" -> {
                 if (!sender.isEntity) return 0
-                var transform = sender.getTransform()
+                var transform = sender.transform
                 val anchor = list.getResult<String>(1)
                 val chainCommand = list.getResult<String>(2)!!
                 when (anchor) {
@@ -407,7 +407,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
 
             "positioned" -> {
                 val vec = list.getResult<Vector3>(1)!!
-                val newLoc = sender.getTransform()
+                val newLoc = sender.transform
                 newLoc.setX(vec.x)
                 newLoc.setY(vec.y)
                 newLoc.setZ(vec.z)
@@ -424,7 +424,7 @@ class ExecuteCommand(name: String) : VanillaCommand(name, "commands.execute.desc
                 }
                 val chainCommand = list.getResult<String>(3)!!
                 for (vec in targets.stream().map { e: Entity -> e.position }.toList()) {
-                    val newLoc = sender.getTransform()
+                    val newLoc = sender.transform
                     newLoc.setX(vec.x)
                     newLoc.setY(vec.y)
                     newLoc.setZ(vec.z)

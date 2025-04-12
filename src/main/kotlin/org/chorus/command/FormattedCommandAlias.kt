@@ -31,7 +31,7 @@ class FormattedCommandAlias : Command {
                     FormattedCommandAlias.log.warn(
                         "An error has occurred while executing the formatted command alias {} by the sender {}",
                         commandLabel,
-                        sender.getName(),
+                        sender.name,
                         e
                     )
                 }

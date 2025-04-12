@@ -30,7 +30,7 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
         level.updateComparatorOutputLevel(this.position)
     }
 
-    override var name: String?
+    override var name: String
         get() = "Item Frame"
         set(name) {
             super.name = name

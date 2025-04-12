@@ -68,7 +68,7 @@ open class ConsoleCommandSender : CommandSender {
     }
 
     override fun sendCommandOutput(container: CommandOutputContainer) {
-        if (this.getTransform().level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
+        if (this.transform.level.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
             for (msg in container.messages) {
                 var text = Server.instance.baseLang.tr(TranslationContainer(msg.messageId, *msg.parameters))
                 val event = ConsoleCommandOutputEvent(this, text)
@@ -80,15 +80,17 @@ open class ConsoleCommandSender : CommandSender {
         }
     }
 
-    override fun getLocator(): Locator {
-        throw UnsupportedOperationException("Can't get locator of ConsoleCommandSender")
-    }
+    override val locator: Locator
+        get() {
+            throw UnsupportedOperationException("Can't get locator of ConsoleCommandSender")
+        }
 
-    override fun getTransform(): Transform {
-        throw UnsupportedOperationException("Can't get transform of ConsoleCommandSender")
-    }
+    override val transform: Transform
+        get() {
+            throw UnsupportedOperationException("Can't get transform of ConsoleCommandSender")
+        }
 
-    override fun getName() = "CONSOLE"
+    override val name get() = "CONSOLE"
 
     override var isOp = true
         set(_) = throw UnsupportedOperationException("Can't set isOp of ConsoleCommandSender")

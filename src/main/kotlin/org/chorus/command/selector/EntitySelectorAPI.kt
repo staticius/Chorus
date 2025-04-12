@@ -54,7 +54,7 @@ class EntitySelectorAPI private constructor() {
             ARGS_CACHE.put(token, arguments)
         }
         //获取克隆过的执行者位置信息
-        val senderLocation = sender.getTransform()
+        val senderLocation = sender.transform
         //获取选择器类型
         val selectorType: SelectorType = SelectorType.parseSelectorType(matcher.group(1))
         //根据选择器类型先确定实体检测范围

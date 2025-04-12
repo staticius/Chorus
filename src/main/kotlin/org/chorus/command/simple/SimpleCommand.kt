@@ -61,7 +61,7 @@ class SimpleCommand(
         try {
             success = method.invoke(this.`object`, sender, commandLabel, args) as Boolean
         } catch (exception: Exception) {
-            SimpleCommand.log.error("Failed to execute {} by {}", commandLabel, sender.getName(), exception)
+            SimpleCommand.log.error("Failed to execute {} by {}", commandLabel, sender.name, exception)
         }
 
         if (!success) {

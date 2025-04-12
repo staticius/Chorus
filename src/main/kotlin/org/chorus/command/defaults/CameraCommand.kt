@@ -170,7 +170,7 @@ class CameraCommand(name: String) : VanillaCommand(name, "commands.camera.descri
         val playerNames =
             players.stream().map { obj: Player -> obj.getEntityName() }.reduce { a: String, b: String -> "$a $b" }.orElse("")
         val pk = CameraInstructionPacket()
-        val senderLocation = sender.getTransform()
+        val senderLocation = sender.transform
         when (result.key) {
             "clear" -> {
                 pk.setInstruction(ClearInstruction)

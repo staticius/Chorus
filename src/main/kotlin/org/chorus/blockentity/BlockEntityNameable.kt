@@ -19,7 +19,7 @@ interface BlockEntityNameable {
      * @param name 这个事物的新名字。<br></br>The new name of this object.
      *
      */
-    var name: String?
+    var name: String
 
     /**
      * 返回这个事物是否有名字。<br></br>

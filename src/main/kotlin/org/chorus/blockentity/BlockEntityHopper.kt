@@ -17,7 +17,6 @@ import org.chorus.inventory.RecipeInventoryHolder
 import org.chorus.item.Item
 import org.chorus.item.ItemPotion
 import org.chorus.item.ItemSplashPotion
-import org.chorus.level.Locator
 import org.chorus.level.format.IChunk
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
@@ -31,10 +30,6 @@ import org.chorus.registry.Registries
 class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt), BlockEntityInventoryHolder,
     IHopper {
     override var inventory: Inventory = HopperInventory(this)
-
-    override fun getLocator(): Locator {
-        return this.locator
-    }
 
     var transferCooldown: Int = 0
 
@@ -107,7 +102,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
             position.floorZ
         ) == BlockID.HOPPER
 
-    override var name: String?
+    override var name: String
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Hopper"
         set(name) {
             if (name == null || name.isEmpty()) {

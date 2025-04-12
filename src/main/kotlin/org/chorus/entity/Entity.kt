@@ -239,7 +239,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     protected open var age: Int = 0
 
     var health: Float = 20f
-        private set
+        protected set
 
     @JvmField
     protected var absorption: Float = 0f
@@ -255,7 +255,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     val isPlayer: Boolean = this is Player
     @JvmField
     var maxHealth: Int = 20
-    var name: String? = null
+    var name: String = ""
         protected set
 
     @Volatile

@@ -51,12 +51,12 @@ class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.de
         if (list.hasResult(3)) {
             oldBlockHandling = list.getResult(3)
         }
-        if (!sender.getLocator().level.isYInRange(locator!!.position.y.toInt())) {
+        if (!sender.locator.level.isYInRange(locator!!.position.y.toInt())) {
             log.addError("commands.setblock.outOfWorld").output()
             return 0
         }
 
-        val level = sender.getLocator().level
+        val level = sender.locator.level
         val current = level.getBlock(locator.position)
         if (current.id == block!!.id && current.blockState === block.blockState) {
             log.addError("commands.setblock.noChange").output()

@@ -152,7 +152,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
         }
     }
 
-    override var name: String?
+    override var name: String
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Campfire"
         set(name) {
             if (name.isNullOrEmpty()) {

@@ -60,7 +60,7 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
             }
 
             for (entity in entities) {
-                if (entity.getEntityName() == sender.getName()) {
+                if (entity.getEntityName() == sender.name) {
                     if (!sender.hasPermission("chorus.command.kill.self")) {
                         continue
                     }

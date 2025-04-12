@@ -67,7 +67,7 @@ interface CommandSender : Permissible {
      *
      *
      */
-    fun getName(): String
+    val name: String
 
     /**
      * @return 发送者是否为玩家<br></br>whether the sender is a player
@@ -111,7 +111,7 @@ interface CommandSender : Permissible {
         return null
     }
 
-    fun getLocator(): Locator
+    val locator: Locator
 
-    fun getTransform(): Transform
+    val transform: Transform
 }

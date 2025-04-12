@@ -62,7 +62,7 @@ class BlockEntityConduit(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
         namedTag.putBoolean("Active", isActive)
     }
 
-    override var name: String?
+    override var name: String
         get() = "Conduit"
         set(name) {
             super.name = name

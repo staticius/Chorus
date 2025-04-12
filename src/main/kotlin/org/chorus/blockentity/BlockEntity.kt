@@ -12,7 +12,7 @@ import org.chorus.utils.Loggable
 abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.provider.level),
     BlockEntityID {
 
-    open var name: String? = ""
+    open var name: String = ""
 
     @JvmField
     var id: Long

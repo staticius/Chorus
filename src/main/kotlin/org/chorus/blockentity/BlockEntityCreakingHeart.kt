@@ -37,7 +37,7 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
     override val isBlockEntityValid: Boolean
         get() = this.block.id == BlockID.CREAKING_HEART
 
-    override var name: String?
+    override var name: String
         get() = "Creaking Heart"
         set(name) {
             super.name = name

@@ -1178,8 +1178,8 @@ class Level(
         val random = ThreadLocalRandom.current()
         if (!loaders.isEmpty()) {
             for (loader in loaders.values) {
-                val chunkX = loader.getLocator().position.chunkX
-                val chunkZ = loader.getLocator().position.chunkZ
+                val chunkX = loader.locator.position.chunkX
+                val chunkZ = loader.locator.position.chunkZ
 
                 val index = chunkHash(chunkX, chunkZ)
                 val existingLoaders = Math.max(0, chunkTickList.getOrDefault(index, 0))

@@ -77,9 +77,9 @@ class ClearCommand(name: String) : VanillaCommand(name, "commands.clear.descript
                 }
 
                 if (count == 0) {
-                    log.addError("commands.clear.failure.no.items", target.getName()).output()
+                    log.addError("commands.clear.failure.no.items", target.name).output()
                 } else {
-                    log.addSuccess("commands.clear.success", target.getName(), count.toString()).output()
+                    log.addSuccess("commands.clear.success", target.name, count.toString()).output()
                 }
             } else if (maxCount == 0) {
                 var count = 0
@@ -96,10 +96,10 @@ class ClearCommand(name: String) : VanillaCommand(name, "commands.clear.descript
                 }
 
                 if (count == 0) {
-                    log.addError("commands.clear.failure.no.items", target.getName()).output()
+                    log.addError("commands.clear.failure.no.items", target.name).output()
                     return 0
                 } else {
-                    log.addSuccess("commands.clear.testing", target.getName(), count.toString()).output()
+                    log.addSuccess("commands.clear.testing", target.name, count.toString()).output()
                 }
             } else if (maxCount == -1) {
                 var count = 0
@@ -118,10 +118,10 @@ class ClearCommand(name: String) : VanillaCommand(name, "commands.clear.descript
                 }
 
                 if (count == 0) {
-                    log.addError("commands.clear.failure.no.items", target.getName()).output()
+                    log.addError("commands.clear.failure.no.items", target.name).output()
                     return 0
                 } else {
-                    log.addSuccess("commands.clear.success", target.getName(), count.toString()).output()
+                    log.addSuccess("commands.clear.success", target.name, count.toString()).output()
                 }
             } else {
                 var remaining = maxCount
@@ -153,10 +153,10 @@ class ClearCommand(name: String) : VanillaCommand(name, "commands.clear.descript
                 }
 
                 if (remaining == maxCount) {
-                    log.addError("commands.clear.failure.no.items", target.getName()).output()
+                    log.addError("commands.clear.failure.no.items", target.name).output()
                     return 0
                 } else {
-                    log.addSuccess("commands.clear.success", target.getName(), (maxCount - remaining).toString())
+                    log.addSuccess("commands.clear.success", target.name, (maxCount - remaining).toString())
                         .output()
                 }
             }

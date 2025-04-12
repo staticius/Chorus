@@ -228,7 +228,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
                 nbt.putList(ICommandBlock.Companion.TAG_LAST_OUTPUT_PARAMS, this.lastOutputParams!!)
             }
             if (this.hasName()) {
-                nbt.putString(ICommandBlock.Companion.TAG_CUSTOM_NAME, this.getName())
+                nbt.putString(ICommandBlock.Companion.TAG_CUSTOM_NAME, this.name)
             }
             return nbt
         }
@@ -239,9 +239,10 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             return blockId == BlockID.COMMAND_BLOCK || blockId == BlockID.CHAIN_COMMAND_BLOCK || blockId == BlockID.REPEATING_COMMAND_BLOCK
         }
 
-    override fun getName(): String {
-        return if (this.hasName()) namedTag.getString(ICommandBlock.Companion.TAG_CUSTOM_NAME) else "!"
-    }
+    override var name: String = ""
+        get() {
+            return if (this.hasName()) namedTag.getString(ICommandBlock.Companion.TAG_CUSTOM_NAME) else "!"
+        }
 
     override fun hasName(): Boolean {
         return namedTag.contains(ICommandBlock.Companion.TAG_CUSTOM_NAME)
@@ -255,13 +256,10 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
     }
 
-    override fun getLocator(): Locator {
-        return locator
-    }
-
-    override fun getTransform(): Transform {
-        return Transform(locator)
-    }
+    override val transform: Transform
+        get() {
+            return Transform(locator)
+        }
 
     override fun onUpdate(): Boolean {
         if (this.mode != ICommandBlock.Companion.MODE_REPEATING) {
@@ -433,7 +431,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
         if (level.gameRules.getBoolean(GameRule.COMMAND_BLOCK_OUTPUT)) {
             message.text =
-                TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + "[" + this.getName() + ": " + TextFormat.RESET +
+                TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + "[" + this.name + ": " + TextFormat.RESET +
                         (if (message.text != Server.instance.baseLang.get(message.text)) "%" else "") + message.text + "]"
             val users =
                 Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)

@@ -162,7 +162,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
     }
 
     interface IHopper {
-        fun getLocator(): Locator?
+        val locator: Locator
 
         fun pullItems(hopperHolder: InventoryHolder, hopperPos: Locator): Boolean {
             val hopperInv = hopperHolder.inventory

@@ -183,7 +183,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
     override val cleanedNBT: CompoundTag
         get() = super.cleanedNBT!!.remove("pairx").remove("pairz")
 
-    override var name: String?
+    override var name: String
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Chest"
         set(name) {
             if (name.isNullOrEmpty()) {

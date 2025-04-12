@@ -67,7 +67,7 @@ class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.de
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        val rules: GameRules = sender.getLocator().level.gameRules
+        val rules: GameRules = sender.locator.level.gameRules
         val list = result.value
         val ruleStr = list.getResult<String>(0)
         if (result.key == "default") {

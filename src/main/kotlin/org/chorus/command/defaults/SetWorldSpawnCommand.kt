@@ -31,8 +31,8 @@ class SetWorldSpawnCommand(name: String) : VanillaCommand(name, "commands.setwor
         val level: Level
         val pos: Vector3
         if (!result.value.hasResult(0)) {
-            level = sender.getLocator().level
-            pos = sender.getLocator().position.round()
+            level = sender.locator.level
+            pos = sender.locator.position.round()
         } else {
             level = Server.instance.defaultLevel!!
             pos = result.value.getResult(0)!!

@@ -31,7 +31,7 @@ class DayLockCommand(name: String) :
 
         if (list.hasResult(0)) lock = list.getResult(0)!!
 
-        val level = sender.getLocator().level
+        val level = sender.locator.level
         if (lock) {
             level.gameRules.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
             level.stopTime()

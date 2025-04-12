@@ -39,15 +39,17 @@ class ExecutorCommandSender(executor: CommandSender, entity: Entity?, executeTra
         executor!!.sendCommandOutput(container)
     }
 
-    override fun getName() = entity!!.name!!
+    override val name get() = entity!!.name!!
 
-    override fun getLocator(): Locator {
-        return entity!!.locator
-    }
+    override val locator: Locator
+        get() {
+            return entity!!.locator
+        }
 
-    override fun getTransform(): Transform {
-        return entity!!.transform
-    }
+    override val transform: Transform
+        get() {
+            return entity!!.transform
+        }
 
     override val isPlayer: Boolean
         get() = entity is Player

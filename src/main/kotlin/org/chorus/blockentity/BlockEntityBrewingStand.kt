@@ -59,7 +59,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         this.fuelTotal = namedTag.getShort("FuelTotal").toInt()
     }
 
-    override var name: String?
+    override var name: String
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Brewing Stand"
         set(name) {
             if (name == null || name == "") {

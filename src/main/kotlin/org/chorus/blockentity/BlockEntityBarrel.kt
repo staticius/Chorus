@@ -22,7 +22,7 @@ class BlockEntityBarrel(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableC
     override val isBlockEntityValid: Boolean
         get() = block.id === BlockID.BARREL
 
-    override var name: String?
+    override var name: String
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Barrel"
         set(name) {
             if (name.isNullOrEmpty()) {

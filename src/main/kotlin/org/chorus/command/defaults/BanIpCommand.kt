@@ -98,7 +98,7 @@ class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.descript
     }
 
     private fun processIPBan(ip: String, sender: CommandSender, reason: String) {
-        Server.instance.bannedIPs.addBan(ip, reason, null, sender.getName())
+        Server.instance.bannedIPs.addBan(ip, reason, null, sender.name)
 
         for (player in ArrayList(Server.instance.onlinePlayers.values)) {
             if (player.address == ip) {

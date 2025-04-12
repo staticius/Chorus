@@ -9,7 +9,7 @@ interface ChunkLoader {
 
     val level: Level?
 
-    fun getLocator(): Locator
+    val locator: Locator
 
     fun onChunkChanged(chunk: IChunk)
 

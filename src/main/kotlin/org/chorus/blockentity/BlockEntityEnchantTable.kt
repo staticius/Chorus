@@ -12,7 +12,7 @@ class BlockEntityEnchantTable(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     override val isBlockEntityValid: Boolean
         get() = block.id == BlockID.ENCHANTING_TABLE
 
-    override var name: String?
+    override var name: String
         get() = if (this.hasName()) namedTag.getString("CustomName") else "Enchanting Table"
         set(name) {
             if (name == null || name.isBlank()) {

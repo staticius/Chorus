@@ -7,7 +7,7 @@ import org.chorus.nbt.tag.StringTag
 import org.chorus.plugin.InternalPlugin
 
 interface ICommandBlock : CommandSender, InventoryHolder {
-    override fun getName(): String
+    override val name: String
 
     fun hasName(): Boolean
 

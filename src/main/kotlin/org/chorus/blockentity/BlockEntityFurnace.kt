@@ -105,7 +105,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
     protected open val clientName: String
         get() = BlockEntityID.FURNACE
 
-    override var name: String?
+    override var name: String
         get() = if (this.hasName()) namedTag.getString("CustomName") else furnaceName
         set(name) {
             if (name == null || name == "") {

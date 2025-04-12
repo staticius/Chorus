@@ -318,11 +318,11 @@ abstract class Command @JvmOverloads constructor(
             val users =
                 Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
 
-            val result = TranslationContainer("chat.type.admin", source.getName(), message)
+            val result = TranslationContainer("chat.type.admin", source.name, message)
 
             val colored = TranslationContainer(
                 TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + "%chat.type.admin",
-                source.getName(),
+                source.name,
                 message
             )
 
@@ -343,9 +343,9 @@ abstract class Command @JvmOverloads constructor(
 
         @JvmOverloads
         fun broadcastCommandMessage(source: CommandSender, message: TextContainer, sendToSource: Boolean = true) {
-            if ((source is ICommandBlock && !source.getLocator().level.gameRules
+            if ((source is ICommandBlock && !source.locator.level.gameRules
                     .getBoolean(GameRule.COMMAND_BLOCK_OUTPUT)) ||
-                (source is ExecutorCommandSender && source.getExecutor() is ICommandBlock && !source.getLocator().level
+                (source is ExecutorCommandSender && source.getExecutor() is ICommandBlock && !source.locator.level
                     .gameRules.getBoolean(GameRule.COMMAND_BLOCK_OUTPUT))
             ) {
                 return
@@ -353,7 +353,7 @@ abstract class Command @JvmOverloads constructor(
 
             val m: TextContainer = message.clone()
             val resultStr =
-                "[" + source.getName() + ": " + (if (m.text != Server.instance.baseLang.tr(m.text)) "%" else "") + m.text + "]"
+                "[" + source.name + ": " + (if (m.text != Server.instance.baseLang.tr(m.text)) "%" else "") + m.text + "]"
 
             val users =
                 Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)

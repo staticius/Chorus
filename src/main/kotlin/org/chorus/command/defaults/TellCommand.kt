@@ -41,7 +41,7 @@ class TellCommand(name: String) :
                 continue
             }
             log.addSuccess("commands.message.display.outgoing", player.getEntityName(), msg)
-            player.sendMessage(TranslationContainer("commands.message.display.incoming", sender.getName(), msg))
+            player.sendMessage(TranslationContainer("commands.message.display.incoming", sender.name, msg))
         }
         log.output()
         return 1
