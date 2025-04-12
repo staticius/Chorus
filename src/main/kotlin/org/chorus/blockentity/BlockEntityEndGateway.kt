@@ -90,7 +90,7 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
             }
         } else {
             if (this.age % 2400 == 0) {
-                this.setTeleportCooldown()
+                this.resetTeleportCooldown()
             }
         }
 
@@ -127,7 +127,7 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
                 )
             }
         }
-        setTeleportCooldown()
+        resetTeleportCooldown()
     }
 
     protected fun checkTeleport(vector3: BlockVector3): BlockVector3 {
@@ -193,11 +193,11 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
         return teleportCooldown > 0
     }
 
-    fun setTeleportCooldown() {
-        this.setTeleportCooldown(40)
+    private fun resetTeleportCooldown() {
+        this.resetTeleportCooldown(40)
     }
 
-    fun setTeleportCooldown(teleportCooldown: Int) {
+    private fun resetTeleportCooldown(teleportCooldown: Int) {
         this.teleportCooldown = teleportCooldown
         setDirty()
         sendBlockEventPacket(0)

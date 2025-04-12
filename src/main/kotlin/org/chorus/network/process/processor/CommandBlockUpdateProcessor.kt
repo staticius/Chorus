@@ -47,7 +47,7 @@ class CommandBlockUpdateProcessor : DataPacketProcessor<CommandBlockUpdatePacket
                     cmdBlock.setPropertyValue(CommonBlockProperties.CONDITIONAL_BIT, conditional)
 
                     blockEntity.command = pk.command
-                    blockEntity.setName(pk.name)
+                    blockEntity.name = (pk.name)
                     blockEntity.setTrackOutput(pk.trackOutput)
                     blockEntity.isConditional = conditional
                     blockEntity.tickDelay = pk.tickDelay

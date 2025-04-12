@@ -2,16 +2,12 @@ package org.chorus.blockentity
 
 import org.chorus.command.CommandSender
 import org.chorus.inventory.InventoryHolder
-import org.chorus.nbt.tag.ListTag
-import org.chorus.nbt.tag.StringTag
 import org.chorus.plugin.InternalPlugin
 
 interface ICommandBlock : CommandSender, InventoryHolder {
     override val name: String
 
     fun hasName(): Boolean
-
-    fun setName(name: String?)
 
     fun setPowered() {
         this.isPowered = true
@@ -66,8 +62,6 @@ interface ICommandBlock : CommandSender, InventoryHolder {
     var isLastOutputCondionalMode: Boolean
 
     var isLastOutputRedstoneMode: Boolean
-
-    fun setLastOutputParams(params: ListTag<StringTag>?)
 
     var tickDelay: Int
 

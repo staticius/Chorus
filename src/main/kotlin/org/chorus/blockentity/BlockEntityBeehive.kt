@@ -288,7 +288,7 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
 
         val bee = if (entity is EntityBee) entity else null
 
-        if (occupant.hasNectar && occupant.getTicksLeftToStay() <= 0) {
+        if (occupant.hasNectar && occupant.ticksLeftToStay <= 0) {
             if (!isHoneyFull) {
                 honeyLevel = honeyLevel + 1
             }
@@ -360,6 +360,9 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
         var ticksLeftToStay: Int
         var actorIdentifier: String
         var saveData: CompoundTag
+            get() {
+                return field.copy()
+            }
         var workSound: Sound = Sound.BLOCK_BEEHIVE_WORK
         var workSoundPitch: Float = 1f
         var hasNectar: Boolean
@@ -400,22 +403,6 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
                 .putBoolean("HasNectar", hasNectar)
                 .putBoolean("Muted", isMuted)
             return compoundTag
-        }
-
-        fun getTicksLeftToStay(): Int {
-            return ticksLeftToStay
-        }
-
-        fun setTicksLeftToStay(ticksLeftToStay: Int) {
-            this.ticksLeftToStay = ticksLeftToStay
-        }
-
-        fun getSaveData(): CompoundTag {
-            return saveData.copy()
-        }
-
-        fun setSaveData(saveData: CompoundTag) {
-            this.saveData = saveData.copy()
         }
 
         override fun toString(): String {

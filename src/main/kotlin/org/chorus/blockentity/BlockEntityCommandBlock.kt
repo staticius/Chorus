@@ -1,6 +1,5 @@
 package org.chorus.blockentity
 
-import com.google.common.base.Strings
 import org.chorus.Player
 import org.chorus.Server
 import org.chorus.block.BlockChainCommandBlock
@@ -16,7 +15,6 @@ import org.chorus.lang.TextContainer
 import org.chorus.lang.TranslationContainer
 import org.chorus.level.GameRule
 import org.chorus.level.Level
-import org.chorus.level.Locator
 import org.chorus.level.Transform
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.tag.CompoundTag
@@ -239,21 +237,20 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             return blockId == BlockID.COMMAND_BLOCK || blockId == BlockID.CHAIN_COMMAND_BLOCK || blockId == BlockID.REPEATING_COMMAND_BLOCK
         }
 
-    override var name: String = ""
+    override var name: String
         get() {
-            return if (this.hasName()) namedTag.getString(ICommandBlock.Companion.TAG_CUSTOM_NAME) else "!"
+            return if (this.hasName()) namedTag.getString(ICommandBlock.TAG_CUSTOM_NAME) else "!"
+        }
+        set(value) {
+            if (value.isEmpty()) {
+                namedTag.remove(ICommandBlock.TAG_CUSTOM_NAME)
+            } else {
+                namedTag.putString(ICommandBlock.TAG_CUSTOM_NAME, value)
+            }
         }
 
     override fun hasName(): Boolean {
         return namedTag.contains(ICommandBlock.Companion.TAG_CUSTOM_NAME)
-    }
-
-    override fun setName(name: String?) {
-        if (Strings.isNullOrEmpty(name)) {
-            namedTag.remove(ICommandBlock.Companion.TAG_CUSTOM_NAME)
-        } else {
-            namedTag.putString(ICommandBlock.Companion.TAG_CUSTOM_NAME, name!!)
-        }
     }
 
     override val transform: Transform
@@ -368,10 +365,6 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
 
     override fun setTrackOutput(track: Boolean) {
         this.isTrackingOutput = track
-    }
-
-    override fun setLastOutputParams(params: ListTag<StringTag>?) {
-        this.lastOutputParams = params
     }
 
     override fun isPermissionSet(name: String): Boolean {

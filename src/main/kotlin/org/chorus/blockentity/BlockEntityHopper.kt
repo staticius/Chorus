@@ -120,10 +120,6 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
     val isOnTransferCooldown: Boolean
         get() = this.transferCooldown > 0
 
-    fun setTransferCooldown(transferCooldown: Int) {
-        this.transferCooldown = transferCooldown
-    }
-
     val size: Int
         get() = 5
 
@@ -205,7 +201,7 @@ class BlockEntityHopper(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(
         }
 
         if (changed) {
-            this.setTransferCooldown(this.cooldownTick)
+            this.transferCooldown = (this.cooldownTick)
             setDirty()
         }
 

@@ -91,7 +91,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
 
         val blockEntity = blockEntity ?: return false
 
-        player!!.addWindow(blockEntity.getInventory())
+        player!!.addWindow(blockEntity.inventory)
         return true
     }
 
@@ -172,7 +172,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
         var slot = -1
         var target: Item? = null
 
-        val inv = blockEntity.getInventory()
+        val inv = blockEntity.inventory
         for ((key, item) in inv.contents.entries) {
             if (!item.isNothing && rand.nextInt(r++) == 0) {
                 target = item

@@ -88,7 +88,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
             val vec = Vector3(tag.getInt("x").toDouble(), tag.getInt("y").toDouble(), tag.getInt("z").toDouble())
             val block = level!!.getBlock(vec, true)
             if (block is BlockCreakingHeart) {
-                block.getOrCreateBlockEntity().setLinkedCreaking(this)
+                block.getOrCreateBlockEntity().linkedCreaking = (this)
             }
         }
         super.initEntity()
@@ -158,7 +158,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
         //ToDo: Creaking Death Animation
         super.kill()
         if (creakingHeart != null && creakingHeart!!.isBlockEntityValid) {
-            creakingHeart!!.setLinkedCreaking(null)
+            creakingHeart!!.linkedCreaking = (null)
         }
     }
 

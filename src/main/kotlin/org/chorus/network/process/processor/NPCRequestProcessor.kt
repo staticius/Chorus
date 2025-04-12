@@ -20,7 +20,7 @@ class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
             val dialog: FormWindowDialog = entity.dialog
 
             val response = FormResponseDialog(pk, dialog)
-            for (handler in dialog.getHandlers()) {
+            for (handler in dialog.handlers) {
                 handler.handle(player, response)
             }
 
@@ -39,7 +39,7 @@ class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
             }
 
             val response = FormResponseDialog(pk, dialog!!)
-            for (handler in dialog.getHandlers()) {
+            for (handler in dialog.handlers) {
                 handler.handle(player, response)
             }
 

@@ -14,7 +14,7 @@ class BlockEntityDispenser(chunk: IChunk, nbt: CompoundTag) : BlockEntityEjectab
     override val blockEntityName: String
         get() = BlockEntityID.DISPENSER
 
-    override fun getInventory(): DispenserInventory {
+    fun getInventory(): DispenserInventory {
         return inventory as DispenserInventory
     }
 

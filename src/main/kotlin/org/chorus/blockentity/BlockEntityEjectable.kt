@@ -71,10 +71,6 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
         }
     }
 
-    open fun getInventory(): EjectableInventory {
-        return inventory
-    }
-
     override val spawnCompound: CompoundTag
         get() {
             val c = super.spawnCompound

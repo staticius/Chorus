@@ -19,6 +19,13 @@ import org.chorus.utils.Utils
 class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt) {
 
     var linkedCreaking: EntityCreaking? = null
+        set(value) {
+            if (field != null) {
+                field!!.creakingHeart = (null)
+            }
+            value?.creakingHeart = (this)
+            field = value
+        }
 
     var spawnRangeHorizontal: Double = 16.5
     var spawnRangeVertical: Double = 8.5
@@ -45,14 +52,6 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
 
     val heart: BlockCreakingHeart
         get() = block as BlockCreakingHeart
-
-    fun setLinkedCreaking(creaking: EntityCreaking?) {
-        if (linkedCreaking != null) {
-            linkedCreaking!!.creakingHeart = (null)
-        }
-        creaking?.creakingHeart = (this)
-        linkedCreaking = creaking
-    }
 
     override fun onUpdate(): Boolean {
         if (level.tick % 40 == 0 && isBlockEntityValid && heart.isActive) {
@@ -94,7 +93,7 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
                 if (ev.isCancelled) {
                     ent.close()
                 } else {
-                    setLinkedCreaking(ent as EntityCreaking)
+                    linkedCreaking = (ent as EntityCreaking)
                     level.addSound(this.position, Sound.BLOCK_CREAKING_HEART_MOB_SPAWN, 1f, 1f)
                     ent.spawnToAll()
                 }

@@ -32,7 +32,7 @@ class FormWindowDialog @JvmOverloads constructor(
         protected set
 
     @Transient
-    protected val handlers: MutableList<FormDialogHandler> = mutableListOf()
+    val handlers: MutableList<FormDialogHandler> = mutableListOf()
 
     init {
         try {
@@ -69,10 +69,6 @@ class FormWindowDialog @JvmOverloads constructor(
 
     fun addHandler(handler: FormDialogHandler) {
         handlers.add(handler)
-    }
-
-    fun getHandlers(): List<FormDialogHandler> {
-        return handlers
     }
 
     var buttonJSONData: String?
