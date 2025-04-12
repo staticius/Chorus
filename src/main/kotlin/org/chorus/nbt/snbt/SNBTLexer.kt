@@ -114,7 +114,7 @@ class SNBTLexer @JvmOverloads constructor(
                 if (invalidToken == null) {
                     invalidToken = token
                 } else {
-                    invalidToken.endOffset = token.getEndOffset()
+                    invalidToken.endOffset = token.endOffset
                 }
                 token = nextToken()
             }

@@ -37,7 +37,14 @@ abstract class Item : Cloneable, ItemID, Loggable {
 
     @JvmField
     var count: Int
-    protected var netId: Int? = null
+    var netId: Int? = null
+        set(value) {
+            if (value != null) {
+                require(value >= 0) { "stack network id cannot be negative" }
+                field = value
+            } else field = null
+        }
+
     protected var block: Block? = null
     protected var hasMeta: Boolean = true
     var compoundTag: ByteArray = EmptyArrays.EMPTY_BYTES
@@ -725,14 +732,6 @@ abstract class Item : Cloneable, ItemID, Loggable {
     @ApiStatus.Internal
     open fun getNetId(): Int {
         return netId!!
-    }
-
-    @ApiStatus.Internal
-    open fun setNetId(netId: Int?) {
-        if (netId != null) {
-            require(netId >= 0) { "stack network id cannot be negative" }
-            this.netId = netId
-        } else this.netId = netId
     }
 
     @ApiStatus.Internal

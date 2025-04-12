@@ -692,7 +692,7 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, Class<out Item?>> {
                         )
                     )
                     val ci = customItem as Item
-                    ci.setNetId(null)
+                    ci.netId = (null)
                     Registries.CREATIVE.addCreativeItem(ci)
                 } else {
                     throw RegisterException("This item has already been registered with the identifier: $key")

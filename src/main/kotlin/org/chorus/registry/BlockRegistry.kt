@@ -1228,7 +1228,7 @@ class BlockRegistry : IRegistry<String, Block?, Class<out Block?>>, Loggable {
                     Registries.ITEM_RUNTIMEID.registerCustomRuntimeItem(RuntimeEntry(customBlock.id, rid, false))
                     if (customBlock.shouldBeRegisteredInCreative()) {
                         val itemBlock = ItemBlock(customBlock.toBlock())
-                        itemBlock.setNetId(null)
+                        itemBlock.netId = (null)
                         Registries.CREATIVE.addCreativeItem(itemBlock)
                     }
                     KEYSET.add(key)

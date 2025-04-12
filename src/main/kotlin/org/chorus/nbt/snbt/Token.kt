@@ -13,6 +13,21 @@ open class Token : SNBTConstants, Node {
     var type: SNBTConstants.TokenType? = null
         protected set
     override var tokenSource: SNBTLexer? = null
+        get() {
+            var flm = field
+            // If this is null, and we have chained tokens,
+            // we try to get it from there! (Why not?)
+            if (flm == null) {
+                if (prependedToken != null) {
+                    flm = prependedToken!!.tokenSource
+                }
+                if (flm == null && appendedToken != null) {
+                    flm = appendedToken!!.tokenSource
+                }
+            }
+            return flm
+        }
+
     override var beginOffset: Int = 0
     override var endOffset: Int = 0
     override var isUnparsed: Boolean = false
@@ -57,51 +72,6 @@ open class Token : SNBTConstants, Node {
         this.tokenSource = tokenSource
     }
 
-    /**
-     * It would be extremely rare that an application
-     * programmer would use this method. It needs to
-     * be public because it is part of the org.chorus.nbt.snbt.Node interface.
-     */
-    fun setBeginOffset(beginOffset: Int) {
-        this.beginOffset = beginOffset
-    }
-
-    /**
-     * It would be extremely rare that an application
-     * programmer would use this method. It needs to
-     * be public because it is part of the org.chorus.nbt.snbt.Node interface.
-     */
-    fun setEndOffset(endOffset: Int) {
-        this.endOffset = endOffset
-    }
-
-    /**
-     * @return the SNBTLexer object that handles
-     * location info for the tokens.
-     */
-    fun getTokenSource(): SNBTLexer? {
-        var flm = this.tokenSource
-        // If this is null and we have chained tokens,
-        // we try to get it from there! (Why not?)
-        if (flm == null) {
-            if (prependedToken != null) {
-                flm = prependedToken!!.getTokenSource()
-            }
-            if (flm == null && appendedToken != null) {
-                flm = appendedToken!!.getTokenSource()
-            }
-        }
-        return flm
-    }
-
-    /**
-     * It should be exceedingly rare that an application
-     * programmer needs to use this method.
-     */
-    fun setTokenSource(tokenSource: SNBTLexer?) {
-        this.tokenSource = tokenSource
-    }
-
     val isVirtual: Boolean
         /**
          * @return whether this Token represent actual input or was it inserted somehow?
@@ -113,14 +83,6 @@ open class Token : SNBTConstants, Node {
          * @return Did we skip this token in parsing?
          */
         get() = false
-
-    fun getBeginOffset(): Int {
-        return beginOffset
-    }
-
-    fun getEndOffset(): Int {
-        return endOffset
-    }
 
     /**
      * @return the string image of the token.
@@ -167,21 +129,21 @@ open class Token : SNBTConstants, Node {
     fun nextCachedToken(): Token? {
         if (type == SNBTConstants.TokenType.EOF) return null
         if (appendedToken != null) return appendedToken
-        val tokenSource = getTokenSource()
-        return tokenSource?.nextCachedToken(getEndOffset())
+        val tokenSource = tokenSource
+        return tokenSource?.nextCachedToken(endOffset)
     }
 
     fun previousCachedToken(): Token? {
         if (prependedToken != null) return prependedToken
-        if (getTokenSource() == null) return null
-        return getTokenSource()!!.previousCachedToken(getBeginOffset())
+        if (tokenSource == null) return null
+        return tokenSource!!.previousCachedToken(beginOffset)
     }
 
     val previousToken: Token?
         get() = previousCachedToken()
 
     fun replaceType(type: SNBTConstants.TokenType): Token {
-        val result = newToken(type, getTokenSource(), getBeginOffset(), getEndOffset())
+        val result = newToken(type, tokenSource, beginOffset, endOffset)
         result.prependedToken = this.prependedToken
         result.appendedToken = this.appendedToken
         result.isInserted = this.isInserted
@@ -192,7 +154,7 @@ open class Token : SNBTConstants, Node {
             result.prependedToken!!.appendedToken = result
         }
         if (!result.isInserted) {
-            getTokenSource()!!.cacheToken(result)
+            tokenSource!!.cacheToken(result)
         }
         return result
     }
@@ -200,8 +162,8 @@ open class Token : SNBTConstants, Node {
     override val source: String?
         get() {
             if (type == SNBTConstants.TokenType.EOF) return ""
-            val flm = getTokenSource()
-            return flm?.getText(getBeginOffset(), getEndOffset())
+            val flm = tokenSource
+            return flm?.getText(beginOffset, endOffset)
         }
 
     constructor()
@@ -287,7 +249,7 @@ open class Token : SNBTConstants, Node {
             appendedToken = otherTok.appendedToken
             prependedToken = otherTok.prependedToken
         }
-        setTokenSource(from.tokenSource)
+        tokenSource = (from.tokenSource)
     }
 
     override fun copyLocationInfo(start: Node, end: Node) {

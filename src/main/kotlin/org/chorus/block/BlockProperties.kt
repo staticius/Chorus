@@ -38,7 +38,7 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
 
         var specialValueBits: Byte = 0
         for (value in this.propertyTypeSet) {
-            specialValueBits = (specialValueBits + value.getBitSize()).toByte()
+            specialValueBits = (specialValueBits + value.bitSize).toByte()
         }
         this.specialValueBits = specialValueBits
 

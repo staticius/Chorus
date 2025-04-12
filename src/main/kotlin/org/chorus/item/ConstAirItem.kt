@@ -67,9 +67,6 @@ class ConstAirItem : Item("minecraft:air") {
     override fun setCanPlaceOn(blocks: Array<Block>) {
     }
 
-    override fun setNetId(netId: Int?) {
-    }
-
     override fun setCount(count: Int) {
     }
 

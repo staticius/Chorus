@@ -10,7 +10,7 @@ interface BlockPropertyType<DATATYPE> {
 
     fun tryCreateValue(value: Any?): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>, *>?
 
-    fun getBitSize(): Byte
+    val bitSize: Byte
 
     fun createDefaultValue(): BlockPropertyValue<DATATYPE, out BlockPropertyType<DATATYPE>, *> {
         return createValue(defaultValue)

@@ -1032,7 +1032,7 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         }
 
         if (netId != null) {
-            item.setNetId(netId)
+            item.netId = (netId)
         }
 
         val bytes = ByteArray(readUnsignedVarInt())
