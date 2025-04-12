@@ -36,7 +36,7 @@ class CircleMovementExecutor(//指示执行器应该从哪个Memory获取目标�
             circleLoc++
             val target = next(entity)
             lastLocation = target
-            if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed)
+            if (entity.movementSpeed != speed) entity.setMovementSpeedF(speed)
             entity.behaviorGroup.setForceUpdateRoute(updateRouteImmediatelyWhenTargetChange)
         }
         setRouteTarget(entity, lastLocation)

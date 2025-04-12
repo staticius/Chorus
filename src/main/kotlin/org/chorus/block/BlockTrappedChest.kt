@@ -93,7 +93,7 @@ class BlockTrappedChest @JvmOverloads constructor(blockstate: BlockState = Compa
         val blockEntity = level.getBlockEntity(this.position)
 
         if (blockEntity is BlockEntityChest) {
-            playerCount = blockEntity.inventory.getViewers().size
+            playerCount = blockEntity.inventory.viewers.size
         }
 
         return min(playerCount.toDouble(), 15.0).toInt()

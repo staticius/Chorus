@@ -115,17 +115,28 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     var onGround: Boolean = true
+    @JvmField
     var ownerNew: Long = -1L
+    @JvmField
     var persistent: Boolean = false
+    @JvmField
     var portalCooldown: Int = 0
+    @JvmField
     var saddled: Boolean = false
     open var sheared: Boolean = false
+    @JvmField
     var showBottom: Boolean = false
+    @JvmField
     var sitting: Boolean = false
+    @JvmField
     var skinId: Int = 0
+    @JvmField
     var strength: Int = 0
+    @JvmField
     var strengthMax: Int = 0
+    @JvmField
     var tags: ListTag<StringTag>? = null
+    @JvmField
     var uniqueId: Long = 0L
     open var variant: Int = 0
 

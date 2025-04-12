@@ -73,7 +73,7 @@ class BowShootExecutor(
             target = newTarget
         }
 
-        if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed)
+        if (entity.movementSpeed != speed) entity.setMovementSpeedF(speed)
         val clone = target!!.transform
 
         if (entity.position.distanceSquared(target!!.position) > maxShootDistanceSquared) {
@@ -110,7 +110,7 @@ class BowShootExecutor(
         removeRouteTarget(entity)
         removeLookTarget(entity)
         //重置速度
-        entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
+        entity.setMovementSpeedF(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
             entity.behaviorGroup.memoryStorage.clear(memory)
         }
@@ -123,7 +123,7 @@ class BowShootExecutor(
         removeRouteTarget(entity)
         removeLookTarget(entity)
         //重置速度
-        entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
+        entity.setMovementSpeedF(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
             entity.behaviorGroup.memoryStorage.clear(memory)
         }

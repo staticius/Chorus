@@ -34,7 +34,7 @@ class ChestInventory(chest: BlockEntityChest) : ContainerInventory(chest, Invent
     override fun onOpen(who: Player) {
         super.onOpen(who)
 
-        if (getViewers().size == 1) {
+        if (viewers.size == 1) {
             val pk = BlockEventPacket(
                 blockPosition = holder.vector3.asBlockVector3(),
                 eventType = 1,
@@ -62,7 +62,7 @@ class ChestInventory(chest: BlockEntityChest) : ContainerInventory(chest, Invent
     }
 
     override fun onClose(who: Player) {
-        if (getViewers().size == 1) {
+        if (viewers.size == 1) {
             val pk = BlockEventPacket(
                 blockPosition = holder.vector3.asBlockVector3(),
                 eventType = 1,

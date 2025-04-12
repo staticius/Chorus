@@ -329,7 +329,8 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
         }
     }
 
-    override fun getDiffHandDamage(): FloatArray {
-        return diffHandDamage
-    }
+    override val diffHandDamage: FloatArray
+        get() {
+            return diffHandDamage
+        }
 }

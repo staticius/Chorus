@@ -61,7 +61,7 @@ class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.
                 Item.AIR,
                 horseArmor, Item.AIR, Item.AIR
             )
-            Server.broadcastPacket(this.getViewers(), mobArmorEquipmentPacket)
+            Server.broadcastPacket(this.viewers, mobArmorEquipmentPacket)
         }
     }
 
@@ -80,7 +80,7 @@ class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.
     override fun onOpen(who: Player) {
         super.onOpen(who)
         who.dataPacket(createUpdateEquipmentPacket(who))
-        sendContents(this.getViewers())
+        sendContents(this.viewers)
     }
 
     protected fun createUpdateEquipmentPacket(who: Player): UpdateEquipmentPacket {

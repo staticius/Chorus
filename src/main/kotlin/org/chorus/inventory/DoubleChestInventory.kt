@@ -107,7 +107,7 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
         leftSide.viewers.add(who)
         rightSide.viewers.add(who)
 
-        if (getViewers().size == 1) {
+        if (viewers.size == 1) {
             val pk1 = BlockEventPacket(
                 blockPosition = leftSide.holder.vector3.asBlockVector3(),
                 eventType = 1,
@@ -140,7 +140,7 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
     }
 
     override fun onClose(who: Player) {
-        if (getViewers().size == 1) {
+        if (viewers.size == 1) {
             val pk1 = BlockEventPacket(
                 blockPosition = rightSide.holder.vector3.asBlockVector3(),
                 eventType = 1,

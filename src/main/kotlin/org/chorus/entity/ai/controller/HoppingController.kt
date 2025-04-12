@@ -29,7 +29,7 @@ class HoppingController(moveCooldown: Int) : WalkController() {
         if (entity.hasMoveDirection() && !entity.isShouldUpdateMoveDirection && currentJumpCoolDown > moveCooldown) {
             //clone防止异步导致的NPE
             val direction = entity.moveDirectionEnd!!.clone()
-            val speed = entity.getMovementSpeed()
+            val speed = entity.movementSpeed
             if (entity.motion.x * entity.motion.x + entity.motion.z * entity.motion.z > speed * speed * 0.4756) {
                 entity.setDataFlag(EntityFlag.MOVING, false)
                 return false

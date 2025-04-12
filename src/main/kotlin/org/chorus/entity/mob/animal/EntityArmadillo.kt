@@ -120,7 +120,7 @@ class EntityArmadillo(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nb
     override fun initEntity() {
         this.maxHealth = 12
         super.initEntity()
-        setMovementSpeed(0.5f)
+        setMovementSpeedF(0.5f)
         setRollState(RollState.UNROLLED)
         memoryStorage.set<Int>(
             CoreMemoryTypes.Companion.NEXT_SHED,

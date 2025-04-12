@@ -1308,10 +1308,10 @@ class Player(
 
                 if (this.wasInSoulSandCompatible && !isSoulSandCompatible) {
                     this.wasInSoulSandCompatible = false
-                    this.setMovementSpeed(this.getMovementSpeed() / this.soulSpeedMultiplier)
+                    this.setMovementSpeedF(this.movementSpeed / this.soulSpeedMultiplier)
                 } else if (!this.wasInSoulSandCompatible && isSoulSandCompatible) {
                     this.wasInSoulSandCompatible = true
-                    this.setMovementSpeed(this.getMovementSpeed() * this.soulSpeedMultiplier)
+                    this.setMovementSpeedF(this.movementSpeed * this.soulSpeedMultiplier)
                 }
             }
         }
@@ -1668,7 +1668,7 @@ class Player(
 
         this.sendData(this)
 
-        this.setMovementSpeed(DEFAULT_SPEED)
+        this.setMovementSpeedF(DEFAULT_SPEED)
 
         getAdventureSettings().update()
         inventory.sendContents(this)
@@ -2740,7 +2740,7 @@ class Player(
                 .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f),
             getAttribute(Attribute.MAX_HUNGER)
                 .setValue(foodData!!.getFood().toFloat()),
-            getAttribute(Attribute.MOVEMENT_SPEED).setValue(this.getMovementSpeed()),
+            getAttribute(Attribute.MOVEMENT_SPEED).setValue(this.movementSpeed),
             getAttribute(Attribute.EXPERIENCE_LEVEL).setValue(
                 experienceLevel.toFloat()
             ),
@@ -4205,7 +4205,7 @@ class Player(
      *
      * @see .setMovementSpeed
      */
-    override fun setMovementSpeed(speed: Float) {
+    override fun setMovementSpeedF(speed: Float) {
         setMovementSpeed(speed, true)
     }
 
@@ -4219,7 +4219,7 @@ class Player(
      * @param send  是否发送数据包[UpdateAttributesPacket]到客户端<br></br>Whether to send [UpdateAttributesPacket] to the client
      */
     fun setMovementSpeed(speed: Float, send: Boolean) {
-        super.setMovementSpeed(speed)
+        super.setMovementSpeedF(speed)
         if (this.spawned && send) {
             this.sendMovementSpeed(speed)
         }
@@ -4996,10 +4996,10 @@ class Player(
         if (value && this.getFreezingTicks() > 0) return
         if (isSprinting() != value) {
             super.setSprinting(value)
-            this.setMovementSpeed(if (value) getMovementSpeed() * 1.3f else getMovementSpeed() / 1.3f)
+            this.setMovementSpeedF(if (value) movementSpeed * 1.3f else movementSpeed / 1.3f)
 
             if (this.hasEffect(EffectType.SPEED)) {
-                val movementSpeed = this.getMovementSpeed()
+                val movementSpeed = this.movementSpeed
                 this.sendMovementSpeed(if (value) movementSpeed * 1.3f else movementSpeed)
             }
         }

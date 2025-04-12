@@ -80,7 +80,7 @@ class VillagerBreedingExecutor(
         //clear look target
         entity.lookTarget = null
         //reset move speed
-        entity.setMovementSpeed(0.1f)
+        entity.setMovementSpeedF(0.1f)
         //interrupt in love status
         entity.memoryStorage.set(CoreMemoryTypes.WILLING, false)
         entity.memoryStorage.set(CoreMemoryTypes.LAST_IN_LOVE_TIME, entity.level!!.tick)

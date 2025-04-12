@@ -28,13 +28,13 @@ class BreezeJumpExecutor : EntityControl, IBehaviorExecutor {
     }
 
     override fun onStop(entity: EntityMob) {
-        entity.setMovementSpeed(EntityLiving.Companion.DEFAULT_SPEED)
+        entity.setMovementSpeedF(EntityLiving.Companion.DEFAULT_SPEED)
         entity.setEnablePitch(false)
         stopSequence(entity)
     }
 
     override fun onInterrupt(entity: EntityMob) {
-        entity.setMovementSpeed(EntityLiving.Companion.DEFAULT_SPEED)
+        entity.setMovementSpeedF(EntityLiving.Companion.DEFAULT_SPEED)
         entity.setEnablePitch(false)
         stopSequence(entity)
     }

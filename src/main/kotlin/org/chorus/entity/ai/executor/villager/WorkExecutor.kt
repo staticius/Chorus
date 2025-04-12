@@ -40,7 +40,7 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.SITE_BLOCK, 0.
                         1 -> {
                             run {
                                 if (walkTick % 10 == 0) {
-                                    entity.setMovementSpeed(0.3f)
+                                    entity.setMovementSpeedF(0.3f)
                                     var minDistance = Float.MAX_VALUE.toDouble()
                                     var nearest: Block? = null
                                     for (block in Arrays.stream<Block>(

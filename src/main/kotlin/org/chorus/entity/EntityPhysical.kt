@@ -194,7 +194,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         val tmp: Vector3 = Vector3()
         var blockLiquid: BlockLiquid? = null
         for (each: Block? in level!!.getCollisionBlocks(
-            getOffsetBoundingBox(),
+            offsetBoundingBox,
             targetFirst = false, ignoreCollidesCheck = true
         )
         { block: Block? -> block is BlockLiquid }) {
@@ -256,7 +256,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
     }
 
     protected fun handleCollideMovement(currentTick: Int) {
-        val selfAABB: AxisAlignedBB = getOffsetBoundingBox().getOffsetBoundingBox(
+        val selfAABB: AxisAlignedBB = offsetBoundingBox.getOffsetBoundingBox(
             motion.x,
             motion.y, motion.z
         )
@@ -284,7 +284,7 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         stream.forEach { each ->
             val targetAABB: AxisAlignedBB = when (each) {
                 is Player -> each.reCalcOffsetBoundingBox()
-                is EntityPhysical -> each.getOffsetBoundingBox()
+                is EntityPhysical -> each.offsetBoundingBox
                 else -> return@forEach
             }
             // 计算碰撞箱
@@ -352,10 +352,6 @@ abstract class EntityPhysical(chunk: IChunk?, nbt: CompoundTag?) : EntityCreatur
         offsetBoundingBox.maxY = (position.y + this.getHeight())
         offsetBoundingBox.minZ = (position.z - dz)
         offsetBoundingBox.maxZ = (position.z + dz)
-    }
-
-    fun getOffsetBoundingBox(): AxisAlignedBB {
-        return this.offsetBoundingBox
     }
 
     override fun resetFallDistance() {

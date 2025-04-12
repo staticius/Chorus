@@ -10,16 +10,16 @@ class EffectSlowness :
         if (entity is EntityLiving) {
             val oldEffect: Effect? = entity.getEffect(this.getType())
             if (oldEffect != null) {
-                entity.setMovementSpeed(entity.getMovementSpeed() / (1 - 0.15f * oldEffect.getLevel()))
+                entity.setMovementSpeedF(entity.movementSpeed / (1 - 0.15f * oldEffect.getLevel()))
             }
 
-            entity.setMovementSpeed(entity.getMovementSpeed() * (1 - 0.15f * this.getLevel()))
+            entity.setMovementSpeedF(entity.movementSpeed * (1 - 0.15f * this.getLevel()))
         }
     }
 
     override fun remove(entity: Entity) {
         if (entity is EntityLiving) {
-            entity.setMovementSpeed(entity.getMovementSpeed() / (1 - 0.15f * this.getLevel()))
+            entity.setMovementSpeedF(entity.movementSpeed / (1 - 0.15f * this.getLevel()))
         }
     }
 }

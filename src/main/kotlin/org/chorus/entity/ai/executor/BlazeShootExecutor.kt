@@ -64,7 +64,7 @@ class BlazeShootExecutor(
             target = newTarget
         }
 
-        if (entity.getMovementSpeed() != speed) entity.setMovementSpeed(speed)
+        if (entity.movementSpeed != speed) entity.setMovementSpeedF(speed)
         val clone = target!!.transform
 
         if (entity.position.distanceSquared(target!!.position) > maxShootDistanceSquared) {
@@ -103,7 +103,7 @@ class BlazeShootExecutor(
     override fun onStop(entity: EntityMob) {
         removeRouteTarget(entity)
         removeLookTarget(entity)
-        entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
+        entity.setMovementSpeedF(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
             entity.behaviorGroup.memoryStorage.clear(memory)
         }
@@ -115,7 +115,7 @@ class BlazeShootExecutor(
     override fun onInterrupt(entity: EntityMob) {
         removeRouteTarget(entity)
         removeLookTarget(entity)
-        entity.setMovementSpeed(EntityLiving.DEFAULT_SPEED)
+        entity.setMovementSpeedF(EntityLiving.DEFAULT_SPEED)
         if (clearDataWhenLose) {
             entity.behaviorGroup.memoryStorage.clear(memory)
         }

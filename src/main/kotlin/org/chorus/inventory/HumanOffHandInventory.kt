@@ -38,7 +38,7 @@ class HumanOffHandInventory(holder: IHuman) : BaseInventory(holder, InventoryTyp
         if (holder is Player) {
             if (!holder.spawned) return
             if (send) {
-                this.sendContents(this.getViewers())
+                this.sendContents(this.viewers)
                 this.sendContents(holder.getEntity().viewers.values)
             }
         }

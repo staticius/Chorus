@@ -103,9 +103,10 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
     override val isEmpty: Boolean
         get() = true
 
-    override fun getViewers(): Set<Player> {
-        return emptySet()
-    }
+    override val viewers: Set<Player>
+        get() {
+            return emptySet()
+        }
 
     override val type: InventoryType
         get() = InventoryType.STRUCTURE_EDITOR

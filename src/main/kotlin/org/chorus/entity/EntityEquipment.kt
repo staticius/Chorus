@@ -24,11 +24,12 @@ class EntityEquipment(holder: InventoryHolder) : BaseInventory(holder, Inventory
         return entity
     }
 
-    override fun getViewers(): Set<Player> {
-        val viewers: MutableSet<Player> = HashSet(this.viewers)
-        viewers.addAll(entity.viewers.values)
-        return viewers
-    }
+    override val viewers: MutableSet<Player> = super.viewers
+        get() {
+            val viewers: MutableSet<Player> = HashSet(field)
+            viewers.addAll(entity.viewers.values)
+            return viewers
+        }
 
     override fun open(who: Player): Boolean {
         return viewers.add(who)

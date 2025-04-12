@@ -84,7 +84,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
      *
      * The damage that can be caused by the entity's empty hand at different difficulties.
      */
-    protected open lateinit var diffHandDamage: FloatArray
+    override lateinit var diffHandDamage: FloatArray
 
 
     override val equipment = EntityEquipment(this)
@@ -307,10 +307,6 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     }
 
     override val inventory: Inventory = this.equipment
-
-    override fun getDiffHandDamage(): FloatArray? {
-        return this.diffHandDamage
-    }
 
     override fun attackTarget(entity: Entity): Boolean {
         return entity is Player

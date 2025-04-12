@@ -79,7 +79,7 @@ open class EntityBreedingExecutor<T : EntityMob>(
         //clear look target
         entity.lookTarget = null
         //reset move speed
-        entity.setMovementSpeed(0.1f)
+        entity.setMovementSpeedF(0.1f)
         //interrupt in love status
         entity.memoryStorage.set(CoreMemoryTypes.IS_IN_LOVE, false)
     }

@@ -93,7 +93,7 @@ class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
         this.setHealthSafe(20f)
         this.setNameTagVisible(true)
         this.setNameTagAlwaysVisible(true)
-        this.setMovementSpeed(0.5f)
+        this.setMovementSpeedF(0.5f)
 
         this.dialog = FormWindowDialog(
             if (namedTag!!.contains(TAG_RAWTEXT_NAME)) namedTag!!.getString(TAG_RAWTEXT_NAME) else this.getNameTag(),

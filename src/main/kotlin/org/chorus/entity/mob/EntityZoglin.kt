@@ -93,15 +93,16 @@ class EntityZoglin(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt!!),
         return 1.4f
     }
 
-    override fun getDiffHandDamage(): FloatArray? {
-        if (isBaby()) {
-            return super.getDiffHandDamage()
-        } else return floatArrayOf(
-            Utils.rand(2.5f, 5f),
-            Utils.rand(3f, 8f),
-            Utils.rand(4.5f, 12f),
-        )
-    }
+    override val diffHandDamage: FloatArray
+        get() {
+            if (isBaby()) {
+                return super.diffHandDamage
+            } else return floatArrayOf(
+                Utils.rand(2.5f, 5f),
+                Utils.rand(3f, 8f),
+                Utils.rand(4.5f, 12f),
+            )
+        }
 
     override fun getOriginalName(): String {
         return "Zoglin"

@@ -110,7 +110,7 @@ abstract class BaseInventory(
             val ev = EntityInventoryChangeEvent(holder, this.getItem(index), item1, index)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
-                this.sendSlot(index, this.getViewers())
+                this.sendSlot(index, this.viewers)
                 return false
             }
 
@@ -357,7 +357,7 @@ abstract class BaseInventory(
                 )
                 Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
-                    this.sendSlot(index, this.getViewers())
+                    this.sendSlot(index, this.viewers)
                     return false
                 }
                 item = ev.newItem
@@ -379,10 +379,6 @@ abstract class BaseInventory(
         for (index in contents.keys) {
             this.clear(index)
         }
-    }
-
-    override fun getViewers(): Set<Player> {
-        return viewers
     }
 
     override fun open(who: Player): Boolean {
@@ -412,7 +408,7 @@ abstract class BaseInventory(
 
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
         if (send) {
-            this.sendSlot(index, this.getViewers())
+            this.sendSlot(index, this.viewers)
         }
 
         val blockHolder = holder
@@ -425,7 +421,7 @@ abstract class BaseInventory(
             if (playerHolder is Player) {
                 playerHolder.updateTrackingPositions(true)
             }
-            getViewers().forEach(Consumer { p: Player? -> p!!.updateTrackingPositions(true) })
+            viewers.forEach(Consumer { p: Player? -> p!!.updateTrackingPositions(true) })
         }
 
 

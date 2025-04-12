@@ -113,12 +113,12 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             val event = EntityFreezeEvent(this)
             Server.instance.pluginManager.callEvent(event)
             if (!event.isCancelled) {
-                this.setMovementSpeed(0.05.coerceAtLeast(getMovementSpeed() - 3.58e-4).toFloat())
+                this.setMovementSpeedF(0.05.coerceAtLeast(movementSpeed - 3.58e-4).toFloat())
             }
         } else if (this.getFreezingTicks() > 0 && !collidedWithPowderSnow) {
             this.addFreezingTicks(-1)
-            this.setMovementSpeed(
-                Player.DEFAULT_SPEED.toDouble().coerceAtMost(getMovementSpeed() + 3.58e-4).toFloat()
+            this.setMovementSpeedF(
+                Player.DEFAULT_SPEED.toDouble().coerceAtMost(movementSpeed + 3.58e-4).toFloat()
             ) //This magic number is to change the player's 0.05 speed within 140tick
         }
         if (this.getFreezingTicks() == 140 && level!!.tick % 40 == 0) {
@@ -228,7 +228,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     override fun close() {
         if (!this.closed) {
             if (inventory != null && (this !is Player || this.loggedIn)) {
-                for (viewer in inventory.getViewers()) {
+                for (viewer in inventory.viewers) {
                     viewer.removeWindow(this.inventory)
                 }
             }

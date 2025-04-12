@@ -261,9 +261,10 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
         )]
     }
 
-    override fun getDiffHandDamage(): FloatArray {
-        return DIFF_DAMAGE
-    }
+    override val diffHandDamage: FloatArray
+        get() {
+            return DIFF_DAMAGE
+        }
 
     override fun getExperienceDrops(): Int {
         return 1

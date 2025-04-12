@@ -276,10 +276,6 @@ interface Inventory {
         return type
     }
 
-    fun getViewers(): Set<Player> {
-        return viewers.toSet()
-    }
-
     companion object {
         const val MAX_STACK: Int = 64
     }

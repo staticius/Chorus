@@ -327,9 +327,10 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
         }
     }
 
-    override fun getDiffHandDamage(): FloatArray {
-        return diffHandDamage
-    }
+    override val diffHandDamage: FloatArray
+        get() {
+            return diffHandDamage
+        }
 
     companion object {
         //猫咪有11种颜色变种

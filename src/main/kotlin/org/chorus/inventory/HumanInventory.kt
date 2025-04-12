@@ -79,7 +79,7 @@ class HumanInventory(human: IHuman) //9+27+4
             Server.instance.pluginManager.callEvent(ev)
 
             if (ev.isCancelled) {
-                this.sendContents(this.getViewers())
+                this.sendContents(this.viewers)
                 return false
             }
 
@@ -143,7 +143,7 @@ class HumanInventory(human: IHuman) //9+27+4
             this.sendHeldItem((holder as Player))
         }
 
-        this.sendHeldItem(this.getViewers())
+        this.sendHeldItem(this.viewers)
     }
 
     fun sendHeldItem(vararg players: Player) {
@@ -176,7 +176,7 @@ class HumanInventory(human: IHuman) //9+27+4
         }
 
         if (index >= ARMORS_INDEX) {
-            this.sendArmorSlot(index - ARMORS_INDEX, this.getViewers())
+            this.sendArmorSlot(index - ARMORS_INDEX, this.viewers)
             this.sendArmorSlot(
                 index - ARMORS_INDEX,
                 holder.getEntity().viewers.values
@@ -365,7 +365,7 @@ class HumanInventory(human: IHuman) //9+27+4
             val ev = EntityArmorChangeEvent((holder as IHuman).getEntity(), this.getItem(index), item, index)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
-                this.sendArmorSlot(index, this.getViewers())
+                this.sendArmorSlot(index, this.viewers)
                 return false
             }
             item = ev.newItem
@@ -373,7 +373,7 @@ class HumanInventory(human: IHuman) //9+27+4
             val ev = EntityInventoryChangeEvent((holder as IHuman).getEntity(), this.getItem(index), item, index)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
-                this.sendSlot(index, this.getViewers())
+                this.sendSlot(index, this.viewers)
                 return false
             }
             item = ev.newItem
@@ -395,7 +395,7 @@ class HumanInventory(human: IHuman) //9+27+4
                 )
                 Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
-                    this.sendSlot(index, this.getViewers())
+                    this.sendSlot(index, this.viewers)
                     return false
                 }
                 item = ev.newItem
@@ -406,7 +406,7 @@ class HumanInventory(human: IHuman) //9+27+4
                 )
                 Server.instance.pluginManager.callEvent(ev)
                 if (ev.isCancelled) {
-                    this.sendSlot(index, this.getViewers())
+                    this.sendSlot(index, this.viewers)
                     return false
                 }
                 item = ev.newItem

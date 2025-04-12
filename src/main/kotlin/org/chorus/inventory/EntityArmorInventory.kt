@@ -120,11 +120,12 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
         }
     }
 
-    override fun getViewers(): Set<Player> {
-        val viewers: MutableSet<Player> = HashSet(this.viewers)
-        viewers.addAll(entity.viewers.values)
-        return viewers
-    }
+    override val viewers: Set<Player>
+        get() {
+            val viewers: MutableSet<Player> = HashSet(this.viewers)
+            viewers.addAll(entity.viewers.values)
+            return viewers
+        }
 
     companion object {
         const val SLOT_HEAD: Int = 0

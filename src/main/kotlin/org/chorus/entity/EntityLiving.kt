@@ -32,7 +32,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     protected open var attackTime: Short = 0
     protected var invisible: Boolean = false
     var movementSpeed: Float = DEFAULT_SPEED
-        get() = getMovementSpeed()
+        get() = movementSpeed
         set(value) {
             field = round(value.toDouble()).toFloat()
         }
@@ -382,10 +382,6 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         return null
     }
 
-    fun getMovementSpeed(): Float {
-        return this.movementSpeed
-    }
-
     /**
      * 设置该有生命实体的移动速度
      *
@@ -394,7 +390,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
      *
      * @param speed 速度大小<br></br>Speed value
      */
-    open fun setMovementSpeed(speed: Float) {
+    open fun setMovementSpeedF(speed: Float) {
         this.movementSpeed = round(speed.toDouble()).toFloat()
     }
 

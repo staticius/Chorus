@@ -30,7 +30,7 @@ class EnchantInventory(table: BlockEntityEnchantTable) : ContainerInventory(tabl
     override fun onSlotChange(index: Int, before: Item, send: Boolean) {
         if (index == 0) {
             if (before.isNothing) {
-                for (viewer in this.getViewers()) {
+                for (viewer in this.viewers) {
                     val options = EnchantmentHelper.getEnchantOptions(
                         (holder as BlockEntityEnchantTable),
                         first, viewer.getEnchantmentSeed()
@@ -44,7 +44,7 @@ class EnchantInventory(table: BlockEntityEnchantTable) : ContainerInventory(tabl
                     }
                 }
             } else {
-                for (viewer in this.getViewers()) {
+                for (viewer in this.viewers) {
                     val pk = PlayerEnchantOptionsPacket()
                     viewer.dataPacket(pk)
                 }

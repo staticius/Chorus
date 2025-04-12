@@ -15,9 +15,10 @@ interface EntityCanAttack {
      *
      * @return 一个包含所有难度下伤害的数组, 0 1 2分别代表简单、普通、困难难度<br></br>An array containing damage on all difficulties, 0 1 2 for easy, normal and hard difficulties respectively
      */
-    fun getDiffHandDamage(): FloatArray? {
-        return EMPTY_FLOAT_ARRAY
-    }
+    val diffHandDamage: FloatArray
+        get() {
+            return EMPTY_FLOAT_ARRAY
+        }
 
     /**
      * 得到指定难度下不携带物品能造成的伤害.
@@ -29,7 +30,7 @@ interface EntityCanAttack {
      * @return 伤害<br></br>damage
      */
     fun getDiffHandDamage(difficulty: Int): Float {
-        return if (difficulty != 0) getDiffHandDamage()!!.get(difficulty - 1) else 0f
+        return if (difficulty != 0) diffHandDamage!![difficulty - 1] else 0f
     }
 
     fun attackTarget(entity: Entity): Boolean

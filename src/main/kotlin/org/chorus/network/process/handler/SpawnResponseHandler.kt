@@ -110,7 +110,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         player.setNameTagVisible(true)
         player.setNameTagAlwaysVisible(true)
         player.setCanClimb(true)
-        player.sendMovementSpeed(player.getMovementSpeed())
+        player.sendMovementSpeed(player.movementSpeed)
         SpawnResponseHandler.log.debug("Sending player list")
 
         server.addOnlinePlayer(player)

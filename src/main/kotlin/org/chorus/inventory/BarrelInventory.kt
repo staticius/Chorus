@@ -19,7 +19,7 @@ class BarrelInventory(barrel: BlockEntityBarrel) : ContainerInventory(barrel, In
     override fun onOpen(who: Player) {
         super.onOpen(who)
 
-        if (getViewers().size == 1) {
+        if (viewers.size == 1) {
             val barrel = this.holder as BlockEntityBarrel
             val level = barrel.level
             val block = barrel.block
@@ -36,7 +36,7 @@ class BarrelInventory(barrel: BlockEntityBarrel) : ContainerInventory(barrel, In
     override fun onClose(who: Player) {
         super.onClose(who)
 
-        if (getViewers().isEmpty()) {
+        if (viewers.isEmpty()) {
             val barrel = this.holder as BlockEntityBarrel
             val level = barrel.level
             val block = barrel.block
