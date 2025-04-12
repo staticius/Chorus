@@ -19,9 +19,6 @@ class SetSpawnPositionPacket : DataPacket() {
     @JvmField
     var dimension: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(this.spawnType)
         byteBuf.writeBlockVector3(this.x, this.y, this.z)

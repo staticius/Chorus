@@ -2,23 +2,12 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-/**
- * @since 15-10-14
- */
-
-
 class TakeItemEntityPacket : DataPacket() {
     @JvmField
     var entityId: Long = 0
 
     @JvmField
     var target: Long = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.target = byteBuf.readActorRuntimeID()
-        this.entityId = byteBuf.readActorRuntimeID()
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(this.target)
@@ -31,5 +20,16 @@ class TakeItemEntityPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<TakeItemEntityPacket> {
+        override fun decode(byteBuf: HandleByteBuf): TakeItemEntityPacket {
+            val packet = TakeItemEntityPacket()
+
+            packet.target = byteBuf.readActorRuntimeID()
+            packet.entityId = byteBuf.readActorRuntimeID()
+
+            return packet
+        }
     }
 }

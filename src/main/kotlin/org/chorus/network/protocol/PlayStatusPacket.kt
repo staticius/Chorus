@@ -2,18 +2,9 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-/**
- * @since 15-10-13
- */
-
-
 class PlayStatusPacket : DataPacket() {
     @JvmField
     var status: Int = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeInt(this.status)

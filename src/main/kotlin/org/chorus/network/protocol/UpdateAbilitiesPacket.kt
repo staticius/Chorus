@@ -22,10 +22,6 @@ class UpdateAbilitiesPacket : DataPacket() {
     @JvmField
     val abilityLayers: MutableList<AbilityLayer> = ObjectArrayList()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        throw UnsupportedOperationException()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeLongLE(this.entityId)
         byteBuf.writeUnsignedVarInt(playerPermission!!.ordinal)

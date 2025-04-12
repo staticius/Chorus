@@ -10,11 +10,6 @@ class PlayerStartItemCoolDownPacket : DataPacket() {
     @JvmField
     var coolDownDuration: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.itemCategory = byteBuf.readString()
-        this.coolDownDuration = byteBuf.readVarInt()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeString(itemCategory!!)
         byteBuf.writeVarInt(coolDownDuration)
@@ -26,5 +21,16 @@ class PlayerStartItemCoolDownPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<PlayerStartItemCoolDownPacket> {
+        override fun decode(byteBuf: HandleByteBuf): PlayerStartItemCoolDownPacket {
+            val packet = PlayerStartItemCoolDownPacket()
+
+            packet.itemCategory = byteBuf.readString()
+            packet.coolDownDuration = byteBuf.readVarInt()
+
+            return packet
+        }
     }
 }

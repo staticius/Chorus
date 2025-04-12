@@ -5,7 +5,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.PropertySyncData
 import org.chorus.utils.Binary
 
-
 class SetEntityDataPacket : DataPacket() {
     @JvmField
     var eid: Long = 0
@@ -13,9 +12,6 @@ class SetEntityDataPacket : DataPacket() {
     var entityData: EntityDataMap = EntityDataMap()
     var syncedProperties: PropertySyncData = PropertySyncData(intArrayOf(), floatArrayOf())
     var frame: Long = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarLong(this.eid)

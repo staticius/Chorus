@@ -4,11 +4,6 @@ import io.netty.util.internal.EmptyArrays
 import org.chorus.network.connection.util.HandleByteBuf
 import java.util.function.Function
 
-/**
- * @since 15-10-13
- */
-
-
 class TextPacket : DataPacket() {
     @JvmField
     var type: Byte = 0
@@ -24,32 +19,7 @@ class TextPacket : DataPacket() {
     var isLocalized: Boolean = false
     var xboxUserId: String = ""
     var platformChatId: String = ""
-
-    /**
-     * @since v685
-     */
     var filteredMessage: String = ""
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.type = byteBuf.readByte()
-        this.isLocalized = byteBuf.readBoolean() || type == TYPE_TRANSLATION
-        when (type) {
-            TYPE_CHAT, TYPE_WHISPER, TYPE_ANNOUNCEMENT -> {
-                this.source = byteBuf.readString()
-                this.message = byteBuf.readString()
-            }
-
-            TYPE_RAW, TYPE_TIP, TYPE_SYSTEM, TYPE_OBJECT, TYPE_OBJECT_WHISPER -> this.message = byteBuf.readString()
-            TYPE_TRANSLATION, TYPE_POPUP, TYPE_JUKEBOX_POPUP -> {
-                this.message = byteBuf.readString()
-                this.parameters = byteBuf.readArray<String>(
-                    String::class.java,
-                    Function { obj: HandleByteBuf -> obj.readString() })
-            }
-        }
-        this.xboxUserId = byteBuf.readString()
-        this.platformChatId = byteBuf.readString()
-        this.filteredMessage = byteBuf.readString()
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(type.toInt())
@@ -85,7 +55,33 @@ class TextPacket : DataPacket() {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<TextPacket> {
+        override fun decode(byteBuf: HandleByteBuf): TextPacket {
+            val packet = TextPacket()
+
+            packet.type = byteBuf.readByte()
+            packet.isLocalized = byteBuf.readBoolean() || packet.type == TYPE_TRANSLATION
+            when (packet.type) {
+                TYPE_CHAT, TYPE_WHISPER, TYPE_ANNOUNCEMENT -> {
+                    packet.source = byteBuf.readString()
+                    packet.message = byteBuf.readString()
+                }
+
+                TYPE_RAW, TYPE_TIP, TYPE_SYSTEM, TYPE_OBJECT, TYPE_OBJECT_WHISPER -> packet.message = byteBuf.readString()
+                TYPE_TRANSLATION, TYPE_POPUP, TYPE_JUKEBOX_POPUP -> {
+                    packet.message = byteBuf.readString()
+                    packet.parameters = byteBuf.readArray<String>(
+                        String::class.java,
+                        Function { obj: HandleByteBuf -> obj.readString() })
+                }
+            }
+            packet.xboxUserId = byteBuf.readString()
+            packet.platformChatId = byteBuf.readString()
+            packet.filteredMessage = byteBuf.readString()
+
+            return packet
+        }
+
         const val TYPE_RAW: Byte = 0
         const val TYPE_CHAT: Byte = 1
         const val TYPE_TRANSLATION: Byte = 2

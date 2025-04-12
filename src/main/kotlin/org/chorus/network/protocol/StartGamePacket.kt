@@ -13,11 +13,6 @@ import java.io.IOException
 import java.nio.ByteOrder
 import java.util.*
 
-/**
- * @since 15-10-13
- */
-
-
 class StartGamePacket : DataPacket() {
     var entityUniqueId: Long = 0
     var entityRuntimeId: Long = 0
@@ -82,52 +77,28 @@ class StartGamePacket : DataPacket() {
     var isDisablingCustomSkins: Boolean = false
     var clientSideGenerationEnabled: Boolean = false
 
-    /**
-     * @since v567
-     */
     var emoteChatMuted: Boolean = false
 
     /**
      * Whether block runtime IDs should be replaced by 32-bit integer hashes of the NBT block state.
      * Unlike runtime IDs, this hashes should be persistent across versions and should make support for data-driven/custom blocks easier.
-     *
-     * @since v582
      */
     var blockNetworkIdsHashed: Boolean = false
 
-    /**
-     * @since v582
-     */
     var createdInEditor: Boolean = false
 
-    /**
-     * @since v582
-     */
+
     var exportedFromEditor: Boolean = false
     var chatRestrictionLevel: Byte = 0
     var disablePlayerInteractions: Boolean = false
 
-    /**
-     * @since v589
-     */
     var isSoundsServerAuthoritative: Boolean = false
 
-    /**
-     * @since v685
-     */
     private val serverId = ""
 
-    /**
-     * @since v685
-     */
     private val worldId = ""
 
-    /**
-     * @since v685
-     */
     private val scenarioId = ""
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorUniqueID(this.entityUniqueId)

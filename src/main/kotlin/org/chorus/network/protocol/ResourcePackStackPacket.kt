@@ -11,9 +11,6 @@ class ResourcePackStackPacket : DataPacket() {
     var gameVersion: String = "*"
     var isHasEditorPacks: Boolean = false
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBoolean(this.mustAccept)
 

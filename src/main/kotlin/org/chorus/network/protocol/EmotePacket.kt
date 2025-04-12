@@ -12,16 +12,7 @@ class EmotePacket : DataPacket() {
     var emoteDuration: Int = 0
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.EMOTE_PACKET
-    }
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.runtimeId = byteBuf.readActorRuntimeID()
-        this.emoteID = byteBuf.readString()
-        this.emoteDuration = byteBuf.readUnsignedVarInt()
-        this.xuid = byteBuf.readString()
-        this.platformId = byteBuf.readString()
-        this.flags = byteBuf.readByte()
+        return ProtocolInfo.EMOTE_PACKET
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
@@ -35,5 +26,20 @@ class EmotePacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<EmotePacket> {
+        override fun decode(byteBuf: HandleByteBuf): EmotePacket {
+            val packet = EmotePacket()
+
+            packet.runtimeId = byteBuf.readActorRuntimeID()
+            packet.emoteID = byteBuf.readString()
+            packet.emoteDuration = byteBuf.readUnsignedVarInt()
+            packet.xuid = byteBuf.readString()
+            packet.platformId = byteBuf.readString()
+            packet.flags = byteBuf.readByte()
+
+            return packet
+        }
     }
 }

@@ -20,9 +20,6 @@ open class UpdateBlockPacket : DataPacket() {
     var flags: Int = 0
     var dataLayer: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBlockVector3(x, y, z)
         byteBuf.writeUnsignedVarInt(blockRuntimeId)

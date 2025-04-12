@@ -38,15 +38,6 @@ class NPCDialoguePacket : DataPacket() {
     @JvmField
     var actionJson: String = ""
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        runtimeEntityId = byteBuf.readLongLE()
-        action = ACTIONS[byteBuf.readVarInt()]
-        dialogue = byteBuf.readString()
-        sceneName = byteBuf.readString()
-        npcName = byteBuf.readString()
-        actionJson = byteBuf.readString()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeLongLE(runtimeEntityId)
         byteBuf.writeVarInt(action.ordinal)
@@ -63,14 +54,27 @@ class NPCDialoguePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.NPC_DIALOGUE_PACKET
+        return ProtocolInfo.NPC_DIALOGUE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<NPCDialoguePacket> {
+        override fun decode(byteBuf: HandleByteBuf): NPCDialoguePacket {
+            val packet = NPCDialoguePacket()
+
+            packet.runtimeEntityId = byteBuf.readLongLE()
+            packet.action = ACTIONS[byteBuf.readVarInt()]
+            packet.dialogue = byteBuf.readString()
+            packet.sceneName = byteBuf.readString()
+            packet.npcName = byteBuf.readString()
+            packet.actionJson = byteBuf.readString()
+
+            return packet
+        }
+
         private val ACTIONS = NPCDialogAction.entries.toTypedArray()
     }
 }

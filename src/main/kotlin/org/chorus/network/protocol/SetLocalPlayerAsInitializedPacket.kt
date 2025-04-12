@@ -6,10 +6,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 class SetLocalPlayerAsInitializedPacket : DataPacket() {
     var eid: Long = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        eid = byteBuf.readUnsignedVarLong()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarLong(eid)
     }
@@ -20,5 +16,15 @@ class SetLocalPlayerAsInitializedPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<SetLocalPlayerAsInitializedPacket> {
+        override fun decode(byteBuf: HandleByteBuf): SetLocalPlayerAsInitializedPacket {
+            val packet = SetLocalPlayerAsInitializedPacket()
+
+            packet.eid = byteBuf.readUnsignedVarLong()
+
+            return packet
+        }
     }
 }

@@ -10,20 +10,7 @@ import org.chorus.network.protocol.types.PlayerPermission
 class RequestPermissionsPacket : DataPacket() {
     var uniqueEntityId: Long = 0
     var permissions: PlayerPermission? = null
-
-    //Serialized capability list
-    //It is an 8-bit binary number, each bit corresponds to an ability
     var customPermissions: Int = 0
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.uniqueEntityId = byteBuf.readLongLE()
-        this.permissions = PlayerPermission.entries[byteBuf.readByte() / 2]
-        this.customPermissions = byteBuf.readShortLE().toInt()
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-        throw UnsupportedOperationException()
-    }
 
     fun parseCustomPermissions(): Set<PlayerAbility> {
         val abilities = HashSet<PlayerAbility>()
@@ -49,8 +36,18 @@ class RequestPermissionsPacket : DataPacket() {
         handler.handle(this)
     }
 
-    companion object {
-        //Controllable capabilities in the permission list
+    companion object : PacketDecoder<RequestPermissionsPacket> {
+        override fun decode(byteBuf: HandleByteBuf): RequestPermissionsPacket {
+            val packet = RequestPermissionsPacket()
+
+            packet.uniqueEntityId = byteBuf.readLongLE()
+            packet.permissions = PlayerPermission.entries[byteBuf.readByte() / 2]
+            packet.customPermissions = byteBuf.readShortLE().toInt()
+
+            return packet
+        }
+
+        // Controllable capabilities in the permission list
         @JvmField
         val CONTROLLABLE_ABILITIES: Array<PlayerAbility> = arrayOf(
             PlayerAbility.BUILD,

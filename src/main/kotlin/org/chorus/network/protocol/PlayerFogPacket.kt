@@ -9,9 +9,6 @@ class PlayerFogPacket : DataPacket() {
     @JvmField
     var fogStack: List<Fog> = ArrayList()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeArray(
             fogStack

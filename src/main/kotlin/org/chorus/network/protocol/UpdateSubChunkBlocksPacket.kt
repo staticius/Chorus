@@ -13,9 +13,6 @@ class UpdateSubChunkBlocksPacket : DataPacket() {
     val standardBlocks: MutableList<BlockChangeEntry> = ObjectArrayList()
     val extraBlocks: MutableList<BlockChangeEntry> = ObjectArrayList()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(chunkX)
         byteBuf.writeUnsignedVarInt(chunkY)

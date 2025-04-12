@@ -8,9 +8,6 @@ class UpdateBlockSyncedPacket : UpdateBlockPacket() {
     var actorUniqueId: Long = 0
     var updateType: BlockSyncType? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         super.encode(byteBuf)
         byteBuf.writeUnsignedVarLong(actorUniqueId)

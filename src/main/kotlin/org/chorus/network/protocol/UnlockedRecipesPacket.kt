@@ -8,13 +8,6 @@ class UnlockedRecipesPacket : DataPacket() {
     var unlockedNotification: Boolean = false
     val unlockedRecipes: MutableList<String> = ObjectArrayList()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.unlockedNotification = byteBuf.readBoolean()
-        for (i in 0..<byteBuf.readUnsignedVarInt()) {
-            unlockedRecipes.add(byteBuf.readString())
-        }
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBoolean(this.unlockedNotification)
         byteBuf.writeUnsignedVarInt(unlockedRecipes.size)
@@ -24,10 +17,23 @@ class UnlockedRecipesPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UNLOCKED_RECIPES_PACKET
+        return ProtocolInfo.UNLOCKED_RECIPES_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<UnlockedRecipesPacket> {
+        override fun decode(byteBuf: HandleByteBuf): UnlockedRecipesPacket {
+            val packet = UnlockedRecipesPacket()
+
+            packet.unlockedNotification = byteBuf.readBoolean()
+            for (i in 0..<byteBuf.readUnsignedVarInt()) {
+                packet.unlockedRecipes.add(byteBuf.readString())
+            }
+
+            return packet
+        }
     }
 }

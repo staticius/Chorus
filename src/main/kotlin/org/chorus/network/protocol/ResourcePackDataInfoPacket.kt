@@ -15,16 +15,6 @@ class ResourcePackDataInfoPacket : AbstractResourcePackDataPacket() {
     var premium: Boolean = false
     var type: Int = TYPE_RESOURCE
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        decodePackInfo(byteBuf)
-        this.maxChunkSize = byteBuf.readIntLE()
-        this.chunkCount = byteBuf.readIntLE()
-        this.compressedPackSize = byteBuf.readLongLE()
-        this.sha256 = byteBuf.readByteArray()
-        this.premium = byteBuf.readBoolean()
-        this.type = byteBuf.readByte().toInt()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         encodePackInfo(byteBuf)
         byteBuf.writeIntLE(this.maxChunkSize)
@@ -43,7 +33,21 @@ class ResourcePackDataInfoPacket : AbstractResourcePackDataPacket() {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<ResourcePackDataInfoPacket> {
+        override fun decode(byteBuf: HandleByteBuf): ResourcePackDataInfoPacket {
+            val packet = ResourcePackDataInfoPacket()
+
+            packet.decodePackInfo(byteBuf)
+            packet.maxChunkSize = byteBuf.readIntLE()
+            packet.chunkCount = byteBuf.readIntLE()
+            packet.compressedPackSize = byteBuf.readLongLE()
+            packet.sha256 = byteBuf.readByteArray()
+            packet.premium = byteBuf.readBoolean()
+            packet.type = byteBuf.readByte().toInt()
+
+            return packet
+        }
+
         const val TYPE_INVALID: Int = 0
         const val TYPE_ADDON: Int = 1
         const val TYPE_CACHED: Int = 2

@@ -7,11 +7,6 @@ class DebugInfoPacket : DataPacket() {
     var entityId: Long = 0
     var data: String? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.entityId = byteBuf.readLong()
-        this.data = byteBuf.readString()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeLong(this.entityId)
         byteBuf.writeString(data!!)
@@ -23,5 +18,16 @@ class DebugInfoPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<DebugInfoPacket> {
+        override fun decode(byteBuf: HandleByteBuf): DebugInfoPacket {
+            val packet = DebugInfoPacket()
+
+            packet.entityId = byteBuf.readLong()
+            packet.data = byteBuf.readString()
+
+            return packet
+        }
     }
 }

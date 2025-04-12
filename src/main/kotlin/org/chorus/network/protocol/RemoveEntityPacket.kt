@@ -7,9 +7,6 @@ class RemoveEntityPacket : DataPacket() {
     @JvmField
     var eid: Long = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorUniqueID(this.eid)
     }

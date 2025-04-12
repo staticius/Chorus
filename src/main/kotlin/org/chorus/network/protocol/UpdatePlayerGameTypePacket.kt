@@ -12,12 +12,6 @@ class UpdatePlayerGameTypePacket : DataPacket() {
     var entityId: Long = 0
     var tick: Long = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.gameType = GameType.Companion.from(byteBuf.readVarInt())
-        this.entityId = byteBuf.readVarLong()
-        this.tick = byteBuf.readUnsignedVarLong()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(gameType!!.ordinal)
         byteBuf.writeVarLong(entityId)
@@ -30,5 +24,17 @@ class UpdatePlayerGameTypePacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<UpdatePlayerGameTypePacket> {
+        override fun decode(byteBuf: HandleByteBuf): UpdatePlayerGameTypePacket {
+            val packet = UpdatePlayerGameTypePacket()
+
+            packet.gameType = GameType.from(byteBuf.readVarInt())
+            packet.entityId = byteBuf.readVarLong()
+            packet.tick = byteBuf.readUnsignedVarLong()
+
+            return packet
+        }
     }
 }

@@ -6,9 +6,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 class SetCommandsEnabledPacket : DataPacket() {
     var enabled: Boolean = false
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBoolean(this.enabled)
     }

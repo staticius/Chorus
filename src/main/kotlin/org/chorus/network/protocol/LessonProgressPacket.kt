@@ -9,12 +9,6 @@ class LessonProgressPacket : DataPacket() {
     var score: Int = 0
     var activityId: String? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.action = LessonAction.entries[byteBuf.readVarInt()]
-        this.score = byteBuf.readVarInt()
-        this.activityId = byteBuf.readString()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(action!!.ordinal)
         byteBuf.writeVarInt(score)
@@ -27,5 +21,17 @@ class LessonProgressPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<LessonProgressPacket> {
+        override fun decode(byteBuf: HandleByteBuf): LessonProgressPacket {
+            val packet = LessonProgressPacket()
+
+            packet.action = LessonAction.entries[byteBuf.readVarInt()]
+            packet.score = byteBuf.readVarInt()
+            packet.activityId = byteBuf.readString()
+
+            return packet
+        }
     }
 }

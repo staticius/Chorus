@@ -11,20 +11,12 @@ class MobEquipmentPacket : DataPacket() {
     var selectedSlot: Int = 0
     var containerId: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readActorRuntimeID() //EntityRuntimeID
-        this.item = byteBuf.readSlot()
-        this.slot = byteBuf.readByte().toInt()
-        this.selectedSlot = byteBuf.readByte().toInt()
-        this.containerId = byteBuf.readByte().toInt()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeActorRuntimeID(this.eid) //EntityRuntimeID
+        byteBuf.writeActorRuntimeID(this.eid)
         byteBuf.writeSlot(this.item)
-        byteBuf.writeByte(slot.toByte().toInt())
-        byteBuf.writeByte(selectedSlot.toByte().toInt())
-        byteBuf.writeByte(containerId.toByte().toInt())
+        byteBuf.writeByte(slot)
+        byteBuf.writeByte(selectedSlot)
+        byteBuf.writeByte(containerId)
     }
 
     override fun pid(): Int {
@@ -33,5 +25,17 @@ class MobEquipmentPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<MobEquipmentPacket> {
+        override fun decode(byteBuf: HandleByteBuf): MobEquipmentPacket {
+            val packet = MobEquipmentPacket()
+            packet.eid = byteBuf.readActorRuntimeID()
+            packet.item = byteBuf.readSlot()
+            packet.slot = byteBuf.readByte().toInt()
+            packet.selectedSlot = byteBuf.readByte().toInt()
+            packet.containerId = byteBuf.readByte().toInt()
+            return packet
+        }
     }
 }

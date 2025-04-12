@@ -14,9 +14,6 @@ class PlayerListPacket : DataPacket() {
     @JvmField
     var entries: Array<Entry> = emptyArray()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(type.toInt())
         byteBuf.writeUnsignedVarInt(entries.size)

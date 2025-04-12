@@ -8,11 +8,6 @@ class NetworkChunkPublisherUpdatePacket : DataPacket() {
     var position: BlockVector3? = null
     var radius: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.position = byteBuf.readSignedBlockPosition()
-        this.radius = byteBuf.readUnsignedVarInt()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeSignedBlockPosition(position!!)
         byteBuf.writeUnsignedVarInt(radius)
@@ -25,5 +20,16 @@ class NetworkChunkPublisherUpdatePacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<NetworkChunkPublisherUpdatePacket> {
+        override fun decode(byteBuf: HandleByteBuf): NetworkChunkPublisherUpdatePacket {
+            val packet = NetworkChunkPublisherUpdatePacket()
+
+            packet.position = byteBuf.readSignedBlockPosition()
+            packet.radius = byteBuf.readUnsignedVarInt()
+
+            return packet
+        }
     }
 }

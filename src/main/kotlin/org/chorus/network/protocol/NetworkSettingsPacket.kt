@@ -19,19 +19,25 @@ class NetworkSettingsPacket : DataPacket() {
         byteBuf.writeFloatLE(this.clientThrottleScalar)
     }
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.compressionThreshold = byteBuf.readShortLE().toInt()
-        this.compressionAlgorithm = PacketCompressionAlgorithm.entries[byteBuf.readShortLE().toInt()]
-        this.clientThrottleEnabled = byteBuf.readBoolean()
-        this.clientThrottleThreshold = byteBuf.readByte()
-        this.clientThrottleScalar = byteBuf.readFloatLE()
-    }
-
     override fun pid(): Int {
-        return ProtocolInfo.Companion.NETWORK_SETTINGS_PACKET
+        return ProtocolInfo.NETWORK_SETTINGS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<NetworkSettingsPacket> {
+        override fun decode(byteBuf: HandleByteBuf): NetworkSettingsPacket {
+            val packet = NetworkSettingsPacket()
+
+            packet.compressionThreshold = byteBuf.readShortLE().toInt()
+            packet.compressionAlgorithm = PacketCompressionAlgorithm.entries[byteBuf.readShortLE().toInt()]
+            packet.clientThrottleEnabled = byteBuf.readBoolean()
+            packet.clientThrottleThreshold = byteBuf.readByte()
+            packet.clientThrottleScalar = byteBuf.readFloatLE()
+
+            return packet
+        }
     }
 }

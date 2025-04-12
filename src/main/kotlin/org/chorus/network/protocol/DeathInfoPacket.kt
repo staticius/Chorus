@@ -8,9 +8,6 @@ class DeathInfoPacket : DataPacket() {
     @JvmField
     var translation: TranslationContainer? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeString(translation!!.text)
         byteBuf.writeArray(

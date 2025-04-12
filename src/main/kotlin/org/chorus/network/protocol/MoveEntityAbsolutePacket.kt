@@ -28,21 +28,6 @@ class MoveEntityAbsolutePacket : DataPacket() {
     var teleport: Boolean = false
     var forceMoveLocalEntity: Boolean = false
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readActorRuntimeID()
-        val flags = byteBuf.readByte().toInt()
-        onGround = (flags and 0x01) != 0
-        teleport = (flags and 0x02) != 0
-        forceMoveLocalEntity = (flags and 0x04) != 0
-        val v = byteBuf.readVector3f()
-        this.x = v.x.toDouble()
-        this.y = v.y.toDouble()
-        this.z = v.z.toDouble()
-        this.pitch = byteBuf.readByte() * (360.0 / 256.0)
-        this.headYaw = byteBuf.readByte() * (360.0 / 256.0)
-        this.yaw = byteBuf.readByte() * (360.0 / 256.0)
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(this.eid)
         var flags: Byte = 0
@@ -63,14 +48,31 @@ class MoveEntityAbsolutePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.MOVE_ENTITY_ABSOLUTE_PACKET
+        return ProtocolInfo.MOVE_ENTITY_ABSOLUTE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<MoveEntityAbsolutePacket> {
+        override fun decode(byteBuf: HandleByteBuf): MoveEntityAbsolutePacket {
+            val packet = MoveEntityAbsolutePacket()
+            packet.eid = byteBuf.readActorRuntimeID()
+            val flags = byteBuf.readByte().toInt()
+            packet.onGround = (flags and 0x01) != 0
+            packet.teleport = (flags and 0x02) != 0
+            packet.forceMoveLocalEntity = (flags and 0x04) != 0
+            val v = byteBuf.readVector3f()
+            packet.x = v.x.toDouble()
+            packet.y = v.y.toDouble()
+            packet.z = v.z.toDouble()
+            packet.pitch = byteBuf.readByte() * (360.0 / 256.0)
+            packet.headYaw = byteBuf.readByte() * (360.0 / 256.0)
+            packet.yaw = byteBuf.readByte() * (360.0 / 256.0)
+            return packet
+        }
+
         const val FLAG_GROUND: Byte = 0x01
         const val FLAG_TELEPORT: Byte = 0x02
         const val FLAG_FORCE_MOVE_LOCAL_ENTITY: Byte = 0x04

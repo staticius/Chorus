@@ -10,21 +10,27 @@ class ToastRequestPacket : DataPacket() {
     @JvmField
     var content: String = ""
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.title = byteBuf.readString()
-        this.content = byteBuf.readString()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeString(this.title)
         byteBuf.writeString(this.content)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.TOAST_REQUEST_PACKET
+        return ProtocolInfo.TOAST_REQUEST_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<ToastRequestPacket> {
+        override fun decode(byteBuf: HandleByteBuf): ToastRequestPacket {
+            val packet = ToastRequestPacket()
+
+            packet.title = byteBuf.readString()
+            packet.content = byteBuf.readString()
+
+            return packet
+        }
     }
 }

@@ -7,9 +7,6 @@ class RemoveObjectivePacket : DataPacket() {
     @JvmField
     var objectiveName: String? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeString(objectiveName!!)
     }

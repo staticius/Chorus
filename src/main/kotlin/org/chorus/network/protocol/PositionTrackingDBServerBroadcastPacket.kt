@@ -17,18 +17,6 @@ class PositionTrackingDBServerBroadcastPacket : DataPacket() {
     var trackingId = 0
     var tag: CompoundTag? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        action = ACTIONS[byteBuf.readByte().toInt()]
-        trackingId = byteBuf.readVarInt()
-        try {
-            ByteBufInputStream(byteBuf).use { inputStream ->
-                tag = readNetworkCompressed(inputStream)
-            }
-        } catch (e: IOException) {
-            throw EncoderException(e)
-        }
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(action!!.ordinal.toByte().toInt())
         byteBuf.writeVarInt(trackingId)
@@ -127,14 +115,30 @@ class PositionTrackingDBServerBroadcastPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.POS_TRACKING_SERVER_BROADCAST_PACKET
+        return ProtocolInfo.POS_TRACKING_SERVER_BROADCAST_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<PositionTrackingDBServerBroadcastPacket> {
+        override fun decode(byteBuf: HandleByteBuf): PositionTrackingDBServerBroadcastPacket {
+            val packet = PositionTrackingDBServerBroadcastPacket()
+
+            packet.action = ACTIONS[byteBuf.readByte().toInt()]
+            packet.trackingId = byteBuf.readVarInt()
+            try {
+                ByteBufInputStream(byteBuf).use { inputStream ->
+                    packet.tag = readNetworkCompressed(inputStream)
+                }
+            } catch (e: IOException) {
+                throw EncoderException(e)
+            }
+
+            return packet
+        }
+
         private val ACTIONS = Action.entries.toTypedArray()
     }
 }

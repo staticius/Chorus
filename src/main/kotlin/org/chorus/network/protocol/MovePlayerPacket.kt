@@ -2,12 +2,6 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
-/**
- * @since 15-10-14
- */
-
-
 class MovePlayerPacket : DataPacket() {
     @JvmField
     var eid: Long = 0
@@ -41,26 +35,7 @@ class MovePlayerPacket : DataPacket() {
     var teleportationCause: Int = 0
     var entityType: Int = 0
 
-    var frame: Long = 0 //tick
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readActorRuntimeID()
-        val v = byteBuf.readVector3f()
-        this.x = v.x
-        this.y = v.y
-        this.z = v.z
-        this.pitch = byteBuf.readFloatLE()
-        this.yaw = byteBuf.readFloatLE()
-        this.headYaw = byteBuf.readFloatLE()
-        this.mode = byteBuf.readByte().toInt()
-        this.onGround = byteBuf.readBoolean()
-        this.ridingEid = byteBuf.readActorRuntimeID()
-        if (this.mode == MODE_TELEPORT) {
-            this.teleportationCause = byteBuf.readIntLE()
-            this.entityType = byteBuf.readIntLE()
-        }
-        this.frame = byteBuf.readUnsignedVarLong()
-    }
+    var frame: Long = 0 // tick
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(this.eid)
@@ -86,7 +61,30 @@ class MovePlayerPacket : DataPacket() {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<MovePlayerPacket> {
+        override fun decode(byteBuf: HandleByteBuf): MovePlayerPacket {
+            val packet = MovePlayerPacket()
+
+            packet.eid = byteBuf.readActorRuntimeID()
+            val v = byteBuf.readVector3f()
+            packet.x = v.x
+            packet.y = v.y
+            packet.z = v.z
+            packet.pitch = byteBuf.readFloatLE()
+            packet.yaw = byteBuf.readFloatLE()
+            packet.headYaw = byteBuf.readFloatLE()
+            packet.mode = byteBuf.readByte().toInt()
+            packet.onGround = byteBuf.readBoolean()
+            packet.ridingEid = byteBuf.readActorRuntimeID()
+            if (packet.mode == MODE_TELEPORT) {
+                packet.teleportationCause = byteBuf.readIntLE()
+                packet.entityType = byteBuf.readIntLE()
+            }
+            packet.frame = byteBuf.readUnsignedVarLong()
+
+            return packet
+        }
+
         const val MODE_NORMAL: Int = 0
         const val MODE_RESET: Int = 1 //MODE_RESPAWN
         const val MODE_TELEPORT: Int = 2

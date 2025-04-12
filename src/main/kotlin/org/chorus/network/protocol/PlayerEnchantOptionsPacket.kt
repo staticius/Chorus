@@ -10,9 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger
 class PlayerEnchantOptionsPacket : DataPacket() {
     var options: List<EnchantOptionData> = ArrayList()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarInt(options.size)
         for (option in this.options) {

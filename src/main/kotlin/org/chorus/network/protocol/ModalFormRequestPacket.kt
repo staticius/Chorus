@@ -7,15 +7,11 @@ class ModalFormRequestPacket : DataPacket() {
     @JvmField
     var formId: Int = 0
 
-    @JvmField
-    var data: String? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
+    lateinit var data: String
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(this.formId)
-        byteBuf.writeString(data!!)
+        byteBuf.writeString(this.data)
     }
 
     override fun pid(): Int {

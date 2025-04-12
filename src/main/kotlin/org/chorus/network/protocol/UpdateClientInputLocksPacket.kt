@@ -5,23 +5,30 @@ import org.chorus.network.connection.util.HandleByteBuf
 
 class UpdateClientInputLocksPacket : DataPacket() {
     var lockComponentData: Int = 0
-    var serverPosition: Vector3f? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.lockComponentData = byteBuf.readVarInt()
-        this.serverPosition = byteBuf.readVector3f()
-    }
+    lateinit var serverPosition: Vector3f
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(lockComponentData)
-        byteBuf.writeVector3f(serverPosition!!)
+        byteBuf.writeVector3f(serverPosition)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_CLIENT_INPUT_LOCKS
+        return ProtocolInfo.UPDATE_CLIENT_INPUT_LOCKS
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+
+    companion object : PacketDecoder<UpdateClientInputLocksPacket> {
+        override fun decode(byteBuf: HandleByteBuf): UpdateClientInputLocksPacket {
+            val packet = UpdateClientInputLocksPacket()
+
+            packet.lockComponentData = byteBuf.readVarInt()
+            packet.serverPosition = byteBuf.readVector3f()
+
+            return packet
+        }
     }
 }

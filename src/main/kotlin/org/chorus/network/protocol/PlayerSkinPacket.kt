@@ -13,16 +13,6 @@ class PlayerSkinPacket : DataPacket() {
     lateinit var newSkinName: String
     lateinit var oldSkinName: String
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        uuid = byteBuf.readUUID()
-        skin = byteBuf.readSkin()
-        newSkinName = byteBuf.readString()
-        oldSkinName = byteBuf.readString()
-        if (byteBuf.isReadable) { // -facepalm-
-            skin.setTrusted(byteBuf.readBoolean())
-        }
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUUID(uuid)
         byteBuf.writeSkin(skin)
@@ -37,5 +27,21 @@ class PlayerSkinPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<PlayerSkinPacket> {
+        override fun decode(byteBuf: HandleByteBuf): PlayerSkinPacket {
+            val packet = PlayerSkinPacket()
+
+            packet.uuid = byteBuf.readUUID()
+            packet.skin = byteBuf.readSkin()
+            packet.newSkinName = byteBuf.readString()
+            packet.oldSkinName = byteBuf.readString()
+            if (byteBuf.isReadable) { // -facepalm-
+                packet.skin.setTrusted(byteBuf.readBoolean())
+            }
+
+            return packet
+        }
     }
 }

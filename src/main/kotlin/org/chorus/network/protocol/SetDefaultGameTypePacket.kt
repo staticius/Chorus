@@ -6,10 +6,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 class SetDefaultGameTypePacket : DataPacket() {
     var gamemode: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.gamemode = byteBuf.readUnsignedVarInt()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarInt(this.gamemode)
     }
@@ -20,5 +16,15 @@ class SetDefaultGameTypePacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<SetDefaultGameTypePacket> {
+        override fun decode(byteBuf: HandleByteBuf): SetDefaultGameTypePacket {
+            val packet = SetDefaultGameTypePacket()
+
+            packet.gamemode = byteBuf.readUnsignedVarInt()
+
+            return packet
+        }
     }
 }

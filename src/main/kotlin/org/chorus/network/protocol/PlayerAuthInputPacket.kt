@@ -25,94 +25,80 @@ class PlayerAuthInputPacket : DataPacket() {
 
     /**
      * [.inputData] must contain [AuthInputAction.PERFORM_ITEM_STACK_REQUEST] in order for this to not be null.
-     *
-     * @since v428
      */
     var itemStackRequest: ItemStackRequest? = null
     val blockActionData: MutableMap<PlayerActionType, PlayerBlockActionData> = EnumMap(
         PlayerActionType::class.java
     )
     var analogMoveVector: Vector2f? = null
-
-    /**
-     * @since 649
-     */
     var predictedVehicle: Long = 0
-
-    /**
-     * @since 662
-     */
     var vehicleRotation: Vector2f? = null
     var cameraOrientation: Vector3f? = null
-
-    /**
-     * @since 766
-     */
     var rawMoveVector: Vector2f? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.pitch = byteBuf.readFloatLE()
-        this.yaw = byteBuf.readFloatLE()
-        this.position = byteBuf.readVector3f()
-        this.motion = Vector2(byteBuf.readFloatLE().toDouble(), byteBuf.readFloatLE().toDouble())
-        this.headYaw = byteBuf.readFloatLE()
-
-        val inputData = byteBuf.readUnsignedBigVarInt(AuthInputAction.Companion.size())
-        for (i in 0..<AuthInputAction.Companion.size()) {
-            if (inputData.testBit(i)) {
-                this.inputData.add(AuthInputAction.Companion.from(i))
-            }
-        }
-
-        this.inputMode = InputMode.Companion.fromOrdinal(byteBuf.readUnsignedVarInt())
-        this.playMode = ClientPlayMode.Companion.fromOrdinal(byteBuf.readUnsignedVarInt())
-        this.interactionModel = AuthInteractionModel.Companion.fromOrdinal(byteBuf.readUnsignedVarInt())
-
-        this.interactRotation = byteBuf.readVector2f()
-
-        this.tick = byteBuf.readPlayerInputTick()
-        this.delta = byteBuf.readVector3f()
-
-        if (this.inputData.contains(AuthInputAction.PERFORM_ITEM_STACK_REQUEST)) {
-            this.itemStackRequest = byteBuf.readItemStackRequest()
-        }
-
-        if (this.inputData.contains(AuthInputAction.PERFORM_BLOCK_ACTIONS)) {
-            val arraySize = byteBuf.readVarInt()
-            for (i in 0..<arraySize) {
-                when (val type: PlayerActionType = PlayerActionType.from(byteBuf.readVarInt())) {
-                    PlayerActionType.START_DESTROY_BLOCK,
-                    PlayerActionType.ABORT_DESTROY_BLOCK,
-                    PlayerActionType.CRACK_BLOCK,
-                    PlayerActionType.PREDICT_DESTROY_BLOCK,
-                    PlayerActionType.CONTINUE_DESTROY_BLOCK ->
-                        blockActionData[type] = PlayerBlockActionData(type, byteBuf.readSignedBlockPosition(), byteBuf.readVarInt())
-                    else -> Unit
-                }
-            }
-        }
-
-        if (this.inputData.contains(AuthInputAction.IN_CLIENT_PREDICTED_IN_VEHICLE)) {
-            this.vehicleRotation = byteBuf.readVector2f()
-            this.predictedVehicle = byteBuf.readVarLong()
-        }
-
-        // since 1.19.70-r1, v575
-        this.analogMoveVector = byteBuf.readVector2f()
-
-        this.cameraOrientation = byteBuf.readVector3f()
-
-        this.rawMoveVector = byteBuf.readVector2f()
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-    }
-
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PLAYER_AUTH_INPUT_PACKET
+        return ProtocolInfo.PLAYER_AUTH_INPUT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<PlayerAuthInputPacket> {
+        override fun decode(byteBuf: HandleByteBuf): PlayerAuthInputPacket {
+            val packet = PlayerAuthInputPacket()
+
+            packet.pitch = byteBuf.readFloatLE()
+            packet.yaw = byteBuf.readFloatLE()
+            packet.position = byteBuf.readVector3f()
+            packet.motion = Vector2(byteBuf.readFloatLE().toDouble(), byteBuf.readFloatLE().toDouble())
+            packet.headYaw = byteBuf.readFloatLE()
+
+            val inputData = byteBuf.readUnsignedBigVarInt(AuthInputAction.Companion.size())
+            for (i in 0..<AuthInputAction.Companion.size()) {
+                if (inputData.testBit(i)) {
+                    packet.inputData.add(AuthInputAction.Companion.from(i))
+                }
+            }
+
+            packet.inputMode = InputMode.Companion.fromOrdinal(byteBuf.readUnsignedVarInt())
+            packet.playMode = ClientPlayMode.Companion.fromOrdinal(byteBuf.readUnsignedVarInt())
+            packet.interactionModel = AuthInteractionModel.Companion.fromOrdinal(byteBuf.readUnsignedVarInt())
+
+            packet.interactRotation = byteBuf.readVector2f()
+
+            packet.tick = byteBuf.readPlayerInputTick()
+            packet.delta = byteBuf.readVector3f()
+
+            if (packet.inputData.contains(AuthInputAction.PERFORM_ITEM_STACK_REQUEST)) {
+                packet.itemStackRequest = byteBuf.readItemStackRequest()
+            }
+
+            if (packet.inputData.contains(AuthInputAction.PERFORM_BLOCK_ACTIONS)) {
+                val arraySize = byteBuf.readVarInt()
+                for (i in 0..<arraySize) {
+                    when (val type: PlayerActionType = PlayerActionType.from(byteBuf.readVarInt())) {
+                        PlayerActionType.START_DESTROY_BLOCK,
+                        PlayerActionType.ABORT_DESTROY_BLOCK,
+                        PlayerActionType.CRACK_BLOCK,
+                        PlayerActionType.PREDICT_DESTROY_BLOCK,
+                        PlayerActionType.CONTINUE_DESTROY_BLOCK ->
+                            packet.blockActionData[type] = PlayerBlockActionData(type, byteBuf.readSignedBlockPosition(), byteBuf.readVarInt())
+                        else -> Unit
+                    }
+                }
+            }
+
+            if (packet.inputData.contains(AuthInputAction.IN_CLIENT_PREDICTED_IN_VEHICLE)) {
+                packet.vehicleRotation = byteBuf.readVector2f()
+                packet.predictedVehicle = byteBuf.readVarLong()
+            }
+
+            packet.analogMoveVector = byteBuf.readVector2f()
+            packet.cameraOrientation = byteBuf.readVector3f()
+            packet.rawMoveVector = byteBuf.readVector2f()
+
+            return packet
+        }
     }
 }

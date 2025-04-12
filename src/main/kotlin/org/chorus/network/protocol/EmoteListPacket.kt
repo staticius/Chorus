@@ -9,14 +9,6 @@ class EmoteListPacket : DataPacket() {
     var runtimeId: Long = 0
     val pieceIds: MutableList<UUID> = ObjectArrayList()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.runtimeId = byteBuf.readActorRuntimeID()
-        for (i in 0..<byteBuf.readUnsignedVarInt()) {
-            val id = byteBuf.readUUID()
-            pieceIds.add(id)
-        }
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(runtimeId)
         byteBuf.writeUnsignedVarInt(pieceIds.size)
@@ -26,10 +18,24 @@ class EmoteListPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.EMOTE_LIST_PACKET
+        return ProtocolInfo.EMOTE_LIST_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<EmoteListPacket> {
+        override fun decode(byteBuf: HandleByteBuf): EmoteListPacket {
+            val packet = EmoteListPacket()
+
+            packet.runtimeId = byteBuf.readActorRuntimeID()
+            for (i in 0..<byteBuf.readUnsignedVarInt()) {
+                val id = byteBuf.readUUID()
+                packet.pieceIds.add(id)
+            }
+
+            return packet
+        }
     }
 }

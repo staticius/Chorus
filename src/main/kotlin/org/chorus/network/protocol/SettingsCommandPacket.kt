@@ -6,11 +6,6 @@ class SettingsCommandPacket : DataPacket() {
     lateinit var command: String
     var suppressOutput: Boolean = false
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.command = byteBuf.readString()
-        this.suppressOutput = byteBuf.readBoolean()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeString(command)
         byteBuf.writeBoolean(suppressOutput)
@@ -22,5 +17,16 @@ class SettingsCommandPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<SettingsCommandPacket> {
+        override fun decode(byteBuf: HandleByteBuf): SettingsCommandPacket {
+            val packet = SettingsCommandPacket()
+
+            packet.command = byteBuf.readString()
+            packet.suppressOutput = byteBuf.readBoolean()
+
+            return packet
+        }
     }
 }

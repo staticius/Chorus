@@ -10,16 +10,13 @@ class ServerSettingsResponsePacket : DataPacket() {
     @JvmField
     var data: String? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(this.formId)
         byteBuf.writeString(data!!)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SERVER_SETTINGS_RESPONSE_PACKET
+        return ProtocolInfo.SERVER_SETTINGS_RESPONSE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

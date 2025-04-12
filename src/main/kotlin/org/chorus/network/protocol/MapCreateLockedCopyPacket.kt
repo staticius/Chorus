@@ -7,11 +7,6 @@ class MapCreateLockedCopyPacket : DataPacket() {
     var originalMapId: Long = 0
     var newMapId: Long = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.originalMapId = byteBuf.readVarLong()
-        this.newMapId = byteBuf.readVarLong()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarLong(this.originalMapId)
         byteBuf.writeVarLong(this.newMapId)
@@ -23,5 +18,16 @@ class MapCreateLockedCopyPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<MapCreateLockedCopyPacket> {
+        override fun decode(byteBuf: HandleByteBuf): MapCreateLockedCopyPacket {
+            val packet = MapCreateLockedCopyPacket()
+
+            packet.originalMapId = byteBuf.readVarLong()
+            packet.newMapId = byteBuf.readVarLong()
+
+            return packet
+        }
     }
 }

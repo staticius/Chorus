@@ -4,32 +4,30 @@ import org.chorus.network.connection.util.HandleByteBuf
 
 
 class ScriptMessagePacket : DataPacket() {
-    private var channel: String? = null
-    var message: String? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.channel = byteBuf.readString()
-        this.message = byteBuf.readString()
-    }
+    lateinit var channel: String
+    lateinit var message: String
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeString(channel!!)
-        byteBuf.writeString(message!!)
-    }
-
-    fun _getChannel(): String? {
-        return channel
-    }
-
-    fun setChannel(channel: String?) {
-        this.channel = channel
+        byteBuf.writeString(channel)
+        byteBuf.writeString(message)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SCRIPT_MESSAGE_PACKET
+        return ProtocolInfo.SCRIPT_MESSAGE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<ScriptMessagePacket> {
+        override fun decode(byteBuf: HandleByteBuf): ScriptMessagePacket {
+            val packet = ScriptMessagePacket()
+
+            packet.channel = byteBuf.readString()
+            packet.message = byteBuf.readString()
+
+            return packet
+        }
     }
 }

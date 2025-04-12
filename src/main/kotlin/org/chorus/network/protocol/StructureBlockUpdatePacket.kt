@@ -12,13 +12,6 @@ class StructureBlockUpdatePacket : DataPacket() {
     var powered: Boolean = false
     var waterlogged: Boolean = false
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.blockPosition = byteBuf.readBlockVector3()
-        this.editorData = readEditorData(byteBuf)
-        this.powered = byteBuf.readBoolean()
-        this.waterlogged = byteBuf.readBoolean()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBlockVector3(blockPosition)
         this.writeEditorData(byteBuf, editorData)
@@ -114,5 +107,18 @@ class StructureBlockUpdatePacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<StructureBlockUpdatePacket> {
+        override fun decode(byteBuf: HandleByteBuf): StructureBlockUpdatePacket {
+            val packet = StructureBlockUpdatePacket()
+
+            packet.blockPosition = byteBuf.readBlockVector3()
+            packet.editorData = packet.readEditorData(byteBuf)
+            packet.powered = byteBuf.readBoolean()
+            packet.waterlogged = byteBuf.readBoolean()
+
+            return packet
+        }
     }
 }

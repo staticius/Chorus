@@ -10,21 +10,6 @@ class ResourcePackClientResponsePacket : DataPacket() {
     var responseStatus: Byte = 0
     var packEntries: Array<Entry> = emptyArray()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.responseStatus = byteBuf.readByte()
-        this.packEntries = Array(byteBuf.readShortLE().toInt()) {
-            val entry = byteBuf.readString().split("_")
-
-            if (UUIDValidator.isValidUUID(entry[0])) {
-                Entry(
-                    UUID.fromString(
-                        entry[0]
-                    ), entry[1]
-                )
-            } else throw RuntimeException("Invalid UUID format")
-        }
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(responseStatus.toInt())
         byteBuf.writeShortLE(packEntries.size)
@@ -37,14 +22,33 @@ class ResourcePackClientResponsePacket : DataPacket() {
     class Entry(val uuid: UUID, val version: String)
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.RESOURCE_PACK_CLIENT_RESPONSE_PACKET
+        return ProtocolInfo.RESOURCE_PACK_CLIENT_RESPONSE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<ResourcePackClientResponsePacket> {
+        override fun decode(byteBuf: HandleByteBuf): ResourcePackClientResponsePacket {
+            val packet = ResourcePackClientResponsePacket()
+
+            packet.responseStatus = byteBuf.readByte()
+            packet.packEntries = Array(byteBuf.readShortLE().toInt()) {
+                val entry = byteBuf.readString().split("_")
+
+                if (UUIDValidator.isValidUUID(entry[0])) {
+                    Entry(
+                        UUID.fromString(
+                            entry[0]
+                        ), entry[1]
+                    )
+                } else throw RuntimeException("Invalid UUID format")
+            }
+
+            return packet
+        }
+
         const val STATUS_REFUSED: Byte = 1
         const val STATUS_SEND_PACKS: Byte = 2
         const val STATUS_HAVE_ALL_PACKS: Byte = 3

@@ -9,12 +9,6 @@ class ToggleCrafterSlotRequestPacket : DataPacket() {
     var slot: Byte = 0
     var disabled: Boolean = false
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.blockPosition = byteBuf.readVector3f()
-        this.slot = byteBuf.readByte()
-        this.disabled = byteBuf.readBoolean()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVector3f(blockPosition!!)
         byteBuf.writeByte(slot.toInt())
@@ -27,5 +21,17 @@ class ToggleCrafterSlotRequestPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<ToggleCrafterSlotRequestPacket> {
+        override fun decode(byteBuf: HandleByteBuf): ToggleCrafterSlotRequestPacket {
+            val packet = ToggleCrafterSlotRequestPacket()
+
+            packet.blockPosition = byteBuf.readVector3f()
+            packet.slot = byteBuf.readByte()
+            packet.disabled = byteBuf.readBoolean()
+
+            return packet
+        }
     }
 }

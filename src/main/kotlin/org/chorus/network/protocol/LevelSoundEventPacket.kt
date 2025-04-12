@@ -3,7 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.utils.Utils
 
-
 open class LevelSoundEventPacket : DataPacket() {
     var sound: Int = 0
     var x: Float = 0f
@@ -13,18 +12,6 @@ open class LevelSoundEventPacket : DataPacket() {
     var entityIdentifier: String? = null
     var isBabyMob: Boolean = false
     var isGlobal: Boolean = false
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.sound = byteBuf.readUnsignedVarInt()
-        val v = byteBuf.readVector3f()
-        this.x = v.x
-        this.y = v.y
-        this.z = v.z
-        this.extraData = byteBuf.readVarInt()
-        this.entityIdentifier = byteBuf.readString()
-        this.isBabyMob = byteBuf.readBoolean()
-        this.isGlobal = byteBuf.readBoolean()
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarInt(this.sound)
@@ -43,7 +30,23 @@ open class LevelSoundEventPacket : DataPacket() {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<LevelSoundEventPacket> {
+        override fun decode(byteBuf: HandleByteBuf): LevelSoundEventPacket {
+            val packet = LevelSoundEventPacket()
+
+            packet.sound = byteBuf.readUnsignedVarInt()
+            val v = byteBuf.readVector3f()
+            packet.x = v.x
+            packet.y = v.y
+            packet.z = v.z
+            packet.extraData = byteBuf.readVarInt()
+            packet.entityIdentifier = byteBuf.readString()
+            packet.isBabyMob = byteBuf.readBoolean()
+            packet.isGlobal = byteBuf.readBoolean()
+
+            return packet
+        }
+
         val SOUND_ITEM_USE_ON: Int = Utils.dynamic(0)
         val SOUND_HIT: Int = Utils.dynamic(1)
         val SOUND_STEP: Int = Utils.dynamic(2)

@@ -11,20 +11,11 @@ class ResourcePacksInfoPacket : DataPacket() {
     var hasAddonPacks: Boolean = false
     var isScriptingEnabled: Boolean = false
 
-    /**
-     * @since v766
-     */
     var worldTemplateId: UUID? = null
 
-    /**
-     * @since v766
-     */
     var worldTemplateVersion: String? = null
 
     var resourcePackEntries: Array<ResourcePack> = ResourcePack.EMPTY_ARRAY
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBoolean(this.isForcedToAccept)

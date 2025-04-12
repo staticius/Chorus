@@ -5,21 +5,12 @@ import org.chorus.network.protocol.types.inventory.InventoryLayout
 import org.chorus.network.protocol.types.inventory.InventoryTabLeft
 import org.chorus.network.protocol.types.inventory.InventoryTabRight
 
-
 class SetPlayerInventoryOptionsPacket : DataPacket() {
     var leftTab: InventoryTabLeft? = null
     var rightTab: InventoryTabRight? = null
     var filtering: Boolean = false
     var layout: InventoryLayout? = null
     var craftingLayout: InventoryLayout? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.leftTab = InventoryTabLeft.Companion.VALUES.get(byteBuf.readVarInt())
-        this.rightTab = InventoryTabRight.Companion.VALUES.get(byteBuf.readVarInt())
-        this.filtering = byteBuf.readBoolean()
-        this.layout = InventoryLayout.Companion.VALUES.get(byteBuf.readVarInt())
-        this.craftingLayout = InventoryLayout.Companion.VALUES.get(byteBuf.readVarInt())
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(leftTab!!.ordinal)
@@ -35,5 +26,19 @@ class SetPlayerInventoryOptionsPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<SetPlayerInventoryOptionsPacket> {
+        override fun decode(byteBuf: HandleByteBuf): SetPlayerInventoryOptionsPacket {
+            val packet = SetPlayerInventoryOptionsPacket()
+
+            packet.leftTab = InventoryTabLeft.VALUES[byteBuf.readVarInt()]
+            packet.rightTab = InventoryTabRight.VALUES[byteBuf.readVarInt()]
+            packet.filtering = byteBuf.readBoolean()
+            packet.layout = InventoryLayout.VALUES[byteBuf.readVarInt()]
+            packet.craftingLayout = InventoryLayout.VALUES[byteBuf.readVarInt()]
+
+            return packet
+        }
     }
 }

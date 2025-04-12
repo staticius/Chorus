@@ -11,14 +11,7 @@ class SpawnParticleEffectPacket : DataPacket() {
     var uniqueEntityId: Long = -1
     var position: Vector3f? = null
     var identifier: String? = null
-
-    /**
-     * @since v503
-     */
     var molangVariablesJson: Optional<String> = Optional.empty()
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(dimensionId.toByte().toInt())

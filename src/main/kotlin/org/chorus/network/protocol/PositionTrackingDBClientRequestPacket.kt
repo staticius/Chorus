@@ -6,12 +6,6 @@ class PositionTrackingDBClientRequestPacket : DataPacket() {
     var action: Action? = null
     var trackingId: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        val aByte = byteBuf.readByte().toInt()
-        action = ACTIONS[aByte]
-        trackingId = byteBuf.readVarInt()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(action!!.ordinal.toByte().toInt())
         byteBuf.writeVarInt(trackingId)
@@ -29,7 +23,16 @@ class PositionTrackingDBClientRequestPacket : DataPacket() {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<PositionTrackingDBClientRequestPacket> {
+        override fun decode(byteBuf: HandleByteBuf): PositionTrackingDBClientRequestPacket {
+            val packet = PositionTrackingDBClientRequestPacket()
+
+            packet.action = ACTIONS[byteBuf.readByte().toInt()]
+            packet.trackingId = byteBuf.readVarInt()
+
+            return packet
+        }
+
         private val ACTIONS = Action.entries.toTypedArray()
     }
 }

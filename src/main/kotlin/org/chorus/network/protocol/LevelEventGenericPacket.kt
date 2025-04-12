@@ -12,9 +12,6 @@ class LevelEventGenericPacket : DataPacket() {
     var eventId: Int = 0
     var tag: CompoundTag? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(eventId)
         try {

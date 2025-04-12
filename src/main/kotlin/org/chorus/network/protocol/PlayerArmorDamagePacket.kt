@@ -11,16 +11,6 @@ class PlayerArmorDamagePacket : DataPacket() {
     )
     val damage: IntArray = IntArray(5)
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        val flagsval = byteBuf.readByte().toInt()
-        for (i in 0..4) {
-            if ((flagsval and (1 shl i)) != 0) {
-                flags.add(PlayerArmorDamageFlag.entries[i])
-                damage[i] = byteBuf.readVarInt()
-            }
-        }
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         var outflags = 0
         for (flag in this.flags) {
@@ -42,10 +32,26 @@ class PlayerArmorDamagePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PLAYER_ARMOR_DAMAGE_PACKET
+        return ProtocolInfo.PLAYER_ARMOR_DAMAGE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<PlayerArmorDamagePacket> {
+        override fun decode(byteBuf: HandleByteBuf): PlayerArmorDamagePacket {
+            val packet = PlayerArmorDamagePacket()
+
+            val flags = byteBuf.readByte().toInt()
+            for (i in 0..4) {
+                if ((flags and (1 shl i)) != 0) {
+                    packet.flags.add(PlayerArmorDamageFlag.entries[i])
+                    packet.damage[i] = byteBuf.readVarInt()
+                }
+            }
+
+            return packet
+        }
     }
 }

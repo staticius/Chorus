@@ -5,31 +5,36 @@ import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.hud.HudElement
 import org.chorus.network.protocol.types.hud.HudVisibility
 
-
 class SetHudPacket : DataPacket() {
     val elements: MutableSet<HudElement> = ObjectOpenHashSet()
     var visibility: HudVisibility? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        elements.clear()
-        byteBuf.readArray(
-            this.elements
-        ) { value: HandleByteBuf? -> HudElement.entries[byteBuf.readUnsignedVarInt()] }
-        this.visibility = HudVisibility.entries[byteBuf.readByte().toInt()]
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeArray(
-            this.elements
-        ) { buf: HandleByteBuf?, element: HudElement -> byteBuf.writeUnsignedVarInt(element.ordinal) }
-        byteBuf.writeByte(visibility!!.ordinal.toByte().toInt())
+        byteBuf.writeArray(this.elements) { buf, element ->
+            buf.writeUnsignedVarInt(element.ordinal)
+        }
+        byteBuf.writeByte(visibility!!.ordinal)
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_HUD
+        return ProtocolInfo.SET_HUD
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<SetHudPacket> {
+        override fun decode(byteBuf: HandleByteBuf): SetHudPacket {
+            val packet = SetHudPacket()
+
+            packet.elements.clear()
+            byteBuf.readArray(packet.elements) {
+                HudElement.entries[it.readUnsignedVarInt()]
+            }
+            packet.visibility = HudVisibility.entries[byteBuf.readByte().toInt()]
+
+            return packet
+        }
     }
 }

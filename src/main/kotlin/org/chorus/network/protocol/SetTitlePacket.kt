@@ -22,17 +22,6 @@ class SetTitlePacket : DataPacket() {
     var platformOnlineId: String = ""
     private var filteredTitleText = ""
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.type = byteBuf.readVarInt()
-        this.text = byteBuf.readString()
-        this.fadeInTime = byteBuf.readVarInt()
-        this.stayTime = byteBuf.readVarInt()
-        this.fadeOutTime = byteBuf.readVarInt()
-        this.xuid = byteBuf.readString()
-        this.platformOnlineId = byteBuf.readString()
-        this.filteredTitleText = byteBuf.readString()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(type)
         byteBuf.writeString(text)
@@ -76,7 +65,22 @@ class SetTitlePacket : DataPacket() {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<SetTitlePacket> {
+        override fun decode(byteBuf: HandleByteBuf): SetTitlePacket {
+            val packet = SetTitlePacket()
+
+            packet.type = byteBuf.readVarInt()
+            packet.text = byteBuf.readString()
+            packet.fadeInTime = byteBuf.readVarInt()
+            packet.stayTime = byteBuf.readVarInt()
+            packet.fadeOutTime = byteBuf.readVarInt()
+            packet.xuid = byteBuf.readString()
+            packet.platformOnlineId = byteBuf.readString()
+            packet.filteredTitleText = byteBuf.readString()
+
+            return packet
+        }
+
         private val TITLE_ACTIONS = TitleAction.entries.toTypedArray()
 
         const val TYPE_CLEAR: Int = 0

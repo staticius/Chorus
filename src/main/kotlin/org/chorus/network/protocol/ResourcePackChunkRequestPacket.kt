@@ -11,11 +11,6 @@ class ResourcePackChunkRequestPacket : AbstractResourcePackDataPacket() {
     override var packVersion: Version? = null
     var chunkIndex: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        decodePackInfo(byteBuf)
-        this.chunkIndex = byteBuf.readIntLE()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         encodePackInfo(byteBuf)
         byteBuf.writeIntLE(this.chunkIndex)
@@ -27,5 +22,16 @@ class ResourcePackChunkRequestPacket : AbstractResourcePackDataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<ResourcePackChunkRequestPacket> {
+        override fun decode(byteBuf: HandleByteBuf): ResourcePackChunkRequestPacket {
+            val packet = ResourcePackChunkRequestPacket()
+
+            packet.decodePackInfo(byteBuf)
+            packet.chunkIndex = byteBuf.readIntLE()
+
+            return packet
+        }
     }
 }

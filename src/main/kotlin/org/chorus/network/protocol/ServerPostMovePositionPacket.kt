@@ -5,14 +5,10 @@ import org.chorus.network.connection.util.HandleByteBuf
 
 
 class ServerPostMovePositionPacket : DataPacket() {
-    var position: Vector3f? = null
-
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.position = byteBuf.readVector3f()
-    }
+    lateinit var position: Vector3f
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeVector3f(position!!)
+        byteBuf.writeVector3f(position)
     }
 
     override fun pid(): Int {

@@ -14,26 +14,29 @@ class ServerboundDiagnosticsPacket : DataPacket() {
     var avgRemainderTimePercent: Float = 0f
     var avgUnaccountedTimePercent: Float = 0f
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.avgFps = byteBuf.readFloatLE()
-        this.avgServerSimTickTimeMS = byteBuf.readFloatLE()
-        this.avgClientSimTickTimeMS = byteBuf.readFloatLE()
-        this.avgBeginFrameTimeMS = byteBuf.readFloatLE()
-        this.avgInputTimeMS = byteBuf.readFloatLE()
-        this.avgRenderTimeMS = byteBuf.readFloatLE()
-        this.avgEndFrameTimeMS = byteBuf.readFloatLE()
-        this.avgRemainderTimePercent = byteBuf.readFloatLE()
-        this.avgUnaccountedTimePercent = byteBuf.readFloatLE()
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-    }
-
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SERVERBOUND_DIAGNOSTICS_PACKET
+        return ProtocolInfo.SERVERBOUND_DIAGNOSTICS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<ServerboundDiagnosticsPacket> {
+        override fun decode(byteBuf: HandleByteBuf): ServerboundDiagnosticsPacket {
+            val packet = ServerboundDiagnosticsPacket()
+
+            packet.avgFps = byteBuf.readFloatLE()
+            packet.avgServerSimTickTimeMS = byteBuf.readFloatLE()
+            packet.avgClientSimTickTimeMS = byteBuf.readFloatLE()
+            packet.avgBeginFrameTimeMS = byteBuf.readFloatLE()
+            packet.avgInputTimeMS = byteBuf.readFloatLE()
+            packet.avgRenderTimeMS = byteBuf.readFloatLE()
+            packet.avgEndFrameTimeMS = byteBuf.readFloatLE()
+            packet.avgRemainderTimePercent = byteBuf.readFloatLE()
+            packet.avgUnaccountedTimePercent = byteBuf.readFloatLE()
+
+            return packet
+        }
     }
 }

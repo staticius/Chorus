@@ -21,9 +21,6 @@ class SetDisplayObjectivePacket : DataPacket() {
     @JvmField
     var sortOrder: SortOrder? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeString(displaySlot!!.slotName)
         byteBuf.writeString(objectiveName!!)

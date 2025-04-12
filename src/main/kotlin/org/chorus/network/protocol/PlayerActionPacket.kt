@@ -17,14 +17,7 @@ class PlayerActionPacket : DataPacket() {
     var face: Int = 0
 
     override fun decode(byteBuf: HandleByteBuf) {
-        this.entityId = byteBuf.readActorRuntimeID()
-        this.action = byteBuf.readVarInt()
-        val v = byteBuf.readBlockVector3()
-        this.x = v.x
-        this.y = v.y
-        this.z = v.z
-        this.resultPosition = byteBuf.readBlockVector3()
-        this.face = byteBuf.readVarInt()
+
     }
 
     override fun encode(byteBuf: HandleByteBuf) {
@@ -36,14 +29,29 @@ class PlayerActionPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PLAYER_ACTION_PACKET
+        return ProtocolInfo.PLAYER_ACTION_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<PlayerActionPacket> {
+        override fun decode(byteBuf: HandleByteBuf): PlayerActionPacket {
+            val packet = PlayerActionPacket()
+
+            packet.entityId = byteBuf.readActorRuntimeID()
+            packet.action = byteBuf.readVarInt()
+            val v = byteBuf.readBlockVector3()
+            packet.x = v.x
+            packet.y = v.y
+            packet.z = v.z
+            packet.resultPosition = byteBuf.readBlockVector3()
+            packet.face = byteBuf.readVarInt()
+
+            return packet
+        }
+
         const val ACTION_START_BREAK: Int = 0
         const val ACTION_ABORT_BREAK: Int = 1
         const val ACTION_STOP_BREAK: Int = 2
@@ -58,8 +66,7 @@ class PlayerActionPacket : DataPacket() {
         const val ACTION_START_SNEAK: Int = 11
         const val ACTION_STOP_SNEAK: Int = 12
         const val ACTION_CREATIVE_PLAYER_DESTROY_BLOCK: Int = 13
-        const val ACTION_DIMENSION_CHANGE_ACK: Int =
-            14 //sent when spawning in a different dimension to tell the server we spawned
+        const val ACTION_DIMENSION_CHANGE_ACK: Int = 14 // sent when spawning in a different dimension to tell the server we spawned
         const val ACTION_START_GLIDE: Int = 15
         const val ACTION_STOP_GLIDE: Int = 16
         const val ACTION_BUILD_DENIED: Int = 17

@@ -8,9 +8,6 @@ class UpdateSoftEnumPacket : DataPacket() {
     var name: String = ""
     var type: Type = Type.SET
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeString(name)
         byteBuf.writeUnsignedVarInt(values.size)

@@ -13,16 +13,6 @@ import java.nio.ByteOrder
 class SyncEntityPropertyPacket(
     var data: CompoundTag? = null
 ) : DataPacket() {
-    override fun decode(byteBuf: HandleByteBuf) {
-        try {
-            ByteBufInputStream(byteBuf).use { stream ->
-                this.data = read(stream, ByteOrder.BIG_ENDIAN, true)
-            }
-        } catch (e: Exception) {
-            SyncEntityPropertyPacket.log.error("", e)
-        }
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         try {
             byteBuf.writeBytes(write(data!!, ByteOrder.BIG_ENDIAN, true))
@@ -32,12 +22,26 @@ class SyncEntityPropertyPacket(
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SYNC_ENTITY_PROPERTY_PACKET
+        return ProtocolInfo.SYNC_ENTITY_PROPERTY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object : Loggable
+    companion object : PacketDecoder<SyncEntityPropertyPacket>, Loggable {
+        override fun decode(byteBuf: HandleByteBuf): SyncEntityPropertyPacket {
+            val packet = SyncEntityPropertyPacket()
+
+            try {
+                ByteBufInputStream(byteBuf).use { stream ->
+                    packet.data = read(stream, ByteOrder.BIG_ENDIAN, true)
+                }
+            } catch (e: Exception) {
+                SyncEntityPropertyPacket.log.error("", e)
+            }
+
+            return packet
+        }
+    }
 }

@@ -15,29 +15,6 @@ class MoveEntityDeltaPacket : DataPacket() {
     var yaw: Float = 0f
     var headYaw: Float = 0f
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.runtimeEntityId = byteBuf.readActorRuntimeID()
-        this.flags = byteBuf.readShortLE()
-        if ((flags.toInt() and FLAG_HAS_X.toInt()) != 0) {
-            this.x = this.getCoordinate(byteBuf)
-        }
-        if ((flags.toInt() and FLAG_HAS_Y.toInt()) != 0) {
-            this.y = this.getCoordinate(byteBuf)
-        }
-        if ((flags.toInt() and FLAG_HAS_Z.toInt()) != 0) {
-            this.z = this.getCoordinate(byteBuf)
-        }
-        if ((flags.toInt() and FLAG_HAS_PITCH.toInt()) != 0) {
-            this.pitch = this.getRotation(byteBuf)
-        }
-        if ((flags.toInt() and FLAG_HAS_YAW.toInt()) != 0) {
-            this.yaw = this.getRotation(byteBuf)
-        }
-        if ((flags.toInt() and FLAG_HAS_HEAD_YAW.toInt()) != 0) {
-            this.headYaw = this.getRotation(byteBuf)
-        }
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(this.runtimeEntityId)
         byteBuf.writeShortLE(flags.toInt())
@@ -89,7 +66,34 @@ class MoveEntityDeltaPacket : DataPacket() {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<MoveEntityDeltaPacket> {
+        override fun decode(byteBuf: HandleByteBuf): MoveEntityDeltaPacket {
+            val packet = MoveEntityDeltaPacket()
+
+            packet.runtimeEntityId = byteBuf.readActorRuntimeID()
+            packet.flags = byteBuf.readShortLE()
+            if ((packet.flags.toInt() and FLAG_HAS_X.toInt()) != 0) {
+                packet.x = packet.getCoordinate(byteBuf)
+            }
+            if ((packet.flags.toInt() and FLAG_HAS_Y.toInt()) != 0) {
+                packet.y = packet.getCoordinate(byteBuf)
+            }
+            if ((packet.flags.toInt() and FLAG_HAS_Z.toInt()) != 0) {
+                packet.z = packet.getCoordinate(byteBuf)
+            }
+            if ((packet.flags.toInt() and FLAG_HAS_PITCH.toInt()) != 0) {
+                packet.pitch = packet.getRotation(byteBuf)
+            }
+            if ((packet.flags.toInt() and FLAG_HAS_YAW.toInt()) != 0) {
+                packet.yaw = packet.getRotation(byteBuf)
+            }
+            if ((packet.flags.toInt() and FLAG_HAS_HEAD_YAW.toInt()) != 0) {
+                packet.headYaw = packet.getRotation(byteBuf)
+            }
+
+            return packet
+        }
+
         const val FLAG_HAS_X: Short = 1
         const val FLAG_HAS_Y: Short = 2
         const val FLAG_HAS_Z: Short = 4

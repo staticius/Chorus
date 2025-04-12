@@ -8,14 +8,6 @@ class MobArmorEquipmentPacket : DataPacket() {
     lateinit var slots: Array<Item>
     var body: Item = Item.AIR
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.eid = byteBuf.readActorRuntimeID()
-        this.slots = Array(4) {
-            byteBuf.readSlot()
-        }
-        this.body = byteBuf.readSlot()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(this.eid)
         byteBuf.writeSlot(slots[0])
@@ -31,5 +23,17 @@ class MobArmorEquipmentPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<MobArmorEquipmentPacket> {
+        override fun decode(byteBuf: HandleByteBuf): MobArmorEquipmentPacket {
+            val packet = MobArmorEquipmentPacket()
+            packet.eid = byteBuf.readActorRuntimeID()
+            packet.slots = Array(4) {
+                byteBuf.readSlot()
+            }
+            packet.body = byteBuf.readSlot()
+            return packet
+        }
     }
 }

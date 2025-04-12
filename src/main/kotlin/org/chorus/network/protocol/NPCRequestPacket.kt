@@ -10,15 +10,6 @@ class NPCRequestPacket : DataPacket() {
     var skinType: Int = 0
     var sceneName: String = ""
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.entityRuntimeId = byteBuf.readActorRuntimeID()
-        this.requestType =
-            RequestType.entries[byteBuf.readByte().toInt()]
-        this.data = byteBuf.readString()
-        this.skinType = byteBuf.readByte().toInt()
-        this.sceneName = byteBuf.readString()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(this.entityRuntimeId)
         byteBuf.writeByte(requestType.ordinal.toByte().toInt())
@@ -43,5 +34,19 @@ class NPCRequestPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<NPCRequestPacket> {
+        override fun decode(byteBuf: HandleByteBuf): NPCRequestPacket {
+            val packet = NPCRequestPacket()
+
+            packet.entityRuntimeId = byteBuf.readActorRuntimeID()
+            packet.requestType = RequestType.entries[byteBuf.readByte().toInt()]
+            packet.data = byteBuf.readString()
+            packet.skinType = byteBuf.readByte().toInt()
+            packet.sceneName = byteBuf.readString()
+
+            return packet
+        }
     }
 }

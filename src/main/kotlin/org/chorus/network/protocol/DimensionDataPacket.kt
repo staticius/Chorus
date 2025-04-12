@@ -2,12 +2,9 @@ package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
 
-
 class DimensionDataPacket : DataPacket() {
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
+        // TODO
     }
 
     override fun pid(): Int {

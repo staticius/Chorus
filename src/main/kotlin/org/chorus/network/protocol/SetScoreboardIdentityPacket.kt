@@ -9,9 +9,6 @@ class SetScoreboardIdentityPacket : DataPacket() {
     val entries: List<Entry> = ObjectArrayList()
     var action: Action? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(action!!.ordinal.toByte().toInt())
 

@@ -11,9 +11,6 @@ class PlaySoundPacket : DataPacket() {
     var volume: Float = 0f
     var pitch: Float = 0f
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeString(name!!)
         byteBuf.writeBlockVector3(this.x * 8, this.y * 8, this.z * 8)

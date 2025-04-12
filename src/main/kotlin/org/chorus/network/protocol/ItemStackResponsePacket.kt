@@ -10,9 +10,6 @@ import org.chorus.network.protocol.types.itemstack.response.ItemStackResponseSta
 class ItemStackResponsePacket : DataPacket() {
     val entries: MutableList<ItemStackResponse> = ArrayList()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeArray(entries) { r: ItemStackResponse ->
             byteBuf.writeByte(r.result.ordinal)

@@ -22,9 +22,6 @@ class UpdateTradePacket : DataPacket() {
     var newTradingUi: Boolean = false //是否启用新版交易ui
     var usingEconomyTrade: Boolean = false //未知
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(containerId.toInt())
         byteBuf.writeByte(containerType.toInt())

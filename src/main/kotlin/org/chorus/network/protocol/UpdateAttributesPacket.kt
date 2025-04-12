@@ -11,9 +11,6 @@ class UpdateAttributesPacket : DataPacket() {
     var entityId: Long = 0
     var frame: Long = 0 //tick
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(this.entityId)
 

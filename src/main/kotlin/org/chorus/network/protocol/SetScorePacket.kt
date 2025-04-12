@@ -11,9 +11,6 @@ class SetScorePacket : DataPacket() {
     @JvmField
     var infos: MutableList<ScoreInfo> = ArrayList()
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(action!!.ordinal.toByte().toInt())
         byteBuf.writeUnsignedVarInt(infos.size)

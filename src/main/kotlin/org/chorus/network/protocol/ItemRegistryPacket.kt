@@ -11,8 +11,6 @@ import java.nio.ByteOrder
 class ItemRegistryPacket : DataPacket() {
     var entries: Array<Entry>? = emptyArray()
 
-    override fun decode(byteBuf: HandleByteBuf) {}
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarInt(entries!!.size)
         try {

@@ -17,9 +17,6 @@ class SetEntityMotionPacket : DataPacket() {
     var motionZ: Float = 0f
     var tick: Long = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(this.eid)
         byteBuf.writeVector3f(this.motionX, this.motionY, this.motionZ)

@@ -6,9 +6,6 @@ import org.chorus.network.connection.util.HandleByteBuf
 class SetHealthPacket : DataPacket() {
     var health: Int = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarInt(this.health)
     }

@@ -11,9 +11,6 @@ class LabTablePacket : DataPacket() {
     var blockPosition: BlockVector3? = null
     var reactionType: LabTableReactionType? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeByte(actionType!!.ordinal.toByte().toInt())
         byteBuf.writeBlockVector3(blockPosition!!)

@@ -11,26 +11,26 @@ class RequestAbilityPacket : DataPacket() {
     var boolValue: Boolean = false
     var floatValue: Float = 0f
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.ability = ABILITIES[byteBuf.readVarInt()]
-        this.type = ABILITY_TYPES[byteBuf.readByte().toInt()]
-        this.boolValue = byteBuf.readBoolean()
-        this.floatValue = byteBuf.readFloatLE()
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-        throw UnsupportedOperationException()
-    }
-
     override fun pid(): Int {
-        return ProtocolInfo.Companion.REQUEST_ABILITY_PACKET
+        return ProtocolInfo.REQUEST_ABILITY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<RequestAbilityPacket> {
+        override fun decode(byteBuf: HandleByteBuf): RequestAbilityPacket {
+            val packet = RequestAbilityPacket()
+
+            packet.ability = ABILITIES[byteBuf.readVarInt()]
+            packet.type = ABILITY_TYPES[byteBuf.readByte().toInt()]
+            packet.boolValue = byteBuf.readBoolean()
+            packet.floatValue = byteBuf.readFloatLE()
+
+            return packet
+        }
+
         val ABILITIES: Array<PlayerAbility> = UpdateAbilitiesPacket.Companion.VALID_FLAGS
         val ABILITY_TYPES: Array<AbilityType> = AbilityType.entries.toTypedArray()
     }

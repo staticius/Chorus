@@ -3,12 +3,6 @@ package org.chorus.network.protocol
 import org.chorus.network.connection.util.HandleByteBuf
 import org.chorus.network.protocol.types.EntityLink
 
-
-/**
- * @since 15-10-22
- */
-
-
 class SetEntityLinkPacket : DataPacket() {
     var vehicleUniqueId: Long = 0 //from
     var riderUniqueId: Long = 0 //to
@@ -16,9 +10,6 @@ class SetEntityLinkPacket : DataPacket() {
     var immediate: Byte = 0
     var riderInitiated: Boolean = false
     var vehicleAngularVelocity: Float = 0f
-
-    override fun decode(byteBuf: HandleByteBuf) {
-    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorUniqueID(this.vehicleUniqueId)

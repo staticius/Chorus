@@ -12,21 +12,24 @@ class ServerboundLoadingScreenPacket : DataPacket() {
      */
     private var loadingScreenId: Int? = null
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        this.type = ServerboundLoadingScreenPacketType.entries[byteBuf.readVarInt()]
-        if (byteBuf.readBoolean()) {
-            this.loadingScreenId = byteBuf.readIntLE()
-        }
-    }
-
-    override fun encode(byteBuf: HandleByteBuf) {
-    }
-
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SERVERBOUND_LOADING_SCREEN_PACKET
+        return ProtocolInfo.SERVERBOUND_LOADING_SCREEN_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    companion object : PacketDecoder<ServerboundLoadingScreenPacket> {
+        override fun decode(byteBuf: HandleByteBuf): ServerboundLoadingScreenPacket {
+            val packet = ServerboundLoadingScreenPacket()
+
+            packet.type = ServerboundLoadingScreenPacketType.entries[byteBuf.readVarInt()]
+            if (byteBuf.readBoolean()) {
+                packet.loadingScreenId = byteBuf.readIntLE()
+            }
+
+            return packet
+        }
     }
 }

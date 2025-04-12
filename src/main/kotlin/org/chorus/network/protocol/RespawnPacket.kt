@@ -19,15 +19,6 @@ class RespawnPacket : DataPacket() {
     @JvmField
     var runtimeEntityId: Long = 0
 
-    override fun decode(byteBuf: HandleByteBuf) {
-        val v = byteBuf.readVector3f()
-        this.x = v.x
-        this.y = v.y
-        this.z = v.z
-        this.respawnState = byteBuf.readByte().toInt()
-        this.runtimeEntityId = byteBuf.readActorRuntimeID()
-    }
-
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVector3f(this.x, this.y, this.z)
         byteBuf.writeByte(respawnState.toByte().toInt())
@@ -35,14 +26,27 @@ class RespawnPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.RESPAWN_PACKET
+        return ProtocolInfo.RESPAWN_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<RespawnPacket> {
+        override fun decode(byteBuf: HandleByteBuf): RespawnPacket {
+            val packet = RespawnPacket()
+
+            val v = byteBuf.readVector3f()
+            packet.x = v.x
+            packet.y = v.y
+            packet.z = v.z
+            packet.respawnState = byteBuf.readByte().toInt()
+            packet.runtimeEntityId = byteBuf.readActorRuntimeID()
+
+            return packet
+        }
+
         const val STATE_SEARCHING_FOR_SPAWN: Int = 0
         const val STATE_READY_TO_SPAWN: Int = 1
         const val STATE_CLIENT_READY_TO_SPAWN: Int = 2
