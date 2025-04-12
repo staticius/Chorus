@@ -90,7 +90,7 @@ class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState = Compani
         if (player.isAdventure) return false
         if (setType(item.getNetId())) {
             if (!player.isCreative) {
-                player.getInventory().decreaseCount(player.getInventory().heldItemIndex)
+                player.inventory.decreaseCount(player.inventory.heldItemIndex)
             }
             return true
         }

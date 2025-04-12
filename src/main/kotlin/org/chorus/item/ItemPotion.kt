@@ -58,8 +58,8 @@ class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
         if (player.isAdventure || player.isSurvival) {
             --this.count
-            player.getInventory().setItemInHand(this)
-            player.getInventory().addItem(ItemGlassBottle())
+            player.inventory.setItemInHand(this)
+            player.inventory.addItem(ItemGlassBottle())
         }
 
         if (potion != null) {

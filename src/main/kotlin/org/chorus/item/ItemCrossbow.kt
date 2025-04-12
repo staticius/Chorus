@@ -33,19 +33,19 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
         if (ticksUsed >= needTickUsed) {
             val itemArrow: Item
-            val inventoryOptional = player.getInventory().contents.entries.stream()
+            val inventoryOptional = player.inventory.contents.entries.stream()
                 .filter { item: Map.Entry<Int?, Item?> -> item.value is ItemArrow || item.value is ItemFireworkRocket }
                 .findFirst()
-            val offhandOptional = player.getOffhandInventory()!!.contents.entries.stream()
+            val offhandOptional = player.offhandInventory!!.contents.entries.stream()
                 .filter { item: Map.Entry<Int?, Item?> -> item.value is ItemArrow || item.value is ItemFireworkRocket }
                 .findFirst()
             var item: Item? = null
             var inventory: Inventory? = null
             if (offhandOptional.isPresent) {
-                inventory = player.getOffhandInventory()
+                inventory = player.offhandInventory
                 item = offhandOptional.get().value
             } else if (inventoryOptional.isPresent) {
-                inventory = player.getInventory()
+                inventory = player.inventory
                 item = inventoryOptional.get().value
             }
             if (inventory == null) return false
@@ -72,7 +72,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                             if (this.damage >= 385) {
                                 --this.count
                             }
-                            player.getInventory().setItemInHand(this)
+                            player.inventory.setItemInHand(this)
                         }
                     }
 
@@ -140,7 +140,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                 Server.instance.pluginManager.callEvent(entityShootBowEvent)
                 if (entityShootBowEvent.isCancelled) {
                     entityShootBowEvent.getProjectile(0).close()
-                    player.getInventory().sendContents(player)
+                    player.inventory.sendContents(player)
                 } else {
                     val proj = entityShootBowEvent.getProjectile(0)
                     proj.setMotion(proj.getMotion().multiply(3.5))
@@ -161,7 +161,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     fun removeChargedItem(player: Player) {
         this.setCompoundTag(this.namedTag!!.remove("chargedItem"))
-        player.getInventory().setItemInHand(this)
+        player.inventory.setItemInHand(this)
     }
 
     override fun onRelease(player: Player, ticksUsed: Int): Boolean {
@@ -180,7 +180,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                     .putByte("WasPickedUp", 0)
             )
             this.setCompoundTag(tag)
-            player.getInventory().setItemInHand(this)
+            player.inventory.setItemInHand(this)
             player.level!!.addSound(player.position, Sound.CROSSBOW_LOADING_END)
         }
     }

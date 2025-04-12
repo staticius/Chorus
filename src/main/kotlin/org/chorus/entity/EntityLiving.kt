@@ -207,7 +207,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         var isBreathing: Boolean = !this.isInsideOfWater()
 
         if (this is Player) {
-            if (isBreathing && player.getInventory().helmet is ItemTurtleHelmet) {
+            if (isBreathing && player.inventory.helmet is ItemTurtleHelmet) {
                 turtleTicks = 200
             } else if (turtleTicks > 0) {
                 isBreathing = true

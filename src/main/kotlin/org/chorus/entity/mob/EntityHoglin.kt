@@ -85,7 +85,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                         not(IBehaviorEvaluator { entity: EntityMob? ->
                             val player = memoryStorage.get<Entity>(CoreMemoryTypes.Companion.ATTACK_TARGET)
                             player is Player && isBreedingItem(
-                                player.getInventory().itemInHand
+                                player.inventory.itemInHand
                             )
                         })
                     ), 5, 1
@@ -96,7 +96,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
                         not(IBehaviorEvaluator { entity: EntityMob? ->
                             val player = memoryStorage[CoreMemoryTypes.Companion.NEAREST_PLAYER]
                             player is Player && isBreedingItem(
-                                player.getInventory().itemInHand
+                                player.inventory.itemInHand
                             )
                         })
                     ), 4, 1
@@ -189,7 +189,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
             memoryStorage[CoreMemoryTypes.Companion.LAST_BE_FEED_TIME] = level!!.tick
             sendBreedingAnimation(item)
             item.count--
-            return player.getInventory().setItemInHand(item) && superResult
+            return player.inventory.setItemInHand(item) && superResult
         }
         return superResult
     }

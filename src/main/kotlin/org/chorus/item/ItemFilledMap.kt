@@ -185,7 +185,7 @@ class ItemFilledMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         if (damage == 6) return false
         val server: Server = Server.instance
         renderMap(server.getLevel(mapWorld)!!, mapStartX, mapStartZ, mapScale)
-        player.getInventory().setItemInHand(this)
+        player.inventory.setItemInHand(this)
         sendImage(player, mapScale)
         return true
     }

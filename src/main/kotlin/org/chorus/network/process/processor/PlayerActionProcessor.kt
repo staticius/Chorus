@@ -217,7 +217,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                 }
 
                 PlayerActionPacket.ACTION_START_SPIN_ATTACK -> {
-                    if (player.getInventory().itemInHand.id != ItemID.TRIDENT) {
+                    if (player.inventory.itemInHand.id != ItemID.TRIDENT) {
                         player.sendPosition(
                             player.position,
                             player.rotation.yaw,
@@ -228,7 +228,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                     }
 
                     val riptideLevel =
-                        player.getInventory().itemInHand.getEnchantmentLevel(Enchantment.ID_TRIDENT_RIPTIDE)
+                        player.inventory.itemInHand.getEnchantmentLevel(Enchantment.ID_TRIDENT_RIPTIDE)
                     if (riptideLevel < 1) {
                         player.sendPosition(
                             player.position,

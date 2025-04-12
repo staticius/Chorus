@@ -35,7 +35,7 @@ class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
         Server.instance.pluginManager.callEvent(playerChangeSkinEvent)
         if (!playerChangeSkinEvent.isCancelled) {
             player.lastSkinChange = System.currentTimeMillis()
-            player.setSkin(skin)
+            player.skin = (skin)
         }
     }
 

@@ -14,7 +14,7 @@ class ItemRabbitStew @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         get() = 12f
 
     override fun onEaten(player: Player): Boolean {
-        player.getInventory().addItem(ItemBowl())
+        player.inventory.addItem(ItemBowl())
 
         return true
     }

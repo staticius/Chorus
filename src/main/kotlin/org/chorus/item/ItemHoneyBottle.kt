@@ -20,7 +20,7 @@ class ItemHoneyBottle @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         get() = 1.2f
 
     override fun onEaten(player: Player): Boolean {
-        player.getInventory().addItem(ItemGlassBottle())
+        player.inventory.addItem(ItemGlassBottle())
         player.removeEffect(EffectType.POISON)
 
         return true

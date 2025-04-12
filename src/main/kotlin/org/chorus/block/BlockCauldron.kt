@@ -201,7 +201,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
 
                     if (player!!.isSurvival || player.isAdventure) {
                         item.setCount(item.getCount() - 1)
-                        player.getInventory().setItemInHand(item)
+                        player.inventory.setItemInHand(item)
                     }
 
                     val color = ItemDye(item.damage).dyeColor.leatherColor
@@ -228,7 +228,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                         val compoundTag = if (item.hasCompoundTag()) item.namedTag else CompoundTag()
                         compoundTag!!.putInt("customColor", cauldron.customColor!!.rgb)
                         item.setCompoundTag(compoundTag)
-                        player!!.getInventory().setItemInHand(item)
+                        player!!.inventory.setItemInHand(item)
                         setFillLevel(
                             (fillLevel - 2).coerceIn(
                                 CommonBlockProperties.FILL_LEVEL.min,
@@ -249,7 +249,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
 
                         compoundTag.remove("customColor")
                         item.setCompoundTag(compoundTag)
-                        player!!.getInventory().setItemInHand(item)
+                        player!!.inventory.setItemInHand(item)
 
                         setFillLevel(
                             (fillLevel - 2).coerceIn(
@@ -327,15 +327,15 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
 
                     val consumeBottle = player!!.isSurvival || player.isAdventure
                     if (consumeBottle && item.getCount() == 1) {
-                        player.getInventory().setItemInHand(potion)
+                        player.inventory.setItemInHand(potion)
                     } else if (item.getCount() > 1) {
                         if (consumeBottle) {
                             item.setCount(item.getCount() - 1)
-                            player.getInventory().setItemInHand(item)
+                            player.inventory.setItemInHand(item)
                         }
 
-                        if (player.getInventory().canAddItem(potion)) {
-                            player.getInventory().addItem(potion)
+                        if (player.inventory.canAddItem(potion)) {
+                            player.inventory.addItem(potion)
                         } else {
                             player.level!!.dropItem(
                                 player.position.add(0.0, 1.3, 0.0),
@@ -364,15 +364,15 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     banner.removePattern(banner.patternsSize - 1)
                     val consumeBanner = player!!.isSurvival || player.isAdventure
                     if (consumeBanner && item.getCount() < item.maxStackSize) {
-                        player.getInventory().setItemInHand(banner)
+                        player.inventory.setItemInHand(banner)
                     } else {
                         if (consumeBanner) {
                             item.setCount(item.getCount() - 1)
-                            player.getInventory().setItemInHand(item)
+                            player.inventory.setItemInHand(item)
                         }
 
-                        if (player.getInventory().canAddItem(banner)) {
-                            player.getInventory().addItem(banner)
+                        if (player.inventory.canAddItem(banner)) {
+                            player.inventory.addItem(banner)
                         } else {
                             player.level!!.dropItem(
                                 player.position.add(0.0, 1.3, 0.0),
@@ -399,7 +399,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
 
                     if (player!!.isSurvival || player.isAdventure) {
                         item.setCount(item.getCount() - 1)
-                        player.getInventory().setItemInHand(item)
+                        player.inventory.setItemInHand(item)
                     }
 
                     color = item.dyeColor.color
@@ -517,11 +517,11 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
     protected fun replaceBucket(oldBucket: Item, player: Player, newBucket: Item) {
         if (player.isSurvival || player.isAdventure) {
             if (oldBucket.getCount() == 1) {
-                player.getInventory().setItemInHand(newBucket)
+                player.inventory.setItemInHand(newBucket)
             } else {
                 oldBucket.setCount(oldBucket.getCount() - 1)
-                if (player.getInventory().canAddItem(newBucket)) {
-                    player.getInventory().addItem(newBucket)
+                if (player.inventory.canAddItem(newBucket)) {
+                    player.inventory.addItem(newBucket)
                 } else {
                     player.level!!.dropItem(
                         player.position.add(0.0, 1.3, 0.0),
@@ -536,14 +536,14 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
     private fun consumePotion(item: Item, player: Player) {
         if (player.isSurvival || player.isAdventure) {
             if (item.getCount() == 1) {
-                player.getInventory().setItemInHand(ItemBlock(BlockAir()))
+                player.inventory.setItemInHand(ItemBlock(BlockAir()))
             } else if (item.getCount() > 1) {
                 item.setCount(item.getCount() - 1)
-                player.getInventory().setItemInHand(item)
+                player.inventory.setItemInHand(item)
 
                 val bottle: Item = ItemGlassBottle()
-                if (player.getInventory().canAddItem(bottle)) {
-                    player.getInventory().addItem(bottle)
+                if (player.inventory.canAddItem(bottle)) {
+                    player.inventory.addItem(bottle)
                 } else {
                     player.level!!.dropItem(
                         player.position.add(0.0, 1.3, 0.0),

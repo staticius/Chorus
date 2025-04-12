@@ -35,7 +35,7 @@ interface EntityNameable {
             this.setNameTagVisible(true)
 
             if (consume && !player.isCreative) {
-                player.getInventory().removeItem(item)
+                player.inventory.removeItem(item)
             }
             // Set entity as persistent.
             return true

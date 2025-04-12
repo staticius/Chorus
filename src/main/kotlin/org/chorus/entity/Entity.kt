@@ -1051,10 +1051,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             if (source.cause != DamageCause.VOID && source.cause != DamageCause.SUICIDE) {
                 var totem = false
                 var isOffhand = false
-                if (player.getOffhandInventory()?.getItem(0) is ItemTotemOfUndying) {
+                if (player.offhandInventory?.getItem(0) is ItemTotemOfUndying) {
                     totem = true
                     isOffhand = true
-                } else if (player.getInventory().itemInHand is ItemTotemOfUndying) {
+                } else if (player.inventory.itemInHand is ItemTotemOfUndying) {
                     totem = true
                 }
                 //复活图腾实现
@@ -1080,9 +1080,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                     player.dataPacket(pk)
 
                     if (isOffhand) {
-                        player.getOffhandInventory()?.clear(0, true)
+                        player.offhandInventory?.clear(0, true)
                     } else {
-                        player.getInventory().clear(player.getInventory().heldItemIndex, true)
+                        player.inventory.clear(player.inventory.heldItemIndex, true)
                     }
 
                     source.isCancelled = true

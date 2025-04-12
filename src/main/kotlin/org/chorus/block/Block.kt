@@ -559,7 +559,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         if (player != null) {
             hasConduitPower = player.hasEffect(EffectType.CONDUIT_POWER)
             hasAquaAffinity =
-                Optional.ofNullable(player.getInventory().helmet.getEnchantment(Enchantment.ID_WATER_WORKER))
+                Optional.ofNullable(player.inventory.helmet.getEnchantment(Enchantment.ID_WATER_WORKER))
                     .map(Enchantment::level).map { l: Int -> l >= 1 }
                     .orElse(false)
             hasteEffectLevel = Optional.ofNullable(player.getEffect(EffectType.HASTE))
@@ -1075,7 +1075,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
             if (player == null) return true
 
             if (player.isAdventure) {
-                val itemInHand = player.getInventory().itemInHand
+                val itemInHand = player.inventory.itemInHand
                 if (itemInHand.isNothing) return false
 
                 val tag = itemInHand.getNamedTagEntry("CanDestroy")
@@ -1191,7 +1191,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
             if (player == null) {
                 return true
             }
-            val itemInHand = player.getInventory().itemInHand
+            val itemInHand = player.inventory.itemInHand
             return (player.isSneaking() || player.isFlySneaking) && !(itemInHand.isTool || itemInHand.isNothing)
         }
 

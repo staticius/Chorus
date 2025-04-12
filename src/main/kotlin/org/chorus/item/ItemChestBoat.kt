@@ -89,9 +89,9 @@ open class ItemChestBoat : Item {
         }
 
         if (player.isSurvival || player.isAdventure) {
-            val item = player.getInventory().itemInHand
+            val item = player.inventory.itemInHand
             item.setCount(item.getCount() - 1)
-            player.getInventory().setItemInHand(item)
+            player.inventory.setItemInHand(item)
         }
 
         boat.spawnToAll()

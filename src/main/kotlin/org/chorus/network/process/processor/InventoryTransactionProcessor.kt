@@ -54,16 +54,16 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     InventoryTransactionPacket.RELEASE_ITEM_ACTION_RELEASE -> {
                         val lastUseTick = player.getLastUseTick(releaseItemData.itemInHand.id)
                         if (lastUseTick != -1) {
-                            val item = player.getInventory().itemInHand
+                            val item = player.inventory.itemInHand
 
                             val ticksUsed = player.level!!.tick - lastUseTick
                             if (!item.onRelease(player, ticksUsed)) {
-                                player.getInventory().sendContents(player)
+                                player.inventory.sendContents(player)
                             }
 
                             player.removeLastUseTick(releaseItemData.itemInHand.id)
                         } else {
-                            player.getInventory().sendContents(player)
+                            player.inventory.sendContents(player)
                         }
                     }
 
@@ -96,10 +96,10 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
         val useItemOnEntityData = pk.transactionData as UseItemOnEntityData
         val target = player.level!!.getEntity(useItemOnEntityData.entityRuntimeId) ?: return
         val type = useItemOnEntityData.actionType
-        if (!useItemOnEntityData.itemInHand.equalsExact(player.getInventory().itemInHand)) {
-            player.getInventory().sendHeldItem(player)
+        if (!useItemOnEntityData.itemInHand.equalsExact(player.inventory.itemInHand)) {
+            player.inventory.sendHeldItem(player)
         }
-        var item = player.getInventory().itemInHand
+        var item = player.inventory.itemInHand
         when (type) {
             InventoryTransactionPacket.USE_ITEM_ON_ENTITY_ACTION_INTERACT -> {
                 val playerInteractEntityEvent =
@@ -145,14 +145,14 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                         }
                     }
 
-                    if (item.isNothing || player.getInventory().itemInHand.id == item.id) {
-                        player.getInventory().setItemInHand(item)
+                    if (item.isNothing || player.inventory.itemInHand.id == item.id) {
+                        player.inventory.setItemInHand(item)
                     } else {
-                        logTriedToSetButHadInHand(playerHandle, item, player.getInventory().itemInHand)
+                        logTriedToSetButHadInHand(playerHandle, item, player.inventory.itemInHand)
                     }
                 } else {
                     //Otherwise nametag still gets consumed on client side
-                    player.getInventory().sendContents(player)
+                    player.inventory.sendContents(player)
                 }
             }
 
@@ -220,7 +220,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 try {
                     if (!target.attack(entityDamageByEntityEvent)) {
                         if (item.isTool && player.isSurvival) {
-                            player.getInventory().sendContents(player)
+                            player.inventory.sendContents(player)
                         }
                         return
                     }
@@ -232,12 +232,12 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 if (item.isTool && (player.isSurvival || player.isAdventure)) {
                     if (item.useOn(target) && item.damage >= item.maxDurability) {
                         player.level!!.addSound(player.position, Sound.RANDOM_BREAK)
-                        player.getInventory().setItemInHand(Item.AIR)
+                        player.inventory.setItemInHand(Item.AIR)
                     } else {
-                        if (item.isNothing || player.getInventory().itemInHand.id === item.id) {
-                            player.getInventory().setItemInHand(item)
+                        if (item.isNothing || player.inventory.itemInHand.id === item.id) {
+                            player.inventory.setItemInHand(item)
                         } else {
-                            logTriedToSetButHadInHand(playerHandle, item, player.getInventory().itemInHand)
+                            logTriedToSetButHadInHand(playerHandle, item, player.inventory.itemInHand)
                         }
                     }
                 }
@@ -267,7 +267,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 if (!useItemData.itemInHand.canBeActivated()) player.setDataFlag(EntityFlag.USING_ITEM, false)
                 if (player.canInteract(blockVector.add(0.5, 0.5, 0.5), (if (player.isCreative) 13 else 7).toDouble())) {
                     if (player.isCreative) {
-                        val i = player.getInventory().itemInHand
+                        val i = player.inventory.itemInHand
                         if (player.level!!.useItemOn(
                                 blockVector.asVector3(),
                                 i,
@@ -280,8 +280,8 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                         ) {
                             return
                         }
-                    } else if (player.getInventory().itemInHand.equals(useItemData.itemInHand, true, false)) {
-                        var i: Item? = player.getInventory().itemInHand
+                    } else if (player.inventory.itemInHand.equals(useItemData.itemInHand, true, false)) {
+                        var i: Item? = player.inventory.itemInHand
                         val oldItem: Item = i!!.clone()
                         //TODO: Implement adventure mode checks
                         if ((player.level!!.useItemOn(
@@ -296,17 +296,17 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                         ) {
                             if (!i!!.equals(oldItem) || i!!.getCount() != oldItem.getCount()) {
                                 if (oldItem.id == i!!.id || i!!.isNothing) {
-                                    player.getInventory().setItemInHand(i!!)
+                                    player.inventory.setItemInHand(i!!)
                                 } else {
                                     logTriedToSetButHadInHand(playerHandle, i!!, oldItem)
                                 }
-                                player.getInventory().sendHeldItem(player.viewers.values)
+                                player.inventory.sendHeldItem(player.viewers.values)
                             }
                             return
                         }
                     }
                 }
-                player.getInventory().sendHeldItem(player)
+                player.inventory.sendHeldItem(player)
                 if (blockVector.distanceSquared(player.position) > 10000) {
                     return
                 }
@@ -330,7 +330,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     return
                 }
                 player.resetInventory()
-                var i: Item? = player.getInventory().itemInHand
+                var i: Item? = player.inventory.itemInHand
                 val oldItem: Item = i!!.clone()
                 if (player.isSurvival || player.isAdventure) {
                     if (player.canInteract(blockVector.add(0.5, 0.5, 0.5), 7.0) && (player.level!!.useBreakOn(
@@ -344,17 +344,17 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                         player.foodData!!.exhaust(0.005)
                         if (!i!!.equals(oldItem) || i!!.getCount() != oldItem.getCount()) {
                             if (oldItem.id == i!!.id || i!!.isNothing) {
-                                player.getInventory().setItemInHand(i!!)
+                                player.inventory.setItemInHand(i!!)
                             } else {
                                 logTriedToSetButHadInHand(playerHandle, i!!, oldItem)
                             }
-                            player.getInventory().sendHeldItem(player.viewers.values)
+                            player.inventory.sendHeldItem(player.viewers.values)
                         }
                         return
                     }
                 }
-                player.getInventory().sendContents(player)
-                player.getInventory().sendHeldItem(player)
+                player.inventory.sendContents(player)
+                player.inventory.sendHeldItem(player)
                 if (blockVector.distanceSquared(player.position) < 10000) {
                     val target = player.level!!.getBlock(blockVector.asVector3())
                     player.level!!.sendBlocks(
@@ -373,7 +373,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
             InventoryTransactionPacket.USE_ITEM_ACTION_CLICK_AIR -> {
                 val item: Item
                 val useItemDataItem = useItemData.itemInHand
-                val serverItemInHand = player.getInventory().itemInHand
+                val serverItemInHand = player.inventory.itemInHand
                 val directionVector = player.getDirectionVector()
                 // Removes Damage Tag that the client adds, but we do not store.
                 if (useItemDataItem.hasCompoundTag() && (!serverItemInHand.hasCompoundTag() || !serverItemInHand.namedTag!!.containsInt(
@@ -387,9 +387,9 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
 
                 item = if (player.isCreative) {
                     serverItemInHand
-                } else if (player.getInventory().itemInHand != useItemDataItem) {
+                } else if (player.inventory.itemInHand != useItemDataItem) {
                     Server.instance.logger.warning("Item received did not match item in hand.")
-                    player.getInventory().sendHeldItem(player)
+                    player.inventory.sendHeldItem(player)
                     return
                 } else {
                     serverItemInHand
@@ -399,17 +399,17 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 Server.instance.pluginManager.callEvent(interactEvent)
                 if (interactEvent.isCancelled) {
                     if (interactEvent.item != null && interactEvent.item.isArmor) {
-                        player.getInventory().sendArmorContents(player)
+                        player.inventory.sendArmorContents(player)
                     }
-                    player.getInventory().sendHeldItem(player)
+                    player.inventory.sendHeldItem(player)
                     return
                 }
                 if (item.onClickAir(player, directionVector)) {
                     if (!player.isCreative) {
-                        if (item.isNothing || player.getInventory().itemInHand.id == item.id) {
-                            player.getInventory().setItemInHand(item)
+                        if (item.isNothing || player.inventory.itemInHand.id == item.id) {
+                            player.inventory.setItemInHand(item)
                         } else {
-                            logTriedToSetButHadInHand(playerHandle, item, player.getInventory().itemInHand)
+                            logTriedToSetButHadInHand(playerHandle, item, player.inventory.itemInHand)
                         }
                     }
                     if (!player.isUsingItem(item.id)) {
@@ -442,14 +442,14 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
 
     companion object : Loggable {
         private fun dropHotBarItemForPlayer(hotbarSlot: Int, dropCount: Int, player: Player) {
-            val inventory = player.getInventory()
+            val inventory = player.inventory
             val item = inventory.getItem(hotbarSlot)
             if (item.isNothing) return
 
             val ev: PlayerDropItemEvent
             Server.instance.pluginManager.callEvent(PlayerDropItemEvent(player, item).also { ev = it })
             if (ev.isCancelled) {
-                player.getInventory().sendContents(player)
+                player.inventory.sendContents(player)
                 return
             }
 

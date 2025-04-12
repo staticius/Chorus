@@ -94,7 +94,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
             if (!isSheared()) {
                 this.setSheared(true)
                 level!!.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_SHEAR)
-                if (player.gamemode != Player.CREATIVE) player.getInventory().itemInHand
+                if (player.gamemode != Player.CREATIVE) player.inventory.itemInHand
                     .damage = (item.damage + 1)
                 level!!.dropItem(
                     position.add(

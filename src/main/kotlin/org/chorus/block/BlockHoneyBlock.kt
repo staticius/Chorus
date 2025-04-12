@@ -29,7 +29,7 @@ class BlockHoneyBlock @JvmOverloads constructor(blockstate: BlockState = Compani
 
     override fun onEntityCollide(entity: Entity) {
         if (!entity.onGround && entity.motion.y <= 0.08 &&
-            (entity !is Player || !entity.getAdventureSettings().get(AdventureSettings.Type.FLYING))
+            (entity !is Player || !entity.adventureSettings.get(AdventureSettings.Type.FLYING))
         ) {
             val ex = abs(position.x + 0.5 - entity.position.x)
             val ez = abs(position.z + 0.5 - entity.position.z)

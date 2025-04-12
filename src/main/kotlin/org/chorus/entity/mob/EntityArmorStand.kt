@@ -182,7 +182,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
             inventory.setItem(slot, itemClone)
             if (!player.isCreative) {
                 handItem.count--
-                player.getInventory().setItem(player.getInventory().heldItemIndex, handItem)
+                player.inventory.setItem(player.inventory.heldItemIndex, handItem)
             }
             return true
         } else if (!item.isNothing) {
@@ -209,15 +209,15 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
                     itemtoAddToArmorStand = handItem.clone()
                     itemToSetToPlayerInv = Item.AIR
                 }
-                player.getInventory().setItem(player.getInventory().heldItemIndex, itemToSetToPlayerInv)
+                player.inventory.setItem(player.inventory.heldItemIndex, itemToSetToPlayerInv)
             }
 
             // Removing item from the armor stand
-            val notAdded: Array<Item> = player.getInventory().addItem(item)
+            val notAdded: Array<Item> = player.inventory.addItem(item)
             if (notAdded.size > 0) {
                 if (notAdded.get(0).count == item.count) {
                     if (!handItem.isNothing) {
-                        player.getInventory().setItem(player.getInventory().heldItemIndex, handItem)
+                        player.inventory.setItem(player.inventory.heldItemIndex, handItem)
                     }
                     return false
                 }

@@ -18,7 +18,7 @@ class BookEditProcessor : DataPacketProcessor<BookEditPacket>() {
     override fun handle(playerHandle: PlayerHandle, pk: BookEditPacket) {
         val player = playerHandle.player
 
-        val oldBook = player.getInventory().getItem(pk.bookSlot.toInt())
+        val oldBook = player.inventory.getItem(pk.bookSlot.toInt())
         if (oldBook.id != ItemID.WRITABLE_BOOK) {
             return
         }
@@ -73,7 +73,7 @@ class BookEditProcessor : DataPacketProcessor<BookEditPacket>() {
             val editBookEvent = PlayerEditBookEvent(player, oldBook, newBook, pk.action)
             Server.instance.pluginManager.callEvent(editBookEvent)
             if (!editBookEvent.isCancelled) {
-                player.getInventory().setItem(pk.bookSlot.toInt(), editBookEvent.newBook)
+                player.inventory.setItem(pk.bookSlot.toInt(), editBookEvent.newBook)
             }
         }
     }

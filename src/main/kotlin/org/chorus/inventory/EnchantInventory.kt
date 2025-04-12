@@ -33,7 +33,7 @@ class EnchantInventory(table: BlockEntityEnchantTable) : ContainerInventory(tabl
                 for (viewer in this.viewers) {
                     val options = EnchantmentHelper.getEnchantOptions(
                         (holder as BlockEntityEnchantTable),
-                        first, viewer.getEnchantmentSeed()
+                        first, viewer.enchSeed
                     )
 
                     val event = PlayerEnchantOptionsRequestEvent(viewer, this, options)

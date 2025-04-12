@@ -235,9 +235,9 @@ class PositionTrackingService(folder: File) : Closeable {
 
                 override fun next(): Inventory {
                     return when (next++) {
-                        0 -> player.getInventory()
+                        0 -> player.inventory
                         1 -> player.cursorInventory
-                        2 -> player.getOffhandInventory()
+                        2 -> player.offhandInventory
                         3 -> player.craftingGrid
                         4 -> player.topWindow.orElse(null)
                         else -> throw NoSuchElementException()

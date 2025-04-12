@@ -72,9 +72,9 @@ class ItemEndCrystal @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         val entity = createEntity(EntityID.ENDER_CRYSTAL, chunk, nbt)
         if (entity != null) {
             if (player.isAdventure || player.isSurvival) {
-                val item = player.getInventory().itemInHand
+                val item = player.inventory.itemInHand
                 item.setCount(item.getCount() - 1)
-                player.getInventory().setItemInHand(item)
+                player.inventory.setItemInHand(item)
             }
             entity.spawnToAll()
             return true

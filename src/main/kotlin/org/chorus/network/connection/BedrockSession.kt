@@ -501,12 +501,12 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
     fun syncInventory() {
         val player = player
         if (player != null) {
-            player.getInventory().sendHeldItem(player)
-            player.getInventory().sendContents(player)
-            player.getInventory().sendArmorContents(player)
+            player.inventory.sendHeldItem(player)
+            player.inventory.sendContents(player)
+            player.inventory.sendArmorContents(player)
             player.cursorInventory.sendContents(player)
-            player.getOffhandInventory()!!.sendContents(player)
-            player.getEnderChestInventory()!!.sendContents(player)
+            player.offhandInventory!!.sendContents(player)
+            player.enderChestInventory!!.sendContents(player)
         }
     }
 

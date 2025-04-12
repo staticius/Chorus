@@ -19,7 +19,7 @@ class EntityEventProcessor : DataPacketProcessor<EntityEventPacket>() {
                 return
             }
 
-            val hand = player.getInventory().itemInHand as? ItemFood ?: return
+            val hand = player.inventory.itemInHand as? ItemFood ?: return
 
             val predictedData = (hand.runtimeId shl 16) or hand.damage
             if (pk.data != predictedData) {

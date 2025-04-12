@@ -28,7 +28,7 @@ class ItemEmptyMap @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         if (!player.isCreative) {
             count--
         }
-        player.getInventory().addItem(get(ItemID.Companion.FILLED_MAP))
+        player.inventory.addItem(get(ItemID.Companion.FILLED_MAP))
         return true
     }
 }

@@ -1072,8 +1072,8 @@ class Server internal constructor(
         this.updatePlayerListData(
             player.getUUID(),
             player.getRuntimeID(),
-            player.getDisplayName(),
-            player.getSkin(),
+            player.displayName,
+            player.skin,
             player.loginChainData.xuid
         )
         network.pong.playerCount = playerList.size
@@ -1219,8 +1219,8 @@ class Server internal constructor(
                 PlayerListPacket.Entry(
                     p.getUUID(),
                     p.getRuntimeID(),
-                    p.getDisplayName(),
-                    p.getSkin(),
+                    p.displayName,
+                    p.skin,
                     p.loginChainData.xuid
                 )
             }
@@ -2203,8 +2203,8 @@ class Server internal constructor(
         val player = this.getPlayerExact(name)
         if (player != null) {
             player.recalculatePermissions()
-            player.getAdventureSettings().onOpChange(true)
-            player.getAdventureSettings().update()
+            player.adventureSettings.onOpChange(true)
+            player.adventureSettings.update()
             player.session.syncAvailableCommands()
         }
         operators.save(true)
@@ -2215,8 +2215,8 @@ class Server internal constructor(
         val player = this.getPlayerExact(name)
         if (player != null) {
             player.recalculatePermissions()
-            player.getAdventureSettings().onOpChange(false)
-            player.getAdventureSettings().update()
+            player.adventureSettings.onOpChange(false)
+            player.adventureSettings.update()
             player.session.syncAvailableCommands()
         }
         operators.save()

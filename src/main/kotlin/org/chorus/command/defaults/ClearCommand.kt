@@ -57,8 +57,8 @@ class ClearCommand(name: String) : VanillaCommand(name, "commands.clear.descript
         }
 
         for (target in targets) {
-            val inventory = target.getInventory()
-            val offhand = target.getOffhandInventory()!!
+            val inventory = target.inventory
+            val offhand = target.offhandInventory
 
             if (item == null) {
                 var count = 0

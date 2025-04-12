@@ -45,10 +45,10 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
         if (!pickEvent.isCancelled) {
             var itemExists = false
             var itemSlot = -1
-            for (slot in 0..<player.getInventory().size) {
-                if (player.getInventory().getItem(slot).equals(pickEvent.item)) {
-                    if (slot < player.getInventory().hotbarSize) {
-                        player.getInventory().setHeldItemSlot(slot)
+            for (slot in 0..<player.inventory.size) {
+                if (player.inventory.getItem(slot).equals(pickEvent.item)) {
+                    if (slot < player.inventory.hotbarSize) {
+                        player.inventory.setHeldItemSlot(slot)
                     } else {
                         itemSlot = slot
                     }
@@ -57,36 +57,36 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
                 }
             }
 
-            for (slot in 0..<player.getInventory().hotbarSize) {
-                if (player.getInventory().getItem(slot).isNothing) {
+            for (slot in 0..<player.inventory.hotbarSize) {
+                if (player.inventory.getItem(slot).isNothing) {
                     if (!itemExists && player.isCreative) {
-                        player.getInventory().setHeldItemSlot(slot)
-                        player.getInventory().setItemInHand(pickEvent.item)
+                        player.inventory.setHeldItemSlot(slot)
+                        player.inventory.setItemInHand(pickEvent.item)
                         return
                     } else if (itemSlot > -1) {
-                        player.getInventory().setHeldItemSlot(slot)
-                        player.getInventory().setItemInHand(player.getInventory().getItem(itemSlot))
-                        player.getInventory().clear(itemSlot, true)
+                        player.inventory.setHeldItemSlot(slot)
+                        player.inventory.setItemInHand(player.inventory.getItem(itemSlot))
+                        player.inventory.clear(itemSlot, true)
                         return
                     }
                 }
             }
 
             if (!itemExists && player.isCreative) {
-                val itemInHand = player.getInventory().itemInHand
-                player.getInventory().setItemInHand(pickEvent.item)
-                if (!player.getInventory().isFull) {
+                val itemInHand = player.inventory.itemInHand
+                player.inventory.setItemInHand(pickEvent.item)
+                if (!player.inventory.isFull) {
                     for (slot in 0..<HumanInventory.ARMORS_INDEX) {
-                        if (player.getInventory().getItem(slot).isNothing) {
-                            player.getInventory().setItem(slot, itemInHand)
+                        if (player.inventory.getItem(slot).isNothing) {
+                            player.inventory.setItem(slot, itemInHand)
                             break
                         }
                     }
                 }
             } else if (itemSlot > -1) {
-                val itemInHand = player.getInventory().itemInHand
-                player.getInventory().setItemInHand(player.getInventory().getItem(itemSlot))
-                player.getInventory().setItem(itemSlot, itemInHand)
+                val itemInHand = player.inventory.itemInHand
+                player.inventory.setItemInHand(player.inventory.getItem(itemSlot))
+                player.inventory.setItem(itemSlot, itemInHand)
             }
         }
     }

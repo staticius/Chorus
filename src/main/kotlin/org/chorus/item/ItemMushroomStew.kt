@@ -15,7 +15,7 @@ class ItemMushroomStew @JvmOverloads constructor(meta: Int? = 0, count: Int = 1)
         get() = 7.2f
 
     override fun onEaten(player: Player): Boolean {
-        player.getInventory().addItem(ItemBowl())
+        player.inventory.addItem(ItemBowl())
 
         return true
     }

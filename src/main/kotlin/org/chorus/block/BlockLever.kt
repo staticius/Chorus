@@ -60,7 +60,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         fz: Float
     ): Boolean {
         if (player != null) {
-            if (!player.getAdventureSettings()[AdventureSettings.Type.DOORS_AND_SWITCHED]) return false
+            if (!player.adventureSettings[AdventureSettings.Type.DOORS_AND_SWITCHED]) return false
             if (isNotActivate(player)) return false
         }
         Server.instance.pluginManager.callEvent(

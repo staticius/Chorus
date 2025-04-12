@@ -114,7 +114,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState = Compani
             if (event.isCancelled) return false
             if (player != null && !player.isCreative) {
                 itemOnFrame.setCount(itemOnFrame.getCount() - 1)
-                player.getInventory().setItemInHand(itemOnFrame)
+                player.inventory.setItemInHand(itemOnFrame)
             }
             itemOnFrame.setCount(1)
             itemFrame.item = itemOnFrame

@@ -85,7 +85,7 @@ open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState = 
         fz: Float
     ): Boolean {
         if (player != null) {
-            val itemInHand = player.getInventory().itemInHand
+            val itemInHand = player.inventory.itemInHand
             if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing) || !instance.settings.gameplaySettings.enableCommandBlocks
             ) {
                 return false

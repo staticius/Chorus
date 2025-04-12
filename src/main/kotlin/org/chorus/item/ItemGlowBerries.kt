@@ -32,7 +32,7 @@ class ItemGlowBerries @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) 
             level.addSound(target.down().position, Sound.DIG_CAVE_VINES)
             if (player.isAdventure || player.isSurvival) {
                 --this.count
-                player.getInventory().setItemInHand(this)
+                player.inventory.setItemInHand(this)
             }
             return true
         }

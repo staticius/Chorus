@@ -457,7 +457,7 @@ class HumanInventory(human: IHuman) //9+27+4
         for (index in 0..<size) {
             this.clear(index)
         }
-        (holder as IHuman).getOffhandInventory()!!.clearAll()
+        (holder as IHuman).offhandInventory!!.clearAll()
     }
 
     /**

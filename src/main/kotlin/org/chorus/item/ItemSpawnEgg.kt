@@ -96,7 +96,7 @@ open class ItemSpawnEgg : Item {
 
         if (entity != null) {
             if (player.isSurvival) {
-                player.getInventory().decreaseCount(player.getInventory().heldItemIndex)
+                player.inventory.decreaseCount(player.inventory.heldItemIndex)
             }
             entity.spawnToAll()
 

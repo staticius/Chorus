@@ -135,7 +135,7 @@ class Player(
 
     //    @NotNull public Boolean sleeping = false;
     var sleepTimer: Short = 0
-    var sneaking: Boolean = false
+//    var sneaking: Boolean = false
     var spawnBlockPositionX: Int = 0
     var spawnBlockPositionY: Int = 0
     var spawnBlockPositionZ: Int = 0
@@ -235,12 +235,23 @@ class Player(
      * Whether to remove the color character in the chat of the changed player as §c §1
      */
     var removeFormat: Boolean = true
-    var displayName: String
+    var displayName: String = ""
+        set(value) {
+            field = value
+            if (this.spawned) {
+                Server.instance.updatePlayerListData(
+                    getUUID(), this.getRuntimeID(), field,
+                    skin,
+                    loginChainData.xuid
+                )
+            }
+        }
     var sleeping: Vector3? = null
     var chunkLoadCount: Int = 0
     var nextChunkOrderRun: Int = 1
     var newPosition: Vector3? = null
     var chunkRadius: Int
+    @JvmField
     var viewDistance: Int
     var spawnPoint: Locator?
     protected var spawnPointType: SpawnPointType? = null
@@ -256,6 +267,10 @@ class Player(
     var inAirTicks: Int = 0
     var startAirTicks: Int = 5
     var adventureSettings: AdventureSettings = AdventureSettings(this)
+        private set(value) {
+            field = value.clone()
+            field.update()
+        }
 
     /**
      * @since 1.2.1.0-PN
@@ -272,6 +287,10 @@ class Player(
      */
     lateinit var foodData: PlayerFood
     protected var enableClientCommand: Boolean = true
+        private set(value) {
+            field = value
+            session.setEnableClientCommand(value)
+        }
     var formWindowCount: Int = 0
     var formWindows: MutableMap<Int, Form<*>> = HashMap()
     var serverSettings: MutableMap<Int, Form<*>> = HashMap()
@@ -350,7 +369,7 @@ class Player(
      */
     var experienceLevel: Int = 0
         private set
-    private var enchSeed = 0
+    var enchSeed = 0
     private var loadingScreenId = 0
     override val loaderId: Int = generateChunkLoaderId(this)
     private var lastBreakPosition = BlockVector3()
@@ -378,6 +397,15 @@ class Player(
         private set
     private var delayedPosTrackingUpdate: TaskHandler? = null
     var showingCredits: Boolean = false
+        set(value) {
+            field = value
+            if (value) {
+                val pk = ShowCreditsPacket()
+                pk.eid = this.getRuntimeID()
+                pk.status = ShowCreditsPacket.STATUS_START_CREDITS
+                this.dataPacket(pk)
+            }
+        }
     var lastBlockAction: PlayerBlockActionData? = null
     var preLoginEventTask: AsyncTask? = null
 
@@ -502,6 +530,21 @@ class Player(
      * Get the player info.
      */
 
+    override var skin: Skin
+        get() = super.skin
+        set(value) {
+            super.skin = value
+            if (this.spawned) {
+//            this.Server.instance.updatePlayerListData(this.getUniqueId(), this.getId(), this.getDisplayName(), skin, this.getLoginChainData().getXUID());
+                val skinPacket = PlayerSkinPacket()
+                skinPacket.uuid = this.getUUID()
+                skinPacket.skin = this.skin
+                skinPacket.newSkinName = skin.getSkinId()
+                skinPacket.oldSkinName = ""
+                Server.broadcastPacket(Server.instance.onlinePlayers.values, skinPacket)
+            }
+        }
+
     init {
         this.perm = PermissibleBase(this)
         this.lastBreak = -1
@@ -522,7 +565,7 @@ class Player(
         this.loginChainData = playerInfo.data
         this.uuid = playerInfo.uniqueId
         this.rawUUID = writeUUID(playerInfo.uniqueId)
-        this.setSkin(playerInfo.skin)
+        this.skin = (playerInfo.skin)
     }
 
     fun onBlockBreakContinue(pos: Vector3, face: BlockFace?) {
@@ -593,7 +636,7 @@ class Player(
 
         target.onTouch(
             pos,
-            getInventory().itemInHand, face, 0f, 0f, 0f, this, playerInteractEvent.action
+            inventory.itemInHand, face, 0f, 0f, 0f, this, playerInteractEvent.action
         )
 
         val block = target.getSide(face)
@@ -669,7 +712,7 @@ class Player(
             return
         }
 
-        var handItem: Item? = getInventory().itemInHand
+        var handItem: Item? = inventory.itemInHand
         val clone: Item = handItem!!.clone()
 
         val canInteract = this.canInteract(blockPos.add(0.5, 0.5, 0.5), (if (this.isCreative) 13 else 7).toDouble())
@@ -739,7 +782,7 @@ class Player(
     private fun updateBlockingFlag() {
         val shouldBlock = this.isItemCoolDownEnd("shield")
                 && (this.isSneaking() || getRiding() != null)
-                && (getInventory().itemInHand is ItemShield || getOffhandInventory()!!.getItem(0) is ItemShield)
+                && (inventory.itemInHand is ItemShield || offhandInventory!!.getItem(0) is ItemShield)
 
         if (isBlocking() != shouldBlock) {
             this.setBlocking(shouldBlock)
@@ -797,7 +840,7 @@ class Player(
         session.syncInventory()
         this.resetInventory()
 
-        this.setEnableClientCommand(true)
+        this.enableClientCommand = (true)
 
         val setTimePacket = SetTimePacket()
         setTimePacket.time = level!!.getTime()
@@ -1298,7 +1341,7 @@ class Player(
 
             //处理灵魂急行附魔
             //Handling Soul Speed Enchantment
-            val soulSpeedLevel = getInventory().boots.getEnchantmentLevel(Enchantment.ID_SOUL_SPEED)
+            val soulSpeedLevel = inventory.boots.getEnchantmentLevel(Enchantment.ID_SOUL_SPEED)
             if (soulSpeedLevel > 0) {
                 val levelBlock = locator.levelBlock
                 this.soulSpeedMultiplier = (soulSpeedLevel * 0.105f) + 1.3f
@@ -1543,7 +1586,7 @@ class Player(
             this,
             TranslationContainer(
                 TextFormat.YELLOW.toString() + "%multiplayer.player.joined", *arrayOf(
-                    this.getDisplayName()
+                    this.displayName
                 )
             )
         )
@@ -1670,7 +1713,7 @@ class Player(
 
         this.setMovementSpeedF(DEFAULT_SPEED)
 
-        getAdventureSettings().update()
+        adventureSettings.update()
         inventory.sendContents(this)
         inventory.sendArmorContents(this)
         offhandInventory.sendContents(this)
@@ -1753,18 +1796,18 @@ class Player(
         this.cursorInventory = PlayerCursorInventory(this)
         this.creativeOutputInventory = CreativeOutputInventory(this)
 
-        this.addWindow(this.getInventory(), SpecialWindowId.PLAYER.id)
+        this.addWindow(this.inventory, SpecialWindowId.PLAYER.id)
         //addDefaultWindows when the player doesn't have a spawn yet,
         // so we need to manually open it to add the player to the viewer
-        getInventory().open(this)
+        inventory.open(this)
         permanentWindows.add(SpecialWindowId.PLAYER.id)
 
         this.addWindow(creativeOutputInventory, SpecialWindowId.CREATIVE.id)
         creativeOutputInventory.open(this)
         permanentWindows.add(SpecialWindowId.CREATIVE.id)
 
-        this.addWindow(getOffhandInventory()!!, SpecialWindowId.OFFHAND.id)
-        getOffhandInventory()!!.open(this)
+        this.addWindow(offhandInventory!!, SpecialWindowId.OFFHAND.id)
+        offhandInventory!!.open(this)
         permanentWindows.add(SpecialWindowId.OFFHAND.id)
 
         this.addWindow(craftingGrid, SpecialWindowId.NONE.id)
@@ -1807,7 +1850,7 @@ class Player(
          */
         get() = TranslationContainer(
             TextFormat.YELLOW.toString() + "%multiplayer.player.left",
-            getDisplayName()
+            displayName
         )
 
     override var isWhitelisted: Boolean
@@ -1833,29 +1876,6 @@ class Player(
         return this.playedBefore
     }
 
-    /**
-     * 获得玩家权限设置.
-     *
-     *
-     * Get player permission settings.
-     */
-    fun getAdventureSettings(): AdventureSettings {
-        return adventureSettings
-    }
-
-    /**
-     * 用于设置玩家权限，对应游戏中的玩家权限设置.
-     *
-     *
-     * Used to set player permissions, corresponding to the game's player permissions settings.
-     *
-     * @param adventureSettings 玩家权限设置<br></br>player permissions settings
-     */
-    fun setAdventureSettings(adventureSettings: AdventureSettings) {
-        this.adventureSettings = adventureSettings.clone()
-        this.adventureSettings.update()
-    }
-
 
     /**
      * 设置[.inAirTicks]为0
@@ -1868,10 +1888,10 @@ class Player(
     }
 
     var allowFlight: Boolean
-        get() = getAdventureSettings()[AdventureSettings.Type.ALLOW_FLIGHT]
+        get() = adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT]
         set(value) {
-            getAdventureSettings()[AdventureSettings.Type.ALLOW_FLIGHT] = value
-            getAdventureSettings().update()
+            adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT] = value
+            adventureSettings.update()
         }
 
 
@@ -1884,10 +1904,10 @@ class Player(
      * @param value 是否允许修改世界<br></br>Whether to allow modification of the world
      */
     fun setAllowModifyWorld(value: Boolean) {
-        getAdventureSettings()[AdventureSettings.Type.WORLD_IMMUTABLE] = !value
-        getAdventureSettings()[AdventureSettings.Type.BUILD] = value
-        getAdventureSettings()[AdventureSettings.Type.WORLD_BUILDER] = value
-        getAdventureSettings().update()
+        adventureSettings[AdventureSettings.Type.WORLD_IMMUTABLE] = !value
+        adventureSettings[AdventureSettings.Type.BUILD] = value
+        adventureSettings[AdventureSettings.Type.WORLD_BUILDER] = value
+        adventureSettings.update()
     }
 
     fun setAllowInteract(value: Boolean) {
@@ -1901,19 +1921,19 @@ class Player(
      * @param containers 是否允许交互容器
      */
     fun setAllowInteract(value: Boolean, containers: Boolean) {
-        getAdventureSettings()[AdventureSettings.Type.WORLD_IMMUTABLE] = !value
-        getAdventureSettings()[AdventureSettings.Type.DOORS_AND_SWITCHED] = value
-        getAdventureSettings()[AdventureSettings.Type.OPEN_CONTAINERS] = containers
-        getAdventureSettings().update()
+        adventureSettings[AdventureSettings.Type.WORLD_IMMUTABLE] = !value
+        adventureSettings[AdventureSettings.Type.DOORS_AND_SWITCHED] = value
+        adventureSettings[AdventureSettings.Type.OPEN_CONTAINERS] = containers
+        adventureSettings.update()
     }
 
     fun setAutoJump(value: Boolean) {
-        getAdventureSettings()[AdventureSettings.Type.AUTO_JUMP] = value
-        getAdventureSettings().update()
+        adventureSettings[AdventureSettings.Type.AUTO_JUMP] = value
+        adventureSettings.update()
     }
 
     fun hasAutoJump(): Boolean {
-        return getAdventureSettings()[AdventureSettings.Type.AUTO_JUMP]
+        return adventureSettings[AdventureSettings.Type.AUTO_JUMP]
     }
 
     override fun spawnTo(player: Player) {
@@ -2075,11 +2095,6 @@ class Player(
         return this.enableClientCommand
     }
 
-    fun setEnableClientCommand(enable: Boolean) {
-        this.enableClientCommand = enable
-        session.setEnableClientCommand(enable)
-    }
-
     override fun asPlayer(): Player {
         return this
     }
@@ -2101,50 +2116,6 @@ class Player(
 
     fun isConnected(): Boolean {
         return connected.get()
-    }
-
-    /**
-     * 得到该玩家的显示名称
-     *
-     *
-     * Get the display name of the player
-     *
-     * @return [.displayName]
-     */
-    fun getDisplayName(): String {
-        return this.displayName
-    }
-
-    /**
-     * 只是改变玩家聊天时和在服务器玩家列表中的显示名(不影响命令的玩家参数名,也不影响玩家头顶显示名称)
-     *
-     *
-     * Just change the name displayed during player chat and in the server player list  (Does not affect the player parameter name of the command, nor does it affect the player header display name)
-     *
-     * @param displayName 显示名称
-     */
-    fun setDisplayName(displayName: String) {
-        this.displayName = displayName
-        if (this.spawned) {
-            Server.instance.updatePlayerListData(
-                getUUID(), this.getRuntimeID(), this.getDisplayName(),
-                getSkin(),
-                loginChainData.xuid
-            )
-        }
-    }
-
-    override fun setSkin(skin: Skin) {
-        super.setSkin(skin)
-        if (this.spawned) {
-//            this.Server.instance.updatePlayerListData(this.getUniqueId(), this.getId(), this.getDisplayName(), skin, this.getLoginChainData().getXUID());
-            val skinPacket = PlayerSkinPacket()
-            skinPacket.uuid = this.getUUID()
-            skinPacket.skin = this.getSkin()
-            skinPacket.newSkinName = getSkin().getSkinId()
-            skinPacket.oldSkinName = ""
-            Server.broadcastPacket(Server.instance.onlinePlayers.values, skinPacket)
-        }
     }
 
     val rawAddress: String
@@ -2547,7 +2518,7 @@ class Player(
         }
 
         if (newSettings == null) {
-            newSettings = getAdventureSettings().clone()
+            newSettings = adventureSettings.clone()
             newSettings.set(AdventureSettings.Type.WORLD_IMMUTABLE, (gamemode and 0x02) > 0)
             newSettings.set(AdventureSettings.Type.BUILD, (gamemode and 0x02) <= 0)
             newSettings.set(AdventureSettings.Type.WORLD_BUILDER, (gamemode and 0x02) <= 0)
@@ -2580,7 +2551,7 @@ class Player(
 
         namedTag!!.putInt("playerGameType", this.gamemode)
 
-        this.setAdventureSettings(ev.newAdventureSettings)
+        this.adventureSettings = (ev.newAdventureSettings)
 
         if (!serverSide) {
             val pk = UpdatePlayerGameTypePacket()
@@ -2606,7 +2577,7 @@ class Player(
     }
 
     fun sendSettings() {
-        getAdventureSettings().update()
+        adventureSettings.update()
     }
 
     val isSurvival: Boolean
@@ -2867,7 +2838,7 @@ class Player(
                 } else {
                     this.lastInAirTick = level!!.tick
                     //check fly for player
-                    if (this.isCheckingMovement && !this.isGliding() && !Server.instance.allowFlight && !getAdventureSettings()[AdventureSettings.Type.ALLOW_FLIGHT] && this.inAirTicks > 20 && !this.isSleeping() && !this.isImmobile() && !this.isSwimming() && this.riding == null && !this.hasEffect(
+                    if (this.isCheckingMovement && !this.isGliding() && !Server.instance.allowFlight && !adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT] && this.inAirTicks > 20 && !this.isSleeping() && !this.isImmobile() && !this.isSwimming() && this.riding == null && !this.hasEffect(
                             EffectType.LEVITATION
                         ) && !this.hasEffect(EffectType.SLOW_FALLING)
                     ) {
@@ -2922,7 +2893,7 @@ class Player(
 
                 //鞘翅检查和耐久计算
                 if (this.isGliding()) {
-                    val playerInventory = this.getInventory()
+                    val playerInventory = this.inventory
                     if (playerInventory != null) {
                         val chestplate = playerInventory.chestplate
                         if ((chestplate == null || chestplate.id != ItemID.ELYTRA)) {
@@ -3053,14 +3024,6 @@ class Player(
         return entity
     }
 
-    fun getEnchantmentSeed(): Int {
-        return this.enchSeed
-    }
-
-    fun setEnchantmentSeed(seed: Int) {
-        this.enchSeed = seed
-    }
-
     fun regenerateEnchantmentSeed() {
         this.enchSeed = ThreadLocalRandom.current().nextInt(Int.MAX_VALUE)
     }
@@ -3121,7 +3084,7 @@ class Player(
                     Server.instance.broadcastMessage(
                         Server.instance.baseLang.tr(
                             chatEvent.format, *arrayOf<String>(
-                                chatEvent.player.getDisplayName(), chatEvent.message!!
+                                chatEvent.player.displayName, chatEvent.message!!
                             )
                         ), chatEvent.getRecipients()
                     )
@@ -3802,7 +3765,7 @@ class Player(
         val cause = this.getLastDamageCause()
 
         if (showMessages) {
-            params.add(this.getDisplayName())
+            params.add(this.displayName)
 
             run switch@{
                 when (if (cause == null) DamageCause.CUSTOM else cause.cause) {
@@ -3812,7 +3775,7 @@ class Player(
                         when (e) {
                             is Player -> {
                                 message = "death.attack.player"
-                                params.add(e.getDisplayName())
+                                params.add(e.displayName)
                                 return@switch
                             }
 
@@ -3832,7 +3795,7 @@ class Player(
                         when (e) {
                             is Player -> {
                                 message = "death.attack.arrow"
-                                params.add(e.getDisplayName())
+                                params.add(e.displayName)
                             }
 
                             is EntityLiving -> {
@@ -3888,7 +3851,7 @@ class Player(
                         when (e) {
                             is Player -> {
                                 message = "death.attack.explosion.player"
-                                params.add(e.getDisplayName())
+                                params.add(e.displayName)
                             }
 
                             is EntityLiving -> {
@@ -4248,7 +4211,7 @@ class Player(
         if (this.isSpectator || this.isCreative) {
             //source.setCancelled();
             return false
-        } else if (getAdventureSettings()[AdventureSettings.Type.ALLOW_FLIGHT] && source.cause == DamageCause.FALL) {
+        } else if (adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT] && source.cause == DamageCause.FALL) {
             //source.setCancelled();
             return false
         } else if (source.cause == DamageCause.FALL) {
@@ -4459,7 +4422,7 @@ class Player(
         }
         this.resetFallDistance()
         //DummyBossBar
-        getDummyBossBars().values.forEach(Consumer { obj: DummyBossBar? -> obj!!.reshow() })
+        dummyBossBars.values.forEach(Consumer { obj: DummyBossBar? -> obj!!.reshow() })
         //Weather
         level!!.sendWeather(this)
         //Update time
@@ -4571,10 +4534,6 @@ class Player(
         }
     }
 
-    fun getFormWindows(): Map<Int, Form<*>> {
-        return formWindows
-    }
-
     /**
      * 向玩家展示一个NPC对话框.
      *
@@ -4673,18 +4632,6 @@ class Player(
      */
     fun getDummyBossBar(bossBarId: Long): DummyBossBar? {
         return dummyBossBars.getOrDefault(bossBarId, null)
-    }
-
-    /**
-     * 获取所有DummyBossBar对象
-     *
-     *
-     * Get all DummyBossBar objects
-     *
-     * @return DummyBossBars Map
-     */
-    fun getDummyBossBars(): Map<Long, DummyBossBar?> {
-        return dummyBossBars
     }
 
     /**
@@ -4873,7 +4820,7 @@ class Player(
                 }
                 removeWindow(value)
             }
-            val drops = getInventory().addItem(*puts.toTypedArray())
+            val drops = inventory.addItem(*puts.toTypedArray())
             for (drop in drops) {
                 this.dropItem(drop)
             }
@@ -5334,7 +5281,7 @@ class Player(
      * @param items The items to give to the player.
      */
     fun giveItem(vararg items: Item) {
-        for (failed in getInventory().addItem(*items)) {
+        for (failed in inventory.addItem(*items)) {
             level!!.dropItem(this.position, failed)
         }
     }
@@ -5399,26 +5346,14 @@ class Player(
     }
 
 
-    fun setShowingCredits(showingCredits: Boolean) {
-        this.showingCredits = showingCredits
-        if (showingCredits) {
-            val pk = ShowCreditsPacket()
-            pk.eid = this.getRuntimeID()
-            pk.status = ShowCreditsPacket.STATUS_START_CREDITS
-            this.dataPacket(pk)
-        }
-    }
-
-
     fun showCredits() {
-        this.setShowingCredits(true)
+        this.showingCredits = (true)
     }
 
 
     fun hasSeenCredits(): Boolean {
-        return showingCredits
+        return hasSeenCredits
     }
-
 
     fun setHasSeenCredits(hasSeenCredits: Boolean) {
         this.hasSeenCredits = hasSeenCredits

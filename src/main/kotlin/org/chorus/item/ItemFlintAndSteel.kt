@@ -70,9 +70,9 @@ class ItemFlintAndSteel @JvmOverloads constructor(meta: Int = 0, count: Int = 1)
         if (!player.isCreative && useOn(block)) {
             if (this.damage >= this.maxDurability) {
                 this.count = 0
-                player.getInventory().setItemInHand(Item.Companion.AIR)
+                player.inventory.setItemInHand(Item.Companion.AIR)
             } else {
-                player.getInventory().setItemInHand(this)
+                player.inventory.setItemInHand(this)
             }
         }
         block.level.addSound(block.position, Sound.FIRE_IGNITE)

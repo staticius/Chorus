@@ -74,12 +74,12 @@ class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone> {
 
         var added = true
         if (item.getCount() == 1) {
-            player.getInventory().setItemInHand(compass)
+            player.inventory.setItemInHand(compass)
         } else {
             val clone: Item = item.clone()
             clone.count--
-            player.getInventory().setItemInHand(clone)
-            for (failed in player.getInventory().addItem(compass)) {
+            player.inventory.setItemInHand(clone)
+            for (failed in player.inventory.addItem(compass)) {
                 added = false
                 player.level!!.dropItem(player.locator.position, failed)
             }

@@ -132,7 +132,7 @@ class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Compani
             return false
         }
 
-        val enderChestInventory = player!!.getEnderChestInventory()
+        val enderChestInventory = player!!.enderChestInventory
         enderChestInventory!!.setBlockEntityEnderChest(player, chest)
         player.addWindow(enderChestInventory)
         return true

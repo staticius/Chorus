@@ -40,7 +40,7 @@ class ItemFireworkRocket @JvmOverloads constructor(meta: Int = 0, count: Int = 1
             this.spawnFirework(level, block.position)
 
             if (!player.isCreative) {
-                player.getInventory().decreaseCount(player.getInventory().heldItemIndex)
+                player.inventory.decreaseCount(player.inventory.heldItemIndex)
             }
 
             return true
@@ -50,7 +50,7 @@ class ItemFireworkRocket @JvmOverloads constructor(meta: Int = 0, count: Int = 1
     }
 
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
-        if (player.getInventory().chestplate is ItemElytra && player.isGliding()) {
+        if (player.inventory.chestplate is ItemElytra && player.isGliding()) {
             player.setMotion(
                 Vector3(
                     -sin(Math.toRadians(player.rotation.yaw)) * cos(Math.toRadians(player.rotation.pitch)) * 2,

@@ -80,7 +80,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
                     return
                 }
                 if (!playerHandle.inventoryOpen) {
-                    playerHandle.inventoryOpen = player.getInventory().open(player)
+                    playerHandle.inventoryOpen = player.inventory.open(player)
                 }
             }
 

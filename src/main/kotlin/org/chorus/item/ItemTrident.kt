@@ -64,7 +64,7 @@ class ItemTrident @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             trident.setPickupMode(EntityProjectile.PICKUP_CREATIVE)
         }
 
-        trident.setFavoredSlot(player.getInventory().heldItemIndex)
+        trident.setFavoredSlot(player.inventory.heldItemIndex)
 
         val entityShootBowEvent = EntityShootBowEvent(player, this, trident, f)
 
@@ -87,7 +87,7 @@ class ItemTrident @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                 player.level!!.addSound(player.position, Sound.ITEM_TRIDENT_THROW)
                 if (!player.isCreative) {
                     count--
-                    player.getInventory().setItemInHand(this)
+                    player.inventory.setItemInHand(this)
                 }
             }
         }

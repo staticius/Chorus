@@ -88,7 +88,7 @@ class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState = Co
         if (player == null) {
             return true
         }
-        val itemInHand = player.getInventory().itemInHand
+        val itemInHand = player.inventory.itemInHand
         if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
             return false
         }

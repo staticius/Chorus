@@ -28,7 +28,7 @@ class EnchantmentThorns :
 
         var thornsLevel = 0
 
-        for (armor in entity.getInventory().armorContents) {
+        for (armor in entity.inventory.armorContents) {
             val thorns = armor.getEnchantment(Enchantment.Companion.ID_THORNS)
             if (thorns != null) {
                 thornsLevel = max(thorns.level.toDouble(), thornsLevel.toDouble()).toInt()

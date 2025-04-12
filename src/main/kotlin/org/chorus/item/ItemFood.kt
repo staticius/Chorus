@@ -48,7 +48,7 @@ abstract class ItemFood : Item {
         Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
-            player.getInventory().sendContents(player)
+            player.inventory.sendContents(player)
             return false
         }
 
@@ -58,7 +58,7 @@ abstract class ItemFood : Item {
 
             if (player.isAdventure || player.isSurvival) {
                 --this.count
-                player.getInventory().setItemInHand(this)
+                player.inventory.setItemInHand(this)
 
                 player.level!!.addSound(player.position, Sound.RANDOM_BURP)
             }

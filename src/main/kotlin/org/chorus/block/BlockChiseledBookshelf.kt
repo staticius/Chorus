@@ -98,12 +98,12 @@ class BlockChiseledBookshelf @JvmOverloads constructor(blockState: BlockState = 
                 if (blockEntity != null) {
                     if (blockEntity.hasBook(index)) {
                         val book: Item = blockEntity.removeBook(index)
-                        player.getInventory().addItem(book)
+                        player.inventory.addItem(book)
                     } else if (item is ItemBook || item is ItemEnchantedBook || item is ItemBookWritable) {
                         val itemClone: Item = item.clone()
                         if (!player.isCreative) {
                             itemClone.setCount(itemClone.getCount() - 1)
-                            player.getInventory().setItemInHand(itemClone)
+                            player.inventory.setItemInHand(itemClone)
                         }
                         itemClone.setCount(1)
                         blockEntity.setBook(itemClone, index)

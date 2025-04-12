@@ -123,7 +123,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         if (item is ItemIronIngot && health <= getMaxHealth() * 0.75f) {
             level!!.addSound(this.position, Sound.MOB_IRONGOLEM_REPAIR)
-            if (player.gamemode != Player.CREATIVE) player.getInventory().itemInHand.decrement(1)
+            if (player.gamemode != Player.CREATIVE) player.inventory.itemInHand.decrement(1)
             heal(25f)
         }
         return super.onInteract(player, item)

@@ -23,7 +23,7 @@ import java.util.*
 open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk, nbt) {
     lateinit var uuid: UUID
     protected lateinit var rawUUID: ByteArray
-    protected lateinit var skin: Skin
+    override lateinit var skin: Skin
 
     override fun getWidth(): Float {
         return 0.6f
@@ -54,16 +54,8 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
         return 1.62f
     }
 
-    override fun getSkin(): Skin {
-        return skin
-    }
-
     override fun getUUID(): UUID {
         return uuid
-    }
-
-    override fun setSkin(skin: Skin) {
-        this.skin = skin
     }
 
     override fun setUUID(uuid: UUID) {
@@ -152,7 +144,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
 
             if (this is Player) Server.instance.updatePlayerListData(
                 this.getUUID(),
-                this.getRuntimeID(), this.getDisplayName(),
+                this.getRuntimeID(), this.displayName,
                 this.skin, this.loginChainData.xuid, arrayOf(player)
             )
             else Server.instance.updatePlayerListData(
@@ -239,14 +231,14 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
 
     override fun onBlock(entity: Entity?, event: EntityDamageEvent?, animate: Boolean) {
         super.onBlock(entity, event, animate)
-        var shield: Item? = getInventory().itemInHand
-        var shieldOffhand: Item? = getOffhandInventory()!!.getItem(0)
+        var shield: Item? = inventory.itemInHand
+        var shieldOffhand: Item? = offhandInventory!!.getItem(0)
         if (shield is ItemShield) {
             shield = damageArmor(shield, entity, event!!)
-            getInventory().setItemInHand(shield)
+            inventory.setItemInHand(shield)
         } else if (shieldOffhand is ItemShield) {
             shieldOffhand = damageArmor(shieldOffhand, entity, event!!)
-            getOffhandInventory()!!.setItem(0, shieldOffhand)
+            offhandInventory!!.setItem(0, shieldOffhand)
         }
     }
 }

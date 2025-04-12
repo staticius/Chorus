@@ -111,7 +111,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
         fz: Float
     ): Boolean {
         if (player != null) {
-            val itemInHand = player.getInventory().itemInHand
+            val itemInHand = player.inventory.itemInHand
             if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) return false
         }
         return toggle(player)
@@ -119,7 +119,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
 
     fun toggle(player: Player?): Boolean {
         if (player != null) {
-            if (!player.getAdventureSettings().get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
+            if (!player.adventureSettings.get(AdventureSettings.Type.DOORS_AND_SWITCHED)) return false
         }
         return this.setOpen(player, !this.isOpen)
     }

@@ -11,7 +11,7 @@ class PlayerHotbarProcessor : DataPacketProcessor<PlayerHotbarPacket>() {
         if (pk.windowId != SpecialWindowId.PLAYER.id) {
             return  //In PE this should never happen
         }
-        playerHandle.player.getInventory().equipItem(pk.selectedHotbarSlot)
+        playerHandle.player.inventory.equipItem(pk.selectedHotbarSlot)
     }
 
     override val packetId: Int

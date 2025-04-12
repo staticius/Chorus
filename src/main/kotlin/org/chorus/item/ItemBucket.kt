@@ -207,17 +207,17 @@ open class ItemBucket : Item {
 
                     if (player.isSurvival) {
                         if (this.getCount() - 1 <= 0) {
-                            player.getInventory().setItemInHand(ev.item)
+                            player.inventory.setItemInHand(ev.item)
                         } else {
                             val clone = this.clone()
                             clone.setCount(this.getCount() - 1)
-                            player.getInventory().setItemInHand(clone)
-                            if (player.getInventory().canAddItem(ev.item)) {
-                                player.getInventory().addItem(ev.item)
+                            player.inventory.setItemInHand(clone)
+                            if (player.inventory.canAddItem(ev.item)) {
+                                player.inventory.addItem(ev.item)
                             } else {
                                 player.dropItem(ev.item)
                             }
-                            player.getInventory().sendContents(player)
+                            player.inventory.sendContents(player)
                         }
                     }
 
@@ -231,7 +231,7 @@ open class ItemBucket : Item {
 
                     return true
                 } else {
-                    player.getInventory().sendContents(player)
+                    player.inventory.sendContents(player)
                 }
             }
         } else if (targetBlock is BlockLiquid) {
@@ -290,7 +290,7 @@ open class ItemBucket : Item {
             } else if (nether) { //handle the logic that the player can't use water bucket in nether
                 if (!player.isCreative) {
                     this.damage = 0 // Empty bucket
-                    player.getInventory().setItemInHand(this)
+                    player.inventory.setItemInHand(this)
                 }
                 player.level!!.addLevelSoundEvent(target.position, LevelSoundEventPacket.SOUND_FIZZ)
                 player.level!!.addParticle(ExplodeParticle(target.position.add(0.5, 1.0, 0.5)))
@@ -301,7 +301,7 @@ open class ItemBucket : Item {
                     UpdateBlockPacket.FLAG_ALL_PRIORITY,
                     1
                 )
-                player.getInventory().sendContents(player)
+                player.inventory.sendContents(player)
             }
         } else if (targetBlock is BlockPowderSnow) {
             val result = get(ItemID.Companion.BUCKET, 0, 1)
@@ -337,13 +337,13 @@ open class ItemBucket : Item {
     private fun updateBucketItem(player: Player, ev: PlayerBucketEmptyEvent) {
         if (player.isSurvival) {
             if (this.getCount() - 1 <= 0) {
-                player.getInventory().setItemInHand(ev.item)
+                player.inventory.setItemInHand(ev.item)
             } else {
                 val clone = this.clone()
                 clone.setCount(this.getCount() - 1)
-                player.getInventory().setItemInHand(clone)
-                if (player.getInventory().canAddItem(ev.item)) {
-                    player.getInventory().addItem(ev.item)
+                player.inventory.setItemInHand(clone)
+                if (player.inventory.canAddItem(ev.item)) {
+                    player.inventory.addItem(ev.item)
                 } else {
                     player.dropItem(ev.item)
                 }

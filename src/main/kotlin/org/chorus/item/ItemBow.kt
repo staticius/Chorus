@@ -32,22 +32,22 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
         return player.isCreative ||
-                player.getInventory().contents.values.stream().filter { item: Item? -> item is ItemArrow }
+                player.inventory.contents.values.stream().filter { item: Item? -> item is ItemArrow }
                     .findFirst().isPresent ||
-                player.getOffhandInventory()!!.contents.values.stream().filter { item: Item? -> item is ItemArrow }
+                player.offhandInventory!!.contents.values.stream().filter { item: Item? -> item is ItemArrow }
                     .findFirst().isPresent
     }
 
     override fun onRelease(player: Player, ticksUsed: Int): Boolean {
-        val inventoryOptional = player.getInventory().contents.entries.stream()
+        val inventoryOptional = player.inventory.contents.entries.stream()
             .filter { item: Map.Entry<Int?, Item?> -> item.value is ItemArrow }.findFirst()
-        val offhandOptional = player.getOffhandInventory()!!.contents.entries.stream()
+        val offhandOptional = player.offhandInventory!!.contents.entries.stream()
             .filter { item: Map.Entry<Int?, Item?> -> item.value is ItemArrow }.findFirst()
 
 
         if (offhandOptional.isEmpty && inventoryOptional.isEmpty && (player.isAdventure || player.isSurvival)) {
-            player.getOffhandInventory()!!.sendContents(player)
-            player.getInventory().sendContents(player)
+            player.offhandInventory!!.sendContents(player)
+            player.inventory.sendContents(player)
             return false
         }
 
@@ -108,8 +108,8 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         Server.instance.pluginManager.callEvent(entityShootBowEvent)
         if (entityShootBowEvent.isCancelled) {
             entityShootBowEvent.getProjectile().kill()
-            player.getInventory().sendContents(player)
-            player.getOffhandInventory()!!.sendContents(player)
+            player.inventory.sendContents(player)
+            player.offhandInventory!!.sendContents(player)
         } else {
             entityShootBowEvent.getProjectile()
                 .setMotion(entityShootBowEvent.getProjectile().getMotion().multiply(entityShootBowEvent.force))
@@ -130,11 +130,11 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                 if (!infinity) {
                     if (offhandOptional.isPresent) {
                         val index = offhandOptional.get().key
-                        player.getOffhandInventory()!!
-                            .setItem(index, player.getOffhandInventory()!!.getItem(index).decrement(1))
+                        player.offhandInventory!!
+                            .setItem(index, player.offhandInventory!!.getItem(index).decrement(1))
                     } else {
                         val index = inventoryOptional.get().key
-                        player.getInventory().setItem(index, player.getInventory().getItem(index).decrement(1))
+                        player.inventory.setItem(index, player.inventory.getItem(index).decrement(1))
                     }
                 }
                 if (!this.isUnbreakable) {
@@ -148,7 +148,7 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                             player.level!!.addSound(player.position, Sound.RANDOM_BREAK)
                             count--
                         }
-                        player.getInventory().setItemInHand(this)
+                        player.inventory.setItemInHand(this)
                     }
                 }
             }

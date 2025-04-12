@@ -50,7 +50,7 @@ class BlockMagma : BlockSolid {
         }
 
         if (entity is Player) {
-            if (entity.getInventory().boots.getEnchantment(Enchantment.ID_FROST_WALKER) != null || entity.isCreative || entity.isSpectator || entity.isSneaking() || !entity.level!!.gameRules.getBoolean(
+            if (entity.inventory.boots.getEnchantment(Enchantment.ID_FROST_WALKER) != null || entity.isCreative || entity.isSpectator || entity.isSneaking() || !entity.level!!.gameRules.getBoolean(
                     GameRule.FIRE_DAMAGE
                 )
             ) {

@@ -24,7 +24,7 @@ class ItemMilkBucket : ItemBucket(ItemID.Companion.MILK_BUCKET) {
         Server.instance.pluginManager.callEvent(event)
 
         if (event.isCancelled) {
-            player.getInventory().sendContents(player)
+            player.inventory.sendContents(player)
             return false
         }
 
@@ -34,8 +34,8 @@ class ItemMilkBucket : ItemBucket(ItemID.Companion.MILK_BUCKET) {
 
         if (player.isAdventure || player.isSurvival) {
             --this.count
-            player.getInventory().addItem(get(ItemID.Companion.BUCKET, 0, 1))
-            player.getInventory().setItemInHand(this)
+            player.inventory.addItem(get(ItemID.Companion.BUCKET, 0, 1))
+            player.inventory.setItemInHand(this)
             player.level!!.addSound(player.position, Sound.RANDOM_BURP)
         }
 

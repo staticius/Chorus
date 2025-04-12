@@ -105,9 +105,9 @@ class ItemPainting @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
                 ?: return false
 
         if (player.isSurvival) {
-            val item = player.getInventory().itemInHand
+            val item = player.inventory.itemInHand
             item.setCount(item.getCount() - 1)
-            player.getInventory().setItemInHand(item)
+            player.inventory.setItemInHand(item)
         }
 
         entity.spawnToAll()

@@ -124,7 +124,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         IBehaviorEvaluator {
                             val player = memoryStorage[CoreMemoryTypes.NEAREST_PLAYER]
                             player is Player && !
-                            player.getInventory().armorContents.toList().stream()
+                            player.inventory.armorContents.toList().stream()
                                 .anyMatch { item -> !item.isNothing && item is ItemArmor && item.tier == ItemArmor.TIER_GOLD }
                         },
                         IBehaviorEvaluator { itemInHand is ItemCrossbow }
@@ -159,7 +159,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                         IBehaviorEvaluator {
                             val player = memoryStorage[CoreMemoryTypes.Companion.NEAREST_PLAYER]
                             player is Player && !
-                            player.getInventory().armorContents.toList().stream()
+                            player.inventory.armorContents.toList().stream()
                                 .anyMatch { item: Item -> !item.isNothing && item is ItemArmor && item.tier == ItemArmor.TIER_GOLD }
                         }
                     ), 5, 1),

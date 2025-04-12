@@ -55,12 +55,12 @@ class ItemGlassBottle @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
         if (filled != null) {
             if (this.count == 1) {
-                player!!.getInventory().setItemInHand(filled)
+                player!!.inventory.setItemInHand(filled)
             } else if (this.count > 1) {
                 count--
-                player!!.getInventory().setItemInHand(this)
-                if (player.getInventory().canAddItem(filled)) {
-                    player.getInventory().addItem(filled)
+                player!!.inventory.setItemInHand(this)
+                if (player.inventory.canAddItem(filled)) {
+                    player.inventory.addItem(filled)
                 } else {
                     player.level!!.dropItem(
                         player.position.add(0.0, 1.3, 0.0),

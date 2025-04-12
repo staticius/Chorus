@@ -36,7 +36,7 @@ class BlockCraftingTable @JvmOverloads constructor(blockState: BlockState = Comp
         fz: Float
     ): Boolean {
         if (player != null) {
-            val itemInHand = player.getInventory().itemInHand
+            val itemInHand = player.inventory.itemInHand
             if (player.isSneaking() && !(itemInHand.isTool || itemInHand.isNothing)) {
                 return false
             }

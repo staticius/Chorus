@@ -23,20 +23,8 @@ import kotlin.math.ceil
 
 abstract class EntityHumanType(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), IHuman {
     override lateinit var inventory: HumanInventory
-    protected lateinit var enderChestInventory: HumanEnderChestInventory
-    protected lateinit var offhandInventory: HumanOffHandInventory
-
-    override fun getInventory(): HumanInventory {
-        return inventory
-    }
-
-    override fun getOffhandInventory(): HumanOffHandInventory {
-        return offhandInventory
-    }
-
-    override fun getEnderChestInventory(): HumanEnderChestInventory {
-        return enderChestInventory
-    }
+    override lateinit var enderChestInventory: HumanEnderChestInventory
+    override lateinit var offhandInventory: HumanOffHandInventory
 
     override fun setInventories(inventory: Array<Inventory>) {
         this.inventory = inventory[0] as HumanInventory

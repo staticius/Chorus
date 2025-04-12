@@ -152,16 +152,16 @@ interface IHuman : InventoryHolder {
                 if (skinTag.contains("IsTrustedSkin")) {
                     newSkin.setTrusted(skinTag.getBoolean("IsTrustedSkin"))
                 }
-                this.setSkin(newSkin)
+                this.skin = (newSkin)
             }
 
-            if (this.getSkin() == null) {
-                this.setSkin(Skin())
+            if (this.skin == null) {
+                this.skin = (Skin())
             }
             this.setUUID(
                 Utils.dataToUUID(
                     human.getRuntimeID().toString().toByteArray(StandardCharsets.UTF_8),
-                    getSkin().getSkinData().data, human.getNameTag().toByteArray(StandardCharsets.UTF_8)
+                    skin.getSkinData().data, human.getNameTag().toByteArray(StandardCharsets.UTF_8)
                 )
             )
         }
@@ -175,11 +175,11 @@ interface IHuman : InventoryHolder {
         )
 
         if (human.namedTag!!.containsNumber("SelectedInventorySlot")) {
-            getInventory().setHeldItemSlot(human.namedTag!!.getInt("SelectedInventorySlot").coerceIn(0, 8))
+            inventory.setHeldItemSlot(human.namedTag!!.getInt("SelectedInventorySlot").coerceIn(0, 8))
         }
 
         if (human.namedTag!!.contains("Inventory") && human.namedTag!!["Inventory"] is ListTag<*>) {
-            val inventory: HumanInventory = this.getInventory()
+            val inventory: HumanInventory = this.inventory
             val inventoryList: ListTag<CompoundTag> = human.namedTag!!.getList("Inventory", CompoundTag::class.java)
             for (item: CompoundTag in inventoryList.all) {
                 val slot: Int = item.getByte("Slot").toInt()
@@ -187,14 +187,14 @@ interface IHuman : InventoryHolder {
             }
         }
         if (human.namedTag!!.containsCompound("OffInventory")) {
-            val offhandInventory: HumanOffHandInventory? = getOffhandInventory()
+            val offhandInventory: HumanOffHandInventory? = offhandInventory
             val offHand: CompoundTag = human.namedTag!!.getCompound("OffInventory")
             offhandInventory!!.setItem(0, NBTIO.getItemHelper(offHand)) //offinventory index 0
         }
         if (human.namedTag!!.contains("EnderItems") && human.namedTag!!["EnderItems"] is ListTag<*>) {
             val inventoryList: ListTag<CompoundTag> = human.namedTag!!.getList("EnderItems", CompoundTag::class.java)
             for (item: CompoundTag in inventoryList.all) { //enderItems index 0-26
-                (human as EntityHumanType).getEnderChestInventory()!!
+                (human as EntityHumanType).enderChestInventory!!
                     .setItem(item.getByte("Slot").toInt(), NBTIO.getItemHelper(item))
             }
         }
@@ -203,27 +203,27 @@ interface IHuman : InventoryHolder {
     fun saveHumanEntity(human: Entity) {
         //EntityHumanType
         val inventoryTag: ListTag<CompoundTag>?
-        if (this.getInventory() != null) {
+        if (this.inventory != null) {
             inventoryTag = ListTag()
             human.namedTag!!.putList("Inventory", inventoryTag)
 
-            for (entry in getInventory().contents.entries) {
+            for (entry in inventory.contents.entries) {
                 inventoryTag.add(NBTIO.putItemHelper(entry.value, entry.key))
             }
 
-            human.namedTag!!.putInt("SelectedInventorySlot", getInventory().heldItemIndex)
+            human.namedTag!!.putInt("SelectedInventorySlot", inventory.heldItemIndex)
         }
 
-        if (this.getOffhandInventory() != null) {
-            val item: Item = getOffhandInventory()!!.getItem(0)
+        if (this.offhandInventory != null) {
+            val item: Item = offhandInventory!!.getItem(0)
             human.namedTag!!.putCompound("OffInventory", NBTIO.putItemHelper(item, 0))
         }
 
         human.namedTag!!.putList("EnderItems", ListTag<CompoundTag>())
-        if (this.getEnderChestInventory() != null) {
+        if (this.enderChestInventory != null) {
             val enderItems: ListTag<CompoundTag> = human.namedTag!!.getList("EnderItems", CompoundTag::class.java)
-            for (slot in 0..<getEnderChestInventory()!!.size) {
-                val item: Item = getEnderChestInventory()!!.getItem(slot)
+            for (slot in 0..<enderChestInventory!!.size) {
+                val item: Item = enderChestInventory!!.getItem(slot)
                 if (!item.isNothing) {
                     enderItems.add(NBTIO.putItemHelper(item, slot))
                 }
@@ -232,7 +232,7 @@ interface IHuman : InventoryHolder {
         }
 
         //EntityHuman
-        val skin: Skin = getSkin()
+        val skin: Skin = skin
         if (skin != null) {
             val skinTag: CompoundTag = CompoundTag()
                 .putByteArray("Data", skin.getSkinData().data)
@@ -311,9 +311,7 @@ interface IHuman : InventoryHolder {
         }
     }
 
-    fun setSkin(skin: Skin)
-
-    fun getSkin(): Skin
+    var skin: Skin
 
     fun getUUID(): UUID
 
@@ -321,13 +319,13 @@ interface IHuman : InventoryHolder {
 
     fun setInventories(inventory: Array<Inventory>)
 
-    fun getInventory(): HumanInventory
+    override val inventory: HumanInventory
 
-    fun getOffhandInventory(): HumanOffHandInventory
+    val offhandInventory: HumanOffHandInventory
 
-    fun getEnderChestInventory(): HumanEnderChestInventory
+    val enderChestInventory: HumanEnderChestInventory
 
-    fun getLevel(): Level
+    override val level: Level?
 
     fun getEntity(): Entity {
         return this as Entity

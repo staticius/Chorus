@@ -20,7 +20,7 @@ class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
         var index = 0
         var offhand = false
 
-        for ((key, item1) in player.getOffhandInventory()!!.contents) {
+        for ((key, item1) in player.offhandInventory!!.contents) {
             if (checkMapItemValid(item1, pk)) {
                 mapItem = item1
                 index = key
@@ -29,7 +29,7 @@ class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
         }
 
         if (mapItem == null) {
-            for ((key, item1) in player.getInventory().contents) {
+            for ((key, item1) in player.inventory.contents) {
                 if (checkMapItemValid(item1, pk)) {
                     mapItem = item1
                     index = key
@@ -69,17 +69,17 @@ class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
                         )
                         if (finalOffhand) {
                             if (checkMapItemValid(
-                                    player.getOffhandInventory()!!.getUnclonedItem(finalIndex),
+                                    player.offhandInventory!!.getUnclonedItem(finalIndex),
                                     pk
                                 )
-                            ) player.getOffhandInventory()!!
+                            ) player.offhandInventory!!
                                 .setItem(finalIndex, map)
                         } else {
                             if (checkMapItemValid(
-                                    player.getInventory().getUnclonedItem(finalIndex),
+                                    player.inventory.getUnclonedItem(finalIndex),
                                     pk
                                 )
-                            ) player.getInventory().setItem(finalIndex, map)
+                            ) player.inventory.setItem(finalIndex, map)
                         }
                         map.sendImage(player)
                     }

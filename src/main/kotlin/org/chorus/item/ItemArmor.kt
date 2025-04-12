@@ -28,28 +28,28 @@ abstract class ItemArmor : Item, ItemDurable {
         var equip = false
         var oldSlotItem: Item = Item.Companion.AIR
         if (this.isHelmet) {
-            oldSlotItem = player.getInventory().helmet
-            if (player.getInventory().setHelmet(this)) {
+            oldSlotItem = player.inventory.helmet
+            if (player.inventory.setHelmet(this)) {
                 equip = true
             }
         } else if (this.isChestplate) {
-            oldSlotItem = player.getInventory().chestplate
-            if (player.getInventory().setChestplate(this)) {
+            oldSlotItem = player.inventory.chestplate
+            if (player.inventory.setChestplate(this)) {
                 equip = true
             }
         } else if (this.isLeggings) {
-            oldSlotItem = player.getInventory().leggings
-            if (player.getInventory().setLeggings(this)) {
+            oldSlotItem = player.inventory.leggings
+            if (player.inventory.setLeggings(this)) {
                 equip = true
             }
         } else if (this.isBoots) {
-            oldSlotItem = player.getInventory().boots
-            if (player.getInventory().setBoots(this)) {
+            oldSlotItem = player.inventory.boots
+            if (player.inventory.setBoots(this)) {
                 equip = true
             }
         }
         if (equip) {
-            player.getInventory().setItem(player.getInventory().heldItemIndex, oldSlotItem)
+            player.inventory.setItem(player.inventory.heldItemIndex, oldSlotItem)
             val tier = this.tier
             when (tier) {
                 TIER_CHAIN -> player.level!!.addSound(player.position, Sound.ARMOR_EQUIP_CHAIN)
