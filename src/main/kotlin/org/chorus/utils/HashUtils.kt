@@ -17,19 +17,19 @@ object HashUtils {
         //build block state tag
         val states = TreeMapCompoundTag()
         for (value in propertyValues) {
-            when (value.propertyType.getType()) {
+            when (value.propertyType.type) {
                 BlockPropertyType.Type.INT -> states.putInt(
-                    value.propertyType.getName(),
+                    value.propertyType.name,
                     value.getSerializedValue() as Int
                 )
 
                 BlockPropertyType.Type.ENUM -> states.putString(
-                    value.propertyType.getName(),
+                    value.propertyType.name,
                     value.getSerializedValue().toString()
                 )
 
                 BlockPropertyType.Type.BOOLEAN -> states.putByte(
-                    value.propertyType.getName(),
+                    value.propertyType.name,
                     (value.getSerializedValue() as Byte).toInt()
                 )
             }

@@ -40,15 +40,15 @@ class BlockStateNode : ParamNode<BlockState?>() {
             val value = valueWithQuote.substring(1, valueWithQuote.length - 1)
             for (propertyType in propertyTypeSet) {
                 if (properties.identifier == key) {
-                    if (propertyType.getType() == BlockPropertyType.Type.ENUM) {
-                        if (propertyType.getValidValues().contains(value)) {
+                    if (propertyType.type == BlockPropertyType.Type.ENUM) {
+                        if (propertyType.validValues.contains(value)) {
                             result = result.setPropertyValue(properties, propertyType.tryCreateValue(value)!!)
                             break
                         } else {
                             this.error()
                             return
                         }
-                    } else if (propertyType.getType() == BlockPropertyType.Type.BOOLEAN) {
+                    } else if (propertyType.type == BlockPropertyType.Type.BOOLEAN) {
                         if (value == "true" || value == "false") {
                             result =
                                 result.setPropertyValue(properties, propertyType.tryCreateValue(value.toBoolean())!!)
@@ -57,7 +57,7 @@ class BlockStateNode : ParamNode<BlockState?>() {
                             this.error()
                             return
                         }
-                    } else if (propertyType.getType() == BlockPropertyType.Type.INT) {
+                    } else if (propertyType.type == BlockPropertyType.Type.INT) {
                         try {
                             result = result.setPropertyValue(properties, propertyType.tryCreateValue(value.toInt())!!)
                             break

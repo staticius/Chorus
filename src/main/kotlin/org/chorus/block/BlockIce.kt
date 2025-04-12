@@ -22,7 +22,8 @@ open class BlockIce : BlockTransparent {
     override val hardness: Double
         get() = 0.5
 
-    open fun getFrictionFactor(): Double = 0.98
+    override val frictionFactor: Double
+        get() = 0.98
 
     override val toolType: Int
         get() = ItemTool.TYPE_PICKAXE

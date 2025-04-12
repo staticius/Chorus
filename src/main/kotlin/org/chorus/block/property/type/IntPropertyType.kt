@@ -19,9 +19,10 @@ class IntPropertyType private constructor(
     ) {
     private val cachedValues: Array<IntPropertyValue> = Array(max - min + 1) { i -> IntPropertyValue(i + min) }
 
-    override fun getType(): BlockPropertyType.Type {
-        return BlockPropertyType.Type.INT
-    }
+    override val type: BlockPropertyType.Type
+        get() {
+            return BlockPropertyType.Type.INT
+        }
 
     override fun createValue(value: Int): IntPropertyValue {
         return cachedValues[value - min]
@@ -44,7 +45,7 @@ class IntPropertyType private constructor(
         }
 
         override fun toString(): String {
-            return "IntPropertyValue(name=${getName()}, value=${value})"
+            return "IntPropertyValue(name=${name}, value=${value})"
         }
     }
 

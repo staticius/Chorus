@@ -104,7 +104,7 @@ class BlockStateImpl(
             val errorMsgBuilder = StringBuilder("Properties ")
             for (i in values.indices) {
                 if (!succeed[i]) {
-                    errorMsgBuilder.append(values[i].propertyType.getName())
+                    errorMsgBuilder.append(values[i].propertyType.name)
                     if (i != values.size - 1) errorMsgBuilder.append(", ")
                 }
             }
@@ -163,19 +163,19 @@ class BlockStateImpl(
         ): CompoundTagView {
             val states = TreeMapCompoundTag()
             for (value in propertyValues) {
-                when (value.propertyType.getType()) {
+                when (value.propertyType.type) {
                     BlockPropertyType.Type.INT -> states.putInt(
-                        value.propertyType.getName(),
+                        value.propertyType.name,
                         value.getSerializedValue() as Int
                     )
 
                     BlockPropertyType.Type.ENUM -> states.putString(
-                        value.propertyType.getName(),
+                        value.propertyType.name,
                         value.getSerializedValue().toString()
                     )
 
                     BlockPropertyType.Type.BOOLEAN -> states.putByte(
-                        value.propertyType.getName(),
+                        value.propertyType.name,
                         (value.getSerializedValue() as Byte).toInt()
                     )
                 }

@@ -9,9 +9,10 @@ class BlockBlueIce : BlockPackedIce {
     override val name: String
         get() = "Blue Ice"
 
-    override fun getFrictionFactor(): Double {
-        return 0.989
-    }
+    override val frictionFactor: Double
+        get() {
+            return 0.989
+        }
 
     override val hardness: Double
         get() = 2.8

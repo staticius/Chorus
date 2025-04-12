@@ -10,9 +10,10 @@ class EnumPropertyType<T : Enum<T>>(name: String, val enumClass: Class<T>, defau
     defaultData,
     Utils.computeRequiredBits(0, enumClass.enumConstants.size - 1)
 ) {
-    val cachedValues: EnumMap<T, EnumPropertyValue> = EnumMap(getValidValues().associateWith { EnumPropertyValue(it) })
+    val cachedValues: EnumMap<T, EnumPropertyValue> = EnumMap(validValues.associateWith { EnumPropertyValue(it) })
 
-    override fun getType(): BlockPropertyType.Type = BlockPropertyType.Type.ENUM
+    override val type: BlockPropertyType.Type
+        get() = BlockPropertyType.Type.ENUM
 
     override fun createValue(value: T): EnumPropertyValue {
         return cachedValues[value]!!
@@ -40,7 +41,7 @@ class EnumPropertyType<T : Enum<T>>(name: String, val enumClass: Class<T>, defau
         }
 
         override fun toString(): String {
-            return "EnumPropertyValue(name=" + getName() + ", value=" + value + ")"
+            return "EnumPropertyValue(name=" + name + ", value=" + value + ")"
         }
     }
 

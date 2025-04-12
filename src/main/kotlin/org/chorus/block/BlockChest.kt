@@ -148,7 +148,7 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
      */
     protected fun findPair(): BlockEntityChest? {
         val universe: List<MinecraftCardinalDirection> =
-            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION.getValidValues()
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION.validValues
         val thisFace = blockFace
         for (face in universe) {
             val side = this.getSide(CommonPropertyMap.CARDINAL_BLOCKFACE[face]!!)

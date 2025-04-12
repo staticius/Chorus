@@ -378,7 +378,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
                         when (each) {
                             is BooleanPropertyType -> {
                                 nbtList.add(
-                                    CompoundTag().putString("name", each.getName())
+                                    CompoundTag().putString("name", each.name)
                                         .putList(
                                             "enum", ListTag<ByteTag>()
                                                 .add(ByteTag(0))
@@ -392,15 +392,15 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
                                 for (i in each.min..each.max) {
                                     enumList.add(IntTag(i))
                                 }
-                                nbtList.add(CompoundTag().putString("name", each.getName()).putList("enum", enumList))
+                                nbtList.add(CompoundTag().putString("name", each.name).putList("enum", enumList))
                             }
 
                             is EnumPropertyType<*> -> {
                                 val enumList = ListTag<StringTag>()
-                                for (e in each.getValidValues()) {
+                                for (e in each.validValues) {
                                     enumList.add(StringTag(e.name.lowercase()))
                                 }
-                                nbtList.add(CompoundTag().putString("name", each.getName()).putList("enum", enumList))
+                                nbtList.add(CompoundTag().putString("name", each.name).putList("enum", enumList))
                             }
                         }
                     }

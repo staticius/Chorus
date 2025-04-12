@@ -7,7 +7,8 @@ class BooleanPropertyType private constructor(name: String, defaultData: Boolean
     private val FALSE = BooleanPropertyValue(false)
     private val TRUE = BooleanPropertyValue(true)
 
-    override fun getType(): BlockPropertyType.Type = BlockPropertyType.Type.BOOLEAN
+    override val type: BlockPropertyType.Type
+        get() = BlockPropertyType.Type.BOOLEAN
 
     override fun createValue(value: Boolean): BooleanPropertyValue {
         return if (value) TRUE else FALSE
@@ -30,7 +31,7 @@ class BooleanPropertyType private constructor(name: String, defaultData: Boolean
         override fun getSerializedValue(): Byte = (if (value) 1 else 0).toByte()
 
         override fun toString(): String {
-            return "BoolPropertyValue(name=${getName()}, value=${value})"
+            return "BoolPropertyValue(name=${name}, value=${value})"
         }
     }
 
