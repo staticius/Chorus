@@ -148,7 +148,7 @@ class EntityAllay(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Ent
             val nearestItem = memoryStorage[CoreMemoryTypes.Companion.NEAREST_ITEM]
             if (nearestItem != null && !nearestItem.closed) {
                 if (nearestItem.position.distance(this.position) < 1 && currentTick - lastItemDropTick > dropCollectCooldown) {
-                    val item: Item = nearestItem.getItem()
+                    val item: Item = nearestItem.item
                     val currentItem: Item = inventory.getItem(0).clone()
                     if (inventory.canAddItem(item)) {
                         if (currentItem.isNothing) {

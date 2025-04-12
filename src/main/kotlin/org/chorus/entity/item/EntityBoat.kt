@@ -552,13 +552,13 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         namedTag!!.putByte("woodID", this.woodID) // Compatibility with Cloudburst Nukkit
     }
 
-    fun getVariant(): Int {
+    fun getBoatVariant(): Int {
         return this.woodID
     }
 
-    fun setVariant(variant: Int) {
+    fun setBoatVariant(variant: Int) {
         this.woodID = variant
-        entityDataMap.put(EntityDataTypes.Companion.VARIANT, variant)
+        entityDataMap[EntityDataTypes.Companion.VARIANT] = variant
     }
 
     override fun getOriginalName(): String {

@@ -56,6 +56,10 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         return EntityID.HORSE
     }
 
+    override var variant: Int
+        get() = super<EntityVariant>.variant
+        set(value) { super<EntityVariant>.variant = value }
+
     private lateinit var attributeMap: MutableMap<String, Attribute>
     override lateinit var inventory: HorseInventory
     private val jumping = AtomicBoolean(false)
@@ -112,7 +116,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
         this.setDataFlag(EntityFlag.HAS_COLLISION, true)
 
         if (!hasVariant()) {
-            this.setVariant(randomVariant())
+            this.variant = (randomVariant())
         }
         if (!hasMarkVariant()) {
             this.setMarkVariant(randomMarkVariant())
@@ -372,10 +376,6 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
     override fun getMountedOffset(entity: Entity?): Vector3f {
         return Vector3f(0f, 2.42f, 0f)
-    }
-
-    fun getInventory(): HorseInventory {
-        return inventory
     }
 
     fun getRider(): Entity? {

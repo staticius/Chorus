@@ -34,6 +34,10 @@ class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!
         return EntityID.SLIME
     }
 
+    override var variant: Int
+        get() = super<EntityVariant>.variant
+        set(value) { super<EntityVariant>.variant = value }
+
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
@@ -71,22 +75,22 @@ class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!
     override fun initEntity() {
         super.initEntity()
         if (!hasVariant()) {
-            this.setVariant(randomVariant())
+            this.variant = (randomVariant())
         }
 
-        if (getVariant() == SIZE_BIG) {
+        if (variant == SIZE_BIG) {
             this.diffHandDamage = floatArrayOf(3f, 4f, 6f)
-        } else if (getVariant() == SIZE_MEDIUM) {
+        } else if (variant == SIZE_MEDIUM) {
             this.diffHandDamage = floatArrayOf(2f, 2f, 3f)
         } else {
             this.diffHandDamage = floatArrayOf(0f, 0f, 0f)
         }
 
-        if (getVariant() == SIZE_BIG) {
+        if (variant == SIZE_BIG) {
             this.maxHealth = 16
-        } else if (getVariant() == SIZE_MEDIUM) {
+        } else if (variant == SIZE_MEDIUM) {
             this.maxHealth = 4
-        } else if (getVariant() == SIZE_SMALL) {
+        } else if (variant == SIZE_SMALL) {
             this.maxHealth = 1
         }
         recalculateBoundingBox()
@@ -97,11 +101,11 @@ class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!
     }
 
     override fun getWidth(): Float {
-        return 0.51f + getVariant() * 0.51f
+        return 0.51f + variant * 0.51f
     }
 
     override fun getHeight(): Float {
-        return 0.51f + getVariant() * 0.51f
+        return 0.51f + variant * 0.51f
     }
 
     override fun getOriginalName(): String {
@@ -109,7 +113,7 @@ class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!
     }
 
     override fun getDrops(): Array<Item> {
-        if (getVariant() == SIZE_SMALL) {
+        if (variant == SIZE_SMALL) {
             if (getLastDamageCause() != null) {
                 if (lastDamageCause is EntityDamageByEntityEvent) {
                     val damager = (lastDamageCause as EntityDamageByEntityEvent).damager
@@ -124,7 +128,7 @@ class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!
     }
 
     override fun getExperienceDrops(): Int {
-        return getVariant()
+        return variant
     }
 
     override fun getAllVariant(): IntArray {
@@ -132,19 +136,19 @@ class EntitySlime(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, nbt!
     }
 
     private fun getSmaller(): Int {
-        return when (getVariant()) {
+        return when (variant) {
             4 -> 2
-            else -> getVariant() - 1
+            else -> variant - 1
         }
     }
 
     override fun kill() {
-        if (getVariant() != SIZE_SMALL) {
+        if (variant != SIZE_SMALL) {
             for (i in 1..<Utils.rand(2, 5)) {
                 val slime = EntitySlime(this.locator.chunk, this.namedTag)
                 slime.setPosition(position.add(Utils.rand(-0.5, 0.5), 0.0, Utils.rand(-0.5, 0.5)))
                 slime.setRotation(rotation.yaw, rotation.pitch)
-                slime.setVariant(getSmaller())
+                slime.variant = (getSmaller())
                 slime.spawnToAll()
             }
         }

@@ -28,6 +28,7 @@ class EntityAreaEffectCloud(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
 
     protected var radiusOnUse: Float = 0f
 
+    @JvmField
     protected var height: Float = 0f
 
     protected var nextApply: Int = 0

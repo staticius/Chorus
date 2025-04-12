@@ -91,8 +91,8 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
         if (item is ItemShears) {
-            if (!isSheared()) {
-                this.setSheared(true)
+            if (!sheared) {
+                this.sheared = (true)
                 level!!.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_SHEAR)
                 if (player.gamemode != Player.CREATIVE) player.inventory.itemInHand
                     .damage = (item.damage + 1)
@@ -121,17 +121,14 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
 
     override fun initEntity() {
         this.setMaxHealth(4)
-        setSheared(false)
+        this.sheared = (false)
         super.initEntity()
     }
 
-    fun setSheared(sheared: Boolean) {
-        setDataFlag(EntityFlag.SHEARED, sheared)
-    }
+    override var sheared: Boolean
+        get() = getDataFlag(EntityFlag.SHEARED)
+        set(value) = setDataFlag(EntityFlag.SHEARED, value)
 
-    fun isSheared(): Boolean {
-        return getDataFlag(EntityFlag.SHEARED)
-    }
 
     override fun onUpdate(currentTick: Int): Boolean {
         waterTicks++

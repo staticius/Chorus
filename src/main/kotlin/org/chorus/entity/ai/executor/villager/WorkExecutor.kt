@@ -27,7 +27,7 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.SITE_BLOCK, 0.
                     stayTick++
                     if (stayTick == 40 || stayTick == 90) entity.level!!.addSound(
                         entity.position, Profession.Companion.getProfession(
-                            entity.getProfession()
+                            entity.profession
                         )!!
                             .getWorkSound()
                     )
@@ -36,7 +36,7 @@ class WorkExecutor : NearbyFlatRandomRoamExecutor(CoreMemoryTypes.SITE_BLOCK, 0.
             } else {
                 walkTick++
                 run switch@{
-                    when (entity.getProfession()) {
+                    when (entity.profession) {
                         1 -> {
                             run {
                                 if (walkTick % 10 == 0) {

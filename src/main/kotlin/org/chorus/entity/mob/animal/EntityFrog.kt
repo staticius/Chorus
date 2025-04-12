@@ -33,6 +33,10 @@ class EntityFrog(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
         return EntityID.FROG
     }
 
+    override var variant: Int
+        get() = super<EntityVariant>.variant
+        set(value) { super<EntityVariant>.variant = value }
+
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
@@ -98,7 +102,7 @@ class EntityFrog(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
         this.maxHealth = 10
         super.initEntity()
         if (!hasVariant()) {
-            this.setVariant(randomVariant())
+            this.variant = (randomVariant())
         }
     }
 

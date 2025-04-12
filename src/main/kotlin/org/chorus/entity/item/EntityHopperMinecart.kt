@@ -73,7 +73,7 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
         }
 
         if (changed) {
-            this.setTransferCooldown(1)
+            this.transferCooldown = (1)
         }
 
         return true
@@ -81,10 +81,6 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
 
     fun isOnTransferCooldown(): Boolean {
         return this.transferCooldown > 0
-    }
-
-    fun setTransferCooldown(transferCooldown: Int) {
-        this.transferCooldown = transferCooldown
     }
 
     override fun getOriginalName(): String {

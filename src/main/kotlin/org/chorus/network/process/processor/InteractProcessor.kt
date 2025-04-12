@@ -72,7 +72,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
                         return
                     } else if (targetEntity is EntityHorse) {
                         if (targetEntity.hasOwner(false) && targetEntity.getOwnerName() == player.getEntityName()) {
-                            player.addWindow(targetEntity.getInventory())
+                            player.addWindow(targetEntity.inventory)
                             return
                         }
                     }

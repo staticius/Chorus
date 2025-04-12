@@ -41,6 +41,10 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
         return EntityID.AXOLOTL
     }
 
+    override var variant: Int
+        get() = super<EntityVariant>.variant
+        set(value) { super<EntityVariant>.variant = value }
+
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
@@ -203,7 +207,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
         if (item.id == ItemID.WATER_BUCKET) {
             val bucket = Item.get(ItemID.AXOLOTL_BUCKET)
             val tag = CompoundTag()
-            tag.putInt("Variant", getVariant())
+            tag.putInt("Variant", variant)
             bucket.setCompoundTag(tag)
             player.inventory.setItemInHand(bucket)
             this.close()
@@ -230,7 +234,7 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
         this.maxHealth = 14
         super.initEntity()
         if (!hasVariant()) {
-            setVariant(randomVariant())
+            variant = (randomVariant())
         }
     }
 

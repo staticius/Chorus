@@ -378,7 +378,7 @@ open class ItemBucket : Item {
             if (fishEntity != null) if (fishEntity is EntityVariant) {
                 if (namedTag != null) {
                     if (namedTag!!.containsInt("Variant")) {
-                        fishEntity.setVariant(namedTag!!.getInt("Variant"))
+                        fishEntity.variant = (namedTag!!.getInt("Variant"))
                     }
                 }
             }

@@ -156,10 +156,6 @@ class EntityTnt @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, pro
         )
     }
 
-    fun getSource(): Entity? {
-        return source
-    }
-
     override fun getOriginalName(): String {
         return "Block of TNT"
     }

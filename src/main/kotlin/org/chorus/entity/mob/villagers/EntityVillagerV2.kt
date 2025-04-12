@@ -118,7 +118,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
      * 13 mason
      * 14 nitwit
      */
-    protected var profession: Int = 0
+    var profession: Int = 0
 
     init {
         applyProfession()
@@ -166,10 +166,10 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 Behavior(
                     { entity: EntityMob? ->
                         moveTarget = null
-                        lookTarget = getTradeInventory()!!.viewers.stream().findFirst().get().position
+                        lookTarget = tradeInventory!!.viewers.stream().findFirst().get().position
                         true
                     },
-                    { entity: EntityMob? -> getTradeInventory() != null && !getTradeInventory()!!.viewers.isEmpty() },
+                    { entity: EntityMob? -> tradeInventory != null && !tradeInventory!!.viewers.isEmpty() },
                     9,
                     1
                 ),
@@ -339,7 +339,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                                                 .notEmpty(CoreMemoryTypes.Companion.SITE_BLOCK) && entity1.getSite() == block
                                         }) if (setProfessionBlock(block)) return@ISensor
                                 }
-                                if (getTradeExp() == 0) setProfession(0, true)
+                                if (tradeExp == 0) setProfession(0, true)
                             }
                         }
                     }
@@ -386,10 +386,10 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     fun shouldShareFood(): Boolean {
-        for (item in getInventory().contents.values) {
+        for (item in inventory.contents.values) {
             if ((item.id == ItemID.BREAD && item.getCount() >= 6)
                 || ((item.id == ItemID.CARROT || item.id == BlockID.BEETROOT) && item.getCount() >= 24)
-                || (item.id == BlockID.WHEAT && item.getCount() >= 18 && getProfession() == 1)
+                || (item.id == BlockID.WHEAT && item.getCount() >= 18 && profession == 1)
             ) return true
         }
         return false
@@ -397,7 +397,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     fun getFoodPoints(): Int {
         var points = 0
-        for (item in getInventory().contents.values) {
+        for (item in inventory.contents.values) {
             points += when (item.id) {
                 ItemID.BREAD -> 4
                 ItemID.CARROT, ItemID.POTATO, BlockID.BEETROOT -> 1
@@ -565,7 +565,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         }
         this.inventory = EntityEquipmentInventory(this)
         if (namedTag!!.contains("Inventory") && namedTag!!["Inventory"] is ListTag<*>) {
-            val inventory = this.getInventory()
+            val inventory = this.inventory
             val inventoryList = namedTag!!.getList(
                 "Inventory",
                 CompoundTag::class.java
@@ -682,13 +682,13 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     override fun saveNBT() {
         super.saveNBT()
-        namedTag!!.putInt("profession", this.getProfession())
-        namedTag!!.putBoolean("isTrade", this.canTrade())
-        namedTag!!.putString("displayName", getDisplayName()!!)
-        namedTag!!.putInt("tradeTier", this.getTradeTier())
-        namedTag!!.putInt("maxTradeTier", this.getMaxTradeTier())
-        namedTag!!.putInt("tradeExp", this.getTradeExp())
-        namedTag!!.putInt("tradeSeed", this.getTradeSeed())
+        namedTag!!.putInt("profession", this.profession)
+        namedTag!!.putBoolean("isTrade", this.canTrade!!)
+        namedTag!!.putString("displayName", displayName!!)
+        namedTag!!.putInt("tradeTier", this.tradeTier!!)
+        namedTag!!.putInt("maxTradeTier", this.maxTradeTier)
+        namedTag!!.putInt("tradeExp", this.tradeExp)
+        namedTag!!.putInt("tradeSeed", this.tradeSeed)
         namedTag!!.putInt("clothing", this.getDataProperty<Int>(EntityDataTypes.Companion.MARK_VARIANT))
         val gossipTag = CompoundTag()
         for ((key, value) in memoryStorage.get(CoreMemoryTypes.Companion.GOSSIP)!!
@@ -718,7 +718,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         }
         val inventoryTag: ListTag<CompoundTag> = ListTag()
         namedTag!!.putList("Inventory", inventoryTag)
-        for ((key, value) in getInventory().contents) {
+        for ((key, value) in inventory.contents) {
             inventoryTag.add(NBTIO.putItemHelper(value, key))
         }
     }
@@ -745,13 +745,6 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         }
     }
 
-    /**
-     * @return 村民的职业id
-     */
-    fun getProfession(): Int {
-        return profession
-    }
-
 
     fun setProfession(profession: Int, apply: Boolean) {
         this.profession = profession
@@ -760,11 +753,11 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     fun setProfessionBlock(block: Block): Boolean {
-        for (profession in Profession.getProfessions().values) {
-            if (getTradeExp() != 0 && profession.getIndex() != getProfession()) continue
-            if (block.id == profession.getBlockID()) {
+        for (prof in Profession.getProfessions().values) {
+            if (tradeExp != 0 && prof.getIndex() != this.profession) continue
+            if (block.id == prof.getBlockID()) {
                 memoryStorage[CoreMemoryTypes.SITE_BLOCK] = block
-                setProfession(profession.getIndex(), true)
+                setProfession(prof.getIndex(), true)
                 return true
             }
         }
@@ -779,13 +772,6 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     /**
-     * @return 该村民是否可以交易
-     */
-    fun canTrade(): Boolean {
-        return canTrade!!
-    }
-
-    /**
      * 设置村民是否可以交易
      *
      * @param canTrade true 可以交易
@@ -793,13 +779,6 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     fun setCanTrade(canTrade: Boolean) {
         this.canTrade = canTrade
         namedTag!!.putBoolean("canTrade", canTrade)
-    }
-
-    /**
-     * @return 交易UI的显示名称
-     */
-    fun getDisplayName(): String? {
-        return displayName
     }
 
     /**
@@ -829,13 +808,13 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     fun updateTrades(player: Player) {
-        if (player.topWindow.isEmpty || player.topWindow.get() !== getTradeInventory()) return
+        if (player.topWindow.isEmpty || player.topWindow.get() !== tradeInventory) return
         val pk1 = UpdateTradePacket()
-        pk1.containerId = player.getWindowId(getTradeInventory()!!).toByte()
+        pk1.containerId = player.getWindowId(tradeInventory!!).toByte()
         pk1.tradeTier = getTradeTier()
         pk1.traderUniqueEntityId = getUniqueID()
         pk1.playerUniqueEntityId = player.getUniqueID()
-        pk1.displayName = getDisplayName()
+        pk1.displayName = displayName
         val tierExpRequirements = ListTag<CompoundTag>()
         var i = 0
         val len = tierExpRequirement.size
@@ -874,13 +853,6 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     /**
-     * @return 村民所允许的最大交易等级
-     */
-    fun getMaxTradeTier(): Int {
-        return maxTradeTier
-    }
-
-    /**
      * @param maxTradeTier 设置村民所允许的最大交易等级
      */
     fun setMaxTradeTier(maxTradeTier: Int) {
@@ -895,13 +867,6 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     /**
-     * @return 村民当前的经验值
-     */
-    fun getTradeExp(): Int {
-        return tradeExp
-    }
-
-    /**
      * @param tradeExp 设置村民当前的经验值
      */
     fun setTradeExp(tradeExp: Int) {
@@ -912,22 +877,10 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {
-        if (this.canTrade()) {
-            player.addWindow(getTradeInventory()!!)
+        if (this.canTrade!!) {
+            player.addWindow(tradeInventory!!)
             return true
         } else return false
-    }
-
-    fun getTradeInventory(): TradeInventory? {
-        return tradeInventory
-    }
-
-    fun getInventory(): EntityEquipmentInventory {
-        return inventory
-    }
-
-    fun getTradeSeed(): Int {
-        return tradeSeed
     }
 
     protected fun setTradeSeed(tradeSeed: Int) {
@@ -966,7 +919,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                             else -> false
                         }
                     ) {
-                        val slice = InventorySlice(getInventory(), 1, getInventory().size)
+                        val slice = InventorySlice(inventory, 1, inventory.size)
                         if (slice.canAddItem(item)) {
                             val pk = TakeItemEntityPacket()
                             pk.entityId = this.getRuntimeID()
@@ -989,7 +942,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
             getTradeNetIds().forEach(Consumer { key -> TradeRecipeBuildUtils.RECIPE_MAP.remove(key) })
             val profession = Profession.getProfession(this.profession)!!
             setDisplayName(profession.getName())
-            for (trade in profession.buildTrades(getTradeSeed()).all) {
+            for (trade in profession.buildTrades(tradeSeed).all) {
                 getTradeNetIds().add(trade.getInt("netId"))
             }
             this.setCanTrade(true)

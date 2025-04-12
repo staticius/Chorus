@@ -237,7 +237,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
             for (entity in hopperPos.level.getCollidingEntities(pickupArea)) {
                 if (entity.isClosed() || entity !is EntityItem) continue
 
-                val item = entity.getItem()
+                val item = entity.item
 
                 if (item.isNothing || !hopperInv.canAddItem(item)) continue
 

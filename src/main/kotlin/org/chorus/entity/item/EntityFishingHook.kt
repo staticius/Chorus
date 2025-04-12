@@ -261,7 +261,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
                 ) as EntityItem?
 
                 if (itemEntity != null) {
-                    itemEntity.setOwner(player.getEntityName())
+                    itemEntity.owner = (player.getEntityName())
                     itemEntity.spawnToAll()
                     player.level!!.dropExpOrb(player.position, event.experience)
                 }

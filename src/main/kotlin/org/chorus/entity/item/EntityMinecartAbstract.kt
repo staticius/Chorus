@@ -795,15 +795,6 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
     /**
      * Set the minecart display block
      *
-     * @param block The block that will changed. Set `null` for BlockAir
-     */
-    fun setDisplayBlock(block: Block?) {
-        setDisplayBlock(block, true)
-    }
-
-    /**
-     * Set the minecart display block
-     *
      * @param block  The block that will changed. Set `null` for BlockAir
      * @param update Do update for the block. (This state changes if you want to show the block)
      */

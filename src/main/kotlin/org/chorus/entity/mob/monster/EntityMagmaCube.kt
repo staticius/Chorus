@@ -35,6 +35,10 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
         return EntityID.MAGMA_CUBE
     }
 
+    override var variant: Int
+        get() = super<EntityVariant>.variant
+        set(value) { super<EntityVariant>.variant = value }
+
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
@@ -72,21 +76,21 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
     override fun initEntity() {
         super.initEntity()
         if (!hasVariant()) {
-            this.setVariant(randomVariant())
+            this.variant = (randomVariant())
         }
 
-        if (getVariant() == SIZE_BIG) {
+        if (variant == SIZE_BIG) {
             this.diffHandDamage = floatArrayOf(4f, 6f, 9f)
-        } else if (getVariant() == SIZE_MEDIUM) {
+        } else if (variant == SIZE_MEDIUM) {
             this.diffHandDamage = floatArrayOf(3f, 4f, 6f)
         } else {
             this.diffHandDamage = floatArrayOf(2.5f, 3f, 4.5f)
         }
-        if (getVariant() == SIZE_BIG) {
+        if (variant == SIZE_BIG) {
             this.maxHealth = 16
-        } else if (getVariant() == SIZE_MEDIUM) {
+        } else if (variant == SIZE_MEDIUM) {
             this.maxHealth = 4
-        } else if (getVariant() == SIZE_SMALL) {
+        } else if (variant == SIZE_SMALL) {
             this.maxHealth = 1
         }
         setHealthSafe(maxHealth.toFloat())
@@ -98,11 +102,11 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
     }
 
     override fun getWidth(): Float {
-        return 0.51f + getVariant() * 0.51f
+        return 0.51f + variant * 0.51f
     }
 
     override fun getHeight(): Float {
-        return 0.51f + getVariant() * 0.51f
+        return 0.51f + variant * 0.51f
     }
 
 
@@ -119,11 +123,11 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
             if (lastDamageCause is EntityDamageByEntityEvent) {
                 val damager = (lastDamageCause as EntityDamageByEntityEvent).damager
                 if (damager is EntityFrog) {
-                    if (getVariant() == SIZE_SMALL) {
+                    if (variant == SIZE_SMALL) {
                         return arrayOf(
                             Item.get(
-                                if (damager.getVariant() == 0) BlockID.OCHRE_FROGLIGHT
-                                else if (damager.getVariant() == 1) BlockID.VERDANT_FROGLIGHT
+                                if (damager.variant == 0) BlockID.OCHRE_FROGLIGHT
+                                else if (damager.variant == 1) BlockID.VERDANT_FROGLIGHT
                                 else BlockID.PEARLESCENT_FROGLIGHT
                             )
                         )
@@ -131,7 +135,7 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
                 }
             }
         }
-        if (getVariant() != SIZE_SMALL) {
+        if (variant != SIZE_SMALL) {
             if (Utils.rand(0, 4) == 0) {
                 return arrayOf(Item.get(ItemID.MAGMA_CREAM))
             }
@@ -140,7 +144,7 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
     }
 
     override fun getExperienceDrops(): Int {
-        return getVariant()
+        return variant
     }
 
     override fun getAllVariant(): IntArray {
@@ -148,19 +152,19 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
     }
 
     private fun getSmaller(): Int {
-        return when (getVariant()) {
+        return when (variant) {
             4 -> 2
-            else -> getVariant() - 1
+            else -> variant - 1
         }
     }
 
     override fun kill() {
-        if (getVariant() != SIZE_SMALL) {
+        if (variant != SIZE_SMALL) {
             for (i in 1..<Utils.rand(2, 5)) {
                 val magmaCube = EntityMagmaCube(this.locator.chunk, this.namedTag)
                 magmaCube.setPosition(position.add(Utils.rand(-0.5, 0.5), 0.0, Utils.rand(-0.5, 0.5)))
                 magmaCube.setRotation(rotation.yaw, rotation.pitch)
-                magmaCube.setVariant(getSmaller())
+                magmaCube.variant = (getSmaller())
                 magmaCube.spawnToAll()
             }
         }

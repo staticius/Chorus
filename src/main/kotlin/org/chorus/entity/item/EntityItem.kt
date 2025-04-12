@@ -24,10 +24,10 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         return EntityID.ITEM
     }
 
-    protected var owner: String? = null
+    var owner: String? = null
     protected var thrower: String? = null
     lateinit var item: Item
-    protected var pickupDelay: Int = 0
+    var pickupDelay: Int = 0
 
     override fun getWidth(): Float {
         return 0.25f
@@ -118,8 +118,8 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
 
         this.lastUpdate = currentTick
 
-        if (this.age % 60 == 0 && this.onGround && this.getItem() != null && this.isAlive()) {
-            if (getItem().getCount() < getItem().maxStackSize) {
+        if (this.age % 60 == 0 && this.onGround && this.item != null && this.isAlive()) {
+            if (item.getCount() < item.maxStackSize) {
                 for (entity: Entity in level!!.getNearbyEntities(
                     getBoundingBox().grow(1.0, 1.0, 1.0),
                     this, false
@@ -128,19 +128,19 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
                         if (!entity.isAlive()) {
                             continue
                         }
-                        val closeItem: Item = entity.getItem()
-                        if (!closeItem.equals(getItem(), true, true)) {
+                        val closeItem: Item = entity.item
+                        if (!closeItem.equals(item, true, true)) {
                             continue
                         }
                         if (!entity.isOnGround()) {
                             continue
                         }
-                        val newAmount: Int = getItem().getCount() + closeItem.getCount()
-                        if (newAmount > getItem().maxStackSize) {
+                        val newAmount: Int = item.getCount() + closeItem.getCount()
+                        if (newAmount > item.maxStackSize) {
                             continue
                         }
                         entity.close()
-                        getItem().setCount(newAmount)
+                        item.setCount(newAmount)
                         val packet: EntityEventPacket = EntityEventPacket()
                         packet.eid = getRuntimeID()
                         packet.data = newAmount
@@ -290,36 +290,8 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         return item.count.toString() + "x " + item.displayName
     }
 
-    fun getItem(): Item {
-        return item
-    }
-
     override fun canCollideWith(entity: Entity): Boolean {
         return false
-    }
-
-    fun getPickupDelay(): Int {
-        return pickupDelay
-    }
-
-    fun setPickupDelay(pickupDelay: Int) {
-        this.pickupDelay = pickupDelay
-    }
-
-    fun getOwner(): String? {
-        return owner
-    }
-
-    fun setOwner(owner: String?) {
-        this.owner = owner
-    }
-
-    fun getThrower(): String? {
-        return thrower
-    }
-
-    fun setThrower(thrower: String?) {
-        this.thrower = thrower
     }
 
     public override fun createAddEntityPacket(): DataPacket {
@@ -328,7 +300,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
             targetRuntimeID = this.runtimeId,
             position = this.position.asVector3f(),
             velocity = this.motion.asVector3f(),
-            item = this.getItem(),
+            item = this.item,
             entityData = this.entityDataMap,
             fromFishing = false
         )

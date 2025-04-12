@@ -42,6 +42,10 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
         return EntityID.CAT
     }
 
+    override var variant: Int
+        get() = super<EntityVariant>.variant
+        set(value) { super<EntityVariant>.variant = value }
+
     override var diffHandDamage: FloatArray = floatArrayOf(4f, 4f, 4f)
 
     override fun updateMovement() {
@@ -209,7 +213,7 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
             )
         }
         if (!hasVariant()) {
-            this.setVariant(randomVariant())
+            this.variant = (randomVariant())
         }
         //update CollarColor to Color
         if (namedTag!!.contains("CollarColor")) {

@@ -44,6 +44,10 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
         return EntityID.SHULKER
     }
 
+    override var variant: Int
+        get() = super<EntityVariant>.variant
+        set(value) { super<EntityVariant>.variant = value }
+
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(
             this.tickSpread,
@@ -129,7 +133,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     override fun initEntity() {
         this.setMaxHealth(30)
         super.initEntity()
-        if (memoryStorage[CoreMemoryTypes.Companion.VARIANT] == null) setVariant(16)
+        if (memoryStorage[CoreMemoryTypes.Companion.VARIANT] == null) variant = (16)
         setDataProperty(
             EntityDataTypes.Companion.SHULKER_ATTACH_POS,
             locator.levelBlock.getSide(BlockFace.UP).position.asBlockVector3()

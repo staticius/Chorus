@@ -80,7 +80,7 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
     }
 
     override fun dropItem() {
-        when (this.getVariant()) {
+        when (this.getBoatVariant()) {
             0 -> level!!.dropItem(this.position, Item.get(ItemID.OAK_CHEST_BOAT))
             1 -> level!!.dropItem(this.position, Item.get(ItemID.SPRUCE_CHEST_BOAT))
             2 -> level!!.dropItem(this.position, Item.get(ItemID.BIRCH_CHEST_BOAT))

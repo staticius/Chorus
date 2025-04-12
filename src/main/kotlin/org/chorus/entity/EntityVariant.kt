@@ -7,13 +7,9 @@ import org.chorus.utils.Utils
  * 实现这个接口的实体拥有变种属性
  */
 interface EntityVariant : EntityComponent {
-    fun getVariant(): Int {
-        return memoryStorage[CoreMemoryTypes.VARIANT]!!
-    }
-
-    fun setVariant(variant: Int) {
-        memoryStorage[CoreMemoryTypes.VARIANT] = variant
-    }
+    var variant: Int
+        get() = memoryStorage[CoreMemoryTypes.VARIANT]!!
+        set(value) { memoryStorage[CoreMemoryTypes.VARIANT] = value }
 
     fun hasVariant(): Boolean {
         return memoryStorage.notEmpty(CoreMemoryTypes.VARIANT)

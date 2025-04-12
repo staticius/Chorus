@@ -5063,8 +5063,8 @@ class Player(
                 entity.close()
                 return true
             } else if (entity is EntityItem) {
-                if (entity.getPickupDelay() <= 0) {
-                    val item = entity.getItem()
+                if (entity.pickupDelay <= 0) {
+                    val item = entity.item
 
                     if (item != null) {
                         if (!this.isCreative && !this.inventory.canAddItem(item)) {
