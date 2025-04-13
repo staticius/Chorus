@@ -6,11 +6,7 @@ import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
 
-class BlockAir : BlockTransparent {
-    constructor() : super(Companion.properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockAir(blockState: BlockState = Companion.properties.defaultState) : BlockTransparent(blockState) {
     override val name: String
         get() = "Air"
 

@@ -267,7 +267,7 @@ open class BlockTrapdoor @JvmOverloads constructor(blockState: BlockState = Comp
         init {
             for (specialValue in boundingBox2SpecialV.indices) {
                 val bb: AxisAlignedBB
-                if (properties.getPropertyValue<Boolean, BooleanPropertyType>(
+                if (properties.getPropertyValue(
                         specialValue,
                         CommonBlockProperties.OPEN_BIT
                     )

@@ -332,7 +332,7 @@ class GameMockExtension : MockitoExtension() {
                     HashMap()
                 )
             )
-            level!!.initLevel()
+            level.initLevel()
 
             val map = HashMap<Int, Level>()
             map[1] = level
@@ -342,11 +342,11 @@ class GameMockExtension : MockitoExtension() {
             players[InetSocketAddress("127.0.0.1", 63333)] = player
             TestUtils.setField(Server::class.java, server, "players", players)
 
-            player.level = level!!
+            player.level = level
             player.setPosition(Vector3(0.0, 100.0, 0.0))
 
             val t = Thread {
-                level!!.close()
+                level.close()
                 try {
                     val file1 = Path.of("services").toFile()
                     if (file1.exists()) {

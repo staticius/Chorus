@@ -563,7 +563,7 @@ class Level(
         }
 
         if (this === defaultLevel) {
-            Server.instance.defaultLevel = null
+            throw RuntimeException("Cannot unload default level!")
         }
 
         this.close()

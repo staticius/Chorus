@@ -4,6 +4,7 @@ import com.google.gson.JsonParser
 import org.chorus.Server
 import org.chorus.block.*
 import org.chorus.utils.BlockColor
+import org.chorus.utils.Loggable
 import org.jetbrains.annotations.ApiStatus
 import java.io.BufferedReader
 import java.io.IOException
@@ -62,10 +63,7 @@ class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
     fun register(value: BlockState) {
         val now: BlockState?
         if ((REGISTRY.put(value.blockStateHash(), value).also { now = it }) != null) {
-            throw RegisterException(
-                """The blockstate ${value}has been registered,
- current value: $now"""
-            )
+            throw RegisterException("The blockstate ${value} has been registered, current value: $now")
         }
     }
 
@@ -78,7 +76,7 @@ class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
         }
     }
 
-    companion object {
+    companion object : Loggable {
         private val REGISTRY = HashMap<Int, BlockState>()
     }
 }

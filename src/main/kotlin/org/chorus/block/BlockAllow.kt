@@ -5,11 +5,7 @@ import org.chorus.item.Item
 import org.chorus.math.BlockFace
 import org.chorus.math.Vector3
 
-class BlockAllow : BlockSolid {
-    constructor() : super(Companion.properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockAllow(blockState: BlockState = Companion.properties.defaultState) : BlockSolid(blockState) {
     override val hardness: Double
         get() = -1.0
 

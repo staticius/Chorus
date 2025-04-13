@@ -10,7 +10,7 @@ open class ItemBlock @JvmOverloads constructor(block: Block, aux: Int = 0, count
         get() = super.damage
         set(meta) {
             if (meta != 0) {
-                val i = Registries.BLOCKSTATE_ITEMMETA[block!!.id, meta]
+                val i = Registries.BLOCKSTATE_ITEMMETA[block!!.id, meta] ?: 0
                 if (i != 0) {
                     val blockState = Registries.BLOCKSTATE[i]
                     this.block = Registries.BLOCK[blockState]

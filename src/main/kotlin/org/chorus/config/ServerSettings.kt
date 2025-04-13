@@ -33,143 +33,143 @@ class ServerSettings : OkaeriConfig() {
     @CustomKey("gameplay-settings")
     val gameplaySettings = GameplaySettings()
 
-    class BaseSettings : OkaeriConfig() {
+    open class BaseSettings : OkaeriConfig() {
         @Comment("chorus.server.settings.baseSettings.language")
-        var language: String = "eng"
+        open var language: String = "eng"
 
         @Comment("chorus.server.settings.baseSettings.forceServerTranslate")
-        var forceServerTranslate: Boolean = false
+        open var forceServerTranslate: Boolean = false
 
         @Comment("chorus.server.settings.baseSettings.shutdownMessage")
-        var shutdownMessage: String = "Server closed"
+        open var shutdownMessage: String = "Server closed"
 
         @Comment("chorus.server.settings.baseSettings.queryPlugins")
-        var queryPlugins: Boolean = true
+        open var queryPlugins: Boolean = true
 
         @Comment("chorus.server.settings.baseSettings.deprecatedVerbose")
-        var deprecatedVerbose: Boolean = true
+        open var deprecatedVerbose: Boolean = true
 
         @Comment("chorus.server.settings.baseSettings.asyncWorkers")
-        var asyncWorkers: String = "auto"
+        open var asyncWorkers: String = "auto"
 
         @Comment("chorus.server.settings.baseSettings.safeSpawn")
-        var safeSpawn: Boolean = true
+        open var safeSpawn: Boolean = true
 
         @Comment("chorus.server.settings.baseSettings.installSpark")
-        var installSpark: Boolean = true
+        open var installSpark: Boolean = true
 
         @Comment("chorus.server.settings.baseSettings.waterdogpe")
-        var waterdogpe: Boolean = false
+        open var waterdogpe: Boolean = false
 
         @Comment("chorus.server.settings.baseSettings.autosave")
-        var autosave: Int = 6000
+        open var autosave: Int = 6000
 
         @Comment("chorus.server.settings.baseSettings.saveUnknownBlock")
-        var saveUnknownBlock: Boolean = true
+        open var saveUnknownBlock: Boolean = true
     }
 
-    class NetworkSettings : OkaeriConfig() {
+    open class NetworkSettings : OkaeriConfig() {
         @Comment("chorus.server.settings.networkSettings.compressionLevel")
-        var compressionLevel: Int = 7
+        open var compressionLevel: Int = 7
 
         @Comment("chorus.server.settings.networkSettings.zlibProvider")
-        var zlibProvider: Int = 3
+        open var zlibProvider: Int = 3
 
         @Comment("chorus.server.settings.networkSettings.snappy")
-        var snappy: Boolean = false
+        open var snappy: Boolean = false
 
         @Comment("chorus.server.settings.networkSettings.compressionBufferSize")
-        var compressionBufferSize: Int = 1048576
+        open var compressionBufferSize: Int = 1048576
 
         @Comment("chorus.server.settings.networkSettings.maxDecompressSize")
-        var maxDecompressSize: Int = 67108864
+        open var maxDecompressSize: Int = 67108864
 
         @Comment("chorus.server.settings.networkSettings.packetLimit")
-        var packetLimit: Int = 240
+        open var packetLimit: Int = 240
     }
 
-    class DebugSettings : OkaeriConfig() {
+    open class DebugSettings : OkaeriConfig() {
         @Comment("chorus.server.settings.debugSettings.level")
-        var level: String = "INFO"
+        open var level: String = "INFO"
 
         @Comment("chorus.server.settings.debugSettings.command")
-        var command: Boolean = false
+        open var command: Boolean = false
 
         @Comment("chorus.server.settings.debugSettings.ignoredPackets")
-        var ignoredPackets: ArrayList<String> = ArrayList()
+        open var ignoredPackets: ArrayList<String> = ArrayList()
 
         @Comment("chorus.server.settings.debugSettings.allowBeta")
-        var allowBeta: Boolean = false
+        open var allowBeta: Boolean = false
     }
 
-    class LevelSettings : OkaeriConfig() {
+    open class LevelSettings : OkaeriConfig() {
         @Comment("chorus.server.settings.levelSettings.autoTickRate")
-        var autoTickRate: Boolean = true
+        open var autoTickRate: Boolean = true
 
         @Comment("chorus.server.settings.levelSettings.autoTickRateLimit")
-        var autoTickRateLimit: Int = 20
+        open var autoTickRateLimit: Int = 20
 
         @Comment("chorus.server.settings.levelSettings.baseTickRate")
-        var baseTickRate: Int = 1
+        open var baseTickRate: Int = 1
 
         @Comment("chorus.server.settings.levelSettings.alwaysTickPlayers")
-        var alwaysTickPlayers: Boolean = false
+        open var alwaysTickPlayers: Boolean = false
 
         @Comment("chorus.server.settings.levelSettings.enableRedstone")
-        var enableRedstone: Boolean = true
+        open var enableRedstone: Boolean = true
 
         @Comment("chorus.server.settings.levelSettings.tickRedstone")
-        var tickRedstone: Boolean = true
+        open var tickRedstone: Boolean = true
 
         @Comment("chorus.server.settings.levelSettings.chunkUnloadDelay")
-        var chunkUnloadDelay: Int = 15000
+        open var chunkUnloadDelay: Int = 15000
 
         @Comment("chorus.server.settings.levelSettings.levelThread")
-        var levelThread: Boolean = false
+        open var levelThread: Boolean = false
     }
 
-    class ChunkSettings : OkaeriConfig() {
+    open class ChunkSettings : OkaeriConfig() {
         @Comment("chorus.server.settings.chunkSettings.perTickSend")
-        var perTickSend: Int = 8
+        open var perTickSend: Int = 8
 
         @Comment("chorus.server.settings.chunkSettings.spawnThreshold")
-        var spawnThreshold: Int = 56
+        open var spawnThreshold: Int = 56
 
         @Comment("chorus.server.settings.chunkSettings.chunksPerTicks")
-        var chunksPerTicks: Int = 40
+        open var chunksPerTicks: Int = 40
 
         @Comment("chorus.server.settings.chunkSettings.tickRadius")
-        var tickRadius: Int = 3
+        open var tickRadius: Int = 3
 
         @Comment("chorus.server.settings.chunkSettings.lightUpdates")
-        var lightUpdates: Boolean = true
+        open var lightUpdates: Boolean = true
 
         @Comment("chorus.server.settings.chunkSettings.clearTickList")
-        var clearTickList: Boolean = false
+        open var clearTickList: Boolean = false
 
         @Comment("chorus.server.settings.chunkSettings.generationQueueSize")
-        var generationQueueSize: Int = 128
+        open var generationQueueSize: Int = 128
     }
 
-    class PlayerSettings : OkaeriConfig() {
+    open class PlayerSettings : OkaeriConfig() {
         @Comment("chorus.server.settings.playerSettings.savePlayerData")
-        var savePlayerData: Boolean = true
+        open var savePlayerData: Boolean = true
 
         @Comment("chorus.server.settings.playerSettings.skinChangeCooldown")
-        var skinChangeCooldown: Int = 30
+        open var skinChangeCooldown: Int = 30
 
         @Comment("chorus.server.settings.playerSettings.forceSkinTrusted")
-        var forceSkinTrusted: Boolean = false
+        open var forceSkinTrusted: Boolean = false
 
         @Comment("chorus.server.settings.playerSettings.checkMovement")
-        var checkMovement: Boolean = true
+        open var checkMovement: Boolean = true
 
         @Comment("chorus.server.settings.playerSettings.spawnRadius")
-        var spawnRadius: Int = 16
+        open var spawnRadius: Int = 16
     }
 
-    class GameplaySettings : OkaeriConfig() {
+    open class GameplaySettings : OkaeriConfig() {
         @Comment("chorus.server.settings.gameplaySettings.enableCommandBlocks")
-        var enableCommandBlocks: Boolean = true
+        open var enableCommandBlocks: Boolean = true
     }
 }

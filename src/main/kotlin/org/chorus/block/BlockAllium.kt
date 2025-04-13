@@ -1,10 +1,6 @@
 package org.chorus.block
 
-class BlockAllium : BlockFlower {
-    constructor() : super(Companion.properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockAllium(blockState: BlockState = Companion.properties.defaultState) : BlockFlower(blockState) {
     override val properties: BlockProperties
         get() = Companion.properties
 

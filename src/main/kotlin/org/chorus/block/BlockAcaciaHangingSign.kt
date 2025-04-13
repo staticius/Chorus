@@ -2,11 +2,7 @@ package org.chorus.block
 
 import org.chorus.block.property.CommonBlockProperties
 
-class BlockAcaciaHangingSign : BlockHangingSign {
-    constructor() : super(Companion.properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockAcaciaHangingSign(blockState: BlockState = Companion.properties.defaultState) : BlockHangingSign(blockState) {
     override val name: String
         get() = "Acacia Hanging Sign"
 

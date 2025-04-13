@@ -284,7 +284,7 @@ class Server internal constructor(
             return result
         }
     }
-    private lateinit var levelArray: Array<Level>
+    private var levelArray: Array<Level> = emptyArray()
 
     val thread: Thread = Thread.currentThread()
     val launchTime: Long = System.currentTimeMillis()
@@ -358,7 +358,9 @@ class Server internal constructor(
                 val levelConfig = LevelConfig("leveldb", true, generatorConfig)
                 this.generateLevel(levelFolder, levelConfig)
             }
-            this.defaultLevel = (this.getLevelByName("$levelFolder Dim0"))
+            this.getLevelByName("$levelFolder Dim0").also {
+                if (it != null) this.defaultLevel = it
+            }
         }
     }
 
@@ -2172,7 +2174,7 @@ class Server internal constructor(
 
         for (entry in levelConfig1.generators.entries) {
             val generatorConfig: GeneratorConfig = entry.value
-            val provider = getProviderByName(levelConfig1.format)
+            val provider = getProviderByName(levelConfig1.format)!!
             val level: Level
             try {
                 provider.getMethod("generate", String::class.java, String::class.java, GeneratorConfig::class.java)

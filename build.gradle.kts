@@ -61,6 +61,7 @@ dependencies {
     testImplementation(libs.commonslang3)
 
     implementation(kotlin("stdlib-jdk8"))
+    implementation(kotlin("reflect"))
 }
 
 java {

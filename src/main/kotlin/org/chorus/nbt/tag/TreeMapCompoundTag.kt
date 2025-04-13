@@ -10,10 +10,7 @@ class TreeMapCompoundTag : CompoundTag {
 
     constructor(tags: Map<String, Tag<*>>) : super(TreeMap<String, Tag<*>>(tags))
 
-    override val tags: MutableMap<String, Tag<*>>
-        get() {
-            return TreeMap(this.tags)
-        }
+    override val tags: MutableMap<String, Tag<*>> = TreeMap(super.tags)
 
     override fun parseValue(): MutableMap<String, Any> {
         val value: MutableMap<String, Any> = TreeMap()

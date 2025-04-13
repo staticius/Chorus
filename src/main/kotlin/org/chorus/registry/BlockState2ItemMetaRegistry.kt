@@ -37,8 +37,8 @@ class BlockState2ItemMetaRegistry : IRegistry<String, Int?, Int> {
         return MAP[key] ?: throw RuntimeException("Unknown BlockState2ItemMeta key: $key")
     }
 
-    operator fun get(key: String, meta: Int): Int {
-        return MAP["$key#$meta"] ?: throw RuntimeException("Unknown BlockState2ItemMeta key: $key#$meta")
+    operator fun get(key: String, meta: Int): Int? {
+        return MAP["$key#$meta"]
     }
 
     @Throws(RegisterException::class)

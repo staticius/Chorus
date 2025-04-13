@@ -34,7 +34,7 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
         assertValid(identifier)
         register(identifier, blockTags)
         this.identifier = identifier.intern()
-        this.propertyTypeSet = Sets.newHashSet<BlockPropertyType<*>>(*properties)
+        this.propertyTypeSet = mutableSetOf(*properties)
 
         var specialValueBits: Byte = 0
         for (value in this.propertyTypeSet) {
@@ -46,22 +46,14 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
             val mapBlockStatePair = initStates()
             val blockStateHashMap = mapBlockStatePair.first
             this.defaultState = mapBlockStatePair.second
-            this.specialValueMap = blockStateHashMap
-                .values
-                .stream()
-                .collect(
-                    Collectors.toMap(
-                        BlockStateImpl::specialValue, Function.identity(),
-                        { v1: BlockState, _: BlockState? -> v1 },
-                        { HashMap() })
-                )
+            this.specialValueMap = blockStateHashMap.values.associateBy { it.specialValue() }
         } else {
             throw IllegalArgumentException()
         }
     }
 
     private fun initStates(): Pair<Map<Int, BlockStateImpl>, BlockStateImpl> {
-        val propertyTypeList = propertyTypeSet.stream().toList()
+        val propertyTypeList = propertyTypeSet.toList()
         val size = propertyTypeList.size
         if (size == 0) {
             val blockState = BlockStateImpl(identifier, mutableListOf())
@@ -71,19 +63,16 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
 
         // to keep track of next element in each of
         // the n arrays
-        val indices = IntArray(size)
-
-        // initialize with first element's index
-        Arrays.fill(indices, 0)
+        val indices = IntArray(size) { 0 }
 
         while (true) {
             // Generate BlockState
-            val values = ImmutableList.builder<BlockPropertyValue<*, *, *>?>()
+            val values = mutableListOf<BlockPropertyValue<*, *, *>>()
             for (i in 0..<size) {
                 val type = propertyTypeList[i]
                 values.add(type.tryCreateValue(type.validValues[indices[i]])!!)
             }
-            val state = BlockStateImpl(identifier, values.build().toMutableList())
+            val state = BlockStateImpl(identifier, values.toMutableList())
             blockStates[state.blockStateHash()] = state
 
             // find the rightmost array that has more
@@ -111,7 +100,7 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
         }
         val defaultStateHash: Int = HashUtils.computeBlockStateHash(
             this.identifier,
-            propertyTypeSet.stream().map { p: BlockPropertyType<*> -> p.tryCreateValue(p.defaultValue)!! }.toList()
+            propertyTypeSet.map { it.tryCreateValue(it.defaultValue)!! }.toList()
         )
         var defaultState: BlockStateImpl? = null
         for (s in blockStates.values) {
@@ -156,7 +145,7 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
     }
 
     fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> getPropertyValue(specialValue: Int, p: PROPERTY): DATATYPE {
-        return getBlockState(specialValue.toShort())!!.getPropertyValue(p)
+        return getBlockState(specialValue.toShort())?.getPropertyValue(p) ?: p.defaultValue
     }
 
     fun getPropertyTypeSet(): @UnmodifiableView MutableSet<BlockPropertyType<*>> {

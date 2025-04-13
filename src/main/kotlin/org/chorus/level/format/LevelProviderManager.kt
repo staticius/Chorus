@@ -36,8 +36,8 @@ object LevelProviderManager : Loggable {
     }
 
     @JvmStatic
-    fun getProviderByName(name: String): Class<out LevelProvider> {
+    fun getProviderByName(name: String): Class<out LevelProvider>? {
         val name1 = name.trim { it <= ' ' }.lowercase()
-        return providers.getOrDefault(name1, null)!!
+        return providers.getOrDefault(name1, null)
     }
 }

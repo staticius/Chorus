@@ -17,6 +17,5 @@ class BlockAcaciaTrapdoor @JvmOverloads constructor(blockstate: BlockState = Com
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT
         )
-
     }
 }
