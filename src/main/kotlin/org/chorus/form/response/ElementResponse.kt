@@ -12,5 +12,5 @@ data class ElementResponse(
     /**
      * The text of the selected option or step
      */
-    protected val elementText: String? = null,
+    val elementText: String? = null,
 )

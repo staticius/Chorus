@@ -121,7 +121,7 @@ class PlayerTest {
         }
         if (limit2 == 0) {
             TestUtils.resetPlayerStatus(player)
-            Assertions.fail<Any>("Chunks cannot be successfully unloaded in 10s, now have chunk %s".formatted(level.chunks.size))
+            Assertions.fail<Any>("Chunks cannot be successfully unloaded in 10s, now have chunk ${level.chunks.size}")
         }
         loop.stop()
         Assertions.assertTrue(level.chunks.containsKey(0L), "spawn chunk 0,0 should keep load")

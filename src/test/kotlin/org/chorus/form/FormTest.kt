@@ -25,23 +25,22 @@ class FormTest {
     @Test
     fun test_FormWindowCustom(player: TestPlayer, testPluginManager: TestPluginManager) {
         testPluginManager.resetAll()
-        val test1 = ElementDropdown("test1", listOf("1", "2", "3"), 1) //default 2
+        val test1 = ElementDropdown("test1", mutableListOf("1", "2", "3"), 1) //default 2
         val test2 = ElementInput("test2", "placeholder", "defaultText")
         val test3 = ElementLabel("test3")
         val test4 = ElementSlider("test4", 0f, 100f, 1, 50f)
-        val test5 = ElementStepSlider("test5", listOf("step1", "step2"), 1) //default step2
+        val test5 = ElementStepSlider("test5", mutableListOf("step1", "step2"), 1) //default step2
         val test6 = ElementToggle("test6", true)
         val test = CustomForm("test")
-            .elements(
-                ObjectArrayList.of(
-                    test1,
-                    test2,
-                    test3,
-                    test4,
-                    test5,
-                    test6
-                )
-            )
+        test.elements = mutableListOf(
+            test1,
+            test2,
+            test3,
+            test4,
+            test5,
+            test6
+        )
+
 
         test.send(player, 1)
         val dataPacketManager = player.session.dataPacketManager
@@ -53,7 +52,7 @@ class FormTest {
         checkNotNull(dataPacketManager)
 
         testPluginManager.registerTestEventHandler(
-            List.of<TestEventHandler<out Event?>>(
+            listOf(
                 object : TestEventHandler<PlayerFormRespondedEvent>() {
                     override fun handle(event: PlayerFormRespondedEvent) {
                         val response = event.response as CustomResponse
@@ -71,15 +70,14 @@ class FormTest {
                         Assertions.assertFalse(toggleResponse)
 
                         val genericDropdownResponse = response.getResponse<ElementResponse>(0)
-                        Assertions.assertEquals(dropdownResponse.elementId(), genericDropdownResponse.elementId())
+                        Assertions.assertEquals(dropdownResponse.elementId, genericDropdownResponse.elementId)
 
                         val responses = response.responses
-                        Assertions.assertEquals(6, responses.size())
+                        Assertions.assertEquals(6, responses.size)
 
-                        Assertions.assertEquals("test", test.title())
+                        Assertions.assertEquals("test", test.title)
                         Assertions.assertEquals(
-                            test1, test.elements()
-                                .toArray<Element> { _Dummy_.__Array__() }[0]
+                            test1, test.elements.toTypedArray()[0]
                         )
                     }
                 }
@@ -116,21 +114,21 @@ class FormTest {
         checkNotNull(dataPacketManager)
 
         testPluginManager.registerTestEventHandler(
-            List.of<TestEventHandler<out Event?>>(
+            listOf(
                 object : TestEventHandler<PlayerFormRespondedEvent>() {
                     override fun handle(event: PlayerFormRespondedEvent) {
                         val response = (event.response as SimpleResponse)
-                        val clickedButton = response.button()
-                        Assertions.assertEquals("button2", clickedButton.text())
-                        val buttonId = response.buttonId()
+                        val clickedButton = response.button
+                        Assertions.assertEquals("button2", clickedButton!!.text)
+                        val buttonId = response.buttonId
                         Assertions.assertEquals(1, buttonId)
 
-                        val buttons = test.buttons().keys.toArray<ElementButton>(ElementButton.EMPTY_LIST)
+                        val buttons = test.buttons.keys.toTypedArray()
 
-                        Assertions.assertEquals("test_FormWindowSimple", test.title())
-                        Assertions.assertEquals("button1", buttons[0].text())
-                        Assertions.assertEquals("button3", buttons[2].text())
-                        Assertions.assertEquals("textures/items/compass", buttons[0].image().data())
+                        Assertions.assertEquals("test_FormWindowSimple", test.title)
+                        Assertions.assertEquals("button1", buttons[0].text)
+                        Assertions.assertEquals("button3", buttons[2].text)
+                        Assertions.assertEquals("textures/items/compass", buttons[0].image!!.data)
                     }
                 }
             ))
@@ -142,7 +140,8 @@ class FormTest {
     @Test
     fun test_FormWindowModal(player: TestPlayer, testPluginManager: TestPluginManager) {
         testPluginManager.resetAll()
-        val test = ModalForm("test_FormWindowModal").content("1028346237")
+        val test = ModalForm("test_FormWindowModal")
+        test.content = ("1028346237")
         test.send(player, 1)
 
         val dataPacketManager = player.session.dataPacketManager
@@ -154,17 +153,17 @@ class FormTest {
         checkNotNull(dataPacketManager)
 
         testPluginManager.registerTestEventHandler(
-            List.of<TestEventHandler<out Event?>>(
+            listOf(
                 object : TestEventHandler<PlayerFormRespondedEvent>() {
                     override fun handle(event: PlayerFormRespondedEvent) {
                         val response = event.response as ModalResponse
-                        val clickedButtonId = response.buttonId()
+                        val clickedButtonId = response.buttonId
                         Assertions.assertEquals(1, clickedButtonId)
-                        val yes = response.yes()
+                        val yes = response.yes
                         Assertions.assertFalse(yes)
 
-                        Assertions.assertEquals("test_FormWindowModal", test.title())
-                        Assertions.assertEquals("1028346237", test.content())
+                        Assertions.assertEquals("test_FormWindowModal", test.title)
+                        Assertions.assertEquals("1028346237", test.content)
                     }
                 }
             ))

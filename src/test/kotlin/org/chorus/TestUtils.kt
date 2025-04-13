@@ -35,9 +35,9 @@ object TestUtils {
     fun gameLoop0(p: TestPlayer): GameLoop {
         val loop = GameLoop.builder().loopCountPerSec(100).onTick { d: GameLoop ->
             try {
-                p.level.scheduler.mainThreadHeartbeat(d.tick)
+                p.level!!.scheduler.mainThreadHeartbeat(d.getTick())
                 Server.instance.network.process()
-                p.level.subTick(d)
+                p.level!!.subTick(d)
                 p.checkNetwork()
             } catch (ignore: Exception) {
             }
@@ -50,11 +50,11 @@ object TestUtils {
     fun resetPlayerStatus(player: TestPlayer) {
         player.level = GameMockExtension.Companion.level!!
         player.setPosition(Vector3(0.0, 100.0, 0.0))
-        player.getPlayerChunkManager().usedChunks.clear()
-        player.getPlayerChunkManager().inRadiusChunks.clear()
+        player.playerChunkManager.usedChunks.clear()
+        player.playerChunkManager.inRadiusChunks.clear()
         setField(
             PlayerChunkManager::class.java,
-            player.getPlayerChunkManager(),
+            player.playerChunkManager,
             "lastLoaderChunkPosHashed",
             Long.MAX_VALUE
         )

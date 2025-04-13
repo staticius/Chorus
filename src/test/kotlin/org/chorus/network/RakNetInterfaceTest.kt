@@ -16,6 +16,7 @@ import org.chorus.network.protocol.ProtocolInfo
 import org.chorus.network.protocol.RequestNetworkSettingsPacket
 import org.chorus.registry.Registries
 import org.chorus.utils.ByteBufVarInt
+import org.chorus.utils.Loggable
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory
 import org.cloudburstmc.netty.channel.raknet.RakChildChannel
 import org.cloudburstmc.netty.channel.raknet.RakClientChannel
@@ -59,7 +60,7 @@ class RakNetInterfaceTest {
                         val header = ByteBufVarInt.readUnsignedInt(byteBuf)
                         assert(header == ProtocolInfo.REQUEST_NETWORK_SETTINGS_PACKET)
                         val dataPacket = Registries.PACKET_DECODER[header]
-                        dataPacket.decode(HandleByteBuf.of(Unpooled.wrappedBuffer(byteBuf)))
+                        dataPacket!!.decode(HandleByteBuf.of(Unpooled.wrappedBuffer(byteBuf)))
                         val target = dataPacket as RequestNetworkSettingsPacket
                         assert(target.protocolVersion == ProtocolInfo.PROTOCOL_VERSION)
                         gameMockExtension.stopNetworkTickLoop()
@@ -100,7 +101,7 @@ class RakNetInterfaceTest {
         gameMockExtension.mockNetworkTickLoop()
     }
 
-    companion object {
+    companion object : Loggable {
         private val ADVERTISEMENT = StringJoiner(";", "", ";")
             .add("MCPE")
             .add("RakNet unit test")

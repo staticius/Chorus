@@ -8,7 +8,7 @@ import java.util.function.BiConsumer
 import java.util.function.Consumer
 
 class ModalForm : Form<ModalResponse?> {
-    protected var content: String = ""
+    var content: String = ""
 
 
     protected var yes: Consumer<Player> =

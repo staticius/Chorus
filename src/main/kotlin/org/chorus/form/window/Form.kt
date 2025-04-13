@@ -18,7 +18,7 @@ abstract class Form<T : Response?>(title: String) {
 
     var viewers: MutableSet<Player> = HashSet()
 
-    protected var title: String = ""
+    var title: String = ""
 
 
     protected var closed: Consumer<Player?>? =

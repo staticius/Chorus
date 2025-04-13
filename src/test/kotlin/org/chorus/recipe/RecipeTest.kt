@@ -13,68 +13,61 @@ import java.util.List
 class RecipeTest {
     @Test
     fun test_getNetworkIdRecipeList() {
-        Registries.RECIPE.networkIdRecipeList
+        Registries.RECIPE.getNetworkIdRecipeList()
     }
 
     @Test
     fun test_findBlastFurnaceRecipe() {
-        val blastFurnaceRecipe = Registries.RECIPE.findBlastFurnaceRecipe(Item.get(ItemID.IRON_PICKAXE))
+        val blastFurnaceRecipe = Registries.RECIPE.findBlastFurnaceRecipe(Item.get(ItemID.IRON_PICKAXE))!!
         Assertions.assertEquals("minecraft:iron_nugget", blastFurnaceRecipe.result.id)
     }
 
     @Test
     fun test_findShapelessRecipe() {
         val shapelessRecipe =
-            Registries.RECIPE.findShapelessRecipe(Item.get(BlockID.BLUE_SHULKER_BOX), Item.get(ItemID.BROWN_DYE))
+            Registries.RECIPE.findShapelessRecipe(Item.get(BlockID.BLUE_SHULKER_BOX), Item.get(ItemID.BROWN_DYE))!!
         Assertions.assertEquals("minecraft:brown_shulker_box", shapelessRecipe.result.id)
     }
 
     @Test
     fun test_tryShrinkMatrix1() {
-        val item1 = List.of(Item.AIR, Item.AIR, Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
-        val item2 = List.of(Item.AIR, Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND)).toArray<Item>(Item.EMPTY_ARRAY)
-        val item3 = List.of(Item.AIR, Item.get(ItemID.TORCHFLOWER_SEEDS), Item.get(ItemID.MELON_SEEDS)).toArray<Item>(
-            Item.EMPTY_ARRAY
-        )
+        val item1 = List.of(Item.AIR, Item.AIR, Item.AIR).toTypedArray()
+        val item2 = List.of(Item.AIR, Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND)).toTypedArray()
+        val item3 = List.of(Item.AIR, Item.get(ItemID.TORCHFLOWER_SEEDS), Item.get(ItemID.MELON_SEEDS)).toTypedArray()
         val data = arrayOf(item1, item2, item3)
         val input = Input(3, 3, data)
         ShapedRecipe.tryShrinkMatrix(input)
         val items = input.data
 
-        val expected1 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND)).toArray<Item>(Item.EMPTY_ARRAY)
+        val expected1 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND)).toTypedArray()
         val expected2 =
-            List.of(Item.get(ItemID.TORCHFLOWER_SEEDS), Item.get(ItemID.MELON_SEEDS)).toArray<Item>(Item.EMPTY_ARRAY)
+            List.of(Item.get(ItemID.TORCHFLOWER_SEEDS), Item.get(ItemID.MELON_SEEDS)).toTypedArray()
         val expected = arrayOf(expected1, expected2)
         Assertions.assertArrayEquals(expected, items)
     }
 
     @Test
     fun test_tryShrinkMatrix2() {
-        val item1 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND), Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
-        val item2 = List.of(Item.get(ItemID.TORCHFLOWER_SEEDS), Item.get(ItemID.MELON_SEEDS), Item.AIR).toArray<Item>(
-            Item.EMPTY_ARRAY
-        )
-        val item3 = List.of(Item.AIR, Item.AIR, Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
+        val item1 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND), Item.AIR).toTypedArray()
+        val item2 = List.of(Item.get(ItemID.TORCHFLOWER_SEEDS), Item.get(ItemID.MELON_SEEDS), Item.AIR).toTypedArray()
+        val item3 = List.of(Item.AIR, Item.AIR, Item.AIR).toTypedArray()
         val data = arrayOf(item1, item2, item3)
         val input = Input(3, 3, data)
         ShapedRecipe.tryShrinkMatrix(input)
         val items = input.data
 
-        val expected1 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND)).toArray<Item>(Item.EMPTY_ARRAY)
+        val expected1 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND)).toTypedArray()
         val expected2 =
-            List.of(Item.get(ItemID.TORCHFLOWER_SEEDS), Item.get(ItemID.MELON_SEEDS)).toArray<Item>(Item.EMPTY_ARRAY)
+            List.of(Item.get(ItemID.TORCHFLOWER_SEEDS), Item.get(ItemID.MELON_SEEDS)).toTypedArray()
         val expected = arrayOf(expected1, expected2)
         Assertions.assertArrayEquals(expected, items)
     }
 
     @Test
     fun test_tryShrinkMatrix3() {
-        val item1 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND), Item.get(ItemID.TORCHFLOWER_SEEDS))
-            .toArray<Item>(
-                Item.EMPTY_ARRAY
-            )
-        val item2 = List.of(Item.AIR, Item.get(ItemID.STICK), Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
-        val item3 = List.of(Item.AIR, Item.get(ItemID.STICK), Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
+        val item1 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND), Item.get(ItemID.TORCHFLOWER_SEEDS)).toTypedArray()
+        val item2 = List.of(Item.AIR, Item.get(ItemID.STICK), Item.AIR).toTypedArray()
+        val item3 = List.of(Item.AIR, Item.get(ItemID.STICK), Item.AIR).toTypedArray()
         val data = arrayOf(item1, item2, item3)
         val input = Input(3, 3, data)
         ShapedRecipe.tryShrinkMatrix(input)
@@ -85,9 +78,9 @@ class RecipeTest {
 
     @Test
     fun test_tryShrinkMatrix4() {
-        val item1 = List.of(Item.get(ItemID.STICK), Item.AIR, Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
-        val item2 = List.of(Item.get(ItemID.STICK), Item.AIR, Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
-        val item3 = List.of(Item.AIR, Item.AIR, Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
+        val item1 = List.of(Item.get(ItemID.STICK), Item.AIR, Item.AIR).toTypedArray()
+        val item2 = List.of(Item.get(ItemID.STICK), Item.AIR, Item.AIR).toTypedArray()
+        val item3 = List.of(Item.AIR, Item.AIR, Item.AIR).toTypedArray()
         val data = arrayOf(item1, item2, item3)
         val input = Input(3, 3, data)
         ShapedRecipe.tryShrinkMatrix(input)
@@ -99,11 +92,9 @@ class RecipeTest {
 
     @Test
     fun test_tryShrinkMatrix5() {
-        val item1 = List.of(Item.AIR, Item.AIR, Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
-        val item2 = List.of(Item.AIR, Item.AIR, Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
-        val item3 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.PLANKS), Item.get(ItemID.PLANKS)).toArray<Item>(
-            Item.EMPTY_ARRAY
-        )
+        val item1 = List.of(Item.AIR, Item.AIR, Item.AIR).toTypedArray()
+        val item2 = List.of(Item.AIR, Item.AIR, Item.AIR).toTypedArray()
+        val item3 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.PLANKS), Item.get(ItemID.PLANKS)).toTypedArray()
         val data = arrayOf(item1, item2, item3)
         val input = Input(3, 3, data)
         ShapedRecipe.tryShrinkMatrix(input)
@@ -115,9 +106,9 @@ class RecipeTest {
 
     @Test
     fun test_tryShrinkMatrix6() {
-        val item1 = List.of(Item.AIR, Item.AIR, Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
-        val item2 = List.of(Item.get(ItemID.PLANKS), Item.AIR, Item.get(ItemID.PLANKS)).toArray<Item>(Item.EMPTY_ARRAY)
-        val item3 = List.of(Item.get(ItemID.PLANKS), Item.AIR, Item.get(ItemID.PLANKS)).toArray<Item>(Item.EMPTY_ARRAY)
+        val item1 = List.of(Item.AIR, Item.AIR, Item.AIR).toTypedArray()
+        val item2 = List.of(Item.get(ItemID.PLANKS), Item.AIR, Item.get(ItemID.PLANKS)).toTypedArray()
+        val item3 = List.of(Item.get(ItemID.PLANKS), Item.AIR, Item.get(ItemID.PLANKS)).toTypedArray()
         val data = arrayOf(item1, item2, item3)
         val input = Input(3, 3, data)
         ShapedRecipe.tryShrinkMatrix(input)
@@ -132,8 +123,8 @@ class RecipeTest {
 
     @Test
     fun test_tryShrinkMatrix7() {
-        val item1 = List.of(Item.AIR, Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
-        val item2 = List.of(Item.get(ItemID.PLANKS), Item.AIR).toArray<Item>(Item.EMPTY_ARRAY)
+        val item1 = List.of(Item.AIR, Item.AIR).toTypedArray()
+        val item2 = List.of(Item.get(ItemID.PLANKS), Item.AIR).toTypedArray()
         val data = arrayOf(item1, item2)
         val input = Input(2, 2, data)
         ShapedRecipe.tryShrinkMatrix(input)
@@ -146,9 +137,9 @@ class RecipeTest {
     }
 
     companion object {
+        @JvmStatic
         @BeforeAll
-        @SneakyThrows
-        fun before() {
+        fun before(): Unit {
             Registries.POTION.init()
             Registries.BLOCKSTATE_ITEMMETA.init()
             Registries.BLOCK.init()

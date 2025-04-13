@@ -11,6 +11,6 @@ class ModalResponse(
      * 0 if accepted
      * 1 if rejected
      */
-    protected var buttonId: Int = -1,
-    protected var yes: Boolean = false,
+    var buttonId: Int = -1,
+    var yes: Boolean = false,
 ) : Response()

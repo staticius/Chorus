@@ -106,7 +106,7 @@ import kotlin.math.*
 /**
  * Game player object, representing the controlled character
  */
-class Player(
+open class Player(
     val session: BedrockSession,
     val playerInfo: PlayerInfo
 ) :
@@ -267,7 +267,7 @@ class Player(
     var inAirTicks: Int = 0
     var startAirTicks: Int = 5
     var adventureSettings: AdventureSettings = AdventureSettings(this)
-        private set(value) {
+        set(value) {
             field = value.clone()
             field.update()
         }
@@ -463,7 +463,7 @@ class Player(
      */
     var lastBeAttackEntity: Entity? = null
     private val playerHandle = PlayerHandle(this)
-    protected val playerChunkManager: PlayerChunkManager
+    val playerChunkManager: PlayerChunkManager
 
     /**
      * Set the status of the current player opening sign

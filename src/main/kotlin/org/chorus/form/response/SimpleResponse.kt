@@ -11,9 +11,9 @@ class SimpleResponse(
      * The ordinal of the selected button
      * -1 if invalid
      */
-    protected var buttonId: Int = -1,
+    var buttonId: Int = -1,
     /**
      * The button, if pressed
      */
-    protected var button: ElementButton? = null
+    var button: ElementButton? = null
 ) : Response()

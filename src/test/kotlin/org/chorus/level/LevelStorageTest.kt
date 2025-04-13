@@ -28,7 +28,7 @@ class LevelStorageTest {
         val blockStatePalette = Palette(BlockAir.STATE)
         blockStatePalette.readFromStoragePersistent(
             byteBuf
-        ) { blockHash: Int -> Registries.BLOCKSTATE[blockHash] }
+        ) { blockHash: Int -> Registries.BLOCKSTATE[blockHash]!! }
         byteBuf.release()
     }
 
@@ -63,12 +63,11 @@ class LevelStorageTest {
     fun testLoadChunk() {
         val chunk = levelDBProvider!!.getChunk(0, 0)
         Assertions.assertNotNull(chunk)
-        Assertions.assertEquals("minecraft:stone", chunk.getBlockState(9, 68, 1).identifier)
+        Assertions.assertEquals("minecraft:stone", chunk.getBlockState(9, 68, 1)!!.identifier)
     }
 
     @Order(5)
     @Test
-    @SneakyThrows
     fun testWriteChunk() {
         val chunk = levelDBProvider!!.getChunk(0, 0)
         chunk.setBlockState(0, 50, 0, BlockOakLog.properties.defaultState)
@@ -82,26 +81,24 @@ class LevelStorageTest {
         val c1 = levelDBProvider!!.getChunk(0, 0)
         val c2 = levelDBProvider!!.getChunk(1, 1)
         val c3 = levelDBProvider!!.getChunk(2, 2)
-        Assertions.assertEquals("minecraft:oak_log", c1.getBlockState(0, 50, 0).identifier)
-        Assertions.assertEquals("minecraft:oak_log", c2.getBlockState(0, 50, 0).identifier)
-        Assertions.assertEquals("minecraft:oak_log", c3.getBlockState(0, 50, 0).identifier)
+        Assertions.assertEquals("minecraft:oak_log", c1.getBlockState(0, 50, 0)!!.identifier)
+        Assertions.assertEquals("minecraft:oak_log", c2.getBlockState(0, 50, 0)!!.identifier)
+        Assertions.assertEquals("minecraft:oak_log", c3.getBlockState(0, 50, 0)!!.identifier)
     }
 
     @Order(6)
-    @SneakyThrows
     @Test
     fun testSaveAndReadChunk() {
         val chunk = levelDBProvider!!.getChunk(0, 0)
-        Assertions.assertEquals("minecraft:stone", chunk.getBlockState(9, 68, 1).identifier)
+        Assertions.assertEquals("minecraft:stone", chunk.getBlockState(9, 68, 1)!!.identifier)
         chunk.setBlockState(9, 68, 1, BlockWoodenButton.properties.defaultState)
         levelDBProvider!!.saveChunk(0, 0, chunk)
         val newChunk = levelDBProvider!!.getChunk(0, 0)
         Assertions.assertNotNull(newChunk)
-        Assertions.assertEquals("minecraft:wooden_button", chunk.getBlockState(9, 68, 1).identifier)
+        Assertions.assertEquals("minecraft:wooden_button", chunk.getBlockState(9, 68, 1)!!.identifier)
     }
 
     @Order(7)
-    @SneakyThrows
     @Test
     fun testSaveAndReadChunkBiome() {
         val chunk = levelDBProvider!!.getChunk(0, 0)
@@ -115,7 +112,6 @@ class LevelStorageTest {
 
     @Order(8)
     @Test
-    @SneakyThrows
     fun testCloseAndLoadAgain() {
         val level = Mockito.mock(Level::class.java)
         Mockito.`when`(level.dimensionData).thenReturn(DimensionEnum.OVERWORLD.dimensionData)
@@ -145,9 +141,9 @@ class LevelStorageTest {
     companion object {
         var levelDBProvider: LevelDBProvider? = null
 
+        @JvmStatic
         @BeforeAll
-        @SneakyThrows
-        fun before() {
+        fun before(): Unit {
             Registries.BLOCK.init()
             FileUtils.copyDirectory(File("src/test/resources/level"), File("src/test/resources/level2"))
             val level = Mockito.mock(Level::class.java)
@@ -155,9 +151,9 @@ class LevelStorageTest {
             levelDBProvider = LevelDBProvider(level, "src/test/resources/level2")
         }
 
+        @JvmStatic
         @AfterAll
-        @SneakyThrows
-        fun after() {
+        fun after(): Unit {
             levelDBProvider!!.close()
             FileUtils.deleteDirectory(File("src/test/resources/level2"))
         }

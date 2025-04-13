@@ -45,7 +45,7 @@ class LevelTest {
         val p = player
         TestUtils.resetPlayerStatus(p)
 
-        p.level.autoSave = true
+        p.level!!.autoSave = true
         p.setPosition(Vector3(0.0, 100.0, 0.0))
         val chunk = p.locator.chunk
         chunk.setBlockState(0, 3, 0, BlockDirt.properties.defaultState)
@@ -66,11 +66,11 @@ class LevelTest {
             }
         }
         if (limit1 <= 0) {
-            p.level.autoSave = false
+            p.level!!.autoSave = false
             TestUtils.resetPlayerStatus(p)
             Assertions.fail<Any>("Chunk cannot be regenerate in 10s, chunk size " + p.usedChunks.size)
         }
-        p.level.regenerateChunk(0, 0)
+        p.level!!.regenerateChunk(0, 0)
 
         var limit = 100
         while (limit-- != 0) {
@@ -84,13 +84,13 @@ class LevelTest {
             }
         }
         if (limit <= 0) {
-            p.level.autoSave = false
+            p.level!!.autoSave = false
             TestUtils.resetPlayerStatus(p)
             Assertions.fail<Any>("Chunk cannot be regenerate in 10s")
         }
 
         Assertions.assertEquals(BlockDirt.properties.defaultState, p.locator.chunk.getBlockState(0, 3, 0))
-        p.level.autoSave = false
+        p.level!!.autoSave = false
 
         gameLoop.stop()
         TestUtils.resetPlayerStatus(p)

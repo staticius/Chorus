@@ -14,7 +14,7 @@ class GeneratorTest {
     @Test
     fun testCreate(level: Level, levelProvider: LevelProvider) {
         val loop = GameLoop.builder().loopCountPerSec(200).onTick { d: GameLoop ->
-            level.scheduler.mainThreadHeartbeat(d.tick)
+            level.scheduler.mainThreadHeartbeat(d.getTick())
         }.build()
         val thread = Thread { loop.startLoop() }
         thread.start()
@@ -23,7 +23,7 @@ class GeneratorTest {
         flat.level = (level)
         val x = 10000
         val z = 10000
-        val chunk = levelProvider.getChunk(x shr 4, z shr 4, true)
+        val chunk = levelProvider.getChunk(x shr 4, z shr 4, true)!!
         flat.syncGenerate(chunk)
         loop.stop()
     }
@@ -31,7 +31,7 @@ class GeneratorTest {
     @Test
     fun testLight(level: Level, levelProvider: LevelProvider) {
         val loop = GameLoop.builder().loopCountPerSec(200).onTick { d: GameLoop ->
-            level.scheduler.mainThreadHeartbeat(d.tick)
+            level.scheduler.mainThreadHeartbeat(d.getTick())
         }.build()
         val thread = Thread { loop.startLoop() }
         thread.start()
@@ -40,7 +40,7 @@ class GeneratorTest {
         flat.level = (level)
         val x = 10000
         val z = 10000
-        val chunk = levelProvider.getChunk(x shr 4, z shr 4, true)
+        val chunk = levelProvider.getChunk(x shr 4, z shr 4, true)!!
         flat.syncGenerate(chunk)
         val blockLightAt = level.getBlockLightAt(x, 4, z)
         val blockSkyLightAt = level.getBlockSkyLightAt(x, 4, z)

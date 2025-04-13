@@ -54,7 +54,7 @@ import java.util.concurrent.locks.LockSupport
 
 
 class GameMockExtension : MockitoExtension() {
-    private var serverMockedStatic: MockedStatic<Server>? = null
+    private lateinit var serverMockedStatic: MockedStatic<Server>
 
     override fun beforeEach(context: ExtensionContext) {
         serverMockedStatic = Mockito.mockStatic(Server::class.java)
@@ -63,7 +63,7 @@ class GameMockExtension : MockitoExtension() {
     }
 
     override fun afterEach(context: ExtensionContext) {
-        serverMockedStatic!!.close()
+        serverMockedStatic.close()
         super.afterEach(context)
     }
 
@@ -84,7 +84,7 @@ class GameMockExtension : MockitoExtension() {
         } else if (parameterContext.parameter.type == BlockRegistry::class.java) {
             return BLOCK_REGISTRY!!
         } else if (parameterContext.parameter.type == LevelProvider::class.java) {
-            return level!!.provider
+            return level!!.getProvider()
         } else if (parameterContext.parameter.type == Level::class.java) {
             return level!!
         } else if (parameterContext.parameter.type == TestPlayer::class.java) {
@@ -126,12 +126,12 @@ class GameMockExtension : MockitoExtension() {
         var simpleCommandMap: SimpleCommandMap = Mockito.mock(SimpleCommandMap::class.java)
         var serverScheduler: ServerScheduler? = null
         var network: Network? = null
-        var level: Level? = null
+        var level: Level
 
         val server: Server = Mockito.mock(Server::class.java)
         var gameMockExtension: GameMockExtension? = null
         var BLOCK_REGISTRY: BlockRegistry? = null
-        var player: TestPlayer? = null
+        var player: TestPlayer
 
         init {
             Mockito.mockStatic(Server::class.java).use { serverMockedStatic ->
@@ -161,10 +161,9 @@ class GameMockExtension : MockitoExtension() {
                 serverScheduler = ServerScheduler()
                 Mockito.`when`(server.scheduler).thenReturn(serverScheduler)
                 Mockito.`when`(banList.entries).thenReturn(LinkedHashMap())
-                Mockito.`when`(server.ipBans).thenReturn(banList)
-                Mockito.`when`(
-                    server.baseLang..thenReturn(BaseLang("eng", "src/main/resources/language"))
-                    val serverSettings = ConfigManager . create (
+                Mockito.`when`(server.bannedIPs).thenReturn(banList)
+                Mockito.`when`(server.baseLang).thenReturn(BaseLang("eng", "src/main/resources/language"))
+                    val serverSettings = ConfigManager. create (
                         ServerSettings::class.java
                         ) { it: OkaeriConfig ->
                     it.withConfigurer(YamlSnakeYamlConfigurer())
@@ -196,7 +195,7 @@ class GameMockExtension : MockitoExtension() {
                 val queryRegenerateEvent = QueryRegenerateEvent(server)
                 Mockito.`when`(server.queryInformation).thenReturn(queryRegenerateEvent)
                 Mockito.`when`(server.network).thenCallRealMethod()
-                Mockito.`when`(server.autoSave).thenReturn(false)
+                Mockito.`when`(server.getAutoSave()).thenReturn(false)
                 Mockito.`when`(server.tick).thenReturn(1)
                 Mockito.`when`(server.viewDistance).thenReturn(4)
                 Mockito.`when`(server.recipeRegistry).thenCallRealMethod()
@@ -208,7 +207,7 @@ class GameMockExtension : MockitoExtension() {
                 try {
                     val positionTrackingService =
                         PositionTrackingService(File(Chorus.DATA_PATH, "services/position_tracking_db"))
-                    Mockito.`when`(server.positionTrackingService).thenReturn(positionTrackingService)
+                    Mockito.`when`(server.getPositionTrackingService()).thenReturn(positionTrackingService)
                 } catch (e: FileNotFoundException) {
                     throw RuntimeException(e)
                 }
@@ -285,7 +284,7 @@ class GameMockExtension : MockitoExtension() {
             val info = PlayerInfo(
                 "test",
                 UUID.randomUUID(),
-                null,
+                Skin(),
                 Mockito.mock(ClientChainData::class.java)
             )
             val dataPacketManager = DataPacketManager()
@@ -335,7 +334,7 @@ class GameMockExtension : MockitoExtension() {
             )
             level!!.initLevel()
 
-            val map = HashMap<Int, Level?>()
+            val map = HashMap<Int, Level>()
             map[1] = level
             Mockito.`when`(server.levels).thenReturn(map)
 

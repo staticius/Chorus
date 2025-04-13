@@ -11,7 +11,7 @@ import java.util.function.Consumer
 class SimpleForm : Form<SimpleResponse?> {
     protected var content: String = ""
 
-    protected var buttons: MutableMap<ElementButton, Consumer<Player>?> = LinkedHashMap()
+    var buttons: MutableMap<ElementButton, Consumer<Player>?> = LinkedHashMap()
 
     constructor(title: String) : super(title)
 

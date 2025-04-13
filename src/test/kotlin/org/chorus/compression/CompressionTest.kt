@@ -14,7 +14,7 @@ class CompressionTest {
     @Order(1)
     @Throws(IllegalAccessException::class)
     fun testDirectBuffer() {
-        Server.instance.settings.networkSettings().compressionBufferSize(CompressionProvider.MAX_INFLATE_LEN)
+        Server.instance.settings.networkSettings.compressionBufferSize = (CompressionProvider.MAX_INFLATE_LEN)
         val directBuffer = FieldUtils.readDeclaredStaticField(
             LibDeflateThreadLocal::class.java, "DIRECT_BUFFER", true
         ) as ThreadLocal<ByteBuffer>
@@ -28,9 +28,9 @@ class CompressionTest {
     @Order(2)
     @Throws(IOException::class)
     fun testLibDeflateInflate() {
-        Server.instance.settings.networkSettings().compressionBufferSize(512)
+        Server.instance.settings.networkSettings.compressionBufferSize = (512)
         ZlibChooser.setProvider(3)
-        val currentProvider = ZlibChooser.getCurrentProvider()
+        val currentProvider = ZlibChooser.currentProvider
         val bytes = ByteArray(1024)
         for (i in 0..1023) {
             bytes[i] = i.toByte()
@@ -44,7 +44,7 @@ class CompressionTest {
     @Throws(Exception::class)
     fun testZlibOriginal() {
         ZlibChooser.setProvider(0)
-        val currentProvider = ZlibChooser.getCurrentProvider()
+        val currentProvider = ZlibChooser.currentProvider
         val deflate = currentProvider.deflate(testInput, 7, true)
         Assertions.assertArrayEquals(testOutput, deflate)
         val inflate = currentProvider.inflate(deflate, testInput.size, true)
@@ -55,7 +55,7 @@ class CompressionTest {
     @Throws(Exception::class)
     fun testZlibSingleThreadLowMem() {
         ZlibChooser.setProvider(1)
-        val currentProvider = ZlibChooser.getCurrentProvider()
+        val currentProvider = ZlibChooser.currentProvider
         val deflate = currentProvider.deflate(testInput, 7, true)
         Assertions.assertArrayEquals(testOutput, deflate)
         val inflate = currentProvider.inflate(deflate, testInput.size, true)
@@ -66,7 +66,7 @@ class CompressionTest {
     @Throws(Exception::class)
     fun testZlibThreadLocal() {
         ZlibChooser.setProvider(2)
-        val currentProvider = ZlibChooser.getCurrentProvider()
+        val currentProvider = ZlibChooser.currentProvider
         val deflate = currentProvider.deflate(testInput, 7, true)
         Assertions.assertArrayEquals(testOutput, deflate)
         val inflate = currentProvider.inflate(deflate, testInput.size, true)
@@ -77,7 +77,7 @@ class CompressionTest {
     @Test
     @Throws(Exception::class)
     fun testSnappy() {
-        val deflate = CompressionProvider.SNAPPY.compress(testInput, 7)
+        val deflate = CompressionProvider.SNAPPY.compress(testInput, 7)!!
         val decompress = CompressionProvider.SNAPPY.decompress(deflate)
         Assertions.assertArrayEquals(testInput, decompress)
     }

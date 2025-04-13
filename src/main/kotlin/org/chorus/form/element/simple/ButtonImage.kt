@@ -11,7 +11,7 @@ class ButtonImage(type: Type, data: String?) {
     protected val `object`: JsonObject = JsonObject()
 
     protected var type: Type? = null
-    protected var data: String? = null
+    var data: String? = null
 
     init {
         this.type(type)

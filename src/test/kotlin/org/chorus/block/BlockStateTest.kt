@@ -11,7 +11,7 @@ import java.io.BufferedReader
 import java.io.FileInputStream
 import java.io.InputStreamReader
 
-class BlockStateTest @Test @SneakyThrows internal constructor() {
+class BlockStateTest internal constructor() {
     init {
         Registries.BLOCK.init()
         var blocks = 0
@@ -38,10 +38,9 @@ class BlockStateTest @Test @SneakyThrows internal constructor() {
     }
 
     @Test
-    @SneakyThrows
     fun BlockStateImpl_computeSpecialValue() {
         val i1 = BlockState.computeSpecialValue(
-            arrayOf<BlockPropertyValue<*, *, *>>(
+            mutableListOf(
                 CommonBlockProperties.DIRECTION.createValue(1),  //2bit
                 CommonBlockProperties.OPEN_BIT.createValue(false),  //1bit
                 CommonBlockProperties.UPSIDE_DOWN_BIT.createValue(false) //1bit

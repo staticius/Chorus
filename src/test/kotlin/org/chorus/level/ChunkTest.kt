@@ -26,35 +26,35 @@ import java.util.function.Consumer
 class ChunkTest {
     @Test
     fun testSetBlockState(levelDBProvider: LevelProvider) {
-        val chunk = levelDBProvider.getChunk(0, 0)
+        val chunk = levelDBProvider.getChunk(0, 0)!!
         chunk.setBlockState(0, 100, 0, BlockGoldOre.properties.defaultState)
         Assertions.assertEquals(BlockGoldOre.properties.defaultState, chunk.getBlockState(0, 100, 0))
     }
 
     @Test
     fun testSetBlockSkyLight(levelDBProvider: LevelProvider) {
-        val chunk = levelDBProvider.getChunk(0, 0)
+        val chunk = levelDBProvider.getChunk(0, 0)!!
         chunk.setBlockSkyLight(0, 100, 0, 10)
         Assertions.assertEquals(10, chunk.getBlockSkyLight(0, 100, 0))
     }
 
     @Test
     fun testSetBlockLight(levelDBProvider: LevelProvider) {
-        val chunk = levelDBProvider.getChunk(0, 0)
+        val chunk = levelDBProvider.getChunk(0, 0)!!
         chunk.setBlockLight(0, 100, 0, 10)
         Assertions.assertEquals(10, chunk.getBlockLight(0, 100, 0))
     }
 
     @Test
     fun testSetBiome(levelDBProvider: LevelProvider) {
-        val chunk = levelDBProvider.getChunk(0, 0)
+        val chunk = levelDBProvider.getChunk(0, 0)!!
         chunk.setBiomeId(0, 100, 0, 10)
         Assertions.assertEquals(10, chunk.getBiomeId(0, 100, 0))
     }
 
     @Test
     fun test_recalculateHeightMap(levelDBProvider: LevelProvider) {
-        val chunk = levelDBProvider.getChunk(1000, 1000, true)
+        val chunk = levelDBProvider.getChunk(1000, 1000, true)!!
         levelDBProvider.level.syncGenerateChunk(1000, 1000)
         chunk.recalculateHeightMap()
         Assertions.assertEquals(4, chunk.getHeightMap(0, 0))
@@ -62,7 +62,7 @@ class ChunkTest {
 
     @Test
     fun test_recalculateHeightMapColumn(levelDBProvider: LevelProvider) {
-        val chunk = levelDBProvider.getChunk(1000, 1000, true)
+        val chunk = levelDBProvider.getChunk(1000, 1000, true)!!
         levelDBProvider.level.syncGenerateChunk(1000, 1000)
         chunk.recalculateHeightMapColumn(0, 0)
         Assertions.assertEquals(4, chunk.getHeightMap(0, 0))
@@ -70,7 +70,7 @@ class ChunkTest {
 
     @Test
     fun test_populateSkyLight(levelDBProvider: LevelProvider) {
-        val chunk = levelDBProvider.getChunk(1000, 1000, true)
+        val chunk = levelDBProvider.getChunk(1000, 1000, true)!!
         levelDBProvider.level.syncGenerateChunk(1000, 1000)
         chunk.populateSkyLight()
         Assertions.assertEquals(15, chunk.getBlockSkyLight(0, 5, 0))
@@ -79,10 +79,10 @@ class ChunkTest {
 
     @Test
     fun testSaveAndReadChunkEntity(levelDBProvider: LevelProvider) {
-        val chunk = levelDBProvider.getChunk(0, 0, true)
+        val chunk = levelDBProvider.getChunk(0, 0, true)!!
         val item = Item.get(ItemID.GOLD_INGOT)
         val itemEntity = Entity.createEntity(
-            Entity.ITEM,
+            EntityID.ITEM,
             chunk,
             Entity.getDefaultNBT(
                 Vector3(0.0, 64.0, 0.0),
@@ -93,7 +93,7 @@ class ChunkTest {
                 .putCompound("Item", NBTIO.putItemHelper(item))
                 .putShort("PickupDelay", 10)
         ) as EntityItem?
-        chunk.addEntity(itemEntity)
+        chunk.addEntity(itemEntity!!)
 
         val list = chunk.entities.values.stream().filter { e: Entity -> e.getEntityIdentifier() == EntityID.ITEM }.toList()
         Assertions.assertFalse(list.isEmpty())
@@ -108,7 +108,6 @@ class ChunkTest {
     }
 
     @Test
-    @SneakyThrows
     fun test_getOrCreateSection(levelDBProvider: LevelProvider) {
         val chunk = levelDBProvider.getChunk(0, 0)
         val getOrCreateSection =
@@ -122,7 +121,7 @@ class ChunkTest {
 
     @Test
     fun testMultiThreadOperate(levelDBProvider: LevelProvider) {
-        val chunk = levelDBProvider.getChunk(0, 0)
+        val chunk = levelDBProvider.getChunk(0, 0)!!
         val threadSet: MutableSet<Thread> = HashSet()
         for (i in 0..<Runtime.getRuntime().availableProcessors()) {
             if (i % 2 == 0) {
@@ -169,7 +168,6 @@ class ChunkTest {
     }
 
     @Test
-    @SneakyThrows
     fun test_SectionIsEmpty() {
         val chunkSection = ChunkSection(0.toByte())
         Assertions.assertTrue(chunkSection.isEmpty)
