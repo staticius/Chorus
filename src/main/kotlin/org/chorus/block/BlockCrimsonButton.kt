@@ -7,12 +7,14 @@ class BlockCrimsonButton @JvmOverloads constructor(blockstate: BlockState = Comp
     override val name: String
         get() = "Crimson Button"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CRIMSON_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-
     }
 }

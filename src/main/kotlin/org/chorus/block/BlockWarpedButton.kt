@@ -7,6 +7,9 @@ class BlockWarpedButton @JvmOverloads constructor(blockstate: BlockState = Compa
     override val name: String
         get() = "Warped Button"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.WARPED_BUTTON,

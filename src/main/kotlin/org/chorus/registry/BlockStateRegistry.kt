@@ -19,7 +19,7 @@ class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
                     val entry = blockStateData[i].asJsonObject
                     val hash = entry["blockStateHash"].asInt
                     val name = entry["name"].asString
-                    if (BlockRegistry.Companion.skipBlockSet.contains(name)) continue
+                    if (BlockRegistry.skipBlockSet.contains(name)) continue
                     val state = Registries.BLOCKSTATE[hash]
                     if (state == null) {
                         Server.instance.logger.alert("$name ($hash) was not a part of block_states.json.")

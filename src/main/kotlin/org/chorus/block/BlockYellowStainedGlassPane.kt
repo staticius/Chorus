@@ -6,6 +6,9 @@ class BlockYellowStainedGlassPane @JvmOverloads constructor(blockstate: BlockSta
     BlockGlassPaneStained(blockstate) {
     override fun getDyeColor() = DyeColor.YELLOW
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.YELLOW_STAINED_GLASS_PANE)
 

@@ -7,6 +7,9 @@ class BlockExposedCopperTrapdoor @JvmOverloads constructor(blockstate: BlockStat
     override val name: String
         get() = "Exposed Copper Trapdoor"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.EXPOSED_COPPER_TRAPDOOR,
@@ -14,6 +17,5 @@ class BlockExposedCopperTrapdoor @JvmOverloads constructor(blockstate: BlockStat
             CommonBlockProperties.OPEN_BIT,
             CommonBlockProperties.UPSIDE_DOWN_BIT
         )
-
     }
 }

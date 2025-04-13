@@ -35,6 +35,9 @@ class BlockWater @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         )
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WATER, CommonBlockProperties.LIQUID_DEPTH)
 

@@ -32,8 +32,10 @@ class BlockLava @JvmOverloads constructor(blockstate: BlockState = Companion.pro
         return level.setBlock(this.position, this, true, false)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.LAVA, CommonBlockProperties.LIQUID_DEPTH)
-
     }
 }

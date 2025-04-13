@@ -96,6 +96,9 @@ class BlockPaleMossBlock @JvmOverloads constructor(blockstate: BlockState = Comp
         return arrayOf(ItemBlock(get(BlockID.PALE_MOSS_BLOCK)))
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PALE_MOSS_BLOCK)
 

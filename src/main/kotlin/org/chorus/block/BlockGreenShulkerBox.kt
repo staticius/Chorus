@@ -10,8 +10,10 @@ class BlockGreenShulkerBox @JvmOverloads constructor(blockstate: BlockState = Co
         return ItemShulkerBox(13)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.GREEN_SHULKER_BOX, setOf(BlockTags.PNX_SHULKERBOX))
-
     }
 }

@@ -18,9 +18,6 @@ import kotlin.math.min
 class BinaryStream {
     var offset: Int
     var buffer: ByteArray
-        get() {
-            return field.copyOf(count)
-        }
         private set
     var count: Int
         private set
@@ -42,6 +39,10 @@ class BinaryStream {
         this.offset = 0
         this.count = 0
         return this
+    }
+
+    fun getBufferCopy(): ByteArray {
+        return this.buffer.copyOf(this.count)
     }
 
     fun setBuffer(buffer: ByteArray) {
@@ -72,20 +73,20 @@ class BinaryStream {
         }
 
         this.ensureCapacity(this.count + bytes.size)
+        bytes.copyInto(this.buffer, this.count)
 
-        System.arraycopy(bytes, 0, this.buffer, this.count, bytes.size)
         this.count += bytes.size
     }
 
     val long: Long
-        get() = Binary.readLong(this.get(8))
+        get() = Binary.readLong(this[8])
 
     fun putLong(l: Long) {
         this.put(Binary.writeLong(l))
     }
 
     val int: Int
-        get() = Binary.readInt(this.get(4))
+        get() = Binary.readInt(this[4])
 
     fun putInt(i: Int) {
         this.put(Binary.writeInt(i))
@@ -341,7 +342,7 @@ class BinaryStream {
         this.buffer = buffer.copyOf(newCapacity)
     }
 
-    companion object {
+    companion object : Loggable {
         private const val MAX_ARRAY_SIZE = Int.MAX_VALUE - 8
 
         private fun hugeCapacity(minCapacity: Int): Int {

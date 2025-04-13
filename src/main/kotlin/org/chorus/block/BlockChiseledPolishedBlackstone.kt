@@ -9,8 +9,10 @@ class BlockChiseledPolishedBlackstone @JvmOverloads constructor(blockstate: Bloc
         return false
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CHISELED_POLISHED_BLACKSTONE)
-
     }
 }

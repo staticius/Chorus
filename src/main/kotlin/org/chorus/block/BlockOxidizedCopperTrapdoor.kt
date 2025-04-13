@@ -7,6 +7,9 @@ class BlockOxidizedCopperTrapdoor @JvmOverloads constructor(blockstate: BlockSta
     override val name: String
         get() = "Oxidized Copper Trapdoor"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.OXIDIZED_COPPER_TRAPDOOR,

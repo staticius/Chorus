@@ -77,6 +77,9 @@ class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState = Compa
         setPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.RAIL_DATA_BIT, active)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(
@@ -84,6 +87,5 @@ class BlockDetectorRail @JvmOverloads constructor(blockstate: BlockState = Compa
                 CommonBlockProperties.RAIL_DATA_BIT,
                 CommonBlockProperties.RAIL_DIRECTION_6
             )
-
     }
 }

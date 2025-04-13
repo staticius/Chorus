@@ -153,13 +153,13 @@ class NBTOutputStream @JvmOverloads constructor(
     private fun serialize(tag: Tag<*>, type: Int, maxDepth: Int) {
         require(maxDepth >= 0) { "Reached depth limit" }
         when (type.toByte()) {
-            Tag.Companion.TAG_BYTE -> this.writeByte((tag.parseValue() as Byte).toInt())
-            Tag.Companion.TAG_SHORT -> this.writeShort((tag.parseValue() as Short).toInt())
-            Tag.Companion.TAG_INT -> this.writeInt(tag.parseValue() as Int)
-            Tag.Companion.TAG_LONG -> this.writeLong(tag.parseValue() as Long)
-            Tag.Companion.TAG_FLOAT -> this.writeFloat(tag.parseValue() as Float)
-            Tag.Companion.TAG_DOUBLE -> this.writeDouble(tag.parseValue() as Double)
-            Tag.Companion.TAG_BYTE_ARRAY -> {
+            Tag.TAG_BYTE -> this.writeByte(tag.parseValue() as Int)
+            Tag.TAG_SHORT -> this.writeShort((tag.parseValue() as Short).toInt())
+            Tag.TAG_INT -> this.writeInt(tag.parseValue() as Int)
+            Tag.TAG_LONG -> this.writeLong(tag.parseValue() as Long)
+            Tag.TAG_FLOAT -> this.writeFloat(tag.parseValue() as Float)
+            Tag.TAG_DOUBLE -> this.writeDouble(tag.parseValue() as Double)
+            Tag.TAG_BYTE_ARRAY -> {
                 val byteArray = tag.parseValue() as ByteArray
                 this.writeInt(byteArray.size)
                 this.write(byteArray)

@@ -7,6 +7,9 @@ class BlockWaxedExposedCopperTrapdoor @JvmOverloads constructor(blockstate: Bloc
     override val name: String
         get() = "Waxed Exposed Copper Trapdoor"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.WAXED_EXPOSED_COPPER_TRAPDOOR,

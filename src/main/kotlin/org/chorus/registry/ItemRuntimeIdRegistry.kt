@@ -25,7 +25,7 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
             require(verify.putIfAbsent(rid, true) == null) { "Runtime ID is already registered: $rid" }
             paletteBuffer.putBoolean(value.isComponent)
         }
-        Companion.itemPalette = paletteBuffer.buffer
+        Companion.itemPalette = paletteBuffer.getBufferCopy()
     }
 
     override fun init() {

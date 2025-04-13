@@ -21,9 +21,11 @@ class BlockJungleWallSign @JvmOverloads constructor(blockState: BlockState = Com
         return ItemJungleSign()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.JUNGLE_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)
-
     }
 }

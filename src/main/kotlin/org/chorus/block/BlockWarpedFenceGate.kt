@@ -22,6 +22,9 @@ class BlockWarpedFenceGate @JvmOverloads constructor(blockstate: BlockState = Co
         level.addSound(this.position, Sound.CLOSE_NETHER_WOOD_FENCE_GATE)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.WARPED_FENCE_GATE,

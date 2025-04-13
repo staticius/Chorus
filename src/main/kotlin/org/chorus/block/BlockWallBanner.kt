@@ -34,6 +34,9 @@ class BlockWallBanner @JvmOverloads constructor(blockstate: BlockState = Compani
             blockFace = direction.closestBlockFace
         }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.WALL_BANNER, CommonBlockProperties.FACING_DIRECTION)
 

@@ -20,6 +20,9 @@ open class BlockLitBlastFurnace @JvmOverloads constructor(blockstate: BlockState
         return ItemBlock(BlockBlastFurnace())
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.LIT_BLAST_FURNACE, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION)

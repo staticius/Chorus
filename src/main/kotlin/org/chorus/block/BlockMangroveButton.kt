@@ -7,6 +7,9 @@ class BlockMangroveButton @JvmOverloads constructor(blockstate: BlockState = Com
     override val name: String
         get() = "Mangrove Button"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.MANGROVE_BUTTON,

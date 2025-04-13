@@ -6,6 +6,9 @@ class BlockPinkStainedGlass @JvmOverloads constructor(blockstate: BlockState = C
     BlockGlassStained(blockstate) {
     override fun getDyeColor() = DyeColor.PINK
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.PINK_STAINED_GLASS)
 

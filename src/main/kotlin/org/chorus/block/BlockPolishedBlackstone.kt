@@ -12,6 +12,9 @@ open class BlockPolishedBlackstone @JvmOverloads constructor(blockstate: BlockSt
     override val hardness: Double
         get() = 1.5
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.POLISHED_BLACKSTONE)
 

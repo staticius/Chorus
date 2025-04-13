@@ -6,8 +6,10 @@ class BlockDeadBubbleCoral @JvmOverloads constructor(blockstate: BlockState = Co
         return true
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.DEAD_BUBBLE_CORAL)
-
     }
 }

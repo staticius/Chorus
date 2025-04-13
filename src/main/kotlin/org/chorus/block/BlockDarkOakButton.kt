@@ -7,12 +7,14 @@ class BlockDarkOakButton @JvmOverloads constructor(blockstate: BlockState = Comp
     override val name: String
         get() = "Dark Oak Button"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.DARK_OAK_BUTTON,
             CommonBlockProperties.BUTTON_PRESSED_BIT,
             CommonBlockProperties.FACING_DIRECTION
         )
-
     }
 }

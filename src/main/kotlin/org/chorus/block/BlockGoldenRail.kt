@@ -192,6 +192,9 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState = Compani
         setPropertyValue(CommonBlockProperties.RAIL_DATA_BIT, active)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(
@@ -199,6 +202,5 @@ class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState = Compani
                 CommonBlockProperties.RAIL_DATA_BIT,
                 CommonBlockProperties.RAIL_DIRECTION_6
             )
-
     }
 }

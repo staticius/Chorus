@@ -10,6 +10,9 @@ class BlockMagentaShulkerBox @JvmOverloads constructor(blockstate: BlockState = 
         return ItemShulkerBox(2)
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.MAGENTA_SHULKER_BOX, setOf(BlockTags.PNX_SHULKERBOX))
 

@@ -8,8 +8,10 @@ class BlockGreenCandleCake @JvmOverloads constructor(blockstate: BlockState = Co
         return BlockGreenCandle()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.GREEN_CANDLE_CAKE, CommonBlockProperties.LIT)
-
     }
 }

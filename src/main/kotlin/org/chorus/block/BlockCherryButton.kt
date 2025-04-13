@@ -7,6 +7,9 @@ class BlockCherryButton @JvmOverloads constructor(blockstate: BlockState = Compa
     override val name: String
         get() = "Cherry Button"
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.CHERRY_BUTTON,

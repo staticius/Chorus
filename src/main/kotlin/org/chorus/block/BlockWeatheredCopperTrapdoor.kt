@@ -4,6 +4,10 @@ import org.chorus.block.property.CommonBlockProperties
 
 class BlockWeatheredCopperTrapdoor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
     BlockCopperTrapdoor(blockstate) {
+
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(
             BlockID.WEATHERED_COPPER_TRAPDOOR,

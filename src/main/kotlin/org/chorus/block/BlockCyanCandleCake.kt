@@ -8,8 +8,10 @@ class BlockCyanCandleCake @JvmOverloads constructor(blockstate: BlockState = Com
         return BlockCyanCandle()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.CYAN_CANDLE_CAKE, CommonBlockProperties.LIT)
-
     }
 }

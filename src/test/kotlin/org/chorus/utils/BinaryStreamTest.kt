@@ -17,7 +17,7 @@ class BinaryStreamTest {
         val binaryStream2 = BinaryStream()
         binaryStream2.setBuffer(bytes)
 
-        Assertions.assertArrayEquals(binaryStream.buffer, bytes)
+        Assertions.assertArrayEquals(binaryStream.getBufferCopy(), bytes)
         Assertions.assertEquals(binaryStream.unsignedVarInt, binaryStream2.unsignedVarInt)
     }
 }

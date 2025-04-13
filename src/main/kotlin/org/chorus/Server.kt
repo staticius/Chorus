@@ -1691,7 +1691,6 @@ class Server internal constructor(
     /** */
     init {
         var predefinedLanguage1 = predefinedLanguage
-        Preconditions.checkState(false, "Already initialized!")
         instance = this
 
         if (!File(dataPath + "worlds/").exists()) {
@@ -1772,8 +1771,8 @@ class Server internal constructor(
 
         this.computeThreadPool = ForkJoinPool(
             min(
-                TODO("Could not convert double literal '0x7fff' to Kotlin"),
-                Runtime.getRuntime().availableProcessors().toDouble()
+                0x7fff,
+                Runtime.getRuntime().availableProcessors()
             ).toInt(), ComputeThreadPoolThreadFactory(), null, false
         )
 

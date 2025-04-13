@@ -21,6 +21,9 @@ class BlockPaleOakWallSign @JvmOverloads constructor(blockState: BlockState = Co
         return ItemPaleOakSign()
     }
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties =
             BlockProperties(BlockID.PALE_OAK_WALL_SIGN, CommonBlockProperties.FACING_DIRECTION)

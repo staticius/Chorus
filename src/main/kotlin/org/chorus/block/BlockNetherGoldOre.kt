@@ -58,6 +58,9 @@ class BlockNetherGoldOre @JvmOverloads constructor(blockstate: BlockState = Comp
     override val rawMaterial: String
         get() = ItemID.GOLD_NUGGET
 
+    override val properties: BlockProperties
+        get() = Companion.properties
+
     companion object {
         val properties: BlockProperties = BlockProperties(BlockID.NETHER_GOLD_ORE)
 
