@@ -334,9 +334,8 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         this.favoredSlot = favoredSlot
     }
 
-    fun isCreative(): Boolean {
-        return getPickupMode() == EntityProjectile.Companion.PICKUP_CREATIVE
-    }
+    override val isCreative: Boolean
+        get() = getPickupMode() == EntityProjectile.PICKUP_CREATIVE
 
     fun hasPlayer(): Boolean {
         return player

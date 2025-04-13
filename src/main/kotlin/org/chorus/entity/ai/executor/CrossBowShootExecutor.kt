@@ -178,9 +178,9 @@ class CrossBowShootExecutor(
         val entityShootBowEvent = EntityShootBowEvent(entity, bow, arrow, f)
         Server.instance.pluginManager.callEvent(entityShootBowEvent)
         if (entityShootBowEvent.isCancelled) {
-            entityShootBowEvent.getProjectile().kill()
+            entityShootBowEvent.projectile.kill()
         } else {
-            entityShootBowEvent.getProjectile().setMotion(
+            entityShootBowEvent.projectile.setMotion(
                 entityShootBowEvent.projectile.getMotion().multiply(entityShootBowEvent.force)
             )
             if (entityShootBowEvent.projectile != null) {

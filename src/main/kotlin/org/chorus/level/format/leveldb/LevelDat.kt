@@ -97,30 +97,6 @@ class LevelDat {
     var worldStartCount: Long = 0L
     var worldPolicies: WorldPolicies = WorldPolicies()
 
-    fun setRandomSeed(seed: Long) {
-        this.randomSeed = seed
-    }
-
-    fun setCurrentTick(currentTick: Int) {
-        this.currentTick = currentTick.toLong()
-    }
-
-    fun setLightningTime(lightningTime: Int) {
-        this.lightningTime = lightningTime
-    }
-
-    fun setRainTime(rainTime: Int) {
-        this.rainTime = rainTime
-    }
-
-    fun addTime() {
-        time++
-    }
-
-    fun setCurrentTick(currentTick: Long) {
-        this.currentTick = currentTick
-    }
-
     class Abilities {
         var attackMobs: Boolean = true
         var attackPlayers: Boolean = true

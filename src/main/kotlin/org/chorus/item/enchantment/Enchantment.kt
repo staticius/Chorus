@@ -357,7 +357,7 @@ abstract class Enchantment : Cloneable {
     companion object {
         val EMPTY_ARRAY: Array<Enchantment> = emptyArray()
         val CUSTOM_ENCHANTMENT_ID: Int = Utils.dynamic(256)
-        protected lateinit var enchantments: Array<Enchantment?>
+        protected lateinit var defaultEnchantments: Array<Enchantment?>
         protected var namedEnchantments: MutableMap<Identifier, Enchantment> = LinkedHashMap()
 
         const val ID_PROTECTION_ALL: Int = 0
@@ -444,209 +444,209 @@ abstract class Enchantment : Cloneable {
 
         @JvmStatic
         fun init() {
-            enchantments = arrayOfNulls(256)
-            enchantments[ID_PROTECTION_ALL] = EnchantmentProtectionAll()
-            enchantments[ID_PROTECTION_FIRE] = EnchantmentProtectionFire()
-            enchantments[ID_PROTECTION_FALL] = EnchantmentProtectionFall()
-            enchantments[ID_PROTECTION_EXPLOSION] = EnchantmentProtectionExplosion()
-            enchantments[ID_PROTECTION_PROJECTILE] = EnchantmentProtectionProjectile()
-            enchantments[ID_THORNS] = EnchantmentThorns()
-            enchantments[ID_WATER_BREATHING] = EnchantmentWaterBreath()
-            enchantments[ID_WATER_WORKER] = EnchantmentWaterWorker()
-            enchantments[ID_WATER_WALKER] = EnchantmentWaterWalker()
-            enchantments[ID_DAMAGE_ALL] = EnchantmentDamageAll()
-            enchantments[ID_DAMAGE_SMITE] = EnchantmentDamageSmite()
-            enchantments[ID_DAMAGE_ARTHROPODS] = EnchantmentDamageArthropods()
-            enchantments[ID_KNOCKBACK] = EnchantmentKnockback()
-            enchantments[ID_FIRE_ASPECT] = EnchantmentFireAspect()
-            enchantments[ID_LOOTING] = EnchantmentLootWeapon()
-            enchantments[ID_EFFICIENCY] = EnchantmentEfficiency()
-            enchantments[ID_SILK_TOUCH] = EnchantmentSilkTouch()
-            enchantments[ID_DURABILITY] = EnchantmentDurability()
-            enchantments[ID_FORTUNE_DIGGING] = EnchantmentLootDigging()
-            enchantments[ID_BOW_POWER] = EnchantmentBowPower()
-            enchantments[ID_BOW_KNOCKBACK] = EnchantmentBowKnockback()
-            enchantments[ID_BOW_FLAME] = EnchantmentBowFlame()
-            enchantments[ID_BOW_INFINITY] = EnchantmentBowInfinity()
-            enchantments[ID_FORTUNE_FISHING] = EnchantmentLootFishing()
-            enchantments[ID_LURE] = EnchantmentLure()
-            enchantments[ID_FROST_WALKER] = EnchantmentFrostWalker()
-            enchantments[ID_MENDING] = EnchantmentMending()
-            enchantments[ID_BINDING_CURSE] = EnchantmentBindingCurse()
-            enchantments[ID_VANISHING_CURSE] = EnchantmentVanishingCurse()
-            enchantments[ID_TRIDENT_IMPALING] = EnchantmentTridentImpaling()
-            enchantments[ID_TRIDENT_RIPTIDE] = EnchantmentTridentRiptide()
-            enchantments[ID_TRIDENT_LOYALTY] = EnchantmentTridentLoyalty()
-            enchantments[ID_TRIDENT_CHANNELING] = EnchantmentTridentChanneling()
-            enchantments[ID_CROSSBOW_MULTISHOT] = EnchantmentCrossbowMultishot()
-            enchantments[ID_CROSSBOW_PIERCING] = EnchantmentCrossbowPiercing()
-            enchantments[ID_CROSSBOW_QUICK_CHARGE] = EnchantmentCrossbowQuickCharge()
-            enchantments[ID_SOUL_SPEED] = EnchantmentSoulSpeed()
-            enchantments[ID_SWIFT_SNEAK] = EnchantmentSwiftSneak()
-            enchantments[38] = null
-            enchantments[ID_DENSITY] = EnchantmentDensity()
-            enchantments[ID_BREACH] = EnchantmentBreach()
+            defaultEnchantments = arrayOfNulls(256)
+            defaultEnchantments[ID_PROTECTION_ALL] = EnchantmentProtectionAll()
+            defaultEnchantments[ID_PROTECTION_FIRE] = EnchantmentProtectionFire()
+            defaultEnchantments[ID_PROTECTION_FALL] = EnchantmentProtectionFall()
+            defaultEnchantments[ID_PROTECTION_EXPLOSION] = EnchantmentProtectionExplosion()
+            defaultEnchantments[ID_PROTECTION_PROJECTILE] = EnchantmentProtectionProjectile()
+            defaultEnchantments[ID_THORNS] = EnchantmentThorns()
+            defaultEnchantments[ID_WATER_BREATHING] = EnchantmentWaterBreath()
+            defaultEnchantments[ID_WATER_WORKER] = EnchantmentWaterWorker()
+            defaultEnchantments[ID_WATER_WALKER] = EnchantmentWaterWalker()
+            defaultEnchantments[ID_DAMAGE_ALL] = EnchantmentDamageAll()
+            defaultEnchantments[ID_DAMAGE_SMITE] = EnchantmentDamageSmite()
+            defaultEnchantments[ID_DAMAGE_ARTHROPODS] = EnchantmentDamageArthropods()
+            defaultEnchantments[ID_KNOCKBACK] = EnchantmentKnockback()
+            defaultEnchantments[ID_FIRE_ASPECT] = EnchantmentFireAspect()
+            defaultEnchantments[ID_LOOTING] = EnchantmentLootWeapon()
+            defaultEnchantments[ID_EFFICIENCY] = EnchantmentEfficiency()
+            defaultEnchantments[ID_SILK_TOUCH] = EnchantmentSilkTouch()
+            defaultEnchantments[ID_DURABILITY] = EnchantmentDurability()
+            defaultEnchantments[ID_FORTUNE_DIGGING] = EnchantmentLootDigging()
+            defaultEnchantments[ID_BOW_POWER] = EnchantmentBowPower()
+            defaultEnchantments[ID_BOW_KNOCKBACK] = EnchantmentBowKnockback()
+            defaultEnchantments[ID_BOW_FLAME] = EnchantmentBowFlame()
+            defaultEnchantments[ID_BOW_INFINITY] = EnchantmentBowInfinity()
+            defaultEnchantments[ID_FORTUNE_FISHING] = EnchantmentLootFishing()
+            defaultEnchantments[ID_LURE] = EnchantmentLure()
+            defaultEnchantments[ID_FROST_WALKER] = EnchantmentFrostWalker()
+            defaultEnchantments[ID_MENDING] = EnchantmentMending()
+            defaultEnchantments[ID_BINDING_CURSE] = EnchantmentBindingCurse()
+            defaultEnchantments[ID_VANISHING_CURSE] = EnchantmentVanishingCurse()
+            defaultEnchantments[ID_TRIDENT_IMPALING] = EnchantmentTridentImpaling()
+            defaultEnchantments[ID_TRIDENT_RIPTIDE] = EnchantmentTridentRiptide()
+            defaultEnchantments[ID_TRIDENT_LOYALTY] = EnchantmentTridentLoyalty()
+            defaultEnchantments[ID_TRIDENT_CHANNELING] = EnchantmentTridentChanneling()
+            defaultEnchantments[ID_CROSSBOW_MULTISHOT] = EnchantmentCrossbowMultishot()
+            defaultEnchantments[ID_CROSSBOW_PIERCING] = EnchantmentCrossbowPiercing()
+            defaultEnchantments[ID_CROSSBOW_QUICK_CHARGE] = EnchantmentCrossbowQuickCharge()
+            defaultEnchantments[ID_SOUL_SPEED] = EnchantmentSoulSpeed()
+            defaultEnchantments[ID_SWIFT_SNEAK] = EnchantmentSwiftSneak()
+            defaultEnchantments[38] = null
+            defaultEnchantments[ID_DENSITY] = EnchantmentDensity()
+            defaultEnchantments[ID_BREACH] = EnchantmentBreach()
             //custom
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_PROTECTION_ALL
-            )] = enchantments[0]!!
+            )] = defaultEnchantments[0]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_PROTECTION_FIRE
-            )] = enchantments[1]!!
+            )] = defaultEnchantments[1]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_PROTECTION_FALL
-            )] = enchantments[2]!!
+            )] = defaultEnchantments[2]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_PROTECTION_EXPLOSION
-            )] = enchantments[3]!!
+            )] = defaultEnchantments[3]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_PROTECTION_PROJECTILE
-            )] = enchantments[4]!!
+            )] = defaultEnchantments[4]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_THORNS
-            )] = enchantments[5]!!
+            )] = defaultEnchantments[5]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_WATER_BREATHING
-            )] = enchantments[6]!!
+            )] = defaultEnchantments[6]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_WATER_WORKER
-            )] = enchantments[7]!!
+            )] = defaultEnchantments[7]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_WATER_WALKER
-            )] = enchantments[8]!!
+            )] = defaultEnchantments[8]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_DAMAGE_ALL
-            )] = enchantments[9]!!
+            )] = defaultEnchantments[9]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_DAMAGE_SMITE
-            )] = enchantments[10]!!
+            )] = defaultEnchantments[10]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_DAMAGE_ARTHROPODS
-            )] = enchantments[11]!!
+            )] = defaultEnchantments[11]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_KNOCKBACK
-            )] = enchantments[12]!!
+            )] = defaultEnchantments[12]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_FIRE_ASPECT
-            )] = enchantments[13]!!
+            )] = defaultEnchantments[13]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_LOOTING
-            )] = enchantments[14]!!
+            )] = defaultEnchantments[14]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_EFFICIENCY
-            )] = enchantments[15]!!
+            )] = defaultEnchantments[15]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_SILK_TOUCH
-            )] = enchantments[16]!!
+            )] = defaultEnchantments[16]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_DURABILITY
-            )] = enchantments[17]!!
+            )] = defaultEnchantments[17]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_FORTUNE_DIGGING
-            )] = enchantments[18]!!
+            )] = defaultEnchantments[18]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BOW_POWER
-            )] = enchantments[19]!!
+            )] = defaultEnchantments[19]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BOW_KNOCKBACK
-            )] = enchantments[20]!!
+            )] = defaultEnchantments[20]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BOW_FLAME
-            )] = enchantments[21]!!
+            )] = defaultEnchantments[21]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BOW_INFINITY
-            )] = enchantments[22]!!
+            )] = defaultEnchantments[22]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_FORTUNE_FISHING
-            )] = enchantments[23]!!
+            )] = defaultEnchantments[23]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_LURE
-            )] = enchantments[24]!!
+            )] = defaultEnchantments[24]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_FROST_WALKER
-            )] = enchantments[25]!!
+            )] = defaultEnchantments[25]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_MENDING
-            )] = enchantments[26]!!
+            )] = defaultEnchantments[26]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BINDING_CURSE
-            )] = enchantments[27]!!
+            )] = defaultEnchantments[27]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_VANISHING_CURSE
-            )] = enchantments[28]!!
+            )] = defaultEnchantments[28]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_TRIDENT_IMPALING
-            )] = enchantments[29]!!
+            )] = defaultEnchantments[29]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_TRIDENT_RIPTIDE
-            )] = enchantments[30]!!
+            )] = defaultEnchantments[30]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_TRIDENT_LOYALTY
-            )] = enchantments[31]!!
+            )] = defaultEnchantments[31]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_TRIDENT_CHANNELING
-            )] = enchantments[32]!!
+            )] = defaultEnchantments[32]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_CROSSBOW_MULTISHOT
-            )] = enchantments[33]!!
+            )] = defaultEnchantments[33]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_CROSSBOW_PIERCING
-            )] = enchantments[34]!!
+            )] = defaultEnchantments[34]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_CROSSBOW_QUICK_CHARGE
-            )] = enchantments[35]!!
+            )] = defaultEnchantments[35]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_SOUL_SPEED
-            )] = enchantments[36]!!
+            )] = defaultEnchantments[36]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_SWIFT_SNEAK
-            )] = enchantments[37]!!
+            )] = defaultEnchantments[37]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_DENSITY
-            )] = enchantments[39]!!
+            )] = defaultEnchantments[39]!!
             namedEnchantments[Identifier(
                 "minecraft",
                 NAME_BREACH
-            )] = enchantments[40]!!
+            )] = defaultEnchantments[40]!!
         }
 
         private fun getLevelString(level: Int): String {
@@ -667,7 +667,7 @@ abstract class Enchantment : Cloneable {
 
         @JvmStatic
         fun reload() {
-            enchantments = arrayOfNulls(256)
+            defaultEnchantments = arrayOfNulls(256)
             namedEnchantments.clear()
             init()
         }
@@ -822,8 +822,8 @@ abstract class Enchantment : Cloneable {
          */
         fun get(id: Int): Enchantment {
             var enchantment: Enchantment? = null
-            if (id >= 0 && id < enchantments.size) {
-                enchantment = enchantments[id]
+            if (id >= 0 && id < defaultEnchantments.size) {
+                enchantment = defaultEnchantments[id]
             }
             if (enchantment == null) {
                 return UnknownEnchantment(id)
@@ -840,8 +840,8 @@ abstract class Enchantment : Cloneable {
          */
         fun getEnchantment(id: Int): Enchantment {
             var enchantment: Enchantment? = null
-            if (id >= 0 && id < enchantments.size) {
-                enchantment = enchantments[id]
+            if (id >= 0 && id < defaultEnchantments.size) {
+                enchantment = defaultEnchantments[id]
             }
             if (enchantment == null) {
                 return UnknownEnchantment(id)

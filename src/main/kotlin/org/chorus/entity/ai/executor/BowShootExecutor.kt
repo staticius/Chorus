@@ -178,16 +178,16 @@ class BowShootExecutor(
         val entityShootBowEvent = EntityShootBowEvent(entity, bow, arrow, f)
         Server.instance.pluginManager.callEvent(entityShootBowEvent)
         if (entityShootBowEvent.isCancelled) {
-            entityShootBowEvent.getProjectile().kill()
+            entityShootBowEvent.projectile.kill()
         } else {
-            entityShootBowEvent.getProjectile().setMotion(
-                entityShootBowEvent.getProjectile().getMotion().multiply(entityShootBowEvent.force)
+            entityShootBowEvent.projectile.setMotion(
+                entityShootBowEvent.projectile.getMotion().multiply(entityShootBowEvent.force)
             )
             val infinityEnchant = bow.getEnchantment(Enchantment.ID_BOW_INFINITY)
             val infinity = infinityEnchant != null && infinityEnchant.level > 0
-            val projectile: EntityProjectile = entityShootBowEvent.getProjectile()
+            val projectile: EntityProjectile = entityShootBowEvent.projectile
             if (infinity && projectile is EntityArrow) {
-                projectile.setPickupMode(EntityProjectile.Companion.PICKUP_CREATIVE)
+                projectile.pickupMode = (EntityProjectile.Companion.PICKUP_CREATIVE)
             }
 
             for (enc in bow.enchantments) {
@@ -196,13 +196,13 @@ class BowShootExecutor(
                 }
             }
 
-            if (entityShootBowEvent.getProjectile() != null) {
-                val projectev = ProjectileLaunchEvent(entityShootBowEvent.getProjectile(), entity)
+            if (entityShootBowEvent.projectile != null) {
+                val projectev = ProjectileLaunchEvent(entityShootBowEvent.projectile, entity)
                 Server.instance.pluginManager.callEvent(projectev)
                 if (projectev.isCancelled) {
-                    entityShootBowEvent.getProjectile().kill()
+                    entityShootBowEvent.projectile.kill()
                 } else {
-                    entityShootBowEvent.getProjectile().spawnToAll()
+                    entityShootBowEvent.projectile.spawnToAll()
                     entity.level!!.addSound(entity.position, Sound.RANDOM_BOW)
                 }
             }

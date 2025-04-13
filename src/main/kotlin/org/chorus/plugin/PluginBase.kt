@@ -28,6 +28,19 @@ abstract class PluginBase : Plugin {
     override lateinit var server: Server
         protected set
     override var isEnabled: Boolean = false
+        set(value) {
+            if (field != value) {
+                if (!value && InternalPlugin.INSTANCE == this) {
+                    throw UnsupportedOperationException("The Chorus Internal Plugin cannot be disabled")
+                }
+                field = value
+                if (isEnabled) {
+                    onEnable()
+                } else {
+                    onDisable()
+                }
+            }
+        }
 
     /**
      * 返回这个插件是否已经初始化。<br></br>
@@ -43,6 +56,13 @@ abstract class PluginBase : Plugin {
     override var dataFolder: File? = null
         protected set
     override var config: Config? = null
+        get() {
+            if (field == null) {
+                this.reloadConfig()
+            }
+            return field
+        }
+
     private lateinit var configFile: File
 
     /**
@@ -65,51 +85,6 @@ abstract class PluginBase : Plugin {
     }
 
     override fun onDisable() {
-    }
-
-    fun isEnabled(): Boolean {
-        return isEnabled
-    }
-
-    /**
-     * 加载这个插件。<br></br>
-     * Enables this plugin.
-     *
-     *
-     *
-     * 如果你需要卸载这个插件，建议使用[.setEnabled]<br></br>
-     * If you need to disable this plugin, it's recommended to use [.setEnabled]
-     *
-     *
-     */
-    fun setEnabled() {
-        this.setEnabled(true)
-    }
-
-    /**
-     * 加载或卸载这个插件。<br></br>
-     * Enables or disables this plugin.
-     *
-     *
-     *
-     * 插件管理器插件常常使用这个方法。<br></br>
-     * It's normally used by a plugin manager plugin to manage plugins.
-     *
-     * @param value `true`为加载，`false`为卸载。<br></br>`true` for enable, `false` for disable.
-     *
-     */
-    fun setEnabled(value: Boolean) {
-        if (isEnabled != value) {
-            if (!value && InternalPlugin.Companion.INSTANCE == this) {
-                throw UnsupportedOperationException("The PowerNukkitX Internal Plugin cannot be disabled")
-            }
-            isEnabled = value
-            if (isEnabled) {
-                onEnable()
-            } else {
-                onDisable()
-            }
-        }
     }
 
     override val isDisabled: Boolean
@@ -236,16 +211,9 @@ abstract class PluginBase : Plugin {
         return false
     }
 
-    fun getConfig(): Config? {
-        if (this.config == null) {
-            this.reloadConfig()
-        }
-        return this.config
-    }
-
     override fun saveConfig() {
-        if (!getConfig()!!.save()) {
-            logger!!.critical("Could not save config to " + configFile.toString())
+        if (!config!!.save()) {
+            logger.critical("Could not save config to " + configFile.toString())
         }
     }
 

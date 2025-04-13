@@ -1,14 +1,6 @@
 package org.chorus.nbt.tag
 
 class IntArrayTag @JvmOverloads constructor(var data: IntArray = IntArray(0)) : Tag<IntArray>() {
-    fun getData(): IntArray {
-        return data
-    }
-
-    fun setData(data: IntArray?) {
-        this.data = data ?: IntArray(0)
-    }
-
     override fun parseValue(): IntArray {
         return this.data
     }

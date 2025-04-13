@@ -20,7 +20,7 @@ class GeneratorTest {
         thread.start()
 
         val flat = Flat(DimensionEnum.OVERWORLD.dimensionData, HashMap())
-        flat.setLevel(level)
+        flat.level = (level)
         val x = 10000
         val z = 10000
         val chunk = levelProvider.getChunk(x shr 4, z shr 4, true)
@@ -37,7 +37,7 @@ class GeneratorTest {
         thread.start()
 
         val flat = Flat(DimensionEnum.OVERWORLD.dimensionData, HashMap())
-        flat.setLevel(level)
+        flat.level = (level)
         val x = 10000
         val z = 10000
         val chunk = levelProvider.getChunk(x shr 4, z shr 4, true)

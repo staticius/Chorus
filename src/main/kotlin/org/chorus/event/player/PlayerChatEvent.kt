@@ -34,14 +34,6 @@ class PlayerChatEvent @JvmOverloads constructor(
         }
     }
 
-    fun getRecipients(): Set<CommandSender> {
-        return this.recipients
-    }
-
-    fun setRecipients(recipients: MutableSet<CommandSender>) {
-        this.recipients = recipients
-    }
-
     companion object {
         val handlers: HandlerList = HandlerList()
     }

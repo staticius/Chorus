@@ -7,7 +7,7 @@ import org.chorus.math.Vector3
 
 class PositionTracking(override var levelName: String, x: Double, y: Double, z: Double) :
     Vector3(x, y, z), NamedPosition {
-    constructor(level: Level, x: Double, y: Double, z: Double) : this(level.getName(), x, y, z)
+    constructor(level: Level, x: Double, y: Double, z: Double) : this(level.getLevelName(), x, y, z)
 
     constructor(level: Level, v: Vector3) : this(level, v.x, v.y, v.z)
 

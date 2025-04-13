@@ -11,12 +11,11 @@ abstract class EntityAbstractArrow @JvmOverloads constructor(
     shootingEntity: Entity? = null
 ) :
     SlenderProjectile(chunk, nbt, shootingEntity) {
-    var isCreative: Boolean = false
+    open val isCreative: Boolean = nbt.getBoolean(TAG_IS_CREATIVE)
     var OwnerID: Long = -1L
     var player: Boolean = false
 
     init {
-        this.isCreative = nbt.getBoolean(TAG_IS_CREATIVE)
         this.OwnerID = nbt.getLong(TAG_OWNER_ID)
         this.player = nbt.getBoolean(TAG_PLAYER)
     }

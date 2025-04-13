@@ -94,10 +94,6 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
         enablePlugin(plugin)
     }
 
-    fun getPlugins(): Map<String, Plugin> {
-        return plugins
-    }
-
     fun loadPlugin(file: File): Plugin? {
         return this.loadPlugin(file, null)
     }
@@ -475,10 +471,6 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
         }
     }
 
-    fun getPermissions(): Map<String, Permission> {
-        return permissions
-    }
-
     fun isPluginEnabled(plugin: Plugin?): Boolean {
         return if (plugin != null && plugins.containsKey(plugin.description.name)) {
             plugin.isEnabled
@@ -568,8 +560,8 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
 
     fun disablePlugins() {
         val plugins: ListIterator<Plugin> = ArrayList(
-            getPlugins().values
-        ).listIterator(getPlugins().size)
+            plugins.values
+        ).listIterator(plugins.size)
 
         while (plugins.hasPrevious()) {
             val previous = plugins.previous()

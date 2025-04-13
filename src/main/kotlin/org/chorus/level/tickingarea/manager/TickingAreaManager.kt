@@ -4,7 +4,7 @@ import org.chorus.level.Locator
 import org.chorus.level.tickingarea.TickingArea
 import org.chorus.level.tickingarea.storage.TickingAreaStorage
 
-abstract class TickingAreaManager(protected var storage: TickingAreaStorage) {
+abstract class TickingAreaManager(var storage: TickingAreaStorage) {
 
     abstract fun addTickingArea(area: TickingArea)
 
@@ -23,8 +23,4 @@ abstract class TickingAreaManager(protected var storage: TickingAreaStorage) {
     abstract fun getTickingAreaByPos(pos: Locator): TickingArea?
 
     abstract fun loadAllTickingArea()
-
-    fun getStorage(): TickingAreaStorage {
-        return storage
-    }
 }

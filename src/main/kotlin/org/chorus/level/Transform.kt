@@ -89,7 +89,7 @@ class Transform : Locator {
     }
 
     override fun toString(): String {
-        return "Location (level=" + level.getName() + ", x=" + position.x + ", y=" + position.y + ", z=" + position.z + ", yaw=" + rotation.yaw + ", pitch=" + rotation.pitch + ", headYaw=" + this.headYaw + ")"
+        return "Location (level=" + level.getLevelName() + ", x=" + position.x + ", y=" + position.y + ", z=" + position.z + ", yaw=" + rotation.yaw + ", pitch=" + rotation.pitch + ", headYaw=" + this.headYaw + ")"
     }
 
     fun add(x: Double): Transform {

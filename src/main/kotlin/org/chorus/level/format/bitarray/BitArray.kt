@@ -16,11 +16,11 @@ interface BitArray {
         return ByteBufVarInt.readInt(buffer)
     }
 
-    fun size(): Int
+    val size: Int
 
-    fun words(): IntArray
+    val words: IntArray
 
-    fun version(): BitArrayVersion
+    val version: BitArrayVersion
 
     fun copy(): BitArray
 }

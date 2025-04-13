@@ -15,6 +15,12 @@ import java.io.IOException
 class PositionTrackingDBServerBroadcastPacket : DataPacket() {
     var action: Action? = null
     var trackingId = 0
+        set(value) {
+            field = value
+            if (tag != null) {
+                tag!!.putString("id", String.format("0x%08x", value))
+            }
+        }
     var tag: CompoundTag? = null
 
     override fun encode(byteBuf: HandleByteBuf) {
@@ -34,17 +40,6 @@ class PositionTrackingDBServerBroadcastPacket : DataPacket() {
                 .putString("id", String.format("0x%08x", trackingId))
         }
         return tag
-    }
-
-    fun setAction(action: Action?) {
-        this.action = action
-    }
-
-    fun setTrackingId(trackingId: Int) {
-        this.trackingId = trackingId
-        if (tag != null) {
-            tag!!.putString("id", String.format("0x%08x", trackingId))
-        }
     }
 
     var position: BlockVector3?

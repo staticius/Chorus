@@ -808,7 +808,7 @@ class Player(
                 spawnPoint!!.position.x,
                 spawnPoint!!.position.y,
                 spawnPoint!!.position.z,
-                spawnPoint!!.level.getName()
+                spawnPoint!!.level.getLevelName()
             )
         }
         setDataFlag(EntityFlag.HIDDEN_WHEN_INVISIBLE)
@@ -1446,7 +1446,7 @@ class Player(
         val level: Level?
         if (Server.instance.getLevelByName(nbt.getString("Level")).also { level = it } == null) {
             this.level = Server.instance.defaultLevel
-            nbt.putString("Level", this.level!!.getName())
+            nbt.putString("Level", this.level!!.getLevelName())
             val spawnLocation = this.level!!.safeSpawn
             nbt.getList("Pos", FloatTag::class.java)
                 .add(FloatTag(spawnLocation.position.x))
@@ -1553,7 +1553,7 @@ class Player(
                 this.address,
                 port.toString(),
                 getRuntimeID().toString(),
-                this.level!!.getName(),
+                this.level!!.getLevelName(),
                 round(position.x).toString(),
                 round(position.y).toString(),
                 round(position.z).toString()
@@ -3086,7 +3086,7 @@ class Player(
                             chatEvent.format, *arrayOf<String>(
                                 chatEvent.player.displayName, chatEvent.message!!
                             )
-                        ), chatEvent.getRecipients()
+                        ), chatEvent.recipients
                     )
                 }
             }
@@ -3688,7 +3688,7 @@ class Player(
             namedTag!!.putInt("SpawnX", spawnPoint!!.position.floorX)
                 .putInt("SpawnY", spawnPoint!!.position.floorY)
                 .putInt("SpawnZ", spawnPoint!!.position.floorZ)
-            namedTag!!.putString("SpawnLevel", spawnPoint!!.level.getName())
+            namedTag!!.putString("SpawnLevel", spawnPoint!!.level.getLevelName())
             namedTag!!.putInt("SpawnDimension", spawnPoint!!.level.dimension)
         }
 
@@ -3702,7 +3702,7 @@ class Player(
         saveNBT()
 
         if (this.level != null) {
-            namedTag!!.putString("Level", level!!.getName())
+            namedTag!!.putString("Level", level!!.getLevelName())
 
             val achievements = CompoundTag()
             for (achievement in this.achievements) {
@@ -4993,7 +4993,7 @@ class Player(
 
                 val ev = InventoryPickupArrowEvent(inventory!!, entity)
 
-                val pickupMode = entity.getPickupMode()
+                val pickupMode = entity.pickupMode
                 if (pickupMode == EntityProjectile.PICKUP_NONE || (pickupMode == EntityProjectile.PICKUP_CREATIVE && !this.isCreative)) {
                     ev.setCancelled()
                 }
@@ -5053,7 +5053,7 @@ class Player(
                 Server.broadcastPacket(entity.viewers.values, pk)
                 this.dataPacket(pk)
 
-                if (!entity.isCreative()) {
+                if (!entity.isCreative) {
                     if (inventory!!.getItem(entity.getFavoredSlot()).isNothing) {
                         inventory.setItem(entity.getFavoredSlot(), item.clone())
                     } else {

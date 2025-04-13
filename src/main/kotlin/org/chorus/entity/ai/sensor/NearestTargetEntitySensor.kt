@@ -61,31 +61,31 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
             if (current != null && current.isAlive()) return
 
             //寻找范围内最近的实体
-            val entities = Collections.synchronizedList(SortedList(Comparator.comparingDouble { e: Entity ->
-                e.position.distanceSquared(
+            val entities = sortedSetOf(compareBy<Entity> {
+                it.position.distanceSquared(
                     entity.position
                 )
-            }))
+            })
             for (p in entity.level!!.entities.values) {
-                if (entity.position.distanceSquared(p.position) <= maxRangeSquared && entity.position.distanceSquared(p.position) >= minRangeSquared && (p != entity)) {
+                if (entity.position.distanceSquared(p.position) in minRangeSquared..maxRangeSquared && (p != entity)) {
                     entities.add(p)
                 }
             }
 
             if (entities.isEmpty()) {
                 entity.memoryStorage.clear(currentMemory)
-            } else entity.memoryStorage.set(currentMemory, entities[0])
+            } else entity.memoryStorage[currentMemory] = entities.firstOrNull()
             return
         }
         if (allTargetFunction != null) {
-            val sortEntities: MutableList<MutableList<Entity>> = ArrayList(memories.size)
+            val sortEntities: MutableList<MutableSet<Entity>> = ArrayList(memories.size)
 
             run {
                 var i = 0
                 val len = memories.size
                 while (i < len) {
-                    sortEntities.add(SortedList(Comparator.comparingDouble { e: Entity ->
-                        e.position.distanceSquared(
+                    sortEntities.add(sortedSetOf(compareBy {
+                        it.position.distanceSquared(
                             entity.position
                         )
                     }))
@@ -94,13 +94,11 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
             }
 
             for (p in entity.level!!.entities.values) {
-                if (entity.position.distanceSquared(p.position) <= maxRangeSquared && entity.position.distanceSquared(p.position) >= minRangeSquared && (p != entity)) {
-                    var i = 0
-                    for (targetFunction in allTargetFunction!!) {
+                if (entity.position.distanceSquared(p.position) in minRangeSquared..maxRangeSquared && (p != entity)) {
+                    for ((i, targetFunction) in allTargetFunction!!.withIndex()) {
                         if (targetFunction.apply(p as T)) {
                             sortEntities[i].add(p)
                         }
-                        ++i
                     }
                 }
             }
@@ -109,7 +107,7 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
             val len = sortEntities.size
             while (i < len) {
                 val currentMemory = memories[i]
-                val current = entity.memoryStorage.get(currentMemory)
+                val current = entity.memoryStorage[currentMemory]
                 if (current != null && current.isAlive()) {
                     ++i
                     continue
@@ -117,7 +115,7 @@ class NearestTargetEntitySensor<T : Entity?> @SafeVarargs constructor(
 
                 if (sortEntities[i].isEmpty()) {
                     entity.memoryStorage.clear(currentMemory)
-                } else entity.memoryStorage.set(currentMemory, sortEntities[i][0])
+                } else entity.memoryStorage[currentMemory] = sortEntities[i].firstOrNull()
                 ++i
             }
         }

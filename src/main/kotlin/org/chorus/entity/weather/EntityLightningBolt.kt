@@ -31,7 +31,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
 
     var state: Int = 0
     var liveTime: Int = 0
-    protected var isEffect: Boolean = true
+    var isEffect: Boolean = true
 
     override fun initEntity() {
         super.initEntity()
@@ -61,14 +61,6 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
                 }
             }
         }
-    }
-
-    override fun isEffect(): Boolean {
-        return this.isEffect
-    }
-
-    override fun setEffect(e: Boolean) {
-        this.isEffect = e
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {

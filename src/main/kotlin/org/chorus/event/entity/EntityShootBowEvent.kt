@@ -32,10 +32,6 @@ class EntityShootBowEvent(shooter: EntityLiving, bow: Item, projectile: EntityPr
         this.force = force
     }
 
-    fun getProjectile(): EntityProjectile {
-        return this.projectile
-    }
-
     fun setProjectile(projectile: Entity) {
         if (projectile !== this.projectile) {
             if (this.projectile.viewers.isEmpty()) {

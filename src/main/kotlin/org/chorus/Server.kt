@@ -299,7 +299,7 @@ class Server internal constructor(
     /**default levels */
     var defaultLevel: Level? = null
         set(value) {
-            if (value == null || (this.isLevelLoaded(value.getName()) && value != field)) {
+            if (value == null || (this.isLevelLoaded(value.getLevelName()) && value != field)) {
                 field = value
             }
         }
@@ -601,7 +601,7 @@ class Server internal constructor(
                     val levelTime = System.currentTimeMillis()
                     //Ensures that the server won't try to tick a level without providers.
                     if (level.getProvider().level == null) {
-                        log.warn("Tried to tick Level " + level.getName() + " without a provider!")
+                        log.warn("Tried to tick Level " + level.getLevelName() + " without a provider!")
                         continue
                     }
                     level.doTick(currentTick)
@@ -620,7 +620,7 @@ class Server internal constructor(
                             }
                             log.debug(
                                 "Raising level \"{}\" tick rate to {} ticks",
-                                level.getName(),
+                                level.getLevelName(),
                                 level.tickRate
                             )
                         } else if (tickMs >= 50) {
@@ -635,7 +635,7 @@ class Server internal constructor(
                             }
                             log.debug(
                                 "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                                level.getName(),
+                                level.getLevelName(),
                                 round(tickMs.toDouble()),
                                 level.tickRate
                             )
@@ -1014,7 +1014,7 @@ class Server internal constructor(
      * @param type 插件加载顺序<br></br>Plugin loading order
      */
     fun enablePlugins(type: PluginLoadOrder) {
-        for (plugin in ArrayList(pluginManager.getPlugins().values)) {
+        for (plugin in ArrayList(pluginManager.plugins.values)) {
             if (!plugin.isEnabled && type == plugin.description.order) {
                 this.enablePlugin(plugin)
             }
@@ -1408,7 +1408,7 @@ class Server internal constructor(
                         .add(FloatTag(spawn.position.y))
                         .add(FloatTag(spawn.position.z))
                 )
-                .putString("Level", defaultLevel!!.getName())
+                .putString("Level", defaultLevel!!.getLevelName())
                 .putList("Inventory", ListTag<Tag<*>>())
                 .putCompound("Achievements", CompoundTag())
                 .putInt("playerGameType", this.gamemode)
@@ -1669,7 +1669,7 @@ class Server internal constructor(
          * Set default nether
          */
         set(defaultLevel) {
-            if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getName()) && defaultLevel != this.defaultNether)) {
+            if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getLevelName()) && defaultLevel != this.defaultNether)) {
                 this.defaultNether = defaultLevel
             }
         }
@@ -1683,7 +1683,7 @@ class Server internal constructor(
          * Set default the_end level
          */
         set(defaultLevel) {
-            if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getName()) && defaultLevel != this.defaultEnd)) {
+            if (defaultLevel == null || (this.isLevelLoaded(defaultLevel.getLevelName()) && defaultLevel != this.defaultEnd)) {
                 this.defaultEnd = defaultLevel
             }
         }
@@ -2010,7 +2010,7 @@ class Server internal constructor(
             name1 = "$name1 Dim0"
         }
         for (level in this.levelArray) {
-            if (level.getName().equals(name1, ignoreCase = true)) {
+            if (level.getLevelName().equals(name1, ignoreCase = true)) {
                 return level
             }
         }

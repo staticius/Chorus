@@ -17,7 +17,7 @@ class BlockMetadataStore(private val owningLevel: Level) : MetadataStore() {
         if (block.level == this.owningLevel) {
             return super.getMetadata(block, metadataKey)
         } else {
-            throw IllegalStateException("Block does not belong to world " + owningLevel.getName())
+            throw IllegalStateException("Block does not belong to world " + owningLevel.getLevelName())
         }
     }
 
@@ -26,7 +26,7 @@ class BlockMetadataStore(private val owningLevel: Level) : MetadataStore() {
         if (block.level == this.owningLevel) {
             return super.getMetadata(block, metadataKey, plugin)
         } else {
-            throw IllegalStateException("Block does not belong to world " + owningLevel.getName())
+            throw IllegalStateException("Block does not belong to world " + owningLevel.getLevelName())
         }
     }
 
@@ -35,7 +35,7 @@ class BlockMetadataStore(private val owningLevel: Level) : MetadataStore() {
         if (block.level == this.owningLevel) {
             return super.hasMetadata(block, metadataKey)
         } else {
-            throw IllegalStateException("Block does not belong to world " + owningLevel.getName())
+            throw IllegalStateException("Block does not belong to world " + owningLevel.getLevelName())
         }
     }
 
@@ -44,7 +44,7 @@ class BlockMetadataStore(private val owningLevel: Level) : MetadataStore() {
         if (block.level == this.owningLevel) {
             return super.hasMetadata(block, metadataKey, plugin)
         } else {
-            throw IllegalStateException("Block does not belong to world " + owningLevel.getName())
+            throw IllegalStateException("Block does not belong to world " + owningLevel.getLevelName())
         }
     }
 
@@ -53,7 +53,7 @@ class BlockMetadataStore(private val owningLevel: Level) : MetadataStore() {
         if (block.level == this.owningLevel) {
             super.removeMetadata(block, metadataKey, owningPlugin)
         } else {
-            throw IllegalStateException("Block does not belong to world " + owningLevel.getName())
+            throw IllegalStateException("Block does not belong to world " + owningLevel.getLevelName())
         }
     }
 
@@ -62,7 +62,7 @@ class BlockMetadataStore(private val owningLevel: Level) : MetadataStore() {
         if (block.level == this.owningLevel) {
             super.setMetadata(block, metadataKey, newMetadataValue)
         } else {
-            throw IllegalStateException("Block does not belong to world " + owningLevel.getName())
+            throw IllegalStateException("Block does not belong to world " + owningLevel.getLevelName())
         }
     }
 

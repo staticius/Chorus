@@ -26,15 +26,6 @@ class ItemRegistryPacket : DataPacket() {
         }
     }
 
-    fun setEntries(entries: Array<Entry>?) {
-        this.entries = if (entries == null) null else if (entries.isEmpty()) emptyArray() else entries.clone()
-    }
-
-    fun getEntries(): Array<Entry>? {
-        return if (entries == null) null else if (entries!!.isEmpty()) emptyArray() else entries!!.clone()
-    }
-
-
     class Entry(
         val name: String,
         val runtimeId: Int,
@@ -44,7 +35,7 @@ class ItemRegistryPacket : DataPacket() {
     )
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.ITEM_REGISTRY_PACKET
+        return ProtocolInfo.ITEM_REGISTRY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

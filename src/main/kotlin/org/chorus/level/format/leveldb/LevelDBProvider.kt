@@ -186,19 +186,19 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
     override var rainTime: Int
         get() = levelData.rainTime
         set(rainTime) {
-            levelData.setRainTime(rainTime)
+            levelData.rainTime = (rainTime)
         }
 
     override var thunderTime: Int
         get() = levelData.lightningTime
         set(thunderTime) {
-            levelData.setLightningTime(thunderTime)
+            levelData.lightningTime = (thunderTime)
         }
 
     override var currentTick: Long
         get() = levelData.currentTick
         set(currentTick) {
-            levelData.setCurrentTick(currentTick)
+            levelData.currentTick = (currentTick)
         }
 
     override var time: Long
@@ -210,7 +210,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
     override var seed: Long
         get() = levelData.randomSeed
         set(value) {
-            levelData.setRandomSeed(value)
+            levelData.randomSeed = (value)
         }
 
     override var spawn: Vector3

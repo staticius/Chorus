@@ -28,7 +28,13 @@ class EntityArrow @JvmOverloads constructor(
 
     var pickupMode: Int = 0
 
-    protected var item: ItemArrow? = null
+    var item: ItemArrow = ItemArrow()
+        set(value) {
+            field = value
+            if (value.tippedArrowPotion != null) {
+                this.setDataProperty(EntityDataTypes.CUSTOM_DISPLAY, value.tippedArrowPotion!!.id + 1)
+            }
+        }
 
     init {
         this.setCritical(critical)
@@ -154,22 +160,7 @@ class EntityArrow @JvmOverloads constructor(
         namedTag!!.putByte("pickup", this.pickupMode)
     }
 
-    fun getPickupMode(): Int {
-        return this.pickupMode
-    }
-
-    fun setPickupMode(pickupMode: Int) {
-        this.pickupMode = pickupMode
-    }
-
-    fun setItem(arrow: ItemArrow) {
-        this.item = arrow
-        if (arrow.tippedArrowPotion != null) {
-            this.setDataProperty(EntityDataTypes.Companion.CUSTOM_DISPLAY, arrow.tippedArrowPotion!!.id + 1)
-        }
-    }
-
-    fun getArrowItem(): ItemArrow? {
+    fun getArrowItem(): ItemArrow {
         return this.item
     }
 

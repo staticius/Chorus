@@ -15,17 +15,20 @@ class SingletonBitArray : BitArray {
         throw UnsupportedOperationException()
     }
 
-    override fun size(): Int {
-        return 1
-    }
+    override val size: Int
+        get() {
+            return 1
+        }
 
-    override fun words(): IntArray {
-        return EMPTY_ARRAY
-    }
+    override val words: IntArray
+        get() {
+            return EMPTY_ARRAY
+        }
 
-    override fun version(): BitArrayVersion {
-        return BitArrayVersion.V0
-    }
+    override val version: BitArrayVersion
+        get() {
+            return BitArrayVersion.V0
+        }
 
     override fun copy(): SingletonBitArray {
         return SingletonBitArray()

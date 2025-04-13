@@ -74,16 +74,16 @@ class ItemTrident @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
         Server.instance.pluginManager.callEvent(entityShootBowEvent)
         if (entityShootBowEvent.isCancelled) {
-            entityShootBowEvent.getProjectile().close()
+            entityShootBowEvent.projectile.close()
         } else {
-            entityShootBowEvent.getProjectile()
-                .setMotion(entityShootBowEvent.getProjectile().getMotion().multiply(entityShootBowEvent.force))
-            val ev = ProjectileLaunchEvent(entityShootBowEvent.getProjectile(), player)
+            entityShootBowEvent.projectile
+                .setMotion(entityShootBowEvent.projectile.getMotion().multiply(entityShootBowEvent.force))
+            val ev = ProjectileLaunchEvent(entityShootBowEvent.projectile, player)
             Server.instance.pluginManager.callEvent(ev)
             if (ev.isCancelled) {
-                entityShootBowEvent.getProjectile().close()
+                entityShootBowEvent.projectile.close()
             } else {
-                entityShootBowEvent.getProjectile().spawnToAll()
+                entityShootBowEvent.projectile.spawnToAll()
                 player.level!!.addSound(player.position, Sound.ITEM_TRIDENT_THROW)
                 if (!player.isCreative) {
                     count--

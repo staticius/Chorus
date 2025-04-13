@@ -82,15 +82,15 @@ open class Palette<V> {
     }
 
     protected fun writeWords(byteBuf: ByteBuf, serializer: RuntimeDataSerializer<V>) {
-        byteBuf.writeByte(getPaletteHeader(bitArray.version(), true))
-        for (word in bitArray.words()) byteBuf.writeIntLE(word)
+        byteBuf.writeByte(getPaletteHeader(bitArray.version, true))
+        for (word in bitArray.words) byteBuf.writeIntLE(word)
         bitArray.writeSizeToNetwork(byteBuf, palette.size)
         for (value in this.palette) ByteBufVarInt.writeInt(byteBuf, serializer.serialize(value))
     }
 
     fun writeToStoragePersistent(byteBuf: ByteBuf, serializer: PersistentDataSerializer<V>) {
-        byteBuf.writeByte(getPaletteHeader(bitArray.version(), false))
-        for (word in bitArray.words()) byteBuf.writeIntLE(word)
+        byteBuf.writeByte(getPaletteHeader(bitArray.version, false))
+        for (word in bitArray.words) byteBuf.writeIntLE(word)
         byteBuf.writeIntLE(palette.size)
         try {
             ByteBufOutputStream(byteBuf).use { bufOutputStream ->
@@ -137,8 +137,8 @@ open class Palette<V> {
         if (writeLast(byteBuf, last)) return
         if (writeEmpty(byteBuf, serializer)) return
 
-        byteBuf.writeByte(getPaletteHeader(bitArray.version(), true))
-        for (word in bitArray.words()) byteBuf.writeIntLE(word)
+        byteBuf.writeByte(getPaletteHeader(bitArray.version, true))
+        for (word in bitArray.words) byteBuf.writeIntLE(word)
         byteBuf.writeIntLE(palette.size)
         for (value in this.palette) byteBuf.writeIntLE(serializer.serialize(value))
     }
@@ -174,7 +174,7 @@ open class Palette<V> {
         index = palette.size
         palette.add(value)
 
-        val version = bitArray.version()
+        val version = bitArray.version
         if (index > version.maxEntryValue) {
             val next = version.next
             if (next != null) this.onResize(next)
@@ -186,7 +186,7 @@ open class Palette<V> {
     val isEmpty: Boolean
         get() {
             if (palette.size == 1) {
-                for (word in bitArray.words()) if (word.toLong() != 0L) {
+                for (word in bitArray.words) if (word.toLong() != 0L) {
                     return false
                 }
                 return true

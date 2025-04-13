@@ -90,10 +90,10 @@ class PositionTrackingService(folder: File) : Closeable {
     private fun sendTrackingUpdate(player: Player, trackingHandler: Int, pos: PositionTracking) {
         if (player.locator.levelName == pos.levelName) {
             val packet = PositionTrackingDBServerBroadcastPacket()
-            packet.setAction(PositionTrackingDBServerBroadcastPacket.Action.UPDATE)
+            packet.action = (PositionTrackingDBServerBroadcastPacket.Action.UPDATE)
             packet.setPosition(pos)
             packet.dimension = player.level!!.dimension
-            packet.setTrackingId(trackingHandler)
+            packet.trackingId = (trackingHandler)
             packet.status = 0
             player.dataPacket(packet)
         } else {
@@ -135,8 +135,8 @@ class PositionTrackingService(folder: File) : Closeable {
 
     private fun destroyPacket(trackingHandler: Int): PositionTrackingDBServerBroadcastPacket {
         val packet = PositionTrackingDBServerBroadcastPacket()
-        packet.setAction(PositionTrackingDBServerBroadcastPacket.Action.DESTROY)
-        packet.setTrackingId(trackingHandler)
+        packet.action = (PositionTrackingDBServerBroadcastPacket.Action.DESTROY)
+        packet.trackingId = (trackingHandler)
         packet.dimension = 0
         packet.setPosition(0, 0, 0)
         packet.status = 2

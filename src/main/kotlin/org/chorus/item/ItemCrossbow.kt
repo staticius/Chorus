@@ -129,7 +129,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             } else {
                 val entity = EntityArrow(player.chunk, nbt, player, true)
                 val chargedItem = this.namedTag!!.getCompound("chargedItem")
-                entity.setItem(
+                entity.item = (
                     get(
                         chargedItem.getString("Name"),
                         chargedItem.getShort("Damage").toInt(),

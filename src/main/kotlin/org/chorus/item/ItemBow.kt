@@ -98,7 +98,7 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         val arrow = createEntity(EntityID.ARROW, player.chunk!!, nbt, player, f == maxForce) as EntityArrow? ?: return false
         val copy = itemArrow.clone() as ItemArrow
         copy.setCount(1)
-        arrow.setItem(copy)
+        arrow.item = (copy)
         val entityShootBowEvent = EntityShootBowEvent(player, this, arrow, f)
 
         if (f < 0.1 || ticksUsed < 3) {
@@ -107,17 +107,17 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
         Server.instance.pluginManager.callEvent(entityShootBowEvent)
         if (entityShootBowEvent.isCancelled) {
-            entityShootBowEvent.getProjectile().kill()
+            entityShootBowEvent.projectile.kill()
             player.inventory.sendContents(player)
             player.offhandInventory!!.sendContents(player)
         } else {
-            entityShootBowEvent.getProjectile()
-                .setMotion(entityShootBowEvent.getProjectile().getMotion().multiply(entityShootBowEvent.force))
+            entityShootBowEvent.projectile
+                .setMotion(entityShootBowEvent.projectile.getMotion().multiply(entityShootBowEvent.force))
             val infinityEnchant = this.getEnchantment(Enchantment.Companion.ID_BOW_INFINITY)
             val infinity = infinityEnchant != null && infinityEnchant.level > 0
-            val projectile = entityShootBowEvent.getProjectile()
+            val projectile = entityShootBowEvent.projectile
             if (infinity && (projectile is EntityArrow)) {
-                projectile.setPickupMode(EntityProjectile.PICKUP_CREATIVE)
+                projectile.pickupMode = (EntityProjectile.PICKUP_CREATIVE)
             }
 
             for (enc in this.enchantments) {
@@ -152,13 +152,13 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                     }
                 }
             }
-            if (entityShootBowEvent.getProjectile() != null) {
-                val projectev = ProjectileLaunchEvent(entityShootBowEvent.getProjectile(), player)
+            if (entityShootBowEvent.projectile != null) {
+                val projectev = ProjectileLaunchEvent(entityShootBowEvent.projectile, player)
                 Server.instance.pluginManager.callEvent(projectev)
                 if (projectev.isCancelled) {
-                    entityShootBowEvent.getProjectile().kill()
+                    entityShootBowEvent.projectile.kill()
                 } else {
-                    entityShootBowEvent.getProjectile().spawnToAll()
+                    entityShootBowEvent.projectile.spawnToAll()
                     player.level!!.addSound(player.position, Sound.RANDOM_BOW)
                 }
             }

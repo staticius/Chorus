@@ -91,15 +91,33 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     protected var canTrade: Boolean? = null
 
-    protected var displayName: String? = null
+    protected var displayName: String = ""
+        set(value) {
+            field = value
+            namedTag!!.putString("displayName", value)
+        }
 
     override var tradeTier: Int? = 0
 
     protected var maxTradeTier: Int = 0
+        set(value) {
+            field = value
+            this.setDataProperty(EntityDataTypes.MAX_TRADE_TIER, value)
+            namedTag!!.putInt("maxTradeTier", value)
+        }
 
     protected var tradeExp: Int = 0
+        set(value) {
+            field = value
+            this.setDataProperty(EntityDataTypes.TRADE_EXPERIENCE, value)
+            namedTag!!.putInt("tradeExp", value)
+        }
 
     protected var tradeSeed: Int = 0
+        set(value) {
+            field = value
+            namedTag!!.putInt("tradeSeed", value)
+        }
 
     /**
      * 0 generic
@@ -481,7 +499,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         super.initEntity()
         setTradingPlayer(0L)
         if (!namedTag!!.contains("tradeSeed")) {
-            this.setTradeSeed(ChorusRandom().nextInt(Int.MAX_VALUE - 1))
+            this.tradeSeed = (ChorusRandom().nextInt(Int.MAX_VALUE - 1))
         } else {
             this.tradeSeed = namedTag!!.getInt("tradeSeed")
         }
@@ -491,7 +509,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
             this.canTrade = namedTag!!.getBoolean("canTrade")
         }
         if (!namedTag!!.contains("displayName") && profession != 0) {
-            this.setDisplayName(getProfessionName(profession)!!)
+            this.displayName = (getProfessionName(profession)!!)
         } else {
             this.displayName = namedTag!!.getString("displayName")
         }
@@ -501,14 +519,14 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
             this.tradeTier = namedTag!!.getInt("tradeTier")
         }
         if (!namedTag!!.contains("maxTradeTier")) {
-            this.setMaxTradeTier(5)
+            this.maxTradeTier = (5)
         } else {
             val maxTradeTier = namedTag!!.getInt("maxTradeTier")
             this.maxTradeTier = maxTradeTier
             this.setDataProperty(EntityDataTypes.Companion.MAX_TRADE_TIER, maxTradeTier)
         }
         if (!namedTag!!.contains("tradeExp")) {
-            this.setTradeExp(0)
+            this.tradeExp = (0)
         } else {
             val tradeExp = namedTag!!.getInt("tradeExp")
             this.tradeExp = tradeExp
@@ -782,14 +800,6 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
     }
 
     /**
-     * @param displayName 设置交易UI的显示名称
-     */
-    fun setDisplayName(displayName: String) {
-        this.displayName = displayName
-        namedTag!!.putString("displayName", displayName)
-    }
-
-    /**
      * @return 该村民的交易等级
      */
     fun getTradeTier(): Int {
@@ -852,27 +862,9 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         player.dataPacket(pk1)
     }
 
-    /**
-     * @param maxTradeTier 设置村民所允许的最大交易等级
-     */
-    fun setMaxTradeTier(maxTradeTier: Int) {
-        this.maxTradeTier = maxTradeTier
-        this.setDataProperty(EntityDataTypes.Companion.MAX_TRADE_TIER, 5)
-        namedTag!!.putInt("maxTradeTier", this.tradeTier!!)
-    }
-
     override fun close() {
         getTradeNetIds().forEach(Consumer { key: Int? -> TradeRecipeBuildUtils.RECIPE_MAP.remove(key) })
         super.close()
-    }
-
-    /**
-     * @param tradeExp 设置村民当前的经验值
-     */
-    fun setTradeExp(tradeExp: Int) {
-        this.tradeExp = tradeExp
-        this.setDataProperty(EntityDataTypes.Companion.TRADE_EXPERIENCE, 10)
-        namedTag!!.putInt("tradeExp", this.tradeTier!!)
     }
 
 
@@ -881,11 +873,6 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
             player.addWindow(tradeInventory!!)
             return true
         } else return false
-    }
-
-    protected fun setTradeSeed(tradeSeed: Int) {
-        this.tradeSeed = tradeSeed
-        namedTag!!.putInt("tradeSeed", tradeSeed)
     }
 
     fun addExperience(xp: Int) {
@@ -941,7 +928,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         } else {
             getTradeNetIds().forEach(Consumer { key -> TradeRecipeBuildUtils.RECIPE_MAP.remove(key) })
             val profession = Profession.getProfession(this.profession)!!
-            setDisplayName(profession.getName())
+            this.displayName = (profession.getName())
             for (trade in profession.buildTrades(tradeSeed).all) {
                 getTradeNetIds().add(trade.getInt("netId"))
             }

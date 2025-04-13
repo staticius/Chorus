@@ -1,6 +1,5 @@
 package org.chorus.level.generator
 
-import com.google.common.base.Preconditions
 import org.chorus.Server
 import java.util.concurrent.Executor
 
@@ -28,25 +27,20 @@ abstract class GenerateStage {
     }
 
     class Builder internal constructor() {
-        var start: GenerateStage? = null
+        lateinit var start: GenerateStage
         var end: GenerateStage? = null
             private set
 
-        fun start(start: GenerateStage?): Builder {
+        fun start(start: GenerateStage): Builder {
             this.start = start
             end = start
             return this
         }
 
         fun next(next: GenerateStage): Builder {
-            start!!.next(next)
+            start.next(next)
             end = next
             return this
-        }
-
-        fun getStart(): GenerateStage {
-            Preconditions.checkNotNull(start, "Starting GenerateStage must be set")
-            return start!!
         }
     }
 }

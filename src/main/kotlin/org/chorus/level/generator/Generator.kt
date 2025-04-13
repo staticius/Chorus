@@ -12,17 +12,13 @@ abstract class Generator(val dimensionData: DimensionData, val settings: Map<Str
     BlockID {
     protected val start: GenerateStage
     protected val end: GenerateStage?
-    protected var level: Level? = null
+    var level: Level? = null
 
     init {
         val builder = GenerateStage.Builder()
         stages(builder)
         this.start = builder.start!!
         this.end = builder.end
-    }
-
-    fun setLevel(level: Level?) {
-        this.level = level
     }
 
     abstract fun stages(builder: GenerateStage.Builder)

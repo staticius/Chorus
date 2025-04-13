@@ -120,7 +120,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
     }
 
     override fun enablePlugin(plugin: Plugin) {
-        if (plugin is PluginBase && !plugin.isEnabled()) {
+        if (plugin is PluginBase && !plugin.isEnabled) {
             JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.enable", plugin.description.fullName))
             plugin.isEnabled = true
             server.pluginManager.callEvent(PluginEnableEvent(plugin))
@@ -129,7 +129,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
 
 
     override fun disablePlugin(plugin: Plugin) {
-        if (plugin is PluginBase && plugin.isEnabled()) {
+        if (plugin is PluginBase && plugin.isEnabled) {
             if (plugin === InternalPlugin.Companion.INSTANCE) {
                 throw UnsupportedOperationException("The PowerNukkitX Internal Plugin cannot be disabled")
             }

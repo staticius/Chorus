@@ -549,7 +549,7 @@ class Level(
         log.info(
             Server.instance.baseLang.tr(
                 "chorus.level.unloading",
-                TextFormat.GREEN.toString() + this.getName() + TextFormat.WHITE
+                TextFormat.GREEN.toString() + this.getLevelName() + TextFormat.WHITE
             )
         )
         val defaultLevel = Server.instance.defaultLevel
@@ -570,7 +570,7 @@ class Level(
         if (force && Server.instance.settings.levelSettings.levelThread) {
             Server.instance.scheduler.scheduleDelayedTask({
                 if (baseTickThread.isAlive) {
-                    Server.instance.logger.critical(getName() + " failed to unload. Trying to stop the thread.")
+                    Server.instance.logger.critical(getLevelName() + " failed to unload. Trying to stop the thread.")
                     baseTickThread.interrupt()
                 }
             }, 100)
@@ -706,7 +706,7 @@ class Level(
                     this.tickRateCounter = this.tickRate
                 }
                 log.debug(
-                    "Raising level \"{}\" tick rate to {} ticks", this.getName(),
+                    "Raising level \"{}\" tick rate to {} ticks", this.getLevelName(),
                     tickRate
                 )
             } else if (tickMs >= 50) {
@@ -715,14 +715,14 @@ class Level(
                     this.tickRate = (baseTickRate + 1).coerceAtLeast(autoTickRateLimit.coerceAtMost(tickMs / 50))
                     log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                        this.getName(), round(tickMs.toDouble()),
+                        this.getLevelName(), round(tickMs.toDouble()),
                         tickRate
                     )
                 } else if ((tickMs / this.tickRate) >= 50 && this.tickRate < autoTickRateLimit) {
                     this.tickRate += 1
                     log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                        this.getName(), round(tickMs.toDouble()),
+                        this.getLevelName(), round(tickMs.toDouble()),
                         tickRate
                     )
                 }
@@ -986,7 +986,7 @@ class Level(
             if (!ev.isCancelled) {
                 bolt.spawnToAll()
             } else {
-                bolt.setEffect(false)
+                bolt.isEffect = (false)
             }
 
             this.addLevelSoundEvent(
@@ -3184,7 +3184,7 @@ class Level(
                     generatorConfig.dimensionData,
                     generatorConfig.preset
                 )
-            generator.setLevel(this@Level)
+            generator.level = (this@Level)
         } catch (e: Throwable) {
             throw RuntimeException(e)
         }
@@ -3256,7 +3256,7 @@ class Level(
         this.tickRate = 1
 
         this.skyLightSubtracted = this.calculateSkylightSubtracted(1f)
-        val levelName = getName()
+        val levelName = getLevelName()
         baseTickGameLoop = GameLoop.builder()
             .onTick { this.doTick(it) }
             .onStop { this.remove() }
@@ -3604,7 +3604,7 @@ class Level(
 
         val tickingAreaManager = Server.instance.tickingAreaManager
         if (tickingAreaManager.getTickingAreaByChunk(
-                this.getName(),
+                this.getLevelName(),
                 TickingArea.ChunkPos(getHashX(hash), getHashZ(hash))
             ) != null
         ) {
@@ -3907,7 +3907,7 @@ class Level(
     val isDaytime: Boolean
         get() = this.skyLightSubtracted < 4
 
-    fun getName(): String {
+    fun getLevelName(): String {
         return requireProvider().name
     }
 
