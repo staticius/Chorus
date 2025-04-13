@@ -40,11 +40,6 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
     var alreadyCollided: Boolean = false
     protected lateinit var trident: Item
 
-    // Default Values
-    protected var gravity: Float = 0.04f
-
-    protected var drag: Float = 0.01f
-
     var pickupMode: Int = 0
     private var collisionPos: Vector3? = null
     private var stuckToBlockPos: BlockVector3? = null
@@ -279,14 +274,6 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         }
     }
 
-    fun getPickupMode(): Int {
-        return this.pickupMode
-    }
-
-    fun setPickupMode(pickupMode: Int) {
-        this.pickupMode = pickupMode
-    }
-
     override fun onCollideWithBlock(locator: Locator, motion: Vector3) {
         if (this.noClip) {
             return
@@ -335,7 +322,7 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
     }
 
     override val isCreative: Boolean
-        get() = getPickupMode() == EntityProjectile.PICKUP_CREATIVE
+        get() = pickupMode == EntityProjectile.PICKUP_CREATIVE
 
     fun hasPlayer(): Boolean {
         return player

@@ -61,7 +61,7 @@ class ItemTrident @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         val f = min((p * p + p * 2) / 3, 1.0) * 2.5
 
         if (player.isCreative) {
-            trident.setPickupMode(EntityProjectile.PICKUP_CREATIVE)
+            trident.pickupMode = (EntityProjectile.PICKUP_CREATIVE)
         }
 
         trident.setFavoredSlot(player.inventory.heldItemIndex)

@@ -5037,7 +5037,7 @@ class Player(
 
                 val ev = InventoryPickupTridentEvent(this.inventory, entity)
 
-                val pickupMode = entity.getPickupMode()
+                val pickupMode = entity.pickupMode
                 if (pickupMode == EntityProjectile.PICKUP_NONE || (pickupMode == EntityProjectile.PICKUP_CREATIVE && !this.isCreative)) {
                     ev.setCancelled()
                 }
