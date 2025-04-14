@@ -1,7 +1,6 @@
 package org.chorus.item
 
-import org.chorus.block.Block
-import org.chorus.block.BlockID
+import org.chorus.block.*
 
 class ItemStainedGlassPane @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.STAINED_GLASS_PANE, meta, count) {
@@ -9,82 +8,82 @@ class ItemStainedGlassPane @JvmOverloads constructor(meta: Int = 0, count: Int =
         when (damage) {
             0 -> {
                 this.name = "White Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.WHITE_STAINED_GLASS_PANE)
+                blockState = BlockWhiteStainedGlassPane.properties.defaultState
             }
 
             1 -> {
                 this.name = "Orange Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.ORANGE_STAINED_GLASS_PANE)
+                blockState = BlockOrangeStainedGlassPane.properties.defaultState
             }
 
             2 -> {
                 this.name = "Magenta Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.MAGENTA_STAINED_GLASS_PANE)
+                blockState = BlockMagentaStainedGlassPane.properties.defaultState
             }
 
             3 -> {
                 this.name = "Light Blue Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.LIGHT_BLUE_STAINED_GLASS_PANE)
+                blockState = BlockLightBlueStainedGlassPane.properties.defaultState
             }
 
             4 -> {
                 this.name = "Yellow Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.YELLOW_STAINED_GLASS_PANE)
+                blockState = BlockYellowStainedGlassPane.properties.defaultState
             }
 
             5 -> {
                 this.name = "Lime Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.LIME_STAINED_GLASS_PANE)
+                blockState = BlockLimeStainedGlassPane.properties.defaultState
             }
 
             6 -> {
                 this.name = "Pink Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.PINK_STAINED_GLASS_PANE)
+                blockState = BlockPinkStainedGlassPane.properties.defaultState
             }
 
             7 -> {
                 this.name = "Gray Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.GRAY_STAINED_GLASS_PANE)
+                blockState = BlockGrayStainedGlassPane.properties.defaultState
             }
 
             8 -> {
                 this.name = "Light Gray Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_STAINED_GLASS_PANE)
+                blockState = BlockLightGrayStainedGlassPane.properties.defaultState
             }
 
             9 -> {
                 this.name = "Cyan Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.CYAN_STAINED_GLASS_PANE)
+                blockState = BlockCyanStainedGlassPane.properties.defaultState
             }
 
             10 -> {
                 this.name = "Purple Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.PURPLE_STAINED_GLASS_PANE)
+                blockState = BlockPurpleStainedGlassPane.properties.defaultState
             }
 
             11 -> {
                 this.name = "Blue Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.BLUE_STAINED_GLASS_PANE)
+                blockState = BlockBlueStainedGlassPane.properties.defaultState
             }
 
             12 -> {
                 this.name = "Brown Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.BROWN_STAINED_GLASS_PANE)
+                blockState = BlockBrownStainedGlassPane.properties.defaultState
             }
 
             13 -> {
                 this.name = "Green Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.GREEN_STAINED_GLASS_PANE)
+                blockState = BlockGreenStainedGlassPane.properties.defaultState
             }
 
             14 -> {
                 this.name = "Red Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.RED_STAINED_GLASS_PANE)
+                blockState = BlockRedStainedGlassPane.properties.defaultState
             }
 
             15 -> {
                 this.name = "Black Stained Glass Pane"
-                blockUnsafe = Block.get(BlockID.BLACK_STAINED_GLASS_PANE)
+                blockState = BlockBlackStainedGlassPane.properties.defaultState
             }
         }
         this.meta = 0

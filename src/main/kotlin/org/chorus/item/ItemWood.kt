@@ -1,7 +1,6 @@
 package org.chorus.item
 
-import org.chorus.block.Block
-import org.chorus.block.BlockID
+import org.chorus.block.*
 
 class ItemWood @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.WOOD, meta, count) {
@@ -9,62 +8,62 @@ class ItemWood @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         when (damage) {
             0, 6, 7, 14, 15 -> {
                 name = "Oak Wood"
-                blockUnsafe = Block.get(BlockID.OAK_WOOD)
+                blockState = BlockOakWood.properties.defaultState
             }
 
             1 -> {
                 name = "Spruce Wood"
-                blockUnsafe = Block.get(BlockID.SPRUCE_WOOD)
+                blockState = BlockSpruceWood.properties.defaultState
             }
 
             2 -> {
                 name = "Birch Wood"
-                blockUnsafe = Block.get(BlockID.BIRCH_WOOD)
+                blockState = BlockBirchWood.properties.defaultState
             }
 
             3 -> {
                 name = "Jungle Wood"
-                blockUnsafe = Block.get(BlockID.JUNGLE_WOOD)
+                blockState = BlockJungleWood.properties.defaultState
             }
 
             4 -> {
                 name = "Acacia Wood"
-                blockUnsafe = Block.get(BlockID.ACACIA_WOOD)
+                blockState = BlockAcaciaWood.properties.defaultState
             }
 
             5 -> {
                 name = "Dark Oak Wood"
-                blockUnsafe = Block.get(BlockID.DARK_OAK_WOOD)
+                blockState = BlockDarkOakWood.properties.defaultState
             }
 
             8 -> {
                 name = "Stripped Oak Wood"
-                blockUnsafe = Block.get(BlockID.STRIPPED_OAK_WOOD)
+                blockState = BlockStrippedOakWood.properties.defaultState
             }
 
             9 -> {
                 name = "Stripped Spruce Wood"
-                blockUnsafe = Block.get(BlockID.STRIPPED_SPRUCE_WOOD)
+                blockState = BlockStrippedSpruceWood.properties.defaultState
             }
 
             10 -> {
                 name = "Stripped Birch Wood"
-                blockUnsafe = Block.get(BlockID.STRIPPED_BIRCH_WOOD)
+                blockState = BlockStrippedBirchWood.properties.defaultState
             }
 
             11 -> {
                 name = "Stripped Jungle Wood"
-                blockUnsafe = Block.get(BlockID.STRIPPED_JUNGLE_WOOD)
+                blockState = BlockStrippedJungleWood.properties.defaultState
             }
 
             12 -> {
                 name = "Stripped Acacia Wood"
-                blockUnsafe = Block.get(BlockID.STRIPPED_ACACIA_WOOD)
+                blockState = BlockStrippedAcaciaWood.properties.defaultState
             }
 
             13 -> {
                 name = "Stripped Dark Oak Wood"
-                blockUnsafe = Block.get(BlockID.STRIPPED_DARK_OAK_WOOD)
+                blockState = BlockStrippedDarkOakWood.properties.defaultState
             }
 
             else -> throw IllegalArgumentException("Invalid damage: $damage")

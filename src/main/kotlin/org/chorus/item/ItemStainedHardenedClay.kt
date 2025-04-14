@@ -1,7 +1,6 @@
 package org.chorus.item
 
-import org.chorus.block.Block
-import org.chorus.block.BlockID
+import org.chorus.block.*
 
 class ItemStainedHardenedClay @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.STAINED_HARDENED_CLAY, meta, count) {
@@ -9,322 +8,82 @@ class ItemStainedHardenedClay @JvmOverloads constructor(meta: Int = 0, count: In
         when (damage) {
             0 -> {
                 this.name = "White Terracotta"
-                blockUnsafe = Block.get(BlockID.WHITE_TERRACOTTA)
-                this.name = "Orange Terracotta"
-                blockUnsafe = Block.get(BlockID.ORANGE_TERRACOTTA)
-                this.name = "Magenta Terracotta"
-                blockUnsafe = Block.get(BlockID.MAGENTA_TERRACOTTA)
-                this.name = "Light Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_BLUE_TERRACOTTA)
-                this.name = "Yellow Terracotta"
-                blockUnsafe = Block.get(BlockID.YELLOW_TERRACOTTA)
-                this.name = "Lime Terracotta"
-                blockUnsafe = Block.get(BlockID.LIME_TERRACOTTA)
-                this.name = "Pink Terracotta"
-                blockUnsafe = Block.get(BlockID.PINK_TERRACOTTA)
-                this.name = "Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.GRAY_TERRACOTTA)
-                this.name = "Light Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_TERRACOTTA)
-                this.name = "Cyan Terracotta"
-                blockUnsafe = Block.get(BlockID.CYAN_TERRACOTTA)
-                this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockWhiteTerracotta.properties.defaultState
             }
 
             1 -> {
                 this.name = "Orange Terracotta"
-                blockUnsafe = Block.get(BlockID.ORANGE_TERRACOTTA)
-                this.name = "Magenta Terracotta"
-                blockUnsafe = Block.get(BlockID.MAGENTA_TERRACOTTA)
-                this.name = "Light Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_BLUE_TERRACOTTA)
-                this.name = "Yellow Terracotta"
-                blockUnsafe = Block.get(BlockID.YELLOW_TERRACOTTA)
-                this.name = "Lime Terracotta"
-                blockUnsafe = Block.get(BlockID.LIME_TERRACOTTA)
-                this.name = "Pink Terracotta"
-                blockUnsafe = Block.get(BlockID.PINK_TERRACOTTA)
-                this.name = "Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.GRAY_TERRACOTTA)
-                this.name = "Light Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_TERRACOTTA)
-                this.name = "Cyan Terracotta"
-                blockUnsafe = Block.get(BlockID.CYAN_TERRACOTTA)
-                this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockOrangeTerracotta.properties.defaultState
             }
 
             2 -> {
                 this.name = "Magenta Terracotta"
-                blockUnsafe = Block.get(BlockID.MAGENTA_TERRACOTTA)
-                this.name = "Light Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_BLUE_TERRACOTTA)
-                this.name = "Yellow Terracotta"
-                blockUnsafe = Block.get(BlockID.YELLOW_TERRACOTTA)
-                this.name = "Lime Terracotta"
-                blockUnsafe = Block.get(BlockID.LIME_TERRACOTTA)
-                this.name = "Pink Terracotta"
-                blockUnsafe = Block.get(BlockID.PINK_TERRACOTTA)
-                this.name = "Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.GRAY_TERRACOTTA)
-                this.name = "Light Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_TERRACOTTA)
-                this.name = "Cyan Terracotta"
-                blockUnsafe = Block.get(BlockID.CYAN_TERRACOTTA)
-                this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockMagentaTerracotta.properties.defaultState
             }
 
             3 -> {
                 this.name = "Light Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_BLUE_TERRACOTTA)
-                this.name = "Yellow Terracotta"
-                blockUnsafe = Block.get(BlockID.YELLOW_TERRACOTTA)
-                this.name = "Lime Terracotta"
-                blockUnsafe = Block.get(BlockID.LIME_TERRACOTTA)
-                this.name = "Pink Terracotta"
-                blockUnsafe = Block.get(BlockID.PINK_TERRACOTTA)
-                this.name = "Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.GRAY_TERRACOTTA)
-                this.name = "Light Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_TERRACOTTA)
-                this.name = "Cyan Terracotta"
-                blockUnsafe = Block.get(BlockID.CYAN_TERRACOTTA)
-                this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockLightBlueTerracotta.properties.defaultState
             }
 
             4 -> {
                 this.name = "Yellow Terracotta"
-                blockUnsafe = Block.get(BlockID.YELLOW_TERRACOTTA)
-                this.name = "Lime Terracotta"
-                blockUnsafe = Block.get(BlockID.LIME_TERRACOTTA)
-                this.name = "Pink Terracotta"
-                blockUnsafe = Block.get(BlockID.PINK_TERRACOTTA)
-                this.name = "Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.GRAY_TERRACOTTA)
-                this.name = "Light Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_TERRACOTTA)
-                this.name = "Cyan Terracotta"
-                blockUnsafe = Block.get(BlockID.CYAN_TERRACOTTA)
-                this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockYellowTerracotta.properties.defaultState
             }
 
             5 -> {
                 this.name = "Lime Terracotta"
-                blockUnsafe = Block.get(BlockID.LIME_TERRACOTTA)
-                this.name = "Pink Terracotta"
-                blockUnsafe = Block.get(BlockID.PINK_TERRACOTTA)
-                this.name = "Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.GRAY_TERRACOTTA)
-                this.name = "Light Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_TERRACOTTA)
-                this.name = "Cyan Terracotta"
-                blockUnsafe = Block.get(BlockID.CYAN_TERRACOTTA)
-                this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockLimeTerracotta.properties.defaultState
             }
 
             6 -> {
                 this.name = "Pink Terracotta"
-                blockUnsafe = Block.get(BlockID.PINK_TERRACOTTA)
-                this.name = "Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.GRAY_TERRACOTTA)
-                this.name = "Light Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_TERRACOTTA)
-                this.name = "Cyan Terracotta"
-                blockUnsafe = Block.get(BlockID.CYAN_TERRACOTTA)
-                this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockPinkTerracotta.properties.defaultState
             }
 
             7 -> {
                 this.name = "Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.GRAY_TERRACOTTA)
-                this.name = "Light Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_TERRACOTTA)
-                this.name = "Cyan Terracotta"
-                blockUnsafe = Block.get(BlockID.CYAN_TERRACOTTA)
-                this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockGrayTerracotta.properties.defaultState
             }
 
             8 -> {
                 this.name = "Light Gray Terracotta"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_TERRACOTTA)
-                this.name = "Cyan Terracotta"
-                blockUnsafe = Block.get(BlockID.CYAN_TERRACOTTA)
-                this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockLightGrayTerracotta.properties.defaultState
             }
 
             9 -> {
                 this.name = "Cyan Terracotta"
-                blockUnsafe = Block.get(BlockID.CYAN_TERRACOTTA)
-                this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockCyanTerracotta.properties.defaultState
             }
 
             10 -> {
                 this.name = "Purple Terracotta"
-                blockUnsafe = Block.get(BlockID.PURPLE_TERRACOTTA)
-                this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockPurpleTerracotta.properties.defaultState
             }
 
             11 -> {
                 this.name = "Blue Terracotta"
-                blockUnsafe = Block.get(BlockID.BLUE_TERRACOTTA)
-                this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockBlueTerracotta.properties.defaultState
             }
 
             12 -> {
                 this.name = "Brown Terracotta"
-                blockUnsafe = Block.get(BlockID.BROWN_TERRACOTTA)
-                this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockBrownTerracotta.properties.defaultState
             }
 
             13 -> {
                 this.name = "Green Terracotta"
-                blockUnsafe = Block.get(BlockID.GREEN_TERRACOTTA)
-                this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockGreenTerracotta.properties.defaultState
             }
 
             14 -> {
                 this.name = "Red Terracotta"
-                blockUnsafe = Block.get(BlockID.RED_TERRACOTTA)
-                this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockRedTerracotta.properties.defaultState
             }
 
             15 -> {
                 this.name = "Black Terracotta"
-                blockUnsafe = Block.get(BlockID.BLACK_TERRACOTTA)
+                blockState = BlockBlackTerracotta.properties.defaultState
             }
         }
         this.meta = 0

@@ -1,7 +1,6 @@
 package org.chorus.item
 
-import org.chorus.block.Block
-import org.chorus.block.BlockID
+import org.chorus.block.*
 
 class ItemWool @JvmOverloads constructor(aux: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.WOOL, aux, count) {
@@ -9,322 +8,82 @@ class ItemWool @JvmOverloads constructor(aux: Int = 0, count: Int = 1) :
         when (damage) {
             0 -> {
                 this.name = "White Wool"
-                blockUnsafe = Block.get(BlockID.WHITE_WOOL)
-                this.name = "Orange Wool"
-                blockUnsafe = Block.get(BlockID.ORANGE_WOOL)
-                this.name = "Magenta Wool"
-                blockUnsafe = Block.get(BlockID.MAGENTA_WOOL)
-                this.name = "Light Blue Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_BLUE_WOOL)
-                this.name = "Yellow Wool"
-                blockUnsafe = Block.get(BlockID.YELLOW_WOOL)
-                this.name = "Lime Wool"
-                blockUnsafe = Block.get(BlockID.LIME_WOOL)
-                this.name = "Pink Wool"
-                blockUnsafe = Block.get(BlockID.PINK_WOOL)
-                this.name = "Gray Wool"
-                blockUnsafe = Block.get(BlockID.GRAY_WOOL)
-                this.name = "Light Gray Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_WOOL)
-                this.name = "Cyan Wool"
-                blockUnsafe = Block.get(BlockID.CYAN_WOOL)
-                this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockWhiteWool.properties.defaultState
             }
 
             1 -> {
                 this.name = "Orange Wool"
-                blockUnsafe = Block.get(BlockID.ORANGE_WOOL)
-                this.name = "Magenta Wool"
-                blockUnsafe = Block.get(BlockID.MAGENTA_WOOL)
-                this.name = "Light Blue Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_BLUE_WOOL)
-                this.name = "Yellow Wool"
-                blockUnsafe = Block.get(BlockID.YELLOW_WOOL)
-                this.name = "Lime Wool"
-                blockUnsafe = Block.get(BlockID.LIME_WOOL)
-                this.name = "Pink Wool"
-                blockUnsafe = Block.get(BlockID.PINK_WOOL)
-                this.name = "Gray Wool"
-                blockUnsafe = Block.get(BlockID.GRAY_WOOL)
-                this.name = "Light Gray Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_WOOL)
-                this.name = "Cyan Wool"
-                blockUnsafe = Block.get(BlockID.CYAN_WOOL)
-                this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockOrangeWool.properties.defaultState
             }
 
             2 -> {
                 this.name = "Magenta Wool"
-                blockUnsafe = Block.get(BlockID.MAGENTA_WOOL)
-                this.name = "Light Blue Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_BLUE_WOOL)
-                this.name = "Yellow Wool"
-                blockUnsafe = Block.get(BlockID.YELLOW_WOOL)
-                this.name = "Lime Wool"
-                blockUnsafe = Block.get(BlockID.LIME_WOOL)
-                this.name = "Pink Wool"
-                blockUnsafe = Block.get(BlockID.PINK_WOOL)
-                this.name = "Gray Wool"
-                blockUnsafe = Block.get(BlockID.GRAY_WOOL)
-                this.name = "Light Gray Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_WOOL)
-                this.name = "Cyan Wool"
-                blockUnsafe = Block.get(BlockID.CYAN_WOOL)
-                this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockMagentaWool.properties.defaultState
             }
 
             3 -> {
                 this.name = "Light Blue Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_BLUE_WOOL)
-                this.name = "Yellow Wool"
-                blockUnsafe = Block.get(BlockID.YELLOW_WOOL)
-                this.name = "Lime Wool"
-                blockUnsafe = Block.get(BlockID.LIME_WOOL)
-                this.name = "Pink Wool"
-                blockUnsafe = Block.get(BlockID.PINK_WOOL)
-                this.name = "Gray Wool"
-                blockUnsafe = Block.get(BlockID.GRAY_WOOL)
-                this.name = "Light Gray Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_WOOL)
-                this.name = "Cyan Wool"
-                blockUnsafe = Block.get(BlockID.CYAN_WOOL)
-                this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockLightBlueWool.properties.defaultState
             }
 
             4 -> {
                 this.name = "Yellow Wool"
-                blockUnsafe = Block.get(BlockID.YELLOW_WOOL)
-                this.name = "Lime Wool"
-                blockUnsafe = Block.get(BlockID.LIME_WOOL)
-                this.name = "Pink Wool"
-                blockUnsafe = Block.get(BlockID.PINK_WOOL)
-                this.name = "Gray Wool"
-                blockUnsafe = Block.get(BlockID.GRAY_WOOL)
-                this.name = "Light Gray Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_WOOL)
-                this.name = "Cyan Wool"
-                blockUnsafe = Block.get(BlockID.CYAN_WOOL)
-                this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockYellowWool.properties.defaultState
             }
 
             5 -> {
                 this.name = "Lime Wool"
-                blockUnsafe = Block.get(BlockID.LIME_WOOL)
-                this.name = "Pink Wool"
-                blockUnsafe = Block.get(BlockID.PINK_WOOL)
-                this.name = "Gray Wool"
-                blockUnsafe = Block.get(BlockID.GRAY_WOOL)
-                this.name = "Light Gray Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_WOOL)
-                this.name = "Cyan Wool"
-                blockUnsafe = Block.get(BlockID.CYAN_WOOL)
-                this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockLimeWool.properties.defaultState
             }
 
             6 -> {
                 this.name = "Pink Wool"
-                blockUnsafe = Block.get(BlockID.PINK_WOOL)
-                this.name = "Gray Wool"
-                blockUnsafe = Block.get(BlockID.GRAY_WOOL)
-                this.name = "Light Gray Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_WOOL)
-                this.name = "Cyan Wool"
-                blockUnsafe = Block.get(BlockID.CYAN_WOOL)
-                this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockPinkWool.properties.defaultState
             }
 
             7 -> {
                 this.name = "Gray Wool"
-                blockUnsafe = Block.get(BlockID.GRAY_WOOL)
-                this.name = "Light Gray Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_WOOL)
-                this.name = "Cyan Wool"
-                blockUnsafe = Block.get(BlockID.CYAN_WOOL)
-                this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockGrayWool.properties.defaultState
             }
 
             8 -> {
                 this.name = "Light Gray Wool"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_WOOL)
-                this.name = "Cyan Wool"
-                blockUnsafe = Block.get(BlockID.CYAN_WOOL)
-                this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockLightGrayWool.properties.defaultState
             }
 
             9 -> {
                 this.name = "Cyan Wool"
-                blockUnsafe = Block.get(BlockID.CYAN_WOOL)
-                this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockCyanWool.properties.defaultState
             }
 
             10 -> {
                 this.name = "Purple Wool"
-                blockUnsafe = Block.get(BlockID.PURPLE_WOOL)
-                this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockPurpleWool.properties.defaultState
             }
 
             11 -> {
                 this.name = "Blue Wool"
-                blockUnsafe = Block.get(BlockID.BLUE_WOOL)
-                this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockBlueWool.properties.defaultState
             }
 
             12 -> {
                 this.name = "Brown Wool"
-                blockUnsafe = Block.get(BlockID.BROWN_WOOL)
-                this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockBrownWool.properties.defaultState
             }
 
             13 -> {
                 this.name = "Green Wool"
-                blockUnsafe = Block.get(BlockID.GREEN_WOOL)
-                this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockGreenWool.properties.defaultState
             }
 
             14 -> {
                 this.name = "Red Wool"
-                blockUnsafe = Block.get(BlockID.RED_WOOL)
-                this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockRedWool.properties.defaultState
             }
 
             15 -> {
                 this.name = "Black Wool"
-                blockUnsafe = Block.get(BlockID.BLACK_WOOL)
+                blockState = BlockBlackWool.properties.defaultState
             }
         }
         this.meta = 0

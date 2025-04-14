@@ -44,7 +44,6 @@ abstract class Item : Cloneable, ItemID, Loggable {
 
     var blockState: BlockState? = null
 
-    protected var block: Block? = null
     protected var hasMeta: Boolean = true
     var compoundTag: ByteArray = EmptyArrays.EMPTY_BYTES
         private set
@@ -770,18 +769,6 @@ abstract class Item : Cloneable, ItemID, Loggable {
     open fun getSafeBlockState(): BlockState {
         return this.blockState ?: BlockAir.properties.defaultState
     }
-
-    @get:ApiStatus.Internal
-    @set:ApiStatus.Internal
-    open var blockUnsafe: Block?
-        get() = this.block
-        set(block) {
-            this.block = block
-            if (block != null) {
-                this.id = block.itemId.intern()
-                this.identifier = Identifier(id)
-            }
-        }
 
     private val airRuntimeId: Int
         get() = Registries.ITEM_RUNTIMEID.getInt(BlockID.AIR)

@@ -10,86 +10,80 @@ class ItemWoodenSlab @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         when (damage) {
             0, 6, 7 -> {
                 name = "Oak Slab"
-                blockUnsafe = Block.get(BlockID.OAK_SLAB)
+                blockState = BlockOakSlab.properties.defaultState
             }
 
             1 -> {
                 name = "Spruce Slab"
-                blockUnsafe = Block.get(BlockID.SPRUCE_SLAB)
+                blockState = BlockSpruceSlab.properties.defaultState
             }
 
             2 -> {
                 name = "Birch Slab"
-                blockUnsafe = Block.get(BlockID.BIRCH_SLAB)
+                blockState = BlockBirchSlab.properties.defaultState
             }
 
             3 -> {
                 name = "Jungle Slab"
-                blockUnsafe = Block.get(BlockID.JUNGLE_SLAB)
+                blockState = BlockJungleSlab.properties.defaultState
             }
 
             4 -> {
                 name = "Acacia Slab"
-                blockUnsafe = Block.get(BlockID.ACACIA_SLAB)
+                blockState = BlockAcaciaSlab.properties.defaultState
             }
 
             5 -> {
                 name = "Dark Oak Slab"
-                blockUnsafe = Block.get(BlockID.DARK_OAK_SLAB)
+                blockState = BlockDarkOakSlab.properties.defaultState
             }
 
             8, 14, 15 -> {
                 name = "Oak Slab (Top)"
-                blockUnsafe =
-                    BlockOakSlab.properties.getBlockState(
-                        CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
-                        MinecraftVerticalHalf.TOP
-                    ).toBlock()
+                blockState = BlockOakSlab.properties.getBlockState(
+                    CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
+                    MinecraftVerticalHalf.TOP
+                )
             }
 
             9 -> {
                 name = "Spruce Slab (Top)"
-                blockUnsafe =
-                    BlockSpruceSlab.properties.getBlockState(
-                        CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
-                        MinecraftVerticalHalf.TOP
-                    ).toBlock()
+                blockState = BlockSpruceSlab.properties.getBlockState(
+                    CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
+                    MinecraftVerticalHalf.TOP
+                )
             }
 
             10 -> {
                 name = "Birch Slab (Top)"
-                blockUnsafe =
-                    BlockBirchSlab.properties.getBlockState(
-                        CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
-                        MinecraftVerticalHalf.TOP
-                    ).toBlock()
+                blockState = BlockBirchSlab.properties.getBlockState(
+                    CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
+                    MinecraftVerticalHalf.TOP
+                )
             }
 
             11 -> {
                 name = "Jungle Slab (Top)"
-                blockUnsafe =
-                    BlockJungleSlab.properties.getBlockState(
-                        CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
-                        MinecraftVerticalHalf.TOP
-                    ).toBlock()
+                blockState = BlockJungleSlab.properties.getBlockState(
+                    CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
+                    MinecraftVerticalHalf.TOP
+                )
             }
 
             12 -> {
                 name = "Acacia Slab (Top)"
-                blockUnsafe =
-                    BlockAcaciaSlab.properties.getBlockState(
-                        CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
-                        MinecraftVerticalHalf.TOP
-                    ).toBlock()
+                blockState = BlockAcaciaSlab.properties.getBlockState(
+                    CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
+                    MinecraftVerticalHalf.TOP
+                )
             }
 
             13 -> {
                 name = "Dark Oak Slab (Top)"
-                blockUnsafe =
-                    BlockDarkOakSlab.properties.getBlockState(
-                        CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
-                        MinecraftVerticalHalf.TOP
-                    ).toBlock()
+                blockState = BlockDarkOakSlab.properties.getBlockState(
+                    CommonBlockProperties.MINECRAFT_VERTICAL_HALF,
+                    MinecraftVerticalHalf.TOP
+                )
             }
 
             else -> throw IllegalArgumentException("Invalid damage: $damage")

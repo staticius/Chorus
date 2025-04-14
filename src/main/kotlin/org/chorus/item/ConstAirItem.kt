@@ -25,11 +25,6 @@ class ConstAirItem : Item("minecraft:air") {
         return 0
     }
 
-    override var blockUnsafe: Block?
-        get() = BlockAir()
-        set(block) {
-        }
-
     override fun getSafeBlockState(): BlockState {
         return BlockAir.properties.defaultState
     }
