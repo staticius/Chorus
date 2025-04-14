@@ -1102,7 +1102,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                     .append('_')
                     .append(item.getCount())
                     .append('_')
-                    .append(if (item.isBlock()) item.blockUnsafe!!.blockState.specialValue().toInt() else item.damage)
+                    .append(if (item.isBlock()) item.getSafeBlockState().specialValue().toInt() else item.damage)
                     .append("_from_")
             }
             var limit = 5
@@ -1118,7 +1118,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                         .append('_')
                         .append(item.getCount())
                         .append('_')
-                        .append(if (item.damage != 0) item.damage else if (item.isBlock()) item.blockUnsafe!!.runtimeId else 0)
+                        .append(if (item.damage != 0) item.damage else if (item.isBlock()) item.getSafeBlockState().toBlock().runtimeId else 0)
                         .append("_and_")
                 }
             }

@@ -1,7 +1,6 @@
 package org.chorus.item
 
-import org.chorus.block.Block
-import org.chorus.block.BlockID
+import org.chorus.block.*
 
 class ItemPlanks @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.PLANKS, meta, count) {
@@ -9,62 +8,32 @@ class ItemPlanks @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         when (damage) {
             0 -> {
                 this.name = "Oak Planks"
-                blockUnsafe = Block.get(BlockID.OAK_PLANKS)
-                this.name = "Spruce Planks"
-                blockUnsafe = Block.get(BlockID.SPRUCE_PLANKS)
-                this.name = "Birch Planks"
-                blockUnsafe = Block.get(BlockID.BIRCH_PLANKS)
-                this.name = "Jungle Planks"
-                blockUnsafe = Block.get(BlockID.JUNGLE_PLANKS)
-                this.name = "Acacia Planks"
-                blockUnsafe = Block.get(BlockID.ACACIA_PLANKS)
-                this.name = "Dark Oak Planks"
-                blockUnsafe = Block.get(BlockID.DARK_OAK_PLANKS)
+                blockState = BlockOakPlanks.properties.defaultState
             }
 
             1 -> {
                 this.name = "Spruce Planks"
-                blockUnsafe = Block.get(BlockID.SPRUCE_PLANKS)
-                this.name = "Birch Planks"
-                blockUnsafe = Block.get(BlockID.BIRCH_PLANKS)
-                this.name = "Jungle Planks"
-                blockUnsafe = Block.get(BlockID.JUNGLE_PLANKS)
-                this.name = "Acacia Planks"
-                blockUnsafe = Block.get(BlockID.ACACIA_PLANKS)
-                this.name = "Dark Oak Planks"
-                blockUnsafe = Block.get(BlockID.DARK_OAK_PLANKS)
+                blockState = BlockSprucePlanks.properties.defaultState
             }
 
             2 -> {
                 this.name = "Birch Planks"
-                blockUnsafe = Block.get(BlockID.BIRCH_PLANKS)
-                this.name = "Jungle Planks"
-                blockUnsafe = Block.get(BlockID.JUNGLE_PLANKS)
-                this.name = "Acacia Planks"
-                blockUnsafe = Block.get(BlockID.ACACIA_PLANKS)
-                this.name = "Dark Oak Planks"
-                blockUnsafe = Block.get(BlockID.DARK_OAK_PLANKS)
+                blockState = BlockBirchPlanks.properties.defaultState
             }
 
             3 -> {
                 this.name = "Jungle Planks"
-                blockUnsafe = Block.get(BlockID.JUNGLE_PLANKS)
-                this.name = "Acacia Planks"
-                blockUnsafe = Block.get(BlockID.ACACIA_PLANKS)
-                this.name = "Dark Oak Planks"
-                blockUnsafe = Block.get(BlockID.DARK_OAK_PLANKS)
+                blockState = BlockJunglePlanks.properties.defaultState
             }
 
             4 -> {
                 this.name = "Acacia Planks"
-                blockUnsafe = Block.get(BlockID.ACACIA_PLANKS)
-                this.name = "Dark Oak Planks"
-                blockUnsafe = Block.get(BlockID.DARK_OAK_PLANKS)
+                blockState = BlockAcaciaPlanks.properties.defaultState
             }
 
             5 -> {
                 this.name = "Dark Oak Planks"
-                blockUnsafe = Block.get(BlockID.DARK_OAK_PLANKS)
+                blockState = BlockDarkOakPlanks.properties.defaultState
             }
         }
         this.meta = 0

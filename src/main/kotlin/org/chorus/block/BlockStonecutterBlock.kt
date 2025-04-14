@@ -90,7 +90,7 @@ class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState = C
     }
 
     override fun toItem(): Item {
-        return ItemBlock(BlockStonecutterBlock())
+        return ItemBlock(BlockStonecutterBlock(),)
     }
 
     override var maxY: Double

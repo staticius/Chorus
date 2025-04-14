@@ -1,3 +1,5 @@
 package org.chorus.item
 
-class ItemMangroveSign : ItemSign(ItemID.Companion.MANGROVE_SIGN)
+import org.chorus.block.BlockMangroveStandingSign
+
+class ItemMangroveSign : ItemSign(BlockMangroveStandingSign.properties.defaultState)

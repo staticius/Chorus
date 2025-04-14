@@ -38,6 +38,6 @@ abstract class BlockCoralWallFan(blockstate: BlockState) : BlockCoralFan(blockst
         get() = blockFace.getOpposite()
 
     override fun toItem(): Item {
-        return ItemBlock(if (isDead) getDeadCoralFan() else this)
+        return ItemBlock(if (isDead) getDeadCoralFan() else this,)
     }
 }

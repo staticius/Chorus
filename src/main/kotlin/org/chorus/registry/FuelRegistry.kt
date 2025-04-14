@@ -288,7 +288,7 @@ class FuelRegistry : IRegistry<Item, Int?, Int> {
     }
 
     override fun get(key: Item): Int? {
-        val hash = if (key.isBlock()) key.blockUnsafe!!.runtimeId.toString()
+        val hash = if (key.isBlock()) key.getSafeBlockState().toBlock().runtimeId.toString()
         else key.id + "#" + key.damage
         return REGISTRY[hash]
     }
@@ -321,7 +321,7 @@ class FuelRegistry : IRegistry<Item, Int?, Int> {
 
     @Throws(RegisterException::class)
     override fun register(key: Item, value: Int) {
-        val hash = if (key.isBlock()) key.blockUnsafe!!.runtimeId.toString()
+        val hash = if (key.isBlock()) key.getSafeBlockState().toBlock().runtimeId.toString()
         else key.id + "#" + key.damage
         if (REGISTRY.putIfAbsent(hash, value) != 0) {
             throw RegisterException("This Fuel has already been registered with the key: $key")

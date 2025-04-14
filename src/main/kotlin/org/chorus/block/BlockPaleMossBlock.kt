@@ -93,7 +93,7 @@ class BlockPaleMossBlock @JvmOverloads constructor(blockstate: BlockState = Comp
     }
 
     override fun getDrops(item: Item): Array<Item> {
-        return arrayOf(ItemBlock(get(BlockID.PALE_MOSS_BLOCK)))
+        return arrayOf(ItemBlock(get(BlockID.PALE_MOSS_BLOCK),))
     }
 
     override val properties: BlockProperties

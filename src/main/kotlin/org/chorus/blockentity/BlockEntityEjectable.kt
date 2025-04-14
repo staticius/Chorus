@@ -48,7 +48,7 @@ abstract class BlockEntityEjectable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
     fun getItem(index: Int): Item {
         val i = this.getSlotIndex(index)
         if (i < 0) {
-            return ItemBlock(BlockAir(), 0, 0)
+            return ItemBlock(BlockAir(),, 0, 0)
         } else {
             val data = namedTag.getList("Items")[i] as CompoundTag
             return NBTIO.getItemHelper(data)

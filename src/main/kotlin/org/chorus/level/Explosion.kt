@@ -271,7 +271,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
             }
         }
 
-        val air = ItemBlock(Block.get(BlockID.AIR))
+        val air = ItemBlock(Block.get(BlockID.AIR),)
         var container: BlockEntity?
         val smokePositions = if (affectedBlocks.isEmpty()) Collections.emptyList() else ObjectArrayList<Vector3>()
         val random = ThreadLocalRandom.current()

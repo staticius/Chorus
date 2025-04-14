@@ -6,9 +6,9 @@ import org.chorus.entity.effect.Effect
 import org.chorus.entity.effect.EffectType
 
 class ItemPoisonousPotato @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
-    ItemPotato(ItemID.Companion.POISONOUS_POTATO, meta, count, "Poisonous Potato") {
+    ItemPotato(ItemID.POISONOUS_POTATO, meta, count, "Poisonous Potato") {
     init {
-        this.block = Block.get(BlockID.POTATOES)
+        this.blockState = BlockPotatoes.properties.defaultState
     }
 
     override fun onEaten(player: Player): Boolean {

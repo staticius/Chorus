@@ -21,7 +21,7 @@ class BlockEntityGlowItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntityIte
     override val spawnCompound: CompoundTag
         get() {
             if (!namedTag.contains("Item")) {
-                this.setItem(ItemBlock(Block.get(BlockID.AIR)), false)
+                this.setItem(ItemBlock(Block.get(BlockID.AIR),), false)
             }
             val item = item
             val tag = super.spawnCompound
@@ -36,7 +36,7 @@ class BlockEntityGlowItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntityIte
                     itemTag.putString("Name", namespacedId)
                 }
                 if (item.isBlock()) {
-                    itemTag.putCompound("Block", item.blockUnsafe!!.blockState.blockStateTag)
+                    itemTag.putCompound("Block", item.getSafeBlockState().blockStateTag)
                 }
                 tag.putCompound("Item", itemTag)
                     .putByte("ItemRotation", this.itemRotation)

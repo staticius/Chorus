@@ -59,7 +59,7 @@ class ShulkerBoxInventory(box: BlockEntityShulkerBox) : ContainerInventory(box, 
     }
 
     override fun canAddItem(item: Item): Boolean {
-        if (item.isBlock() && item.blockUnsafe is BlockUndyedShulkerBox) {
+        if (item.isBlock() && item.getSafeBlockState().toBlock() is BlockUndyedShulkerBox) {
             // Do not allow nested shulker boxes.
             return false
         }

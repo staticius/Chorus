@@ -5078,7 +5078,7 @@ open class Player(
                             return false
                         }
 
-                        if (item.blockUnsafe is BlockWood) {
+                        if (item.getSafeBlockState().toBlock() is BlockWood) {
                             this.awardAchievement("mineWood")
                         } else if (item.id == ItemID.DIAMOND) {
                             this.awardAchievement("diamond")

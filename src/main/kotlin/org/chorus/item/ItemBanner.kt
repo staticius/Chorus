@@ -8,13 +8,13 @@ import org.chorus.utils.DyeColor
 import java.util.*
 
 class ItemBanner @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
-    Item(ItemID.Companion.BANNER, meta, count, "Banner") {
+    Item(ItemID.BANNER, meta, count, "Banner") {
     override fun internalAdjust() {
-        block = BlockStandingBanner.properties.getBlockState(
+        blockState = BlockStandingBanner.properties.getBlockState(
             CommonBlockProperties.GROUND_SIGN_DIRECTION.createValue(
                 damage
             )
-        ).toBlock()
+        )
         name = baseDyeColor.name + " Banner"
     }
 

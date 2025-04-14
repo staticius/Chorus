@@ -9,7 +9,7 @@ class ItemBed @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(BlockID.BED, meta, count) {
     override fun internalAdjust() {
         name = DyeColor.getByWoolData(meta).name + " Bed"
-        block = BlockBed.properties.defaultState.toBlock()
+        blockState = BlockBed.properties.defaultState
     }
 
     override val maxStackSize: Int

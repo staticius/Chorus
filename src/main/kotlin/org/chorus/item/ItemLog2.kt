@@ -1,22 +1,24 @@
 package org.chorus.item
 
 import org.chorus.block.Block
+import org.chorus.block.BlockAcaciaLog
+import org.chorus.block.BlockDarkOakLog
 import org.chorus.block.BlockID
 
 class ItemLog2 @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
-    Item(ItemID.Companion.LOG2, meta, count) {
+    Item(ItemID.LOG2, meta, count) {
     override fun internalAdjust() {
         when (damage) {
             0 -> {
                 this.name = "Acacia Log"
-                this.block = Block.get(BlockID.ACACIA_LOG)
+                this.blockState = BlockAcaciaLog.properties.defaultState
                 this.name = "Dark Oak Log"
-                this.block = Block.get(BlockID.DARK_OAK_LOG)
+                this.blockState = BlockDarkOakLog.properties.defaultState
             }
 
             1 -> {
                 this.name = "Dark Oak Log"
-                this.block = Block.get(BlockID.DARK_OAK_LOG)
+                this.blockState = BlockDarkOakLog.properties.defaultState
             }
         }
         this.meta = 0
@@ -25,7 +27,7 @@ class ItemLog2 @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     override fun equalItemBlock(item: Item): Boolean {
         if (this.isBlock() && item.isBlock()) {
-            return this.blockUnsafe!!.properties == item.blockUnsafe!!.properties
+            return this.getSafeBlockState() == item.getSafeBlockState()
         }
         return true
     }

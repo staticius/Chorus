@@ -65,7 +65,7 @@ class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState = Compani
         if (this.age == 0x03) {
             this.age = 0
             return arrayOf<Item>(
-                ItemBlock(this, 0, 2 + (Math.random() * ((4 - 2) + 1)).toInt())
+                ItemBlock(this,, 0, 2 + (Math.random() * ((4 - 2) + 1)).toInt())
             )
         } else {
             return arrayOf(

@@ -149,7 +149,7 @@ abstract class BlockLichen(blockState: BlockState) : BlockTransparent(blockState
     }
 
     override fun toItem(): Item {
-        return ItemBlock(properties.defaultState.toBlock())
+        return ItemBlock(properties.defaultState.toBlock(),)
     }
 
     companion object {

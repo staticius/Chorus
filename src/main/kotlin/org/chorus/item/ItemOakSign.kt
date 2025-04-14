@@ -1,3 +1,5 @@
 package org.chorus.item
 
-class ItemOakSign : ItemSign(ItemID.Companion.OAK_SIGN)
+import org.chorus.block.BlockStandingSign
+
+class ItemOakSign : ItemSign(BlockStandingSign.properties.defaultState)

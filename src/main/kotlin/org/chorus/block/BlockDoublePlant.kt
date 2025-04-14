@@ -27,7 +27,7 @@ abstract class BlockDoublePlant(blockstate: BlockState) : BlockFlowable(blocksta
 
     override fun toItem(): Item {
         val aux = doublePlantType.ordinal
-        return ItemBlock(this, aux)
+        return ItemBlock(this,, aux)
     }
 
     override val name: String

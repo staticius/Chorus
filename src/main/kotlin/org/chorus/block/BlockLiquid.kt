@@ -609,7 +609,7 @@ abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.AIR))
+        return ItemBlock(get(BlockID.AIR),)
     }
 
     override fun breaksWhenMoved(): Boolean {

@@ -11,7 +11,7 @@ class BlockUnknown @JvmOverloads constructor(blockstate: BlockState = Companion.
         get() = "Unknown"
 
     override fun toItem(): Item {
-        return ItemBlock(this.clone())
+        return ItemBlock(this.clone(),)
     }
 
     override val properties: BlockProperties

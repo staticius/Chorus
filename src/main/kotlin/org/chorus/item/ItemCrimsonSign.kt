@@ -1,3 +1,5 @@
 package org.chorus.item
 
-class ItemCrimsonSign : ItemSign(ItemID.Companion.CRIMSON_SIGN)
+import org.chorus.block.BlockCrimsonStandingSign
+
+class ItemCrimsonSign : ItemSign(BlockCrimsonStandingSign.properties.defaultState)

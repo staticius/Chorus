@@ -26,9 +26,6 @@ class BlockNetheriteBlock : BlockSolid {
         return false
     }
 
-    override val isLavaResistant: Boolean
-        get() = true
-
     override val properties: BlockProperties
         get() = Companion.properties
 

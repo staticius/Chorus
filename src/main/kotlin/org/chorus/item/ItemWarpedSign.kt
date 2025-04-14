@@ -1,4 +1,6 @@
 package org.chorus.item
 
+import org.chorus.block.BlockWarpedStandingSign
 
-class ItemWarpedSign : ItemSign(ItemID.Companion.WARPED_SIGN)
+
+class ItemWarpedSign : ItemSign(BlockWarpedStandingSign.properties.defaultState)

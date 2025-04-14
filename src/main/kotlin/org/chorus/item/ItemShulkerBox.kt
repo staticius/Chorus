@@ -1,7 +1,6 @@
 package org.chorus.item
 
-import org.chorus.block.Block
-import org.chorus.block.BlockID
+import org.chorus.block.*
 
 class ItemShulkerBox @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.SHULKER_BOX, meta, count) {
@@ -9,84 +8,86 @@ class ItemShulkerBox @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         when (damage) {
             0 -> {
                 this.name = "White Shulker Box"
-                blockUnsafe = Block.get(BlockID.WHITE_SHULKER_BOX)
+                blockState = BlockWhiteShulkerBox.properties.defaultState
             }
 
             1 -> {
                 this.name = "Orange Shulker Box"
-                blockUnsafe = Block.get(BlockID.ORANGE_SHULKER_BOX)
+                blockState = BlockOrangeShulkerBox.properties.defaultState
             }
 
             2 -> {
                 this.name = "Magenta Shulker Box"
-                blockUnsafe = Block.get(BlockID.MAGENTA_SHULKER_BOX)
+                blockState = BlockMagentaShulkerBox.properties.defaultState
             }
 
             3 -> {
                 this.name = "Light Blue Shulker Box"
-                blockUnsafe = Block.get(BlockID.LIGHT_BLUE_SHULKER_BOX)
+                blockState = BlockLightBlueShulkerBox.properties.defaultState
             }
 
             4 -> {
                 this.name = "Yellow Shulker Box"
-                blockUnsafe = Block.get(BlockID.YELLOW_SHULKER_BOX)
+                blockState = BlockYellowShulkerBox.properties.defaultState
             }
 
             5 -> {
                 this.name = "Lime Shulker Box"
-                blockUnsafe = Block.get(BlockID.LIME_SHULKER_BOX)
+                blockState = BlockLimeShulkerBox.properties.defaultState
             }
 
             6 -> {
                 this.name = "Pink Shulker Box"
-                blockUnsafe = Block.get(BlockID.PINK_SHULKER_BOX)
+                blockState = BlockPinkShulkerBox.properties.defaultState
             }
 
             7 -> {
                 this.name = "Gray Shulker Box"
-                blockUnsafe = Block.get(BlockID.GRAY_SHULKER_BOX)
+                blockState = BlockGrayShulkerBox.properties.defaultState
             }
 
             8 -> {
                 this.name = "Light Gray Shulker Box"
-                blockUnsafe = Block.get(BlockID.LIGHT_GRAY_SHULKER_BOX)
+                blockState = BlockLightGrayShulkerBox.properties.defaultState
             }
 
             9 -> {
                 this.name = "Cyan Shulker Box"
-                blockUnsafe = Block.get(BlockID.CYAN_SHULKER_BOX)
+                blockState = BlockCyanShulkerBox.properties.defaultState
             }
 
             10 -> {
                 this.name = "Purple Shulker Box"
-                blockUnsafe = Block.get(BlockID.PURPLE_SHULKER_BOX)
+                blockState = BlockPurpleShulkerBox.properties.defaultState
             }
 
             11 -> {
                 this.name = "Blue Shulker Box"
-                blockUnsafe = Block.get(BlockID.BLUE_SHULKER_BOX)
+                blockState = BlockBlueShulkerBox.properties.defaultState
             }
 
             12 -> {
                 this.name = "Brown Shulker Box"
-                blockUnsafe = Block.get(BlockID.BROWN_SHULKER_BOX)
+                blockState = BlockBrownShulkerBox.properties.defaultState
             }
 
             13 -> {
                 this.name = "Green Shulker Box"
-                blockUnsafe = Block.get(BlockID.GREEN_SHULKER_BOX)
+                blockState = BlockGreenShulkerBox.properties.defaultState
             }
 
             14 -> {
                 this.name = "Red Shulker Box"
-                blockUnsafe = Block.get(BlockID.RED_SHULKER_BOX)
+                blockState = BlockRedShulkerBox.properties.defaultState
             }
 
             15 -> {
                 this.name = "Black Shulker Box"
-                blockUnsafe = Block.get(BlockID.BLACK_SHULKER_BOX)
+                blockState = BlockBlackShulkerBox.properties.defaultState
             }
         }
         this.meta = 0
     }
+
+    override val maxStackSize: Int = 1
 }

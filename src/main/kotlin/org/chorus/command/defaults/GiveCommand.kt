@@ -48,7 +48,7 @@ class GiveCommand(name: String) : VanillaCommand(name, "commands.give.descriptio
             log.addError("commands.give.item.notFound", item.displayName).output()
             return 0
         }
-        if (item is ItemBlock && item.getSafeBlock() is BlockUnknown) {
+        if (item is ItemBlock && item.getSafeBlockState().identifier == BlockUnknown.properties.identifier) {
             log.addError("commands.give.block.notFound", item.displayName).output()
             return 0
         }

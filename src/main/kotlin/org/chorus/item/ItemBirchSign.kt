@@ -1,3 +1,5 @@
 package org.chorus.item
 
-class ItemBirchSign : ItemSign(ItemID.Companion.BIRCH_SIGN)
+import org.chorus.block.BlockBirchStandingSign
+
+class ItemBirchSign : ItemSign(BlockBirchStandingSign.properties.defaultState)

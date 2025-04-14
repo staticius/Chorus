@@ -22,10 +22,6 @@ class BlockAir(blockState: BlockState = Companion.properties.defaultState) : Blo
         return true
     }
 
-    override fun canBePlaced(): Boolean {
-        return false
-    }
-
     override fun canBeReplaced(): Boolean {
         return true
     }

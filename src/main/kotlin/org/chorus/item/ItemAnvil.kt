@@ -2,4 +2,4 @@ package org.chorus.item
 
 import org.chorus.block.BlockAnvil
 
-class ItemAnvil : ItemBlock(BlockAnvil())
+class ItemAnvil : ItemBlock(BlockAnvil(),)

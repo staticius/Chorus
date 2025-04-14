@@ -2645,7 +2645,7 @@ class Level(
         val target = this.getBlock(vector)
         var block = target.getSide(face)
 
-        if (item.getSafeBlock() is BlockScaffolding && face == BlockFace.UP && block.id == BlockID.SCAFFOLDING) {
+        if (item.getSafeBlockState().identifier == BlockScaffolding.properties.identifier && face == BlockFace.UP && block.id == BlockID.SCAFFOLDING) {
             while (block is BlockScaffolding) {
                 block = block.up()
             }
@@ -2739,7 +2739,7 @@ class Level(
         var block = block
         val hand: Block
         if (item.canBePlaced()) {
-            hand = item.getSafeBlock()
+            hand = item.getSafeBlockState().toBlock(block)
             hand.position(block)
         } else {
             return null
@@ -2819,7 +2819,7 @@ class Level(
                             continue
                         }
                         val entry = get(v.data)
-                        if (!entry.isNothing && entry.getSafeBlock().id == target.id) {
+                        if (!entry.isNothing && entry.getSafeBlockState().identifier == target.id) {
                             canPlace = true
                             break
                         }

@@ -15,7 +15,7 @@ class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState = Co
         get() = 15
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.REDSTONE_LAMP))
+        return ItemBlock(get(BlockID.REDSTONE_LAMP),)
     }
 
     override fun onUpdate(type: Int): Int {

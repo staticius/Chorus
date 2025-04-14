@@ -1027,7 +1027,7 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
             item = get(Registries.ITEM_RUNTIMEID.getIdentifier(runtimeId), damage, count)
             val blockState = Registries.BLOCKSTATE[blockRuntimeId]
             if (blockState != null) {
-                item.blockUnsafe = blockState.toBlock()
+                item.blockState = blockState
             }
         }
 
@@ -1107,7 +1107,7 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
             }
         }
 
-        writeVarInt(if (item.isBlock()) item.blockUnsafe!!.runtimeId else 0)
+        writeVarInt(if (item.isBlock()) item.getSafeBlockState().toBlock().runtimeId else 0)
 
         val userDataBuf = ByteBufAllocator.DEFAULT.ioBuffer()
         try {

@@ -128,10 +128,10 @@ abstract class BlockHangingSign(blockState: BlockState) : BlockSignBase(blockSta
     }
 
     private fun checkGroundBlock(): BlockFace? {
-        if (getSide(BlockFace.NORTH, 1).canBePlaced()) return BlockFace.NORTH
-        if (getSide(BlockFace.SOUTH, 1).canBePlaced()) return BlockFace.SOUTH
-        if (getSide(BlockFace.WEST, 1).canBePlaced()) return BlockFace.WEST
-        if (getSide(BlockFace.EAST, 1).canBePlaced()) return BlockFace.EAST
+        if (getSide(BlockFace.NORTH, 1).isSolid) return BlockFace.NORTH
+        if (getSide(BlockFace.SOUTH, 1).isSolid) return BlockFace.SOUTH
+        if (getSide(BlockFace.WEST, 1).isSolid) return BlockFace.WEST
+        if (getSide(BlockFace.EAST, 1).isSolid) return BlockFace.EAST
         return null
     }
 }

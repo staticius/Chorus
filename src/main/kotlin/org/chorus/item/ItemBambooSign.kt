@@ -1,4 +1,7 @@
 package org.chorus.item
 
+import org.chorus.block.BlockBambooHangingSign
+import org.chorus.block.BlockBambooStandingSign
 
-class ItemBambooSign : ItemSign(ItemID.Companion.BAMBOO_SIGN)
+
+class ItemBambooSign : ItemSign(BlockBambooStandingSign.properties.defaultState)

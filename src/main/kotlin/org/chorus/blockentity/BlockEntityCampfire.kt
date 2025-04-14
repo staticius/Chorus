@@ -190,7 +190,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
 
     fun getItem(index: Int): Item {
         if (index < 0 || index >= size) {
-            return ItemBlock(BlockAir(), 0, 0)
+            return ItemBlock(BlockAir(),, 0, 0)
         } else {
             val data = namedTag.getCompound("Item" + (index + 1))
             return NBTIO.getItemHelper(data)

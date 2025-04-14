@@ -1,7 +1,6 @@
 package org.chorus.item
 
-import org.chorus.block.Block
-import org.chorus.block.BlockID
+import org.chorus.block.*
 
 class ItemFence @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.FENCE, meta, count) {
@@ -9,41 +8,41 @@ class ItemFence @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         when (damage) {
             0 -> {
                 this.name = "Oak Fence"
-                blockUnsafe = Block.get(BlockID.OAK_FENCE)
+                blockState = BlockOakFence.properties.defaultState
                 return
             }
 
             1 -> {
                 this.name = "Spruce Fence"
-                blockUnsafe = Block.get(BlockID.SPRUCE_FENCE)
+                blockState = BlockSpruceFence.properties.defaultState
                 this.meta = 0
                 return
             }
 
             2 -> {
                 this.name = "Birch Fence"
-                blockUnsafe = Block.get(BlockID.BIRCH_FENCE)
+                blockState = BlockBirchFence.properties.defaultState
                 this.meta = 0
                 return
             }
 
             3 -> {
                 this.name = "Jungle Fence"
-                blockUnsafe = Block.get(BlockID.JUNGLE_FENCE)
+                blockState = BlockJungleFence.properties.defaultState
                 this.meta = 0
                 return
             }
 
             4 -> {
                 this.name = "Acacia Fence"
-                blockUnsafe = Block.get(BlockID.ACACIA_FENCE)
+                blockState = BlockAcaciaFence.properties.defaultState
                 this.meta = 0
                 return
             }
 
             5 -> {
                 this.name = "Dark Oak Fence"
-                blockUnsafe = Block.get(BlockID.DARK_OAK_FENCE)
+                blockState = BlockDarkOakFence.properties.defaultState
                 this.meta = 0
             }
         }

@@ -143,7 +143,7 @@ open class BlockBeehive @JvmOverloads constructor(blockstate: BlockState = Compa
     }
 
     override fun toItem(): Item {
-        val item: Item = ItemBlock(this)
+        val item: Item = ItemBlock(this,)
         val beehive = blockEntity
         if (beehive != null) {
             beehive.saveNBT()

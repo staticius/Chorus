@@ -1,3 +1,5 @@
 package org.chorus.item
 
-class ItemSpruceSign : ItemSign(ItemID.Companion.SPRUCE_SIGN)
+import org.chorus.block.BlockSpruceStandingSign
+
+class ItemSpruceSign : ItemSign(BlockSpruceStandingSign.properties.defaultState)

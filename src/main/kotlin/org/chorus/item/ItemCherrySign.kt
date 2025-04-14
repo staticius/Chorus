@@ -1,3 +1,5 @@
 package org.chorus.item
 
-class ItemCherrySign : ItemSign(ItemID.Companion.CHERRY_SIGN)
+import org.chorus.block.BlockCherryStandingSign
+
+class ItemCherrySign : ItemSign(BlockCherryStandingSign.properties.defaultState)

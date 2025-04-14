@@ -139,7 +139,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockState: BlockState = Comp
         }
 
     override fun toItem(): Item {
-        return ItemBlock(BlockCherrySapling())
+        return ItemBlock(BlockCherrySapling(),)
     }
 
     override val isFertilizable: Boolean

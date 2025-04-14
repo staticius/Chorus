@@ -34,7 +34,7 @@ class BlockGrindstone @JvmOverloads constructor(blockstate: BlockState = Compani
     }
 
     override fun toItem(): Item {
-        return ItemBlock(BlockGrindstone())
+        return ItemBlock(BlockGrindstone(),)
     }
 
     override val waterloggingLevel: Int

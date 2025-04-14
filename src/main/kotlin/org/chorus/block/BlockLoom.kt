@@ -20,7 +20,7 @@ class BlockLoom @JvmOverloads constructor(blockState: BlockState = Companion.pro
         get() = "Loom"
 
     override fun toItem(): Item {
-        return ItemBlock(BlockLoom())
+        return ItemBlock(BlockLoom(),)
     }
 
     override val toolType: Int

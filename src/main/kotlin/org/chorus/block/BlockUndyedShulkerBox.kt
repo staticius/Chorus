@@ -37,7 +37,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(bloc
     override val waterloggingLevel: Int
         get() = 1
 
-    open fun getShulkerBox(): Item = ItemBlock(this)
+    open fun getShulkerBox(): Item = ItemBlock(this,)
 
     override fun toItem(): Item {
         val item = getShulkerBox()
@@ -158,9 +158,6 @@ open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(bloc
     override fun isSolid(side: BlockFace): Boolean {
         return false
     }
-
-    override val itemMaxStackSize: Int
-        get() = 1
 
     override val properties: BlockProperties
         get() = Companion.properties

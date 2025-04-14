@@ -18,7 +18,4 @@ abstract class BlockRaw(blockstate: BlockState) : BlockSolid(blockstate) {
     override fun canHarvestWithHand(): Boolean {
         return false
     }
-
-    override val isLavaResistant: Boolean
-        get() = true
 }

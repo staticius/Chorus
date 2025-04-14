@@ -27,7 +27,7 @@ class BlockWarpedSlab @JvmOverloads constructor(blockstate: BlockState = Compani
         get() = 3.0
 
     override fun toItem(): Item {
-        return ItemBlock(this)
+        return ItemBlock(this,)
     }
 
     override val properties: BlockProperties

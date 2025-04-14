@@ -55,7 +55,7 @@ class BlockSponge @JvmOverloads constructor(state: BlockState = Companion.proper
     }
 
     override fun toItem(): Item {
-        return ItemBlock(BlockSponge())
+        return ItemBlock(BlockSponge(),)
     }
 
     private fun performWaterAbsorb(block: Block): Boolean {

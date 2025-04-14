@@ -243,17 +243,13 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
          */
         get() = 0
 
-    open fun canBePlaced(): Boolean {
-        return true
-    }
-
     open fun canBeReplaced(): Boolean {
         return false
     }
 
     open val isTransparent: Boolean
         /**
-         * 控制方块是否透明(默认为false)
+         * Control whether the block is transparent (default is false)
          *
          * @return 方块是否透明
          */
@@ -1013,7 +1009,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         get() = this.blockState === properties.defaultState
 
     open fun toItem(): Item {
-        return ItemBlock(properties.defaultState.toBlock())
+        return ItemBlock(properties.defaultState.toBlock(),)
     }
 
     /**
@@ -1029,14 +1025,6 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         }
         return Item.EMPTY_ARRAY
     }
-
-    open val isLavaResistant: Boolean
-        /**
-         * If the block, when in item form, is resistant to lava and fire and can float on lava like if it was on water.
-         *
-         * @since 1.4.0.0-PN
-         */
-        get() = false
 
     fun firstInLayers(condition: Predicate<Block?>): Optional<Block> {
         return firstInLayers(0, condition)
@@ -1087,7 +1075,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
                         }
                         val entry = Item.get(v.data)
                         if (!entry.isNothing &&
-                            entry.getSafeBlock().id == this.id
+                            entry.getSafeBlockState().identifier == this.id
                         ) {
                             canBreak = true
                             break
@@ -1118,9 +1106,6 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
     open fun onProjectileHit(projectile: Entity, locator: Locator, motion: Vector3): Boolean {
         return false
     }
-
-    open val itemMaxStackSize: Int
-        get() = 64
 
     open val isGettingPower: Boolean
         /**

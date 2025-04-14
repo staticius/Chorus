@@ -1,11 +1,10 @@
 package org.chorus.item
 
-import org.chorus.block.Block
-import org.chorus.block.BlockID
+import org.chorus.block.BlockTorchflowerCrop
 
 class ItemTorchflowerSeeds @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
-    Item(ItemID.Companion.TORCHFLOWER_SEEDS, meta, count, "Torchflower Seeds") {
+    Item(ItemID.TORCHFLOWER_SEEDS, meta, count, "Torchflower Seeds") {
     init {
-        this.block = Block.get(BlockID.TORCHFLOWER_CROP)
+        this.blockState = BlockTorchflowerCrop.properties.defaultState
     }
 }

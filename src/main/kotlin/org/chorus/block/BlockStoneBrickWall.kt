@@ -20,7 +20,7 @@ class BlockStoneBrickWall @JvmOverloads constructor(blockstate: BlockState = Com
         get() = ItemTool.TIER_WOODEN
 
     override fun toItem(): Item {
-        return ItemBlock(properties.defaultState.toBlock())
+        return ItemBlock(properties.defaultState.toBlock(),)
     }
 
     override val properties: BlockProperties

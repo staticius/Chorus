@@ -34,7 +34,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
         get() = 1
 
     override fun toItem(): Item {
-        return ItemBlock(this, 0)
+        return ItemBlock(this,, 0)
     }
 
     override fun hasComparatorInputOverride(): Boolean {
@@ -190,7 +190,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
 
         fun getChance(item: Item): Int {
             return if (item is ItemBlock) {
-                compostableBlocks[item.blockUnsafe!!.blockState]!!
+                compostableBlocks[item.getSafeBlockState()]!!
             } else {
                 compostableItems[item.id]!!
             }

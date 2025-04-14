@@ -49,10 +49,6 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Compa
         return false
     }
 
-    override fun canBePlaced(): Boolean {
-        return false
-    }
-
     override fun canBeReplaced(): Boolean {
         return true
     }

@@ -1,10 +1,10 @@
 package org.chorus.item
 
-import org.chorus.block.Block
+import org.chorus.block.BlockState
 
-abstract class ItemHangingSign(id: String) : Item(id) {
+abstract class ItemHangingSign(blockState: BlockState) : Item(blockState.identifier) {
     init {
-        this.block = Block.get(id)
+        this.blockState = blockState
     }
 
     override val maxStackSize: Int

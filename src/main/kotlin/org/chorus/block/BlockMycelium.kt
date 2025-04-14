@@ -33,7 +33,7 @@ class BlockMycelium : BlockDirt {
 
     override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
-            ItemBlock(get(BlockID.DIRT))
+            ItemBlock(get(BlockID.DIRT),)
         )
     }
 

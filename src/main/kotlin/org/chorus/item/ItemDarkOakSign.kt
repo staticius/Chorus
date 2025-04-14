@@ -1,4 +1,6 @@
 package org.chorus.item
 
+import org.chorus.block.BlockDarkoakStandingSign
 
-class ItemDarkOakSign : ItemSign(ItemID.Companion.DARK_OAK_SIGN)
+
+class ItemDarkOakSign : ItemSign(BlockDarkoakStandingSign.properties.defaultState)

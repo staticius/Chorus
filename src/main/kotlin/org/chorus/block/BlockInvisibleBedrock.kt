@@ -37,7 +37,7 @@ class BlockInvisibleBedrock @JvmOverloads constructor(blockstate: BlockState = C
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.AIR))
+        return ItemBlock(get(BlockID.AIR),)
     }
 
     override val properties: BlockProperties

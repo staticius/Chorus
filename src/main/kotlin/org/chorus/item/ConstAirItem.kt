@@ -2,6 +2,7 @@ package org.chorus.item
 
 import org.chorus.block.Block
 import org.chorus.block.BlockAir
+import org.chorus.block.BlockState
 import org.chorus.nbt.tag.CompoundTag
 
 class ConstAirItem : Item("minecraft:air") {
@@ -29,8 +30,8 @@ class ConstAirItem : Item("minecraft:air") {
         set(block) {
         }
 
-    override fun getSafeBlock(): Block {
-        return BlockAir()
+    override fun getSafeBlockState(): BlockState {
+        return BlockAir.properties.defaultState
     }
 
     override fun setCompoundTag(tags: ByteArray): Item {

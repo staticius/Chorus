@@ -49,7 +49,7 @@ enum class EnchantmentType {
             DIGGER -> item.isPickaxe || item.isShovel || item.isAxe || item.isHoe
             BOW -> item is ItemBow
             FISHING_ROD -> item is ItemFishingRod
-            WEARABLE -> item is ItemHead || item.getSafeBlock() is BlockCarvedPumpkin
+            WEARABLE -> item is ItemHead || item.getSafeBlockState().identifier == BlockCarvedPumpkin.properties.identifier
             TRIDENT -> item is ItemTrident
             CROSSBOW -> item is ItemCrossbow
             MACE -> item is ItemMace

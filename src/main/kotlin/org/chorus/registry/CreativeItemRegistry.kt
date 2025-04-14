@@ -51,7 +51,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                     if (ItemRegistry.itemComponents.containsCompound(name)) {
                         item.setNamedTag(ItemRegistry.itemComponents.getCompound(name).getCompound("components"))
                     }
-                    if (item.isNothing || (item.isBlock() && item.blockUnsafe!!.isAir)) {
+                    if (item.isNothing || (item.isBlock() && item.getSafeBlockState().toBlock().isAir)) {
                         item = Item.AIR
                         CreativeItemRegistry.log.warn("load creative item {} damage {} is null", name, damage)
                     }
@@ -65,7 +65,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                             item = Item.AIR
                             CreativeItemRegistry.log.warn("load creative item {} blockHash {} is null", name, blockHash)
                         } else {
-                            item.blockUnsafe = block.toBlock()
+                            item.blockState = block
                             val updateDamage = block.toBlock().toItem()
                             if (updateDamage.damage != 0) {
                                 item.damage = updateDamage.damage
@@ -73,7 +73,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                         }
                     } else {
                         INTERNAL_DIFF_ITEM[i] = item.clone()
-                        item.blockUnsafe = null
+                        item.blockState = null
                     }
                     creativeItemData.add(CreativeItemData(item, groupIndex))
                     register(i, item)

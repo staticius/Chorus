@@ -62,7 +62,7 @@ open class BlockDirt : BlockSolid, Natural {
     }
 
     override fun toItem(): Item {
-        return ItemBlock(this)
+        return ItemBlock(this,)
     }
 
     override val properties: BlockProperties

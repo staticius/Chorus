@@ -361,7 +361,7 @@ open class BlockRail @JvmOverloads constructor(blockState: BlockState = Companio
     }
 
     override fun toItem(): Item {
-        return ItemBlock(this, 0)
+        return ItemBlock(this,, 0)
     }
 
     override var blockFace: BlockFace

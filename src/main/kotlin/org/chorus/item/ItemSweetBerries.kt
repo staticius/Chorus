@@ -3,9 +3,9 @@ package org.chorus.item
 import org.chorus.block.BlockSweetBerryBush
 
 class ItemSweetBerries @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
-    ItemFood(ItemID.Companion.SWEET_BERRIES, meta, count, "Sweet Berries") {
+    ItemFood(ItemID.SWEET_BERRIES, meta, count, "Sweet Berries") {
     init {
-        this.block = BlockSweetBerryBush()
+        this.blockState = BlockSweetBerryBush.properties.defaultState
     }
 
     override val foodRestore: Int

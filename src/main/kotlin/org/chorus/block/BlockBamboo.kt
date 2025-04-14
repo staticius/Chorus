@@ -205,7 +205,7 @@ class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.p
         }
 
     override fun toItem(): Item {
-        return ItemBlock(BlockBamboo())
+        return ItemBlock(BlockBamboo(),)
     }
 
     override val hardness: Double

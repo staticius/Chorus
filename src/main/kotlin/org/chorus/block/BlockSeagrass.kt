@@ -145,7 +145,7 @@ class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion
         get() = ItemTool.TYPE_SHEARS
 
     override fun toItem(): Item {
-        return ItemBlock(BlockSeagrass(), 0)
+        return ItemBlock(BlockSeagrass(),, 0)
     }
 
     override val isFertilizable: Boolean

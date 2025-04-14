@@ -224,7 +224,7 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
         }
 
     override fun toItem(): Item {
-        return ItemBlock(this, 0)
+        return ItemBlock(this,, 0)
     }
 
     override var blockFace: BlockFace
@@ -255,7 +255,7 @@ open class BlockChest @JvmOverloads constructor(blockState: BlockState = Compani
     }
 
     override fun getDrops(item: Item): Array<Item> {
-        return arrayOf(ItemBlock(Companion.properties.defaultState.toBlock(), 0))
+        return arrayOf(ItemBlock(Companion.properties.defaultState.toBlock(),, 0))
     }
 
     override val properties: BlockProperties

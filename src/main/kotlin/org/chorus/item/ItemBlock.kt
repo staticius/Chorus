@@ -1,33 +1,30 @@
 package org.chorus.item
 
-import org.chorus.block.Block
+import org.chorus.block.BlockAncientDebris
+import org.chorus.block.BlockNetheriteBlock
+import org.chorus.block.BlockState
 import org.chorus.registry.Registries
 
 
-open class ItemBlock @JvmOverloads constructor(block: Block, aux: Int = 0, count: Int = 1) :
-    Item(block, aux, count, block.name, true) {
+open class ItemBlock @JvmOverloads constructor(blockState: BlockState, name: String, aux: Int = 0, count: Int = 1) :
+    Item(blockState, aux, count, name, true) {
     override var damage: Int
         get() = super.damage
         set(meta) {
             if (meta != 0) {
-                val i = Registries.BLOCKSTATE_ITEMMETA[block!!.id, meta] ?: 0
-                if (i != 0) {
-                    val blockState = Registries.BLOCKSTATE[i]
-                    this.block = Registries.BLOCK[blockState]
-                }
+                val i = Registries.BLOCKSTATE_ITEMMETA[blockState!!.identifier, meta] ?: 0
+                if (i != 0) this.blockState = Registries.BLOCKSTATE[i]
             }
         }
 
     override fun clone(): ItemBlock {
-        val block = super.clone() as ItemBlock
-        block.block = this.block!!.clone()
-        return block
-    }
-
-    override fun getSafeBlock(): Block {
-        return block!!.clone()
+        return super.clone() as ItemBlock
     }
 
     override val isLavaResistant: Boolean
-        get() = block!!.isLavaResistant
+        get() = when (blockState?.identifier) {
+            BlockAncientDebris.properties.identifier,
+            BlockNetheriteBlock.properties.identifier -> true
+            else -> false
+        }
 }

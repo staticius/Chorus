@@ -75,7 +75,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
         fy: Float,
         fz: Float
     ): Boolean {
-        if (item.getSafeBlock() != null && item.blockId == BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
+        if (item.blockId == BlockID.TURTLE_EGG && (player == null || !player.isSneaking())) {
             val eggCount = eggCount
             if (eggCount == TurtleEggCount.FOUR_EGG) {
                 return false
@@ -261,7 +261,7 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
     }
 
     override fun toItem(): Item {
-        return ItemBlock(BlockTurtleEgg())
+        return ItemBlock(BlockTurtleEgg(),)
     }
 
     override fun onBreak(item: Item?): Boolean {

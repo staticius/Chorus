@@ -26,7 +26,7 @@ class EnchantmentVanishingCurse : Enchantment(
         return when (item.id) {
             BlockID.SKULL, ItemID.COMPASS -> true
             else -> {
-                if (item.isBlock() && item.getSafeBlock().id == BlockID.CARVED_PUMPKIN) {
+                if (item.isBlock() && item.getSafeBlockState().identifier == BlockID.CARVED_PUMPKIN) {
                     return true
                 }
                 super.canEnchant(item)

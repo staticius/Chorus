@@ -19,9 +19,6 @@ class BlockAncientDebris @JvmOverloads constructor(blockstate: BlockState = Comp
     override val hardness: Double
         get() = 30.0
 
-    override val isLavaResistant: Boolean
-        get() = true
-
     override fun canHarvestWithHand(): Boolean {
         return false
     }

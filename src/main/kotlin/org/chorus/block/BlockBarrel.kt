@@ -110,7 +110,7 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState = Companion.p
         get() = ItemTool.TYPE_AXE
 
     override fun toItem(): Item {
-        return ItemBlock(BlockBarrel())
+        return ItemBlock(BlockBarrel(),)
     }
 
     override var blockFace: BlockFace

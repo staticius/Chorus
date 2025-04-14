@@ -1,7 +1,6 @@
 package org.chorus.item
 
-import org.chorus.block.Block
-import org.chorus.block.BlockID
+import org.chorus.block.*
 
 class ItemLog @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.LOG, meta, count) {
@@ -9,34 +8,22 @@ class ItemLog @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         when (damage) {
             0 -> {
                 this.name = "Oak Log"
-                blockUnsafe = Block.get(BlockID.OAK_LOG)
-                this.name = "Spruce Log"
-                blockUnsafe = Block.get(BlockID.SPRUCE_LOG)
-                this.name = "Birch Log"
-                blockUnsafe = Block.get(BlockID.BIRCH_LOG)
-                this.name = "Jungle Log"
-                blockUnsafe = Block.get(BlockID.JUNGLE_LOG)
+                blockState = BlockOakLog.properties.defaultState
             }
 
             1 -> {
                 this.name = "Spruce Log"
-                blockUnsafe = Block.get(BlockID.SPRUCE_LOG)
-                this.name = "Birch Log"
-                blockUnsafe = Block.get(BlockID.BIRCH_LOG)
-                this.name = "Jungle Log"
-                blockUnsafe = Block.get(BlockID.JUNGLE_LOG)
+                blockState = BlockSpruceLog.properties.defaultState
             }
 
             2 -> {
                 this.name = "Birch Log"
-                blockUnsafe = Block.get(BlockID.BIRCH_LOG)
-                this.name = "Jungle Log"
-                blockUnsafe = Block.get(BlockID.JUNGLE_LOG)
+                blockState = BlockBirchLog.properties.defaultState
             }
 
             3 -> {
                 this.name = "Jungle Log"
-                blockUnsafe = Block.get(BlockID.JUNGLE_LOG)
+                blockState = BlockJungleLog.properties.defaultState
             }
         }
         this.meta = 0
@@ -45,7 +32,7 @@ class ItemLog @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
 
     override fun equalItemBlock(item: Item): Boolean {
         if (this.isBlock() && item.isBlock()) {
-            return this.blockUnsafe!!.properties == item.blockUnsafe!!.properties
+            return this.getSafeBlockState() == item.getSafeBlockState()
         }
         return true
     }

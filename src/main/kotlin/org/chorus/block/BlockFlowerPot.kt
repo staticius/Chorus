@@ -81,8 +81,8 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
             removeFlower()
             return true
         }
-        val potBlock = item.getSafeBlock()
-        if (potBlock is FlowerPotBlock && potBlock.isPotBlockState) {
+        val potBlock = item.getSafeBlockState().toBlock()
+        if (potBlock is FlowerPotBlock) {
             val blockEntity = getOrCreateBlockEntity()
             blockEntity.namedTag.putCompound("PlantBlock", potBlock.plantBlockTag)
 
@@ -249,14 +249,6 @@ class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
                 return tag.putString("itemId", item.id)
                     .putInt("itemMeta", item.damage) //only exist in PNX
             }
-
-        val isPotBlockState: Boolean
-            /**
-             * 对于高草丛来说，只有状态为"fern"的方块才能放入花盆中
-             *
-             * @return 是否是可作为花盆方块的状态
-             */
-            get() = true
     }
 
     override val properties: BlockProperties

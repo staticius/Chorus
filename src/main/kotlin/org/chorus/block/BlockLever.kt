@@ -33,7 +33,7 @@ class BlockLever @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         get() = 2.5
 
     override fun toItem(): Item {
-        return ItemBlock(this, 0)
+        return ItemBlock(this,, 0)
     }
 
     var isPowerOn: Boolean

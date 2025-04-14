@@ -2,6 +2,7 @@ package org.chorus.item
 
 import org.chorus.block.Block
 import org.chorus.block.BlockID
+import org.chorus.block.BlockPotatoes
 
 
 open class ItemPotato @JvmOverloads constructor(
@@ -11,10 +12,10 @@ open class ItemPotato @JvmOverloads constructor(
     name: String? = "Potato"
 ) :
     ItemFood(id, meta, count, name) {
-    constructor(meta: Int) : this(ItemID.Companion.POTATO, meta, 1, "Potato")
+    constructor(meta: Int) : this(ItemID.POTATO, meta, 1, "Potato")
 
     init {
-        this.block = Block.get(BlockID.POTATOES)
+        this.blockState = BlockPotatoes.properties.defaultState
     }
 
     override val foodRestore: Int

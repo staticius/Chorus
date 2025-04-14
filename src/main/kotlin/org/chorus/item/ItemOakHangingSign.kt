@@ -1,5 +1,6 @@
 package org.chorus.item
 
 import org.chorus.block.BlockID
+import org.chorus.block.BlockOakHangingSign
 
-class ItemOakHangingSign : ItemHangingSign(BlockID.OAK_HANGING_SIGN)
+class ItemOakHangingSign : ItemHangingSign(BlockOakHangingSign.properties.defaultState)

@@ -122,7 +122,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.DIRT))
+        return ItemBlock(get(BlockID.DIRT),)
     }
 
     override fun isSolid(side: BlockFace): Boolean {

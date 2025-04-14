@@ -1,4 +1,6 @@
 package org.chorus.item
 
+import org.chorus.block.BlockAcaciaStandingSign
 
-class ItemAcaciaSign : ItemSign(ItemID.Companion.ACACIA_SIGN)
+
+class ItemAcaciaSign : ItemSign(BlockAcaciaStandingSign.properties.defaultState)

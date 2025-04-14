@@ -29,7 +29,7 @@ open class BlockPumpkin : BlockSolid, Faceable, Natural {
         get() = ItemTool.TYPE_AXE
 
     override fun toItem(): Item {
-        return ItemBlock(this, 0)
+        return ItemBlock(this,, 0)
     }
 
     override fun canBeActivated(): Boolean {

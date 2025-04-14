@@ -55,7 +55,7 @@ open class BlockDispenser @JvmOverloads constructor(blockstate: BlockState = Com
     }
 
     override fun toItem(): Item {
-        return ItemBlock(this, 0)
+        return ItemBlock(this,, 0)
     }
 
     override val comparatorInputOverride: Int

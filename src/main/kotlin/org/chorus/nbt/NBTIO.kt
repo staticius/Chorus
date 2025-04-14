@@ -47,7 +47,7 @@ object NBTIO {
         //whereas for `minecraft:potato` item, the corresponding block is `minecraft:potatos`
         //these items do not need to be written
         if (item.isBlock() && item.blockId == item.id) {
-            tag.putCompound("Block", item.blockUnsafe!!.blockState.blockStateTag.copy())
+            tag.putCompound("Block", item.getSafeBlockState().blockStateTag.copy())
         }
         tag.putInt("version", ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION)
         return tag
@@ -102,7 +102,7 @@ object NBTIO {
                     }
                     item.setCount(amount)
                 }
-                item.blockUnsafe = blockState.toBlock()
+                item.blockState = blockState
             } else if (item.isNothing) { //write unknown block item
                 item = UnknownItem(BlockID.UNKNOWN, damage, amount)
                 val compoundTag = LinkedCompoundTag()
@@ -111,7 +111,7 @@ object NBTIO {
                 val hash = HashUtils.fnv1a_32_nbt(compoundTag)
                 compoundTag.putInt("version", block.getInt("version"))
                 val unknownBlockState = BlockState.makeUnknownBlockState(hash, compoundTag)
-                item.blockUnsafe = BlockUnknown(unknownBlockState)
+                item.blockState = unknownBlockState
             }
         } else {
             if (item.isNothing) { //write unknown item

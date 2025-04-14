@@ -33,7 +33,7 @@ class BlockPortal @JvmOverloads constructor(blockstate: BlockState = Companion.p
         get() = 11
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.AIR))
+        return ItemBlock(get(BlockID.AIR),)
     }
 
     override fun canBePushed(): Boolean {

@@ -5,10 +5,7 @@ import io.netty.util.internal.EmptyArrays
 import it.unimi.dsi.fastutil.ints.Int2IntArrayMap
 import it.unimi.dsi.fastutil.ints.Int2IntMap
 import org.chorus.Player
-import org.chorus.block.Block
-import org.chorus.block.BlockAir
-import org.chorus.block.BlockID
-import org.chorus.block.BlockState
+import org.chorus.block.*
 import org.chorus.entity.Entity
 import org.chorus.item.Item.ItemJsonComponents.ItemLock
 import org.chorus.item.enchantment.Enchantment
@@ -44,6 +41,8 @@ abstract class Item : Cloneable, ItemID, Loggable {
                 field = value
             } else field = null
         }
+
+    var blockState: BlockState? = null
 
     protected var block: Block? = null
     protected var hasMeta: Boolean = true
@@ -87,14 +86,14 @@ abstract class Item : Cloneable, ItemID, Loggable {
         }
     }
 
-    protected constructor(block: Block, meta: Int, count: Int, name: String?, autoAssignStackNetworkId: Boolean) {
-        this.id = block.itemId.intern()
+    protected constructor(blockState: BlockState, meta: Int, count: Int, name: String?, autoAssignStackNetworkId: Boolean) {
+        this.id = blockState.identifier.intern()
         this.identifier = Identifier(id)
         this.count = count
         if (name != null) {
             this.name = name.intern()
         }
-        this.block = block
+        this.blockState = blockState
         this.damage = meta
         if (autoAssignStackNetworkId) {
             this.autoAssignStackNetworkId()
@@ -765,15 +764,11 @@ abstract class Item : Cloneable, ItemID, Loggable {
         get() = if (this.hasCustomName()) customName else idConvertToName()
 
     fun canBePlaced(): Boolean {
-        return ((this.block != null) && block!!.canBePlaced())
+        return (this.blockState != null)
     }
 
-    open fun getSafeBlock(): Block {
-        return if (this.block != null) {
-            block!!.clone()
-        } else {
-            Block.get(BlockID.AIR)
-        }
+    open fun getSafeBlockState(): BlockState {
+        return this.blockState ?: BlockAir.properties.defaultState
     }
 
     @get:ApiStatus.Internal
@@ -815,16 +810,12 @@ abstract class Item : Cloneable, ItemID, Loggable {
         get() = ((runtimeId.toShort()).toInt() shl 16) or ((meta and 0x7fff) shl 1)
 
     fun isBlock(): Boolean {
-        return this.block != null
+        return this.blockState != null
     }
 
     val blockId: String
         get() {
-            return if (block != null) {
-                block!!.id
-            } else {
-                UNKNOWN_STR
-            }
+            return blockState?.identifier ?: UNKNOWN_STR
         }
 
     open var damage: Int
@@ -845,14 +836,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
         this.hasMeta = false
     }
 
-    open val maxStackSize: Int
-        /**
-         * 定义物品堆叠的最大数量
-         *
-         *
-         * Define the maximum number of items to be stacked
-         */
-        get() = if (block == null) 64 else block!!.itemMaxStackSize
+    open val maxStackSize: Int = 64
 
     val fuelTime: Int?
         /**
@@ -1200,7 +1184,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
 
     open fun equalItemBlock(item: Item): Boolean {
         if (this.isBlock() && item.isBlock()) {
-            return blockUnsafe!!.blockState === item.blockUnsafe!!.blockState
+            return this.blockState === item.blockState
         }
         return true
     }

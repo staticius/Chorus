@@ -1,7 +1,6 @@
 package org.chorus.item
 
-import org.chorus.block.Block
-import org.chorus.block.BlockID
+import org.chorus.block.*
 
 class ItemLeaves @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.LEAVES, meta, count) {
@@ -9,24 +8,24 @@ class ItemLeaves @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         when (damage) {
             0 -> {
                 name = "Oak Leaves"
-                blockUnsafe = Block.get(BlockID.OAK_LEAVES)
+                blockState = BlockOakLeaves.properties.defaultState
             }
 
             1 -> {
                 name = "Spruce Leaves"
-                blockUnsafe = Block.get(BlockID.SPRUCE_LEAVES)
+                blockState = BlockSpruceLeaves.properties.defaultState
                 this.meta = 0
             }
 
             2 -> {
                 name = "Birch Leaves"
-                blockUnsafe = Block.get(BlockID.BIRCH_LEAVES)
+                blockState = BlockBirchLeaves.properties.defaultState
                 this.meta = 0
             }
 
             3 -> {
                 name = "Jungle Leaves"
-                blockUnsafe = Block.get(BlockID.JUNGLE_LEAVES)
+                blockState = BlockJungleLeaves.properties.defaultState
                 this.meta = 0
             }
 

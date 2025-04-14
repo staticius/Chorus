@@ -1,6 +1,7 @@
 package org.chorus.entity.ai.executor
 
 import org.chorus.block.Block
+import org.chorus.block.BlockAir
 import org.chorus.block.BlockID
 import org.chorus.block.Natural
 import org.chorus.entity.data.EntityDataTypes
@@ -33,9 +34,9 @@ class EndermanBlockExecutor : IBehaviorExecutor {
                     ).filter { block: Block -> block.isSolid && block.up().canBeReplaced() }.findAny()
                     if (optionalBlock.isPresent) {
                         val block = optionalBlock.get()
-                        block.level.setBlock(block.up().position, entity.itemInHand.getSafeBlock())
+                        block.level.setBlock(block.up().position, entity.itemInHand.getSafeBlockState().toBlock())
                         entity.setItemInHand(Item.AIR)
-                        entity.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, Item.AIR.getSafeBlock())
+                        entity.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, BlockAir())
                     }
                 }
             }

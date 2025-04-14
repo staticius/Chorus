@@ -68,7 +68,7 @@ open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = 
 
     override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
-            ItemBlock(get(BlockID.REDSTONE_LAMP))
+            ItemBlock(get(BlockID.REDSTONE_LAMP),)
         )
     }
 

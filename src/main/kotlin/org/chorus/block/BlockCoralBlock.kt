@@ -68,6 +68,6 @@ abstract class BlockCoralBlock(blockstate: BlockState) : BlockSolid(blockstate) 
     }
 
     override fun toItem(): Item {
-        return ItemBlock(this)
+        return ItemBlock(this,)
     }
 }
