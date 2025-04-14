@@ -22,7 +22,7 @@ class CommandParameter private constructor(
          *
          * @see .newType
          */
-        fun newType(name: String?, type: CommandParamType?): CommandParameter {
+        fun newType(name: String, type: CommandParamType): CommandParameter {
             return newType(name, false, type)
         }
 
@@ -40,8 +40,8 @@ class CommandParameter private constructor(
          *
          * @see .newType
          */
-        fun newType(name: String?, optional: Boolean, type: CommandParamType?): CommandParameter {
-            return newType(name, optional, type, null, *arrayOf<CommandParamOption>())
+        fun newType(name: String, optional: Boolean, type: CommandParamType): CommandParameter {
+            return newType(name, optional, type, null)
         }
 
         /**
@@ -50,10 +50,10 @@ class CommandParameter private constructor(
          * @see .newType
          */
         fun newType(
-            name: String?,
+            name: String,
             optional: Boolean,
             type: CommandParamType?,
-            vararg options: CommandParamOption?
+            vararg options: CommandParamOption
         ): CommandParameter {
             return newType(name, optional, type, null, *options)
         }

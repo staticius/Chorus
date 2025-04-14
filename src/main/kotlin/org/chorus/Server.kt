@@ -138,65 +138,65 @@ class Server internal constructor(
     lateinit var bannedPlayers: BanList
         private set
 
-    lateinit var bannedIPs: BanList
+    var bannedIPs: BanList
         private set
 
-    lateinit var operators: Config
+    var operators: Config
         private set
 
-    lateinit var whitelist: Config
+    var whitelist: Config
         private set
 
     private val isRunning = AtomicBoolean(true)
     private val busyingTime: MutableList<Long> = Collections.synchronizedList(mutableListOf())
     private var hasStopped = false
 
-    lateinit var pluginManager: PluginManager
+    var commandMap: SimpleCommandMap = SimpleCommandMap(this)
         private set
 
-    lateinit var scheduler: ServerScheduler
+    var pluginManager: PluginManager = PluginManager(this, commandMap)
         private set
 
+    var scheduler: ServerScheduler
+        private set
     /**
      * A tick counter that records the number of ticks that have passed on the server
      */
     var tick: Int = 0
         private set
+
     var nextTick: Long = 0
         private set
-
     private val tickAverage = RollingFloatAverage(20)
-    private val useAverage = RollingFloatAverage(20)
 
+    private val useAverage = RollingFloatAverage(20)
     private var maxTick = 20f
     private var maxUse = 0f
-    private var sendUsageTicker = 0
 
+    private var sendUsageTicker = 0
     private lateinit var console: ChorusConsole
+
     private lateinit var consoleThread: ConsoleThread
 
     /**
      * FJP thread pool responsible for terrain generation, data compression and other computing tasks
      */
-    lateinit var computeThreadPool: ForkJoinPool
+    var computeThreadPool: ForkJoinPool
         private set
 
-    lateinit var commandMap: SimpleCommandMap
+    var resourcePackManager: ResourcePackManager
         private set
 
-    lateinit var resourcePackManager: ResourcePackManager
+    var consoleSender: ConsoleCommandSender
         private set
 
-    lateinit var consoleSender: ConsoleCommandSender
+    var scoreboardManager: IScoreboardManager
         private set
 
-    lateinit var scoreboardManager: IScoreboardManager
+    var functionManager: FunctionManager
         private set
 
-    lateinit var functionManager: FunctionManager
-        private set
-
-    lateinit var tickingAreaManager: TickingAreaManager
+    var tickingAreaManager: TickingAreaManager
         private set
 
     var maxPlayers: Int = 0
