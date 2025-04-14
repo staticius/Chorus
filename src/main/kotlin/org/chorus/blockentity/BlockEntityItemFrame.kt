@@ -19,7 +19,7 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
     override fun loadNBT() {
         super.loadNBT()
         if (!namedTag.contains("Item")) {
-            namedTag.putCompound("Item", NBTIO.putItemHelper(ItemBlock(Block.get(BlockID.AIR),)))
+            namedTag.putCompound("Item", NBTIO.putItemHelper(Item.AIR))
         }
         if (!namedTag.contains("ItemRotation")) {
             namedTag.putByte("ItemRotation", 0)
@@ -77,7 +77,7 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
     override val spawnCompound: CompoundTag
         get() {
             if (!namedTag.contains("Item")) {
-                this.setItem(ItemBlock(Block.get(BlockID.AIR),), false)
+                this.setItem(Item.AIR, false)
             }
             val item = item
             val tag = super.spawnCompound

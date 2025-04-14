@@ -37,7 +37,7 @@ open class BlockUndyedShulkerBox(blockState: BlockState) : BlockTransparent(bloc
     override val waterloggingLevel: Int
         get() = 1
 
-    open fun getShulkerBox(): Item = ItemBlock(this,)
+    open fun getShulkerBox(): Item = super.toItem()
 
     override fun toItem(): Item {
         val item = getShulkerBox()

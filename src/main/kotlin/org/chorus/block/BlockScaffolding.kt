@@ -35,10 +35,6 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Compan
             )
         }
 
-    override fun toItem(): Item {
-        return ItemBlock(BlockScaffolding(),)
-    }
-
     override fun place(
         item: Item?,
         block: Block,

@@ -26,7 +26,7 @@ class BlockUnlitRedstoneTorch @JvmOverloads constructor(blockstate: BlockState =
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.REDSTONE_TORCH),)
+        return ItemBlock(BlockRedstoneTorch.properties.defaultState)
     }
 
     override fun onUpdate(type: Int): Int {

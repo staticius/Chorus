@@ -47,10 +47,6 @@ class BlockWetSponge @JvmOverloads constructor(state: BlockState = Companion.pro
         return true
     }
 
-    override fun toItem(): Item {
-        return ItemBlock(BlockWetSponge(),)
-    }
-
     override val properties: BlockProperties
         get() = Companion.properties
 

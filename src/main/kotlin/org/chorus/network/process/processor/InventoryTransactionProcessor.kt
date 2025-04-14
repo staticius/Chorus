@@ -135,13 +135,13 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     if (item.isTool) {
                         if (item.useOn(target) && item.damage >= item.maxDurability) {
                             player.level!!.addSound(player.position, Sound.RANDOM_BREAK)
-                            item = ItemBlock(Block.get(BlockID.AIR),)
+                            item = Item.AIR
                         }
                     } else {
                         if (item.count > 1) {
                             item.count--
                         } else {
-                            item = ItemBlock(Block.get(BlockID.AIR),)
+                            item = Item.AIR
                         }
                     }
 

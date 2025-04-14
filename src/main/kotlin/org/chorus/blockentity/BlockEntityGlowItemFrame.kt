@@ -2,6 +2,7 @@ package org.chorus.blockentity
 
 import org.chorus.block.Block
 import org.chorus.block.BlockID
+import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.level.format.IChunk
 import org.chorus.nbt.NBTIO
@@ -21,7 +22,7 @@ class BlockEntityGlowItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntityIte
     override val spawnCompound: CompoundTag
         get() {
             if (!namedTag.contains("Item")) {
-                this.setItem(ItemBlock(Block.get(BlockID.AIR),), false)
+                this.setItem(Item.AIR, false)
             }
             val item = item
             val tag = super.spawnCompound

@@ -260,10 +260,6 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = Companio
         }
     }
 
-    override fun toItem(): Item {
-        return ItemBlock(BlockTurtleEgg(),)
-    }
-
     override fun onBreak(item: Item?): Boolean {
         val eggCount = eggCount
         if (item!!.getEnchantment(Enchantment.ID_SILK_TOUCH) == null) {

@@ -65,7 +65,7 @@ class BlockEntityLectern(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
     var book: Item
         get() {
             return if (!hasBook()) {
-                ItemBlock(BlockAir(),, 0, 0)
+                Item.AIR
             } else {
                 NBTIO.getItemHelper(namedTag.getCompound("book"))
             }

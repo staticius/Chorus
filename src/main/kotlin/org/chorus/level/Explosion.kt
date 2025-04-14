@@ -20,6 +20,7 @@ import org.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus.event.entity.EntityDamageEvent
 import org.chorus.event.entity.EntityExplodeEvent
 import org.chorus.inventory.InventoryHolder
+import org.chorus.item.Item
 import org.chorus.item.ItemBlock
 import org.chorus.math.AxisAlignedBB
 import org.chorus.math.BlockFace
@@ -271,7 +272,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
             }
         }
 
-        val air = ItemBlock(Block.get(BlockID.AIR),)
+        val air = Item.AIR
         var container: BlockEntity?
         val smokePositions = if (affectedBlocks.isEmpty()) Collections.emptyList() else ObjectArrayList<Vector3>()
         val random = ThreadLocalRandom.current()

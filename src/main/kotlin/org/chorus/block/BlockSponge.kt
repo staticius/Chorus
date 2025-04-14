@@ -54,10 +54,6 @@ class BlockSponge @JvmOverloads constructor(state: BlockState = Companion.proper
         return super.place(item, block, target, face, fx, fy, fz, player)
     }
 
-    override fun toItem(): Item {
-        return ItemBlock(BlockSponge(),)
-    }
-
     private fun performWaterAbsorb(block: Block): Boolean {
         val entries: Queue<Entry> = ArrayDeque()
 
