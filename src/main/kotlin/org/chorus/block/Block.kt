@@ -1009,7 +1009,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         get() = this.blockState === properties.defaultState
 
     open fun toItem(): Item {
-        return ItemBlock(properties.defaultState.toBlock(),)
+        return ItemBlock(properties.defaultState, name)
     }
 
     /**

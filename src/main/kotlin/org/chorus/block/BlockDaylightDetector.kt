@@ -38,7 +38,7 @@ open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = C
         get() = ItemTool.TYPE_AXE
 
     override fun toItem(): Item {
-        return ItemBlock(this,, 0)
+        return ItemBlock(this.blockState, name, 0)
     }
 
     override fun canBeActivated(): Boolean {

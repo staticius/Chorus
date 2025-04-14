@@ -50,9 +50,7 @@ class BlockPurpurPillar @JvmOverloads constructor(blockstate: BlockState = Compa
             )
         }
 
-    override fun toItem(): Item {
-        return ItemBlock(properties.defaultState.toBlock(),)
-    }
+
 
     override val properties: BlockProperties
         get() = Companion.properties

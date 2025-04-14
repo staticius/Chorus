@@ -22,7 +22,7 @@ class BlockIronBars @JvmOverloads constructor(blockstate: BlockState = Companion
         get() = ItemTool.TYPE_PICKAXE
 
     override fun toItem(): Item {
-        return ItemBlock(this,, 0)
+        return ItemBlock(this.blockState, name, 0)
     }
 
     override val toolTier: Int

@@ -148,9 +148,7 @@ abstract class BlockLichen(blockState: BlockState) : BlockTransparent(blockState
         return false
     }
 
-    override fun toItem(): Item {
-        return ItemBlock(properties.defaultState.toBlock(),)
-    }
+
 
     companion object {
         val RANDOM: ChorusRandom = ChorusRandom()

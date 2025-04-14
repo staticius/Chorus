@@ -13,7 +13,7 @@ class BlockDaylightDetectorInverted @JvmOverloads constructor(blockState: BlockS
         get() = "Daylight Detector Inverted"
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.DAYLIGHT_DETECTOR),, 0)
+        return ItemBlock(BlockDaylightDetector.properties.defaultState, name, 0)
     }
 
     override fun onActivate(

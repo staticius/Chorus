@@ -49,12 +49,9 @@ open class BlockPrismarine : BlockSolid {
 
     override fun toItem(): Item {
         return when (this.prismarineBlockType) {
-            PrismarineBlockType.BRICKS -> ItemBlock(
-                BlockPrismarineBricks.properties.defaultState.toBlock(),
-            )
-
-            PrismarineBlockType.DARK -> ItemBlock(BlockDarkPrismarine.properties.defaultState.toBlock(),)
-            PrismarineBlockType.DEFAULT -> ItemBlock(properties.defaultState.toBlock(),)
+            PrismarineBlockType.BRICKS -> ItemBlock(BlockPrismarineBricks.properties.defaultState)
+            PrismarineBlockType.DARK -> ItemBlock(BlockDarkPrismarine.properties.defaultState)
+            PrismarineBlockType.DEFAULT -> ItemBlock(properties.defaultState)
         }
     }
 

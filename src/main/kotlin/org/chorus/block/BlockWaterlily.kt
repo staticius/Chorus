@@ -81,7 +81,7 @@ class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = Companio
     }
 
     override fun toItem(): Item {
-        return ItemBlock(this,, 0)
+        return ItemBlock(this.blockState, name, 0)
     }
 
     override fun canPassThrough(): Boolean {

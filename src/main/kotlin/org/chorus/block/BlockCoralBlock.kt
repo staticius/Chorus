@@ -66,8 +66,4 @@ abstract class BlockCoralBlock(blockstate: BlockState) : BlockSolid(blockstate) 
             Item.EMPTY_ARRAY
         }
     }
-
-    override fun toItem(): Item {
-        return ItemBlock(this,)
-    }
 }

@@ -159,7 +159,7 @@ class BlockEndPortalFrame @JvmOverloads constructor(blockstate: BlockState = Com
     }
 
     override fun toItem(): Item {
-        return ItemBlock(this,, 0)
+        return ItemBlock(this.blockState, name, 0)
     }
 
     override var blockFace: BlockFace

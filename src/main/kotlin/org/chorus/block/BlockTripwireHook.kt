@@ -271,7 +271,7 @@ class BlockTripwireHook @JvmOverloads constructor(state: BlockState = Companion.
     }
 
     override fun toItem(): Item {
-        return ItemBlock(this,, 0)
+        return ItemBlock(this.blockState, name, 0)
     }
 
     override val isSolid: Boolean

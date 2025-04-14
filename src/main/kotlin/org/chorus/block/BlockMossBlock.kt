@@ -179,7 +179,7 @@ open class BlockMossBlock @JvmOverloads constructor(blockstate: BlockState = Com
         get() = ItemTool.TYPE_HOE
 
     override fun getDrops(item: Item): Array<Item> {
-        return arrayOf(ItemBlock(get(BlockID.MOSS_BLOCK),))
+        return arrayOf(super.toItem())
     }
 
     override val isFertilizable: Boolean

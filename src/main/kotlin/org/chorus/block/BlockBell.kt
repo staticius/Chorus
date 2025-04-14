@@ -395,10 +395,6 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
             setPropertyValue(CommonBlockProperties.TOGGLE_BIT, toggled)
         }
 
-    override fun toItem(): Item {
-        return ItemBlock(BlockBell(),)
-    }
-
     override val waterloggingLevel: Int
         get() = 1
 

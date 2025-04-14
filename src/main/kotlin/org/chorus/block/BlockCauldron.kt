@@ -536,7 +536,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
     private fun consumePotion(item: Item, player: Player) {
         if (player.isSurvival || player.isAdventure) {
             if (item.getCount() == 1) {
-                player.inventory.setItemInHand(ItemBlock(BlockAir(),))
+                player.inventory.setItemInHand(Item.AIR)
             } else if (item.getCount() > 1) {
                 item.setCount(item.getCount() - 1)
                 player.inventory.setItemInHand(item)

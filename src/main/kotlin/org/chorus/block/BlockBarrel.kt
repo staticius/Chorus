@@ -109,10 +109,6 @@ class BlockBarrel @JvmOverloads constructor(blockState: BlockState = Companion.p
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 
-    override fun toItem(): Item {
-        return ItemBlock(BlockBarrel(),)
-    }
-
     override var blockFace: BlockFace
         get() = fromIndex(getPropertyValue(CommonBlockProperties.FACING_DIRECTION))
         set(face) {

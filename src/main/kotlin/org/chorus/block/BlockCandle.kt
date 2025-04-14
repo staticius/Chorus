@@ -83,7 +83,7 @@ open class BlockCandle @JvmOverloads constructor(blockstate: BlockState = Compan
 
     override fun getDrops(item: Item): Array<Item> {
         return arrayOf(
-            ItemBlock(this,, 0, getPropertyValue(CommonBlockProperties.CANDLES) + 1)
+            ItemBlock(properties.defaultState, name, 0, getPropertyValue(CommonBlockProperties.CANDLES) + 1)
         )
     }
 

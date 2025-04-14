@@ -16,9 +16,7 @@ class BlockResinBrickWall @JvmOverloads constructor(blockstate: BlockState = Com
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
 
-    override fun toItem(): Item {
-        return ItemBlock(properties.defaultState.toBlock(),)
-    }
+
 
     override val properties: BlockProperties
         get() = Companion.properties

@@ -67,7 +67,7 @@ class BlockEndPortal @JvmOverloads constructor(blockState: BlockState = Companio
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.AIR),)
+        return Item.AIR
     }
 
     override fun canBePushed(): Boolean {

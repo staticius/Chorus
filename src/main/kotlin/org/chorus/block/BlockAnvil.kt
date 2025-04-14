@@ -131,10 +131,6 @@ open class BlockAnvil @JvmOverloads constructor(blockstate: BlockState = Compani
         )
     }
 
-    override fun toItem(): Item {
-        return ItemBlock(clone().setPropertyValue(CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION.createDefaultValue()),)
-    }
-
     override val properties: BlockProperties
         get() = Companion.properties
 

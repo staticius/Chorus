@@ -105,7 +105,7 @@ open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState = Co
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.FURNACE),)
+        return ItemBlock(BlockFurnace.properties.defaultState, "")
     }
 
     override val toolTier: Int

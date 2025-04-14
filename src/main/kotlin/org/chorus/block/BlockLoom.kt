@@ -19,10 +19,6 @@ class BlockLoom @JvmOverloads constructor(blockState: BlockState = Companion.pro
     override val name: String
         get() = "Loom"
 
-    override fun toItem(): Item {
-        return ItemBlock(BlockLoom(),)
-    }
-
     override val toolType: Int
         get() = ItemTool.TYPE_AXE
 

@@ -18,7 +18,7 @@ open class BlockLitSmoker @JvmOverloads constructor(blockstate: BlockState = Com
     override fun getBlockEntityClass() = BlockEntitySmoker::class.java
 
     override fun toItem(): Item {
-        return ItemBlock(BlockSmoker(),)
+        return ItemBlock(BlockSmoker.properties.defaultState, "")
     }
 
     override val properties: BlockProperties

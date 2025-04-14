@@ -34,7 +34,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
         get() = 1
 
     override fun toItem(): Item {
-        return ItemBlock(this,, 0)
+        return ItemBlock(properties.defaultState, name, 0)
     }
 
     override fun hasComparatorInputOverride(): Boolean {

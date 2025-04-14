@@ -318,7 +318,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.AIR),)
+        return Item.AIR
     }
 
     /**

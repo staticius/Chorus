@@ -153,7 +153,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.pro
     }
 
     override fun toItem(): Item {
-        return ItemBlock(this,, 0)
+        return ItemBlock(this.blockState, name, 0)
     }
 
     override fun onUpdate(type: Int): Int {

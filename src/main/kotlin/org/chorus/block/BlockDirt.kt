@@ -61,9 +61,7 @@ open class BlockDirt : BlockSolid, Natural {
         return arrayOf(this.toItem())
     }
 
-    override fun toItem(): Item {
-        return ItemBlock(this,)
-    }
+
 
     override val properties: BlockProperties
         get() = Companion.properties

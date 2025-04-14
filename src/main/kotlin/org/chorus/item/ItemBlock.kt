@@ -6,7 +6,7 @@ import org.chorus.block.BlockState
 import org.chorus.registry.Registries
 
 
-open class ItemBlock @JvmOverloads constructor(blockState: BlockState, name: String, aux: Int = 0, count: Int = 1) :
+open class ItemBlock @JvmOverloads constructor(blockState: BlockState, name: String = "", aux: Int = 0, count: Int = 1) :
     Item(blockState, aux, count, name, true) {
     override var damage: Int
         get() = super.damage

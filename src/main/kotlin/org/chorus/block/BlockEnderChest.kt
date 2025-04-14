@@ -168,7 +168,7 @@ class BlockEnderChest @JvmOverloads constructor(blockstate: BlockState = Compani
     }
 
     override fun toItem(): Item {
-        return ItemBlock(this,, 0)
+        return ItemBlock(this.blockState, name, 0)
     }
 
     override var blockFace: BlockFace

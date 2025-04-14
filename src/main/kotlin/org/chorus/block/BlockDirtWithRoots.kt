@@ -50,7 +50,7 @@ class BlockDirtWithRoots : BlockDirt {
             vector.setY(position.y + 1)
             item.useOn(this)
             level.setBlock(this.position, get(BlockID.DIRT), true)
-            level.dropItem(vector, ItemBlock(get(BlockID.HANGING_ROOTS),))
+            level.dropItem(vector, ItemBlock(BlockHangingRoots.properties.defaultState, ""))
             if (player != null) {
                 player.level!!.addSound(player.position, Sound.USE_GRASS)
             }
@@ -75,7 +75,7 @@ class BlockDirtWithRoots : BlockDirt {
         get() = ItemTool.TYPE_SHOVEL
 
     override fun getDrops(item: Item): Array<Item> {
-        return arrayOf(ItemBlock(get(BlockID.DIRT_WITH_ROOTS),))
+        return arrayOf(ItemBlock(BlockDirtWithRoots.properties.defaultState, ""))
     }
 
     override val properties: BlockProperties

@@ -79,7 +79,7 @@ open class BlockPistonArmCollision @JvmOverloads constructor(blockstate: BlockSt
     }
 
     override fun toItem(): Item {
-        return ItemBlock(get(BlockID.AIR),)
+        return Item.AIR
     }
 
     override val properties: BlockProperties
