@@ -23,7 +23,6 @@ data class CraftingDataPacket(
     var cleanRecipes: Boolean = false
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeArray(craftingEntries) { _, _ -> }
         byteBuf.writeUnsignedVarInt(entries.size)
 
         var recipeNetworkId = 1

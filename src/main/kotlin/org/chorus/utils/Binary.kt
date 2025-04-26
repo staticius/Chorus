@@ -110,10 +110,10 @@ class Binary {
             stream.putUnsignedVarInt(entityDataMap.size.toLong()) //size
             for ((key, data) in entityDataMap) {
                 stream.putUnsignedVarInt(key.getValue().toLong())
-                val transformer = key.getTransformer() as Function<Any, Any>
-                val applyData = transformer.apply(data)
+                val transformer = key.getTransformer() as Function<Any, *>?
+                val applyData = transformer?.apply(data) ?: data
 
-                val format = EntityDataFormat.from(applyData.javaClass)
+                val format = EntityDataFormat.from(applyData)
                 stream.putUnsignedVarInt(format.ordinal.toLong())
 
                 when (format) {

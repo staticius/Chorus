@@ -65,7 +65,8 @@ class EntityDataMap : MutableMap<EntityDataType<Any>, Any> {
         this[type] = value
     }
 
-    override val size: Int = map.size
+    override val size: Int
+        get() = map.size
 
     override fun isEmpty(): Boolean {
         return map.isEmpty()
@@ -94,29 +95,12 @@ class EntityDataMap : MutableMap<EntityDataType<Any>, Any> {
             val type = key.getType()
             val number: Number = value1 as Number
             when (type) {
-                Long::class.javaPrimitiveType, Long::class.java -> {
-                    value1 = number.toLong()
-                }
-
-                Int::class.javaPrimitiveType, Int::class.java -> {
-                    value1 = number.toInt()
-                }
-
-                Short::class.javaPrimitiveType, Short::class.java -> {
-                    value1 = number.toShort()
-                }
-
-                Byte::class.javaPrimitiveType, Byte::class.java -> {
-                    value1 = number.toByte()
-                }
-
-                Float::class.javaPrimitiveType, Float::class.java -> {
-                    value1 = number.toFloat()
-                }
-
-                Double::class.javaPrimitiveType, Double::class.java -> {
-                    value1 = number.toDouble()
-                }
+                Long::class -> value1 = number.toLong()
+                Int::class -> value1 = number.toInt()
+                Short::class -> value1 = number.toShort()
+                Byte::class -> value1 = number.toByte()
+                Float::class -> value1 = number.toFloat()
+                Double::class -> value1 = number.toDouble()
             }
         }
         return map.put(key, value1)
@@ -135,11 +119,14 @@ class EntityDataMap : MutableMap<EntityDataType<Any>, Any> {
         map.clear()
     }
 
-    override val keys: MutableSet<EntityDataType<*>> = map.keys
+    override val keys: MutableSet<EntityDataType<*>>
+        get() = map.keys
 
-    override val values: MutableCollection<Any> = map.values
+    override val values: MutableCollection<Any>
+        get() = map.values
 
-    override val entries: MutableSet<MutableMap.MutableEntry<EntityDataType<*>, Any>> = map.entries
+    override val entries: MutableSet<MutableMap.MutableEntry<EntityDataType<*>, Any>>
+        get() = map.entries
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

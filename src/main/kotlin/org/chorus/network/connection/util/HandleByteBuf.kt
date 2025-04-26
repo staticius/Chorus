@@ -1382,22 +1382,14 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
 
     fun writePropertySyncData(data: PropertySyncData) {
         writeUnsignedVarInt(data.intProperties.size)
-        run {
-            var i = 0
-            val len = data.intProperties.size
-            while (i < len) {
-                writeUnsignedVarInt(i)
-                writeVarInt(data.intProperties[i])
-                ++i
-            }
+        for (i in data.intProperties.indices) {
+            writeUnsignedVarInt(i)
+            writeVarInt(data.intProperties[i])
         }
         writeUnsignedVarInt(data.floatProperties.size)
-        var i = 0
-        val len = data.floatProperties.size
-        while (i < len) {
+        for (i in data.floatProperties.indices) {
             writeUnsignedVarInt(i)
             writeFloatLE(data.floatProperties[i])
-            ++i
         }
     }
 

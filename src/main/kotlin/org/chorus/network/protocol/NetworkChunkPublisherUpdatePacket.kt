@@ -15,7 +15,7 @@ class NetworkChunkPublisherUpdatePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET
+        return ProtocolInfo.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

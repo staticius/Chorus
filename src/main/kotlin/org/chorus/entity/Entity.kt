@@ -273,8 +273,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @Volatile
     protected var saveWithChunk: Boolean = true
-    private val intProperties: MutableMap<String?, Int> = LinkedHashMap()
-    private val floatProperties: MutableMap<String?, Float> = LinkedHashMap()
+    private val intProperties: MutableMap<String, Int> = LinkedHashMap()
+    private val floatProperties: MutableMap<String, Float> = LinkedHashMap()
 
     @JvmField
     protected val attributes: MutableMap<Int, Attribute> = HashMap()
@@ -3059,7 +3059,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         return validateAndSetIntProperty(identifier, if (value) 1 else 0)
     }
 
-    fun setFloatEntityProperty(identifier: String?, value: Float): Boolean {
+    fun setFloatEntityProperty(identifier: String, value: Float): Boolean {
         if (!floatProperties.containsKey(identifier)) return false
         floatProperties[identifier] = value
         return true
@@ -3130,19 +3130,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     }
 
     fun propertySyncData(): PropertySyncData {
-        val intValues: Collection<Int> = intProperties.values
-        val intArray = IntArray(intValues.size)
-        var i = 0
-        for (value: Int in intValues) {
-            intArray[i++] = value
-        }
-
-        val floatValues: Collection<Float> = floatProperties.values
-        val floatArray = FloatArray(floatValues.size)
-        i = 0
-        for (value: Float in floatValues) {
-            floatArray[i++] = value
-        }
+        val intArray = intProperties.values.toIntArray()
+        val floatArray = floatProperties.values.toFloatArray()
 
         return PropertySyncData(intArray, floatArray)
     }
