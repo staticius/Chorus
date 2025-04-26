@@ -2,7 +2,6 @@ package org.chorus.level.format.leveldb
 
 import io.netty.buffer.ByteBufAllocator
 import io.netty.buffer.ByteBufOutputStream
-import it.unimi.dsi.fastutil.Pair
 import org.chorus.blockentity.BlockEntitySpawnable
 import org.chorus.level.*
 import org.chorus.level.format.*
@@ -25,30 +24,27 @@ import java.nio.file.StandardCopyOption
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.collections.HashMap
 
 class LevelDBProvider(override val level: Level, override val path: String) : LevelProvider {
     private val lastChunk: ThreadLocal<WeakReference<IChunk>?> = ThreadLocal()
     protected val chunks: ConcurrentHashMap<Long, IChunk> = ConcurrentHashMap()
-    protected val storage: LevelDBStorage
+    protected val storage: LevelDBStorage = CACHE.computeIfAbsent(path) { p: String ->
+        try {
+            return@computeIfAbsent LevelDBStorage(
+                level.dimensionCount, p, Options()
+                    .createIfMissing(true)
+                    .compressionType(CompressionType.ZLIB_RAW)
+                    .blockSize(64 * 1024)
+            )
+        } catch (e: IOException) {
+            throw RuntimeException(e)
+        }
+    }
 
     val levelData: LevelDat = readLevelDat() ?: LevelDat().also {
         this.levelData = it
         saveLevelData()
-    }
-
-    init {
-        this.storage = CACHE.computeIfAbsent(path) { p: String ->
-            try {
-                return@computeIfAbsent LevelDBStorage(
-                    level.dimensionCount, p, Options()
-                        .createIfMissing(true)
-                        .compressionType(CompressionType.ZLIB_RAW)
-                        .blockSize(64 * 1024)
-                )
-            } catch (e: IOException) {
-                throw RuntimeException(e)
-            }
-        }
     }
 
     fun loadChunk(index: Long, chunkX: Int, chunkZ: Int, create: Boolean): IChunk {
@@ -176,7 +172,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                 byteBuf.release()
             }
         }
-        return Pair.of(data.get(), subChunkCountRef.get())
+        return Pair(data.get(), subChunkCountRef.get())
     }
 
 

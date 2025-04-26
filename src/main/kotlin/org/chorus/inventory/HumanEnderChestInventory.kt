@@ -23,7 +23,7 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
     }
 
     override var holder: InventoryHolder
-        get() = holder as IHuman
+        get() = super.holder as IHuman
         set(holder) {
             super.holder = holder
         }

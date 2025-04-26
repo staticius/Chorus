@@ -37,7 +37,7 @@ interface IChunk {
      */
     fun setSection(fY: Int, section: ChunkSection?)
 
-    val sections: Array<ChunkSection?>
+    fun getSectionsSafe(): Array<ChunkSection?>
 
     var x: Int
 

@@ -51,11 +51,16 @@ class Chunk : IChunk {
 
     private var atomicChunkState = AtomicReference(ChunkState.NEW)
 
-    override val sections: Array<ChunkSection?>
-        get() {
-            val stamp = blockLock.readLock()
-            return field.also { blockLock.unlockRead(stamp) }
+    val sections: Array<ChunkSection?>
+
+    override fun getSectionsSafe(): Array<ChunkSection?> {
+        val stamp = blockLock.readLock()
+        try {
+            return sections
+        } finally {
+            blockLock.unlockRead(stamp)
         }
+    }
 
     override val heightMapArray: ShortArray //256 size Values start at 0 and are 0-384 for the Overworld range
 

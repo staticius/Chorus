@@ -19,16 +19,16 @@ enum class EntityDataFormat {
     companion object {
         fun from(clazz: Class<*>): EntityDataFormat {
             when (clazz) {
-                Byte::class.java -> return BYTE
-                Short::class.java -> return SHORT
-                Int::class.java -> return INT
-                Float::class.java -> return FLOAT
-                String::class.java -> return STRING
-                CompoundTag::class.java -> return NBT
-                BlockVector3::class.java -> return VECTOR3I
-                Long::class.java -> return LONG
-                Vector3::class.java,
-                Vector3f::class.java -> return VECTOR3F
+                Byte::class.javaObjectType -> return BYTE
+                Short::class.javaObjectType -> return SHORT
+                Int::class.javaObjectType -> return INT
+                Float::class.javaObjectType -> return FLOAT
+                String::class.javaObjectType -> return STRING
+                CompoundTag::class.javaObjectType -> return NBT
+                BlockVector3::class.javaObjectType -> return VECTOR3I
+                Long::class.javaObjectType -> return LONG
+                Vector3::class.javaObjectType,
+                Vector3f::class.javaObjectType -> return VECTOR3F
 
                 else -> throw IllegalArgumentException("Unknown EntityDataType: $clazz")
             }

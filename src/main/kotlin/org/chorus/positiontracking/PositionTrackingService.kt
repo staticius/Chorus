@@ -224,16 +224,16 @@ class PositionTrackingService(folder: File) : Closeable {
         Server.instance.onlinePlayers.values.forEach(Consumer { player: Player -> this.detectNeededUpdates(player) })
     }
 
-    private fun inventories(player: Player): Iterable<Inventory> {
+    private fun inventories(player: Player): Iterable<Inventory?> {
         return Iterable {
-            object : Iterator<Inventory> {
+            object : Iterator<Inventory?> {
                 var next: Int = 0
 
                 override fun hasNext(): Boolean {
                     return next <= 4
                 }
 
-                override fun next(): Inventory {
+                override fun next(): Inventory? {
                     return when (next++) {
                         0 -> player.inventory
                         1 -> player.cursorInventory

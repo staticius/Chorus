@@ -294,7 +294,7 @@ class Level(
         val levelProvider = getProvider()
         if (levelProvider == null) {
             val levelException: LevelException =
-                LevelException("The level \"" + folderPath + "\" is already closed (have no providers)")
+                LevelException("The level \"$folderPath\" is already closed (have no providers)")
             try {
                 close()
             } catch (e: Exception) {
@@ -1222,7 +1222,7 @@ class Level(
                     continue
                 }
 
-                for (section in chunk.sections) {
+                for (section in chunk.getSectionsSafe()) {
                     if (section == null || section.isEmpty) {
                         continue
                     }
@@ -3481,8 +3481,8 @@ class Level(
                         pk.chunkX = x
                         pk.chunkZ = z
                         pk.dimension = dimensionData.dimensionId
-                        pk.subChunkCount = pair.right()
-                        pk.data = pair.left()
+                        pk.subChunkCount = pair.second
+                        pk.data = pair.first
                         player.sendChunk(x, z, pk)
                     }
                 }
@@ -3512,8 +3512,8 @@ class Level(
                 pk.chunkX = chunkX
                 pk.chunkZ = chunkZ
                 pk.dimension = dimensionData.dimensionId
-                pk.subChunkCount = pair.right()
-                pk.data = pair.left()
+                pk.subChunkCount = pair.second
+                pk.data = pair.first
                 player.sendChunk(chunkX, chunkZ, pk)
             }
         }
@@ -3785,7 +3785,8 @@ class Level(
     }
 
     fun getSafeSpawn(spawn: Vector3?, horizontalMaxOffset: Int): Locator {
-        return getSafeSpawn(spawn, horizontalMaxOffset, true)
+        val safe = getSafeSpawn(spawn, horizontalMaxOffset, true)
+        return safe
     }
 
     fun getSafeSpawn(spawn: Vector3?, horizontalMaxOffset: Int, allowWaterUnder: Boolean): Locator {
@@ -3798,51 +3799,43 @@ class Level(
 
         for (horizontalOffset in 0..horizontalMaxOffset) {
             for (y in maxY downTo minY) {
-                val pos = spawn1.clone()
-                pos.setY(y.toDouble())
-                var newSpawn: Vector3
+                val pos = Locator.fromObject(spawn1, this)
+                pos.position.y = (y.toDouble())
+
+                var newSpawn: Locator
                 if (standable(
-                        pos.add(horizontalOffset.toDouble(), 0.0, horizontalOffset.toDouble()).also { newSpawn = it },
+                        pos.add(horizontalOffset.toDouble(), 0.0, horizontalOffset.toDouble()).also { newSpawn = it }.position,
                         allowWaterUnder
                     )
-                ) return Locator(
-                    newSpawn,
-                    this
-                )
+                ) return newSpawn
+
                 if (standable(
-                        pos.add(horizontalOffset.toDouble(), 0.0, -horizontalOffset.toDouble()).also { newSpawn = it },
+                        pos.add(horizontalOffset.toDouble(), 0.0, -horizontalOffset.toDouble()).also { newSpawn = it }.position,
                         allowWaterUnder
                     )
-                ) return Locator(
-                    newSpawn,
-                    this
-                )
+                ) return newSpawn
+
                 if (standable(
-                        pos.add(-horizontalOffset.toDouble(), 0.0, horizontalOffset.toDouble()).also { newSpawn = it },
+                        pos.add(-horizontalOffset.toDouble(), 0.0, horizontalOffset.toDouble()).also { newSpawn = it }.position,
                         allowWaterUnder
                     )
-                ) return Locator(
-                    newSpawn,
-                    this
-                )
+                ) return newSpawn
+
                 if (standable(
-                        pos.add(-horizontalOffset.toDouble(), 0.0, -horizontalOffset.toDouble()).also { newSpawn = it },
+                        pos.add(-horizontalOffset.toDouble(), 0.0, -horizontalOffset.toDouble()).also { newSpawn = it }.position,
                         allowWaterUnder
                     )
-                ) return Locator(
-                    newSpawn,
-                    this
-                )
+                ) return newSpawn
             }
         }
 
         log.warn("cannot find a safe spawn around " + spawn1.asBlockVector3() + "!")
-        return Locator.Companion.fromObject(spawn1, this)
+        return Locator.fromObject(spawn1, this)
     }
 
     @JvmOverloads
     fun standable(vec: Vector3, allowWaterUnder: Boolean = false): Boolean {
-        val pos: Locator = Locator.Companion.fromObject(vec, this)
+        val pos: Locator = Locator.fromObject(vec, this)
         val blockUnder = pos.add(0.0, -1.0, 0.0).getLevelBlock(0, true)
         val block = pos.getLevelBlock(0, true)
         val blockUpper = pos.add(0.0, 1.0, 0.0).getLevelBlock(0, true)
