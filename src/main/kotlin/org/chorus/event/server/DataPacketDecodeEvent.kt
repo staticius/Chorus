@@ -6,7 +6,7 @@ import org.chorus.event.HandlerList
 import org.chorus.network.connection.netty.BedrockPacketWrapper
 
 
-class DataPacketDecodeEvent(val player: Player, val packetWrapper: BedrockPacketWrapper) : ServerEvent(), Cancellable {
+class DataPacketDecodeEvent(val player: Player?, val packetWrapper: BedrockPacketWrapper) : ServerEvent(), Cancellable {
     val packetId: Int
         get() = packetWrapper.packetId
 

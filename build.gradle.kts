@@ -14,7 +14,7 @@ plugins {
 }
 
 group = "org.chorus"
-version = "2.0.0-SNAPSHOT"
+version = "0.0.1-SNAPSHOT"
 description = "Chorus"
 
 repositories {

@@ -47,7 +47,7 @@ class BedrockBatchEncoder : ChannelOutboundHandlerAdapter() {
                 packet.release()
             }
 
-            batch.uncompressed = buf.retain()
+            batch.setUncompressed(buf.retain())
             ctx.write(batch.retain())
         } finally {
             buf.release()

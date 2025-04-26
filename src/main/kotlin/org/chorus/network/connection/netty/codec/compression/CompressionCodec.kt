@@ -55,7 +55,8 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
 
         val compression: BatchCompression?
         if (this.prefixed) {
-            val algorithm = this.getCompressionAlgorithm(compressed.readByte())
+            val compressionHeader = compressed.readByte()
+            val algorithm = this.getCompressionAlgorithm(compressionHeader)
             compression = strategy.getCompression(algorithm)
         } else {
             compression = strategy.defaultCompression
@@ -63,7 +64,7 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
 
         msg.algorithm = compression!!.algorithm
 
-        msg.uncompressed = compression.decode(ctx, compressed.slice())
+        msg.setUncompressed(compression.decode(ctx, compressed.slice()))
         this.onDecompressed(ctx, msg)
         out.add(msg.retain())
     }
@@ -75,24 +76,29 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
     protected fun onDecompressed(ctx: ChannelHandlerContext?, msg: BedrockBatchWrapper?) {}
 
     protected fun getCompressionHeader(algorithm: CompressionAlgorithm): Byte {
-        if (algorithm == PacketCompressionAlgorithm.NONE) {
-            return 0xff.toByte()
-        } else if (algorithm == PacketCompressionAlgorithm.ZLIB) {
-            return 0x00
-        } else if (algorithm == PacketCompressionAlgorithm.SNAPPY) {
-            return 0x01
+        when (algorithm) {
+            PacketCompressionAlgorithm.NONE -> {
+                return 0xff.toByte()
+            }
+            PacketCompressionAlgorithm.ZLIB -> {
+                return 0x00
+            }
+            PacketCompressionAlgorithm.SNAPPY -> {
+                return 0x01
+            }
+            else -> {
+                val header = this.getCompressionHeader0(algorithm)
+                require(header.toInt() != -1) { "Unknown compression algorithm $algorithm" }
+                return header
+            }
         }
-
-        val header = this.getCompressionHeader0(algorithm)
-        require(header.toInt() != -1) { "Unknown compression algorithm $algorithm" }
-        return header
     }
 
     protected fun getCompressionAlgorithm(header: Byte): CompressionAlgorithm {
-        when (header.toInt()) {
-            0x00 -> return PacketCompressionAlgorithm.ZLIB
-            0x01 -> return PacketCompressionAlgorithm.SNAPPY
-            0xff -> return PacketCompressionAlgorithm.NONE
+        when (header) {
+            0x00.toByte() -> return PacketCompressionAlgorithm.ZLIB
+            0x01.toByte() -> return PacketCompressionAlgorithm.SNAPPY
+            0xff.toByte() -> return PacketCompressionAlgorithm.NONE
         }
 
         val algorithm = this.getCompressionAlgorithm0(header)

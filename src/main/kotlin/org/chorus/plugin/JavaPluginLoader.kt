@@ -24,7 +24,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
         val description = this.getPluginDescription(file)
         if (description != null) {
             JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.load", description.fullName))
-            val dataFolder = File(file.parentFile, description.name!!)
+            val dataFolder = File(file.parentFile, description.name)
             check(!(dataFolder.exists() && !dataFolder.isDirectory)) { "Projected dataFolder '" + dataFolder + "' for " + description.name + " exists and is not a directory" }
 
             val className = description.main

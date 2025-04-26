@@ -47,7 +47,7 @@ abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacket
             wrapper.packet = packetDecoder.decode(HandleByteBuf.of(msg))
             out.add(wrapper.retain())
         } catch (t: Throwable) {
-            log.info("Failed to decode PacketID: ${wrapper.packetId}; $t")
+            log.info("Failed to decode PacketID: ${wrapper.packetId}", t)
             throw t
         } finally {
             wrapper.release()

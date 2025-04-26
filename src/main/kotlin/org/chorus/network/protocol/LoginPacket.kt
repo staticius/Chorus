@@ -179,9 +179,9 @@ class LoginPacket(
                 }
             )
 
-            val buffer = BinaryStream(byteBuf.readByteArray(), 0)
-            packet.decodeChainData(buffer)
-            packet.decodeSkinData(buffer)
+            packet.buffer = BinaryStream(byteBuf.readByteArray(), 0)
+            packet.decodeChainData(packet.buffer!!)
+            packet.decodeSkinData(packet.buffer!!)
 
             return packet
         }

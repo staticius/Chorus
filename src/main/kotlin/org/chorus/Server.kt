@@ -132,6 +132,7 @@ class Server internal constructor(
 ) {
     val dataPath: String = File(dataPath).absolutePath + "/"
     val pluginPath: String = File(pluginPath).absolutePath + "/"
+    val commandDataPath: String = File(dataPath).absolutePath + "/command_data"
 
     val properties: ServerProperties = ServerProperties(this.dataPath)
 
@@ -151,11 +152,9 @@ class Server internal constructor(
     private val busyingTime: MutableList<Long> = Collections.synchronizedList(mutableListOf())
     private var hasStopped = false
 
-    var commandMap: SimpleCommandMap = SimpleCommandMap(this)
-        private set
+    val commandMap: SimpleCommandMap by lazy { SimpleCommandMap(this) }
 
-    var pluginManager: PluginManager = PluginManager(this, commandMap)
-        private set
+    val pluginManager: PluginManager by lazy { PluginManager(this, this.commandMap) }
 
     var scheduler: ServerScheduler
         private set
@@ -174,9 +173,9 @@ class Server internal constructor(
     private var maxUse = 0f
 
     private var sendUsageTicker = 0
-    private lateinit var console: ChorusConsole
+    private var console: ChorusConsole
 
-    private lateinit var consoleThread: ConsoleThread
+    private var consoleThread: ConsoleThread
 
     /**
      * FJP thread pool responsible for terrain generation, data compression and other computing tasks
@@ -190,14 +189,11 @@ class Server internal constructor(
     var consoleSender: ConsoleCommandSender
         private set
 
-    var scoreboardManager: IScoreboardManager
-        private set
+    val scoreboardManager: IScoreboardManager by lazy { ScoreboardManager(JSONScoreboardStorage("$commandDataPath/scoreboard.json")) }
 
-    var functionManager: FunctionManager
-        private set
+    val functionManager: FunctionManager by lazy { FunctionManager("$commandDataPath/functions") }
 
-    var tickingAreaManager: TickingAreaManager
-        private set
+    val tickingAreaManager: TickingAreaManager by lazy { SimpleTickingAreaManager(JSONTickingAreaStorage(this.dataPath + "worlds/")) }
 
     var maxPlayers: Int = 0
         private set
@@ -437,7 +433,7 @@ class Server internal constructor(
 
         this.enablePlugins(PluginLoadOrder.STARTUP)
         this.enablePlugins(PluginLoadOrder.POSTWORLD)
-        pluginManager.callEvent(ServerStartedEvent)
+        pluginManager.callEvent(ServerStartedEvent())
     }
 
     /**
@@ -466,7 +462,7 @@ class Server internal constructor(
 
             this.hasStopped = true
 
-            pluginManager.callEvent(ServerStopEvent)
+            pluginManager.callEvent(ServerStopEvent())
 
             for (player in ArrayList(players.values)) {
                 player.close(player.leaveMessage, settings.baseSettings.shutdownMessage)
@@ -548,7 +544,7 @@ class Server internal constructor(
             )
         )
 
-        pluginManager.callEvent(ServerStartedEvent)
+        pluginManager.callEvent(ServerStartedEvent())
         this.tickProcessor()
         this.forceShutdown()
     }
@@ -1704,7 +1700,6 @@ class Server internal constructor(
         if (!File(pluginPath).exists()) {
             File(pluginPath).mkdirs()
         }
-        val commandDataPath = File(dataPath).absolutePath + "/command_data"
         if (!File(commandDataPath).exists()) {
             File(commandDataPath).mkdirs()
         }
@@ -1886,10 +1881,6 @@ class Server internal constructor(
             DispenseBehaviorRegister.init()
         }
 
-        scoreboardManager = ScoreboardManager(JSONScoreboardStorage("$commandDataPath/scoreboard.json"))
-        functionManager = FunctionManager("$commandDataPath/functions")
-        tickingAreaManager = SimpleTickingAreaManager(JSONTickingAreaStorage(this.dataPath + "worlds/"))
-
         // Convert legacy data before plugins get the chance to mess with it.
         try {
             playerDataDB = Iq80DBFactory.factory.open(
@@ -1905,8 +1896,6 @@ class Server internal constructor(
             ZippedResourcePackLoader(File(Chorus.DATA_PATH, "resource_packs")),
             JarPluginResourcePackLoader(File(this.pluginPath))
         )
-        this.commandMap = SimpleCommandMap(this)
-        this.pluginManager = PluginManager(this, this.commandMap)
         pluginManager.subscribeToPermission(BROADCAST_CHANNEL_ADMINISTRATIVE, this.consoleSender)
         pluginManager.registerInterface(JavaPluginLoader::class.java)
         console.setExecutingCommands(true)
@@ -2105,7 +2094,6 @@ class Server internal constructor(
             File(this.dataPath, "worlds/$levelFolderName1").absolutePath
         }
         val pathS = Path.of(path).toString()
-        val provider = getProvider(pathS)
 
         val generators: Map<Int, GeneratorConfig> = levelConfig.generators
         for ((key, value) in generators) {
@@ -2115,12 +2103,12 @@ class Server internal constructor(
             }
             val level: Level
             try {
-                if (provider == null) {
+                if (!LevelDBProvider.isValid(pathS)) {
                     log.error(this.baseLang.tr("chorus.level.loadError", levelFolderName1, "the level does not exist"))
                     return false
                 }
                 level = Level(
-                    levelName, pathS, generators.size, provider, value
+                    levelName, pathS, generators.size, LevelDBProvider::class.java, value
                 )
             } catch (e: Exception) {
                 log.error(this.baseLang.tr("chorus.level.loadError", levelFolderName1, e.message!!), e)
@@ -2174,17 +2162,15 @@ class Server internal constructor(
 
         for (entry in levelConfig1.generators.entries) {
             val generatorConfig: GeneratorConfig = entry.value
-            val provider = getProviderByName(levelConfig1.format)!!
             val level: Level
             try {
-                provider.getMethod("generate", String::class.java, String::class.java, GeneratorConfig::class.java)
-                    .invoke(null, path, name, generatorConfig)
+                LevelDBProvider.generate(path, name, generatorConfig)
                 val levelName = name + " Dim" + entry.key
                 if (this.isLevelLoaded(levelName)) {
                     log.warn("level {} has already been loaded!", levelName)
                     continue
                 }
-                level = Level(levelName, path, levelConfig1.generators.size, provider, generatorConfig)
+                level = Level(levelName, path, levelConfig1.generators.size, LevelDBProvider::class.java, generatorConfig)
 
                 levels[level.id] = level
                 level.initLevel()

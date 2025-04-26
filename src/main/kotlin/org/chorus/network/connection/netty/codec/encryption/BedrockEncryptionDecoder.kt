@@ -38,7 +38,7 @@ class BedrockEncryptionDecoder(val key: SecretKey, private val cipher: Cipher) :
             }
         }
 
-        msg.compressed = output.retain()
+        msg.setCompressed(output.retain())
         out.add(msg.retain())
     }
 

@@ -152,10 +152,10 @@ class CommandParameter private constructor(
          * @see .newEnum
          */
         fun newEnum(
-            name: String?,
+            name: String,
             optional: Boolean,
-            data: CommandEnum?,
-            vararg options: CommandParamOption?
+            data: CommandEnum,
+            vararg options: CommandParamOption
         ): CommandParameter {
             return newEnum(name, optional, data, null, *options)
         }

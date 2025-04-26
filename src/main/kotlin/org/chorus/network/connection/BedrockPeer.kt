@@ -156,7 +156,6 @@ class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessi
     }
 
     fun setCompression(algorithm: PacketCompressionAlgorithm) {
-        Objects.requireNonNull(algorithm, "algorithm")
         this.setCompression(
             BedrockChannelInitializer.getCompression(
                 algorithm,
@@ -166,8 +165,6 @@ class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessi
     }
 
     private fun setCompression(strategy: CompressionStrategy) {
-        Objects.requireNonNull(strategy, "strategy")
-
         val needsPrefix = ProtocolInfo.PROTOCOL_VERSION >= 649 // TODO: do not hardcode
 
         val handler = channel.pipeline()[CompressionCodec.NAME]

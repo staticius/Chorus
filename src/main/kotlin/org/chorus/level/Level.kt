@@ -562,10 +562,6 @@ class Level(
             }
         }
 
-        if (this === defaultLevel) {
-            throw RuntimeException("Cannot unload default level!")
-        }
-
         this.close()
         if (force && Server.instance.settings.levelSettings.levelThread) {
             Server.instance.scheduler.scheduleDelayedTask({
@@ -4104,7 +4100,7 @@ class Level(
     }
 
     fun setRaining(raining: Boolean): Boolean {
-        val ev: WeatherChangeEvent = WeatherChangeEvent(this, raining)
+        val ev = WeatherChangeEvent(this, raining)
         Server.instance.pluginManager.callEvent(ev)
 
         if (ev.isCancelled) {

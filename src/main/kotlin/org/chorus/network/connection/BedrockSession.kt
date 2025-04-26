@@ -168,7 +168,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         if (isDisconnected) {
             return
         }
-        val ev = DataPacketSendEvent(player!!, packet)
+        val ev = DataPacketSendEvent(player, packet)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return
@@ -207,11 +207,13 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         if (isDisconnected) {
             return
         }
-        val ev = DataPacketSendEvent(player!!, packet)
+
+        val ev = DataPacketSendEvent(player, packet)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return
         }
+
         peer.sendPacketImmediately(this.subClientId, 0, packet)
         this.logOutbound(packet)
     }
@@ -220,7 +222,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         if (isDisconnected) {
             return
         }
-        val ev = DataPacketSendEvent(player!!, packet)
+        val ev = DataPacketSendEvent(player, packet)
         Server.instance.pluginManager.callEvent(ev)
         if (ev.isCancelled) {
             return
@@ -235,9 +237,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         val header = alloc.ioBuffer(5)
         val msg = BedrockPacketWrapper(0, subClientId, 0, pk, null)
         try {
-            val bedrockPacketCodec = peer.channel.pipeline().get(
-                BedrockPacketCodec::class.java
-            )
+            val bedrockPacketCodec = peer.channel.pipeline().get(BedrockPacketCodec.NAME) as BedrockPacketCodec
             val packet = msg.packet
             msg.packetId = packet!!.pid()
             bedrockPacketCodec.encodeHeader(buf1, msg)
@@ -248,7 +248,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
             ByteBufVarInt.writeUnsignedInt(header, buf1.readableBytes())
             buf2.addComponent(true, header)
             buf2.addComponent(true, buf1)
-            batch.compressed = buf2
+            batch.setCompressed(buf2)
             peer.channel.writeAndFlush(batch)
         } catch (t: Throwable) {
             log.error("Error send", t)
@@ -278,7 +278,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         val packet = wrapper.packet!!
         this.logInbound(packet)
 
-        val ev = DataPacketDecodeEvent(player!!, wrapper)
+        val ev = DataPacketDecodeEvent(player, wrapper)
         Server.instance.pluginManager.callEvent(ev)
 
         val predictMaxBuffer = when (ev.packetId) {
@@ -436,7 +436,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
     }
 
     fun handleDataPacket(packet: DataPacket) {
-        val ev = DataPacketReceiveEvent(player!!, packet)
+        val ev = DataPacketReceiveEvent(player, packet)
         Server.instance.pluginManager.callEvent(ev)
 
         if (ev.isCancelled) return

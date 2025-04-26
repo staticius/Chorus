@@ -693,7 +693,7 @@ class Chunk : IChunk {
         override var chunkZ: Int = 0
         override var chunkX: Int = 0
         private var levelProvider: LevelProvider? = null
-        override var sections: Array<ChunkSection?> = arrayOfNulls(levelProvider!!.dimensionData.chunkSectionCount)
+        override var sections: Array<ChunkSection?> = emptyArray()
         private var heightMap: ShortArray = ShortArray(256)
         var entities: List<CompoundTag> = listOf()
         private var blockEntities: List<CompoundTag> = listOf()
@@ -715,6 +715,7 @@ class Chunk : IChunk {
 
         override fun levelProvider(levelProvider: LevelProvider): Builder {
             this.levelProvider = levelProvider
+            this.sections = arrayOfNulls(levelProvider.dimensionData.chunkSectionCount)
             return this
         }
 

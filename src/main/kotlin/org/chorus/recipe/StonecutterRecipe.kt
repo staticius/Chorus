@@ -4,6 +4,7 @@ import org.chorus.item.Item
 import org.chorus.network.protocol.types.RecipeUnlockingRequirement
 import org.chorus.recipe.descriptor.DefaultDescriptor
 import org.chorus.registry.RecipeRegistry
+import org.chorus.utils.MainLogger
 import java.util.*
 
 class StonecutterRecipe(

@@ -29,6 +29,12 @@ import kotlin.Throwable
 import kotlin.Throws
 import kotlin.UnsupportedOperationException
 import kotlin.addSuppressed
+import kotlin.reflect.KClass
+import kotlin.reflect.full.companionObject
+import kotlin.reflect.full.companionObjectInstance
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
+import kotlin.reflect.jvm.jvmName
 import kotlin.require
 
 open class PluginManager(private val server: Server, private val commandMap: SimpleCommandMap) {
@@ -714,9 +720,10 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
     @Throws(IllegalAccessException::class)
     private fun getEventListeners(type: Class<out Event>): HandlerList {
         try {
-            val method = getRegistrationClass(type).getDeclaredMethod("getHandlers")
+            val method = getRegistrationClass(type.kotlin).memberProperties.find { it.name == "handlers" }?.getter!!
+
             method.isAccessible = true
-            return method.invoke(null) as HandlerList
+            return method.call(type.kotlin.companionObjectInstance) as HandlerList
         } catch (e: NullPointerException) {
             throw IllegalArgumentException("getHandlers method in " + type.name + " was not static!", e)
         } catch (e: Exception) {
@@ -727,20 +734,16 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
     }
 
     @Throws(IllegalAccessException::class)
-    private fun getRegistrationClass(clazz: Class<out Event>): Class<out Event> {
-        try {
-            clazz.getDeclaredMethod("getHandlers")
-            return clazz
-        } catch (e: NoSuchMethodException) {
-            if (clazz.superclass != null && (clazz.superclass != Event::class.java) && Event::class.java.isAssignableFrom(
-                    clazz.superclass
-                )
-            ) {
-                return getRegistrationClass(clazz.superclass.asSubclass(Event::class.java))
-            } else {
-                throw IllegalAccessException("Unable to find handler list for event " + clazz.name + ". Static getHandlers method required!")
+    private fun getRegistrationClass(clazz: KClass<out Event>): KClass<*> {
+        val companion = clazz.companionObject
+        if (companion != null) {
+            val handlersProp = companion.memberProperties.find { it.name == "handlers" }
+            if (handlersProp != null) {
+                return companion
             }
         }
+
+        throw IllegalAccessException("Unable to find handler list for event " + clazz.jvmName + ". Static getHandlers method required!")
     }
 
     companion object : Loggable

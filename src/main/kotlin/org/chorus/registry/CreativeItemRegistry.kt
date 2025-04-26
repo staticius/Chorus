@@ -2,6 +2,7 @@ package org.chorus.registry
 
 import com.google.gson.Gson
 import io.netty.util.internal.EmptyArrays
+import org.chorus.block.BlockAir
 import org.chorus.item.*
 import org.chorus.item.Item.Companion.get
 import org.chorus.nbt.NBTIO.read
@@ -9,6 +10,7 @@ import org.chorus.network.protocol.types.inventory.creative.CreativeItemCategory
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
 import org.chorus.utils.Loggable
+import org.chorus.utils.MainLogger
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.ByteOrder
@@ -51,7 +53,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                     if (ItemRegistry.itemComponents.containsCompound(name)) {
                         item.setNamedTag(ItemRegistry.itemComponents.getCompound(name).getCompound("components"))
                     }
-                    if (item.isNothing || (item.isBlock() && item.getSafeBlockState().toBlock().isAir)) {
+                    if (item.isNothing || (item.isBlock() && item.getSafeBlockState() == BlockAir.properties.defaultState)) {
                         item = Item.AIR
                         CreativeItemRegistry.log.warn("load creative item {} damage {} is null", name, damage)
                     }
@@ -66,7 +68,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                             CreativeItemRegistry.log.warn("load creative item {} blockHash {} is null", name, blockHash)
                         } else {
                             item.blockState = block
-                            val updateDamage = block.toBlock().toItem()
+                            val updateDamage = block.toItem()
                             if (updateDamage.damage != 0) {
                                 item.damage = updateDamage.damage
                             }

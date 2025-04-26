@@ -6,7 +6,7 @@ import org.chorus.event.HandlerList
 import org.chorus.network.protocol.DataPacket
 
 
-class DataPacketReceiveEvent(val player: Player, val packet: DataPacket) : ServerEvent(), Cancellable {
+class DataPacketReceiveEvent(val player: Player?, val packet: DataPacket) : ServerEvent(), Cancellable {
     companion object {
         val handlers: HandlerList = HandlerList()
     }

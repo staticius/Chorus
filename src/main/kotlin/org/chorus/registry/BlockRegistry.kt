@@ -5,6 +5,7 @@ import org.chorus.block.customblock.CustomBlockDefinition
 import org.chorus.level.Level
 import org.chorus.plugin.Plugin
 import org.chorus.utils.Loggable
+import org.chorus.utils.MainLogger
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -1135,11 +1136,17 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
                     param.type == typeOf<BlockState>()
                 } ?: throw RuntimeException("Block: $value must have a constructor with a BlockState param!")
 
-                if (CACHE_CONSTRUCTORS.putIfAbsent(blockProperties.identifier, constructor) != null) {
+                val fn = fun (state: BlockState?): Block {
+                    return constructor.call(state ?: blockProperties.defaultState)
+                }
+
+                if (CACHE_CONSTRUCTORS.putIfAbsent(blockProperties.identifier, fn) != null) {
                     throw RegisterException("This block has already been registered with the identifier: " + blockProperties.identifier)
                 } else {
                     KEYSET.add(key)
                     PROPERTIES[key] = blockProperties
+
+
 
                     blockProperties.specialValueMap.values.forEach { v: BlockState ->
                         Registries.BLOCKSTATE.registerInternal(v)
@@ -1268,24 +1275,18 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
     }
 
     fun getBlockProperties(identifier: String): BlockProperties {
-        val properties = PROPERTIES[identifier]
-        requireNotNull(properties != null) { "Get the Block State from a unknown id: $identifier" }
-        return properties!!
+        return PROPERTIES[identifier] ?: BlockAir.properties
     }
 
     override operator fun get(key: String): Block? {
         val constructor = CACHE_CONSTRUCTORS[key] ?: return null
-        try {
-            return constructor.call()
-        } catch (e: Throwable) {
-            throw RuntimeException(e)
-        }
+        return constructor.invoke(null)
     }
 
     fun get(identifier: String, x: Int, y: Int, z: Int): Block? {
         val constructor = CACHE_CONSTRUCTORS[identifier] ?: return null
         try {
-            val b = constructor.call()
+            val b = constructor.invoke(null)
             b.position.x = x.toDouble()
             b.position.y = y.toDouble()
             b.position.z = z.toDouble()
@@ -1298,7 +1299,7 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
     fun get(identifier: String, x: Int, y: Int, z: Int, level: Level): Block? {
         val constructor = CACHE_CONSTRUCTORS[identifier] ?: return null
         try {
-            val b = constructor.call()
+            val b = constructor.invoke(null)
             b.position.x = x.toDouble()
             b.position.y = y.toDouble()
             b.position.z = z.toDouble()
@@ -1312,7 +1313,7 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
     fun get(identifier: String, x: Int, y: Int, z: Int, layer: Int, level: Level): Block? {
         val constructor = CACHE_CONSTRUCTORS[identifier] ?: return null
         try {
-            val b = constructor.call()
+            val b = constructor.invoke(null)
             b.position.x = x.toDouble()
             b.position.y = y.toDouble()
             b.position.z = z.toDouble()
@@ -1330,16 +1331,16 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
         val constructor = CACHE_CONSTRUCTORS[blockState.identifier] ?: return null
 
         try {
-            return constructor.call(blockState)
+            return constructor.invoke(blockState)
         } catch (e: Throwable) {
-            throw RuntimeException(e)
+            return null
         }
     }
 
     fun get(blockState: BlockState, x: Int, y: Int, z: Int): Block? {
         val constructor = CACHE_CONSTRUCTORS[blockState.identifier] ?: return null
         try {
-            val b = constructor.call(blockState)
+            val b = constructor.invoke(blockState)
             b.position.x = x.toDouble()
             b.position.y = y.toDouble()
             b.position.z = z.toDouble()
@@ -1352,7 +1353,7 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
     operator fun get(blockState: BlockState, x: Int, y: Int, z: Int, level: Level): Block? {
         val constructor = CACHE_CONSTRUCTORS[blockState.identifier] ?: return null
         try {
-            val b = constructor.call(blockState)
+            val b = constructor.invoke(blockState)
             b.position.x = x.toDouble()
             b.position.y = y.toDouble()
             b.position.z = z.toDouble()
@@ -1366,7 +1367,7 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
     operator fun get(blockState: BlockState, x: Int, y: Int, z: Int, layer: Int, level: Level): Block? {
         val constructor = CACHE_CONSTRUCTORS[blockState.identifier] ?: return null
         try {
-            val b = constructor.call(blockState)
+            val b = constructor.invoke(blockState)
             b.position.x = x.toDouble()
             b.position.y = y.toDouble()
             b.position.z = z.toDouble()
@@ -1381,7 +1382,7 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
     companion object {
         private val isLoad = AtomicBoolean(false)
         private val KEYSET: MutableSet<String> = HashSet()
-        private val CACHE_CONSTRUCTORS = mutableMapOf<String, KFunction<Block>>()
+        private val CACHE_CONSTRUCTORS = mutableMapOf<String, (BlockState?) -> Block>()
         private val PROPERTIES = HashMap<String, BlockProperties>()
         private val CUSTOM_BLOCK_DEFINITIONS: MutableMap<Plugin, MutableList<CustomBlockDefinition>> = LinkedHashMap()
 

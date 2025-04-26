@@ -840,15 +840,15 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                     item.disableMeta()
                     descriptor = DefaultDescriptor(item)
                 } else {    // only other possibility is the "default" type
-                    val itemId = data["itemId"] as String?
+                    val itemId = data["itemId"] as String
                     val count = if (data.containsKey("count")) Utils.toInt(data["count"]!!) else 1
                     val meta = (data["auxValue"] as Double).toInt().toShort()
                     val item: Item
                     if (meta == Short.MAX_VALUE || meta.toInt() == -1) {
-                        item = get(itemId!!, 0, count)
+                        item = get(itemId, 0, count)
                         item.disableMeta()
                     } else {
-                        item = get(itemId!!, meta.toInt(), count)
+                        item = get(itemId, meta.toInt(), count)
                     }
                     descriptor = DefaultDescriptor(item)
                 }
@@ -1118,7 +1118,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                         .append('_')
                         .append(item.getCount())
                         .append('_')
-                        .append(if (item.damage != 0) item.damage else if (item.isBlock()) item.getSafeBlockState().toBlock().runtimeId else 0)
+                        .append(if (item.damage != 0) item.damage else if (item.isBlock()) item.getSafeBlockState().blockStateHash() else 0)
                         .append("_and_")
                 }
             }

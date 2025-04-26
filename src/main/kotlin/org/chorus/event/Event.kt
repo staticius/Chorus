@@ -23,12 +23,13 @@ import org.chorus.utils.EventException
  */
 abstract class Event {
     protected var eventName: String? = null
-    var isCancelled: Boolean = false
+
+    open var isCancelled: Boolean = false
         get() {
             if (this !is Cancellable) {
                 throw EventException("Event is not Cancellable")
             }
-            return field
+            return false // TODO: field
         }
         set(value) {
             if (this !is Cancellable) {

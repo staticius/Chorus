@@ -3,7 +3,6 @@ package org.chorus.network
 import com.google.common.base.Strings
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import io.netty.bootstrap.ServerBootstrap
-import io.netty.buffer.ByteBuf
 import io.netty.channel.Channel
 import io.netty.channel.EventLoopGroup
 import io.netty.channel.epoll.Epoll
@@ -46,11 +45,11 @@ import java.util.concurrent.atomic.AtomicReference
 class Network @JvmOverloads constructor(
     val server: Server,
     nettyThreadNumber: Int = Runtime.getRuntime().availableProcessors(),
-    threadFactory: ThreadFactory? = ThreadFactoryBuilder().setNameFormat("Netty Server IO #%d").build()
+    threadFactory: ThreadFactory = ThreadFactoryBuilder().setNameFormat("Netty Server IO #%d").build()
 ) {
     private val netWorkStatisticDataList = LinkedList<NetWorkStatisticData>()
     private val hardWareNetworkInterfaces = AtomicReference<List<NetworkIF>?>(null)
-    private val sessionMap: MutableMap<InetSocketAddress?, BedrockSession> = ConcurrentHashMap()
+    private val sessionMap: MutableMap<InetSocketAddress, BedrockSession> = ConcurrentHashMap()
     private val blockIpMap: MutableMap<InetAddress, LocalDateTime> = HashMap()
     private val channel: RakServerChannel
 
@@ -103,9 +102,9 @@ class Network @JvmOverloads constructor(
 
         this.channel = ServerBootstrap()
             .channelFactory(RakChannelFactory.server(oclass))
-            .option<ByteBuf>(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
+            .option(RakChannelOption.RAK_ADVERTISEMENT, pong.toByteBuf())
             .option(RakChannelOption.RAK_PACKET_LIMIT, server.settings.networkSettings.packetLimit)
-            .option<Boolean>(RakChannelOption.RAK_SEND_COOKIE, true)
+            .option(RakChannelOption.RAK_SEND_COOKIE, true)
             .group(eventloopgroup)
             .childHandler(object : BedrockServerInitializer() {
                 override fun postInitChannel(channel: Channel?) {

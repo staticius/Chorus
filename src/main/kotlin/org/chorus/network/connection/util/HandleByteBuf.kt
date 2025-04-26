@@ -1107,7 +1107,7 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
             }
         }
 
-        writeVarInt(if (item.isBlock()) item.getSafeBlockState().toBlock().runtimeId else 0)
+        writeVarInt(if (item.isBlock()) item.getSafeBlockState().blockStateHash() else 0)
 
         val userDataBuf = ByteBufAllocator.DEFAULT.ioBuffer()
         try {

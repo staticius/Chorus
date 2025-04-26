@@ -321,9 +321,9 @@ class FuelRegistry : IRegistry<Item, Int?, Int> {
 
     @Throws(RegisterException::class)
     override fun register(key: Item, value: Int) {
-        val hash = if (key.isBlock()) key.getSafeBlockState().toBlock().runtimeId.toString()
+        val hash = if (key.isBlock()) key.getSafeBlockState().blockStateHash().toString()
         else key.id + "#" + key.damage
-        if (REGISTRY.putIfAbsent(hash, value) != 0) {
+        if (REGISTRY.putIfAbsent(hash, value) != null) {
             throw RegisterException("This Fuel has already been registered with the key: $key")
         }
     }
@@ -338,7 +338,7 @@ class FuelRegistry : IRegistry<Item, Int?, Int> {
 
     private fun register0(key: String, value: Int) {
         try {
-            if (REGISTRY.putIfAbsent("$key#0", value) != 0) {
+            if (REGISTRY.putIfAbsent("$key#0", value) != null) {
                 throw RegisterException("This Fuel has already been registered with the key: $key")
             }
         } catch (e: RegisterException) {
@@ -348,7 +348,7 @@ class FuelRegistry : IRegistry<Item, Int?, Int> {
 
     private fun register1(key: String, meta: Int, value: Int) {
         try {
-            if (REGISTRY.putIfAbsent("$key#$meta", value) != 0) {
+            if (REGISTRY.putIfAbsent("$key#$meta", value) != null) {
                 throw RegisterException("This Fuel has already been registered with the key: $key")
             }
         } catch (e: RegisterException) {

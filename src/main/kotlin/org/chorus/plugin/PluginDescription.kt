@@ -319,12 +319,20 @@ class PluginDescription {
         this.version = plugin["version"].toString()
         this.main = plugin["main"] as String?
         val api = plugin["api"]
-        if (api is List<*>) {
-            this.compatibleAPIs = api as List<String>
-        } else {
-            val list: MutableList<String> = ArrayList()
-            list.add(api as String)
-            this.compatibleAPIs = list
+        when (api) {
+            is List<*> -> {
+                this.compatibleAPIs = api as List<String>
+            }
+
+            is String -> {
+                val list: MutableList<String> = ArrayList()
+                list.add(api)
+                this.compatibleAPIs = list
+            }
+
+            else -> {
+                this.compatibleAPIs = emptyList()
+            }
         }
         if (main!!.startsWith("org.chorus.") && (this.main != "org.chorus.plugin.InternalPlugin") && (name != "PowerNukkit")) {
             throw PluginException("Invalid PluginDescription main, cannot start within the org.chorus. package")

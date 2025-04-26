@@ -40,7 +40,7 @@ class FrameIdCodec(private val frameId: Int) : MessageToMessageCodec<RakMessage,
         }
         val id = `in`.readUnsignedByte().toInt()
         check(id == frameId) { "Invalid frame ID: $id" }
-        out.add(BedrockBatchWrapper.Companion.newInstance(`in`.readRetainedSlice(`in`.readableBytes()), null))
+        out.add(BedrockBatchWrapper.newInstance(`in`.readRetainedSlice(`in`.readableBytes()), null))
     }
 
     companion object : Loggable {

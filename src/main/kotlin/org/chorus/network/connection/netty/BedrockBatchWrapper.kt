@@ -16,24 +16,28 @@ class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Han
     AbstractReferenceCounted() {
 
     var compressed: ByteBuf? = null
-        set(value) {
-            if (field != null) {
-                field!!.release()
-            }
-
-            field = value
-            if (value == null) {
-                this.algorithm = null
-            }
-        }
+        private set
 
     var uncompressed: ByteBuf? = null
-        set(value) {
-            if (field != null) {
-                field!!.release()
-                field = value
-            }
+        private set
+
+    fun setCompressed(compressed: ByteBuf?) {
+        if (this.compressed != null) {
+            this.compressed!!.release()
         }
+
+        this.compressed = compressed
+        if (compressed == null) {
+            this.algorithm = null
+        }
+    }
+
+    fun setUncompressed(value: ByteBuf?) {
+        if (this.uncompressed != null) {
+            this.uncompressed!!.release()
+        }
+        this.uncompressed = value
+    }
 
     var algorithm: CompressionAlgorithm? = null
 

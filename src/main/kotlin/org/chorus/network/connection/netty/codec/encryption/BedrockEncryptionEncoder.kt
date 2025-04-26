@@ -33,7 +33,7 @@ class BedrockEncryptionEncoder(val key: SecretKey, private val cipher: Cipher) :
             index += cipher.update(trailer, outBuffer)
 
             buf.writerIndex(index)
-            `in`.compressed = buf.retain()
+            `in`.setCompressed(buf.retain())
             out.add(`in`.retain())
         } finally {
             buf.release()

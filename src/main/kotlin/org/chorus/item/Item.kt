@@ -1478,10 +1478,10 @@ abstract class Item : Cloneable, ItemID, Loggable {
         }
 
         protected fun getItemBlockState(id: String, aux: Int): BlockState {
-            val i = Registries.BLOCKSTATE_ITEMMETA[id, aux] ?: return BlockAir.STATE
-            if (i == 0) {
-                val block = Registries.BLOCK[id] ?: return BlockAir.STATE
-                return block.properties.defaultState
+            val i = Registries.BLOCKSTATE_ITEMMETA[id, aux]
+            if (i == null) {
+                val properties = Registries.BLOCK.getBlockProperties(id)
+                return properties.defaultState
             }
             return Registries.BLOCKSTATE[i]!!
         }

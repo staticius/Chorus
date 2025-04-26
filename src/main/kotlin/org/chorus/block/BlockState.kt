@@ -3,6 +3,7 @@ package org.chorus.block
 import org.chorus.block.Block.Companion.get
 import org.chorus.block.property.type.BlockPropertyType
 import org.chorus.item.Item
+import org.chorus.item.ItemBlock
 import org.chorus.level.Locator
 import org.chorus.nbt.tag.CompoundTag
 import org.chorus.nbt.tag.CompoundTagView
@@ -52,7 +53,7 @@ interface BlockState {
     }
 
     fun toItem(): Item {
-        return toBlock().toItem()
+        return ItemBlock(this)
     }
 
     companion object {

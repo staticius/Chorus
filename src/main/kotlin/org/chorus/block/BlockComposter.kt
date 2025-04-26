@@ -172,18 +172,16 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
         }
 
         fun registerBlock(chance: Int, blockId: String) {
-            val blockState = Registries.BLOCK.get(blockId)!!.blockState
+            val blockState = Registries.BLOCK.getBlockProperties(blockId).defaultState
             compostableBlocks[blockState] = chance
         }
 
         fun registerBlock(chance: Int, blockId: String, meta: Int) {
             val i = Registries.BLOCKSTATE_ITEMMETA.get(blockId)
-            val blockState: BlockState
-            if (i == 0) {
-                val block = Registries.BLOCK.get(blockId)
-                blockState = block!!.properties.defaultState
+            val blockState: BlockState = if (i == 0) {
+                Registries.BLOCK.getBlockProperties(blockId).defaultState
             } else {
-                blockState = Registries.BLOCKSTATE.get(i)!!
+                Registries.BLOCKSTATE.get(i)!!
             }
             compostableBlocks[blockState] = chance
         }
