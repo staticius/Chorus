@@ -1,6 +1,7 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.utils.MainLogger
 
 
 class PacketViolationWarningPacket : DataPacket() {
@@ -44,6 +45,8 @@ class PacketViolationWarningPacket : DataPacket() {
             packet.severity = PacketViolationSeverity.entries[byteBuf.readVarInt()]
             packet.packetId = byteBuf.readVarInt()
             packet.context = byteBuf.readString()
+
+            MainLogger.log.warn("Packet violation warning: {}", packet)
 
             return packet
         }

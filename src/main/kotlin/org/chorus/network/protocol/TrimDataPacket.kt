@@ -11,16 +11,16 @@ class TrimDataPacket : DataPacket() {
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarInt(patterns.size)
-        patterns.forEach(Consumer { p: TrimPattern ->
+        patterns.forEach { p: TrimPattern ->
             byteBuf.writeString(p.itemName)
             byteBuf.writeString(p.patternId)
-        })
+        }
         byteBuf.writeUnsignedVarInt(materials.size)
-        materials.forEach(Consumer { m: TrimMaterial ->
+        materials.forEach { m: TrimMaterial ->
             byteBuf.writeString(m.materialId)
             byteBuf.writeString(m.color)
             byteBuf.writeString(m.itemName)
-        })
+        }
     }
 
     override fun pid(): Int {
