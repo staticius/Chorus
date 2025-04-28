@@ -118,7 +118,11 @@ enum class EntityFlag(private val value: Int) {
     TIMER_FLAG_1(115),
     TIMER_FLAG_2(116),
     TIMER_FLAG_3(117),
-    BODY_ROTATION_BLOCKED(118);
+    BODY_ROTATION_BLOCKED(118),
+    RENDER_WHEN_INVISIBLE(119),
+    BODY_ROTATION_AXIS_ALIGNED(120),
+    COLLIDABLE(121),
+    WASD_AIR_CONTROLLED(122);
 
     fun getValue(): Int {
         return value

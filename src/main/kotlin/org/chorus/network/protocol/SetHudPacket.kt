@@ -13,7 +13,7 @@ class SetHudPacket : DataPacket() {
         byteBuf.writeArray(this.elements) { buf, element ->
             buf.writeUnsignedVarInt(element.ordinal)
         }
-        byteBuf.writeByte(visibility!!.ordinal)
+        byteBuf.writeVarInt(visibility!!.ordinal)
     }
 
     override fun pid(): Int {
@@ -32,7 +32,7 @@ class SetHudPacket : DataPacket() {
             byteBuf.readArray(packet.elements) {
                 HudElement.entries[it.readUnsignedVarInt()]
             }
-            packet.visibility = HudVisibility.entries[byteBuf.readByte().toInt()]
+            packet.visibility = HudVisibility.entries[byteBuf.readVarInt()]
 
             return packet
         }

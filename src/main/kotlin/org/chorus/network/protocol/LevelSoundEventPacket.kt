@@ -1,6 +1,7 @@
 package org.chorus.network.protocol
 
 import org.chorus.network.connection.util.HandleByteBuf
+import org.chorus.network.protocol.types.ActorUniqueID
 import org.chorus.utils.Utils
 
 open class LevelSoundEventPacket : DataPacket() {
@@ -12,6 +13,7 @@ open class LevelSoundEventPacket : DataPacket() {
     var entityIdentifier: String? = null
     var isBabyMob: Boolean = false
     var isGlobal: Boolean = false
+    var entityUniqueID: ActorUniqueID = 0
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeUnsignedVarInt(this.sound)
@@ -20,6 +22,7 @@ open class LevelSoundEventPacket : DataPacket() {
         byteBuf.writeString(entityIdentifier!!)
         byteBuf.writeBoolean(this.isBabyMob)
         byteBuf.writeBoolean(this.isGlobal)
+        byteBuf.writeActorUniqueID(this.entityUniqueID)
     }
 
     override fun pid(): Int {
