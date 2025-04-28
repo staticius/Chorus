@@ -4,12 +4,12 @@ import org.chorus.utils.SemVersion
 
 interface ProtocolInfo {
     companion object {
-        const val PROTOCOL_VERSION = 776
+        const val PROTOCOL_VERSION = 786
 
-        const val GAME_VERSION_NET = "1.21.60"
+        const val GAME_VERSION_NET = "1.21.70"
         const val GAME_VERSION_STR = "v$GAME_VERSION_NET"
 
-        val GAME_VERSION = SemVersion(1, 21, 6, 0, 0)
+        val GAME_VERSION = SemVersion(1, 21, 7, 0, 0)
 
         val BLOCK_STATE_VERSION_NO_REVISION =
             (GAME_VERSION.major shl 24) or (GAME_VERSION.minor shl 16) or (GAME_VERSION.patch shl 8)
