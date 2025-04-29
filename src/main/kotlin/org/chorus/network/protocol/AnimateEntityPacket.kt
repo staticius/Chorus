@@ -19,8 +19,8 @@ data class AnimateEntityPacket(
         byteBuf.writeInt(this.stopExpressionVersion)
         byteBuf.writeString(this.controller)
         byteBuf.writeFloatLE(this.blendOutTime)
-        byteBuf.writeArray(this.runtimeIDs.toTypedArray()) {
-            byteBuf.writeActorRuntimeID(it)
+        byteBuf.writeArray(this.runtimeIDs) { buf, id ->
+            buf.writeActorRuntimeID(id)
         }
     }
 

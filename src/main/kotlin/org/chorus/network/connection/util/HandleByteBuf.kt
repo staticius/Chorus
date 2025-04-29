@@ -759,7 +759,7 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
     /**
      * Writes a list of Attributes to the packet buffer using the standard format.
      */
-    fun writeAttributeList(attributes: Array<Attribute>) {
+    fun writeAttributeList(attributes: List<Attribute>) {
         this.writeUnsignedVarInt(attributes.size)
         for (attribute in attributes) {
             this.writeString(attribute.name)

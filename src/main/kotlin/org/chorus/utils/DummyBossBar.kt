@@ -103,7 +103,7 @@ class DummyBossBar private constructor(builder: Builder) {
                 rotation = Vector2f(),
                 yHeadRotation = 0f,
                 yBodyRotation = 0f,
-                attributeList = emptyArray(),
+                attributeList = emptyList(),
                 actorData = run {
                     val entityDataMap = EntityDataMap()
                     entityDataMap.getOrCreateFlags()
@@ -115,7 +115,7 @@ class DummyBossBar private constructor(builder: Builder) {
                     entityDataMap
                 },
                 syncedProperties = PropertySyncData(intArrayOf(), floatArrayOf()),
-                actorLinks = emptyArray()
+                actorLinks = emptyList()
             )
         )
     }

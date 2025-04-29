@@ -288,13 +288,13 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
             rotation = this.rotation.asVector2f(),
             yHeadRotation = this.rotation.yaw.toFloat(),
             yBodyRotation = this.rotation.yaw.toFloat(),
-            attributeList = this.attributes.values.toTypedArray(),
+            attributeList = this.attributes.values.toList(),
             actorData = run {
                 this.entityDataMap[EntityDataTypes.OWNER_EID] = shootingEntity?.getRuntimeID() ?: -1
                 this.entityDataMap
             },
             syncedProperties = this.propertySyncData(),
-            actorLinks = Array(passengers.size) { i ->
+            actorLinks = List(passengers.size) { i ->
                 EntityLink(
                     this.getRuntimeID(),
                     passengers[i].getRuntimeID(),

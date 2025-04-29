@@ -239,11 +239,11 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
                     Attribute.getAttribute(Attribute.MAX_HEALTH).setMaxValue(getMaxDiffHealth().toFloat())
                         .setValue(getMaxDiffHealth().toFloat())
                 )
-                this.attributes.values.toTypedArray()
+                this.attributes.values.toList()
             },
             actorData = this.entityDataMap,
             syncedProperties = this.propertySyncData(),
-            actorLinks = Array(passengers.size) { i ->
+            actorLinks = List(passengers.size) { i ->
                 EntityLink(
                     this.getRuntimeID(),
                     passengers[i].getRuntimeID(),

@@ -118,11 +118,11 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
                 this.attributes.values.add(
                     Attribute.getAttribute(Attribute.MAX_HEALTH).setMaxValue(200f).setValue(200f)
                 )
-                this.attributes.values.toTypedArray()
+                this.attributes.values.toList()
             },
             actorData = this.entityDataMap,
             syncedProperties = this.propertySyncData(),
-            actorLinks = Array(passengers.size) { i ->
+            actorLinks = List(passengers.size) { i ->
                 EntityLink(
                     this.getRuntimeID(),
                     passengers[i].getRuntimeID(),

@@ -174,7 +174,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
                         CommandPermission.ANY,
                         emptyArray() // TODO: AbilityLayers
                     ),
-                    actorLinks = Array(this.passengers.size) { i ->
+                    actorLinks = List(this.passengers.size) { i ->
                         EntityLink(
                             this.getUniqueID(),
                             this.passengers[i].uniqueId,

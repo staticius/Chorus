@@ -133,10 +133,10 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             rotation = this.rotation.asVector2f(),
             yHeadRotation = this.rotation.yaw.toFloat(),
             yBodyRotation = this.rotation.yaw.toFloat(),
-            attributeList = this.attributes.values.toTypedArray(),
+            attributeList = this.attributes.values.toList(),
             actorData = this.entityDataMap,
             syncedProperties = this.propertySyncData(),
-            actorLinks = Array(passengers.size) { i ->
+            actorLinks = List(passengers.size) { i ->
                 EntityLink(
                     this.getRuntimeID(),
                     passengers[i].getRuntimeID(),

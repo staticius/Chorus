@@ -922,10 +922,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                 else -> this.rotation.yaw.toFloat()
             },
             yBodyRotation = this.rotation.yaw.toFloat(),
-            attributeList = this.attributes.values.toTypedArray(),
+            attributeList = this.attributes.values.toList(),
             actorData = this.entityDataMap,
             syncedProperties = this.propertySyncData(),
-            actorLinks = Array(passengers.size) { i ->
+            actorLinks = List(passengers.size) { i ->
                 EntityLink(
                     this.uniqueId,
                     passengers[i].uniqueId,

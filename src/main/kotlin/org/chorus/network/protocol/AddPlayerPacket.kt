@@ -23,7 +23,7 @@ data class AddPlayerPacket(
     val entityDataMap: EntityDataMap,
     val syncedProperties: PropertySyncData,
     val abilitiesData: SerializedAbilitiesData,
-    val actorLinks: Array<EntityLink>,
+    val actorLinks: List<EntityLink>,
     val deviceID: String,
     val buildPlatform: Platform,
 ) : DataPacket(), PacketEncoder {
@@ -41,8 +41,8 @@ data class AddPlayerPacket(
         byteBuf.writeBytes(Binary.writeEntityData(this.entityDataMap))
         byteBuf.writePropertySyncData(this.syncedProperties)
         this.abilitiesData.write(byteBuf)
-        byteBuf.writeArray(this.actorLinks) {
-            byteBuf.writeEntityLink(it)
+        byteBuf.writeArray(this.actorLinks) { buf, link ->
+            buf.writeEntityLink(link)
         }
         byteBuf.writeString(this.deviceID)
         byteBuf.writeIntLE(this.buildPlatform.id)
@@ -54,51 +54,5 @@ data class AddPlayerPacket(
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (javaClass != other?.javaClass) return false
-
-        other as AddPlayerPacket
-
-        if (targetRuntimeID != other.targetRuntimeID) return false
-        if (yHeadRotation != other.yHeadRotation) return false
-        if (playerGameType != other.playerGameType) return false
-        if (uuid != other.uuid) return false
-        if (playerName != other.playerName) return false
-        if (platformChatID != other.platformChatID) return false
-        if (position != other.position) return false
-        if (velocity != other.velocity) return false
-        if (rotation != other.rotation) return false
-        if (carriedItem != other.carriedItem) return false
-        if (entityDataMap != other.entityDataMap) return false
-        if (syncedProperties != other.syncedProperties) return false
-        if (abilitiesData != other.abilitiesData) return false
-        if (!actorLinks.contentEquals(other.actorLinks)) return false
-        if (deviceID != other.deviceID) return false
-        if (buildPlatform != other.buildPlatform) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = targetRuntimeID.hashCode()
-        result = 31 * result + yHeadRotation.hashCode()
-        result = 31 * result + playerGameType
-        result = 31 * result + uuid.hashCode()
-        result = 31 * result + playerName.hashCode()
-        result = 31 * result + platformChatID.hashCode()
-        result = 31 * result + position.hashCode()
-        result = 31 * result + velocity.hashCode()
-        result = 31 * result + rotation.hashCode()
-        result = 31 * result + carriedItem.hashCode()
-        result = 31 * result + entityDataMap.hashCode()
-        result = 31 * result + syncedProperties.hashCode()
-        result = 31 * result + abilitiesData.hashCode()
-        result = 31 * result + actorLinks.contentHashCode()
-        result = 31 * result + deviceID.hashCode()
-        result = 31 * result + buildPlatform.hashCode()
-        return result
     }
 }
