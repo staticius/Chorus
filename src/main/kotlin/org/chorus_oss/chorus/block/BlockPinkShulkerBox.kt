@@ -1,0 +1,20 @@
+package org.chorus_oss.chorus.block
+
+import org.chorus_oss.chorus.item.Item
+import org.chorus_oss.chorus.item.ItemShulkerBox
+import org.chorus_oss.chorus.tags.BlockTags
+
+class BlockPinkShulkerBox @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+    BlockUndyedShulkerBox(blockstate) {
+    override fun getShulkerBox(): Item {
+        return ItemShulkerBox(6)
+    }
+
+    override val properties: BlockProperties
+        get() = Companion.properties
+
+    companion object {
+        val properties: BlockProperties = BlockProperties(BlockID.PINK_SHULKER_BOX, setOf(BlockTags.PNX_SHULKERBOX))
+
+    }
+}

@@ -172,7 +172,7 @@ tasks.shadowJar {
     dependsOn("copyDependencies")
     manifest {
         attributes(
-            "Main-Class" to "org.chorus.JarStart"
+            "Main-Class" to "org.chorus_oss.chorus.JarStart"
         )
     }
 

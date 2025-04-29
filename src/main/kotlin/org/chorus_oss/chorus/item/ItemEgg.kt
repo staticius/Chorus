@@ -1,0 +1,14 @@
+package org.chorus_oss.chorus.item
+
+
+class ItemEgg @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
+    ProjectileItem(ItemID.Companion.EGG, meta, count, "Egg") {
+    override val projectileEntityType: String
+        get() = ItemID.Companion.EGG
+
+    override val throwForce: Float
+        get() = 1.5f
+
+    override val maxStackSize: Int
+        get() = 16
+}

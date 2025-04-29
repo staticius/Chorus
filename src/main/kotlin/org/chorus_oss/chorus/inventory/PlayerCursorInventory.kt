@@ -1,0 +1,48 @@
+package org.chorus_oss.chorus.inventory
+
+import org.chorus_oss.chorus.Player
+import org.chorus_oss.chorus.Server
+import org.chorus_oss.chorus.item.Item
+import org.chorus_oss.chorus.network.protocol.InventorySlotPacket
+import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
+import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+
+
+class PlayerCursorInventory(player: Player) : BaseInventory(player, InventoryType.INVENTORY, 1) {
+    val item: Item
+        get() = getItem(0)
+
+    override fun init() {
+        val slotTypeMap = super.slotTypeMap()
+        slotTypeMap[0] = ContainerSlotType.CURSOR
+    }
+
+    override fun sendSlot(index: Int, vararg players: Player) {
+        val pk = InventorySlotPacket()
+        pk.item = this.getUnclonedItem(index)
+        pk.slot = index
+
+        for (player in players) {
+            val id = SpecialWindowId.CURSOR.id
+            pk.inventoryId = id
+            pk.fullContainerName = FullContainerName(
+                ContainerSlotType.CURSOR,
+                id
+            )
+            player.dataPacket(pk)
+        }
+    }
+
+    override fun sendContents(vararg players: Player) {
+        val inventorySlotPacket = InventorySlotPacket()
+        val id = SpecialWindowId.CURSOR.id
+        inventorySlotPacket.inventoryId = id
+        inventorySlotPacket.item = getUnclonedItem(0)
+        inventorySlotPacket.slot = 0
+        inventorySlotPacket.fullContainerName = FullContainerName(
+            ContainerSlotType.CURSOR,
+            id
+        )
+        Server.broadcastPacket(players.toList(), inventorySlotPacket)
+    }
+}

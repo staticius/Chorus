@@ -1,0 +1,3 @@
+package org.chorus_oss.chorus.item
+
+class ItemNetheriteUpgradeSmithingTemplate : Item(ItemID.Companion.NETHERITE_UPGRADE_SMITHING_TEMPLATE)

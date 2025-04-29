@@ -1,9 +1,9 @@
 package jmh
 
-import org.chorus.block.BlockID
-import org.chorus.item.Item
-import org.chorus.item.ItemID
-import org.chorus.registry.Registries
+import org.chorus_oss.chorus.block.BlockID
+import org.chorus_oss.chorus.item.Item
+import org.chorus_oss.chorus.item.ItemID
+import org.chorus_oss.chorus.registry.Registries
 import org.openjdk.jmh.annotations.*
 import org.openjdk.jmh.infra.Blackhole
 import org.openjdk.jmh.runner.Runner
