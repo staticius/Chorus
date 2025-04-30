@@ -505,8 +505,8 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
             player.inventory.sendContents(player)
             player.inventory.sendArmorContents(player)
             player.cursorInventory.sendContents(player)
-            player.offhandInventory!!.sendContents(player)
-            player.enderChestInventory!!.sendContents(player)
+            player.offhandInventory.sendContents(player)
+            player.enderChestInventory.sendContents(player)
         }
     }
 

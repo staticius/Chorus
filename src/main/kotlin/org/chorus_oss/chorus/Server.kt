@@ -1212,7 +1212,7 @@ class Server internal constructor(
     fun sendFullPlayerListData(player: Player) {
         val pk = PlayerListPacket()
         pk.type = PlayerListPacket.TYPE_ADD
-        pk.entries = playerList.values.stream()
+        pk.entries = playerList.values
             .map { p: Player ->
                 PlayerListPacket.Entry(
                     p.getUUID(),
@@ -1222,7 +1222,7 @@ class Server internal constructor(
                     p.loginChainData.xuid
                 )
             }
-            .toArray { size -> arrayOfNulls<PlayerListPacket.Entry>(size) }
+            .toTypedArray()
 
         player.dataPacket(pk)
     }

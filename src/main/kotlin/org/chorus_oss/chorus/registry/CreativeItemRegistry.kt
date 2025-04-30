@@ -78,6 +78,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                         item.blockState = null
                     }
                     creativeItemData.add(CreativeItemData(item, groupIndex))
+
                     register(i, item)
                 }
             }
@@ -99,7 +100,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
      */
     fun getCreativeItemIndex(item: Item): Int {
         for (i in 0..<MAP.size) {
-            if (item.equals(MAP[i]!!, !item.isTool)) {
+            if (item.equals(MAP[i]!!, !item.isTool, false)) {
                 return i
             }
         }
@@ -196,7 +197,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
 
     @Throws(RegisterException::class)
     override fun register(key: Int, value: Item) {
-        if (MAP.putIfAbsent(key, value) != null || creativeItemData.stream().anyMatch { it.item == value }) {
+        if (MAP.putIfAbsent(key, value) != null || creativeItemData.any { it.item == value }) {
             return
             //throw new RegisterException("This creative item has already been registered with the identifier: " + key);
         } else {
@@ -205,6 +206,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
     }
 
     companion object : Loggable {
+        val NETWORK_ITEMS: MutableList<Item> = mutableListOf()
         val MAP: MutableMap<Int, Item> = LinkedHashMap()
         val INTERNAL_DIFF_ITEM: MutableMap<Int, Item> = HashMap()
         val isLoad: AtomicBoolean = AtomicBoolean(false)

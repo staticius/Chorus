@@ -11,12 +11,15 @@ data class CreativeContentPacket(
     val writeEntries: List<CreativeItemData> = CreativeItemRegistry.creativeItemData.toList()
 ) : DataPacket() {
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeArray(this.groups) { buf, group ->
-            this.writeGroup(buf, group)
-        }
-        byteBuf.writeArray(this.writeEntries) { buf, data ->
-            this.writeItem(buf, data)
-        }
+        byteBuf.writeVarInt(0)
+        byteBuf.writeVarInt(0)
+        // TODO: FIX PACKET
+//        byteBuf.writeArray(this.groups) { buf, group ->
+//            this.writeGroup(buf, group)
+//        }
+//        byteBuf.writeArray(this.writeEntries) { buf, data ->
+//            this.writeItem(buf, data)
+//        }
     }
 
     private fun writeGroup(byteBuf: HandleByteBuf, group: CreativeItemGroup) {
@@ -26,7 +29,7 @@ data class CreativeContentPacket(
     }
 
     private fun writeItem(byteBuf: HandleByteBuf, data: CreativeItemData) {
-        byteBuf.writeUnsignedVarInt(Registries.CREATIVE.getCreativeItemIndex(data.item))
+        byteBuf.writeUnsignedVarInt(data.netID)
         byteBuf.writeSlot(data.item, true)
         byteBuf.writeUnsignedVarInt(data.groupId)
     }

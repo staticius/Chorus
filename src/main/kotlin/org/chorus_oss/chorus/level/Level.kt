@@ -3472,7 +3472,7 @@ class Level(
                 val pair = requireProvider().requestChunkData(x, z)
                 for (player in players.values) {
                     if (player.isConnected()) {
-                        val ncp: NetworkChunkPublisherUpdatePacket = NetworkChunkPublisherUpdatePacket()
+                        val ncp = NetworkChunkPublisherUpdatePacket()
                         ncp.position = player.position.asBlockVector3()
                         ncp.radius = player.viewDistance shl 4
                         player.dataPacket(ncp)
@@ -3496,7 +3496,7 @@ class Level(
         val chunkPositionZ = player.position.chunkZ
         val chunkRadius = player.viewDistance
 
-        val ncp: NetworkChunkPublisherUpdatePacket = NetworkChunkPublisherUpdatePacket()
+        val ncp = NetworkChunkPublisherUpdatePacket()
         ncp.position = player.position.asBlockVector3()
         ncp.radius = player.viewDistance shl 4
         player.dataPacket(ncp)
@@ -3508,7 +3508,7 @@ class Level(
 
                 val pair = requireProvider().requestChunkData(chunkX, chunkZ)
 
-                val pk: LevelChunkPacket = LevelChunkPacket()
+                val pk = LevelChunkPacket()
                 pk.chunkX = chunkX
                 pk.chunkZ = chunkZ
                 pk.dimension = dimensionData.dimensionId

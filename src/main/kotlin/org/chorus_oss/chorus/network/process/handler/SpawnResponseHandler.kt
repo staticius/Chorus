@@ -23,8 +23,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
 
         this.startGame()
 
-        SpawnResponseHandler.log.debug("Sending component items")
-
+        SpawnResponseHandler.log.debug("Sending item components")
         val itemRegistryPacket = ItemRegistryPacket()
         val entries = ObjectOpenHashSet<ItemRegistryPacket.Entry>()
 
@@ -61,6 +60,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
 
         // 注册实体属性
         // Register entity attributes
+
         SpawnResponseHandler.log.debug("Sending actor properties")
         for (pk in getPacketCache()) {
             player.dataPacket(pk)
@@ -81,14 +81,15 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
 
         // 发送玩家权限列表
         // Send player permission list
+
         SpawnResponseHandler.log.debug("Sending abilities")
         val col = setOf(player)
-        server.onlinePlayers.values.forEach(Consumer<Player> { p: Player ->
+        server.onlinePlayers.values.forEach { p: Player ->
             if (p !== player) {
                 p.adventureSettings.sendAbilities(col)
                 p.adventureSettings.updateAdventureSettings()
             }
-        })
+        }
 
         SpawnResponseHandler.log.debug("Sending effects")
         player.sendPotionEffects(player)
@@ -102,6 +103,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         SpawnResponseHandler.log.debug("Sending creative content")
         this.session.syncCreativeContent()
 
+        SpawnResponseHandler.log.debug("Sending trim data")
         val trimDataPacket = TrimDataPacket()
         trimDataPacket.materials.addAll(TrimData.trimMaterials)
         trimDataPacket.patterns.addAll(TrimData.trimPatterns)
@@ -111,8 +113,8 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         player.setNameTagAlwaysVisible(true)
         player.setCanClimb(true)
         player.sendMovementSpeed(player.movementSpeed)
-        SpawnResponseHandler.log.debug("Sending player list")
 
+        SpawnResponseHandler.log.debug("Sending player list")
         server.addOnlinePlayer(player)
         server.onPlayerCompleteLoginSequence(player)
 

@@ -15,7 +15,7 @@ class ItemBanner @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                 damage
             )
         )
-        name = baseDyeColor.name + " Banner"
+        name = baseDyeColor.colorName + " Banner"
     }
 
     override val maxStackSize: Int
@@ -29,7 +29,7 @@ class ItemBanner @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     }
 
     val baseDyeColor: DyeColor
-        get() = DyeColor.getByDyeData(baseColor)!!
+        get() = DyeColor.getByDyeData(baseColor)
 
     var type: Int
         get() = getOrCreateNamedTag().getInt("Type")
