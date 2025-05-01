@@ -51,9 +51,9 @@ class Chunk : IChunk {
 
     private var atomicChunkState = AtomicReference(ChunkState.NEW)
 
-    val sections: Array<ChunkSection?>
+    val sections: Array<SubChunk?>
 
-    override fun getSectionsSafe(): Array<ChunkSection?> {
+    override fun getSectionsSafe(): Array<SubChunk?> {
         val stamp = blockLock.readLock()
         try {
             return sections
@@ -106,7 +106,7 @@ class Chunk : IChunk {
         chunkX: Int,
         chunkZ: Int,
         levelProvider: LevelProvider,
-        sections: Array<ChunkSection?>,
+        sections: Array<SubChunk?>,
         heightMap: ShortArray,
         entityNBT: List<CompoundTag>,
         blockEntityNBT: List<CompoundTag>
@@ -132,7 +132,7 @@ class Chunk : IChunk {
         return section == null || section.isEmpty
     }
 
-    override fun getSection(fY: Int): ChunkSection? {
+    override fun getSection(fY: Int): SubChunk? {
         var stamp = blockLock.tryOptimisticRead()
         try {
             while (true) {
@@ -152,11 +152,11 @@ class Chunk : IChunk {
         }
     }
 
-    private fun getSectionInternal(fY: Int): ChunkSection? {
+    private fun getSectionInternal(fY: Int): SubChunk? {
         return sections[fY - dimensionData.minSectionY]
     }
 
-    override fun setSection(fY: Int, section: ChunkSection?) {
+    override fun setSection(fY: Int, section: SubChunk?) {
         val stamp = blockLock.writeLock()
         try {
             sections[fY - dimensionData.minSectionY] = section
@@ -615,8 +615,8 @@ class Chunk : IChunk {
         val offsetZ = z shl 4
         return IntStream.rangeClosed(0, dimensionData.chunkSectionCount - 1)
             .mapToObj { sectionY: Int -> sections[sectionY] }
-            .filter { section: ChunkSection? -> section != null && !section.isEmpty }.parallel()
-            .map { section: ChunkSection? ->
+            .filter { section: SubChunk? -> section != null && !section.isEmpty }.parallel()
+            .map { section: SubChunk? ->
                 section!!.scanBlocks(
                     provider,
                     offsetX,
@@ -635,12 +635,12 @@ class Chunk : IChunk {
      * @param sectionY the section y range -4 ~ 19
      * @return the or create section
      */
-    protected fun getOrCreateSection(sectionY: Int): ChunkSection? {
+    protected fun getOrCreateSection(sectionY: Int): SubChunk? {
         val minSectionY = this.dimensionData.minSectionY
         val offsetY = sectionY - minSectionY
         for (i in 0..offsetY) {
             if (sections[i] == null) {
-                sections[i] = ChunkSection((i + minSectionY).toByte())
+                sections[i] = SubChunk((i + minSectionY).toByte())
             }
         }
         return sections[offsetY]
@@ -698,7 +698,7 @@ class Chunk : IChunk {
         override var chunkZ: Int = 0
         override var chunkX: Int = 0
         private var levelProvider: LevelProvider? = null
-        override var sections: Array<ChunkSection?> = emptyArray()
+        override var sections: Array<SubChunk?> = emptyArray()
         private var heightMap: ShortArray = ShortArray(256)
         var entities: List<CompoundTag> = listOf()
         private var blockEntities: List<CompoundTag> = listOf()
@@ -729,7 +729,7 @@ class Chunk : IChunk {
                 return levelProvider!!.dimensionData
             }
 
-        override fun sections(sections: Array<ChunkSection?>): Builder {
+        override fun sections(sections: Array<SubChunk?>): Builder {
             this.sections = sections
             return this
         }

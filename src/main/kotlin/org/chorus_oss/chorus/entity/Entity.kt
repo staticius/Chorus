@@ -3277,7 +3277,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             val entityIdentifier = Registries.ENTITY.getEntityIdentifier(type)
             return createEntity(
                 entityIdentifier,
-                requireNonNull(pos.chunk)!!,
+                pos.chunk,
                 getDefaultNBT(pos.position),
                 *args
             )

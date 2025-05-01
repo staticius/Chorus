@@ -82,11 +82,11 @@ class LevelDBChunkSerializer private constructor() {
 
             val buffer = ByteBufAllocator.DEFAULT.ioBuffer()
             try {
-                buffer.writeByte(ChunkSection.VERSION)
-                buffer.writeByte(ChunkSection.LAYER_COUNT)
+                buffer.writeByte(SubChunk.VERSION)
+                buffer.writeByte(section.layers.size)
                 buffer.writeByte(section.y.toInt())
-                for (i in 0..<ChunkSection.LAYER_COUNT) {
-                    section.blockLayer[i].writeToStoragePersistent(buffer) { it.blockStateTag }
+                for (layer in section.layers) {
+                    layer.writeToStoragePersistent(buffer) { it.blockStateTag }
                 }
                 writeBatch.put(
                     LevelDBKeyUtil.CHUNK_SECTION_PREFIX.getKey(
@@ -106,7 +106,7 @@ class LevelDBChunkSerializer private constructor() {
         val dimensionData = builder.dimensionData
         val minSectionY = dimensionData.minSectionY
 
-        val sections = arrayOfNulls<ChunkSection>(dimensionData.chunkSectionCount)
+        val sections = arrayOfNulls<SubChunk>(dimensionData.chunkSectionCount)
         for (sectionY in minSectionY..dimensionData.maxSectionY) {
             val bytes = db[LevelDBKeyUtil.CHUNK_SECTION_PREFIX.getKey(
                 builder.chunkX, builder.chunkZ, sectionY,
@@ -129,9 +129,9 @@ class LevelDBChunkSerializer private constructor() {
 
                 when (iSubChunkVersion) {
                     1, 8, 9 -> {
-                        val section: ChunkSection
+                        val section: SubChunk
                         if (layers <= 2) {
-                            section = ChunkSection(sectionY.toByte())
+                            section = SubChunk(sectionY.toByte())
                         } else {
                             val palettes = Array(layers) {
                                 BlockPalette(
@@ -139,11 +139,11 @@ class LevelDBChunkSerializer private constructor() {
                                     BitArrayVersion.V2
                                 )
                             }
-                            section = ChunkSection(sectionY.toByte(), palettes)
+                            section = SubChunk(sectionY.toByte(), palettes)
                         }
                         var layer = 0
                         while (layer < layers) {
-                            section.blockLayer[layer].readFromStoragePersistent(
+                            section.layers[layer].readFromStoragePersistent(
                                 byteBuf
                             ) { hash: Int ->
                                 val blockState = Registries.BLOCKSTATE[hash]

@@ -1,8 +1,6 @@
 package org.chorus_oss.chorus.registry
 
 
-import me.sunlan.fastreflection.FastConstructor
-import me.sunlan.fastreflection.FastMemberLoader
 import org.chorus_oss.chorus.Chorus
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.EntityID
@@ -39,504 +37,509 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.collections.set
+import kotlin.reflect.KClass
+import kotlin.reflect.KFunction
+import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.full.isSuperclassOf
+import kotlin.reflect.full.primaryConstructor
 
 
-class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out Entity>> {
+class EntityRegistry : IRegistry<EntityDefinition, KClass<out Entity>?, KClass<out Entity>> {
     override fun init() {
         if (isLoad.getAndSet(true)) return
-        registerInternal(
+        register(
             EntityDefinition(EntityID.CHICKEN, "", 10, hasSpawnegg = true, summonable = true),
-            EntityChicken::class.java
+            EntityChicken::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.COW, "", 11, hasSpawnegg = true, summonable = true),
-            EntityCow::class.java
+            EntityCow::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.PIG, "", 12, hasSpawnegg = true, summonable = true),
-            EntityPig::class.java
+            EntityPig::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SHEEP, "", 13, hasSpawnegg = true, summonable = true),
-            EntitySheep::class.java
+            EntitySheep::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.WOLF, "", 14, hasSpawnegg = true, summonable = true),
-            EntityWolf::class.java
+            EntityWolf::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.VILLAGER, "", 15, hasSpawnegg = false, summonable = true),
-            EntityVillager::class.java
+            EntityVillager::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.MOOSHROOM, "", 16, hasSpawnegg = true, summonable = true),
-            EntityMooshroom::class.java
+            EntityMooshroom::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SQUID, "", 17, hasSpawnegg = true, summonable = true),
-            EntitySquid::class.java
+            EntitySquid::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.RABBIT, "", 18, hasSpawnegg = true, summonable = true),
-            EntityRabbit::class.java
+            EntityRabbit::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.BAT, "", 19, hasSpawnegg = true, summonable = true),
-            EntityBat::class.java
+            EntityBat::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.IRON_GOLEM, "", 20, hasSpawnegg = true, summonable = true),
-            EntityIronGolem::class.java
+            EntityIronGolem::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SNOW_GOLEM, "", 21, hasSpawnegg = true, summonable = true),
-            EntitySnowGolem::class.java
+            EntitySnowGolem::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.OCELOT, "", 22, hasSpawnegg = true, summonable = true),
-            EntityOcelot::class.java
+            EntityOcelot::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.HORSE, "", 23, hasSpawnegg = true, summonable = true),
-            EntityHorse::class.java
+            EntityHorse::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.DONKEY, "", 24, hasSpawnegg = true, summonable = true),
-            EntityDonkey::class.java
+            EntityDonkey::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.MULE, "", 25, hasSpawnegg = true, summonable = true),
-            EntityMule::class.java
+            EntityMule::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SKELETON_HORSE, "", 26, hasSpawnegg = true, summonable = true),
-            EntitySkeletonHorse::class.java
+            EntitySkeletonHorse::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ZOMBIE_HORSE, "", 27, hasSpawnegg = true, summonable = true),
-            EntityZombieHorse::class.java
+            EntityZombieHorse::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.POLAR_BEAR, "", 28, hasSpawnegg = true, summonable = true),
-            EntityPolarBear::class.java
+            EntityPolarBear::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.LLAMA, "", 29, hasSpawnegg = true, summonable = true),
-            EntityLlama::class.java
+            EntityLlama::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.PARROT, "", 30, hasSpawnegg = true, summonable = true),
-            EntityParrot::class.java
+            EntityParrot::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.DOLPHIN, "", 31, hasSpawnegg = true, summonable = true),
-            EntityDolphin::class.java
+            EntityDolphin::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ZOMBIE, "", 32, hasSpawnegg = true, summonable = true),
-            EntityZombie::class.java
+            EntityZombie::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.CREEPER, "", 33, hasSpawnegg = true, summonable = true),
-            EntityCreeper::class.java
+            EntityCreeper::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SKELETON, "", 34, hasSpawnegg = true, summonable = true),
-            EntitySkeleton::class.java
+            EntitySkeleton::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SPIDER, "", 35, hasSpawnegg = true, summonable = true),
-            EntitySpider::class.java
+            EntitySpider::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ZOMBIE_PIGMAN, "", 36, hasSpawnegg = true, summonable = true),
-            EntityZombiePigman::class.java
+            EntityZombiePigman::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SLIME, "", 37, hasSpawnegg = true, summonable = true),
-            EntitySlime::class.java
+            EntitySlime::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ENDERMAN, "", 38, hasSpawnegg = true, summonable = true),
-            EntityEnderman::class.java
+            EntityEnderman::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SILVERFISH, "", 39, hasSpawnegg = true, summonable = true),
-            EntitySilverfish::class.java
+            EntitySilverfish::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.CAVE_SPIDER, "", 40, hasSpawnegg = true, summonable = true),
-            EntityCaveSpider::class.java
+            EntityCaveSpider::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.GHAST, "", 41, hasSpawnegg = true, summonable = true),
-            EntityGhast::class.java
+            EntityGhast::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.MAGMA_CUBE, "", 42, hasSpawnegg = true, summonable = true),
-            EntityMagmaCube::class.java
+            EntityMagmaCube::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.BLAZE, "", 43, hasSpawnegg = true, summonable = true),
-            EntityBlaze::class.java
+            EntityBlaze::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ZOMBIE_VILLAGER, "", 44, hasSpawnegg = false, summonable = true),
-            EntityZombieVillager::class.java
+            EntityZombieVillager::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.WITCH, "", 45, hasSpawnegg = true, summonable = true),
-            EntityWitch::class.java
+            EntityWitch::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.STRAY, "", 46, hasSpawnegg = true, summonable = true),
-            EntityStray::class.java
+            EntityStray::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.HUSK, "", 47, hasSpawnegg = true, summonable = true),
-            EntityHusk::class.java
+            EntityHusk::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.WITHER_SKELETON, "", 48, hasSpawnegg = true, summonable = true),
-            EntityWitherSkeleton::class.java
+            EntityWitherSkeleton::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.GUARDIAN, "", 49, hasSpawnegg = true, summonable = true),
-            EntityGuardian::class.java
+            EntityGuardian::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ELDER_GUARDIAN, "", 50, hasSpawnegg = true, summonable = true),
-            EntityElderGuardian::class.java
+            EntityElderGuardian::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.NPC, "", 51, hasSpawnegg = true, summonable = true),
-            EntityNPC::class.java
+            EntityNPC::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.WITHER, "", 52, hasSpawnegg = true, summonable = true),
-            EntityWither::class.java
+            EntityWither::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ENDER_DRAGON, "", 53, hasSpawnegg = true, summonable = true),
-            EntityEnderDragon::class.java
+            EntityEnderDragon::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SHULKER, "", 54, hasSpawnegg = true, summonable = true),
-            EntityShulker::class.java
+            EntityShulker::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ENDERMITE, "", 55, hasSpawnegg = true, summonable = true),
-            EntityEndermite::class.java
+            EntityEndermite::class
         )
-        //        registerInternal(new EntityDefinition(AGENT, "", 56, hasSpawnegg = false, summonable = false), EntityAgent.class);
-        registerInternal(
+        //        register(new EntityDefinition(AGENT, "", 56, hasSpawnegg = false, summonable = false), EntityAgent.class);
+        register(
             EntityDefinition(EntityID.VINDICATOR, "", 57, hasSpawnegg = true, summonable = true),
-            EntityVindicator::class.java
+            EntityVindicator::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.PHANTOM, "", 58, hasSpawnegg = true, summonable = true),
-            EntityPhantom::class.java
+            EntityPhantom::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.RAVAGER, "", 59, hasSpawnegg = true, summonable = true),
-            EntityRavager::class.java
+            EntityRavager::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ARMOR_STAND, "", 61, hasSpawnegg = false, summonable = true),
-            EntityArmorStand::class.java
+            EntityArmorStand::class
         )
-        //        registerInternal(new EntityDefinition(TRIPOD_CAMERA, "", 62, hasSpawnegg = false, summonable = false), EntityTripodCamera.class);
-        registerInternal(
+        //        register(new EntityDefinition(TRIPOD_CAMERA, "", 62, hasSpawnegg = false, summonable = false), EntityTripodCamera.class);
+        register(
             EntityDefinition(EntityID.ITEM, "", 64, hasSpawnegg = false, summonable = false),
-            EntityItem::class.java
+            EntityItem::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.TNT, "", 65, hasSpawnegg = false, summonable = true),
-            EntityTnt::class.java
+            EntityTnt::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.FALLING_BLOCK, "", 66, hasSpawnegg = false, summonable = false),
-            EntityFallingBlock::class.java
+            EntityFallingBlock::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.XP_BOTTLE, "", 68, hasSpawnegg = false, summonable = true),
-            EntityXpBottle::class.java
+            EntityXpBottle::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.XP_ORB, "", 69, hasSpawnegg = false, summonable = true),
-            EntityXpOrb::class.java
+            EntityXpOrb::class
         )
-        //        registerInternal(new EntityDefinition(EYE_OF_ENDER_SIGNAL, "", 70, hasSpawnegg = false, summonable = false), EntityEyeOfEnderSignal.class);
-        registerInternal(
+        //        register(new EntityDefinition(EYE_OF_ENDER_SIGNAL, "", 70, hasSpawnegg = false, summonable = false), EntityEyeOfEnderSignal.class);
+        register(
             EntityDefinition(EntityID.ENDER_CRYSTAL, "", 71, hasSpawnegg = false, summonable = true),
-            EntityEnderCrystal::class.java
+            EntityEnderCrystal::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.FIREWORKS_ROCKET, "", 72, hasSpawnegg = false, summonable = true),
-            EntityFireworksRocket::class.java
+            EntityFireworksRocket::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.THROWN_TRIDENT, "", 73, hasSpawnegg = false, summonable = false),
-            EntityThrownTrident::class.java
+            EntityThrownTrident::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.TURTLE, "", 74, hasSpawnegg = true, summonable = true),
-            EntityTurtle::class.java
+            EntityTurtle::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.CAT, "", 75, hasSpawnegg = true, summonable = true),
-            EntityCat::class.java
+            EntityCat::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SHULKER_BULLET, "", 76, hasSpawnegg = false, summonable = false),
-            EntityShulkerBullet::class.java
+            EntityShulkerBullet::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.FISHING_HOOK, "", 77, hasSpawnegg = false, summonable = false),
-            EntityFishingHook::class.java
+            EntityFishingHook::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.DRAGON_FIREBALL, "", 79, hasSpawnegg = false, summonable = false),
-            EntityDragonFireball::class.java
+            EntityDragonFireball::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ARROW, "", 80, hasSpawnegg = false, summonable = true),
-            EntityArrow::class.java
+            EntityArrow::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SNOWBALL, "", 81, hasSpawnegg = false, summonable = true),
-            EntitySnowball::class.java
+            EntitySnowball::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.EGG, "", 82, hasSpawnegg = false, summonable = true),
-            EntityEgg::class.java
+            EntityEgg::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.PAINTING, "", 83, hasSpawnegg = false, summonable = false),
-            EntityPainting::class.java
+            EntityPainting::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.MINECART, "", 84, hasSpawnegg = false, summonable = true),
-            EntityMinecart::class.java
+            EntityMinecart::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.FIREBALL, "", 85, hasSpawnegg = false, summonable = false),
-            EntityFireball::class.java
+            EntityFireball::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SPLASH_POTION, "", 86, hasSpawnegg = false, summonable = true),
-            EntitySplashPotion::class.java
+            EntitySplashPotion::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ENDER_PEARL, "", 87, hasSpawnegg = false, summonable = false),
-            EntityEnderPearl::class.java
+            EntityEnderPearl::class
         )
-        //        registerInternal(new EntityDefinition(LEASH_KNOT, "", 88, hasSpawnegg = false, summonable = true), EntityLeashKnot.class);
-        registerInternal(
+        //        register(new EntityDefinition(LEASH_KNOT, "", 88, hasSpawnegg = false, summonable = true), EntityLeashKnot.class);
+        register(
             EntityDefinition(EntityID.WITHER_SKULL, "", 89, hasSpawnegg = false, summonable = false),
-            EntityWitherSkull::class.java
+            EntityWitherSkull::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.BOAT, "", 90, hasSpawnegg = false, summonable = true),
-            EntityBoat::class.java
+            EntityBoat::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.WITHER_SKULL_DANGEROUS, "", 91, hasSpawnegg = false, summonable = false),
-            EntityWitherSkullDangerous::class.java
+            EntityWitherSkullDangerous::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.LIGHTNING_BOLT, "", 93, hasSpawnegg = false, summonable = true),
-            EntityLightningBolt::class.java
+            EntityLightningBolt::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SMALL_FIREBALL, "", 94, hasSpawnegg = false, summonable = false),
-            EntitySmallFireball::class.java
+            EntitySmallFireball::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.AREA_EFFECT_CLOUD, "", 95, hasSpawnegg = false, summonable = false),
-            EntityAreaEffectCloud::class.java
+            EntityAreaEffectCloud::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.HOPPER_MINECART, "", 96, hasSpawnegg = false, summonable = true),
-            EntityHopperMinecart::class.java
+            EntityHopperMinecart::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.TNT_MINECART, "", 97, hasSpawnegg = false, summonable = true),
-            EntityTntMinecart::class.java
+            EntityTntMinecart::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.CHEST_MINECART, "", 98, hasSpawnegg = false, summonable = true),
-            EntityChestMinecart::class.java
+            EntityChestMinecart::class
         )
-        //        registerInternal(new EntityDefinition(COMMAND_BLOCK_MINECART, "", 100, hasSpawnegg = false, summonable = true), EntityCommandBlockMinecart.class);
-        registerInternal(
+        //        register(new EntityDefinition(COMMAND_BLOCK_MINECART, "", 100, hasSpawnegg = false, summonable = true), EntityCommandBlockMinecart.class);
+        register(
             EntityDefinition(EntityID.LINGERING_POTION, "", 101, hasSpawnegg = false, summonable = false),
-            EntityLingeringPotion::class.java
+            EntityLingeringPotion::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.LLAMA_SPIT, "", 102, hasSpawnegg = false, summonable = false),
-            EntityLlamaSpit::class.java
+            EntityLlamaSpit::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.EVOCATION_FANG, "", 103, hasSpawnegg = false, summonable = true),
-            EntityEvocationFang::class.java
+            EntityEvocationFang::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.EVOCATION_ILLAGER, "", 104, hasSpawnegg = true, summonable = true),
-            EntityEvocationIllager::class.java
+            EntityEvocationIllager::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.VEX, "", 105, hasSpawnegg = true, summonable = true),
-            EntityVex::class.java
+            EntityVex::class
         )
-        //        registerInternal(new EntityDefinition(ICE_BOMB, "", 106, hasSpawnegg = false, summonable = false), EntityIceBomb.class);
-//        registerInternal(new EntityDefinition(BALLOON, "", 107, hasSpawnegg = false, summonable = false), EntityBalloon.class);
-        registerInternal(
+        //        register(new EntityDefinition(ICE_BOMB, "", 106, hasSpawnegg = false, summonable = false), EntityIceBomb.class);
+//        register(new EntityDefinition(BALLOON, "", 107, hasSpawnegg = false, summonable = false), EntityBalloon.class);
+        register(
             EntityDefinition(EntityID.PUFFERFISH, "", 108, hasSpawnegg = true, summonable = true),
-            EntityPufferfish::class.java
+            EntityPufferfish::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SALMON, "", 109, hasSpawnegg = true, summonable = true),
-            EntitySalmon::class.java
+            EntitySalmon::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.DROWNED, "", 110, hasSpawnegg = true, summonable = true),
-            EntityDrowned::class.java
+            EntityDrowned::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.TROPICALFISH, "", 111, hasSpawnegg = true, summonable = true),
-            EntityTropicalfish::class.java
+            EntityTropicalfish::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.COD, "", 112, hasSpawnegg = true, summonable = true),
-            EntityCod::class.java
+            EntityCod::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.PANDA, "", 113, hasSpawnegg = true, summonable = true),
-            EntityPanda::class.java
+            EntityPanda::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.PILLAGER, "", 114, hasSpawnegg = true, summonable = true),
-            EntityPillager::class.java
+            EntityPillager::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.VILLAGER_V2, "", 115, hasSpawnegg = true, summonable = false),
-            EntityVillagerV2::class.java
+            EntityVillagerV2::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ZOMBIE_VILLAGER_V2, "", 116, hasSpawnegg = true, summonable = false),
-            EntityZombieVillagerV2::class.java
+            EntityZombieVillagerV2::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.WANDERING_TRADER, "", 118, hasSpawnegg = true, summonable = true),
-            EntityWanderingTrader::class.java
+            EntityWanderingTrader::class
         )
-        //        registerInternal(new EntityDefinition(ELDER_GUARDIAN_GHOST, "", 120, hasSpawnegg = false, summonable = true), EntityElderGuardianGhost.class);
-        registerInternal(
+        //        register(new EntityDefinition(ELDER_GUARDIAN_GHOST, "", 120, hasSpawnegg = false, summonable = true), EntityElderGuardianGhost.class);
+        register(
             EntityDefinition(EntityID.FOX, "", 121, hasSpawnegg = true, summonable = true),
-            EntityFox::class.java
+            EntityFox::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.BEE, "", 122, hasSpawnegg = true, summonable = true),
-            EntityBee::class.java
+            EntityBee::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.PIGLIN, "", 123, hasSpawnegg = true, summonable = true),
-            EntityPiglin::class.java
+            EntityPiglin::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.HOGLIN, "", 124, hasSpawnegg = true, summonable = true),
-            EntityHoglin::class.java
+            EntityHoglin::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.STRIDER, "", 125, hasSpawnegg = true, summonable = true),
-            EntityStrider::class.java
+            EntityStrider::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ZOGLIN, "", 126, hasSpawnegg = true, summonable = true),
-            EntityZoglin::class.java
+            EntityZoglin::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.PIGLIN_BRUTE, "", 127, hasSpawnegg = true, summonable = true),
-            EntityPiglinBrute::class.java
+            EntityPiglinBrute::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.GOAT, "", 128, hasSpawnegg = true, summonable = true),
-            EntityGoat::class.java
+            EntityGoat::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.GLOW_SQUID, "", 129, hasSpawnegg = true, summonable = true),
-            EntityGlowSquid::class.java
+            EntityGlowSquid::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.AXOLOTL, "", 130, hasSpawnegg = true, summonable = true),
-            EntityAxolotl::class.java
+            EntityAxolotl::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.WARDEN, "", 131, hasSpawnegg = true, summonable = true),
-            EntityWarden::class.java
+            EntityWarden::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.FROG, "", 132, hasSpawnegg = true, summonable = true),
-            EntityFrog::class.java
+            EntityFrog::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.TADPOLE, "", 133, hasSpawnegg = true, summonable = true),
-            EntityTadpole::class.java
+            EntityTadpole::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ALLAY, "", 134, hasSpawnegg = true, summonable = true),
-            EntityAllay::class.java
+            EntityAllay::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.CAMEL, "", 138, hasSpawnegg = true, summonable = true),
-            EntityCamel::class.java
+            EntityCamel::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.SNIFFER, "", 139, hasSpawnegg = true, summonable = true),
-            EntitySniffer::class.java
+            EntitySniffer::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.TRADER_LLAMA, "", 157, hasSpawnegg = true, summonable = true),
-            EntityTraderLlama::class.java
+            EntityTraderLlama::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.CHEST_BOAT, "", 218, hasSpawnegg = false, summonable = true),
-            EntityChestBoat::class.java
+            EntityChestBoat::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.ARMADILLO, "", 142, hasSpawnegg = true, summonable = true),
-            EntityArmadillo::class.java
+            EntityArmadillo::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.BREEZE, "", 140, hasSpawnegg = true, summonable = true),
-            EntityBreeze::class.java
+            EntityBreeze::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.BREEZE_WIND_CHARGE_PROJECTILE, "", 141, hasSpawnegg = false, summonable = false),
-            EntityBreezeWindCharge::class.java
+            EntityBreezeWindCharge::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.WIND_CHARGE_PROJECTILE, "", 143, hasSpawnegg = false, summonable = false),
-            EntityWindCharge::class.java
+            EntityWindCharge::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.BOGGED, "", 144, hasSpawnegg = true, summonable = true),
-            EntityBogged::class.java
+            EntityBogged::class
         )
-        registerInternal(
+        register(
             EntityDefinition(EntityID.CREAKING, "", 146, hasSpawnegg = true, summonable = true),
-            EntityCreaking::class.java
+            EntityCreaking::class
         )
 
         this.rebuildTag()
     }
 
-    fun getEntityClass(id: String): Class<out Entity>? {
+    fun getEntityClass(id: String): KClass<out Entity>? {
         return CLASS[id]
     }
 
-    fun getEntityClass(id: Int): Class<out Entity>? {
+    fun getEntityClass(id: Int): KClass<out Entity>? {
         return getEntityClass(RID2ID[id] ?: return null)
     }
 
@@ -569,7 +572,7 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
     val entityId2NetworkIdMap: Map<Int, String>
         get() = Collections.unmodifiableMap(RID2ID)
 
-    val knownEntities: @UnmodifiableView MutableMap<String, Class<out Entity>?>
+    val knownEntities: Map<String, KClass<out Entity>>
         /**
          * 获取全部已经注册的实体，包括自定义实体
          *
@@ -578,67 +581,37 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
          *
          * @return the known entities
          */
-        get() = Collections.unmodifiableMap(
-            CLASS
-        )
+        get() = CLASS
 
     fun provideEntity(id: String, chunk: IChunk, nbt: CompoundTag, vararg args: Any?): Entity? {
-        val clazz = getEntityClass(id) ?: return null
+        val exceptions = mutableListOf<Throwable>()
 
         var entity: Entity? = null
-        var exceptions: MutableList<Exception?>? = null
-        for (constructor in clazz.constructors) {
-            if (entity != null) {
-                break
-            }
-
-            if (constructor.parameterCount != (args.size + 2)) {
-                continue
-            }
-
-            try {
-                if (args.isEmpty()) {
-                    val fastConstructor = FAST_NEW[id]!!
-                    entity = fastConstructor.invoke(chunk, nbt) as Entity
-                } else {
-                    val objects = arrayOfNulls<Any>(args.size + 2)
-
-                    objects[0] = chunk
-                    objects[1] = nbt
-                    System.arraycopy(args, 0, objects, 2, args.size)
-                    entity = constructor.newInstance(*objects) as Entity
-                }
-            } catch (e: Exception) {
-                if (exceptions == null) {
-                    exceptions = ArrayList()
-                }
-                exceptions.add(e)
-            } catch (e: Throwable) {
-                if (exceptions == null) {
-                    exceptions = ArrayList()
-                }
-                exceptions.add(RuntimeException(e))
-            }
+        try {
+            val ctor = FAST_NEW[id] ?: throw RegisterException("Cannot find Entity for id: $id")
+            entity = ctor.call(chunk, nbt, *args)
+        } catch (e: Throwable) {
+            exceptions.add(e)
         }
 
         if (entity == null) {
             val cause: Exception = IllegalArgumentException(
                 "Could not create an entity of identifier $id",
-                if (!exceptions.isNullOrEmpty()) exceptions[0] else null
+                if (exceptions.isNotEmpty()) exceptions[0] else null
             )
-            if (exceptions != null && exceptions.size > 1) {
+            if (exceptions.size > 1) {
                 for (i in 1..<exceptions.size) {
                     cause.addSuppressed(exceptions[i])
                 }
             }
-            EntityRegistry.log.error("Could not create an entity of type {} with {} args", id, args.size, cause)
+            EntityRegistry.log.error("Could not create an entity of type {}", id, cause)
         } else {
             return entity
         }
         return null
     }
 
-    override fun get(key: EntityDefinition): Class<out Entity>? {
+    override fun get(key: EntityDefinition): KClass<out Entity>? {
         return CLASS[key.id]
     }
 
@@ -654,18 +627,10 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
     }
 
     @Throws(RegisterException::class)
-    override fun register(key: EntityDefinition, value: Class<out Entity>) {
+    override fun register(key: EntityDefinition, value: KClass<out Entity>) {
         if (CLASS.putIfAbsent(key.id, value) == null) {
-            try {
-                FAST_NEW[key.id] = FastConstructor.create(
-                    value.getConstructor(
-                        IChunk::class.java,
-                        CompoundTag::class.java
-                    )
-                )
-            } catch (e: NoSuchMethodException) {
-                throw RuntimeException(e)
-            }
+            FAST_NEW[key.id] = value.primaryConstructor ?: throw RegisterException("Entity must have a primary constructor")
+
             ID2RID[key.id] = key.rid
             RID2ID[key.rid] = key.id
             DEFINITIONS[key.id] = key
@@ -683,32 +648,27 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
      * @throws RegisterException the register exception
      */
     @Throws(RegisterException::class)
-    fun registerOverrideEntity(plugin: Plugin, entityId: String, value: Class<out Entity?>) {
+    fun registerOverrideEntity(plugin: Plugin, entityId: String, value: KClass<out Entity>) {
         val key = getEntityDefinition(entityId)
         val entityClass = getEntityClass(entityId)
             ?: throw RegisterException(
                 "This entity class does not override because can't find entity class from entityId {}",
                 entityId
             )
-        if (!entityClass.isAssignableFrom(value)) {
+        if (!entityClass.isSuperclassOf(value)) {
             throw RegisterException(
                 "This entity class {} does not override the {} because is not assignable from {}!",
-                entityClass.simpleName,
-                value.simpleName,
-                value.simpleName
+                entityClass.simpleName ?: "",
+                value.simpleName ?: "",
+                value.simpleName ?: ""
             )
         }
         try {
-            val memberLoader: FastMemberLoader =
-                IRegistry.Companion.fastMemberLoaderCache.computeIfAbsent(plugin.name) { p: String? ->
-                    FastMemberLoader(plugin.pluginClassLoader)
-                }
-            FAST_NEW[key.id] = FastConstructor.create(
-                value.getConstructor(
-                    IChunk::class.java,
-                    CompoundTag::class.java
-                ), memberLoader, false
-            )
+            FAST_NEW[key.id] = value.constructors.find { ctor ->
+                ctor.parameters.map {
+                    it.type.classifier
+                } == listOf(IChunk::class, CompoundTag::class)
+            } ?: throw RegisterException("Entity must have constructor(IChunk, CompoundTag)")
         } catch (e: NoSuchMethodException) {
             throw RuntimeException(e)
         }
@@ -721,20 +681,15 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
      * register custom entity
      */
     @Throws(RegisterException::class)
-    fun registerCustomEntity(plugin: Plugin, key: CustomEntityDefinition, value: Class<out Entity>) {
-        if (CustomEntity::class.java.isAssignableFrom(value)) {
+    fun registerCustomEntity(plugin: Plugin, key: CustomEntityDefinition, value: KClass<out Entity>) {
+        if (value.isSubclassOf(CustomEntity::class)) {
             if (CLASS.putIfAbsent(key.id, value) == null) {
                 try {
-                    val memberLoader: FastMemberLoader =
-                        IRegistry.fastMemberLoaderCache.computeIfAbsent(plugin.name) { p: String? ->
-                            FastMemberLoader(plugin.pluginClassLoader)
-                        }
-                    FAST_NEW[key.id] = FastConstructor.create(
-                        value.getConstructor(
-                            IChunk::class.java,
-                            CompoundTag::class.java
-                        ), memberLoader, false
-                    )
+                    FAST_NEW[key.id] = value.constructors.find { ctor ->
+                        ctor.parameters.map {
+                            it.type.classifier
+                        } == listOf(IChunk::class, CompoundTag::class)
+                    } ?: throw RegisterException("Entity must have constructor(IChunk, CompoundTag)")
                 } catch (e: NoSuchMethodException) {
                     throw RuntimeException(e)
                 }
@@ -751,15 +706,6 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
             throw RegisterException("This class does not implement the CustomEntity interface and cannot be registered as a custom entity!")
         }
     }
-
-    private fun registerInternal(key: EntityDefinition, value: Class<out Entity>) {
-        try {
-            register(key, value)
-        } catch (e: RegisterException) {
-            EntityRegistry.log.error("{}", e.cause!!.message)
-        }
-    }
-
 
     class CustomEntityDefinition(val id: String, val bid: String, val hasSpawnegg: Boolean, val summonable: Boolean)
 
@@ -805,8 +751,8 @@ class EntityRegistry : IRegistry<EntityDefinition, Class<out Entity>?, Class<out
     }
 
     companion object : Loggable {
-        private val CLASS = HashMap<String, Class<out Entity>>()
-        private val FAST_NEW = HashMap<String, FastConstructor<out Entity>>()
+        private val CLASS = HashMap<String, KClass<out Entity>>()
+        private val FAST_NEW = HashMap<String, KFunction<Entity>>()
         private val ID2RID = HashMap<String, Int>()
         private val RID2ID = HashMap<Int, String>()
         private val DEFINITIONS = HashMap<String, EntityDefinition>()

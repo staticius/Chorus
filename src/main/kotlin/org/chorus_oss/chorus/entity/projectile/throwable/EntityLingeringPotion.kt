@@ -11,14 +11,10 @@ import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.FloatTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
 
-class EntityLingeringPotion : EntitySplashPotion {
+class EntityLingeringPotion(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) : EntitySplashPotion(chunk, nbt, shootingEntity) {
     override fun getEntityIdentifier(): String {
         return EntityID.LINGERING_POTION
     }
-
-    constructor(chunk: IChunk?, nbt: CompoundTag) : super(chunk, nbt)
-
-    constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity?) : super(chunk, nbt, shootingEntity)
 
     override fun initEntity() {
         super.initEntity()

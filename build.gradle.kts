@@ -48,7 +48,6 @@ dependencies {
     implementation(libs.sentry.log4j2)
     implementation(libs.disruptor)
     implementation(libs.oshi)
-    implementation(libs.fastreflection)
     implementation(libs.bundles.compress)
     implementation(libs.bundles.terminal)
     implementation(libs.graalvm.polyglot)

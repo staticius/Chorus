@@ -6,7 +6,7 @@ import io.netty.buffer.ByteBufInputStream
 import io.netty.buffer.ByteBufOutputStream
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.*
-import org.chorus_oss.chorus.level.format.ChunkSection
+import org.chorus_oss.chorus.level.format.SubChunk
 import org.chorus_oss.chorus.level.format.bitarray.BitArray
 import org.chorus_oss.chorus.level.format.bitarray.BitArrayVersion
 import org.chorus_oss.chorus.level.updater.block.BlockStateUpdaters
@@ -27,13 +27,13 @@ open class Palette<V> {
 
     @JvmOverloads
     constructor(first: V, version: BitArrayVersion = BitArrayVersion.V2) {
-        this.bitArray = version.createArray(ChunkSection.SIZE)
+        this.bitArray = version.createArray(SubChunk.SIZE)
         this.palette = ArrayList(16)
         palette.add(first)
     }
 
     constructor(first: V, palette: MutableList<V>, version: BitArrayVersion) {
-        this.bitArray = version.createArray(ChunkSection.SIZE)
+        this.bitArray = version.createArray(SubChunk.SIZE)
         this.palette = palette
         this.palette.add(first)
     }
@@ -115,7 +115,7 @@ open class Palette<V> {
                 NBTInputStream(bufInputStream, ByteOrder.LITTLE_ENDIAN).use { nbtInputStream ->
                     val bVersion = readBitArrayVersion(byteBuf)
                     if (bVersion == BitArrayVersion.V0) {
-                        this.bitArray = bVersion.createArray(ChunkSection.SIZE)
+                        this.bitArray = bVersion.createArray(SubChunk.SIZE)
                         palette.clear()
                         addBlockPalette(byteBuf, deserializer, nbtInputStream)
                         this.onResize(BitArrayVersion.V2)
@@ -153,7 +153,7 @@ open class Palette<V> {
 
         val version = getVersionFromPaletteHeader(header)
         if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(ChunkSection.SIZE)
+            this.bitArray = version.createArray(SubChunk.SIZE)
             palette.clear()
             palette.add(deserializer.deserialize(byteBuf.readIntLE()))
 
@@ -276,17 +276,17 @@ open class Palette<V> {
     }
 
     protected fun readWords(byteBuf: ByteBuf, version: BitArrayVersion) {
-        val wordCount = version.getWordsForSize(ChunkSection.SIZE)
+        val wordCount = version.getWordsForSize(SubChunk.SIZE)
         val words = IntArray(wordCount)
         for (i in 0..<wordCount) words[i] = byteBuf.readIntLE()
 
-        this.bitArray = version.createArray(ChunkSection.SIZE, words)
+        this.bitArray = version.createArray(SubChunk.SIZE, words)
         palette.clear()
     }
 
     protected fun onResize(version: BitArrayVersion) {
-        val newBitArray = version.createArray(ChunkSection.SIZE)
-        for (i in 0..<ChunkSection.SIZE) newBitArray[i] = bitArray[i]
+        val newBitArray = version.createArray(SubChunk.SIZE)
+        for (i in 0..<SubChunk.SIZE) newBitArray[i] = bitArray[i]
 
         this.bitArray = newBitArray
     }

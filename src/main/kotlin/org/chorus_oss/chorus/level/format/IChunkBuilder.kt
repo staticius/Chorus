@@ -18,9 +18,9 @@ interface IChunkBuilder {
 
     val dimensionData: DimensionData
 
-    fun sections(sections: Array<ChunkSection?>): IChunkBuilder
+    fun sections(sections: Array<SubChunk?>): IChunkBuilder
 
-    val sections: Array<ChunkSection?>
+    val sections: Array<SubChunk?>
 
     fun heightMap(heightMap: ShortArray): IChunkBuilder
 

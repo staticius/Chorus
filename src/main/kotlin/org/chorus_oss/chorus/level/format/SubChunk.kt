@@ -19,9 +19,9 @@ import kotlin.math.min
 
 @NotThreadSafe
 @JvmRecord
-data class ChunkSection(
+data class SubChunk(
     val y: Byte,
-    val blockLayer: Array<BlockPalette>,
+    val layers: Array<BlockPalette>,
     val biomes: Palette<Int>,
     val blockLights: ByteArray,
     val skyLights: ByteArray,
@@ -60,18 +60,18 @@ data class ChunkSection(
     }
 
     fun getBlockState(x: Int, y: Int, z: Int, layer: Int): BlockState {
-        return blockLayer[layer][IChunk.index(x, y, z)]
+        return layers[layer][IChunk.index(x, y, z)]
     }
 
     fun setBlockState(x: Int, y: Int, z: Int, blockState: BlockState, layer: Int) {
         blockChanges.addAndGet(1)
-        blockLayer[layer][IChunk.index(x, y, z)] = blockState
+        layers[layer][IChunk.index(x, y, z)] = blockState
     }
 
     fun getAndSetBlockState(x: Int, y: Int, z: Int, blockState: BlockState, layer: Int): BlockState {
         blockChanges.addAndGet(1)
-        val result = blockLayer[layer][IChunk.index(x, y, z)]
-        blockLayer[layer][IChunk.index(x, y, z)] = blockState
+        val result = layers[layer][IChunk.index(x, y, z)]
+        layers[layer][IChunk.index(x, y, z)] = blockState
         return result
     }
 
@@ -119,7 +119,7 @@ data class ChunkSection(
                 current.z = offsetZ + z
                 for (y in min((max.y - offsetY), 15) downTo minY) {
                     current.y = offsetY + y
-                    val state = blockLayer[0][IChunk.index(x, y, z)]
+                    val state = layers[0][IChunk.index(x, y, z)]
                     if (condition.test(current, state)) {
                         results.add(Registries.BLOCK[state, current.x, current.y, current.z, provider.level]!!)
                     }
@@ -130,45 +130,43 @@ data class ChunkSection(
     }
 
     val isEmpty: Boolean
-        get() = blockLayer[0].isEmpty && blockLayer[0][0] === BlockAir.properties.defaultState
+        get() = layers[0].isEmpty && layers[0][0] === BlockAir.properties.defaultState
 
     fun setNeedReObfuscate() {
-        blockLayer[0].setNeedReObfuscate()
-        blockLayer[1].setNeedReObfuscate()
+        layers[0].setNeedReObfuscate()
+        layers[1].setNeedReObfuscate()
     }
 
     fun writeToBuf(byteBuf: ByteBuf) {
         byteBuf.writeByte(VERSION)
-        //block layer count
-        byteBuf.writeByte(LAYER_COUNT)
+        byteBuf.writeByte(layers.size)
         byteBuf.writeByte(y.toInt())
 
-        blockLayer[0].writeToNetwork(byteBuf) { it.blockStateHash() }
-        blockLayer[1].writeToNetwork(byteBuf) { it.blockStateHash() }
+        for (layer in layers) {
+            layer.writeToNetwork(byteBuf) { it.blockStateHash() }
+        }
     }
 
     fun writeObfuscatedToBuf(level: Level, byteBuf: ByteBuf) {
         byteBuf.writeByte(VERSION)
-        //block layer count
-        byteBuf.writeByte(LAYER_COUNT)
+        byteBuf.writeByte(layers.size)
         byteBuf.writeByte(y.toInt())
 
-        blockLayer[0].writeObfuscatedToNetwork(
-            level, blockChanges, byteBuf
-        ) { it.blockStateHash() }
-        blockLayer[1].writeObfuscatedToNetwork(
-            level, blockChanges, byteBuf
-        ) { it.blockStateHash() }
+        for (layer in layers) {
+            layer.writeObfuscatedToNetwork(
+                level, blockChanges, byteBuf
+            ) { it.blockStateHash() }
+        }
     }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as ChunkSection
+        other as SubChunk
 
         if (y != other.y) return false
-        if (!blockLayer.contentEquals(other.blockLayer)) return false
+        if (!layers.contentEquals(other.layers)) return false
         if (biomes != other.biomes) return false
         if (!blockLights.contentEquals(other.blockLights)) return false
         if (!skyLights.contentEquals(other.skyLights)) return false
@@ -179,7 +177,7 @@ data class ChunkSection(
 
     override fun hashCode(): Int {
         var result: Int = y.toInt()
-        result = 31 * result + blockLayer.contentHashCode()
+        result = 31 * result + layers.contentHashCode()
         result = 31 * result + biomes.hashCode()
         result = 31 * result + blockLights.contentHashCode()
         result = 31 * result + skyLights.contentHashCode()
@@ -189,7 +187,6 @@ data class ChunkSection(
 
     companion object {
         const val SIZE: Int = 16 * 16 * 16
-        const val LAYER_COUNT: Int = 2
         const val VERSION: Int = 9
     }
 }

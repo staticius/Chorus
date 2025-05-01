@@ -120,22 +120,20 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                     }
                 }
                 val total = subChunkCount + 1
-                //write block
+                // write block
                 if (level.isAntiXrayEnabled) {
                     for (i in 0..<total) {
                         if (sections[i] == null) {
-                            sections[i] = ChunkSection((i + dimensionData.minSectionY).toByte())
+                            sections[i] = SubChunk((i + dimensionData.minSectionY).toByte())
                         }
-                        checkNotNull(sections[i])
-                        sections[i]!!.writeObfuscatedToBuf(level, byteBuf)
+                        checkNotNull(sections[i]).writeObfuscatedToBuf(level, byteBuf)
                     }
                 } else {
                     for (i in 0..<total) {
                         if (sections[i] == null) {
-                            sections[i] = ChunkSection((i + dimensionData.minSectionY).toByte())
+                            sections[i] = SubChunk((i + dimensionData.minSectionY).toByte())
                         }
-                        checkNotNull(sections[i])
-                        sections[i]!!.writeToBuf(byteBuf)
+                        checkNotNull(sections[i]).writeToBuf(byteBuf)
                     }
                 }
 
@@ -147,11 +145,12 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                 byteBuf.writeByte(0) // edu- border blocks
 
                 // Block entities
+
                 val tagList: MutableList<CompoundTag> = ArrayList()
                 for (blockEntity in unsafeChunk.blockEntities.values) {
                     if (blockEntity is BlockEntitySpawnable) {
                         tagList.add(blockEntity.spawnCompound)
-                        //Adding NBT to a chunk pack does not show some block entities, and you have to send block entity packets to the player
+                        // Adding NBT to a chunk pack does not show some block entities, and you have to send block entity packets to the player
                         level.addChunkPacket(
                             blockEntity.position.chunkX,
                             blockEntity.position.chunkZ,
@@ -166,6 +165,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                 } catch (e: IOException) {
                     throw RuntimeException(e)
                 }
+
                 data.set(Utils.convertByteBuf2Array(byteBuf))
                 subChunkCountRef.set(total)
             } finally {

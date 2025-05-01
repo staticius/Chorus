@@ -606,8 +606,8 @@ class Level(
     fun addChunkPacket(chunkX: Int, chunkZ: Int, packet: DataPacket?) {
         val index = chunkHash(chunkX, chunkZ)
         val packets = chunkPackets.computeIfAbsent(
-            index,
-            Function<Long, Deque<DataPacket>> { ConcurrentLinkedDeque<DataPacket>() })
+            index
+        ) { ConcurrentLinkedDeque<DataPacket>() }
         packets.add(packet)
     }
 

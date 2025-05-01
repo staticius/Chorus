@@ -27,7 +27,7 @@ interface IChunk {
      * @param fY range -4 ~ 19 for Overworld
      * @return the section
      */
-    fun getSection(fY: Int): ChunkSection?
+    fun getSection(fY: Int): SubChunk?
 
     /**
      * Sets section.
@@ -35,9 +35,9 @@ interface IChunk {
      * @param fY      range -4 ~ 19 for Overworld
      * @param section the section
      */
-    fun setSection(fY: Int, section: ChunkSection?)
+    fun setSection(fY: Int, section: SubChunk?)
 
-    fun getSectionsSafe(): Array<ChunkSection?>
+    fun getSectionsSafe(): Array<SubChunk?>
 
     var x: Int
 

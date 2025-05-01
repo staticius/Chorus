@@ -10,7 +10,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.level.biome.BiomeID
 import org.chorus_oss.chorus.level.format.Chunk
-import org.chorus_oss.chorus.level.format.ChunkSection
+import org.chorus_oss.chorus.level.format.SubChunk
 import org.chorus_oss.chorus.level.format.LevelProvider
 import org.chorus_oss.chorus.level.format.UnsafeChunk
 import org.chorus_oss.chorus.math.Vector3
@@ -113,9 +113,9 @@ class ChunkTest {
         val getOrCreateSection =
             Chunk::class.java.getDeclaredMethod("getOrCreateSection", Int::class.javaPrimitiveType)
         getOrCreateSection.isAccessible = true
-        val s1 = getOrCreateSection.invoke(chunk, -4) as ChunkSection
+        val s1 = getOrCreateSection.invoke(chunk, -4) as SubChunk
         Assertions.assertEquals(-4, s1.y.toInt())
-        val s2 = getOrCreateSection.invoke(chunk, 19) as ChunkSection
+        val s2 = getOrCreateSection.invoke(chunk, 19) as SubChunk
         Assertions.assertEquals(19, s2.y.toInt())
     }
 
@@ -169,7 +169,7 @@ class ChunkTest {
 
     @Test
     fun test_SectionIsEmpty() {
-        val chunkSection = ChunkSection(0.toByte())
-        Assertions.assertTrue(chunkSection.isEmpty)
+        val subChunk = SubChunk(0.toByte())
+        Assertions.assertTrue(subChunk.isEmpty)
     }
 }

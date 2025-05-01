@@ -15,7 +15,7 @@ object BiomeTags {
     const val CAVES: String = "caves"
     const val COLD: String = "cold"
     const val CRIMSON_FOREST: String = "crimson_forest"
-    const val DEEP: String = "deep"
+    const val DEEP_DOWN: String = "deep_down"
     const val DESERT: String = "desert"
     const val DRIPSTONE_CAVES: String = "dripstone_caves"
     const val EDGE: String = "edge"

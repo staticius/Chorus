@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.block.BlockAir
 import org.chorus_oss.chorus.block.BlockState
 import org.chorus_oss.chorus.level.AntiXraySystem
 import org.chorus_oss.chorus.level.Level
-import org.chorus_oss.chorus.level.format.ChunkSection
+import org.chorus_oss.chorus.level.format.SubChunk
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.level.format.bitarray.BitArrayVersion
 import org.chorus_oss.chorus.registry.Registries
@@ -55,7 +55,7 @@ class BlockPalette : Palette<BlockState> {
                 obfuscatePalette = BlockPalette(BlockAir.STATE)
                 this.copyTo(obfuscatePalette!!)
             }
-            for (i in 0..<ChunkSection.SIZE) {
+            for (i in 0..<SubChunk.SIZE) {
                 val x = (i shr 8) and 0xF
                 val z = (i shr 4) and 0xF
                 val y = i and 0xF

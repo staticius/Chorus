@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus
 
 class UnsafeChunk(private val chunk: Chunk) {
     @get:ApiStatus.Internal
-    val sections: Array<ChunkSection?>
+    val sections: Array<SubChunk?>
         get() = chunk.sections
 
     val dimensionData: DimensionData
@@ -86,23 +86,23 @@ class UnsafeChunk(private val chunk: Chunk) {
      * @param sectionY the section y range -4 ~ 19
      * @return the or create section
      */
-    private fun getOrCreateSection(sectionY: Int): ChunkSection? {
+    private fun getOrCreateSection(sectionY: Int): SubChunk? {
         val minSectionY = dimensionData.minSectionY
         val offsetY = sectionY - minSectionY
         if (offsetY < 0) return null
         for (i in 0..offsetY) {
             if (chunk.sections[i] == null) {
-                chunk.sections[i] = ChunkSection((i + minSectionY).toByte())
+                chunk.sections[i] = SubChunk((i + minSectionY).toByte())
             }
         }
         return chunk.sections[offsetY]
     }
 
-    fun getSection(fY: Int): ChunkSection? {
+    fun getSection(fY: Int): SubChunk? {
         return chunk.sections[fY - dimensionData.minSectionY]
     }
 
-    fun setSection(fY: Int, section: ChunkSection?) {
+    fun setSection(fY: Int, section: SubChunk?) {
         chunk.sections[fY - dimensionData.minSectionY] = section
         setChanged()
     }
