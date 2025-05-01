@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.entity.mob.animal
 
-import it.unimi.dsi.fastutil.Pair
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.block.BlockFlowingWater
 import org.chorus_oss.chorus.entity.*
@@ -172,27 +171,27 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
             setOf<IController>(
                 LookController(true, true),
                 ConditionalController(
-                    Pair.of<Predicate<EntityMob>, IController>(
+                    Pair<Predicate<EntityMob>, IController>(
                         Predicate<EntityMob> { obj: EntityMob -> obj.isInsideOfWater() },
                         DiveController()
-                    ), Pair.of<Predicate<EntityMob>, IController>(
+                    ), Pair<Predicate<EntityMob>, IController>(
                         Predicate<EntityMob> { obj: EntityMob -> obj.isInsideOfWater() }, SpaceMoveController()
-                    ), Pair.of<Predicate<EntityMob>, IController>(
+                    ), Pair<Predicate<EntityMob>, IController>(
                         Predicate<EntityMob> { entity: EntityMob -> !entity.isInsideOfWater() }, WalkController()
-                    ), Pair.of<Predicate<EntityMob>, IController>(
+                    ), Pair<Predicate<EntityMob>, IController>(
                         Predicate<EntityMob> { entity: EntityMob -> !entity.isInsideOfWater() }, FluctuateController()
                     )
                 )
             ),
             ConditionalAStarRouteFinder(
                 this,
-                Pair.of<Predicate<EntityMob>, IRouteFinder>(
+                Pair<Predicate<EntityMob>, IRouteFinder>(
                     Predicate<EntityMob> { ent: EntityMob -> !ent.isInsideOfWater() }, SimpleFlatAStarRouteFinder(
                         WalkingPosEvaluator(),
                         this
                     )
                 ),
-                Pair.of<Predicate<EntityMob>, IRouteFinder>(
+                Pair<Predicate<EntityMob>, IRouteFinder>(
                     Predicate<EntityMob> { obj: EntityMob -> obj.isInsideOfWater() }, SimpleSpaceAStarRouteFinder(
                         SwimmingPosEvaluator(),
                         this

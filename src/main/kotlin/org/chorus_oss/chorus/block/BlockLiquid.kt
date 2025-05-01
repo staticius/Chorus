@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus.block
 
-import it.unimi.dsi.fastutil.longs.Long2ByteMap
-import it.unimi.dsi.fastutil.longs.Long2ByteOpenHashMap
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
@@ -10,7 +8,6 @@ import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.event.block.BlockFromToEvent
 import org.chorus_oss.chorus.event.block.LiquidFlowEvent
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.Level.Companion.blockHash
@@ -27,7 +24,7 @@ import kotlin.math.min
 abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
     var adjacentSources: Int = 0
     protected var flowVector: Vector3? = null
-    private val flowCostVisited: Long2ByteMap = Long2ByteOpenHashMap()
+    private val flowCostVisited: MutableMap<Long, Byte> = mutableMapOf()
 
     override fun canBeFlowedInto(): Boolean {
         return true

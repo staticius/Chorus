@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus.block
 
-import it.unimi.dsi.fastutil.longs.Long2LongMap
-import it.unimi.dsi.fastutil.longs.Long2LongOpenHashMap
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server.Companion.instance
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
@@ -141,11 +139,10 @@ abstract class BlockLeaves(blockState: BlockState) : BlockTransparent(blockState
         return type
     }
 
-    private fun findLog(current: Block?, distance: Int, visited: Long2LongMap?): Boolean {
+    private fun findLog(current: Block?, distance: Int, visited: MutableMap<Long, Long>?): Boolean {
         var visited1 = visited
         if (visited1 == null) {
-            visited1 = Long2LongOpenHashMap()
-            visited1.defaultReturnValue(-1)
+            visited1 = mutableMapOf()
         }
         if (current is IBlockWood || current is BlockMangroveRoots) {
             return true
@@ -154,10 +151,10 @@ abstract class BlockLeaves(blockState: BlockState) : BlockTransparent(blockState
             return false
         }
         val hash = hashBlock(current.position)
-        if (visited1.get(hash) >= distance) {
+        if (visited1.getOrDefault(hash, -1) >= distance) {
             return false
         }
-        visited1.put(hash, distance.toLong())
+        visited1[hash] = distance.toLong()
         for (face in VISIT_ORDER) {
             if (findLog(current.getSide(face), distance - 1, visited1)) {
                 return true

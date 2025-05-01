@@ -2,8 +2,6 @@ package org.chorus_oss.chorus.inventory
 
 import com.google.common.collect.BiMap
 import com.google.common.collect.HashBiMap
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.ints.IntList
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.blockentity.BlockEntity
@@ -246,8 +244,7 @@ abstract class BaseInventory(
             }
         }
 
-        // improve performance using FastUtils IntArrayList
-        val emptySlots: IntList = IntArrayList(this.size)
+        val emptySlots = mutableListOf<Int>()
 
         for (i in 0..<this.size) {
             //获取未克隆Item对象

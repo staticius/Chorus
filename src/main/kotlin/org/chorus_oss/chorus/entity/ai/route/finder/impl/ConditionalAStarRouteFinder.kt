@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus.entity.ai.route.finder.impl
 
-import it.unimi.dsi.fastutil.Pair
-import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap
 import org.chorus_oss.chorus.entity.ai.route.data.Node
 import org.chorus_oss.chorus.entity.ai.route.finder.IRouteFinder
 import org.chorus_oss.chorus.entity.mob.EntityMob
@@ -14,18 +12,17 @@ class ConditionalAStarRouteFinder(
     vararg routeFinders: Pair<Predicate<EntityMob>, IRouteFinder>
 ) :
     IRouteFinder {
-    private val routeFinders = Object2ObjectArrayMap<Predicate<EntityMob>, IRouteFinder>()
+    private val routeFinders: MutableMap<Predicate<EntityMob>, IRouteFinder> = mutableMapOf()
 
     init {
-        Arrays.stream(routeFinders).forEach { pair: Pair<Predicate<EntityMob>, IRouteFinder> ->
-            this.routeFinders[pair.first()] =
-                pair.second()
+        routeFinders.forEach { pair ->
+            this.routeFinders[pair.first] = pair.second
         }
     }
 
     val routeFinder: Optional<IRouteFinder>
         get() {
-            for ((key, value) in routeFinders.object2ObjectEntrySet()) {
+            for ((key, value) in routeFinders.entries) {
                 if (key.test(this.entity)) {
                     return Optional.ofNullable(value)
                 }

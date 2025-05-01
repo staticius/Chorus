@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.command.defaults
 
 import com.sun.jna.platform.win32.COM.WbemcliUtil
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus_oss.chorus.Chorus
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.command.CommandSender
@@ -15,8 +14,6 @@ import java.io.IOException
 import java.lang.management.ManagementFactory
 import java.nio.file.Files
 import java.util.concurrent.TimeUnit
-import kotlin.collections.HashMap
-import kotlin.collections.MutableMap
 import kotlin.collections.set
 import kotlin.math.round
 
@@ -200,11 +197,9 @@ class StatusCommand(name: String) :
                         ) + "/s"
                     )
                     sender.sendMessage(TextFormat.GOLD.toString() + "Network hardware list: ")
-                    var list: ObjectArrayList<String?>
+                    var list: List<String?>
                     for (each in network.getHardWareNetworkInterfaces()!!) {
-                        list = ObjectArrayList(each.iPv4addr.size + each.iPv6addr.size)
-                        list.addElements(0, each.iPv4addr)
-                        list.addElements(list.size, each.iPv6addr)
+                        list = listOf(*each.iPv4addr, *each.iPv6addr)
                         sender.sendMessage(TextFormat.AQUA.toString() + "  " + each.displayName)
                         sender.sendMessage(
                             TextFormat.RESET.toString() + "    " + formatKB(each.speed) + "/s " + TextFormat.GRAY + java.lang.String.join(

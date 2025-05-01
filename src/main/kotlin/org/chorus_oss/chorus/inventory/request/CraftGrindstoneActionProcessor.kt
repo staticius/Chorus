@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus.inventory.request
 
-import it.unimi.dsi.fastutil.Pair
-import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.inventory.GrindstoneEvent
@@ -39,10 +37,10 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
             return context.error()
         }
         val pair = updateGrindstoneResult(player, inventory) ?: return context.error()
-        val exp = pair.right()
+        val exp = pair.second
         val event = GrindstoneEvent(
             inventory,
-            firstItem, pair.left(), secondItem, exp, player
+            firstItem, pair.first, secondItem, exp, player
         )
         Server.instance.pluginManager.callEvent(event)
         if (event.isCancelled) {
@@ -58,7 +56,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
     fun updateGrindstoneResult(player: Player?, inventory: GrindstoneInventory): Pair<Item, Int>? {
         var firstItem = inventory.firstItem
         var secondItem = inventory.secondItem
-        val resultPair: Pair<Item, Int> = ObjectIntMutablePair.of(Item.AIR, 0)
+        var resultPair: Pair<Item, Int> = Pair(Item.AIR, 0)
         if (!firstItem.isNothing && !secondItem.isNothing && (firstItem.id != secondItem.id)) {
             return null
         }
@@ -75,8 +73,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
 
         if (firstItem.id == ItemID.ENCHANTED_BOOK) {
             if (secondItem.isNothing) {
-                resultPair.left(Item.get(ItemID.BOOK, 0, firstItem.getCount()))
-                resultPair.right(recalculateResultExperience(inventory))
+                resultPair = Pair(Item.get(ItemID.BOOK, 0, firstItem.getCount()), recalculateResultExperience(inventory))
             } else {
                 return null
             }
@@ -97,8 +94,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
             val resultingDamage = max((firstItem.maxDurability - reduction + 1).toDouble(), 0.0).toInt()
             result.damage = resultingDamage
         }
-        resultPair.left(result)
-        resultPair.right(resultExperience)
+        resultPair = Pair(result, resultExperience)
         return resultPair
     }
 

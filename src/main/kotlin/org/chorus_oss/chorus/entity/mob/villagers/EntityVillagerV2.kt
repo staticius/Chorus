@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.entity.mob.villagers
 
-import it.unimi.dsi.fastutil.ints.IntArrayList
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.Block
@@ -565,7 +564,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
             val gossipTag = namedTag!!.getCompound("gossip")
             for (key in gossipTag.tags.keys) {
                 val gossipValues = gossipTag.getList(key, IntTag::class.java)
-                val valueMap = IntArrayList()
+                val valueMap = mutableListOf<Int>()
                 for (i in 0..<gossipValues.size()) {
                     valueMap.add(i, gossipValues[i].data)
                 }
@@ -638,11 +637,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     fun addGossip(xuid: String, gossip: Gossip, value: Int) {
         val gossipMap = memoryStorage[CoreMemoryTypes.Companion.GOSSIP]!!
-        if (!gossipMap.containsKey(xuid)) gossipMap[xuid] = IntArrayList(
-            Collections.nCopies(
-                Gossip.VALUES.size, 0
-            )
-        )
+        if (!gossipMap.containsKey(xuid)) gossipMap[xuid] = MutableList(Gossip.VALUES.size) { 0 }
+
         val values = gossipMap[xuid]
         val ordinal = gossip.ordinal
         values!![ordinal] = min(gossip.max.toDouble(), (values[ordinal] + value).toDouble()).toInt()
@@ -662,11 +658,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 val gossipMap = memoryStorage[CoreMemoryTypes.GOSSIP]!!
                 val targetGossipMap = target.memoryStorage[CoreMemoryTypes.Companion.GOSSIP]!!
                 for ((xuid, value) in gossipMap.entries) {
-                    if (!targetGossipMap.containsKey(xuid)) targetGossipMap[xuid] = IntArrayList(
-                        Collections.nCopies(
-                            Gossip.VALUES.size, 0
-                        )
-                    )
+                    if (!targetGossipMap.containsKey(xuid)) targetGossipMap[xuid] = MutableList(Gossip.VALUES.size) { 0 }
                     val targetValues = targetGossipMap[xuid]
                     for (gossip in Gossip.VALUES) {
                         val ordinal = gossip.ordinal
@@ -681,12 +673,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     fun getGossip(xuid: String, gossip: Gossip): Int {
         val gossipMap = memoryStorage[CoreMemoryTypes.Companion.GOSSIP]!!
-        if (!gossipMap.containsKey(xuid)) gossipMap[xuid] = IntArrayList(
-            Collections.nCopies(
-                Gossip.VALUES.size,
-                0
-            )
-        )
+        if (!gossipMap.containsKey(xuid)) gossipMap[xuid] = MutableList(Gossip.VALUES.size) { 0 }
         val values = gossipMap[xuid]
         val ordinal = gossip.ordinal
         return values!!.get(ordinal) * gossip.multiplier

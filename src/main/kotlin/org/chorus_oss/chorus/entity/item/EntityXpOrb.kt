@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.entity.item
 
-import it.unimi.dsi.fastutil.ints.IntArrayList
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.EntityID
@@ -254,13 +253,13 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
          */
         @JvmStatic
         fun splitIntoOrbSizes(amount: Int): List<Int> {
-            var amount: Int = amount
-            val result: MutableList<Int> = IntArrayList()
+            var amount1: Int = amount
+            val result: MutableList<Int> = mutableListOf()
 
-            while (amount > 0) {
-                val size: Int = getMaxOrbSize(amount)
+            while (amount1 > 0) {
+                val size: Int = getMaxOrbSize(amount1)
                 result.add(size)
-                amount -= size
+                amount1 -= size
             }
 
             return result

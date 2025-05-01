@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus.blockentity
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus_oss.chorus.block.BlockCauldron
 import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.level.format.IChunk
@@ -149,13 +147,13 @@ class BlockEntityCauldron(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
         UNKNOWN(-2);
 
         companion object {
-            private val BY_DATA: Int2ObjectMap<PotionType>
+            private val BY_DATA: MutableMap<Int, PotionType>
 
             init {
                 val types = entries.toTypedArray()
-                BY_DATA = Int2ObjectOpenHashMap(types.size)
+                BY_DATA = mutableMapOf()
                 for (type in types) {
-                    BY_DATA.put(type.potionTypeData, type)
+                    BY_DATA[type.potionTypeData] = type
                 }
             }
 

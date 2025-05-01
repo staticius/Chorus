@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.block
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.property.type.BlockPropertyType
@@ -36,6 +35,7 @@ import org.chorus_oss.chorus.utils.BlockColor
 import org.chorus_oss.chorus.utils.Loggable
 import java.util.*
 import java.util.function.Predicate
+import kotlin.collections.HashMap
 import kotlin.math.pow
 
 
@@ -1169,7 +1169,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
     companion object {
         val EMPTY_ARRAY: Array<Block> = emptyArray()
         const val DEFAULT_AIR_FLUID_FRICTION: Double = 0.95
-        val VANILLA_BLOCK_COLOR_MAP: Long2ObjectOpenHashMap<BlockColor> = Long2ObjectOpenHashMap()
+        val VANILLA_BLOCK_COLOR_MAP: HashMap<Long, BlockColor> = HashMap()
 
         @JvmStatic
         fun isNotActivate(player: Player?): Boolean {

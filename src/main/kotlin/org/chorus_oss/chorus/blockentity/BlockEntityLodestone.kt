@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.blockentity
 
-import it.unimi.dsi.fastutil.ints.IntList
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.level.format.IChunk
@@ -47,7 +46,7 @@ class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         get() = levelBlock.id === BlockID.LODESTONE
 
     override fun onBreak(isSilkTouch: Boolean) {
-        val handlers: IntList
+        val handlers: MutableList<Int>
         val positionTrackingService = Server.instance.getPositionTrackingService()
         try {
             handlers = positionTrackingService.findTrackingHandlers(this)
