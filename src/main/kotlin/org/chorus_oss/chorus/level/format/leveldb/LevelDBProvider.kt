@@ -24,7 +24,6 @@ import java.nio.file.StandardCopyOption
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicReference
-import kotlin.collections.HashMap
 
 class LevelDBProvider(override val level: Level, override val path: String) : LevelProvider {
     private val lastChunk: ThreadLocal<WeakReference<IChunk>?> = ThreadLocal()

@@ -10,7 +10,6 @@ import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.Min
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import org.chorus_oss.chorus.utils.Loggable
-import java.util.List
 
 
 class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction> {

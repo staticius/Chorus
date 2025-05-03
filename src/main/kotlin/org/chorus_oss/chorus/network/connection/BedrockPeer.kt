@@ -44,7 +44,7 @@ class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessi
         val targetId = wrapper.targetSubClientId
         val session = sessions.computeIfAbsent(
             targetId
-        ) { sessionId-> this.onSessionCreated(sessionId)!! }
+        ) { sessionId -> this.onSessionCreated(sessionId)!! }
         session.onPacket(wrapper)
     }
 

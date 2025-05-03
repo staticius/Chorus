@@ -1,8 +1,6 @@
 package org.chorus_oss.chorus.item
 
-import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.block.BlockCocoa
-import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.utils.DyeColor
 
 class ItemCocoaBeans : ItemDye(ItemID.COCOA_BEANS) {

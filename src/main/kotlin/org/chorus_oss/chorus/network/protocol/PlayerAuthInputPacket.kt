@@ -83,7 +83,9 @@ class PlayerAuthInputPacket : DataPacket() {
                         PlayerActionType.CRACK_BLOCK,
                         PlayerActionType.PREDICT_DESTROY_BLOCK,
                         PlayerActionType.CONTINUE_DESTROY_BLOCK ->
-                            packet.blockActionData[type] = PlayerBlockActionData(type, byteBuf.readSignedBlockPosition(), byteBuf.readVarInt())
+                            packet.blockActionData[type] =
+                                PlayerBlockActionData(type, byteBuf.readSignedBlockPosition(), byteBuf.readVarInt())
+
                         else -> Unit
                     }
                 }

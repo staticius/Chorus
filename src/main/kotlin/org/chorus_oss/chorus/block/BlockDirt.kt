@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.math.BlockFace
@@ -60,7 +59,6 @@ open class BlockDirt : BlockSolid, Natural {
     override fun getDrops(item: Item): Array<Item> {
         return arrayOf(this.toItem())
     }
-
 
 
     override val properties: BlockProperties

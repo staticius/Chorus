@@ -41,7 +41,6 @@ import org.chorus_oss.chorus.level.format.LevelConfig
 import org.chorus_oss.chorus.level.format.LevelConfig.GeneratorConfig
 import org.chorus_oss.chorus.level.format.LevelProviderManager.addProvider
 import org.chorus_oss.chorus.level.format.LevelProviderManager.getProvider
-import org.chorus_oss.chorus.level.format.LevelProviderManager.getProviderByName
 import org.chorus_oss.chorus.level.format.LevelProviderManager.getProviderName
 import org.chorus_oss.chorus.level.format.leveldb.LevelDBProvider
 import org.chorus_oss.chorus.level.tickingarea.manager.SimpleTickingAreaManager
@@ -158,6 +157,7 @@ class Server internal constructor(
 
     var scheduler: ServerScheduler
         private set
+
     /**
      * A tick counter that records the number of ticks that have passed on the server
      */
@@ -983,7 +983,10 @@ class Server internal constructor(
             }
         } else {
             for (cmd in commands) {
-                server.executeCommand(server.consoleSender, "execute as " + "\"" + sender.getEntityName() + "\" run " + cmd)
+                server.executeCommand(
+                    server.consoleSender,
+                    "execute as " + "\"" + sender.getEntityName() + "\" run " + cmd
+                )
             }
         }
 
@@ -2170,7 +2173,8 @@ class Server internal constructor(
                     log.warn("level {} has already been loaded!", levelName)
                     continue
                 }
-                level = Level(levelName, path, levelConfig1.generators.size, LevelDBProvider::class.java, generatorConfig)
+                level =
+                    Level(levelName, path, levelConfig1.generators.size, LevelDBProvider::class.java, generatorConfig)
 
                 levels[level.id] = level
                 level.initLevel()

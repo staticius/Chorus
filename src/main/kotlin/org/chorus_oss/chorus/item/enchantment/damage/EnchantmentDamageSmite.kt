@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.item.enchantment.damage
 
-import org.chorus_oss.chorus.entity.*
-import org.chorus_oss.chorus.item.enchantment.*
+import org.chorus_oss.chorus.entity.Entity
+import org.chorus_oss.chorus.entity.EntitySmite
 
 
 class EnchantmentDamageSmite :

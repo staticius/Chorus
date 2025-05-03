@@ -87,7 +87,8 @@ class EffectCommand(name: String) : Command(name, "commands.effect.description",
                             continue
                         }
                         entity.removeEffect(effect.getType())
-                        log.addSuccess("commands.effect.success.removed", effect.getName(), entity.getEntityName()).output()
+                        log.addSuccess("commands.effect.success.removed", effect.getName(), entity.getEntityName())
+                            .output()
                     } else {
                         effect.setDuration(duration).setAmplifier(amplification)
                         entity.addEffect(effect.clone())

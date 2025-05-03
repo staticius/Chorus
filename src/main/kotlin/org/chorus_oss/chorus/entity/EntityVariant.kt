@@ -9,7 +9,9 @@ import org.chorus_oss.chorus.utils.Utils
 interface EntityVariant : EntityComponent {
     var variant: Int
         get() = memoryStorage[CoreMemoryTypes.VARIANT]!!
-        set(value) { memoryStorage[CoreMemoryTypes.VARIANT] = value }
+        set(value) {
+            memoryStorage[CoreMemoryTypes.VARIANT] = value
+        }
 
     fun hasVariant(): Boolean {
         return memoryStorage.notEmpty(CoreMemoryTypes.VARIANT)

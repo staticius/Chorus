@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.inventory.request
 
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.inventory.*
+import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.DestroyAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer

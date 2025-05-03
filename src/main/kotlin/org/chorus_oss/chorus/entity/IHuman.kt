@@ -187,14 +187,14 @@ interface IHuman : InventoryHolder {
             }
         }
         if (human.namedTag!!.containsCompound("OffInventory")) {
-            val offhandInventory: HumanOffHandInventory? = offhandInventory
+            val offhandInventory: HumanOffHandInventory = offhandInventory
             val offHand: CompoundTag = human.namedTag!!.getCompound("OffInventory")
             offhandInventory!!.setItem(0, NBTIO.getItemHelper(offHand)) //offinventory index 0
         }
         if (human.namedTag!!.contains("EnderItems") && human.namedTag!!["EnderItems"] is ListTag<*>) {
             val inventoryList: ListTag<CompoundTag> = human.namedTag!!.getList("EnderItems", CompoundTag::class.java)
             for (item: CompoundTag in inventoryList.all) { //enderItems index 0-26
-                (human as EntityHumanType).enderChestInventory!!
+                (human as EntityHumanType).enderChestInventory
                     .setItem(item.getByte("Slot").toInt(), NBTIO.getItemHelper(item))
             }
         }
@@ -215,15 +215,15 @@ interface IHuman : InventoryHolder {
         }
 
         if (this.offhandInventory != null) {
-            val item: Item = offhandInventory!!.getItem(0)
+            val item: Item = offhandInventory.getItem(0)
             human.namedTag!!.putCompound("OffInventory", NBTIO.putItemHelper(item, 0))
         }
 
         human.namedTag!!.putList("EnderItems", ListTag<CompoundTag>())
         if (this.enderChestInventory != null) {
             val enderItems: ListTag<CompoundTag> = human.namedTag!!.getList("EnderItems", CompoundTag::class.java)
-            for (slot in 0..<enderChestInventory!!.size) {
-                val item: Item = enderChestInventory!!.getItem(slot)
+            for (slot in 0..<enderChestInventory.size) {
+                val item: Item = enderChestInventory.getItem(slot)
                 if (!item.isNothing) {
                     enderItems.add(NBTIO.putItemHelper(item, slot))
                 }

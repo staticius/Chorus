@@ -2,7 +2,9 @@ package org.chorus_oss.chorus.item
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.block.*
+import org.chorus_oss.chorus.block.Block
+import org.chorus_oss.chorus.block.BlockFire
+import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.event.block.BlockIgniteEvent
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.BlockFace

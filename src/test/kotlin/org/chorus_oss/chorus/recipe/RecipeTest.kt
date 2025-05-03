@@ -65,7 +65,8 @@ class RecipeTest {
 
     @Test
     fun test_tryShrinkMatrix3() {
-        val item1 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND), Item.get(ItemID.TORCHFLOWER_SEEDS)).toTypedArray()
+        val item1 = List.of(Item.get(ItemID.PLANKS), Item.get(ItemID.DIAMOND), Item.get(ItemID.TORCHFLOWER_SEEDS))
+            .toTypedArray()
         val item2 = List.of(Item.AIR, Item.get(ItemID.STICK), Item.AIR).toTypedArray()
         val item3 = List.of(Item.AIR, Item.get(ItemID.STICK), Item.AIR).toTypedArray()
         val data = arrayOf(item1, item2, item3)

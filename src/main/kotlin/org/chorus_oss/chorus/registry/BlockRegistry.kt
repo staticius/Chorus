@@ -5,14 +5,11 @@ import org.chorus_oss.chorus.block.customblock.CustomBlockDefinition
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.plugin.Plugin
 import org.chorus_oss.chorus.utils.Loggable
-import org.chorus_oss.chorus.utils.MainLogger
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.function.Consumer
 import kotlin.collections.set
 import kotlin.reflect.KClass
-import kotlin.reflect.KFunction
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.typeOf
@@ -1122,9 +1119,11 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
         }
         try {
             val companion = value.companionObject ?: throw RuntimeException("Block must have a companion object!")
-            val companionInstance = companion.objectInstance ?: throw RuntimeException("Block must have a companion object!")
+            val companionInstance =
+                companion.objectInstance ?: throw RuntimeException("Block must have a companion object!")
 
-            val properties = companion.memberProperties.find { it.name == "properties" } ?: throw RuntimeException("Block companion must have properties member")
+            val properties = companion.memberProperties.find { it.name == "properties" }
+                ?: throw RuntimeException("Block companion must have properties member")
             properties.isAccessible = true
 
             if (properties.returnType == typeOf<BlockProperties>()) {
@@ -1136,7 +1135,7 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
                     param.type == typeOf<BlockState>()
                 } ?: throw RuntimeException("Block: $value must have a constructor with a BlockState param!")
 
-                val fn = fun (state: BlockState?): Block {
+                val fn = fun(state: BlockState?): Block {
                     return constructor.call(state ?: blockProperties.defaultState)
                 }
 

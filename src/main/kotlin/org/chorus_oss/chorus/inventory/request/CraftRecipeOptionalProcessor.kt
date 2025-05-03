@@ -6,7 +6,9 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.inventory.AnvilInventory
 import org.chorus_oss.chorus.inventory.CartographyTableInventory
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.item.Item
+import org.chorus_oss.chorus.item.ItemFilledMap
+import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.nbt.tag.CompoundTag

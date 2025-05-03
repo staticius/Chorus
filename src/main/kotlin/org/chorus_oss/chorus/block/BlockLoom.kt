@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.inventory.BlockInventoryHolder
 import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.inventory.LoomInventory
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.BlockFace.Companion.horizontals

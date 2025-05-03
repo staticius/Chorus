@@ -4,7 +4,6 @@ package org.chorus_oss.chorus.nbt.snbt
 import org.chorus_oss.chorus.nbt.snbt.ast.Delimiter
 import org.chorus_oss.chorus.nbt.snbt.ast.Literal
 import org.chorus_oss.chorus.nbt.snbt.ast.WHITESPACE
-import java.util.*
 
 open class Token : SNBTConstants, Node {
     /**

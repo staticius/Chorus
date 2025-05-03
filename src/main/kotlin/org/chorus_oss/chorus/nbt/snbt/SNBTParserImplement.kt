@@ -2,7 +2,10 @@
 package org.chorus_oss.chorus.nbt.snbt
 
 import org.chorus_oss.chorus.nbt.snbt.ast.*
-import java.io.*
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.io.PrintStream
+import java.io.Reader
 import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
@@ -53,7 +56,10 @@ class SNBTParserImplement(
      * will be used in error messages and so on.
      * @param path        The location (typically the filename) from which to get the input to parse
      */
-    constructor(inputSource: String, path: Path) : this(inputSource, SNBTLexer.stringFromBytes(Files.readAllBytes(path)))
+    constructor(inputSource: String, path: Path) : this(
+        inputSource,
+        SNBTLexer.stringFromBytes(Files.readAllBytes(path))
+    )
 
     constructor(inputSource: String, path: Path, charset: Charset?) : this(
         inputSource, SNBTLexer.Companion.stringFromBytes(

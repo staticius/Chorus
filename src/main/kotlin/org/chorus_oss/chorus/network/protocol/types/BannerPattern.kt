@@ -14,8 +14,7 @@ data class BannerPattern(
                 BannerPatternType.fromCode(if (compoundTag.contains("Pattern")) compoundTag.getString("Pattern") else "bo")
             return BannerPattern(
                 bannerPatternType,
-                if (compoundTag.contains("Color")) DyeColor.getByDyeData(compoundTag.getInt("Color"))
-                    ?: DyeColor.BLACK else DyeColor.BLACK
+                if (compoundTag.contains("Color")) DyeColor.getByDyeData(compoundTag.getInt("Color")) else DyeColor.BLACK
             )
         }
     }

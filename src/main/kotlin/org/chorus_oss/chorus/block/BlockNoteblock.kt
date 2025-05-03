@@ -48,7 +48,9 @@ class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState = Companio
         fy: Float,
         fz: Float
     ): Boolean {
-        if (player != null && player.isSneaking() || (up().isAir && blockFace == BlockFace.UP && item.isBlock() && item.getSafeBlockState().toBlock() is BlockHead)) {
+        if (player != null && player.isSneaking() || (up().isAir && blockFace == BlockFace.UP && item.isBlock() && item.getSafeBlockState()
+                .toBlock() is BlockHead)
+        ) {
             return false
         }
         this.increaseStrength()

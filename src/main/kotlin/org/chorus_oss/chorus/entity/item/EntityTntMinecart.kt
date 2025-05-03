@@ -2,22 +2,27 @@ package org.chorus_oss.chorus.entity.item
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.block.*
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.block.Block
+import org.chorus_oss.chorus.block.BlockID
+import org.chorus_oss.chorus.entity.Entity
+import org.chorus_oss.chorus.entity.EntityExplosive
+import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.data.EntityDataTypes
 import org.chorus_oss.chorus.entity.data.EntityFlag
 import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus_oss.chorus.event.entity.EntityExplosionPrimeEvent
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.item.Item
+import org.chorus_oss.chorus.item.ItemID
+import org.chorus_oss.chorus.item.ItemTntMinecart
 import org.chorus_oss.chorus.level.Explosion
 import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.level.format.IChunk
-import org.chorus_oss.chorus.math.*
+import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.protocol.types.EntityLink
 import org.chorus_oss.chorus.utils.MinecartType
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
 
 class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt), EntityExplosive {

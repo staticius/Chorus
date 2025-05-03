@@ -1,8 +1,9 @@
 package org.chorus_oss.chorus.item.randomitem
 
 import org.chorus_oss.chorus.block.BlockID
-import org.chorus_oss.chorus.item.*
-import org.chorus_oss.chorus.item.enchantment.*
+import org.chorus_oss.chorus.item.Item
+import org.chorus_oss.chorus.item.ItemID
+import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.item.randomitem.fishing.FishingEnchantmentItemSelector
 
 object Fishing {

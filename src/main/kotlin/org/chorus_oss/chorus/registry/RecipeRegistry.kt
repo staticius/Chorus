@@ -1118,7 +1118,10 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                         .append('_')
                         .append(item.getCount())
                         .append('_')
-                        .append(if (item.damage != 0) item.damage else if (item.isBlock()) item.getSafeBlockState().blockStateHash() else 0)
+                        .append(
+                            if (item.damage != 0) item.damage else if (item.isBlock()) item.getSafeBlockState()
+                                .blockStateHash() else 0
+                        )
                         .append("_and_")
                 }
             }

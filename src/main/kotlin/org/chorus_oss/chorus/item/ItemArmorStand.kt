@@ -1,14 +1,19 @@
 package org.chorus_oss.chorus.item
 
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.block.*
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.block.Block
+import org.chorus_oss.chorus.block.BlockID
+import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.Entity.Companion.createEntity
 import org.chorus_oss.chorus.entity.Entity.Companion.getDefaultNBT
+import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.mob.EntityArmorStand
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.Sound
-import org.chorus_oss.chorus.math.*
+import org.chorus_oss.chorus.math.BlockFace
+import org.chorus_oss.chorus.math.CompassRoseDirection
+import org.chorus_oss.chorus.math.SimpleAxisAlignedBB
+import org.chorus_oss.chorus.math.Vector3
 
 class ItemArmorStand : Item(ItemID.Companion.ARMOR_STAND) {
     override fun canBeActivated(): Boolean {

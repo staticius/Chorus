@@ -1,10 +1,10 @@
 package org.chorus_oss.chorus.item.enchantment.damage
 
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.entity.Entity
+import org.chorus_oss.chorus.entity.EntityArthropod
 import org.chorus_oss.chorus.entity.effect.Effect
 import org.chorus_oss.chorus.entity.effect.EffectType
 import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
-import org.chorus_oss.chorus.item.enchantment.*
 import java.util.concurrent.ThreadLocalRandom
 
 

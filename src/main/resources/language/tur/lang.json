@@ -923,9 +923,6 @@
   "language.selected": "{%0} ({%1}) dili seçildi",
   "multiplayer.player.joined": "{%0} oyuna katıldı",
   "multiplayer.player.left": "{%0} oyundan ayrıldı",
-
-
-
   "chorus.command.alias.illegal": "{%0}, geçersiz karakterler içerdiği için kaydedilemedi",
   "chorus.command.alias.notFound": "\u0027{%0}\u0027 kayıt edilemedi. Çünkü varolmayan bir komutu içeriyor: {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003coyuncu\u003e",

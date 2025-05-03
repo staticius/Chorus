@@ -6,7 +6,7 @@ interface BlockEntityInventoryNameable : InventoryNameable {
     val blockEntityInventoryHolder: BlockEntityNameable?
 
     override var inventoryTitle: String
-        get() = blockEntityInventoryHolder!!.name!!
+        get() = blockEntityInventoryHolder!!.name
         set(name) {
             blockEntityInventoryHolder!!.name = name
         }

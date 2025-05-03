@@ -923,9 +923,6 @@
   "language.selected": "Wybrano {%0} ({%1}) jako język podstawowy",
   "multiplayer.player.joined": "{%0} dołącza do gry",
   "multiplayer.player.left": "{%0} opuszcza grę",
-
-
-
   "chorus.command.alias.illegal": "Nie udalo sie zarejestrowac aliasu {%0} poniewaz zawiera niepoprawne znaki",
   "chorus.command.alias.notFound": "Nie udalo sie zarejestrowac aliasu {%0} poniewaz zawiera komendy, ktore nie istnieja: {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003cgracz\u003e",

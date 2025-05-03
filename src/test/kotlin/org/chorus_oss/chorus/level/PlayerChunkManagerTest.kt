@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.TestPlayer
 import org.chorus_oss.chorus.math.Vector3
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
-import java.util.PriorityQueue
+import java.util.*
 
 @ExtendWith(GameMockExtension::class)
 class PlayerChunkManagerTest {

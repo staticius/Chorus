@@ -61,7 +61,7 @@ class QueryRegenerateEvent @JvmOverloads constructor(server: Server, var timeout
                 plist.append(":")
                 for (p in this.plugins) {
                     val d = p.description
-                    plist.append(" ").append(d.name!!.replace(";", "").replace(":", "").replace(" ", "_"))
+                    plist.append(" ").append(d.name.replace(";", "").replace(":", "").replace(" ", "_"))
                         .append(" ").append(d.version!!.replace(";", "").replace(":", "").replace(" ", "_"))
                         .append(";")
                 }

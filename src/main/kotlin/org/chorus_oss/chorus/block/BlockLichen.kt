@@ -4,7 +4,6 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.type.IntPropertyType
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.utils.ChorusRandom
@@ -147,7 +146,6 @@ abstract class BlockLichen(blockState: BlockState) : BlockTransparent(blockState
     override fun isSolid(side: BlockFace): Boolean {
         return false
     }
-
 
 
     companion object {

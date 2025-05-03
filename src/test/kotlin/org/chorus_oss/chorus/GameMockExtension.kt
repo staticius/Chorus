@@ -84,11 +84,11 @@ class GameMockExtension : MockitoExtension() {
         } else if (parameterContext.parameter.type == BlockRegistry::class.java) {
             return BLOCK_REGISTRY!!
         } else if (parameterContext.parameter.type == LevelProvider::class.java) {
-            return level!!.getProvider()
+            return level.getProvider()
         } else if (parameterContext.parameter.type == Level::class.java) {
-            return level!!
+            return level
         } else if (parameterContext.parameter.type == TestPlayer::class.java) {
-            return player!!
+            return player
         } else if (parameterContext.parameter.type == TestPluginManager::class.java) {
             return pluginManager!!
         }
@@ -163,9 +163,9 @@ class GameMockExtension : MockitoExtension() {
                 Mockito.`when`(banList.entries).thenReturn(LinkedHashMap())
                 Mockito.`when`(server.bannedIPs).thenReturn(banList)
                 Mockito.`when`(server.baseLang).thenReturn(BaseLang("eng", "src/main/resources/language"))
-                    val serverSettings = ConfigManager. create (
-                        ServerSettings::class.java
-                        ) { it: OkaeriConfig ->
+                val serverSettings = ConfigManager.create(
+                    ServerSettings::class.java
+                ) { it: OkaeriConfig ->
                     it.withConfigurer(YamlSnakeYamlConfigurer())
                     it.withBindFile("nukkit.yml")
                     it.withRemoveOrphans(true)

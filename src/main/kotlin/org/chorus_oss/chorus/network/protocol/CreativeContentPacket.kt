@@ -4,7 +4,6 @@ import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus_oss.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
 import org.chorus_oss.chorus.registry.CreativeItemRegistry
-import org.chorus_oss.chorus.registry.Registries
 
 data class CreativeContentPacket(
     val groups: List<CreativeItemGroup> = CreativeItemRegistry.creativeGroups.toList(),

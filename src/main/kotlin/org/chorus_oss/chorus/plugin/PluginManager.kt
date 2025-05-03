@@ -191,7 +191,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                 PluginManager.log.error(
                                     server.baseLang.tr(
                                         "chorus.plugin.duplicateError",
-                                        name!!
+                                        name
                                     )
                                 )
                                 continue
@@ -212,7 +212,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                     PluginManager.log.error(
                                         server.baseLang.tr(
                                             "chorus.plugin.loadError",
-                                            name!!, "Wrong API format"
+                                            name, "Wrong API format"
                                         ), e
                                     )
                                     continue
@@ -220,7 +220,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                     PluginManager.log.error(
                                         server.baseLang.tr(
                                             "chorus.plugin.loadError",
-                                            name!!, "Wrong API format"
+                                            name, "Wrong API format"
                                         ), e
                                     )
                                     continue
@@ -250,7 +250,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                 PluginManager.log.error(
                                     server.baseLang.tr(
                                         "chorus.plugin.loadError",
-                                        name!!, "%nukkit.plugin.incompatibleAPI"
+                                        name, "%nukkit.plugin.incompatibleAPI"
                                     )
                                 )
                                 if (compatible == 1) {
@@ -623,8 +623,11 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 } catch (e: Exception) {
                     PluginManager.log.error(
                         server.baseLang.tr(
-                            "chorus.plugin.eventError", event.getSafeEventName(), registration.plugin.description.fullName,
-                            e.message!!, registration.listener.javaClass.name
+                            "chorus.plugin.eventError",
+                            event.getSafeEventName(),
+                            registration.plugin.description.fullName,
+                            e.message!!,
+                            registration.listener.javaClass.name
                         ), e
                     )
                 }

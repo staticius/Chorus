@@ -57,10 +57,7 @@ class EnchantCommand(name: String) :
 
             "byName" -> {
                 val str = list.getResult<String>(1)!!
-                enchantment = Enchantment.getEnchantment(str) ?: run {
-                    log.addError("commands.enchant.notFound", str).output()
-                    return 0
-                }
+                enchantment = Enchantment.getEnchantment(str)
             }
 
             else -> {

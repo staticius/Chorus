@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.nbt
 
 import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.block.BlockState
-import org.chorus_oss.chorus.block.BlockUnknown
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.Item.Companion.get
 import org.chorus_oss.chorus.item.UnknownItem
@@ -16,7 +15,6 @@ import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.HashUtils
 import org.chorus_oss.chorus.utils.ThreadCache
-
 import java.io.*
 import java.nio.ByteOrder
 import java.nio.file.Files
@@ -117,7 +115,9 @@ object NBTIO {
             if (item.isNothing) { //write unknown item
                 item = UnknownItem(BlockID.UNKNOWN, damage, amount)
                 item.getOrCreateNamedTag().putCompound("Item", CompoundTag().putString("Name", name))
-            } else if (item.id == BlockID.UNKNOWN && item.getOrCreateNamedTag().containsCompound("Item")) { //restore unknown item
+            } else if (item.id == BlockID.UNKNOWN && item.getOrCreateNamedTag()
+                    .containsCompound("Item")
+            ) { //restore unknown item
                 val removeTag = item.namedTag!!.removeAndGet<CompoundTag>("Item")
                 val originItemName = removeTag!!.getString("Name")
                 val originItem = get(originItemName, damage, amount)

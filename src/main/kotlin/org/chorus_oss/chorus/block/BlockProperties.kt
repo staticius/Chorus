@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus.block
 
-import com.google.common.collect.ImmutableList
-import com.google.common.collect.Sets
 import org.chorus_oss.chorus.block.property.type.BlockPropertyType
 import org.chorus_oss.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus_oss.chorus.tags.BlockTags.register
@@ -9,8 +7,6 @@ import org.chorus_oss.chorus.utils.HashUtils
 import org.chorus_oss.chorus.utils.Identifier.Companion.assertValid
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
-import java.util.function.Function
-import java.util.stream.Collectors
 
 class BlockProperties(identifier: String, blockTags: Set<String>, vararg properties: BlockPropertyType<*>) {
 

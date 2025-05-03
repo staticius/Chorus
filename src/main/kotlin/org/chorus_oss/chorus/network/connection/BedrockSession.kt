@@ -84,11 +84,11 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
 
         cfg.configure(SessionState.LOGIN).onEntry(Action {
             this.packetHandler = (
-                LoginHandler(
-                    this
-                ) { info: PlayerInfo? ->
-                    this.info = info
-                })
+                    LoginHandler(
+                        this
+                    ) { info: PlayerInfo? ->
+                        this.info = info
+                    })
         })
             .onExit(Action { this.onServerLoginSuccess() })
             .permitIf(

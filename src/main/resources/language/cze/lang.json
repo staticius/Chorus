@@ -923,9 +923,6 @@
   "language.selected": "{%0} ({%1}) vybrán jako zakladní jazyk",
   "multiplayer.player.joined": "{%0} se připojil do hry",
   "multiplayer.player.left": "{%0} opustil hru",
-
-
-
   "chorus.command.alias.illegal": "Nelze zaregistrovat alias {%0} protože obsahuje nepovolené znaky",
   "chorus.command.alias.notFound": "Nelze registrovat alias {%0} protože obsahuje příkazy, které neexistují: {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003chráč\u003e",

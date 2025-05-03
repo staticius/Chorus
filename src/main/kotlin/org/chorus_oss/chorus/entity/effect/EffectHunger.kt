@@ -12,7 +12,7 @@ class EffectHunger :
 
     override fun apply(entity: Entity, tickCount: Double) {
         if (entity is Player) {
-            entity.foodData?.exhaust(0.1 * this.getLevel())
+            entity.foodData.exhaust(0.1 * this.getLevel())
         }
     }
 }

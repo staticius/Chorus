@@ -14,7 +14,6 @@ import org.chorus_oss.chorus.event.entity.EntityCombustByBlockEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageByBlockEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.AxisAlignedBB

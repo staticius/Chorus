@@ -19,7 +19,8 @@ import org.chorus_oss.chorus.utils.BlockColor
 import java.awt.Color
 import kotlin.math.sqrt
 
-open class EntitySplashPotion(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) : EntityThrowable(chunk, nbt, shootingEntity) {
+open class EntitySplashPotion(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
+    EntityThrowable(chunk, nbt, shootingEntity) {
     override fun getEntityIdentifier(): String {
         return EntityID.SPLASH_POTION
     }

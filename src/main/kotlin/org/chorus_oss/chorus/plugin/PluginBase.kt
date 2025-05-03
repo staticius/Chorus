@@ -218,7 +218,7 @@ abstract class PluginBase : Plugin {
     }
 
     override fun saveDefaultConfig() {
-        if (!configFile!!.exists()) {
+        if (!configFile.exists()) {
             this.saveResource("config.yml", false)
         }
     }

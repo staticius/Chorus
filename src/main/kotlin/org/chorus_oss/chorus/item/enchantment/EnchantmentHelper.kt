@@ -1,7 +1,8 @@
 package org.chorus_oss.chorus.item.enchantment
 
 import org.chorus_oss.chorus.block.BlockID
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.item.Item
+import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.level.Locator
 import org.chorus_oss.chorus.network.protocol.PlayerEnchantOptionsPacket.EnchantOptionData
 import org.chorus_oss.chorus.utils.ChorusRandom

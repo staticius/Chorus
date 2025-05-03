@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.entity.effect.PotionType
 import org.chorus_oss.chorus.event.player.PlayerItemConsumeEvent
 import org.chorus_oss.chorus.level.vibration.VibrationEvent
 import org.chorus_oss.chorus.level.vibration.VibrationType
-import org.chorus_oss.chorus.math.*
+import org.chorus_oss.chorus.math.Vector3
 
 class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.POTION, meta, count, "Potion") {
@@ -68,7 +68,7 @@ class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         return true
     }
 
-    val potion: PotionType?
+    val potion: PotionType
         get() = PotionType.get(damage)
 
     companion object {

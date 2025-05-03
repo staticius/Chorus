@@ -408,9 +408,9 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     } else {
                         val current = cauldron.customColor
                         val mixed = BlockColor(
-                            current!!.red + (color!!.red - current.red) / 2,
-                            current.green + (color!!.green - current.green) / 2,
-                            current.blue + (color!!.blue - current.blue) / 2
+                            current!!.red + (color.red - current.red) / 2,
+                            current.green + (color.green - current.green) / 2,
+                            current.blue + (color.blue - current.blue) / 2
                         )
                         cauldron.customColor = mixed
                     }

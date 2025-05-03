@@ -74,68 +74,98 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     var invulnerable: Boolean = false
+
     @JvmField
     var isAngry: Boolean = false
+
     @JvmField
     var isAutonomous: Boolean = false
+
     @JvmField
     var isBaby: Boolean = false
+
     @JvmField
     var isEating: Boolean = false
+
     @JvmField
     var isGliding: Boolean = false
+
     @JvmField
     var isGlobal: Boolean = false
+
     @JvmField
     var isIllagerCaptain: Boolean = false
+
     @JvmField
     var isOrphaned: Boolean = false
+
     @JvmField
     var isOutOfControl: Boolean = false
+
     @JvmField
     var isRoaring: Boolean = false
+
     @JvmField
     var isScared: Boolean = false
+
     @JvmField
     var isStunned: Boolean = false
+
     @JvmField
     var isSwimming: Boolean = false
+
     @JvmField
     var isTamed: Boolean = false
+
     @JvmField
     var isTrusting: Boolean = false
+
     @JvmField
     var lastDimensionId: Int? = null
+
     @JvmField
     var linksTag: CompoundTag? = null
+
     @JvmField
     var lootDropped: Boolean = true
+
     @JvmField
     var markVariant: Int = 0
 
     @JvmField
     var onGround: Boolean = true
+
     @JvmField
     var ownerNew: Long = -1L
+
     @JvmField
     var persistent: Boolean = false
+
     @JvmField
     var portalCooldown: Int = 0
+
     @JvmField
     var saddled: Boolean = false
     open var sheared: Boolean = false
+
     @JvmField
     var showBottom: Boolean = false
+
     @JvmField
     var sitting: Boolean = false
+
     @JvmField
     var skinId: Int = 0
+
     @JvmField
     var strength: Int = 0
+
     @JvmField
     var strengthMax: Int = 0
+
     @JvmField
     var tags: ListTag<StringTag>? = null
+
     @JvmField
     var uniqueId: Long = 0L
     open var variant: Int = 0
@@ -166,6 +196,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     protected val hasSpawned: MutableMap<Int, Player> = ConcurrentHashMap()
+
     @JvmField
     protected val effects: MutableMap<EffectType, Effect> = ConcurrentHashMap()
 
@@ -213,8 +244,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     var inPortalTicks: Int = 0
+
     @JvmField
     var freezingTicks: Int = 0 //0 - 140
+
     @JvmField
     var scale: Float = 1f
 
@@ -238,12 +271,14 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     @JvmField
     var closed: Boolean = false
+
     @JvmField
     var noClip: Boolean = false
 
 
     @Volatile
     protected var runtimeId: Long = 0
+
     @JvmField
     protected var lastDamageCause: EntityDamageEvent? = null
 
@@ -263,6 +298,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
     @JvmField
     protected var inEndPortal: Boolean = false
     val isPlayer: Boolean = this is Player
+
     @JvmField
     var maxHealth: Int = 20
     var name: String = ""
@@ -289,7 +325,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             }
         }
         this.name = result.toString().trim { it <= ' ' }.intern()
-        return name!!
+        return name
     }
 
     init {
@@ -851,7 +887,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
      * The name that English name of the type of this entity.
      */
     open fun getOriginalName(): String {
-        return if (name == null) idConvertToName() else name!!
+        return if (name == null) idConvertToName() else name
     }
 
     /**
@@ -1050,7 +1086,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             if (source.cause != DamageCause.VOID && source.cause != DamageCause.SUICIDE) {
                 var totem = false
                 var isOffhand = false
-                if (player.offhandInventory?.getItem(0) is ItemTotemOfUndying) {
+                if (player.offhandInventory.getItem(0) is ItemTotemOfUndying) {
                     totem = true
                     isOffhand = true
                 } else if (player.inventory.itemInHand is ItemTotemOfUndying) {
@@ -1079,7 +1115,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                     player.dataPacket(pk)
 
                     if (isOffhand) {
-                        player.offhandInventory?.clear(0, true)
+                        player.offhandInventory.clear(0, true)
                     } else {
                         player.inventory.clear(player.inventory.heldItemIndex, true)
                     }
@@ -1968,17 +2004,17 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     val transform: Transform
         get() = Transform(
-                    position.x,
-                    position.y,
-                    position.z, rotation.yaw, rotation.pitch, rotation.yaw,
-                    level!!
-                )
+            position.x,
+            position.y,
+            position.z, rotation.yaw, rotation.pitch, rotation.yaw,
+            level!!
+        )
 
     val locator: Locator
         get() = Locator(
-                    position.x, position.y, position.z,
-                    level!!
-                )
+            position.x, position.y, position.z,
+            level!!
+        )
 
     fun isTouchingWater(): Boolean {
         return hasWaterAt(0f) || hasWaterAt(this.getEyeHeight())

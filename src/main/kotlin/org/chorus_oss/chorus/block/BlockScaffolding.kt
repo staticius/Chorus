@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.block.property.type.IntPropertyType
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.item.EntityFallingBlock
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.AxisAlignedBB
 import org.chorus_oss.chorus.math.BlockFace

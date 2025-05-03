@@ -923,9 +923,6 @@
   "language.selected": "将 {%0} ({%1}) 设置为基本语言",
   "multiplayer.player.joined": "{%0} 加入了游戏",
   "multiplayer.player.left": "{%0} 退出了游戏",
-
-
-
   "chorus.command.alias.illegal": "无法注册别名 {%0}，因为它包含非法字符",
   "chorus.command.alias.notFound": "无法注册别名 {%0}，因为它包含不存在的命令：{%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003c玩家名称\u003e",

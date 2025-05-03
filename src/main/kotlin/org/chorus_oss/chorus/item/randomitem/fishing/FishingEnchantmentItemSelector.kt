@@ -1,8 +1,10 @@
 package org.chorus_oss.chorus.item.randomitem.fishing
 
-import org.chorus_oss.chorus.item.*
-import org.chorus_oss.chorus.item.enchantment.*
-import org.chorus_oss.chorus.item.randomitem.*
+import org.chorus_oss.chorus.item.Item
+import org.chorus_oss.chorus.item.ItemID
+import org.chorus_oss.chorus.item.enchantment.Enchantment
+import org.chorus_oss.chorus.item.randomitem.EnchantmentItemSelector
+import org.chorus_oss.chorus.item.randomitem.Selector
 
 class FishingEnchantmentItemSelector : EnchantmentItemSelector {
     constructor(id: String, parent: Selector?) : this(id, 0, parent)

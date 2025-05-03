@@ -923,9 +923,6 @@
   "language.selected": "Chọn {%0} ({%1}) là ngôn ngữ chính",
   "multiplayer.player.joined": "{%0} tham gia trò chơi",
   "multiplayer.player.left": "{%0} rời trò chơi",
-
-
-
   "chorus.command.alias.illegal": "Không thể đăng bí danh {%0} do có ký tự không hợp lệ",
   "chorus.command.alias.notFound": "Không thể đăng ký bí danh {%0} vì nó chứa các lệnh không tồn tại: {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003cNgười chơi\u003e",

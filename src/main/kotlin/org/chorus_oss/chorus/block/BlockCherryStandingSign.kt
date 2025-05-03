@@ -18,6 +18,7 @@ class BlockCherryStandingSign @JvmOverloads constructor(blockState: BlockState =
         get() = Companion.properties
 
     companion object {
-        val properties: BlockProperties = BlockProperties(BlockID.CHERRY_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
+        val properties: BlockProperties =
+            BlockProperties(BlockID.CHERRY_STANDING_SIGN, CommonBlockProperties.GROUND_SIGN_DIRECTION)
     }
 }

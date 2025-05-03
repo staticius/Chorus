@@ -135,7 +135,8 @@ open class Player(
 
     //    @NotNull public Boolean sleeping = false;
     var sleepTimer: Short = 0
-//    var sneaking: Boolean = false
+
+    //    var sneaking: Boolean = false
     var spawnBlockPositionX: Int = 0
     var spawnBlockPositionY: Int = 0
     var spawnBlockPositionZ: Int = 0
@@ -251,6 +252,7 @@ open class Player(
     var nextChunkOrderRun: Int = 1
     var newPosition: Vector3? = null
     var chunkRadius: Int
+
     @JvmField
     var viewDistance: Int
     var spawnPoint: Locator?
@@ -651,7 +653,7 @@ open class Player(
             val i =
                 level!!.useBreakOn(block.position, oldItem, this, true)
             if (this.isSurvival || this.isAdventure) {
-                foodData!!.exhaust(0.005)
+                foodData.exhaust(0.005)
                 if (!i!!.equals(oldItem) || i.getCount() != oldItem!!.getCount()) {
                     inventory.setItemInHand(i)
                     inventory.sendHeldItem(viewers.values)
@@ -720,7 +722,7 @@ open class Player(
             handItem =
                 level!!.useBreakOn(blockPos.asVector3(), face, handItem, this, true)
             if (handItem != null && this.isSurvival) {
-                foodData!!.exhaust(0.005)
+                foodData.exhaust(0.005)
                 if (handItem.equals(clone) && handItem.getCount() == clone.getCount()) {
                     return
                 }
@@ -782,7 +784,7 @@ open class Player(
     private fun updateBlockingFlag() {
         val shouldBlock = this.isItemCoolDownEnd("shield")
                 && (this.isSneaking() || getRiding() != null)
-                && (inventory.itemInHand is ItemShield || offhandInventory!!.getItem(0) is ItemShield)
+                && (inventory.itemInHand is ItemShield || offhandInventory.getItem(0) is ItemShield)
 
         if (isBlocking() != shouldBlock) {
             this.setBlocking(shouldBlock)
@@ -873,7 +875,7 @@ open class Player(
 
         //FoodLevel
         val food = this.foodData
-        if (food!!.isHungry) {
+        if (food.isHungry) {
             food.sendFood()
         }
 
@@ -1286,7 +1288,7 @@ open class Player(
     fun handleLogicInMove(invalidMotion: Boolean, distance: Double) {
         if (!invalidMotion) {
             //处理饱食度更新
-            if (foodData!!.isEnabled && Server.instance.getDifficulty() > 0) {
+            if (foodData.isEnabled && Server.instance.getDifficulty() > 0) {
                 //UpdateFoodExpLevel
                 if (distance >= 0.05) {
                     var jump = 0.0
@@ -1297,12 +1299,12 @@ open class Player(
                         if (this.inAirTicks == 3 && swimming == 0.0) {
                             jump = 0.2
                         }
-                        foodData!!.exhaust(0.1 * distance2 + jump + swimming)
+                        foodData.exhaust(0.1 * distance2 + jump + swimming)
                     } else {
                         if (this.inAirTicks == 3 && swimming == 0.0) {
                             jump = 0.05
                         }
-                        foodData!!.exhaust(jump + swimming)
+                        foodData.exhaust(jump + swimming)
                     }
                 }
             }
@@ -1707,7 +1709,7 @@ open class Player(
 
         this.removeAllEffects()
         this.setHealthSafe(getMaxHealth().toFloat())
-        foodData!!.setFood(20, 20f)
+        foodData.setFood(20, 20f)
 
         this.sendData(this)
 
@@ -1806,8 +1808,8 @@ open class Player(
         creativeOutputInventory.open(this)
         permanentWindows.add(SpecialWindowId.CREATIVE.id)
 
-        this.addWindow(offhandInventory!!, SpecialWindowId.OFFHAND.id)
-        offhandInventory!!.open(this)
+        this.addWindow(offhandInventory, SpecialWindowId.OFFHAND.id)
+        offhandInventory.open(this)
         permanentWindows.add(SpecialWindowId.OFFHAND.id)
 
         this.addWindow(craftingGrid, SpecialWindowId.NONE.id)
@@ -2710,7 +2712,7 @@ open class Player(
                 .setMaxValue(getMaxHealth().toFloat())
                 .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f),
             getAttribute(Attribute.MAX_HUNGER)
-                .setValue(foodData!!.getFood().toFloat()),
+                .setValue(foodData.getFood().toFloat()),
             getAttribute(Attribute.MOVEMENT_SPEED).setValue(this.movementSpeed),
             getAttribute(Attribute.EXPERIENCE_LEVEL).setValue(
                 experienceLevel.toFloat()
@@ -2888,7 +2890,7 @@ open class Player(
                 }
 
                 if (this.foodData != null) {
-                    foodData!!.tick(tickDiff)
+                    foodData.tick(tickDiff)
                 }
 
                 //鞘翅检查和耐久计算
@@ -3715,8 +3717,8 @@ open class Player(
             namedTag!!.putString("lastIP", this.address)
             namedTag!!.putInt("EXP", this.experience)
             namedTag!!.putInt("expLevel", this.experienceLevel)
-            namedTag!!.putInt("foodLevel", foodData!!.getFood())
-            namedTag!!.putFloat("foodSaturationLevel", foodData!!.getSaturation())
+            namedTag!!.putInt("foodLevel", foodData.getFood())
+            namedTag!!.putFloat("foodSaturationLevel", foodData.getSaturation())
             namedTag!!.putInt("enchSeed", this.enchSeed)
 
             val fogIdentifiers = ListTag<StringTag>()
@@ -4233,7 +4235,7 @@ open class Player(
                 if (source is EntityDamageByEntityEvent) {
                     val damager = source.damager
                     if (damager is Player) {
-                        damager.foodData!!.exhaust(0.1)
+                        damager.foodData.exhaust(0.1)
                     }
                     //保存攻击玩家的实体在lastBeAttackEntity
                     this.lastBeAttackEntity = source.damager
@@ -4981,7 +4983,7 @@ open class Player(
                 val item = if (entity.getArrowItem() != null) entity.getArrowItem() else ItemArrow()
                 if (!this.isCreative) {
                     // Should only collect to the offhand slot if the item matches what is already there
-                    if (offhandInventory.getItem(0).id == item!!.id && offhandInventory.canAddItem(
+                    if (offhandInventory.getItem(0).id == item.id && offhandInventory.canAddItem(
                             item
                         )
                     ) {
@@ -5010,7 +5012,7 @@ open class Player(
                 this.dataPacket(pk)
 
                 if (!this.isCreative) {
-                    inventory.addItem(item!!.clone())
+                    inventory.addItem(item.clone())
                 }
                 entity.close()
                 return true

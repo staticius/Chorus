@@ -11,7 +11,8 @@ import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.FloatTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
 
-class EntityLingeringPotion(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) : EntitySplashPotion(chunk, nbt, shootingEntity) {
+class EntityLingeringPotion(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
+    EntitySplashPotion(chunk, nbt, shootingEntity) {
     override fun getEntityIdentifier(): String {
         return EntityID.LINGERING_POTION
     }

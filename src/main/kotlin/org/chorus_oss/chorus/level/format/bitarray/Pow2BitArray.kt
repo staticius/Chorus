@@ -4,7 +4,8 @@ import com.google.common.base.Objects
 import kotlin.math.ceil
 
 @JvmRecord
-data class Pow2BitArray(override val version: BitArrayVersion, override val size: Int, override val words: IntArray) : BitArray {
+data class Pow2BitArray(override val version: BitArrayVersion, override val size: Int, override val words: IntArray) :
+    BitArray {
     override fun set(index: Int, value: Int) {
         val bitIndex = index * version.bits
         val arrayIndex = bitIndex shr 5

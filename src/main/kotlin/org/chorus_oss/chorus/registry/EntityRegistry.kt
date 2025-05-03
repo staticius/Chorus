@@ -629,7 +629,8 @@ class EntityRegistry : IRegistry<EntityDefinition, KClass<out Entity>?, KClass<o
     @Throws(RegisterException::class)
     override fun register(key: EntityDefinition, value: KClass<out Entity>) {
         if (CLASS.putIfAbsent(key.id, value) == null) {
-            FAST_NEW[key.id] = value.primaryConstructor ?: throw RegisterException("Entity must have a primary constructor")
+            FAST_NEW[key.id] =
+                value.primaryConstructor ?: throw RegisterException("Entity must have a primary constructor")
 
             ID2RID[key.id] = key.rid
             RID2ID[key.rid] = key.id

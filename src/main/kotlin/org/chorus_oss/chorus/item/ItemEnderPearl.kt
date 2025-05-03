@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.item
 
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.projectile.throwable.EntityEnderPearl
 
 class ItemEnderPearl @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :

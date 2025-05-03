@@ -66,7 +66,8 @@ class PlayerActionPacket : DataPacket() {
         const val ACTION_START_SNEAK: Int = 11
         const val ACTION_STOP_SNEAK: Int = 12
         const val ACTION_CREATIVE_PLAYER_DESTROY_BLOCK: Int = 13
-        const val ACTION_DIMENSION_CHANGE_ACK: Int = 14 // sent when spawning in a different dimension to tell the server we spawned
+        const val ACTION_DIMENSION_CHANGE_ACK: Int =
+            14 // sent when spawning in a different dimension to tell the server we spawned
         const val ACTION_START_GLIDE: Int = 15
         const val ACTION_STOP_GLIDE: Int = 16
         const val ACTION_BUILD_DENIED: Int = 17

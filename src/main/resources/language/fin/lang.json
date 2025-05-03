@@ -923,9 +923,6 @@
   "language.selected": "Valittu {%0} ({%1}) peruskieliksi",
   "multiplayer.player.joined": "{%0} liittyi peliin",
   "multiplayer.player.left": "{%0} poistui pelistä",
-
-
-
   "chorus.command.alias.illegal": "Aliasta {%0} ei voida rekisteröidä, koska se sisältää sopimattomia merkkejä",
   "chorus.command.alias.notFound": "Aliasta {%0} ei voida rekisteröidä, koska se sisältää komentoja, joita ei ole: {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003cpelaaja\u003e",

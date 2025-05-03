@@ -215,7 +215,12 @@ class MethodEventExecutor(val method: Method?) : EventExecutor {
             }
             method!!.isAccessible = true
             try {
-                val args = arrayOf<Any>("org.chorus_oss.chorus.plugin.PNXMethodEventExecutor$" + compileTime.get(), b, 0, b.size)
+                val args = arrayOf<Any>(
+                    "org.chorus_oss.chorus.plugin.PNXMethodEventExecutor$" + compileTime.get(),
+                    b,
+                    0,
+                    b.size
+                )
                 clazz = method.invoke(loader, *args) as Class<*>
             } finally {
                 method.isAccessible = false

@@ -11,7 +11,6 @@ import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.level.vibration.VibrationEvent
 import org.chorus_oss.chorus.level.vibration.VibrationType
 import org.chorus_oss.chorus.math.BlockFace
-import java.util.*
 
 
 class ItemGlassBottle @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
@@ -31,7 +30,9 @@ class ItemGlassBottle @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         fz: Double
     ): Boolean {
         var filled: Item? = null
-        if (level.getCollidingEntities(player.getBoundingBox().grow(1.1, 1.1, 1.1)).any { entity: Entity -> entity is EntityAreaEffectCloud && entity.isDragonBreath() }) {
+        if (level.getCollidingEntities(player.getBoundingBox().grow(1.1, 1.1, 1.1))
+                .any { entity: Entity -> entity is EntityAreaEffectCloud && entity.isDragonBreath() }
+        ) {
             filled = ItemDragonBreath()
 
             level.getCollidingEntities(
@@ -50,15 +51,15 @@ class ItemGlassBottle @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         } else if (target is BlockBeehive && target.isFull) {
             filled = get(ItemID.Companion.HONEY_BOTTLE)
             target.honeyCollected(player)
-            level.addSound(player!!.position, Sound.BUCKET_FILL_WATER)
+            level.addSound(player.position, Sound.BUCKET_FILL_WATER)
         }
 
         if (filled != null) {
             if (this.count == 1) {
-                player!!.inventory.setItemInHand(filled)
+                player.inventory.setItemInHand(filled)
             } else if (this.count > 1) {
                 count--
-                player!!.inventory.setItemInHand(this)
+                player.inventory.setItemInHand(this)
                 if (player.inventory.canAddItem(filled)) {
                     player.inventory.addItem(filled)
                 } else {

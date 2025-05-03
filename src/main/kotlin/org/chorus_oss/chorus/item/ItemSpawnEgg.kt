@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.item
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.block.*
+import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.entity.Entity.Companion.createEntity
 import org.chorus_oss.chorus.event.entity.CreatureSpawnEvent
 import org.chorus_oss.chorus.event.entity.CreatureSpawnEvent.SpawnReason

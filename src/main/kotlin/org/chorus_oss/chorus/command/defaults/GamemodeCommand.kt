@@ -85,7 +85,11 @@ class GamemodeCommand(name: String) : VanillaCommand(
                 log.addSuccess("commands.gamemode.success.self", Server.getGamemodeString(gameMode))
             } else {
                 log.outputObjectWhisper(target, "gameMode.changed", Server.getGamemodeString(gameMode))
-                log.addSuccess("commands.gamemode.success.other", Server.getGamemodeString(gameMode), target.getEntityName())
+                log.addSuccess(
+                    "commands.gamemode.success.other",
+                    Server.getGamemodeString(gameMode),
+                    target.getEntityName()
+                )
             }
         }
         log.successCount(players.size).output(true)

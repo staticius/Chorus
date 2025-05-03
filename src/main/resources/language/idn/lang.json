@@ -923,9 +923,6 @@
   "language.selected": "Memilih {%0} ({%1}) sebagai bahasa utama",
   "multiplayer.player.joined": "{%0} masuk ke permainan",
   "multiplayer.player.left": "{%0} keluar dari permainan",
-
-
-
   "chorus.command.alias.illegal": "Tidak dapat mendaftarkan alias {%0} karena berisi karakter huruf ilegal",
   "chorus.command.alias.notFound": "Tidak dapat mendaftarkan alias {%0} karena berisi perintah yang tidak ada: {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003cplayer\u003e",

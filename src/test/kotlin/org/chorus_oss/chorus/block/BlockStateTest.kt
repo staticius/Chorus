@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.block
 
 import com.google.gson.JsonParser
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
-import org.chorus_oss.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
 import org.chorus_oss.chorus.registry.BlockRegistry
 import org.chorus_oss.chorus.registry.Registries
 import org.junit.jupiter.api.Assertions

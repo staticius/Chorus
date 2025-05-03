@@ -37,7 +37,9 @@ class EntityMagmaCube(chunk: IChunk?, nbt: CompoundTag?) : EntityMonster(chunk, 
 
     override var variant: Int
         get() = super<EntityVariant>.variant
-        set(value) { super<EntityVariant>.variant = value }
+        set(value) {
+            super<EntityVariant>.variant = value
+        }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(

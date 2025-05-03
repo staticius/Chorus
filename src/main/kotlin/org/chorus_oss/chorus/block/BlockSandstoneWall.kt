@@ -1,8 +1,6 @@
 package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
-import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemTool
 
 class BlockSandstoneWall @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
@@ -18,7 +16,6 @@ class BlockSandstoneWall @JvmOverloads constructor(blockstate: BlockState = Comp
 
     override val toolTier: Int
         get() = ItemTool.TIER_WOODEN
-
 
 
     override val properties: BlockProperties

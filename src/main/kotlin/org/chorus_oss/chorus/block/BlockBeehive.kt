@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.blockentity.BlockEntityBeehive
 import org.chorus_oss.chorus.blockentity.BlockEntityID
 import org.chorus_oss.chorus.event.player.PlayerInteractEvent
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.level.Sound

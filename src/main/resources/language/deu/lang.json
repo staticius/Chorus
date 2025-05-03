@@ -923,9 +923,6 @@
   "language.selected": "{%0} ({%1}) als Standard eingestellt",
   "multiplayer.player.joined": "{%0} hat das Spiel betreten",
   "multiplayer.player.left": "{%0} hat das Spiel verlassen",
-
-
-
   "chorus.command.alias.illegal": "Konnte Alias {%0} nicht registrieren, da er unzulässige Zeichen enthält",
   "chorus.command.alias.notFound": "Konnte Alias {%0} nicht registrieren, da er Kommandos enthält, die nicht existieren: {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003cSpieler\u003e",

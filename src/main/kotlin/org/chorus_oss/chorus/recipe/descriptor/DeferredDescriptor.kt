@@ -12,7 +12,7 @@ class DeferredDescriptor(val fullName: String, val auxValue: Int, override val c
 
     @Throws(CloneNotSupportedException::class)
     override fun clone(): ItemDescriptor {
-        return super<Cloneable>.clone() as ItemDescriptor
+        return super.clone() as ItemDescriptor
     }
 
     override fun equals(o: Any?): Boolean {

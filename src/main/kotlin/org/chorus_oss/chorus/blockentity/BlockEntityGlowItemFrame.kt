@@ -1,9 +1,6 @@
 package org.chorus_oss.chorus.blockentity
 
-import org.chorus_oss.chorus.block.Block
-import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag

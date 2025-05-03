@@ -31,7 +31,8 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
     private var garbagePos: Long = 0
     private var stringHeapPos: Long = 0
     private val persistence: RandomAccessFile
-    private val cache: Cache<Int, PositionTracking?> = CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).concurrencyLevel(1).build()
+    private val cache: Cache<Int, PositionTracking?> =
+        CacheBuilder.newBuilder().expireAfterAccess(5, TimeUnit.MINUTES).concurrencyLevel(1).build()
     private var nextIndex = 0
 
     /**
@@ -176,7 +177,7 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
     fun getPosition(trackingHandler: Int): PositionTracking? {
         validateHandler(trackingHandler)
         try {
-            return cache[trackingHandler, { loadPosition(trackingHandler, true) }]?.clone()
+            return cache[trackingHandler, { loadPosition(trackingHandler, true) }].clone()
         } catch (e: ExecutionException) {
             throw handleExecutionException(e)
         }

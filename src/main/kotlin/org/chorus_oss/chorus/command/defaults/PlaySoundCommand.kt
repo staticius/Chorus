@@ -74,7 +74,7 @@ class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.
 
         val successes: MutableList<String> = mutableListOf()
         for (player in targets) {
-            val name = player.name!!
+            val name = player.name
             val packet: PlaySoundPacket = PlaySoundPacket()
             if (locator.position.distance(player.position) > maxDistance) {
                 if (minimumVolume <= 0) {

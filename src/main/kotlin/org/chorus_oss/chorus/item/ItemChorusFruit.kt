@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.item
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.block.BlockLiquid
 import org.chorus_oss.chorus.event.player.PlayerTeleportEvent
-import org.chorus_oss.chorus.math.*
+import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus_oss.chorus.utils.ChorusRandom
 

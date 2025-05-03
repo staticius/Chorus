@@ -2,8 +2,9 @@ package org.chorus_oss.chorus.lang
 
 import org.chorus_oss.chorus.plugin.PluginBase
 import org.chorus_oss.chorus.utils.Loggable
-
-import java.io.*
+import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 import java.util.jar.JarFile
 
 /**

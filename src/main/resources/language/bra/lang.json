@@ -923,9 +923,6 @@
   "language.selected": "Selecionado {%0} ({%1}) como a linguagem base",
   "multiplayer.player.joined": "{%0} entrou no jogo",
   "multiplayer.player.left": "{%0} saiu do jogo",
-
-
-
   "chorus.command.alias.illegal": "Não foi possível registrar a alias {%0} porque ela contém caracteres ilegais",
   "chorus.command.alias.notFound": "Não foi possível registrar a alias {%0} porque ela contém comandos que não existem: {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003cjogador\u003e",

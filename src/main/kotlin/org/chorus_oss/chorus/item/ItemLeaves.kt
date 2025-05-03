@@ -1,6 +1,9 @@
 package org.chorus_oss.chorus.item
 
-import org.chorus_oss.chorus.block.*
+import org.chorus_oss.chorus.block.BlockBirchLeaves
+import org.chorus_oss.chorus.block.BlockJungleLeaves
+import org.chorus_oss.chorus.block.BlockOakLeaves
+import org.chorus_oss.chorus.block.BlockSpruceLeaves
 
 class ItemLeaves @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.LEAVES, meta, count) {

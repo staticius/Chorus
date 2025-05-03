@@ -1,14 +1,12 @@
 package org.chorus_oss.chorus.blockentity
 
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.block.BlockAir
 import org.chorus_oss.chorus.block.BlockCampfire
 import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.event.inventory.CampfireSmeltEvent
 import org.chorus_oss.chorus.inventory.CampfireInventory
 import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag

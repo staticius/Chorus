@@ -1,12 +1,13 @@
 package org.chorus_oss.chorus.item
 
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.block.*
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.block.Block
+import org.chorus_oss.chorus.block.BlockID
+import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.event.item.ItemWearEvent
-import org.chorus_oss.chorus.item.enchantment.*
+import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.nbt.tag.ByteTag
-import org.chorus_oss.chorus.utils.*
+import org.chorus_oss.chorus.utils.Utils
 import java.util.*
 
 

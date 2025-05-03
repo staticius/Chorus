@@ -1,9 +1,7 @@
 package org.chorus_oss.chorus.item
 
-import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.block.BlockAcaciaLeaves
 import org.chorus_oss.chorus.block.BlockDarkOakLeaves
-import org.chorus_oss.chorus.block.BlockID
 
 class ItemLeaves2 @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.Companion.LEAVES2, meta, count) {

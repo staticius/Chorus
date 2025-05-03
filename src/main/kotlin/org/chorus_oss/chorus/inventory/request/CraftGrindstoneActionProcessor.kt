@@ -73,7 +73,8 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
 
         if (firstItem.id == ItemID.ENCHANTED_BOOK) {
             if (secondItem.isNothing) {
-                resultPair = Pair(Item.get(ItemID.BOOK, 0, firstItem.getCount()), recalculateResultExperience(inventory))
+                resultPair =
+                    Pair(Item.get(ItemID.BOOK, 0, firstItem.getCount()), recalculateResultExperience(inventory))
             } else {
                 return null
             }

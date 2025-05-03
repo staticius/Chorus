@@ -46,7 +46,9 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
 
     override var variant: Int
         get() = super<EntityVariant>.variant
-        set(value) { super<EntityVariant>.variant = value }
+        set(value) {
+            super<EntityVariant>.variant = value
+        }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(

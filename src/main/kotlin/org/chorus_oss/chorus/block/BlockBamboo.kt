@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.block.property.enums.BambooLeafSize
 import org.chorus_oss.chorus.block.property.enums.BambooStalkThickness
 import org.chorus_oss.chorus.event.block.BlockGrowEvent
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.particle.BoneMealParticle

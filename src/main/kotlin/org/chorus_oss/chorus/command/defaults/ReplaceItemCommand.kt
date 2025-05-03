@@ -261,12 +261,12 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
 
                 "slot.weapon.offhand" -> {
                     if (entity is Player) {
-                        val old = entity.offhandInventory!!.getItem(0)
+                        val old = entity.offhandInventory.getItem(0)
                         if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
-                        if (entity.offhandInventory!!.setItem(0, item)) {
+                        if (entity.offhandInventory.setItem(0, item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
                                 entity.getEntityName(),
@@ -543,12 +543,12 @@ class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replacei
                         continue
                     }
                     if (entity is Player) {
-                        val old = entity.enderChestInventory!!.getItem(slotId)
+                        val old = entity.enderChestInventory.getItem(slotId)
                         if (oldItemHandling == "keep" && !old.isNothing) {
                             log.addError("commands.replaceitem.keepFailed", slotType, slotId.toString())
                             continue
                         }
-                        if (entity.enderChestInventory!!.setItem(slotId, item)) {
+                        if (entity.enderChestInventory.setItem(slotId, item)) {
                             log.addSuccess(
                                 "commands.replaceitem.success.entity",
                                 entity.getEntityName(),

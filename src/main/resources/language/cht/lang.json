@@ -923,9 +923,6 @@
   "language.selected": "設定 {%0} ({%1}) 為基本語言",
   "multiplayer.player.joined": "{%0} 加入了遊戲",
   "multiplayer.player.left": "{%0} 離開了遊戲",
-
-
-
   "chorus.command.alias.illegal": "不能註冊別名 {%0}，因為它包含非法字元",
   "chorus.command.alias.notFound": "未能註冊別稱 {%0} ，因為它包含不存在的指令：{%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003c玩家代號\u003e",

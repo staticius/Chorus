@@ -80,12 +80,15 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
             PacketCompressionAlgorithm.NONE -> {
                 return 0xff.toByte()
             }
+
             PacketCompressionAlgorithm.ZLIB -> {
                 return 0x00
             }
+
             PacketCompressionAlgorithm.SNAPPY -> {
                 return 0x01
             }
+
             else -> {
                 val header = this.getCompressionHeader0(algorithm)
                 require(header.toInt() != -1) { "Unknown compression algorithm $algorithm" }

@@ -13,7 +13,7 @@ class MolangDescriptor(val tagExpression: String, val molangVersion: Int, overri
 
     @Throws(CloneNotSupportedException::class)
     override fun clone(): ItemDescriptor {
-        return super<Cloneable>.clone() as ItemDescriptor
+        return super.clone() as ItemDescriptor
     }
 
     override fun equals(o: Any?): Boolean {

@@ -923,9 +923,6 @@
   "language.selected": "Pasirinkote {%0} ({%1}) kaip pagrindinę kalbą",
   "multiplayer.player.joined": "{%0} prisijungė į žaidimą",
   "multiplayer.player.left": "{%0} atsijungė nuo žaidimo",
-
-
-
   "chorus.command.alias.illegal": "Neįmanoma užregistruoti alternatyvos {%0}, nes ji turi netinkamų simbolių",
   "chorus.command.alias.notFound": "Neįmanoma užregistruoti alternatyvos {%0}, nes ji turi komandų, kurios neegzistuoja: {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003cžaidėjas\u003e",

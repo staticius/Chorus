@@ -318,8 +318,7 @@ class PluginDescription {
         this.name = name.replace(" ", "_")
         this.version = plugin["version"].toString()
         this.main = plugin["main"] as String?
-        val api = plugin["api"]
-        when (api) {
+        when (val api = plugin["api"]) {
             is List<*> -> {
                 this.compatibleAPIs = api as List<String>
             }

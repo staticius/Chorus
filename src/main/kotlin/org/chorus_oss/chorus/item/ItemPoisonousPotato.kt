@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.item
 
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.block.*
+import org.chorus_oss.chorus.block.BlockPotatoes
 import org.chorus_oss.chorus.entity.effect.Effect
 import org.chorus_oss.chorus.entity.effect.EffectType
 

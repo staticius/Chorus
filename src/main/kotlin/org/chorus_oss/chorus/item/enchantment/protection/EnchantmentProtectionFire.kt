@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.item.enchantment.protection
 
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus_oss.chorus.item.enchantment.*
 
 
 class EnchantmentProtectionFire :

@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.network.protocol
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.TrimMaterial
 import org.chorus_oss.chorus.network.protocol.types.TrimPattern
-import java.util.function.Consumer
 
 class TrimDataPacket : DataPacket() {
     val patterns: MutableList<TrimPattern> = mutableListOf()

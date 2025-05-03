@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.item.enchantment.trident
 
-import org.chorus_oss.chorus.entity.*
-import org.chorus_oss.chorus.item.enchantment.*
+import org.chorus_oss.chorus.entity.Entity
 
 class EnchantmentTridentImpaling :
     EnchantmentTrident(ID_TRIDENT_IMPALING, "tridentImpaling", Rarity.RARE) {

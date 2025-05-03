@@ -35,7 +35,9 @@ class CreativeItemTest {
                             .decode(tag["nbt_b64"].toString()) else EmptyArrays.EMPTY_BYTES
                         val name = tag["id"].toString()
                         val item = Item.get(name, damage, 1, nbt, false)
-                        require(!(item.isNothing || (item.isBlock() && item.getSafeBlockState().toBlock().isAir))) { "creative index $i $name" }
+                        require(
+                            !(item.isNothing || (item.isBlock() && item.getSafeBlockState().toBlock().isAir))
+                        ) { "creative index $i $name" }
                         val isBlock = tag.containsKey("block_state_b64")
                         if (isBlock) {
                             val blockTag =

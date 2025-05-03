@@ -58,7 +58,9 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
     override var variant: Int
         get() = super<EntityVariant>.variant
-        set(value) { super<EntityVariant>.variant = value }
+        set(value) {
+            super<EntityVariant>.variant = value
+        }
 
     private lateinit var attributeMap: MutableMap<String, Attribute>
     override lateinit var inventory: HorseInventory

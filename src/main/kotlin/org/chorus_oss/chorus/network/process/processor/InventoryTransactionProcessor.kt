@@ -5,7 +5,6 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.PlayerHandle
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.Block
-import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.blockentity.BlockEntitySpawnable
 import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import org.chorus_oss.chorus.entity.EntityLiving
@@ -16,7 +15,6 @@ import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus_oss.chorus.event.player.*
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.Sound
@@ -341,7 +339,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                             true
                         ).also { i = it }) != null
                     ) {
-                        player.foodData!!.exhaust(0.005)
+                        player.foodData.exhaust(0.005)
                         if (!i!!.equals(oldItem) || i!!.getCount() != oldItem.getCount()) {
                             if (oldItem.id == i!!.id || i!!.isNothing) {
                                 player.inventory.setItemInHand(i!!)

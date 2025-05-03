@@ -923,9 +923,6 @@
   "language.selected": "{%0} ({%1}) sélectionné en tant que langage principal",
   "multiplayer.player.joined": "{%0} a rejoint la partie",
   "multiplayer.player.left": "{%0} a quitté la partie",
-
-
-
   "chorus.command.alias.illegal": "Impossible d\u0027enregistrer l\u0027alias {%0} car il contient des caractères illégaux.",
   "chorus.command.alias.notFound": "Impossible d\u0027enregistrer l\u0027alias {%0} car il contient des commandes qui n\u0027existent pas : {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003cplayer\u003e",

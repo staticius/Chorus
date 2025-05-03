@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.WoodType
 import org.chorus_oss.chorus.event.level.StructureGrowEvent
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.generator.`object`.BlockManager
 import org.chorus_oss.chorus.level.generator.`object`.ObjectCherryTree

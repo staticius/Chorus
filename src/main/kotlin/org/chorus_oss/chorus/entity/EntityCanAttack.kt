@@ -30,7 +30,7 @@ interface EntityCanAttack {
      * @return 伤害<br></br>damage
      */
     fun getDiffHandDamage(difficulty: Int): Float {
-        return if (difficulty != 0) diffHandDamage!![difficulty - 1] else 0f
+        return if (difficulty != 0) diffHandDamage[difficulty - 1] else 0f
     }
 
     fun attackTarget(entity: Entity): Boolean

@@ -3,7 +3,10 @@ package org.chorus_oss.chorus.item
 import com.google.gson.annotations.SerializedName
 import io.netty.util.internal.EmptyArrays
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.block.*
+import org.chorus_oss.chorus.block.Block
+import org.chorus_oss.chorus.block.BlockAir
+import org.chorus_oss.chorus.block.BlockID
+import org.chorus_oss.chorus.block.BlockState
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.item.Item.ItemJsonComponents.ItemLock
 import org.chorus_oss.chorus.item.enchantment.Enchantment
@@ -20,7 +23,6 @@ import java.io.IOException
 import java.io.UncheckedIOException
 import java.nio.ByteOrder
 import java.util.*
-import kotlin.collections.HashMap
 
 
 abstract class Item : Cloneable, ItemID, Loggable {
@@ -84,7 +86,13 @@ abstract class Item : Cloneable, ItemID, Loggable {
         }
     }
 
-    protected constructor(blockState: BlockState, meta: Int, count: Int, name: String?, autoAssignStackNetworkId: Boolean) {
+    protected constructor(
+        blockState: BlockState,
+        meta: Int,
+        count: Int,
+        name: String?,
+        autoAssignStackNetworkId: Boolean
+    ) {
         this.id = blockState.identifier.intern()
         this.identifier = Identifier(id)
         this.count = count
@@ -420,7 +428,7 @@ abstract class Item : Cloneable, ItemID, Loggable {
         for (ench in customEnch.all) {
             val enchantment: Enchantment = Enchantment.getEnchantment(
                 ench.getString("id")
-            )!!.setLevel(ench.getShort("lvl").toInt())
+            ).setLevel(ench.getShort("lvl").toInt())
             joiner.add(enchantment.lore)
         }
         return joiner.toString()

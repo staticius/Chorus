@@ -2,7 +2,6 @@
 package org.chorus_oss.chorus.nbt.snbt
 
 import org.chorus_oss.chorus.nbt.snbt.SNBTConstants.LexicalState
-import org.chorus_oss.chorus.nbt.snbt.SNBTNfaData.NfaFunction
 import java.io.*
 import java.nio.Buffer
 import java.nio.ByteBuffer
@@ -207,7 +206,7 @@ class SNBTLexer @JvmOverloads constructor(
                 nextStates.clear()
                 var nextActive = if (codeUnitsRead == 0) 0 else currentStates.nextSetBit(0)
                 do {
-                    val returnedType = nfaFunctions[nextActive]!!
+                    val returnedType = nfaFunctions[nextActive]
                         .apply(curChar, nextStates, activeTokenTypes)
                     if (returnedType != null && (newType == null || returnedType.ordinal < newType.ordinal)) {
                         newType = returnedType
@@ -273,22 +272,22 @@ class SNBTLexer @JvmOverloads constructor(
     // But there is no goto in Java!!!
     private fun goTo(offset: Int) {
         var offset = offset
-        while (offset < content!!.length && tokenLocationTable[offset] === IGNORED) {
+        while (offset < content.length && tokenLocationTable[offset] === IGNORED) {
             ++offset
         }
         this.bufferPosition = offset
     }
 
     private fun readChar(): Int {
-        while (tokenLocationTable[bufferPosition] === IGNORED && bufferPosition < content!!.length) {
+        while (tokenLocationTable[bufferPosition] === IGNORED && bufferPosition < content.length) {
             ++bufferPosition
         }
-        if (bufferPosition >= content!!.length) {
+        if (bufferPosition >= content.length) {
             return -1
         }
-        val ch = content!![bufferPosition++]
-        if (Character.isHighSurrogate(ch) && bufferPosition < content!!.length) {
-            val nextChar = content!![bufferPosition]
+        val ch = content[bufferPosition++]
+        if (Character.isHighSurrogate(ch) && bufferPosition < content.length) {
+            val nextChar = content[bufferPosition]
             if (Character.isLowSurrogate(nextChar)) {
                 ++bufferPosition
                 return Character.toCodePoint(ch, nextChar)
@@ -311,7 +310,7 @@ class SNBTLexer @JvmOverloads constructor(
             if (reversed) turnOffLine = !turnOffLine
             if (turnOffLine) {
                 val lineOffset = lineOffsets[i]
-                val nextLineOffset = if (i < lineOffsets.size - 1) lineOffsets[i + 1] else content!!.length
+                val nextLineOffset = if (i < lineOffsets.size - 1) lineOffsets[i + 1] else content.length
                 for (offset in lineOffset..<nextLineOffset) {
                     tokenLocationTable[offset] = IGNORED
                 }
@@ -339,7 +338,7 @@ class SNBTLexer @JvmOverloads constructor(
      * @return the line number from the absolute offset passed in as a parameter
      */
     fun getLineFromOffset(pos: Int): Int {
-        if (pos >= content!!.length) {
+        if (pos >= content.length) {
             if (content[content.length - 1] == '\n') {
                 return startingLine + lineOffsets.size
             }
@@ -358,7 +357,7 @@ class SNBTLexer @JvmOverloads constructor(
      */
     fun getCodePointColumnFromOffset(pos: Int): Int {
         var pos = pos
-        if (pos >= content!!.length) return 1
+        if (pos >= content.length) return 1
         if (pos == 0) return startingColumn
         val line = getLineFromOffset(pos) - startingLine
         val lineStart = lineOffsets[line]
@@ -393,7 +392,7 @@ class SNBTLexer @JvmOverloads constructor(
         val buf = StringBuilder()
         for (offset in startOffset..<endOffset) {
             if (tokenLocationTable[offset] !== IGNORED) {
-                buf.append(content!![offset])
+                buf.append(content[offset])
             }
         }
         return buf.toString()
@@ -407,31 +406,31 @@ class SNBTLexer @JvmOverloads constructor(
         }
         val offset = tok.beginOffset
         if (tokenLocationTable[offset] !== IGNORED) {
-            tokenOffsets!!.set(offset)
+            tokenOffsets.set(offset)
             tokenLocationTable[offset] = tok
         }
     }
 
     fun uncacheTokens(lastToken: Token) {
         val endOffset = lastToken.endOffset
-        if (endOffset < tokenOffsets!!.length()) {
-            tokenOffsets!!.clear(lastToken.endOffset, tokenOffsets!!.length())
+        if (endOffset < tokenOffsets.length()) {
+            tokenOffsets.clear(lastToken.endOffset, tokenOffsets.length())
         }
         lastToken.unsetAppendedToken()
     }
 
     fun nextCachedToken(offset: Int): Token? {
-        val nextOffset = tokenOffsets!!.nextSetBit(offset)
+        val nextOffset = tokenOffsets.nextSetBit(offset)
         return if (nextOffset != -1) tokenLocationTable[nextOffset] else null
     }
 
     fun previousCachedToken(offset: Int): Token? {
-        val prevOffset = tokenOffsets!!.previousSetBit(offset - 1)
+        val prevOffset = tokenOffsets.previousSetBit(offset - 1)
         return if (prevOffset == -1) null else tokenLocationTable[prevOffset]
     }
 
     private fun createLineOffsetsTable() {
-        if (content!!.length == 0) {
+        if (content.length == 0) {
             this.lineOffsets = IntArray(0)
             return
         }

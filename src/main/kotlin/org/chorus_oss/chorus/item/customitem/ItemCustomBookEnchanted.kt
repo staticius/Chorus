@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.item.customitem
 
 import org.chorus_oss.chorus.item.ItemEnchantedBook
 import org.chorus_oss.chorus.item.customitem.data.CreativeCategory
-import org.chorus_oss.chorus.item.enchantment.*
+import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import java.util.function.Consumer
 

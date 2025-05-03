@@ -11,7 +11,7 @@ class ComplexAliasDescriptor(var name: String) : ItemDescriptor, Cloneable {
     }
 
     override fun clone(): ItemDescriptor {
-        return super<Cloneable>.clone() as ItemDescriptor
+        return super.clone() as ItemDescriptor
     }
 
     override val count: Int

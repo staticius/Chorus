@@ -23,7 +23,6 @@ import org.chorus_oss.chorus.event.entity.CreatureSpawnEvent
 import org.chorus_oss.chorus.event.entity.EntityInteractEvent
 import org.chorus_oss.chorus.event.player.PlayerInteractEvent
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.Sound

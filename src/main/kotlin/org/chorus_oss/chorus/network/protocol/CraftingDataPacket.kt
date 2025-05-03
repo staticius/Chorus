@@ -59,6 +59,7 @@ data class CraftingDataPacket(
                         RecipeType.SHAPELESS, RecipeType.USER_DATA_SHAPELESS_RECIPE -> byteBuf.writeString(
                             CRAFTING_TAG_CRAFTING_TABLE
                         )
+
                         else -> Unit
                     }
                     byteBuf.writeVarInt(shapeless.priority)

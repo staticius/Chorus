@@ -12,7 +12,6 @@ import org.chorus_oss.chorus.entity.projectile.abstract_arrow.EntityArrow
 import org.chorus_oss.chorus.event.block.BellRingEvent
 import org.chorus_oss.chorus.event.block.BellRingEvent.RingCause
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.Locator

@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.item
 
-import org.chorus_oss.chorus.nbt.tag.*
+import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.utils.DyeColor
 
 class ItemShield : ItemTool {

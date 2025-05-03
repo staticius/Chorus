@@ -1,9 +1,11 @@
 package org.chorus_oss.chorus.item.enchantment
 
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.entity.Entity
+import org.chorus_oss.chorus.entity.EntityHumanType
 import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent.DamageCause
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.item.Item
+import org.chorus_oss.chorus.item.ItemElytra
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 

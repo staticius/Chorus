@@ -2,17 +2,17 @@ package org.chorus_oss.chorus.item
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.entity.*
 import org.chorus_oss.chorus.entity.Entity.Companion.createEntity
+import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.projectile.EntityProjectile
 import org.chorus_oss.chorus.entity.projectile.abstract_arrow.EntityArrow
 import org.chorus_oss.chorus.event.entity.EntityShootBowEvent
 import org.chorus_oss.chorus.event.entity.ProjectileLaunchEvent
-import org.chorus_oss.chorus.item.enchantment.*
+import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.item.enchantment.bow.EnchantmentBow
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.level.Transform
-import org.chorus_oss.chorus.math.*
+import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.FloatTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
@@ -34,19 +34,19 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         return player.isCreative ||
                 player.inventory.contents.values.stream().filter { item: Item? -> item is ItemArrow }
                     .findFirst().isPresent ||
-                player.offhandInventory!!.contents.values.stream().filter { item: Item? -> item is ItemArrow }
+                player.offhandInventory.contents.values.stream().filter { item: Item? -> item is ItemArrow }
                     .findFirst().isPresent
     }
 
     override fun onRelease(player: Player, ticksUsed: Int): Boolean {
         val inventoryOptional = player.inventory.contents.entries.stream()
             .filter { item: Map.Entry<Int?, Item?> -> item.value is ItemArrow }.findFirst()
-        val offhandOptional = player.offhandInventory!!.contents.entries.stream()
+        val offhandOptional = player.offhandInventory.contents.entries.stream()
             .filter { item: Map.Entry<Int?, Item?> -> item.value is ItemArrow }.findFirst()
 
 
         if (offhandOptional.isEmpty && inventoryOptional.isEmpty && (player.isAdventure || player.isSurvival)) {
-            player.offhandInventory!!.sendContents(player)
+            player.offhandInventory.sendContents(player)
             player.inventory.sendContents(player)
             return false
         }
@@ -95,7 +95,8 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         val maxForce = 3.5
         val f = min((p * p + p * 2) / 3, 1.0) * maxForce
 
-        val arrow = createEntity(EntityID.ARROW, player.chunk!!, nbt, player, f == maxForce) as EntityArrow? ?: return false
+        val arrow =
+            createEntity(EntityID.ARROW, player.chunk!!, nbt, player, f == maxForce) as EntityArrow? ?: return false
         val copy = itemArrow.clone() as ItemArrow
         copy.setCount(1)
         arrow.item = (copy)
@@ -109,7 +110,7 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         if (entityShootBowEvent.isCancelled) {
             entityShootBowEvent.projectile.kill()
             player.inventory.sendContents(player)
-            player.offhandInventory!!.sendContents(player)
+            player.offhandInventory.sendContents(player)
         } else {
             entityShootBowEvent.projectile
                 .setMotion(entityShootBowEvent.projectile.getMotion().multiply(entityShootBowEvent.force))
@@ -130,8 +131,8 @@ class ItemBow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                 if (!infinity) {
                     if (offhandOptional.isPresent) {
                         val index = offhandOptional.get().key
-                        player.offhandInventory!!
-                            .setItem(index, player.offhandInventory!!.getItem(index).decrement(1))
+                        player.offhandInventory
+                            .setItem(index, player.offhandInventory.getItem(index).decrement(1))
                     } else {
                         val index = inventoryOptional.get().key
                         player.inventory.setItem(index, player.inventory.getItem(index).decrement(1))

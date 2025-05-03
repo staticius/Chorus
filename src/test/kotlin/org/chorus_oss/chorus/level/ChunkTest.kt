@@ -10,12 +10,11 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.level.biome.BiomeID
 import org.chorus_oss.chorus.level.format.Chunk
-import org.chorus_oss.chorus.level.format.SubChunk
 import org.chorus_oss.chorus.level.format.LevelProvider
+import org.chorus_oss.chorus.level.format.SubChunk
 import org.chorus_oss.chorus.level.format.UnsafeChunk
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.NBTIO
-
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -95,14 +94,16 @@ class ChunkTest {
         ) as EntityItem?
         chunk.addEntity(itemEntity!!)
 
-        val list = chunk.entities.values.stream().filter { e: Entity -> e.getEntityIdentifier() == EntityID.ITEM }.toList()
+        val list =
+            chunk.entities.values.stream().filter { e: Entity -> e.getEntityIdentifier() == EntityID.ITEM }.toList()
         Assertions.assertFalse(list.isEmpty())
         Assertions.assertEquals(EntityID.ITEM, list[0].getEntityIdentifier())
 
         levelDBProvider.saveChunk(0, 0, chunk)
         val newChunk = levelDBProvider.getChunk(0, 0)
         Assertions.assertNotNull(newChunk)
-        val list2 = chunk.entities.values.stream().filter { e: Entity -> e.getEntityIdentifier() == EntityID.ITEM }.toList()
+        val list2 =
+            chunk.entities.values.stream().filter { e: Entity -> e.getEntityIdentifier() == EntityID.ITEM }.toList()
         Assertions.assertFalse(list2.isEmpty())
         Assertions.assertEquals(EntityID.ITEM, list2[0].getEntityIdentifier())
     }

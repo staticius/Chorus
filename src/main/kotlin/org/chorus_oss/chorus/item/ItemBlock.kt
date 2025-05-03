@@ -6,7 +6,12 @@ import org.chorus_oss.chorus.block.BlockState
 import org.chorus_oss.chorus.registry.Registries
 
 
-open class ItemBlock @JvmOverloads constructor(blockState: BlockState, name: String = "", aux: Int = 0, count: Int = 1) :
+open class ItemBlock @JvmOverloads constructor(
+    blockState: BlockState,
+    name: String = "",
+    aux: Int = 0,
+    count: Int = 1
+) :
     Item(blockState, aux, count, name, true) {
     override var damage: Int
         get() = super.damage
@@ -25,6 +30,7 @@ open class ItemBlock @JvmOverloads constructor(blockState: BlockState, name: Str
         get() = when (blockState?.identifier) {
             BlockAncientDebris.properties.identifier,
             BlockNetheriteBlock.properties.identifier -> true
+
             else -> false
         }
 }

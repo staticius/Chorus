@@ -2,11 +2,11 @@ package org.chorus_oss.chorus.item
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.Entity.Companion.createEntity
 import org.chorus_oss.chorus.entity.projectile.EntityProjectile
 import org.chorus_oss.chorus.event.entity.ProjectileLaunchEvent
-import org.chorus_oss.chorus.math.*
+import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.FloatTag
 import org.chorus_oss.chorus.nbt.tag.ListTag

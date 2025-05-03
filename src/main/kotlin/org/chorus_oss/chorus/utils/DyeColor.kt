@@ -230,7 +230,8 @@ enum class DyeColor(
 
 
         fun getByDyeData(dyeColorMeta: Int): DyeColor {
-            return BY_DYE_ITEM_DATA[dyeColorMeta.coerceIn(0, BY_DYE_ITEM_DATA.size - 1)] ?: throw RuntimeException("Unknown DyeColorMeta: $dyeColorMeta")
+            return BY_DYE_ITEM_DATA[dyeColorMeta.coerceIn(0, BY_DYE_ITEM_DATA.size - 1)]
+                ?: throw RuntimeException("Unknown DyeColorMeta: $dyeColorMeta")
         }
 
         fun getByWoolData(woolColorMeta: Int): DyeColor {

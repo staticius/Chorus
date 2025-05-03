@@ -11,8 +11,6 @@ import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.utils.TextFormat
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.stream.Collectors
-import kotlin.collections.Map
-import kotlin.collections.MutableList
 import kotlin.collections.set
 
 class KillCommand(name: String) : VanillaCommand(name, "commands.kill.description") {

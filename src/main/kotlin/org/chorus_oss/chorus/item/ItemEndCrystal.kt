@@ -1,9 +1,12 @@
 package org.chorus_oss.chorus.item
 
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.block.*
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.block.Block
+import org.chorus_oss.chorus.block.BlockBedrock
+import org.chorus_oss.chorus.block.BlockID
+import org.chorus_oss.chorus.block.BlockObsidian
 import org.chorus_oss.chorus.entity.Entity.Companion.createEntity
+import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.SimpleAxisAlignedBB

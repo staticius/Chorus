@@ -4,9 +4,9 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.item.ItemWearEvent
 import org.chorus_oss.chorus.level.Sound
-import org.chorus_oss.chorus.math.*
+import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.ByteTag
-import org.chorus_oss.chorus.utils.*
+import org.chorus_oss.chorus.utils.Utils
 
 
 abstract class ItemArmor : Item, ItemDurable {

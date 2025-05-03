@@ -232,13 +232,13 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     override fun onBlock(entity: Entity?, event: EntityDamageEvent?, animate: Boolean) {
         super.onBlock(entity, event, animate)
         var shield: Item? = inventory.itemInHand
-        var shieldOffhand: Item? = offhandInventory!!.getItem(0)
+        var shieldOffhand: Item? = offhandInventory.getItem(0)
         if (shield is ItemShield) {
             shield = damageArmor(shield, entity, event!!)
             inventory.setItemInHand(shield)
         } else if (shieldOffhand is ItemShield) {
             shieldOffhand = damageArmor(shieldOffhand, entity, event!!)
-            offhandInventory!!.setItem(0, shieldOffhand)
+            offhandInventory.setItem(0, shieldOffhand)
         }
     }
 }

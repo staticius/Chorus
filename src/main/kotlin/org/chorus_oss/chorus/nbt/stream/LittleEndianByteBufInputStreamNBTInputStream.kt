@@ -94,7 +94,7 @@ class LittleEndianByteBufInputStreamNBTInputStream(private val stream: LittleEnd
     }
 
     @Throws(IOException::class)
-    fun readTag(maxDepth: Int): Any? {
+    fun readTag(maxDepth: Int): Any {
         check(stream.available() > 0) { "Trying to read from a closed reader!" }
         val typeId = this.readUnsignedByte()
         this.readUTF()

@@ -1,8 +1,10 @@
 package org.chorus_oss.chorus.inventory.request
 
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.inventory.*
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.inventory.CreativeOutputInventory
+import org.chorus_oss.chorus.inventory.Inventory
+import org.chorus_oss.chorus.inventory.SoleInventory
+import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.TransferItemStackRequestAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot

@@ -5,7 +5,6 @@ import org.chorus_oss.chorus.blockentity.BlockEntityEndGateway
 import org.chorus_oss.chorus.blockentity.BlockEntityID
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3

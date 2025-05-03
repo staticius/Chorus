@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.dispenser
 
 import org.chorus_oss.chorus.block.BlockDispenser
-import org.chorus_oss.chorus.block.BlockUndyedShulkerBox
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.level.vibration.VibrationEvent
 import org.chorus_oss.chorus.level.vibration.VibrationType

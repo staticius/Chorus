@@ -5,8 +5,8 @@ import org.chorus_oss.chorus.block.BlockAir
 import org.chorus_oss.chorus.block.BlockState
 import org.chorus_oss.chorus.level.AntiXraySystem
 import org.chorus_oss.chorus.level.Level
-import org.chorus_oss.chorus.level.format.SubChunk
 import org.chorus_oss.chorus.level.format.IChunk
+import org.chorus_oss.chorus.level.format.SubChunk
 import org.chorus_oss.chorus.level.format.bitarray.BitArrayVersion
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.ByteBufVarInt

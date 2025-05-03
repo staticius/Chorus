@@ -4,7 +4,8 @@ import com.google.common.base.Objects
 import kotlin.math.ceil
 
 @JvmRecord
-data class PaddedBitArray(override val version: BitArrayVersion, override val size: Int, override val words: IntArray) : BitArray {
+data class PaddedBitArray(override val version: BitArrayVersion, override val size: Int, override val words: IntArray) :
+    BitArray {
     override fun set(index: Int, value: Int) {
         val arrayIndex = index / version.entriesPerWord
         val offset = (index % version.entriesPerWord) * version.bits

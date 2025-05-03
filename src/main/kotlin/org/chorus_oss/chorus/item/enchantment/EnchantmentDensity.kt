@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.item.enchantment
 
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.entity.Entity
 
 
 class EnchantmentDensity : Enchantment(ID_DENSITY, "density", Rarity.RARE, EnchantmentType.MACE) {

@@ -10,7 +10,6 @@ import org.chorus_oss.chorus.network.protocol.types.inventory.creative.CreativeI
 import org.chorus_oss.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus_oss.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
 import org.chorus_oss.chorus.utils.Loggable
-import org.chorus_oss.chorus.utils.MainLogger
 import java.io.IOException
 import java.io.InputStreamReader
 import java.nio.ByteOrder

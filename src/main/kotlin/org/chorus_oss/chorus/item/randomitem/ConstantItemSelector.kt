@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.item.randomitem
 
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.item.Item
 
 open class ConstantItemSelector(val item: Item, parent: Selector?) : Selector(parent) {
     constructor(id: String, parent: Selector?) : this(id, 0, parent)

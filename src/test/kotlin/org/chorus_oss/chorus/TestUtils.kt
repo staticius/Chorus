@@ -48,7 +48,7 @@ object TestUtils {
     }
 
     fun resetPlayerStatus(player: TestPlayer) {
-        player.level = GameMockExtension.Companion.level!!
+        player.level = GameMockExtension.Companion.level
         player.setPosition(Vector3(0.0, 100.0, 0.0))
         player.playerChunkManager.usedChunks.clear()
         player.playerChunkManager.inRadiusChunks.clear()

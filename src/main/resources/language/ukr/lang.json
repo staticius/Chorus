@@ -923,9 +923,6 @@
   "language.selected": "Встановлено {%0} ({%1}) як основну мову",
   "multiplayer.player.joined": "{%0} приєднався",
   "multiplayer.player.left": "{%0} покидає гру",
-
-
-
   "chorus.command.alias.illegal": "Не вдалось зареєструвати альтернативу команди {%0} бо вона містить недопустимі символи",
   "chorus.command.alias.notFound": "Не вдалось зареєструвати альтернативу команди {%0} оскільки вона містить команди, що не існують: {%1}",
   "chorus.command.allowlist.add.usage": "/whitelist add \u003cгравець\u003e",

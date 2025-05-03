@@ -42,7 +42,9 @@ class EntityAxolotl(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
 
     override var variant: Int
         get() = super<EntityVariant>.variant
-        set(value) { super<EntityVariant>.variant = value }
+        set(value) {
+            super<EntityVariant>.variant = value
+        }
 
     public override fun requireBehaviorGroup(): IBehaviorGroup {
         return BehaviorGroup(

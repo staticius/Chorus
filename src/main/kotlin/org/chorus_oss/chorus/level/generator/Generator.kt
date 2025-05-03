@@ -17,7 +17,7 @@ abstract class Generator(val dimensionData: DimensionData, val settings: Map<Str
     init {
         val builder = GenerateStage.Builder()
         stages(builder)
-        this.start = builder.start!!
+        this.start = builder.start
         this.end = builder.end
     }
 

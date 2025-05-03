@@ -2,14 +2,18 @@ package org.chorus_oss.chorus.item.customitem
 
 import com.google.common.base.Preconditions
 import org.chorus_oss.chorus.block.BlockID
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.customitem.data.CreativeCategory
 import org.chorus_oss.chorus.item.customitem.data.CreativeGroup
 import org.chorus_oss.chorus.item.customitem.data.DigProperty
 import org.chorus_oss.chorus.item.customitem.data.RenderOffsets
-import org.chorus_oss.chorus.nbt.tag.*
+import org.chorus_oss.chorus.nbt.tag.CompoundTag
+import org.chorus_oss.chorus.nbt.tag.ListTag
+import org.chorus_oss.chorus.nbt.tag.StringTag
+import org.chorus_oss.chorus.nbt.tag.Tag
 import org.chorus_oss.chorus.tags.ItemTags
-import org.chorus_oss.chorus.utils.*
+import org.chorus_oss.chorus.utils.Identifier
+import org.chorus_oss.chorus.utils.Loggable
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
@@ -1289,7 +1293,8 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
         }
 
         fun getRuntimeId(identifier: String): Int {
-            return INTERNAL_ALLOCATION_ID_MAP.get(identifier) ?: throw RuntimeException("Unknown Identifier: $identifier")
+            return INTERNAL_ALLOCATION_ID_MAP.get(identifier)
+                ?: throw RuntimeException("Unknown Identifier: $identifier")
         }
     }
 }

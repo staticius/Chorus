@@ -20,7 +20,7 @@ class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
         var index = 0
         var offhand = false
 
-        for ((key, item1) in player.offhandInventory!!.contents) {
+        for ((key, item1) in player.offhandInventory.contents) {
             if (checkMapItemValid(item1, pk)) {
                 mapItem = item1
                 index = key
@@ -69,10 +69,10 @@ class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
                         )
                         if (finalOffhand) {
                             if (checkMapItemValid(
-                                    player.offhandInventory!!.getUnclonedItem(finalIndex),
+                                    player.offhandInventory.getUnclonedItem(finalIndex),
                                     pk
                                 )
-                            ) player.offhandInventory!!
+                            ) player.offhandInventory
                                 .setItem(finalIndex, map)
                         } else {
                             if (checkMapItemValid(

@@ -143,7 +143,8 @@ class PositionTrackingService(folder: File) : Closeable {
     fun stopTracking(player: Player): Boolean {
         val toRemove = tracking.remove(player)
         if (toRemove != null && player.isOnline) {
-            val packets = toRemove.values.flatMap { it.toIntArray().asSequence() }.map { this.destroyPacket(it) }.toTypedArray()
+            val packets =
+                toRemove.values.flatMap { it.toIntArray().asSequence() }.map { this.destroyPacket(it) }.toTypedArray()
             for (p in packets) {
                 player.dataPacket(p)
             }

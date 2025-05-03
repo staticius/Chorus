@@ -5,7 +5,6 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.protocol.types.BannerPattern
 import org.chorus_oss.chorus.utils.DyeColor
-import java.util.*
 
 class ItemBanner @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
     Item(ItemID.BANNER, meta, count, "Banner") {

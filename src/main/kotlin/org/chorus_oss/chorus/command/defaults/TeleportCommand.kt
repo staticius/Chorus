@@ -427,7 +427,11 @@ class TeleportCommand(name: String) :
                             target.position.floorZ.toString()
                         )
                     } else {
-                        log.addError("commands.tp.safeTeleportFail ", sender.asEntity()!!.getEntityName(), target.toString())
+                        log.addError(
+                            "commands.tp.safeTeleportFail ",
+                            sender.asEntity()!!.getEntityName(),
+                            target.toString()
+                        )
                             .output()
                         return 0
                     }
@@ -478,7 +482,11 @@ class TeleportCommand(name: String) :
                             target.position.floorZ.toString()
                         )
                     } else {
-                        log.addError("commands.tp.safeTeleportFail", sender.asEntity()!!.getEntityName(), target.toString())
+                        log.addError(
+                            "commands.tp.safeTeleportFail",
+                            sender.asEntity()!!.getEntityName(),
+                            target.toString()
+                        )
                             .output()
                         return 0
                     }

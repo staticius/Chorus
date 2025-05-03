@@ -30,6 +30,5 @@ data class ClientCameraAimAssistPacket(
                 allowAimAssist = byteBuf.readBoolean(),
             )
         }
-
     }
 }

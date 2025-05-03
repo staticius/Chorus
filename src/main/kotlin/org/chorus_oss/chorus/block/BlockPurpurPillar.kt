@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 
@@ -49,7 +48,6 @@ class BlockPurpurPillar @JvmOverloads constructor(blockstate: BlockState = Compa
                 axis
             )
         }
-
 
 
     override val properties: BlockProperties

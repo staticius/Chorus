@@ -54,7 +54,6 @@ import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.ChorusRandom
 import org.chorus_oss.chorus.utils.TradeRecipeBuildUtils
 import org.chorus_oss.chorus.utils.Utils
-import java.util.*
 import java.util.function.Consumer
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -255,7 +254,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                         IBehaviorEvaluator { entity: EntityMob? -> !isBaby() }
                     ), 3, 1),
                 Behavior(
-                    org.chorus_oss.chorus.entity.ai.executor.villager.VillagerBreedingExecutor(
+                    VillagerBreedingExecutor(
                         EntityVillagerV2::class.java,
                         16,
                         100,
@@ -658,7 +657,8 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 val gossipMap = memoryStorage[CoreMemoryTypes.GOSSIP]!!
                 val targetGossipMap = target.memoryStorage[CoreMemoryTypes.Companion.GOSSIP]!!
                 for ((xuid, value) in gossipMap.entries) {
-                    if (!targetGossipMap.containsKey(xuid)) targetGossipMap[xuid] = MutableList(Gossip.VALUES.size) { 0 }
+                    if (!targetGossipMap.containsKey(xuid)) targetGossipMap[xuid] =
+                        MutableList(Gossip.VALUES.size) { 0 }
                     val targetValues = targetGossipMap[xuid]
                     for (gossip in Gossip.VALUES) {
                         val ordinal = gossip.ordinal
@@ -694,7 +694,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         super.saveNBT()
         namedTag!!.putInt("profession", this.profession)
         namedTag!!.putBoolean("isTrade", this.canTrade!!)
-        namedTag!!.putString("displayName", displayName!!)
+        namedTag!!.putString("displayName", displayName)
         namedTag!!.putInt("tradeTier", this.tradeTier!!)
         namedTag!!.putInt("maxTradeTier", this.maxTradeTier)
         namedTag!!.putInt("tradeExp", this.tradeExp)

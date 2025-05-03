@@ -7,11 +7,13 @@ import org.chorus_oss.chorus.entity.projectile.abstract_arrow.EntityArrow
 import org.chorus_oss.chorus.event.entity.EntityShootCrossbowEvent
 import org.chorus_oss.chorus.event.entity.ProjectileLaunchEvent
 import org.chorus_oss.chorus.inventory.Inventory
-import org.chorus_oss.chorus.item.enchantment.*
+import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.level.Sound
-import org.chorus_oss.chorus.math.*
-import org.chorus_oss.chorus.nbt.tag.*
-import org.chorus_oss.chorus.utils.*
+import org.chorus_oss.chorus.math.Vector3
+import org.chorus_oss.chorus.nbt.tag.CompoundTag
+import org.chorus_oss.chorus.nbt.tag.FloatTag
+import org.chorus_oss.chorus.nbt.tag.ListTag
+import org.chorus_oss.chorus.utils.Utils
 import kotlin.math.cos
 import kotlin.math.sin
 
@@ -36,7 +38,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
             val inventoryOptional = player.inventory.contents.entries.stream()
                 .filter { item: Map.Entry<Int?, Item?> -> item.value is ItemArrow || item.value is ItemFireworkRocket }
                 .findFirst()
-            val offhandOptional = player.offhandInventory!!.contents.entries.stream()
+            val offhandOptional = player.offhandInventory.contents.entries.stream()
                 .filter { item: Map.Entry<Int?, Item?> -> item.value is ItemArrow || item.value is ItemFireworkRocket }
                 .findFirst()
             var item: Item? = null
@@ -130,12 +132,12 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                 val entity = EntityArrow(player.chunk, nbt, player, true)
                 val chargedItem = this.namedTag!!.getCompound("chargedItem")
                 entity.item = (
-                    get(
-                        chargedItem.getString("Name"),
-                        chargedItem.getShort("Damage").toInt(),
-                        chargedItem.getByte("Count").toInt()
-                    ) as ItemArrow
-                )
+                        get(
+                            chargedItem.getString("Name"),
+                            chargedItem.getShort("Damage").toInt(),
+                            chargedItem.getByte("Count").toInt()
+                        ) as ItemArrow
+                        )
                 val entityShootBowEvent = EntityShootCrossbowEvent(player, this, entity)
                 Server.instance.pluginManager.callEvent(entityShootBowEvent)
                 if (entityShootBowEvent.isCancelled) {

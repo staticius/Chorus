@@ -133,8 +133,8 @@ class EntityArrow @JvmOverloads constructor(
     override fun afterCollisionWithEntity(entity: Entity) {
         if (hadCollision) {
             if (getArrowItem() != null) {
-                if (getArrowItem()!!.tippedArrowPotion != null) {
-                    getArrowItem()!!.tippedArrowPotion!!
+                if (getArrowItem().tippedArrowPotion != null) {
+                    getArrowItem().tippedArrowPotion!!
                         .getEffects(false).forEach(Consumer { entity.addEffect(it) })
                 }
             }

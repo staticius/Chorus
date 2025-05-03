@@ -67,7 +67,9 @@ class TextPacket : DataPacket() {
                     packet.message = byteBuf.readString()
                 }
 
-                TYPE_RAW, TYPE_TIP, TYPE_SYSTEM, TYPE_OBJECT, TYPE_OBJECT_WHISPER -> packet.message = byteBuf.readString()
+                TYPE_RAW, TYPE_TIP, TYPE_SYSTEM, TYPE_OBJECT, TYPE_OBJECT_WHISPER -> packet.message =
+                    byteBuf.readString()
+
                 TYPE_TRANSLATION, TYPE_POPUP, TYPE_JUKEBOX_POPUP -> {
                     packet.message = byteBuf.readString()
                     packet.parameters = byteBuf.readArray<String>(

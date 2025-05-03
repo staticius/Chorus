@@ -304,7 +304,8 @@ class PluginI18n(private val plugin: PluginBase) {
 
     private fun reloadLang(lang: LangCode?, reader: BufferedReader): Boolean {
         val d = MULTI_LANGUAGE[lang]
-        val map: MutableMap<String, String> = JSONUtils.from(reader, object : TypeToken<MutableMap<String, String>>() {})
+        val map: MutableMap<String, String> =
+            JSONUtils.from(reader, object : TypeToken<MutableMap<String, String>>() {})
         if (d == null) {
             MULTI_LANGUAGE[lang] = map
         } else {
