@@ -1,12 +1,11 @@
 package org.chorus_oss.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import java.util.*
 
 
 class SetScoreboardIdentityPacket : DataPacket() {
-    val entries: List<Entry> = ObjectArrayList()
+    val entries: List<Entry> = listOf()
     var action: Action? = null
 
     override fun encode(byteBuf: HandleByteBuf) {

@@ -1,12 +1,11 @@
 package org.chorus_oss.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.hud.HudElement
 import org.chorus_oss.chorus.network.protocol.types.hud.HudVisibility
 
 class SetHudPacket : DataPacket() {
-    val elements: MutableSet<HudElement> = ObjectOpenHashSet()
+    val elements: MutableSet<HudElement> = mutableSetOf()
     var visibility: HudVisibility? = null
 
     override fun encode(byteBuf: HandleByteBuf) {

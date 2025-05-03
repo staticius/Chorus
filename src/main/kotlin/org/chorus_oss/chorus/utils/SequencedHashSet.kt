@@ -1,21 +1,16 @@
 package org.chorus_oss.chorus.utils
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectLinkedOpenHashMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap
-import it.unimi.dsi.fastutil.objects.Object2IntLinkedOpenHashMap
-import it.unimi.dsi.fastutil.objects.Object2IntMap
-
 class SequencedHashSet<E> : MutableList<E> {
-    private val map: Object2IntMap<E> = Object2IntLinkedOpenHashMap()
-    private val inverse: Int2ObjectMap<E> = Int2ObjectLinkedOpenHashMap()
+    private val map: MutableMap<E, Int> = mutableMapOf()
+    private val inverse: MutableMap<Int, E> = mutableMapOf()
     private var index = 0
 
     override fun indexOf(element: E): Int {
-        return map.getInt(element)
+        return map[element]!!
     }
 
     override fun lastIndexOf(element: E): Int {
-        return map.getInt(element)
+        return map[element]!!
     }
 
     override fun listIterator(): MutableListIterator<E> {
@@ -50,8 +45,8 @@ class SequencedHashSet<E> : MutableList<E> {
     override fun add(element: E): Boolean {
         if (!map.containsKey(element)) {
             val index = index++
-            map.put(element, index)
-            inverse.put(index, element)
+            map[element] = index
+            inverse[index] = element
             return true
         }
         return false
@@ -89,7 +84,7 @@ class SequencedHashSet<E> : MutableList<E> {
     }
 
     override fun get(index: Int): E {
-        return inverse[index]
+        return inverse[index]!!
     }
 
     override fun set(index: Int, element: E): E {

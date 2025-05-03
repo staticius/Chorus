@@ -1,10 +1,7 @@
 package org.chorus_oss.chorus.form
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus_oss.chorus.*
-import org.chorus_oss.chorus.event.Event
 import org.chorus_oss.chorus.event.player.PlayerFormRespondedEvent
-import org.chorus_oss.chorus.form.element.Element
 import org.chorus_oss.chorus.form.element.custom.*
 import org.chorus_oss.chorus.form.element.simple.ButtonImage
 import org.chorus_oss.chorus.form.element.simple.ElementButton
@@ -16,9 +13,9 @@ import org.chorus_oss.chorus.form.window.CustomForm
 import org.chorus_oss.chorus.form.window.ModalForm
 import org.chorus_oss.chorus.form.window.SimpleForm
 import org.chorus_oss.chorus.network.protocol.ModalFormResponsePacket
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import java.util.List
 
 @ExtendWith(GameMockExtension::class)
 class FormTest {

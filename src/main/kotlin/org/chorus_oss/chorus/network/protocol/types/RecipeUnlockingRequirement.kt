@@ -1,10 +1,9 @@
 package org.chorus_oss.chorus.network.protocol.types
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus_oss.chorus.recipe.descriptor.ItemDescriptor
 
 class RecipeUnlockingRequirement(var context: UnlockingContext) {
-    var ingredients: List<ItemDescriptor> = ObjectArrayList()
+    var ingredients: List<ItemDescriptor> = listOf()
 
     enum class UnlockingContext {
         NONE,

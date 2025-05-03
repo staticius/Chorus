@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus.nbt.stream
 
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.ints.IntList
 import java.io.*
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -20,7 +18,7 @@ class PGZIPOutputStream(
     FilterOutputStream(out) {
     // TODO: remove after block guessing is implemented
     // array list that contains the block sizes
-    private val blockSizes: IntList = IntArrayList()
+    private val blockSizes = mutableListOf<Int>()
 
     private var level = Deflater.BEST_SPEED
     private var strategy = Deflater.DEFAULT_STRATEGY

@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.network.process.handler
 
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.entity.data.property.EntityProperty.Companion.getPacketCache
@@ -13,7 +12,6 @@ import org.chorus_oss.chorus.registry.ItemRegistry
 import org.chorus_oss.chorus.registry.ItemRuntimeIdRegistry
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.Loggable
-import java.util.function.Consumer
 import kotlin.math.max
 import kotlin.math.min
 
@@ -25,7 +23,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
 
         SpawnResponseHandler.log.debug("Sending item components")
         val itemRegistryPacket = ItemRegistryPacket()
-        val entries = ObjectOpenHashSet<ItemRegistryPacket.Entry>()
+        val entries = mutableSetOf<ItemRegistryPacket.Entry>()
 
         for (data in ItemRuntimeIdRegistry.ITEM_DATA) {
             var tag = CompoundTag()

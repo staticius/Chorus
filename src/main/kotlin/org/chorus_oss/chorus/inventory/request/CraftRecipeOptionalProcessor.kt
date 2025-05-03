@@ -1,8 +1,6 @@
 package org.chorus_oss.chorus.inventory.request
 
 import io.netty.util.internal.StringUtil
-import it.unimi.dsi.fastutil.Pair
-import it.unimi.dsi.fastutil.objects.ObjectIntMutablePair
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.BlockID
@@ -48,8 +46,8 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
         if (inventory is AnvilInventory) {
             val pair = updateAnvilResult(player, inventory, filterString)
             if (pair != null) {
-                player.creativeOutputInventory.setItem(pair.left())
-                player.setExperience(player.experience, player.experienceLevel - pair.right())
+                player.creativeOutputInventory.setItem(pair.first)
+                player.setExperience(player.experience, player.experienceLevel - pair.second)
             } else {
                 return context.error()
             }
@@ -76,7 +74,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
             return null
         }
 
-        val resultPair: Pair<Item, Int> = ObjectIntMutablePair.of(Item.AIR, 1)
+        var resultPair: Pair<Item, Int> = Pair(Item.AIR, 1)
 
         var extraCost = 0
         var costHelper = 0
@@ -220,16 +218,16 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
         }
 
         val levelCost = getRepairCost(result) + (if (sacrifice.isNothing) 0 else getRepairCost(sacrifice))
-        resultPair.right(levelCost + extraCost)
+        resultPair = resultPair.copy(second = levelCost + extraCost)
         if (extraCost <= 0) {
             result = Item.AIR
         }
 
-        if (costHelper == extraCost && costHelper > 0 && resultPair.right() >= 40) {
-            resultPair.right(39)
+        if (costHelper == extraCost && costHelper > 0 && resultPair.second >= 40) {
+            resultPair = resultPair.copy(second = 39)
         }
 
-        if (resultPair.right() >= 40 && !player.isCreative) {
+        if (resultPair.second >= 40 && !player.isCreative) {
             result = Item.AIR
         }
 
@@ -254,7 +252,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
                 result.addEnchantment(*enchantments.toTypedArray())
             }
         }
-        resultPair.left(result)
+        resultPair = resultPair.copy(first = result)
         return resultPair
     }
 

@@ -1,13 +1,12 @@
 package org.chorus_oss.chorus.level
 
-import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue
-import it.unimi.dsi.fastutil.longs.LongComparator
 import org.apache.commons.lang3.reflect.FieldUtils
 import org.chorus_oss.chorus.GameMockExtension
 import org.chorus_oss.chorus.TestPlayer
 import org.chorus_oss.chorus.math.Vector3
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.extension.ExtendWith
+import java.util.PriorityQueue
 
 @ExtendWith(GameMockExtension::class)
 class PlayerChunkManagerTest {
@@ -21,17 +20,17 @@ class PlayerChunkManagerTest {
         player.setPosition(Vector3(0.0, 100.0, 0.0))
 
 
-        val longComparator = chunkDistanceComparator[playerChunkManager] as LongComparator
-        val longArrayPriorityQueue = LongArrayPriorityQueue(10 * 10, longComparator)
-        longArrayPriorityQueue.enqueue(111L)
-        longArrayPriorityQueue.enqueue(222L)
-        longArrayPriorityQueue.enqueue(22L)
-        longArrayPriorityQueue.enqueue(55L)
-        val d1 = longArrayPriorityQueue.dequeueLong()
+        val comparator = chunkDistanceComparator[playerChunkManager] as Comparator<Long>
+        val priorityQueue = PriorityQueue(10 * 10, comparator)
+        priorityQueue.add(111L)
+        priorityQueue.add(222L)
+        priorityQueue.add(22L)
+        priorityQueue.add(55L)
+        val d1 = priorityQueue.poll()
         Assertions.assertEquals(22, d1)
-        val d2 = longArrayPriorityQueue.dequeueLong()
+        val d2 = priorityQueue.poll()
         Assertions.assertEquals(55, d2)
-        longArrayPriorityQueue.enqueue(d1)
-        Assertions.assertEquals(22, longArrayPriorityQueue.dequeueLong())
+        priorityQueue.add(d1)
+        Assertions.assertEquals(22, priorityQueue.poll())
     }
 }

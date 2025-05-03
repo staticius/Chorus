@@ -60,7 +60,7 @@ class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
         val size = handlers.size
         for (i in 0..<size) {
-            val handler = handlers.getInt(i)
+            val handler = handlers[i]
             try {
                 positionTrackingService.invalidateHandler(handler)
             } catch (e: IOException) {

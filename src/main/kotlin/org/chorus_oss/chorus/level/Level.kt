@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.level
 
 
 import com.google.common.base.Preconditions
-import it.unimi.dsi.fastutil.longs.*
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.*
@@ -1108,9 +1107,9 @@ class Level(
             if (block != null) size++
         }
         val packets: ArrayList<UpdateBlockPacket> = ArrayList<UpdateBlockPacket>(size)
-        var chunks: LongSet? = null
+        var chunks: MutableSet<Long>? = null
         if (optimizeRebuilds) {
-            chunks = LongOpenHashSet()
+            chunks = mutableSetOf()
         }
         for (b in blocks) {
             if (b == null) {
@@ -1982,10 +1981,10 @@ class Level(
         if (size == 0) {
             return
         }
-        val lightPropagationQueue: Queue<Long> = ConcurrentLinkedQueue<Long>()
-        val lightRemovalQueue: Queue<Array<Any>> = ConcurrentLinkedQueue<Array<Any>>()
-        val visited = Long2ObjectOpenHashMap<Any>()
-        val removalVisited = Long2ObjectOpenHashMap<Any>()
+        val lightPropagationQueue: Queue<Long> = ConcurrentLinkedQueue()
+        val lightRemovalQueue: Queue<Array<Any>> = ConcurrentLinkedQueue()
+        val visited = mutableMapOf<Long, Any>()
+        val removalVisited = mutableMapOf<Long, Any>()
 
         val iter = map.entries.iterator()
         while (iter.hasNext() && size-- > 0) {
@@ -2279,7 +2278,8 @@ class Level(
         synchronized(changedBlocks) {
             val current = changedBlocks.computeIfAbsent(
                 index,
-                Long2ObjectFunction { SoftReference(HashMap()) })
+                { SoftReference(HashMap()) }
+            )
             val currentMap = current.get()
             if (currentMap !== changeBlocksFullMap && currentMap != null) {
                 if (currentMap.size > MAX_BLOCK_CACHE) {
@@ -4048,14 +4048,14 @@ class Level(
                     }
                 }
 
-                if (toRemove == null) toRemove = LongArrayList()
+                if (toRemove == null) toRemove = mutableListOf()
                 toRemove.add(index)
             }
 
             if (toRemove != null) {
                 val size: Int = toRemove.size
                 for (i in 0..<size) {
-                    val index = toRemove.get(i)
+                    val index = toRemove[i]
                     val X = getHashX(index)
                     val Z = getHashZ(index)
 

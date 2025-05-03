@@ -34,7 +34,6 @@ dependencies {
     api(libs.gson)
     api(libs.guava)
     api(libs.commonsio)
-    api(libs.fastutil)
     api(libs.snakeyaml)
     api(libs.stateless4j)
 

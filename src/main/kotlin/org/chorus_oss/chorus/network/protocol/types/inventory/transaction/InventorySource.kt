@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus.network.protocol.types.inventory.transaction
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus_oss.chorus.inventory.SpecialWindowId
 
 data class InventorySource(
@@ -23,17 +21,10 @@ data class InventorySource(
         }
 
         companion object {
-            private val BY_ID: Int2ObjectMap<Type> = Int2ObjectOpenHashMap(6)
-
-            init {
-                for (type in entries) {
-                    BY_ID.put(type.id, type)
-                }
-            }
+            private val BY_ID: Map<Int, Type> = entries.associateBy { it.id }
 
             fun byId(id: Int): Type {
-                val type = BY_ID[id]
-                return type ?: INVALID
+                return BY_ID[id] ?: INVALID
             }
         }
     }

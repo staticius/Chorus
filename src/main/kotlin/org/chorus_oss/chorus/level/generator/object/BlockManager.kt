@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus.level.generator.`object`
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectFunction
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.block.BlockState
@@ -17,8 +15,8 @@ import java.util.function.Consumer
 import java.util.function.Predicate
 
 class BlockManager(val level: Level) {
-    private val caches = Long2ObjectOpenHashMap<Block?>()
-    private val places = Long2ObjectOpenHashMap<Block>()
+    private val caches = mutableMapOf<Long, Block?>()
+    private val places = mutableMapOf<Long, Block>()
 
     private fun hashXYZ(x: Int, y: Int, z: Int, layer: Int): Long {
         val v = (if (layer == 1) 0xFFFFFFF else 0x7FFFFFF).toLong()
@@ -31,8 +29,8 @@ class BlockManager(val level: Level) {
 
     fun getBlockIdAt(x: Int, y: Int, z: Int, layer: Int): String {
         val block = caches.computeIfAbsent(
-            hashXYZ(x, y, z, layer),
-            Long2ObjectFunction { level.getBlock(x, y, z, layer) })
+            hashXYZ(x, y, z, layer)
+        ) { level.getBlock(x, y, z, layer) }
         return block!!.id
     }
 
@@ -42,8 +40,8 @@ class BlockManager(val level: Level) {
 
     fun getBlockAt(x: Int, y: Int, z: Int): Block? {
         return caches.computeIfAbsent(
-            hashXYZ(x, y, z, 0),
-            Long2ObjectFunction { level.getBlock(x, y, z) })
+            hashXYZ(x, y, z, 0)
+        ) { level.getBlock(x, y, z) }
     }
 
     fun setBlockStateAt(blockVector3: Vector3, blockState: BlockState) {

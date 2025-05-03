@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.level
 
-import it.unimi.dsi.fastutil.ints.*
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.block.*
 import org.chorus_oss.chorus.math.BlockFace
@@ -11,8 +10,8 @@ import org.chorus_oss.chorus.registry.Registries
 class AntiXraySystem(private val level: Level) {
     var fakeOreDenominator: Int = 16
     var isPreDeObfuscate: Boolean = true
-    val rawRealOreToReplacedRuntimeIdMap: Int2IntMap = Int2IntOpenHashMap(24)
-    private val fakeOreToPutRuntimeIds = Int2ObjectOpenHashMap<IntList>(4)
+    val rawRealOreToReplacedRuntimeIdMap: MutableMap<Int, Int> = mutableMapOf()
+    private val fakeOreToPutRuntimeIds: MutableMap<Int, MutableList<Int>> = mutableMapOf()
 
     fun addAntiXrayOreBlock(oreBlock: Block, replaceWith: Block) {
         rawRealOreToReplacedRuntimeIdMap.put(oreBlock.runtimeId, replaceWith.runtimeId)
@@ -26,7 +25,7 @@ class AntiXraySystem(private val level: Level) {
         val rid = originBlock.runtimeId
         var list = fakeOreToPutRuntimeIds[rid]
         if (list == null) {
-            fakeOreToPutRuntimeIds.put(rid, IntArrayList(8).also { list = it })
+            fakeOreToPutRuntimeIds[rid] = mutableListOf<Int>().also { list = it }
         }
         for (each in fakeBlocks) {
             list!!.add(each.runtimeId)
@@ -39,17 +38,17 @@ class AntiXraySystem(private val level: Level) {
         if (list != null) {
             for (each in fakeBlocks) {
                 val tmp = each.runtimeId
-                list.removeIf(IntPredicate { i: Int -> i == tmp })
+                list.removeIf { it == tmp }
             }
         }
     }
 
-    val rawFakeOreToPutRuntimeIdMap: Int2ObjectMap<IntList>
+    val rawFakeOreToPutRuntimeIdMap: MutableMap<Int, MutableList<Int>>
         get() = this.fakeOreToPutRuntimeIds
 
     fun obfuscateSendBlocks(index: Long, playerArray: Array<Player>, blocks: Map<Int, Any>) {
         val size: Int = blocks.size
-        val vectorSet = IntOpenHashSet(size * 6)
+        val vectorSet: MutableSet<Int> = mutableSetOf()
         val vRidList = ArrayList<Vector3WithRuntimeId>(size * 7)
         var tmpV3Rid: Vector3WithRuntimeId
         for (blockHash in blocks.keys.iterator()) {
@@ -280,13 +279,12 @@ class AntiXraySystem(private val level: Level) {
                 } catch (ignore: Exception) {
                 }
             }
-            transparentBlockRuntimeIds.trim()
         }
     }
 
     companion object {
-        private val transparentBlockRuntimeIds = IntOpenHashSet(256)
-        val rawTransparentBlockRuntimeIds: IntSet
+        private val transparentBlockRuntimeIds: MutableSet<Int> = mutableSetOf(256)
+        val rawTransparentBlockRuntimeIds: MutableSet<Int>
             get() = transparentBlockRuntimeIds
     }
 }

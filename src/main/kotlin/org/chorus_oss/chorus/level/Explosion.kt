@@ -1,8 +1,5 @@
 package org.chorus_oss.chorus.level
 
-import it.unimi.dsi.fastutil.longs.LongArraySet
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.block.BlockID
@@ -21,7 +18,6 @@ import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.event.entity.EntityExplodeEvent
 import org.chorus_oss.chorus.inventory.InventoryHolder
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.math.AxisAlignedBB
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.SimpleAxisAlignedBB
@@ -172,8 +168,8 @@ class Explosion protected constructor(private val source: Locator, size: Double,
      * @return `false` if explosion was canceled, otherwise `true`
      */
     fun explodeB(): Boolean {
-        val updateBlocks = LongArraySet()
-        val send: MutableList<Vector3> = ArrayList()
+        val updateBlocks: MutableSet<Long> = mutableSetOf()
+        val send: MutableList<Vector3> = mutableListOf()
 
         val source = (Vector3(
             source.position.x,
@@ -182,7 +178,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
         var yield = (1.0 / this.size) * 100.0
 
         if (what is Entity) {
-            val affectedBlocksList: List<Block> = ArrayList(this.affectedBlocks)
+            val affectedBlocksList: List<Block> = this.affectedBlocks.toList()
             val ev: EntityExplodeEvent = EntityExplodeEvent(
                 what,
                 this.source, affectedBlocksList, yield
@@ -274,7 +270,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
 
         val air = Item.AIR
         var container: BlockEntity?
-        val smokePositions = if (affectedBlocks.isEmpty()) Collections.emptyList() else ObjectArrayList<Vector3>()
+        val smokePositions: MutableList<Vector3> = mutableListOf()
         val random = ThreadLocalRandom.current()
 
         for (block in affectedBlocks) {
@@ -346,7 +342,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
         }
 
         val count: Int = smokePositions.size
-        val data = CompoundTag(Object2ObjectOpenHashMap(count, 0.999999f))
+        val data = CompoundTag()
             .putFloat("originX", this.source.position.x.toFloat())
             .putFloat("originY", this.source.position.y.toFloat())
             .putFloat("originZ", this.source.position.z.toFloat())

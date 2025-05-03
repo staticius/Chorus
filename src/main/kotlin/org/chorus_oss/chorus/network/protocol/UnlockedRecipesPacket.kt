@@ -1,12 +1,11 @@
 package org.chorus_oss.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 
 
 class UnlockedRecipesPacket : DataPacket() {
     var unlockedNotification: Boolean = false
-    val unlockedRecipes: MutableList<String> = ObjectArrayList()
+    val unlockedRecipes: MutableList<String> = mutableListOf()
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeBoolean(this.unlockedNotification)

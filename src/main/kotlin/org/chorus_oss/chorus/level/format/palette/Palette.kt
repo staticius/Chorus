@@ -210,7 +210,7 @@ open class Palette<V> {
         }
 
         var resultingBlockState: V? = unknownState
-        var semVersion = p.right()
+        var semVersion = p.second
 
         if (semVersion == null) {
             semVersion = ProtocolInfo.GAME_VERSION
@@ -221,10 +221,10 @@ open class Palette<V> {
 
         var isBlockOutdated = false
 
-        if (p.left() == null) {     // is blockStateHash null
+        if (p.first == null) {     // is blockStateHash null
             isBlockOutdated = true
         } else {
-            val hash = p.left()
+            val hash = p.first!!
             val currentState = deserializer.deserialize(hash)
             if (hash != -2 && currentState === unknownState) {
                 byteBuf.resetReaderIndex()

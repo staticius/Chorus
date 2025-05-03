@@ -6,7 +6,6 @@ import io.netty.buffer.ByteBufInputStream
 import io.netty.util.ByteProcessor
 import io.netty.util.internal.ObjectUtil
 import io.netty.util.internal.StringUtil
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.entity.Attribute
 import org.chorus_oss.chorus.entity.data.Skin
@@ -1461,7 +1460,7 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
                 val recipeId = readUnsignedVarInt()
                 val numberOfRequestedCrafts = readUnsignedByte().toInt()
                 val timesCrafted = readUnsignedByte().toInt()
-                val ingredients: MutableList<ItemDescriptor> = ObjectArrayList()
+                val ingredients: MutableList<ItemDescriptor> = mutableListOf()
                 readArray(
                     ingredients,
                     { obj: HandleByteBuf ->

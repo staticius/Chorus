@@ -1,8 +1,6 @@
 package org.chorus_oss.chorus.network.protocol
 
 import com.google.common.base.Preconditions
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import org.chorus_oss.chorus.command.data.*
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.CommandEnumConstraintData
@@ -12,15 +10,15 @@ import java.util.function.ObjIntConsumer
 
 class AvailableCommandsPacket : DataPacket() {
     var commands: Map<String, CommandDataVersions>? = null
-    val constraints: List<CommandEnumConstraintData> = ObjectArrayList()
+    val constraints: List<CommandEnumConstraintData> = listOf()
 
     override fun encode(byteBuf: HandleByteBuf) {
-        val enumValuesSet: MutableSet<String> = ObjectOpenHashSet()
+        val enumValuesSet: MutableSet<String> = mutableSetOf()
         val subCommandValues = SequencedHashSet<String>()
-        val postfixSet: MutableSet<String> = ObjectOpenHashSet()
+        val postfixSet: MutableSet<String> = mutableSetOf()
         val subCommandData = SequencedHashSet<ChainedSubCommandData>()
-        val enumsSet: MutableSet<CommandEnum> = ObjectOpenHashSet()
-        val softEnumsSet: MutableSet<CommandEnum> = ObjectOpenHashSet()
+        val enumsSet: MutableSet<CommandEnum> = mutableSetOf()
+        val softEnumsSet: MutableSet<CommandEnum> = mutableSetOf()
 
         // Get all enum values
         for ((_, value1) in commands!!) {
@@ -79,10 +77,10 @@ class AvailableCommandsPacket : DataPacket() {
             }
             enumValuesSet.addAll(Arrays.asList(String.valueOf(enumData.getValues())));
         }*/
-        val enumValues: List<String> = ObjectArrayList(enumValuesSet)
-        val postFixes: List<String> = ObjectArrayList(postfixSet)
-        val enums: List<CommandEnum> = ObjectArrayList(enumsSet)
-        val softEnums: List<CommandEnum> = ObjectArrayList(softEnumsSet)
+        val enumValues: List<String> = enumValuesSet.toList()
+        val postFixes: List<String> = postfixSet.toList()
+        val enums: List<CommandEnum> = enumsSet.toList()
+        val softEnums: List<CommandEnum> = softEnumsSet.toList()
 
         byteBuf.writeUnsignedVarInt(enumValues.size)
         for (enumValue in enumValues) {

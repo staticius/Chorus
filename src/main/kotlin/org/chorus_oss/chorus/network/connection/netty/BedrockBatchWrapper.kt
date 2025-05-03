@@ -5,8 +5,6 @@ import io.netty.util.AbstractReferenceCounted
 import io.netty.util.ReferenceCountUtil
 import io.netty.util.ReferenceCounted
 import io.netty.util.internal.ObjectPool
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet
 import org.chorus_oss.chorus.network.connection.util.BatchFlag
 import org.chorus_oss.chorus.network.protocol.DataPacket
 import org.chorus_oss.chorus.network.protocol.types.CompressionAlgorithm
@@ -41,10 +39,10 @@ class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Han
 
     var algorithm: CompressionAlgorithm? = null
 
-    private val packets: MutableList<BedrockPacketWrapper?> = ObjectArrayList()
+    private val packets: MutableList<BedrockPacketWrapper?> = mutableListOf()
 
     var modified = false
-    private val flags: MutableSet<BatchFlag> = ObjectOpenHashSet()
+    private val flags: MutableSet<BatchFlag> = mutableSetOf()
 
     override fun deallocate() {
         packets.forEach(Consumer { msg: BedrockPacketWrapper? -> ReferenceCountUtil.safeRelease(msg) })

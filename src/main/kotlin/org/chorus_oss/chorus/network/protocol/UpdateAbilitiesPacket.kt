@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.AbilityLayer
 import org.chorus_oss.chorus.network.protocol.types.CommandPermission
@@ -20,7 +19,7 @@ class UpdateAbilitiesPacket : DataPacket() {
     var commandPermission: CommandPermission? = null
 
     @JvmField
-    val abilityLayers: MutableList<AbilityLayer> = ObjectArrayList()
+    val abilityLayers: MutableList<AbilityLayer> = mutableListOf()
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeLongLE(this.entityId)

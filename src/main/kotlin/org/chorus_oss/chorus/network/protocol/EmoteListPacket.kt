@@ -1,13 +1,12 @@
 package org.chorus_oss.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import java.util.*
 
 
 class EmoteListPacket : DataPacket() {
     var runtimeId: Long = 0
-    val pieceIds: MutableList<UUID> = ObjectArrayList()
+    val pieceIds: MutableList<UUID> = mutableListOf()
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorRuntimeID(runtimeId)

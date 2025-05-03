@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.level.format.palette
 
 import io.netty.buffer.ByteBuf
-import it.unimi.dsi.fastutil.Pair
 import org.chorus_oss.chorus.nbt.stream.NBTInputStream
 import org.chorus_oss.chorus.nbt.tag.*
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
@@ -9,7 +8,7 @@ import org.chorus_oss.chorus.utils.*
 import java.io.IOException
 
 object PaletteUtils {
-    fun fastReadBlockHash(input: NBTInputStream, byteBuf: ByteBuf): Pair<Int, SemVersion>? {
+    fun fastReadBlockHash(input: NBTInputStream, byteBuf: ByteBuf): Pair<Int?, SemVersion?>? {
         try {
             byteBuf.markReaderIndex()
             val typeId = input.readUnsignedByte()
@@ -26,7 +25,7 @@ object PaletteUtils {
         byteBuf: ByteBuf,
         type: Int,
         maxDepth: Int
-    ): Pair<Int, SemVersion>? {
+    ): Pair<Int?, SemVersion?>? {
         require(maxDepth >= 0) { "NBT compound is too deeply nested" }
         when (type.toByte()) {
             Tag.TAG_END -> {}
@@ -45,7 +44,7 @@ object PaletteUtils {
                         val version = input.readInt()
                         byteBuf.resetReaderIndex()
                         if (version != ProtocolInfo.BLOCK_STATE_VERSION_NO_REVISION) {
-                            return Pair.of(null, getSemVersion(version))
+                            return Pair(null, getSemVersion(version))
                         }
                         val result = ByteArray(end - byteBuf.readerIndex())
                         input.readFully(result)
@@ -57,7 +56,7 @@ object PaletteUtils {
                         var i = HashUtils.fnv1a_32(result)
                         if (i == 147887818) i = -2 //minecraft:unknown
 
-                        return Pair.of(i, null)
+                        return Pair(i, null)
                     }
                     deserialize(input, byteBuf, nbtType, maxDepth - 1)
                 }

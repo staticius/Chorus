@@ -2,9 +2,6 @@ package org.chorus_oss.chorus.positiontracking
 
 import com.google.common.base.Preconditions
 import com.google.common.collect.MapMaker
-import it.unimi.dsi.fastutil.ints.IntArrayList
-import it.unimi.dsi.fastutil.ints.IntList
-import it.unimi.dsi.fastutil.ints.IntOpenHashSet
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.inventory.Inventory
@@ -18,7 +15,6 @@ import java.lang.ref.WeakReference
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.function.Consumer
-import java.util.function.IntConsumer
 
 /**
  * A position tracking db service. It holds file resources that needs to be closed when not needed anymore.
@@ -128,8 +124,8 @@ class PositionTrackingService(folder: File) : Closeable {
 
         val position = storage.getPosition(trackingHandler) ?: return null
 
-        tracking.computeIfAbsent(player) { p: Player? -> HashMap() }
-            .computeIfAbsent(storage) { s: PositionTrackingStorage? -> IntOpenHashSet(3) }.add(trackingHandler)
+        tracking.computeIfAbsent(player) { mutableMapOf() }
+            .computeIfAbsent(storage) { mutableSetOf() }.add(trackingHandler)
         return position
     }
 
@@ -192,13 +188,13 @@ class PositionTrackingService(folder: File) : Closeable {
     @Synchronized
     fun forceRecheckAllPlayers() {
         tracking.keys.removeIf { p: Player -> !p.isOnline }
-        val toRemove: MutableMap<Player, IntList> = HashMap(2)
+        val toRemove: MutableMap<Player, MutableList<Int>> = mutableMapOf()
         for ((player, value) in tracking) {
             for ((_, value1) in value) {
                 value1.forEach { trackingHandler: Int ->
                     try {
                         if (!hasTrackingDevice(player, trackingHandler)) {
-                            toRemove.computeIfAbsent(player) { p: Player? -> IntArrayList(2) }.add(trackingHandler)
+                            toRemove.computeIfAbsent(player) { mutableListOf() }.add(trackingHandler)
                         }
                     } catch (e: IOException) {
                         PositionTrackingService.log.error(
@@ -213,12 +209,12 @@ class PositionTrackingService(folder: File) : Closeable {
         }
 
         toRemove.forEach { (player, list) ->
-            list.forEach(IntConsumer { handler: Int ->
+            list.forEach { handler: Int ->
                 stopTracking(
                     player,
                     handler
                 )
-            })
+            }
         }
 
         Server.instance.onlinePlayers.values.forEach(Consumer { player: Player -> this.detectNeededUpdates(player) })
@@ -280,7 +276,7 @@ class PositionTrackingService(folder: File) : Closeable {
     fun forceRecheck(player: Player) {
         val tracking = tracking[player]
         if (tracking != null) {
-            val toRemove: IntList = IntArrayList(2)
+            val toRemove: MutableList<Int> = mutableListOf()
             for ((_, value) in tracking) {
                 value.forEach { trackingHandler: Int ->
                     try {
@@ -297,7 +293,7 @@ class PositionTrackingService(folder: File) : Closeable {
                     }
                 }
             }
-            toRemove.forEach(IntConsumer { handler: Int -> stopTracking(player, handler) })
+            toRemove.forEach { handler: Int -> stopTracking(player, handler) }
         }
 
         detectNeededUpdates(player)
@@ -411,7 +407,7 @@ class PositionTrackingService(folder: File) : Closeable {
     fun findTrackingHandler(position: NamedPosition): OptionalInt {
         val handlers = findTrackingHandlers(position, true, 1)
         if (!handlers.isEmpty()) {
-            return OptionalInt.of(handlers.getInt(0))
+            return OptionalInt.of(handlers[0])
         }
         return OptionalInt.empty()
     }
@@ -517,21 +513,21 @@ class PositionTrackingService(folder: File) : Closeable {
 
     @Synchronized
     @Throws(IOException::class)
-    fun findTrackingHandlers(pos: NamedPosition): IntList {
+    fun findTrackingHandlers(pos: NamedPosition): MutableList<Int> {
         return findTrackingHandlers(pos, true)
     }
 
     @Synchronized
     @Throws(IOException::class)
-    fun findTrackingHandlers(pos: NamedPosition, onlyEnabled: Boolean): IntList {
+    fun findTrackingHandlers(pos: NamedPosition, onlyEnabled: Boolean): MutableList<Int> {
         return findTrackingHandlers(pos, onlyEnabled, Int.MAX_VALUE)
     }
 
     @Synchronized
     @Throws(IOException::class)
-    fun findTrackingHandlers(pos: NamedPosition, onlyEnabled: Boolean, limit: Int): IntList {
+    fun findTrackingHandlers(pos: NamedPosition, onlyEnabled: Boolean, limit: Int): MutableList<Int> {
         checkClosed()
-        val list: IntList = IntArrayList()
+        val list: MutableList<Int> = mutableListOf()
         for (startIndex in storage.descendingKeySet()) {
             list.addAll(loadStorage(startIndex).findTrackingHandlers(pos, onlyEnabled, limit - list.size))
             if (list.size >= limit) {

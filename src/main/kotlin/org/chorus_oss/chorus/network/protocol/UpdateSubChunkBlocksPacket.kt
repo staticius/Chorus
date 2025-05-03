@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.network.protocol
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.BlockChangeEntry
 
@@ -10,8 +9,8 @@ class UpdateSubChunkBlocksPacket : DataPacket() {
     var chunkY: Int = 0
     var chunkZ: Int = 0
 
-    val standardBlocks: MutableList<BlockChangeEntry> = ObjectArrayList()
-    val extraBlocks: MutableList<BlockChangeEntry> = ObjectArrayList()
+    val standardBlocks: MutableList<BlockChangeEntry> = mutableListOf()
+    val extraBlocks: MutableList<BlockChangeEntry> = mutableListOf()
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(chunkX)

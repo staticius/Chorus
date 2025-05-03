@@ -5,9 +5,6 @@ import io.netty.handler.codec.*
 import io.netty.util.ReferenceCountUtil
 import io.netty.util.concurrent.ScheduledFuture
 import io.netty.util.internal.PlatformDependent
-import it.unimi.dsi.fastutil.ints.Int2ObjectFunction
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap
 import org.chorus_oss.chorus.network.connection.netty.BedrockPacketWrapper
 import org.chorus_oss.chorus.network.connection.netty.codec.FrameIdCodec
 import org.chorus_oss.chorus.network.connection.netty.codec.batch.BedrockBatchDecoder
@@ -38,7 +35,7 @@ import javax.crypto.SecretKey
  */
 class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessionFactory) :
     ChannelInboundHandlerAdapter(), Loggable {
-    private val sessions: Int2ObjectMap<BedrockSession> = Int2ObjectOpenHashMap()
+    private val sessions: MutableMap<Int, BedrockSession> = mutableMapOf()
     private val packetQueue: Queue<BedrockPacketWrapper> = PlatformDependent.newMpscQueue()
     private var tickFuture: ScheduledFuture<*>? = null
     private var closed: AtomicBoolean = AtomicBoolean()
@@ -46,8 +43,8 @@ class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessi
     private fun onBedrockPacket(wrapper: BedrockPacketWrapper) {
         val targetId = wrapper.targetSubClientId
         val session = sessions.computeIfAbsent(
-            targetId,
-            Int2ObjectFunction { sessionId: Int -> this.onSessionCreated(sessionId) })
+            targetId
+        ) { sessionId-> this.onSessionCreated(sessionId)!! }
         session.onPacket(wrapper)
     }
 
@@ -234,7 +231,7 @@ class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessi
 
     @Throws(Exception::class)
     override fun channelActive(ctx: ChannelHandlerContext) {
-        sessions.put(0, sessionFactory.createSession(this, 0))
+        sessions[0] = sessionFactory.createSession(this, 0)!!
         this.tickFuture =
             channel.eventLoop().scheduleAtFixedRate({ this.onTick() }, 10, 10, TimeUnit.MILLISECONDS)
     }

@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.registry
 
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap
 import org.chorus_oss.chorus.entity.effect.*
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
@@ -72,10 +71,6 @@ class PotionRegistry : IRegistry<String, PotionType?, PotionType> {
     val potionId2TypeMap: Map<Int, PotionType>
         get() = Collections.unmodifiableMap(ID_2_POTION)
 
-    fun trim() {
-        REGISTRY.trim()
-    }
-
     override fun reload() {
         isLoad.set(false)
         REGISTRY.clear()
@@ -101,8 +96,8 @@ class PotionRegistry : IRegistry<String, PotionType?, PotionType> {
     }
 
     companion object {
-        private val REGISTRY = Object2ObjectOpenHashMap<String, PotionType?>()
-        private val ID_2_POTION = Object2ObjectOpenHashMap<Int, PotionType>()
+        private val REGISTRY = mutableMapOf<String, PotionType?>()
+        private val ID_2_POTION = mutableMapOf<Int, PotionType>()
         private val isLoad = AtomicBoolean(false)
     }
 }

@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.level.format.palette
 
 import io.netty.buffer.ByteBuf
-import it.unimi.dsi.fastutil.ints.IntSet
 import org.chorus_oss.chorus.block.BlockAir
 import org.chorus_oss.chorus.block.BlockState
 import org.chorus_oss.chorus.level.AntiXraySystem
@@ -44,7 +43,7 @@ class BlockPalette : Palette<BlockState> {
     ) {
         val realOreToFakeMap = level.antiXraySystem!!.rawRealOreToReplacedRuntimeIdMap
         val fakeBlockMap = level.antiXraySystem!!.rawFakeOreToPutRuntimeIdMap
-        val transparentBlockSet: IntSet = AntiXraySystem.rawTransparentBlockRuntimeIds
+        val transparentBlockSet: MutableSet<Int> = AntiXraySystem.rawTransparentBlockRuntimeIds
         val xAndDenominator = level.antiXraySystem!!.fakeOreDenominator - 1
         val chorusRandom = ChorusRandom(level.seed)
 
@@ -73,7 +72,7 @@ class BlockPalette : Palette<BlockState> {
                                 z
                             )
                         ) {
-                            rid = tmp2.getInt(chorusRandom.nextInt(0, tmp2.size - 1))
+                            rid = tmp2[chorusRandom.nextInt(0, tmp2.size - 1)]
                         }
                     }
                 }
@@ -93,7 +92,7 @@ class BlockPalette : Palette<BlockState> {
         this.needReObfuscate = true
     }
 
-    private fun canBeObfuscated(transparentBlockSet: IntSet, x: Int, y: Int, z: Int): Boolean {
+    private fun canBeObfuscated(transparentBlockSet: MutableSet<Int>, x: Int, y: Int, z: Int): Boolean {
         return !transparentBlockSet.contains(
             get(
                 IChunk.index(

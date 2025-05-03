@@ -2,8 +2,6 @@ package org.chorus_oss.chorus.item
 
 import com.google.gson.annotations.SerializedName
 import io.netty.util.internal.EmptyArrays
-import it.unimi.dsi.fastutil.ints.Int2IntArrayMap
-import it.unimi.dsi.fastutil.ints.Int2IntMap
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.block.*
 import org.chorus_oss.chorus.entity.Entity
@@ -22,6 +20,7 @@ import java.io.IOException
 import java.io.UncheckedIOException
 import java.nio.ByteOrder
 import java.util.*
+import kotlin.collections.HashMap
 
 
 abstract class Item : Cloneable, ItemID, Loggable {
@@ -1225,17 +1224,16 @@ abstract class Item : Cloneable, ItemID, Loggable {
         val otherEnchantmentTags = otherTags.getList("ench", CompoundTag::class.java)
 
         val size = thisEnchantmentTags.size()
-        val enchantments: Int2IntMap = Int2IntArrayMap(size)
-        enchantments.defaultReturnValue(Int.MIN_VALUE)
+        val enchantments: MutableMap<Int, Int> = mutableMapOf()
 
         for (i in 0..<size) {
             val tag = thisEnchantmentTags[i]
-            enchantments.put(tag.getShort("id").toInt(), tag.getShort("lvl").toInt())
+            enchantments[tag.getShort("id").toInt()] = tag.getShort("lvl").toInt()
         }
 
         for (i in 0..<size) {
             val tag = otherEnchantmentTags[i]
-            if (enchantments[tag.getShort("id").toInt()] != tag.getShort("lvl").toInt()) {
+            if ((enchantments[tag.getShort("id").toInt()] ?: Int.MIN_VALUE) != tag.getShort("lvl").toInt()) {
                 return false
             }
         }
