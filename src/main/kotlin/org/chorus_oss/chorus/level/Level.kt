@@ -3477,7 +3477,7 @@ class Level(
                         ncp.radius = player.viewDistance shl 4
                         player.dataPacket(ncp)
 
-                        val pk: LevelChunkPacket = LevelChunkPacket()
+                        val pk = LevelChunkPacket()
                         pk.chunkX = x
                         pk.chunkZ = z
                         pk.dimension = dimensionData.dimensionId
@@ -3985,7 +3985,7 @@ class Level(
      */
     fun doLevelGarbageCollection(force: Boolean) {
         //gcBlockInventoryMetaData
-        for (entry in HashMap<String, Map<Plugin, MetadataValue>>(
+        for (entry in HashMap(
             getBlockMetadata()!!.blockMetadataMap
         ).entries) {
             val key = entry.key

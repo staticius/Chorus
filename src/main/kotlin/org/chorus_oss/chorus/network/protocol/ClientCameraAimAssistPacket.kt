@@ -21,4 +21,15 @@ data class ClientCameraAimAssistPacket(
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
+
+    companion object : PacketDecoder<ClientCameraAimAssistPacket> {
+        override fun decode(byteBuf: HandleByteBuf): ClientCameraAimAssistPacket {
+            return ClientCameraAimAssistPacket(
+                cameraPresetID = byteBuf.readString(),
+                action = ClientCameraAimAssistPacketAction.entries[byteBuf.readByte().toInt()],
+                allowAimAssist = byteBuf.readBoolean(),
+            )
+        }
+
+    }
 }
