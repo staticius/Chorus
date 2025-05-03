@@ -3482,8 +3482,8 @@ class Level(
                         pk.chunkX = x
                         pk.chunkZ = z
                         pk.dimension = dimensionData.dimensionId
-                        pk.subChunkCount = pair.second
                         pk.data = pair.first
+                        pk.subChunkCount = pair.second
                         player.sendChunk(x, z, pk)
                     }
                 }
@@ -3513,8 +3513,8 @@ class Level(
                 pk.chunkX = chunkX
                 pk.chunkZ = chunkZ
                 pk.dimension = dimensionData.dimensionId
-                pk.subChunkCount = pair.second
                 pk.data = pair.first
+                pk.subChunkCount = pair.second
                 player.sendChunk(chunkX, chunkZ, pk)
             }
         }

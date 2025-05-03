@@ -63,7 +63,7 @@ class PlayerChunkManager(private val player: Player) {
         if (!player.isConnected()) return
         val currentLoaderChunkPosHashed: Long
         val floor = player.position.asBlockVector3()
-        if ((Level.Companion.chunkHash(floor.x shr 4, floor.z shr 4)
+        if ((Level.chunkHash(floor.x shr 4, floor.z shr 4)
                 .also { currentLoaderChunkPosHashed = it }) != lastLoaderChunkPosHashed
         ) {
             lastLoaderChunkPosHashed = currentLoaderChunkPosHashed
