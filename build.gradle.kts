@@ -13,8 +13,8 @@ plugins {
     kotlin("jvm") version "2.1.10"
 }
 
-group = "org.chorus"
-version = "0.0.1-SNAPSHOT"
+group = "org.chorus_oss.chorus"
+version = "1.0-SNAPSHOT"
 description = "Chorus"
 
 repositories {
