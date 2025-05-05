@@ -30,7 +30,7 @@ open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) 
         get() = this.clone()
 
     override fun clone(): Locator {
-        return super.clone() as Locator
+        return super<Cloneable>.clone() as Locator
     }
 
     fun setLevel(level: Level): Locator {

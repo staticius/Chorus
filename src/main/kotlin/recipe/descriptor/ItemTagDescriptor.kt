@@ -17,7 +17,7 @@ class ItemTagDescriptor(@JvmField val itemTag: String, override val count: Int) 
 
     @Throws(CloneNotSupportedException::class)
     override fun clone(): ItemDescriptor {
-        return super.clone() as ItemDescriptor
+        return super<Cloneable>.clone() as ItemDescriptor
     }
 
     override fun equals(o: Any?): Boolean {

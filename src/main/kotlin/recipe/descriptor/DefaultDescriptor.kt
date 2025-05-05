@@ -12,7 +12,7 @@ class DefaultDescriptor(@JvmField val item: Item) : ItemDescriptor, Cloneable {
 
     @Throws(CloneNotSupportedException::class)
     override fun clone(): ItemDescriptor {
-        return super.clone() as ItemDescriptor
+        return super<Cloneable>.clone() as ItemDescriptor
     }
 
     override val count: Int

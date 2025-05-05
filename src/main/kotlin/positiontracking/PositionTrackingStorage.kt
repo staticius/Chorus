@@ -177,7 +177,7 @@ class PositionTrackingStorage @JvmOverloads constructor(startIndex: Int, persist
     fun getPosition(trackingHandler: Int): PositionTracking? {
         validateHandler(trackingHandler)
         try {
-            return cache[trackingHandler, { loadPosition(trackingHandler, true) }].clone()
+            return cache[trackingHandler, { loadPosition(trackingHandler, true) }]?.clone()
         } catch (e: ExecutionException) {
             throw handleExecutionException(e)
         }
