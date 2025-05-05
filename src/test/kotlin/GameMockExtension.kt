@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus
 
-import eu.okaeri.configs.ConfigManager
-import eu.okaeri.configs.OkaeriConfig
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.reflect.FieldUtils
 import org.chorus_oss.chorus.block.BlockComposter
@@ -11,7 +9,6 @@ import org.chorus_oss.chorus.dispenser.DispenseBehaviorRegister
 import org.chorus_oss.chorus.entity.Attribute
 import org.chorus_oss.chorus.entity.data.Skin
 import org.chorus_oss.chorus.entity.data.profession.Profession
-import org.chorus_oss.chorus.event.server.QueryRegenerateEvent
 import org.chorus_oss.chorus.inventory.HumanEnderChestInventory
 import org.chorus_oss.chorus.inventory.HumanInventory
 import org.chorus_oss.chorus.inventory.HumanOffHandInventory
@@ -183,8 +180,6 @@ class GameMockExtension : MockitoExtension() {
                 Mockito.`when`(server.port).thenReturn(19132)
                 Mockito.`when`(server.ip).thenReturn("127.0.0.1")
 
-                val queryRegenerateEvent = QueryRegenerateEvent(server)
-                Mockito.`when`(server.queryInformation).thenReturn(queryRegenerateEvent)
                 Mockito.`when`(server.network).thenCallRealMethod()
                 Mockito.`when`(server.getAutoSave()).thenReturn(false)
                 Mockito.`when`(server.tick).thenReturn(1)

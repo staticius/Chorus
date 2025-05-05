@@ -44,10 +44,6 @@ class ServerSettings {
         @SerialName("shutdown-message")
         var shutdownMessage: String = "Server closed"
 
-        @TomlComments("Show plugin information in query data")
-        @SerialName("query-plugins")
-        var queryPlugins: Boolean = true
-
         @TomlComments("Generate warnings for deprecated events in plugins")
         @SerialName("deprecated-verbose")
         var deprecatedVerbose: Boolean = true
@@ -55,12 +51,9 @@ class ServerSettings {
         @TomlComments("Number of threads used by the server scheduler. \"auto\" means automatic allocation")
         var asyncWorkers: String = "auto"
 
-        @TomlComments("Spawn protection")
+        @TomlComments("Safe player spawn")
         @SerialName("safe-spawn")
         var safeSpawn: Boolean = true
-
-        @SerialName("install-spark")
-        var installSpark: Boolean = true
 
         @SerialName("waterdog-pe")
         var waterdogpe: Boolean = false

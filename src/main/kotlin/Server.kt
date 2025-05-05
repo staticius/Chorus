@@ -1,12 +1,8 @@
 package org.chorus_oss.chorus
 
 import com.akuleshov7.ktoml.Toml
-import com.akuleshov7.ktoml.file.TomlFileReader
 import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableMap
-import eu.okaeri.configs.ConfigManager
-import eu.okaeri.configs.OkaeriConfig
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import org.apache.commons.io.FileUtils
 import org.chorus_oss.chorus.block.BlockComposter
@@ -32,7 +28,6 @@ import org.chorus_oss.chorus.event.HandlerList.Companion.unregisterAll
 import org.chorus_oss.chorus.event.level.LevelInitEvent
 import org.chorus_oss.chorus.event.level.LevelLoadEvent
 import org.chorus_oss.chorus.event.player.PlayerLoginEvent
-import org.chorus_oss.chorus.event.server.QueryRegenerateEvent
 import org.chorus_oss.chorus.event.server.ServerStartedEvent
 import org.chorus_oss.chorus.event.server.ServerStopEvent
 import org.chorus_oss.chorus.item.enchantment.Enchantment
@@ -86,7 +81,6 @@ import org.chorus_oss.chorus.tags.ItemTags
 import org.chorus_oss.chorus.utils.*
 import org.chorus_oss.chorus.utils.JSONUtils.from
 import org.chorus_oss.chorus.utils.JSONUtils.toPretty
-import org.chorus_oss.chorus.utils.SparkInstaller.initSpark
 import org.chorus_oss.chorus.utils.StartArgUtils.isShaded
 import org.chorus_oss.chorus.utils.StartArgUtils.isValidStart
 import org.chorus_oss.chorus.utils.Utils.allThreadDumps
@@ -255,9 +249,6 @@ class Server internal constructor(
 
     private val players: MutableMap<InetSocketAddress?, Player> = ConcurrentHashMap()
     private val playerList: MutableMap<UUID, Player> = ConcurrentHashMap()
-
-    lateinit var queryInformation: QueryRegenerateEvent
-        private set
 
     private var positionTrackingService: PositionTrackingService? = null
 
@@ -701,14 +692,6 @@ class Server internal constructor(
             this.titleTick()
             this.maxTick = 20f
             this.maxUse = 0f
-
-            if ((this.tick and 511) == 0) {
-                try {
-                    pluginManager.callEvent(QueryRegenerateEvent(this, 5).also { this.queryInformation = it })
-                } catch (e: Exception) {
-                    log.error("", e)
-                }
-            }
         }
 
         if (this.autoSave && ++this.autoSaveTicker >= this.autoSaveTicks) {
@@ -1920,7 +1903,6 @@ class Server internal constructor(
 
         loadLevels()
 
-        this.queryInformation = QueryRegenerateEvent(this, 5)
         this.network = Network(this)
         tickingAreaManager.loadAllTickingArea()
 
@@ -1937,14 +1919,9 @@ class Server internal constructor(
 
         this.enablePlugins(PluginLoadOrder.POSTWORLD)
 
-
         EntityProperty.init()
         buildPacketData()
         buildPlayerProperty()
-
-        if (settings.baseSettings.installSpark) {
-            initSpark(this)
-        }
 
         if (!System.getProperty("disableWatchdog", "false").toBoolean()) {
             this.watchdog = Watchdog(this, 60000) //60s

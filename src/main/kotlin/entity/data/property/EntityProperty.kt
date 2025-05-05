@@ -93,7 +93,7 @@ abstract class EntityProperty(private val identifier: String) {
 
         @JvmStatic
         fun buildPlayerProperty() {
-            val properties: List<EntityProperty>? = entityPropertyMap.get(PLAYER_KEY)
+            val properties: List<EntityProperty>? = entityPropertyMap[PLAYER_KEY]
             if (properties == null) {
                 playerPropertyCache = CompoundTag()
                 return

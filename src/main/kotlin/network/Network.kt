@@ -22,8 +22,6 @@ import org.chorus_oss.chorus.network.connection.BedrockPong
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.connection.netty.initializer.BedrockServerInitializer
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
-import org.chorus_oss.chorus.network.query.codec.QueryPacketCodec
-import org.chorus_oss.chorus.network.query.handler.QueryPacketHandler
 import org.chorus_oss.chorus.plugin.InternalPlugin
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.chorus.utils.Utils
@@ -107,15 +105,6 @@ class Network @JvmOverloads constructor(
             .option(RakChannelOption.RAK_SEND_COOKIE, true)
             .group(eventloopgroup)
             .childHandler(object : BedrockServerInitializer() {
-                override fun postInitChannel(channel: Channel?) {
-                    if (server.properties[ServerPropertiesKeys.ENABLE_QUERY, true]) {
-                        channel!!.pipeline().addLast("queryPacketCodec", QueryPacketCodec())
-                            .addLast(
-                                "queryPacketHandler",
-                                QueryPacketHandler { server.queryInformation })
-                    }
-                }
-
                 override fun createSession0(peer: BedrockPeer, subClientId: Int): BedrockSession {
                     val session = BedrockSession(peer, subClientId)
                     val address = session.socketAddress as InetSocketAddress?

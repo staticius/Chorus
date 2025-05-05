@@ -45,7 +45,6 @@ class ServerProperties(dataPath: String) {
             defaults[ServerPropertiesKeys.ALLOW_NETHER.toString()] = true
             defaults[ServerPropertiesKeys.ALLOW_THE_END.toString()] = true
             defaults[ServerPropertiesKeys.USE_TERRA.toString()] = false
-            defaults[ServerPropertiesKeys.ENABLE_QUERY.toString()] = false
             defaults[ServerPropertiesKeys.AUTO_SAVE.toString()] = true
             defaults[ServerPropertiesKeys.FORCE_RESOURCES.toString()] = false
             defaults[ServerPropertiesKeys.FORCE_RESOURCES_ALLOW_CLIENT_PACKS.toString()] = false
