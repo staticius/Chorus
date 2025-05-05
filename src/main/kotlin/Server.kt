@@ -3,9 +3,7 @@ package org.chorus_oss.chorus
 import com.akuleshov7.ktoml.Toml
 import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableMap
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.*
 import kotlinx.serialization.encodeToString
 import org.apache.commons.io.FileUtils
 import org.chorus_oss.chorus.block.BlockComposter
@@ -107,11 +105,7 @@ import java.nio.file.Path
 import java.security.*
 import java.util.*
 import java.util.concurrent.ConcurrentHashMap
-import java.util.concurrent.ForkJoinPool
-import java.util.concurrent.ForkJoinPool.ForkJoinWorkerThreadFactory
-import java.util.concurrent.ForkJoinWorkerThread
 import java.util.concurrent.atomic.AtomicBoolean
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
@@ -175,7 +169,7 @@ class Server internal constructor(
     private var sendUsageTicker = 0
     private var console: ChorusConsole
 
-    private var consoleThread: ConsoleThread
+    private var consoleJob: Job
 
     /**
      * FJP thread pool responsible for terrain generation, data compression and other computing tasks
@@ -493,7 +487,7 @@ class Server internal constructor(
             }
 
             log.debug("Closing console")
-            consoleThread.interrupt()
+            consoleJob.cancel()
 
             log.debug("Stopping network interfaces")
             network.shutdown()
@@ -1697,8 +1691,7 @@ class Server internal constructor(
         }
 
         this.console = ChorusConsole(this)
-        this.consoleThread = ConsoleThread()
-        consoleThread.start()
+        this.consoleJob = CoroutineScope(Dispatchers.Default).launch { console.start() }
 
         val config = File(this.dataPath + "chorus.toml")
         var chooseLanguage: String? = null
@@ -2443,35 +2436,6 @@ class Server internal constructor(
         return thread
     }
 
-    //todo NukkitConsole 会阻塞关不掉
-    private inner class ConsoleThread : Thread("Console Thread"), InterruptibleThread {
-        override fun run() {
-            console.start()
-        }
-    }
-
-    /**
-     * Creates a ForkJoinWorkerThread operating in the given pool.
-     *
-     * @param pool the pool this thread works in
-     * @throws NullPointerException if pool is null
-     */
-    private class ComputeThread(pool: ForkJoinPool, threadCount: AtomicInteger) : ForkJoinWorkerThread(pool) {
-        init {
-            this.name = "ComputeThreadPool - Thread #" + threadCount.getAndIncrement()
-        }
-    }
-
-    private class ComputeThreadPoolThreadFactory : ForkJoinWorkerThreadFactory {
-        companion object {
-            private val threadCount = AtomicInteger(0)
-        }
-
-        override fun newThread(pool: ForkJoinPool): ForkJoinWorkerThread {
-            return ComputeThread(pool, threadCount)
-        }
-    }
-
     companion object : Loggable {
         const val BROADCAST_CHANNEL_ADMINISTRATIVE: String = "nukkit.broadcast.admin"
         const val BROADCAST_CHANNEL_USERS: String = "nukkit.broadcast.user"
@@ -2509,7 +2473,7 @@ class Server internal constructor(
 
         const val LEVEL_DIM_PATTERN: String = "^.*Dim[0-9]$"
 
-        /**
+        /**`
          * 默认`direct=false`
          *
          * @see .getGamemodeString
