@@ -1,6 +1,7 @@
 package org.chorus_oss.chorus.config
 
 import com.akuleshov7.ktoml.Toml
+import com.akuleshov7.ktoml.TomlInputConfig
 import com.akuleshov7.ktoml.annotations.TomlComments
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -10,178 +11,216 @@ import java.io.File
 
 @Serializable
 class ServerSettings {
-    @TomlComments("chorus.server.settings.baseSettings")
     @SerialName("settings")
     val baseSettings = BaseSettings()
 
-    @TomlComments("chorus.server.settings.networkSettings")
     @SerialName("network-settings")
     val networkSettings = NetworkSettings()
 
-    @TomlComments("chorus.server.settings.debugSettings")
     @SerialName("debug-settings")
     val debugSettings = DebugSettings()
 
-    @TomlComments("chorus.server.settings.levelSettings")
     @SerialName("level-settings")
     val levelSettings = LevelSettings()
 
-    @TomlComments("chorus.server.settings.chunkSettings")
     @SerialName("chunk-settings")
     val chunkSettings = ChunkSettings()
 
-    @TomlComments("chorus.server.settings.playerSettings")
     @SerialName("player-settings")
     val playerSettings = PlayerSettings()
 
-    @TomlComments("chorus.server.settings.gameplaySettings")
     @SerialName("gameplay-settings")
     val gameplaySettings = GameplaySettings()
 
     @Serializable
     class BaseSettings {
-        @TomlComments("chorus.server.settings.baseSettings.language")
         var language: String = "eng"
 
-        @TomlComments("chorus.server.settings.baseSettings.forceServerTranslate")
+        @TomlComments("Use server-side translation for text")
+        @SerialName("force-server-translate")
         var forceServerTranslate: Boolean = false
 
-        @TomlComments("chorus.server.settings.baseSettings.shutdownMessage")
+        @TomlComments("Message sent to clients on shutdown")
+        @SerialName("shutdown-message")
         var shutdownMessage: String = "Server closed"
 
-        @TomlComments("chorus.server.settings.baseSettings.queryPlugins")
+        @TomlComments("Show plugin information in query data")
+        @SerialName("query-plugins")
         var queryPlugins: Boolean = true
 
-        @TomlComments("chorus.server.settings.baseSettings.deprecatedVerbose")
+        @TomlComments("Generate warnings for deprecated events in plugins")
+        @SerialName("deprecated-verbose")
         var deprecatedVerbose: Boolean = true
 
-        @TomlComments("chorus.server.settings.baseSettings.asyncWorkers")
+        @TomlComments("Number of threads used by the server scheduler. \"auto\" means automatic allocation")
         var asyncWorkers: String = "auto"
 
-        @TomlComments("chorus.server.settings.baseSettings.safeSpawn")
+        @TomlComments("Spawn protection")
+        @SerialName("safe-spawn")
         var safeSpawn: Boolean = true
 
-        @TomlComments("chorus.server.settings.baseSettings.installSpark")
+        @SerialName("install-spark")
         var installSpark: Boolean = true
 
-        @TomlComments("chorus.server.settings.baseSettings.waterdogpe")
+        @SerialName("waterdog-pe")
         var waterdogpe: Boolean = false
 
-        @TomlComments("chorus.server.settings.baseSettings.autosave")
+        @TomlComments("Autosave interval in ticks (1 = 20ms)")
+        @SerialName("autosave")
         var autosave: Int = 6000
 
-        @TomlComments("chorus.server.settings.baseSettings.saveUnknownBlock")
+        @TomlComments("If unknown blocks should be saved to the leveldb")
+        @SerialName("save-unknown-block")
         var saveUnknownBlock: Boolean = true
     }
 
     @Serializable
     class NetworkSettings {
-        @TomlComments("chorus.server.settings.networkSettings.compressionLevel")
+        @SerialName("compression-level")
         var compressionLevel: Int = 7
 
-        @TomlComments("chorus.server.settings.networkSettings.zlibProvider")
+        @TomlComments(
+            "0 - Java's default algorithm",
+            "1 - Single-threaded low mem usage algorithm",
+            "2 - Multi-threaded caching algorithm",
+            "3 - Hardware-accelerated algorithm",
+        )
+        @SerialName("zlib-provider")
         var zlibProvider: Int = 3
 
-        @TomlComments("chorus.server.settings.networkSettings.snappy")
+        @TomlComments("Use Snappy compression (Not recommended)")
         var snappy: Boolean = false
 
-        @TomlComments("chorus.server.settings.networkSettings.compressionBufferSize")
+        @TomlComments("Maximum compression buffer size")
+        @SerialName("compression-buffer-size")
         var compressionBufferSize: Int = 1048576
 
-        @TomlComments("chorus.server.settings.networkSettings.maxDecompressSize")
+        @TomlComments("Maximum decompression buffer size")
+        @SerialName("max-decompress-size")
         var maxDecompressSize: Int = 67108864
 
-        @TomlComments("chorus.server.settings.networkSettings.packetLimit")
+        @TomlComments("Maximum amount of packets per second")
+        @SerialName("packet-limit")
         var packetLimit: Int = 240
     }
 
     @Serializable
     class DebugSettings {
-        @TomlComments("chorus.server.settings.debugSettings.level")
+        @TomlComments(
+            "Server's log level:",
+            "- INFO",
+            "- DEBUG",
+            "- TRACE",
+            "- ALL"
+        )
         var level: String = "INFO"
 
-        @TomlComments("chorus.server.settings.debugSettings.command")
+        @TomlComments("Enable debug commands")
         var command: Boolean = false
 
-        @TomlComments("chorus.server.settings.debugSettings.ignoredPackets")
+        @TomlComments("Packets to ignore when logging at TRACE level")
+        @SerialName("ignored-packets")
         var ignoredPackets: ArrayList<String> = ArrayList()
 
-        @TomlComments("chorus.server.settings.debugSettings.allowBeta")
+        @SerialName("allow-beta")
         var allowBeta: Boolean = false
     }
 
     @Serializable
     class LevelSettings {
-        @TomlComments("chorus.server.settings.levelSettings.autoTickRate")
+        @TomlComments("Enable dynamic tick rate")
+        @SerialName("auto-tick-rate")
         var autoTickRate: Boolean = true
 
-        @TomlComments("chorus.server.settings.levelSettings.autoTickRateLimit")
+        @TomlComments("Maximum dynamic tick rate")
+        @SerialName("auto-tick-rate-limit")
         var autoTickRateLimit: Int = 20
 
-        @TomlComments("chorus.server.settings.levelSettings.baseTickRate")
+        @TomlComments("Minimum dynamic tick rate")
+        @SerialName("base-tick-rate")
         var baseTickRate: Int = 1
 
-        @TomlComments("chorus.server.settings.levelSettings.alwaysTickPlayers")
+        @TomlComments("Should players be ticked")
+        @SerialName("always-tick-players")
         var alwaysTickPlayers: Boolean = false
 
-        @TomlComments("chorus.server.settings.levelSettings.enableRedstone")
+        @TomlComments("Enable redstone functionality")
+        @SerialName("enable-redstone")
         var enableRedstone: Boolean = true
 
-        @TomlComments("chorus.server.settings.levelSettings.tickRedstone")
+        @TomlComments("Should redstone be ticked")
+        @SerialName("tick-redstone")
         var tickRedstone: Boolean = true
 
-        @TomlComments("chorus.server.settings.levelSettings.chunkUnloadDelay")
+        @TomlComments("Chunk unloading delay (in ms)")
+        @SerialName("chunk-unload-delay")
         var chunkUnloadDelay: Int = 15000
 
-        @TomlComments("chorus.server.settings.levelSettings.levelThread")
+        @TomlComments("Enable level multi-threading")
+        @SerialName("level-thread")
         var levelThread: Boolean = false
     }
 
     @Serializable
     class ChunkSettings {
-        @TomlComments("chorus.server.settings.chunkSettings.perTickSend")
+        @TomlComments("Maximum number of chunks sent to players per tick")
+        @SerialName("per-tick-send")
         var perTickSend: Int = 8
 
-        @TomlComments("chorus.server.settings.chunkSettings.spawnThreshold")
+        @TomlComments("Number of chunks a player needs to receive upon first spawn")
+        @SerialName("spawn-threshold")
         var spawnThreshold: Int = 56
 
-        @TomlComments("chorus.server.settings.chunkSettings.chunksPerTicks")
+        @TomlComments("Tick cycle of chunks")
+        @SerialName("chunks-per-ticks")
         var chunksPerTicks: Int = 40
 
-        @TomlComments("chorus.server.settings.chunkSettings.tickRadius")
+        @TomlComments("Tick radius of chunks")
+        @SerialName("tick-radius")
         var tickRadius: Int = 3
 
-        @TomlComments("chorus.server.settings.chunkSettings.lightUpdates")
+        @TomlComments("Whether chunks perform light updates")
+        @SerialName("light-updates")
         var lightUpdates: Boolean = true
 
-        @TomlComments("chorus.server.settings.chunkSettings.clearTickList")
+        @TomlComments("Whether to clear the tick list at the end of each tick")
+        @SerialName("clear-tick-list")
         var clearTickList: Boolean = false
 
-        @TomlComments("chorus.server.settings.chunkSettings.generationQueueSize")
+        @TomlComments("Maximum number of terrain generation tasks executed simultaneously")
+        @SerialName("generation-queue-size")
         var generationQueueSize: Int = 128
     }
 
     @Serializable
     class PlayerSettings {
-        @TomlComments("chorus.server.settings.playerSettings.savePlayerData")
+        @TomlComments("Whether to save player data")
+        @SerialName("save-player-data")
         var savePlayerData: Boolean = true
 
-        @TomlComments("chorus.server.settings.playerSettings.skinChangeCooldown")
+        @TomlComments("Cooldown time for players changing skins")
+        @SerialName("skin-change-cooldown")
         var skinChangeCooldown: Int = 30
 
-        @TomlComments("chorus.server.settings.playerSettings.forceSkinTrusted")
+        @TomlComments("Whether to force trust player skins, allowing players to use third-party skins freely")
+        @SerialName("force-skin-trusted")
         var forceSkinTrusted: Boolean = false
 
-        @TomlComments("chorus.server.settings.playerSettings.checkMovement")
+        @TomlComments("Whether to check player movement")
+        @SerialName("check-movement")
         var checkMovement: Boolean = true
 
-        @TomlComments("chorus.server.settings.playerSettings.spawnRadius")
+        @SerialName("spawn-radius")
         var spawnRadius: Int = 16
     }
 
     @Serializable
     class GameplaySettings {
-        @TomlComments("chorus.server.settings.gameplaySettings.enableCommandBlocks")
+        @TomlComments(
+            "Whether to allow players to use command blocks",
+            "Note: If enabled, per-world gamerules still apply."
+        )
+        @SerialName("enable-command-blocks")
         var enableCommandBlocks: Boolean = true
     }
 
@@ -191,7 +230,9 @@ class ServerSettings {
 
     companion object {
         fun load(file: File): ServerSettings {
-            return Toml.decodeFromString<ServerSettings>(file.readText())
+            return Toml(inputConfig = TomlInputConfig(ignoreUnknownNames = true)).decodeFromString<ServerSettings>(
+                if (file.exists()) file.readText() else ""
+            )
         }
     }
 }

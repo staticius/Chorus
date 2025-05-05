@@ -20,7 +20,6 @@ import org.chorus_oss.chorus.compression.ZlibChooser.setProvider
 import org.chorus_oss.chorus.config.ServerProperties
 import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import org.chorus_oss.chorus.config.ServerSettings
-import org.chorus_oss.chorus.config.YamlSnakeYamlConfigurer
 import org.chorus_oss.chorus.console.ChorusConsole
 import org.chorus_oss.chorus.dispenser.DispenseBehaviorRegister
 import org.chorus_oss.chorus.entity.*
@@ -1719,8 +1718,6 @@ class Server internal constructor(
         val config = File(this.dataPath + "chorus.toml")
         var chooseLanguage: String? = null
         if (!config.exists()) {
-            config.createNewFile()
-
             log.info("{}Welcome! Please choose a language first!", TextFormat.GREEN)
             try {
                 val languageList = javaClass.module.getResourceAsStream("language/language.list")
@@ -1765,10 +1762,11 @@ class Server internal constructor(
         this.baseLang = BaseLang(chooseLanguage!!)
         this.baseLangCode = mapInternalLang(chooseLanguage!!)
         log.info("Loading {}...", TextFormat.GREEN.toString() + "chorus.toml" + TextFormat.RESET)
-        this.settings = ServerSettings.load(config)
-        settings.baseSettings.language = chooseLanguage!!
 
+        this.settings = ServerSettings.load(config)
         this.settings.save(config)
+
+        settings.baseSettings.language = chooseLanguage!!
 
         this.computeThreadPool = ForkJoinPool(
             min(
