@@ -1,6 +1,8 @@
 package org.chorus_oss.chorus.utils
 
 import com.google.common.base.Preconditions
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import java.util.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
@@ -83,7 +85,7 @@ class GameLoop private constructor(
             try {
                 if (nanoSleepTime > 0) {
                     // noinspection BusyWait
-                    Thread.sleep(TimeUnit.NANOSECONDS.toMillis(nanoSleepTime))
+                    runBlocking { delay(TimeUnit.NANOSECONDS.toMillis(nanoSleepTime)) }
                 }
             } catch (exception: InterruptedException) {
                 GameLoop.log.error("GameLoop interrupted", exception)

@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus
 
-import com.google.common.base.Preconditions
 import io.netty.util.ResourceLeakDetector
 import io.netty.util.internal.logging.InternalLoggerFactory
 import io.netty.util.internal.logging.Log4J2LoggerFactory
@@ -262,12 +261,9 @@ object Chorus : Loggable {
             return loggerConfig.level
         }
         set(level) {
-            Preconditions.checkNotNull(level, "level")
-            val ctx =
-                LogManager.getContext(false) as LoggerContext
+            val ctx = LogManager.getContext(false) as LoggerContext
             val log4jConfig = ctx.configuration
-            val loggerConfig =
-                log4jConfig.getLoggerConfig(LogManager.ROOT_LOGGER_NAME)
+            val loggerConfig = log4jConfig.getLoggerConfig(LogManager.ROOT_LOGGER_NAME)
             loggerConfig.level = level
             ctx.updateLoggers()
         }
