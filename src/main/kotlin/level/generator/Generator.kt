@@ -1,6 +1,9 @@
 package org.chorus_oss.chorus.level.generator
 
 import com.google.common.base.Preconditions
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.level.DimensionData
 import org.chorus_oss.chorus.level.Level
@@ -28,21 +31,25 @@ abstract class Generator(val dimensionData: DimensionData, val settings: Map<Str
     @JvmOverloads
     fun syncGenerate(chunk: IChunk, to: String? = end!!.name()): IChunk {
         val context = ChunkGenerateContext(this, level, chunk)
-        var future = CompletableFuture.runAsync(
-            {
-                start.apply(context)
-            }, start.executor
-        )
+        var future = start.scope.async {
+            start.apply(context)
+        }
         var now: GenerateStage? = start
         while ((now?.nextStage.also { now = it }) != null) {
             val finalNow = now!!
             if (finalNow.name() == to) {
-                future = future.thenRunAsync({ finalNow.apply(context) }, finalNow.executor)
+                future = finalNow.scope.async {
+                    future.await()
+                    finalNow.apply(context)
+                }
                 break
             }
-            future = future.thenRunAsync({ finalNow.apply(context) }, finalNow.executor)
+            future = finalNow.scope.async {
+                future.await()
+                finalNow.apply(context)
+            }
         }
-        future.join()
+        runBlocking { future.await() }
         return context.chunk
     }
 
@@ -64,13 +71,13 @@ abstract class Generator(val dimensionData: DimensionData, val settings: Map<Str
     private fun asyncGenerate0(context: ChunkGenerateContext, start: GenerateStage?, to: String?, callback: Runnable) {
         if (start == null || to == null) return
         if (to == start.name()) {
-            start.executor.execute {
+            start.scope.launch {
                 start.apply(context)
                 callback.run()
             }
             return
         }
-        start.executor.execute {
+        start.scope.launch {
             start.apply(context)
             asyncGenerate0(context, start.nextStage, to, callback)
         }

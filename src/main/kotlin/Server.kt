@@ -3,6 +3,9 @@ package org.chorus_oss.chorus
 import com.akuleshov7.ktoml.Toml
 import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableMap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.serialization.encodeToString
 import org.apache.commons.io.FileUtils
 import org.chorus_oss.chorus.block.BlockComposter
@@ -177,7 +180,7 @@ class Server internal constructor(
     /**
      * FJP thread pool responsible for terrain generation, data compression and other computing tasks
      */
-    var computeThreadPool: ForkJoinPool
+    var computeScope: CoroutineScope
         private set
 
     var resourcePackManager: ResourcePackManager
@@ -495,14 +498,13 @@ class Server internal constructor(
             log.debug("Stopping network interfaces")
             network.shutdown()
             playerDataDB.close()
-            //close watchdog and metrics
+            // close watchdog and metrics
             if (this.watchdog != null) {
                 watchdog!!.running = false
             }
-            //close threadPool
-            ForkJoinPool.commonPool().shutdownNow()
-            computeThreadPool.shutdownNow()
-            //todo other things
+            // close threadPool
+            computeScope.cancel()
+            // todo other things
         } catch (e: Exception) {
             log.error("Exception happened while shutting down, exiting the process", e)
             exitProcess(1)
@@ -1751,12 +1753,7 @@ class Server internal constructor(
 
         settings.baseSettings.language = chooseLanguage!!
 
-        this.computeThreadPool = ForkJoinPool(
-            min(
-                0x7fff,
-                Runtime.getRuntime().availableProcessors()
-            ), ComputeThreadPoolThreadFactory(), null, false
-        )
+        this.computeScope = CoroutineScope(Dispatchers.Default)
 
         levelArray = Level.EMPTY_ARRAY
 

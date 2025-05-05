@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.level.generator
 
+import kotlinx.coroutines.CoroutineScope
 import org.chorus_oss.chorus.Server
-import java.util.concurrent.Executor
 
 abstract class GenerateStage {
     var nextStage: GenerateStage? = null
@@ -11,8 +11,8 @@ abstract class GenerateStage {
 
     abstract fun name(): String
 
-    open val executor: Executor
-        get() = Server.instance.computeThreadPool
+    open val scope: CoroutineScope
+        get() = Server.instance.computeScope
 
     private fun next(stage: GenerateStage) {
         if (this.nextStage == null) {

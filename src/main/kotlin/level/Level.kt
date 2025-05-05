@@ -2,6 +2,7 @@ package org.chorus_oss.chorus.level
 
 
 import com.google.common.base.Preconditions
+import kotlinx.coroutines.*
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.*
@@ -14,7 +15,6 @@ import org.chorus_oss.chorus.entity.Entity.Companion.getDefaultNBT
 import org.chorus_oss.chorus.entity.EntityAsyncPrepare
 import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.item.*
-import org.chorus_oss.chorus.entity.mob.EntityMob
 import org.chorus_oss.chorus.entity.projectile.EntityProjectile
 import org.chorus_oss.chorus.entity.weather.EntityLightningBolt
 import org.chorus_oss.chorus.event.block.BlockBreakEvent
@@ -59,6 +59,7 @@ import org.chorus_oss.chorus.scheduler.ServerScheduler
 import org.chorus_oss.chorus.utils.*
 import java.awt.Color
 import java.io.*
+import java.lang.Runnable
 import java.lang.ref.SoftReference
 import java.util.*
 import java.util.concurrent.*
@@ -775,18 +776,18 @@ class Level(
                 }
             }
             if (!updateEntities.isEmpty()) {
-                CompletableFuture.runAsync({
-                    updateEntities.keys.parallelStream().forEach(Consumer { id ->
-                        val entity = updateEntities[id]
-                        if (entity != null && entity.isInitialized() && entity is EntityAsyncPrepare) {
-                            entity.asyncPrepare(tick)
+                runBlocking {
+                    updateEntities.values.map { e ->
+                        Server.instance.computeScope.async {
+                            if (e.isInitialized() && e is EntityAsyncPrepare) {
+                                e.asyncPrepare(tick)
+                            }
                         }
-                    })
-                }, Server.instance.computeThreadPool).join()
+                    }.awaitAll()
+                }
+
                 for (id in updateEntities.keys) {
                     val entity = updateEntities[id]
-                    if (entity is EntityMob) {
-                    }
                     if (entity == null) {
                         updateEntities.remove(id)
                         continue

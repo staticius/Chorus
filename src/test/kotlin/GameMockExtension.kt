@@ -1,5 +1,7 @@
 package org.chorus_oss.chorus
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.reflect.FieldUtils
 import org.chorus_oss.chorus.block.BlockComposter
@@ -186,8 +188,8 @@ class GameMockExtension : MockitoExtension() {
                 Mockito.`when`(server.viewDistance).thenReturn(4)
                 Mockito.`when`(server.recipeRegistry).thenCallRealMethod()
 
-                val pool = ForkJoinPool(Runtime.getRuntime().availableProcessors())
-                Mockito.`when`(server.computeThreadPool).thenReturn(pool)
+                val pool = CoroutineScope(Dispatchers.Default)
+                Mockito.`when`(server.computeScope).thenReturn(pool)
                 Mockito.`when`(server.commandMap).thenReturn(simpleCommandMap)
                 Mockito.`when`(server.scoreboardManager).thenReturn(null)
                 try {
