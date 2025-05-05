@@ -11,6 +11,7 @@ plugins {
     id("io.github.goooler.shadow") version "8.1.7"
     id("com.gorylenko.gradle-git-properties") version "2.4.1"
     kotlin("jvm") version "2.1.10"
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 group = "org.chorus_oss.chorus"
@@ -57,6 +58,9 @@ dependencies {
     testImplementation(libs.bundles.test)
     testImplementation(libs.commonsio)
     testImplementation(libs.commonslang3)
+
+    implementation("com.akuleshov7:ktoml-core:0.6.0")
+    implementation("com.akuleshov7:ktoml-file:0.6.0")
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))

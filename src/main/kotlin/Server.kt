@@ -1,9 +1,13 @@
 package org.chorus_oss.chorus
 
+import com.akuleshov7.ktoml.Toml
+import com.akuleshov7.ktoml.file.TomlFileReader
 import com.google.common.base.Preconditions
 import com.google.common.collect.ImmutableMap
 import eu.okaeri.configs.ConfigManager
 import eu.okaeri.configs.OkaeriConfig
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import org.apache.commons.io.FileUtils
 import org.chorus_oss.chorus.block.BlockComposter
 import org.chorus_oss.chorus.command.CommandSender
@@ -468,7 +472,8 @@ class Server internal constructor(
                 player.close(player.leaveMessage, settings.baseSettings.shutdownMessage)
             }
 
-            settings.save()
+            val config = File(this.dataPath + "chorus.toml")
+            config.writeText(Toml.encodeToString<ServerSettings>(this.settings))
 
             log.debug("Disabling all plugins")
             pluginManager.disablePlugins()
@@ -1711,9 +1716,11 @@ class Server internal constructor(
         this.consoleThread = ConsoleThread()
         consoleThread.start()
 
-        val config = File(this.dataPath + "nukkit.yml")
+        val config = File(this.dataPath + "chorus.toml")
         var chooseLanguage: String? = null
         if (!config.exists()) {
+            config.createNewFile()
+
             log.info("{}Welcome! Please choose a language first!", TextFormat.GREEN)
             try {
                 val languageList = javaClass.module.getResourceAsStream("language/language.list")
@@ -1757,23 +1764,17 @@ class Server internal constructor(
         }
         this.baseLang = BaseLang(chooseLanguage!!)
         this.baseLangCode = mapInternalLang(chooseLanguage!!)
-        log.info("Loading {}...", TextFormat.GREEN.toString() + "nukkit.yml" + TextFormat.RESET)
-        this.settings = ConfigManager.create(
-            ServerSettings::class.java
-        ) { it: OkaeriConfig ->
-            it.withConfigurer(YamlSnakeYamlConfigurer())
-            it.withBindFile(config)
-            it.withRemoveOrphans(true)
-            it.saveDefaults()
-            it.load(true)
-        }
+        log.info("Loading {}...", TextFormat.GREEN.toString() + "chorus.toml" + TextFormat.RESET)
+        this.settings = ServerSettings.load(config)
         settings.baseSettings.language = chooseLanguage!!
+
+        this.settings.save(config)
 
         this.computeThreadPool = ForkJoinPool(
             min(
                 0x7fff,
                 Runtime.getRuntime().availableProcessors()
-            ).toInt(), ComputeThreadPoolThreadFactory(), null, false
+            ), ComputeThreadPoolThreadFactory(), null, false
         )
 
         levelArray = Level.EMPTY_ARRAY
