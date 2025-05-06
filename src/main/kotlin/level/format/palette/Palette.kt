@@ -153,7 +153,7 @@ open class Palette<V> {
 
         val version = getVersionFromPaletteHeader(header)
         if (version == BitArrayVersion.V0) {
-            this.bitArray = version.createArray(SubChunk.SIZE)
+            this.bitArray = version.createArray(SubChunk.SIZE, IntArray(0))
             palette.clear()
             palette.add(deserializer.deserialize(byteBuf.readIntLE()))
 
