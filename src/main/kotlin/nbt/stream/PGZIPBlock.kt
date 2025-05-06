@@ -20,8 +20,6 @@ class PGZIPBlock(parent: PGZIPOutputStream) : Callable<ByteArray> {
     // Only on worker thread
     @Throws(Exception::class)
     override fun call(): ByteArray {
-        // LOG.info("Processing " + this + " on " + Thread.currentThread());
-
         val state = STATE.get()
         // ByteArrayOutputStream buf = new ByteArrayOutputStream(in.length);   // Overestimate output size required.
         // DeflaterOutputStream def = newDeflaterOutputStream(buf);

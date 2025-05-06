@@ -69,13 +69,7 @@ class LevelDat {
     var isRandomSeedAllowed: Boolean = false
     var isSingleUseWorld: Boolean = false
     var isWorldTemplateOptionLocked: Boolean = false
-    var lastOpenedWithVersion: SemVersion = SemVersion(
-        1,
-        20,
-        40,
-        1,
-        0
-    )
+    var lastOpenedWithVersion: SemVersion = ProtocolInfo.GAME_VERSION
     var lightningLevel: Float = 0.0f
     var lightningTime: Int = 0 //thunderTime
     var limitedWorldDepth: Int = 16

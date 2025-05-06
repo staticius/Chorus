@@ -44,14 +44,12 @@ class ServerProperties(dataPath: String) {
             defaults[ServerPropertiesKeys.LEVEL_SEED.toString()] = ""
             defaults[ServerPropertiesKeys.ALLOW_NETHER.toString()] = true
             defaults[ServerPropertiesKeys.ALLOW_THE_END.toString()] = true
-            defaults[ServerPropertiesKeys.USE_TERRA.toString()] = false
             defaults[ServerPropertiesKeys.AUTO_SAVE.toString()] = true
             defaults[ServerPropertiesKeys.FORCE_RESOURCES.toString()] = false
             defaults[ServerPropertiesKeys.FORCE_RESOURCES_ALLOW_CLIENT_PACKS.toString()] = false
             defaults[ServerPropertiesKeys.XBOX_AUTH.toString()] = true
             defaults[ServerPropertiesKeys.CHECK_LOGIN_TIME.toString()] = false
             defaults[ServerPropertiesKeys.DISABLE_AUTO_BUG_REPORT.toString()] = false
-            defaults[ServerPropertiesKeys.ALLOW_SHADED.toString()] = true
             defaults[ServerPropertiesKeys.SERVER_AUTHORITATIVE_MOVEMENT.toString()] = "server-auth"
             defaults[ServerPropertiesKeys.NETWORK_ENCRYPTION.toString()] = true
             return defaults

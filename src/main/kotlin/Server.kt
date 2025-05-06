@@ -82,8 +82,6 @@ import org.chorus_oss.chorus.tags.ItemTags
 import org.chorus_oss.chorus.utils.*
 import org.chorus_oss.chorus.utils.JSONUtils.from
 import org.chorus_oss.chorus.utils.JSONUtils.toPretty
-import org.chorus_oss.chorus.utils.StartArgUtils.isShaded
-import org.chorus_oss.chorus.utils.StartArgUtils.isValidStart
 import org.chorus_oss.chorus.utils.Utils.allThreadDumps
 import org.chorus_oss.chorus.utils.Utils.getExceptionMessage
 import org.chorus_oss.chorus.utils.Utils.readFile
@@ -478,7 +476,7 @@ class Server internal constructor(
             log.debug("Unloading all levels")
             for (level in this.levelArray) {
                 this.unloadLevel(level, true)
-                while (level.isThreadRunning) Thread.sleep(1)
+                while (level.isThreadRunning) runBlocking { delay(1) }
             }
             val tempPositionTrackingService = positionTrackingService
             if (tempPositionTrackingService != null) {
@@ -1758,18 +1756,6 @@ class Server internal constructor(
 
         log.info("Loading {}...", TextFormat.GREEN.toString() + "server.properties" + TextFormat.RESET)
 
-        val isShaded = isShaded
-        if (!isValidStart || (JarStart.isUsingJavaJar && !isShaded)) {
-            log.error(this.baseLang.tr("chorus.start.invalid"))
-            throw RuntimeException()
-        }
-        if (!properties[ServerPropertiesKeys.ALLOW_SHADED, false] && isShaded) {
-            log.error(this.baseLang.tr("chorus.start.shaded1"))
-            log.error(this.baseLang.tr("chorus.start.shaded2"))
-            log.error(this.baseLang.tr("chorus.start.shaded3"))
-            throw RuntimeException()
-        }
-
         this.checkLoginTime = properties[ServerPropertiesKeys.CHECK_LOGIN_TIME, false]
 
         log.info(this.baseLang.tr("language.selected", baseLang.name, baseLang.getLang()))
@@ -2430,10 +2416,6 @@ class Server internal constructor(
      */
     fun isPrimaryThread(): Boolean {
         return (Thread.currentThread() === thread)
-    }
-
-    fun getPrimaryThread(): Thread {
-        return thread
     }
 
     companion object : Loggable {

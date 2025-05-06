@@ -23,14 +23,12 @@ enum class ServerPropertiesKeys(private val key: String) {
     LEVEL_SEED("level-seed"),
     ALLOW_NETHER("allow-nether"),
     ALLOW_THE_END("allow-the_end"),
-    USE_TERRA("use-terra"),
     AUTO_SAVE("auto-save"),
     FORCE_RESOURCES("force-resources"),
     FORCE_RESOURCES_ALLOW_CLIENT_PACKS("force-resources-allow-client-packs"),
     XBOX_AUTH("xbox-auth"),
     CHECK_LOGIN_TIME("check-login-time"),
     DISABLE_AUTO_BUG_REPORT("disable-auto-bug-report"),
-    ALLOW_SHADED("allow-shaded"),
     SERVER_AUTHORITATIVE_MOVEMENT("server-authoritative-movement"),
     NETWORK_ENCRYPTION("network-encryption");
 

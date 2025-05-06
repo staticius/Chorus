@@ -165,15 +165,6 @@ object Chorus : Loggable {
         log.info("Stopping other threads")
 
         PGZIPOutputStream.sharedThreadPool.shutdownNow()
-        for (thread in Thread.getAllStackTraces().keys) {
-            if (thread !is InterruptibleThread) {
-                continue
-            }
-            log.debug("Stopping {} thread", thread.javaClass.simpleName)
-            if (thread.isAlive) {
-                thread.interrupt()
-            }
-        }
 
         if (TITLE) {
             print(0x1b.toChar().toString() + "]0;Server Stopped" + 0x07.toChar())
