@@ -42,7 +42,6 @@ class DataPacketManager {
             PlayerSkinProcessor(),
             PacketViolationWarningProcessor(),
             EmoteProcessor(),
-            PlayerInputProcessor(),
             MovePlayerProcessor(),
             PlayerAuthInputProcessor(),
             RequestAbilityProcessor(),
@@ -73,7 +72,6 @@ class DataPacketManager {
             PositionTrackingDBClientRequestProcessor(),
             ShowCreditsProcessor(),
             RequestPermissionsProcessor(),
-            RiderJumpProcessor(),
             ItemStackRequestPacketProcessor(),
             SetLocalPlayerAsInitializedPacketProcessor()
         )

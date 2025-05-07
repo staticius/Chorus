@@ -122,7 +122,8 @@ enum class EntityFlag(private val value: Int) {
     RENDER_WHEN_INVISIBLE(119),
     BODY_ROTATION_AXIS_ALIGNED(120),
     COLLIDABLE(121),
-    WASD_AIR_CONTROLLED(122);
+    WASD_AIR_CONTROLLED(122),
+    DOES_SERVER_AUTH_ONLY_DISMOUNT(123);
 
     fun getValue(): Int {
         return value

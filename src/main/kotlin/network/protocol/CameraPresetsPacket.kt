@@ -39,6 +39,7 @@ data class CameraPresetsPacket(
         byteBuf.writeOptional(preset.playEffect) { value -> byteBuf.writeBoolean(value) }
         byteBuf.writeOptional(preset.alignTargetAndCameraForward) { value -> byteBuf.writeBoolean(value) }
         writeCameraPresetAimAssist(byteBuf, preset.aimAssist)
+        byteBuf.writeNotNull(preset.controlScheme) { value -> byteBuf.writeByte(value.ordinal) }
     }
 
     fun writeCameraPresetAimAssist(byteBuf: HandleByteBuf, data: OptionalValue<CameraPresetAimAssist>) {

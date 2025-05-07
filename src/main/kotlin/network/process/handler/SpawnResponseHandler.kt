@@ -64,12 +64,13 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
             player.dataPacket(pk)
         }
 
-        SpawnResponseHandler.log.debug("Sending biome definitions")
-        player.dataPacket(
-            BiomeDefinitionListPacket(
-                Registries.BIOME.biomeDefinitionListPacketData
-            )
-        )
+        // TODO: New BiomeDefinitionListPacket
+//        SpawnResponseHandler.log.debug("Sending biome definitions")
+//        player.dataPacket(
+//            BiomeDefinitionListPacket(
+//                Registries.BIOME.biomeDefinitionListPacketData
+//            )
+//        )
 
         SpawnResponseHandler.log.debug("Sending attributes")
         player.syncAttributes()

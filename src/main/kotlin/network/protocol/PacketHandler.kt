@@ -27,8 +27,6 @@ interface PacketHandler {
 
     fun handle(pk: AvailableActorIdentifiersPacket) {}
 
-    fun handle(pk: BiomeDefinitionListPacket) {}
-
     fun handle(pk: BlockActorDataPacket) {}
 
     fun handle(pk: BlockEventPacket) {}
@@ -76,8 +74,6 @@ interface PacketHandler {
     fun handle(pk: CommandRequestPacket) {}
 
     fun handle(pk: CompletedUsingItemPacket) {}
-
-    fun handle(pk: CompressedBiomeDefinitionListPacket) {}
 
     fun handle(pk: ContainerClosePacket) {}
 
@@ -203,9 +199,9 @@ interface PacketHandler {
 
     fun handle(pk: PlayerHotbarPacket) {}
 
-    fun handle(pk: PlayerInputPacket) {}
-
     fun handle(pk: PlayerListPacket) {}
+
+    fun handle(pk: PlayerLocationPacket) {}
 
     fun handle(pk: PlayerSkinPacket) {}
 
@@ -242,8 +238,6 @@ interface PacketHandler {
     fun handle(pk: ResourcePacksInfoPacket) {}
 
     fun handle(pk: RespawnPacket) {}
-
-    fun handle(pk: RiderJumpPacket) {}
 
     fun handle(pk: ScriptMessagePacket) {}
 

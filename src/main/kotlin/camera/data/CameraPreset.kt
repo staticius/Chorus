@@ -6,6 +6,7 @@ import org.chorus_oss.chorus.command.data.CommandEnum
 import org.chorus_oss.chorus.math.Vector2f
 import org.chorus_oss.chorus.math.Vector3f
 import org.chorus_oss.chorus.network.protocol.UpdateSoftEnumPacket
+import org.chorus_oss.chorus.network.protocol.types.ControlScheme
 import org.chorus_oss.chorus.network.protocol.types.camera.CameraAudioListener
 import org.chorus_oss.chorus.network.protocol.types.camera.aimassist.CameraPresetAimAssist
 import org.chorus_oss.chorus.utils.OptionalValue
@@ -34,7 +35,8 @@ class CameraPreset @JvmOverloads constructor(
     val verticalRotationLimit: Vector2f? = null,
     continueTargeting: Boolean? = null,
     alignTargetAndCameraForward: Boolean? = null,
-    aimAssist: CameraPresetAimAssist? = null
+    aimAssist: CameraPresetAimAssist? = null,
+    val controlScheme: ControlScheme? = null,
 ) {
     val inheritFrom = inheritFrom ?: ""
     val snapToTarget: OptionalValue<Boolean> = OptionalValue.ofNullable(snapToTarget)

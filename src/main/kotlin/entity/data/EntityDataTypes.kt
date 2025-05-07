@@ -289,53 +289,22 @@ interface EntityDataTypes {
         </pre> *
          */
         val HITBOX: EntityDataType<CompoundTag> = EntityDataType(CompoundTag(), "HITBOX", 118)
-        val IS_BUOYANT: EntityDataType<Boolean> = EntityDataType(
-            false, "IS_BUOYANT", 119,
-            Transformers.BOOLEAN_TO_BYTE
-        )
+        val IS_BUOYANT: EntityDataType<Boolean> = EntityDataType(false, "IS_BUOYANT", 119, Transformers.BOOLEAN_TO_BYTE)
         val FREEZING_EFFECT_STRENGTH: EntityDataType<Float> = EntityDataType(0f, "FREEZING_EFFECT_STRENGTH", 120)
         val BUOYANCY_DATA: EntityDataType<String> = EntityDataType("", "BUOYANCY_DATA", 121)
         val GOAT_HORN_COUNT: EntityDataType<Int> = EntityDataType(0, "GOAT_HORN_COUNT", 122)
         val BASE_RUNTIME_ID: EntityDataType<String> = EntityDataType("", "BASE_RUNTIME_ID", 123)
-
-        /**
-         * @since v503
-         */
-        val MOVEMENT_SOUND_DISTANCE_OFFSET: EntityDataType<Float> =
-            EntityDataType(0f, "MOVEMENT_SOUND_DISTANCE_OFFSET", 124)
-
-        /**
-         * @since v503
-         */
+        val MOVEMENT_SOUND_DISTANCE_OFFSET: EntityDataType<Float> = EntityDataType(0f, "MOVEMENT_SOUND_DISTANCE_OFFSET", 124)
         val HEARTBEAT_INTERVAL_TICKS: EntityDataType<Int> = EntityDataType(0, "HEARTBEAT_INTERVAL_TICKS", 125)
-
-        /**
-         * @since v503
-         */
         val HEARTBEAT_SOUND_EVENT: EntityDataType<Int> = EntityDataType(0, "HEARTBEAT_SOUND_EVENT", 126)
-
-        /**
-         * @since v527
-         */
-        val PLAYER_LAST_DEATH_POS: EntityDataType<BlockVector3> =
-            EntityDataType(BlockVector3(), "PLAYER_LAST_DEATH_POS", 127)
-
-        /**
-         * @since v527
-         */
+        val PLAYER_LAST_DEATH_POS: EntityDataType<BlockVector3> = EntityDataType(BlockVector3(), "PLAYER_LAST_DEATH_POS", 127)
         val PLAYER_LAST_DEATH_DIMENSION: EntityDataType<Int> = EntityDataType(0, "PLAYER_LAST_DEATH_DIMENSION", 128)
-
-        /**
-         * @since v527
-         */
-        val PLAYER_HAS_DIED: EntityDataType<Boolean> = EntityDataType(
-            false, "PLAYER_HAS_DIED", 129,
-            Transformers.BOOLEAN_TO_BYTE
-        )
-
-        /**
-         * @since v594
-         */
+        val PLAYER_HAS_DIED: EntityDataType<Boolean> = EntityDataType(false, "PLAYER_HAS_DIED", 129, Transformers.BOOLEAN_TO_BYTE)
         val COLLISION_BOX: EntityDataType<Vector3f> = EntityDataType(Vector3f(), "COLLISION_BOX", 130)
+        val VISIBLE_MOB_EFFECTS: EntityDataType<Long> = EntityDataType(0L, "VISIBLE_MOB_EFFECTS", 131)
+        val FILTERED_NAME: EntityDataType<String> = EntityDataType("", "FILTERED_NAME", 132)
+        val BED_ENTER_POSITION: EntityDataType<Vector3f> = EntityDataType(Vector3f(), "BED_ENTER_POSITION", 133)
+        val SEAT_THIRD_PERSON_CAMERA_RADIUS: EntityDataType<Float> = EntityDataType(0.0f, "SEAT_THIRD_PERSON_CAMERA_RADIUS", 134)
+        val SEAT_CAMERA_RELAX_DISTANCE_SMOOTHING: EntityDataType<Float> = EntityDataType(0.0f, "SEAT_CAMERA_RELAX_DISTANCE_SMOOTHING", 135)
     }
 }

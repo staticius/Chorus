@@ -58,7 +58,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.MOVE_ENTITY_ABSOLUTE_PACKET, MoveEntityAbsolutePacket) // 18
         this.register(ProtocolInfo.MOVE_PLAYER_PACKET, MovePlayerPacket) // 19
         this.register(ProtocolInfo.PLAYER_ACTION_PACKET, PlayerActionPacket) // 36
-        this.register(ProtocolInfo.PLAYER_INPUT_PACKET, PlayerInputPacket) // 57
         this.register(ProtocolInfo.PLAYER_HOTBAR_PACKET, PlayerHotbarPacket) // 48
         this.register(ProtocolInfo.REQUEST_CHUNK_RADIUS_PACKET, RequestChunkRadiusPacket) // 69
         this.register(ProtocolInfo.RESOURCE_PACK_CLIENT_RESPONSE_PACKET, ResourcePackClientResponsePacket) // 8
@@ -67,7 +66,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.RESOURCE_PACK_CHUNK_REQUEST_PACKET, ResourcePackChunkRequestPacket) // 84
         this.register(ProtocolInfo.PLAYER_SKIN_PACKET, PlayerSkinPacket) // 93
         this.register(ProtocolInfo.RESPAWN_PACKET, RespawnPacket) // 45
-        this.register(ProtocolInfo.RIDER_JUMP_PACKET, RiderJumpPacket) // 20
         this.register(ProtocolInfo.SET_DIFFICULTY_PACKET, SetDifficultyPacket) // 60
         this.register(ProtocolInfo.SET_PLAYER_GAME_TYPE_PACKET, SetPlayerGameTypePacket) // 62
         this.register(ProtocolInfo.SET_TITLE_PACKET, SetTitlePacket) // 88
@@ -123,6 +121,7 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.SERVERBOUND_LOADING_SCREEN_PACKET, ServerboundLoadingScreenPacket) // 312
         this.register(ProtocolInfo.SERVERBOUND_DIAGNOSTICS_PACKET, ServerboundDiagnosticsPacket) // 315
         this.register(ProtocolInfo.CLIENT_CAMERA_AIM_ASSIST_PACKET, ClientCameraAimAssistPacket) // 321
+        this.register(ProtocolInfo.PLAYER_LOCATION_PACKET, PlayerLocationPacket) // 326
     }
 
     companion object {
