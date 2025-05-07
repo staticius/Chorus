@@ -22,16 +22,10 @@ class ServerProperties(dataPath: String) {
     private val defaultValues: ConfigSection
         get() {
             val defaults = ConfigSection()
-            defaults[ServerPropertiesKeys.MOTD.toString()] = "PowerNukkitX Server"
-            defaults[ServerPropertiesKeys.SUB_MOTD.toString()] = "powernukkitx.org"
-            defaults[ServerPropertiesKeys.SERVER_IP.toString()] = "0.0.0.0"
-            defaults[ServerPropertiesKeys.SERVER_PORT.toString()] = 19132
             defaults[ServerPropertiesKeys.VIEW_DISTANCE.toString()] = 8
-            defaults[ServerPropertiesKeys.WHITE_LIST.toString()] = false
             defaults[ServerPropertiesKeys.ACHIEVEMENTS.toString()] = true
             defaults[ServerPropertiesKeys.ANNOUNCE_PLAYER_ACHIEVEMENTS.toString()] = true
             defaults[ServerPropertiesKeys.SPAWN_PROTECTION.toString()] = 16
-            defaults[ServerPropertiesKeys.MAX_PLAYERS.toString()] = 20
             defaults[ServerPropertiesKeys.ALLOW_FLIGHT.toString()] = false
             defaults[ServerPropertiesKeys.SPAWN_ANIMALS.toString()] = true
             defaults[ServerPropertiesKeys.SPAWN_MOBS.toString()] = true
@@ -45,13 +39,7 @@ class ServerProperties(dataPath: String) {
             defaults[ServerPropertiesKeys.ALLOW_NETHER.toString()] = true
             defaults[ServerPropertiesKeys.ALLOW_THE_END.toString()] = true
             defaults[ServerPropertiesKeys.AUTO_SAVE.toString()] = true
-            defaults[ServerPropertiesKeys.FORCE_RESOURCES.toString()] = false
-            defaults[ServerPropertiesKeys.FORCE_RESOURCES_ALLOW_CLIENT_PACKS.toString()] = false
-            defaults[ServerPropertiesKeys.XBOX_AUTH.toString()] = true
-            defaults[ServerPropertiesKeys.CHECK_LOGIN_TIME.toString()] = false
             defaults[ServerPropertiesKeys.DISABLE_AUTO_BUG_REPORT.toString()] = false
-            defaults[ServerPropertiesKeys.SERVER_AUTHORITATIVE_MOVEMENT.toString()] = "server-auth"
-            defaults[ServerPropertiesKeys.NETWORK_ENCRYPTION.toString()] = true
             return defaults
         }
 

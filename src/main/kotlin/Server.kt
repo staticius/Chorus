@@ -16,7 +16,7 @@ import org.chorus_oss.chorus.command.function.FunctionManager
 import org.chorus_oss.chorus.compression.ZlibChooser.setProvider
 import org.chorus_oss.chorus.config.ServerProperties
 import org.chorus_oss.chorus.config.ServerPropertiesKeys
-import org.chorus_oss.chorus.config.ServerSettings
+import org.chorus_oss.chorus.config.ChorusTOML
 import org.chorus_oss.chorus.console.ChorusConsole
 import org.chorus_oss.chorus.dispenser.DispenseBehaviorRegister
 import org.chorus_oss.chorus.entity.*
@@ -274,12 +274,10 @@ class Server internal constructor(
     val thread: Thread = Thread.currentThread()
     val launchTime: Long = System.currentTimeMillis()
 
-    lateinit var settings: ServerSettings
+    var settings: ChorusTOML
         private set
     private var watchdog: Watchdog? = null
-    private lateinit var playerDataDB: DB
-
-    val enabledNetworkEncryption: Boolean = properties[ServerPropertiesKeys.NETWORK_ENCRYPTION, true]
+    private var playerDataDB: DB
 
     /**default levels */
     var defaultLevel: Level? = null
@@ -293,6 +291,245 @@ class Server internal constructor(
 
     val allowNether: Boolean = properties[ServerPropertiesKeys.ALLOW_NETHER, true]
     val allowEnd: Boolean = properties[ServerPropertiesKeys.ALLOW_THE_END, true]
+
+    /** */
+    init {
+        var predefinedLanguage1 = predefinedLanguage
+        instance = this
+
+        if (!File(dataPath + "worlds/").exists()) {
+            File(dataPath + "worlds/").mkdirs()
+        }
+        if (!File(dataPath + "players/").exists()) {
+            File(dataPath + "players/").mkdirs()
+        }
+        if (!File(pluginPath).exists()) {
+            File(pluginPath).mkdirs()
+        }
+        if (!File(commandDataPath).exists()) {
+            File(commandDataPath).mkdirs()
+        }
+
+        this.console = ChorusConsole(this)
+        this.consoleJob = CoroutineScope(Dispatchers.Default).launch { console.start() }
+
+        val config = File(this.dataPath + "chorus.toml")
+        var chooseLanguage: String? = null
+        if (!config.exists()) {
+            log.info("{}Welcome! Please choose a language first!", TextFormat.GREEN)
+            try {
+                val languageList = javaClass.module.getResourceAsStream("language/language.list")
+                checkNotNull(languageList) { "language/language.list is missing. If you are running a development version, make sure you have run 'git submodule update --init'." }
+                val lines = readFile(languageList).split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+                for (line in lines) {
+                    log.info(line)
+                }
+            } catch (e: IOException) {
+                throw RuntimeException(e)
+            }
+
+            while (chooseLanguage == null) {
+                val lang: String
+                if (predefinedLanguage1 != null) {
+                    log.info("Trying to load language from predefined language: {}", predefinedLanguage1)
+                    lang = predefinedLanguage1
+                } else {
+                    lang = console.readLine()
+                }
+
+                try {
+                    javaClass.classLoader.getResourceAsStream("language/$lang/lang.json").use { conf ->
+                        if (conf != null) {
+                            chooseLanguage = lang
+                        } else if (predefinedLanguage1 != null) {
+                            log.warn(
+                                "No language found for predefined language: {}, please choose a valid language",
+                                predefinedLanguage1
+                            )
+                            predefinedLanguage1 = null
+                        }
+                    }
+                } catch (e: IOException) {
+                    throw RuntimeException(e)
+                }
+            }
+        } else {
+            val configInstance = Config(config)
+            chooseLanguage = configInstance.getString("settings.language", "eng")
+        }
+        this.baseLang = BaseLang(chooseLanguage!!)
+        this.baseLangCode = mapInternalLang(chooseLanguage!!)
+        log.info("Loading {}...", TextFormat.GREEN.toString() + "chorus.toml" + TextFormat.RESET)
+
+        this.settings = ChorusTOML.load(config)
+        this.settings.save(config)
+
+        settings.baseSettings.language = chooseLanguage!!
+
+        this.computeScope = CoroutineScope(Dispatchers.Default)
+
+        levelArray = Level.EMPTY_ARRAY
+
+        val targetLevel = org.apache.logging.log4j.Level.getLevel(settings.debugSettings.level)
+        val currentLevel = Chorus.logLevel
+        if (targetLevel != null && targetLevel.intLevel() > currentLevel!!.intLevel()) {
+            Chorus.logLevel = targetLevel
+        }
+
+        log.info("Loading {}...", TextFormat.GREEN.toString() + "server.properties" + TextFormat.RESET)
+
+        this.checkLoginTime = settings.serverSettings.checkLoginTime
+
+        log.info(this.baseLang.tr("language.selected", baseLang.name, baseLang.getLang()))
+        log.info(
+            this.baseLang.tr(
+                "chorus.server.start",
+                TextFormat.AQUA.toString() + this.version + TextFormat.RESET
+            )
+        )
+
+        val poolSize: String = settings.baseSettings.asyncWorkers
+        val poolSizeNumber = try {
+            poolSize.toInt()
+        } catch (e: Exception) {
+            max(Runtime.getRuntime().availableProcessors().toDouble(), 4.0).toInt()
+        }
+        ServerScheduler.WORKERS = poolSizeNumber
+        this.scheduler = ServerScheduler()
+
+        setProvider(settings.networkSettings.zlibProvider)
+
+        this.serverAuthoritativeMovementMode =
+            when (settings.serverSettings.serverAuthoritativeMovement) {
+                "client-auth" -> 0
+                "server-auth" -> 1
+                "server-auth-with-rewind" -> 2
+                else -> throw IllegalArgumentException()
+            }
+        if (settings.baseSettings.waterdogpe) {
+            this.checkLoginTime = false
+        }
+
+        this.entityMetadata = EntityMetadataStore()
+        this.playerMetadata = PlayerMetadataStore()
+        this.levelMetadata = LevelMetadataStore()
+        this.operators = Config(this.dataPath + "ops.txt", Config.ENUM)
+        this.whitelist = Config(this.dataPath + "white-list.txt", Config.ENUM)
+        this.bannedPlayers = BanList(this.dataPath + "banned-players.json")
+        bannedPlayers.load()
+        this.bannedIPs = BanList(this.dataPath + "banned-ips.json")
+        bannedIPs.load()
+        this.maxPlayers = settings.serverSettings.maxPlayers
+        this.setAutoSave(properties[ServerPropertiesKeys.AUTO_SAVE, true])
+        if (properties[ServerPropertiesKeys.HARDCORE, false] && this.getDifficulty() < 3) {
+            properties[ServerPropertiesKeys.DIFFICULTY, 3]
+        }
+
+        log.info(
+            this.baseLang.tr(
+                "chorus.server.info",
+                name,
+                TextFormat.YELLOW.toString() + this.nukkitVersion + TextFormat.RESET + " (" + TextFormat.YELLOW + this.gitCommit + TextFormat.RESET + ")" + TextFormat.RESET,
+                apiVersion
+            )
+        )
+        log.info(this.baseLang.tr("chorus.server.license"))
+        this.consoleSender = ConsoleCommandSender()
+
+        run {
+            Registries.POTION.init()
+            Registries.PACKET_DECODER.init()
+            Registries.ENTITY.init()
+            Registries.BLOCKENTITY.init()
+            Registries.BLOCKSTATE_ITEMMETA.init()
+            Registries.ITEM_RUNTIMEID.init()
+            Registries.BLOCK.init()
+            Registries.BLOCKSTATE.init()
+            Registries.ITEM.init()
+            Registries.CREATIVE.init()
+            Registries.BIOME.init()
+            Registries.FUEL.init()
+            Registries.GENERATOR.init()
+            Registries.GENERATE_STAGE.init()
+            Registries.EFFECT.init()
+            Registries.RECIPE.init()
+            Profession.init()
+            BlockTags
+            ItemTags
+            BiomeTags
+            BlockStateUpdaterBase
+            Enchantment.init()
+            Attribute.init()
+            BlockComposter.init()
+            DispenseBehaviorRegister.init()
+        }
+
+        // Convert legacy data before plugins get the chance to mess with it.
+        try {
+            playerDataDB = Iq80DBFactory.factory.open(
+                File(dataPath, "players"), Options()
+                    .createIfMissing(true)
+                    .compressionType(CompressionType.ZLIB_RAW)
+            )
+        } catch (e: IOException) {
+            log.error("", e)
+            exitProcess(1)
+        }
+        this.resourcePackManager = ResourcePackManager(
+            ZippedResourcePackLoader(File(Chorus.DATA_PATH, "resource_packs")),
+            JarPluginResourcePackLoader(File(this.pluginPath))
+        )
+        pluginManager.subscribeToPermission(BROADCAST_CHANNEL_ADMINISTRATIVE, this.consoleSender)
+        pluginManager.registerInterface(JavaPluginLoader::class.java)
+        console.setExecutingCommands(true)
+
+        try {
+            log.debug("Loading position tracking service")
+            this.positionTrackingService =
+                PositionTrackingService(File(Chorus.DATA_PATH, "services/position_tracking_db"))
+        } catch (e: IOException) {
+            log.error("Failed to start the Position Tracking DB service!", e)
+        }
+        pluginManager.loadInternalPlugin()
+
+        this.serverID = UUID.randomUUID()
+        pluginManager.loadPlugins(this.pluginPath)
+
+        this.enablePlugins(PluginLoadOrder.STARTUP)
+
+        addProvider("leveldb", LevelDBProvider::class.java)
+
+        loadLevels()
+
+        this.network = Network(this)
+        tickingAreaManager.loadAllTickingArea()
+
+        properties.save()
+
+        if (this.defaultLevel == null) {
+            log.error(this.baseLang.tr("chorus.level.defaultError"))
+            this.forceShutdown()
+
+            throw RuntimeException()
+        }
+
+        this.autoSaveTicks = settings.baseSettings.autosave
+
+        this.enablePlugins(PluginLoadOrder.POSTWORLD)
+
+        EntityProperty.init()
+        buildPacketData()
+        buildPlayerProperty()
+
+        if (!System.getProperty("disableWatchdog", "false").toBoolean()) {
+            this.watchdog = Watchdog(this, 60000) //60s
+            watchdog!!.start()
+        }
+        Runtime.getRuntime().addShutdownHook(Thread { this.shutdown() })
+        this.start()
+    }
+
+    val enabledNetworkEncryption: Boolean = settings.networkSettings.encryption
 
     private fun loadLevels() {
         val file = File(this.dataPath + "/worlds")
@@ -371,7 +608,7 @@ class Server internal constructor(
 
         log.info("Reloading properties...")
         properties.reload()
-        this.maxPlayers = properties[ServerPropertiesKeys.MAX_PLAYERS, 20]
+        this.maxPlayers = settings.serverSettings.maxPlayers
         if (properties[ServerPropertiesKeys.HARDCORE, false] && this.getDifficulty() < 3) {
             properties[ServerPropertiesKeys.DIFFICULTY, 3.also { difficulty = it }]
         }
@@ -458,7 +695,7 @@ class Server internal constructor(
             }
 
             val config = File(this.dataPath + "chorus.toml")
-            config.writeText(Toml.encodeToString<ServerSettings>(this.settings))
+            config.writeText(Toml.encodeToString<ChorusTOML>(this.settings))
 
             log.debug("Disabling all plugins")
             pluginManager.disablePlugins()
@@ -1270,7 +1507,7 @@ class Server internal constructor(
         if (bytes == null) {
             playerDataDB.put(nameBytes, array)
         }
-        val xboxAuthEnabled = properties[ServerPropertiesKeys.XBOX_AUTH, false]
+        val xboxAuthEnabled = settings.serverSettings.xboxAuth
         if (info is XboxLivePlayerInfo || !xboxAuthEnabled) {
             playerDataDB.put(nameBytes, array)
         }
@@ -1670,243 +1907,6 @@ class Server internal constructor(
             }
         }
 
-    /** */
-    init {
-        var predefinedLanguage1 = predefinedLanguage
-        instance = this
-
-        if (!File(dataPath + "worlds/").exists()) {
-            File(dataPath + "worlds/").mkdirs()
-        }
-        if (!File(dataPath + "players/").exists()) {
-            File(dataPath + "players/").mkdirs()
-        }
-        if (!File(pluginPath).exists()) {
-            File(pluginPath).mkdirs()
-        }
-        if (!File(commandDataPath).exists()) {
-            File(commandDataPath).mkdirs()
-        }
-
-        this.console = ChorusConsole(this)
-        this.consoleJob = CoroutineScope(Dispatchers.Default).launch { console.start() }
-
-        val config = File(this.dataPath + "chorus.toml")
-        var chooseLanguage: String? = null
-        if (!config.exists()) {
-            log.info("{}Welcome! Please choose a language first!", TextFormat.GREEN)
-            try {
-                val languageList = javaClass.module.getResourceAsStream("language/language.list")
-                checkNotNull(languageList) { "language/language.list is missing. If you are running a development version, make sure you have run 'git submodule update --init'." }
-                val lines = readFile(languageList).split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-                for (line in lines) {
-                    log.info(line)
-                }
-            } catch (e: IOException) {
-                throw RuntimeException(e)
-            }
-
-            while (chooseLanguage == null) {
-                val lang: String
-                if (predefinedLanguage1 != null) {
-                    log.info("Trying to load language from predefined language: {}", predefinedLanguage1)
-                    lang = predefinedLanguage1
-                } else {
-                    lang = console.readLine()
-                }
-
-                try {
-                    javaClass.classLoader.getResourceAsStream("language/$lang/lang.json").use { conf ->
-                        if (conf != null) {
-                            chooseLanguage = lang
-                        } else if (predefinedLanguage1 != null) {
-                            log.warn(
-                                "No language found for predefined language: {}, please choose a valid language",
-                                predefinedLanguage1
-                            )
-                            predefinedLanguage1 = null
-                        }
-                    }
-                } catch (e: IOException) {
-                    throw RuntimeException(e)
-                }
-            }
-        } else {
-            val configInstance = Config(config)
-            chooseLanguage = configInstance.getString("settings.language", "eng")
-        }
-        this.baseLang = BaseLang(chooseLanguage!!)
-        this.baseLangCode = mapInternalLang(chooseLanguage!!)
-        log.info("Loading {}...", TextFormat.GREEN.toString() + "chorus.toml" + TextFormat.RESET)
-
-        this.settings = ServerSettings.load(config)
-        this.settings.save(config)
-
-        settings.baseSettings.language = chooseLanguage!!
-
-        this.computeScope = CoroutineScope(Dispatchers.Default)
-
-        levelArray = Level.EMPTY_ARRAY
-
-        val targetLevel = org.apache.logging.log4j.Level.getLevel(settings.debugSettings.level)
-        val currentLevel = Chorus.logLevel
-        if (targetLevel != null && targetLevel.intLevel() > currentLevel!!.intLevel()) {
-            Chorus.logLevel = targetLevel
-        }
-
-        log.info("Loading {}...", TextFormat.GREEN.toString() + "server.properties" + TextFormat.RESET)
-
-        this.checkLoginTime = properties[ServerPropertiesKeys.CHECK_LOGIN_TIME, false]
-
-        log.info(this.baseLang.tr("language.selected", baseLang.name, baseLang.getLang()))
-        log.info(
-            this.baseLang.tr(
-                "chorus.server.start",
-                TextFormat.AQUA.toString() + this.version + TextFormat.RESET
-            )
-        )
-
-        val poolSize: String = settings.baseSettings.asyncWorkers
-        val poolSizeNumber = try {
-            poolSize.toInt()
-        } catch (e: Exception) {
-            max(Runtime.getRuntime().availableProcessors().toDouble(), 4.0).toInt()
-        }
-        ServerScheduler.WORKERS = poolSizeNumber
-        this.scheduler = ServerScheduler()
-
-        setProvider(settings.networkSettings.zlibProvider)
-
-        this.serverAuthoritativeMovementMode =
-            when (properties.get(ServerPropertiesKeys.SERVER_AUTHORITATIVE_MOVEMENT, "server-auth")) {
-                "client-auth" -> 0
-                "server-auth" -> 1
-                "server-auth-with-rewind" -> 2
-                else -> throw IllegalArgumentException()
-            }
-        if (settings.baseSettings.waterdogpe) {
-            this.checkLoginTime = false
-        }
-
-        this.entityMetadata = EntityMetadataStore()
-        this.playerMetadata = PlayerMetadataStore()
-        this.levelMetadata = LevelMetadataStore()
-        this.operators = Config(this.dataPath + "ops.txt", Config.ENUM)
-        this.whitelist = Config(this.dataPath + "white-list.txt", Config.ENUM)
-        this.bannedPlayers = BanList(this.dataPath + "banned-players.json")
-        bannedPlayers.load()
-        this.bannedIPs = BanList(this.dataPath + "banned-ips.json")
-        bannedIPs.load()
-        this.maxPlayers = properties[ServerPropertiesKeys.MAX_PLAYERS, 20]
-        this.setAutoSave(properties[ServerPropertiesKeys.AUTO_SAVE, true])
-        if (properties[ServerPropertiesKeys.HARDCORE, false] && this.getDifficulty() < 3) {
-            properties[ServerPropertiesKeys.DIFFICULTY, 3]
-        }
-
-        log.info(
-            this.baseLang.tr(
-                "chorus.server.info",
-                name,
-                TextFormat.YELLOW.toString() + this.nukkitVersion + TextFormat.RESET + " (" + TextFormat.YELLOW + this.gitCommit + TextFormat.RESET + ")" + TextFormat.RESET,
-                apiVersion
-            )
-        )
-        log.info(this.baseLang.tr("chorus.server.license"))
-        this.consoleSender = ConsoleCommandSender()
-
-        run {
-            Registries.POTION.init()
-            Registries.PACKET_DECODER.init()
-            Registries.ENTITY.init()
-            Registries.BLOCKENTITY.init()
-            Registries.BLOCKSTATE_ITEMMETA.init()
-            Registries.ITEM_RUNTIMEID.init()
-            Registries.BLOCK.init()
-            Registries.BLOCKSTATE.init()
-            Registries.ITEM.init()
-            Registries.CREATIVE.init()
-            Registries.BIOME.init()
-            Registries.FUEL.init()
-            Registries.GENERATOR.init()
-            Registries.GENERATE_STAGE.init()
-            Registries.EFFECT.init()
-            Registries.RECIPE.init()
-            Profession.init()
-            BlockTags
-            ItemTags
-            BiomeTags
-            BlockStateUpdaterBase
-            Enchantment.init()
-            Attribute.init()
-            BlockComposter.init()
-            DispenseBehaviorRegister.init()
-        }
-
-        // Convert legacy data before plugins get the chance to mess with it.
-        try {
-            playerDataDB = Iq80DBFactory.factory.open(
-                File(dataPath, "players"), Options()
-                    .createIfMissing(true)
-                    .compressionType(CompressionType.ZLIB_RAW)
-            )
-        } catch (e: IOException) {
-            log.error("", e)
-            exitProcess(1)
-        }
-        this.resourcePackManager = ResourcePackManager(
-            ZippedResourcePackLoader(File(Chorus.DATA_PATH, "resource_packs")),
-            JarPluginResourcePackLoader(File(this.pluginPath))
-        )
-        pluginManager.subscribeToPermission(BROADCAST_CHANNEL_ADMINISTRATIVE, this.consoleSender)
-        pluginManager.registerInterface(JavaPluginLoader::class.java)
-        console.setExecutingCommands(true)
-
-        try {
-            log.debug("Loading position tracking service")
-            this.positionTrackingService =
-                PositionTrackingService(File(Chorus.DATA_PATH, "services/position_tracking_db"))
-        } catch (e: IOException) {
-            log.error("Failed to start the Position Tracking DB service!", e)
-        }
-        pluginManager.loadInternalPlugin()
-
-        this.serverID = UUID.randomUUID()
-        pluginManager.loadPlugins(this.pluginPath)
-
-        this.enablePlugins(PluginLoadOrder.STARTUP)
-
-        addProvider("leveldb", LevelDBProvider::class.java)
-
-        loadLevels()
-
-        this.network = Network(this)
-        tickingAreaManager.loadAllTickingArea()
-
-        properties.save()
-
-        if (this.defaultLevel == null) {
-            log.error(this.baseLang.tr("chorus.level.defaultError"))
-            this.forceShutdown()
-
-            throw RuntimeException()
-        }
-
-        this.autoSaveTicks = settings.baseSettings.autosave
-
-        this.enablePlugins(PluginLoadOrder.POSTWORLD)
-
-        EntityProperty.init()
-        buildPacketData()
-        buildPlayerProperty()
-
-        if (!System.getProperty("disableWatchdog", "false").toBoolean()) {
-            this.watchdog = Watchdog(this, 60000) //60s
-            watchdog!!.start()
-        }
-        Runtime.getRuntime().addShutdownHook(Thread { this.shutdown() })
-        this.start()
-    }
-
     /**
      * @param name 世界名字
      * @return 世界是否已经加载<br></br>Is the world already loaded
@@ -2205,7 +2205,7 @@ class Server internal constructor(
         /**
          * @return 服务器端口<br></br>server port
          */
-        get() = properties[ServerPropertiesKeys.SERVER_PORT, 19132]
+        get() = settings.serverSettings.port
 
     val viewDistance: Int
         /**
@@ -2217,7 +2217,7 @@ class Server internal constructor(
         /**
          * @return 服务器网络地址<br></br>server ip
          */
-        get() = properties.get(ServerPropertiesKeys.SERVER_IP, "0.0.0.0")
+        get() = settings.serverSettings.ip
 
     /**
      * @return 服务器是否会自动保存<br></br>Does the server automatically save
@@ -2301,7 +2301,7 @@ class Server internal constructor(
      * @return 是否开启白名单<br></br>Whether to start server whitelist
      */
     fun hasWhitelist(): Boolean {
-        return properties[ServerPropertiesKeys.WHITE_LIST, false]
+        return settings.serverSettings.whiteList
     }
 
     val spawnRadius: Int
@@ -2320,14 +2320,14 @@ class Server internal constructor(
         /**
          * @return 得到服务器标题<br></br>Get server motd
          */
-        get() = properties.get(ServerPropertiesKeys.MOTD, "PowerNukkitX Server")
+        get() = settings.serverSettings.motd
         /**
          * Set the motd of server.
          *
          * @param motd the motd content
          */
         set(motd) {
-            properties.get(ServerPropertiesKeys.MOTD, motd)
+            settings.serverSettings.motd = motd
             network.pong.motd = motd
             network.pong.update()
         }
@@ -2337,12 +2337,7 @@ class Server internal constructor(
          * @return 得到服务器子标题<br></br>Get the server subheading
          */
         get() {
-            var subMotd =
-                properties.get(ServerPropertiesKeys.SUB_MOTD, "v2.powernukkitx.com")
-            if (subMotd.isEmpty()) {
-                subMotd = "v2.powernukkitx.com"
-            }
-            return subMotd
+            return settings.serverSettings.subMotd
         }
         /**
          * Set the sub motd of server.
@@ -2350,7 +2345,7 @@ class Server internal constructor(
          * @param subMotd the sub motd
          */
         set(subMotd) {
-            properties.get(ServerPropertiesKeys.SUB_MOTD, subMotd)
+            settings.serverSettings.subMotd = subMotd
             network.pong.subMotd = subMotd
             network.pong.update()
         }
@@ -2359,13 +2354,13 @@ class Server internal constructor(
         /**
          * @return 是否强制使用服务器资源包<br></br>Whether to force the use of server resourcepack
          */
-        get() = properties[ServerPropertiesKeys.FORCE_RESOURCES, false]
+        get() = settings.serverSettings.forceResources
 
     val forceResourcesAllowOwnPacks: Boolean
         /**
          * @return 是否强制使用服务器资源包的同时允许加载客户端资源包<br></br>Whether to force the use of server resourcepack while allowing the loading of client resourcepack
          */
-        get() = properties[ServerPropertiesKeys.FORCE_RESOURCES_ALLOW_CLIENT_PACKS, false]
+        get() = settings.serverSettings.forceResourcesAllowClientPacks
 
     private fun mapInternalLang(langName: String): LangCode {
         return when (langName) {

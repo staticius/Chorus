@@ -64,13 +64,13 @@ class WhitelistCommand(name: String) :
                     }
 
                     "on" -> {
-                        Server.instance.properties[ServerPropertiesKeys.WHITE_LIST.toString()] = true
+                        Server.instance.settings.serverSettings.whiteList = true
                         log.addSuccess("commands.allowlist.enabled").output(true)
                         return 1
                     }
 
                     "off" -> {
-                        Server.instance.properties[ServerPropertiesKeys.WHITE_LIST.toString()] = false
+                        Server.instance.settings.serverSettings.whiteList = false
                         log.addSuccess("commands.allowlist.disabled").output(true)
                         return 1
                     }

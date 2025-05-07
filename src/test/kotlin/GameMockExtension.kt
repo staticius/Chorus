@@ -6,7 +6,7 @@ import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.reflect.FieldUtils
 import org.chorus_oss.chorus.block.BlockComposter
 import org.chorus_oss.chorus.command.SimpleCommandMap
-import org.chorus_oss.chorus.config.ServerSettings
+import org.chorus_oss.chorus.config.ChorusTOML
 import org.chorus_oss.chorus.dispenser.DispenseBehaviorRegister
 import org.chorus_oss.chorus.entity.Attribute
 import org.chorus_oss.chorus.entity.data.Skin
@@ -46,7 +46,6 @@ import java.io.*
 import java.net.InetSocketAddress
 import java.nio.file.Path
 import java.util.*
-import java.util.concurrent.ForkJoinPool
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.locks.LockSupport
 
@@ -161,7 +160,7 @@ class GameMockExtension : MockitoExtension() {
                 Mockito.`when`(banList.entries).thenReturn(LinkedHashMap())
                 Mockito.`when`(server.bannedIPs).thenReturn(banList)
                 Mockito.`when`(server.baseLang).thenReturn(BaseLang("eng", "src/main/resources/language"))
-                val serverSettings = ServerSettings.load(File("chorus.toml"))
+                val serverSettings = ChorusTOML.load(File("chorus.toml"))
                 Mockito.`when`(server.settings).thenReturn(serverSettings)
                 Mockito.`when`(server.apiVersion).thenReturn("1.0.0")
                 Mockito.`when`(simpleCommandMap.commands).thenReturn(emptyMap())

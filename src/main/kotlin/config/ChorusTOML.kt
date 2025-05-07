@@ -10,9 +10,12 @@ import kotlinx.serialization.encodeToString
 import java.io.File
 
 @Serializable
-class ServerSettings {
+class ChorusTOML {
     @SerialName("settings")
     val baseSettings = BaseSettings()
+
+    @SerialName("server-settings")
+    val serverSettings = ServerSettings()
 
     @SerialName("network-settings")
     val networkSettings = NetworkSettings()
@@ -68,7 +71,32 @@ class ServerSettings {
     }
 
     @Serializable
+    data class ServerSettings(
+        var motd: String = "Chorus",
+        @SerialName("sub-motd")
+        var subMotd: String = "chorus-oss.org",
+        var ip: String = "0.0.0.0",
+        var port: Int = 19132,
+        @SerialName("max-players")
+        var maxPlayers: Int = 10,
+        @SerialName("xbox-auth")
+        var xboxAuth: Boolean = true,
+        @SerialName("check-login-time")
+        var checkLoginTime: Boolean = false,
+        @SerialName("white-list")
+        var whiteList: Boolean = false,
+        @SerialName("force-resources")
+        var forceResources: Boolean = false,
+        @SerialName("force-resources-allow-client-packs")
+        var forceResourcesAllowClientPacks: Boolean = false,
+        @SerialName("server-authoritative-movement")
+        var serverAuthoritativeMovement: String = "server-auth"
+    )
+
+    @Serializable
     class NetworkSettings {
+        var encryption: Boolean = true
+
         @SerialName("compression-level")
         var compressionLevel: Int = 7
 
@@ -222,8 +250,8 @@ class ServerSettings {
     }
 
     companion object {
-        fun load(file: File): ServerSettings {
-            return Toml(inputConfig = TomlInputConfig(ignoreUnknownNames = true)).decodeFromString<ServerSettings>(
+        fun load(file: File): ChorusTOML {
+            return Toml(inputConfig = TomlInputConfig(ignoreUnknownNames = true)).decodeFromString<ChorusTOML>(
                 if (file.exists()) file.readText() else ""
             )
         }

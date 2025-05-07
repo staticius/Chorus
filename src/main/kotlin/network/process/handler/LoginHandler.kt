@@ -41,7 +41,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         val chainData = ClientChainData.read(pk)
 
         //verify the player if enable the xbox-auth
-        if (!chainData.isXboxAuthed && server.properties[ServerPropertiesKeys.XBOX_AUTH, true]) {
+        if (!chainData.isXboxAuthed && server.settings.serverSettings.xboxAuth) {
             LoginHandler.log.debug("disconnection due to notAuthenticated")
             session.close("disconnectionScreen.notAuthenticated")
             return
