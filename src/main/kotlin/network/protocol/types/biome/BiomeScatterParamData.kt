@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.network.protocol.types.biome
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 
 data class BiomeScatterParamData(
-    val coordinate: MutableList<BiomeCoordinateData>,
+    val coordinate: List<BiomeCoordinateData>,
     val evalOrder: CoordinateEvaluationOrder,
     val chancePercentType: ExpressionOp,
     val chancePercent: Short,

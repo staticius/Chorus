@@ -4,8 +4,8 @@ import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.biome.BiomeDefinitionData
 
 data class BiomeDefinitionListPacket(
-    val biomeDefinitions: MutableMap<Short, BiomeDefinitionData>,
-    val biomeStringList: MutableList<String>,
+    val biomeDefinitions: Map<Short, BiomeDefinitionData>,
+    val biomeStringList: List<String>,
 ) : DataPacket(), PacketEncoder {
     override fun pid(): Int {
         return ProtocolInfo.BIOME_DEFINITION_LIST_PACKET

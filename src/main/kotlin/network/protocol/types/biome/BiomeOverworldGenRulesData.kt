@@ -3,13 +3,13 @@ package org.chorus_oss.chorus.network.protocol.types.biome
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 
 data class BiomeOverworldGenRulesData(
-    val hillsTransformations: MutableList<BiomeWeightedData>,
-    val mutateTransformations: MutableList<BiomeWeightedData>,
-    val riverTransformations: MutableList<BiomeWeightedData>,
-    val shoreTransformations: MutableList<BiomeWeightedData>,
-    val preHillsEdge: MutableList<BiomeConditionalTransformationData>,
-    val postShoreEdge: MutableList<BiomeConditionalTransformationData>,
-    val climate: MutableList<BiomeWeightedTemperatureData>,
+    val hillsTransformations: List<BiomeWeightedData>,
+    val mutateTransformations: List<BiomeWeightedData>,
+    val riverTransformations: List<BiomeWeightedData>,
+    val shoreTransformations: List<BiomeWeightedData>,
+    val preHillsEdge: List<BiomeConditionalTransformationData>,
+    val postShoreEdge: List<BiomeConditionalTransformationData>,
+    val climate: List<BiomeWeightedTemperatureData>,
 ) {
     fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeArray(hillsTransformations) { buf, data ->

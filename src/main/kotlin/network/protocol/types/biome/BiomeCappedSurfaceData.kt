@@ -3,8 +3,8 @@ package org.chorus_oss.chorus.network.protocol.types.biome
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 
 data class BiomeCappedSurfaceData(
-    val floorBlocks: MutableList<Int>,
-    val ceilingBlocks: MutableList<Int>,
+    val floorBlocks: List<Int>,
+    val ceilingBlocks: List<Int>,
     val seaBlock: UInt? = null,
     val foundationBlock: UInt? = null,
     val beachBlock: UInt? = null,
