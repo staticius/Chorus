@@ -14,7 +14,7 @@ plugins {
     kotlin("plugin.serialization") version "2.1.10"
 }
 
-group = "org.chorus_oss.chorus"
+group = "org.chorus_oss"
 version = "1.0-SNAPSHOT"
 description = "Chorus"
 
