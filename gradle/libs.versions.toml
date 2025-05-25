@@ -37,6 +37,7 @@ com-github-stateless4j = "2.6.0"
 eu-okaeri-core = "c995d17b6e"
 disruptor = "4.0.0"
 caffeine-ver = "3.2.0"
+protocol = "1.0-SNAPSHOT"
 
 [libraries]
 libdeflate = { module = "cn.powernukkitx:libdeflate-java", version.ref = "cn-powernukkitx-libdeflate-java" }
@@ -80,6 +81,7 @@ rng-simple = { module = "org.apache.commons:commons-rng-simple", version.ref = "
 rng-sampling = { module = "org.apache.commons:commons-rng-sampling", version.ref = "commons-rng" }
 okaeri = { module = "com.github.PowerNukkitX:okaeri-configs", version.ref = "eu-okaeri-core" }
 caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "caffeine-ver"}
+chorus-protocol = { module = "org.chorus_oss:protocol", version.ref = "protocol" }
 
 [bundles]
 netty = ["netty-raknet", "netty-epoll", "netty-kqueue"]

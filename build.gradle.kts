@@ -63,6 +63,8 @@ dependencies {
     implementation("com.akuleshov7:ktoml-file:0.6.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
+    implementation(libs.chorus.protocol)
+
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
 }
