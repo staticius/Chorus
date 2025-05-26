@@ -64,6 +64,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     implementation(libs.chorus.protocol)
+    implementation(libs.kotlinx.io)
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
