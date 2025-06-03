@@ -137,16 +137,13 @@ class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessi
                     channel.pipeline().get(BedrockEncryptionDecoder::class.java) != null)
         ) { "Encryption is already enabled" }
 
-        val protocolVersion = ProtocolInfo.PROTOCOL_VERSION
-        val useCtr = protocolVersion >= 428
-
         channel.pipeline().addAfter(
             FrameIdCodec.NAME, BedrockEncryptionEncoder.NAME,
-            BedrockEncryptionEncoder(secretKey, EncryptionUtils.createCipher(useCtr, true, secretKey))
+            BedrockEncryptionEncoder(secretKey, EncryptionUtils.createCipher(true, secretKey))
         )
         channel.pipeline().addAfter(
             FrameIdCodec.NAME, BedrockEncryptionDecoder.NAME,
-            BedrockEncryptionDecoder(secretKey, EncryptionUtils.createCipher(useCtr, false, secretKey))
+            BedrockEncryptionDecoder(secretKey, EncryptionUtils.createCipher(false, secretKey))
         )
 
         log.debug("Encryption enabled for {}", socketAddress)

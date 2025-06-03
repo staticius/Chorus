@@ -51,7 +51,6 @@ dependencies {
     implementation(libs.bundles.compress)
     implementation(libs.bundles.terminal)
     implementation(libs.graalvm.polyglot)
-    implementation(libs.okaeri)
     implementation(libs.caffeine)
     runtimeOnly(libs.bundles.graalvm.runtime)
 
@@ -65,6 +64,8 @@ dependencies {
 
     implementation(libs.chorus.protocol)
     implementation(libs.kotlinx.io)
+    implementation(libs.cryptography.core)
+    implementation(libs.cryptography.provider.jdk)
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))

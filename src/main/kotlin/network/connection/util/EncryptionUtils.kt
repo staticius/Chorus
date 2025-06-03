@@ -230,19 +230,14 @@ object EncryptionUtils {
         return token
     }
 
-    fun createCipher(gcm: Boolean, encrypt: Boolean, key: SecretKey): Cipher {
+    fun createCipher(encrypt: Boolean, key: SecretKey): Cipher {
         try {
-            val iv: ByteArray
-            val transformation: String
-            if (gcm) {
-                iv = ByteArray(16)
-                System.arraycopy(key.encoded, 0, iv, 0, 12)
-                iv[15] = 2
-                transformation = "AES/CTR/NoPadding"
-            } else {
-                iv = key.encoded.copyOf(16)
-                transformation = "AES/CFB8/NoPadding"
-            }
+            val iv = ByteArray(16)
+            val transformation = "AES/CTR/NoPadding"
+
+            System.arraycopy(key.encoded, 0, iv, 0, 12)
+            iv[15] = 2
+
             val cipher = Cipher.getInstance(transformation)
             cipher.init(if (encrypt) Cipher.ENCRYPT_MODE else Cipher.DECRYPT_MODE, key, IvParameterSpec(iv))
             return cipher
