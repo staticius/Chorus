@@ -33,12 +33,12 @@ object EncryptionUtils {
         return CryptographyRandom.nextBytes(16)
     }
 
-    fun getSecretKey(localPrivateKey: EC.PrivateKey, remotePublicKey: EC.PublicKey, token: ByteArray): AES.CTR.Key {
-        val shared = ByteArray(32) // TODO
+    fun getSecretKey(localPrivateKey: ECDH.PrivateKey, remotePublicKey: ECDH.PublicKey, token: ByteArray): AES.CTR.Key {
+        val shared = localPrivateKey.sharedSecretGenerator().generateSharedSecretToByteArrayBlocking(remotePublicKey)
 
         val hasher = digest.hasher()
-        hasher.hashBlocking(token + shared)
-        return aes.keyGenerator(AES.Key.Size.B256).generateKeyBlocking()
+        val hash = hasher.hashBlocking(token + shared)
+        return aes.keyDecoder().decodeFromByteArrayBlocking(AES.Key.Format.RAW, hash)
     }
 
     fun createHandshakeJWT(serverKeyPair: ECDSA.KeyPair, token: ByteArray): ByteString {
