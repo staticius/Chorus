@@ -76,45 +76,21 @@ class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: 
     protected fun onDecompressed(ctx: ChannelHandlerContext?, msg: BedrockBatchWrapper?) {}
 
     protected fun getCompressionHeader(algorithm: CompressionAlgorithm): Byte {
-        when (algorithm) {
-            PacketCompressionAlgorithm.NONE -> {
-                return 0xff.toByte()
-            }
-
-            PacketCompressionAlgorithm.ZLIB -> {
-                return 0x00
-            }
-
-            PacketCompressionAlgorithm.SNAPPY -> {
-                return 0x01
-            }
-
-            else -> {
-                val header = this.getCompressionHeader0(algorithm)
-                require(header.toInt() != -1) { "Unknown compression algorithm $algorithm" }
-                return header
-            }
+        return when (algorithm) {
+            PacketCompressionAlgorithm.NONE -> 0xff.toByte()
+            PacketCompressionAlgorithm.ZLIB -> 0x00
+            PacketCompressionAlgorithm.SNAPPY -> 0x01
+            else -> throw IllegalArgumentException("Unknown compression algorithm $algorithm")
         }
     }
 
     protected fun getCompressionAlgorithm(header: Byte): CompressionAlgorithm {
-        when (header) {
-            0x00.toByte() -> return PacketCompressionAlgorithm.ZLIB
-            0x01.toByte() -> return PacketCompressionAlgorithm.SNAPPY
-            0xff.toByte() -> return PacketCompressionAlgorithm.NONE
+        return when (header) {
+            0x00.toByte() -> PacketCompressionAlgorithm.ZLIB
+            0x01.toByte() -> PacketCompressionAlgorithm.SNAPPY
+            0xff.toByte() -> PacketCompressionAlgorithm.NONE
+            else -> throw IllegalArgumentException("Unknown compression algorithm $header")
         }
-
-        val algorithm = this.getCompressionAlgorithm0(header)
-        requireNotNull(algorithm) { "Unknown compression algorithm $header" }
-        return algorithm
-    }
-
-    protected fun getCompressionHeader0(algorithm: CompressionAlgorithm?): Byte {
-        return -1
-    }
-
-    protected fun getCompressionAlgorithm0(header: Byte): CompressionAlgorithm? {
-        return null
     }
 
     override fun toString(): String {

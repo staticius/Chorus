@@ -5,7 +5,6 @@ import io.netty.util.AbstractReferenceCounted
 import io.netty.util.ReferenceCountUtil
 import io.netty.util.ReferenceCounted
 import io.netty.util.internal.ObjectPool
-import org.chorus_oss.chorus.network.connection.util.BatchFlag
 import org.chorus_oss.chorus.network.protocol.DataPacket
 import org.chorus_oss.chorus.network.protocol.types.CompressionAlgorithm
 import java.util.function.Consumer
@@ -42,7 +41,6 @@ class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Han
     private val packets: MutableList<BedrockPacketWrapper?> = mutableListOf()
 
     var modified = false
-    private val flags: MutableSet<BatchFlag> = mutableSetOf()
 
     override fun deallocate() {
         packets.forEach(Consumer { msg: BedrockPacketWrapper? -> ReferenceCountUtil.safeRelease(msg) })
@@ -53,7 +51,6 @@ class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Han
         packets.clear()
         this.modified = false
         this.algorithm = null
-        flags.clear()
         handle.recycle(this)
     }
 
@@ -73,18 +70,6 @@ class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Han
 
         this.compressed = compressed
         this.algorithm = algorithm
-    }
-
-    fun setFlag(flag: BatchFlag) {
-        flags.add(flag)
-    }
-
-    fun hasFlag(flag: BatchFlag): Boolean {
-        return flags.contains(flag)
-    }
-
-    fun unsetFlag(flag: BatchFlag) {
-        flags.remove(flag)
     }
 
     override fun touch(o: Any): ReferenceCounted {
@@ -114,7 +99,7 @@ class BedrockBatchWrapper private constructor(private val handle: ObjectPool.Han
             batch.uncompressed = uncompressed
             batch.setRefCnt(1)
 
-            check(!(batch.packets.isNotEmpty() || batch.flags.isNotEmpty())) { "Batch was not deallocated" }
+            check(!(batch.packets.isNotEmpty())) { "Batch was not deallocated" }
             return batch
         }
 
