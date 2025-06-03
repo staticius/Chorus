@@ -40,6 +40,7 @@ caffeine-ver = "3.2.0"
 protocol = "1.0-SNAPSHOT"
 kotlinx-io = "0.7.0"
 cryptography = "0.4.0"
+jwt = "1.1.0"
 
 [libraries]
 libdeflate = { module = "cn.powernukkitx:libdeflate-java", version.ref = "cn-powernukkitx-libdeflate-java" }
@@ -88,6 +89,7 @@ kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "
 cryptography-core = { module = "dev.whyoleg.cryptography:cryptography-core", version.ref = "cryptography" }
 cryptography-random = { module = "dev.whyleg.cryptography:cryptography-random", version.ref = "cryptography" }
 cryptography-provider-jdk = { module = "dev.whyoleg.cryptography:cryptography-provider-jdk", version.ref = "cryptography" }
+jwt = { module = "com.appstractive:jwt-kt", version.ref = "jwt" }
 
 [bundles]
 netty = ["netty-raknet", "netty-epoll", "netty-kqueue"]

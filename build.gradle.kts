@@ -64,10 +64,10 @@ dependencies {
 
     implementation(libs.chorus.protocol)
     implementation(libs.kotlinx.io)
-
     implementation(libs.cryptography.core)
     implementation(libs.cryptography.random)
     implementation(libs.cryptography.provider.jdk)
+    implementation(libs.jwt)
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
