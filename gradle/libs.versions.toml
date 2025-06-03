@@ -86,6 +86,7 @@ caffeine = { module = "com.github.ben-manes.caffeine:caffeine", version.ref = "c
 chorus-protocol = { module = "org.chorus_oss:protocol", version.ref = "protocol" }
 kotlinx-io = { module = "org.jetbrains.kotlinx:kotlinx-io-core", version.ref = "kotlinx-io" }
 cryptography-core = { module = "dev.whyoleg.cryptography:cryptography-core", version.ref = "cryptography" }
+cryptography-random = { module = "dev.whyleg.cryptography:cryptography-random", version.ref = "cryptography" }
 cryptography-provider-jdk = { module = "dev.whyoleg.cryptography:cryptography-provider-jdk", version.ref = "cryptography" }
 
 [bundles]

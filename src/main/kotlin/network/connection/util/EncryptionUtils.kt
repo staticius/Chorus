@@ -1,8 +1,5 @@
 package org.chorus_oss.chorus.network.connection.util
 
-import org.chorus_oss.chorus.utils.JSONUtils
-
-import org.jose4j.json.JsonUtil
 import org.jose4j.jwa.AlgorithmConstraints
 import org.jose4j.jws.AlgorithmIdentifiers
 import org.jose4j.jws.JsonWebSignature
@@ -86,68 +83,6 @@ object EncryptionUtils {
     @JvmStatic
     fun createKeyPair(): KeyPair {
         return KEY_PAIR_GEN.generateKeyPair()
-    }
-
-    @Throws(NoSuchAlgorithmException::class, InvalidKeySpecException::class, JoseException::class)
-    fun verifyClientData(clientDataJwt: String?, identityPublicKey: String?): ByteArray? {
-        return verifyClientData(clientDataJwt, parseKey(identityPublicKey))
-    }
-
-    @Throws(JoseException::class)
-    fun verifyClientData(clientDataJwt: String?, identityPublicKey: PublicKey?): ByteArray? {
-        val clientData = JsonWebSignature()
-        clientData.compactSerialization = clientDataJwt
-        clientData.key = identityPublicKey
-        if (!clientData.verifySignature()) {
-            return null
-        }
-        return clientData.unverifiedPayloadBytes
-    }
-
-    @Throws(JoseException::class, NoSuchAlgorithmException::class, InvalidKeySpecException::class)
-    fun validateChain(chain: List<String?>): ChainValidationResult {
-        when (chain.size) {
-            1 -> {
-                // offline / proxied
-                val identity = JsonWebSignature()
-                identity.compactSerialization = chain[0]
-                return ChainValidationResult(false, identity.unverifiedPayload)
-            }
-
-            3 -> {
-                var currentKey: ECPublicKey? = null
-                var parsedPayload: Map<String, Any?>? = null
-                var i = 0
-                while (i < 3) {
-                    val signature = JsonWebSignature()
-                    signature.compactSerialization = chain[i]
-
-                    val expectedKey = parseKey(signature.getHeader(HeaderParameterNames.X509_URL))
-
-                    if (currentKey == null) {
-                        currentKey = expectedKey
-                    } else check(currentKey == expectedKey) { "Received broken chain" }
-
-                    signature.setAlgorithmConstraints(ALGORITHM_CONSTRAINTS)
-                    signature.key = currentKey
-                    check(signature.verifySignature()) { "Chain signature doesn't match content" }
-
-                    // the second chain entry has to be signed by Mojang
-                    check(!(i == 1 && (currentKey != mojangPublicKey && currentKey != oldMojangPublicKey))) { "The chain isn't signed by Mojang!" }
-
-                    parsedPayload = JsonUtil.parseJson(signature.unverifiedPayload)
-                    val identityPublicKey = JSONUtils.childAsType(
-                        parsedPayload, "identityPublicKey",
-                        String::class.java
-                    )
-                    currentKey = parseKey(identityPublicKey)
-                    i++
-                }
-                return ChainValidationResult(true, parsedPayload)
-            }
-
-            else -> throw IllegalStateException("Unexpected login chain length")
-        }
     }
 
     /**
