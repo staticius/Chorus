@@ -1,12 +1,18 @@
 package org.chorus_oss.chorus.network.connection.netty.codec.packet
 
 import io.netty.buffer.ByteBuf
+import io.netty.buffer.ByteBufInputStream
 import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageCodec
+import kotlinx.io.Buffer
+import kotlinx.io.asSource
+import kotlinx.io.buffered
 import org.chorus_oss.chorus.network.connection.netty.BedrockPacketWrapper
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.Loggable
+import org.chorus_oss.protocol.core.Packet
+import org.chorus_oss.protocol.core.PacketRegistry
 
 abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacketWrapper>() {
     @Throws(Exception::class)
@@ -39,6 +45,13 @@ abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacket
             val index = msg.readerIndex()
             this.decodeHeader(msg, wrapper)
             wrapper.headerLength = msg.readerIndex() - index
+
+//            val codec = PacketRegistry.get(wrapper.packetId) ?: run {
+//                log.info("Couldn't find PacketCodec for id: ${wrapper.packetId}")
+//                return
+//            }
+//            val packet = codec.deserialize(ByteBufInputStream(msg).asSource().buffered()) as Packet
+
             val packetDecoder = Registries.PACKET_DECODER[wrapper.packetId]
             if (packetDecoder == null) {
                 log.info("Couldn't find PacketDecoder for PacketID: ${wrapper.packetId}")
