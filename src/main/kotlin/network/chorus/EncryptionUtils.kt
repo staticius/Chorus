@@ -4,11 +4,13 @@ import dev.whyoleg.cryptography.CryptographyProvider
 import dev.whyoleg.cryptography.algorithms.*
 import dev.whyoleg.cryptography.random.CryptographyRandom
 import kotlinx.io.bytestring.ByteString
-import kotlinx.io.bytestring.encodeToByteString
+import kotlinx.io.bytestring.decodeToByteString
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 object EncryptionUtils {
     @Suppress("SpellCheckingInspection")
-    val mojangPublicKey: ECDSA.PublicKey = parseKey("MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAECRXueJeTDqNRRgJi/vlRufByu/2G0i2Ebt6YMar5QX/R0DIIyrJMcUpruK4QveTfJSTp3Shlq4Gk34cD/4GUWwkv0DVuzeuB+tXija7HBxii03NHDbPAD0AKnLr2wdAp".encodeToByteString())
+    val mojangPublicKey: ECDSA.PublicKey = parseKey("MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAECRXueJeTDqNRRgJi/vlRufByu/2G0i2Ebt6YMar5QX/R0DIIyrJMcUpruK4QveTfJSTp3Shlq4Gk34cD/4GUWwkv0DVuzeuB+tXija7HBxii03NHDbPAD0AKnLr2wdAp")
 
     val ecdsa = CryptographyProvider.Default.get(ECDSA)
     val aes = CryptographyProvider.Default.get(AES.CTR)
@@ -16,13 +18,19 @@ object EncryptionUtils {
     val ecdh = CryptographyProvider.Default.get(ECDH)
 
     val curve = EC.Curve.P384
-    val format = EC.PublicKey.Format.DER
+    val publicFormat = EC.PublicKey.Format.DER
+    val privateFormat = EC.PrivateKey.Format.DER
 
     val keyGenerator = ecdsa.keyPairGenerator(curve)
     val publicKeyDecoder = ecdsa.publicKeyDecoder(curve)
 
-    fun parseKey(b64: ByteString): ECDSA.PublicKey {
-        return publicKeyDecoder.decodeFromByteStringBlocking(format, b64)
+    val ecdhPrivateKeyDecoder = ecdh.privateKeyDecoder(curve)
+    val ecdhPublicKeyDecoder = ecdh.publicKeyDecoder(curve)
+
+    @OptIn(ExperimentalEncodingApi::class)
+    fun parseKey(b64: String): ECDSA.PublicKey {
+        val byteString = Base64.decodeToByteString(b64)
+        return publicKeyDecoder.decodeFromByteStringBlocking(publicFormat, byteString)
     }
 
     fun generateKeyPair(): ECDSA.KeyPair {
@@ -33,8 +41,11 @@ object EncryptionUtils {
         return CryptographyRandom.nextBytes(16)
     }
 
-    fun getSecretKey(localPrivateKey: ECDH.PrivateKey, remotePublicKey: ECDH.PublicKey, token: ByteArray): AES.CTR.Key {
-        val shared = localPrivateKey.sharedSecretGenerator().generateSharedSecretToByteArrayBlocking(remotePublicKey)
+    fun getSecretKey(localPrivateKey: ECDSA.PrivateKey, remotePublicKey: ECDSA.PublicKey, token: ByteArray): AES.CTR.Key {
+        val localECDHPrivateKey = ecdhPrivateKeyDecoder.decodeFromByteArrayBlocking(privateFormat, localPrivateKey.encodeToByteArrayBlocking(privateFormat))
+        val remoteECDHPublicKey = ecdhPublicKeyDecoder.decodeFromByteArrayBlocking(publicFormat, remotePublicKey.encodeToByteArrayBlocking(publicFormat))
+
+        val shared = localECDHPrivateKey.sharedSecretGenerator().generateSharedSecretToByteArrayBlocking(remoteECDHPublicKey)
 
         val hasher = digest.hasher()
         val hash = hasher.hashBlocking(token + shared)
