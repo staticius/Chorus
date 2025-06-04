@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.cryptography.random)
     implementation(libs.cryptography.provider.jdk)
     implementation(libs.jwt)
+    implementation(libs.jwt.ecdsa)
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))

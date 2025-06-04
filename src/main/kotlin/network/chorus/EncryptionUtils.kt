@@ -1,9 +1,12 @@
 package org.chorus_oss.chorus.network.chorus
 
+import com.appstractive.jwt.UnsignedJWT
+import com.appstractive.jwt.jwt
+import com.appstractive.jwt.sign
+import com.appstractive.jwt.signatures.es384
 import dev.whyoleg.cryptography.CryptographyProvider
 import dev.whyoleg.cryptography.algorithms.*
 import dev.whyoleg.cryptography.random.CryptographyRandom
-import kotlinx.io.bytestring.ByteString
 import kotlinx.io.bytestring.decodeToByteString
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
@@ -52,7 +55,18 @@ object EncryptionUtils {
         return aes.keyDecoder().decodeFromByteArrayBlocking(AES.Key.Format.RAW, hash)
     }
 
-    fun createHandshakeJWT(serverKeyPair: ECDSA.KeyPair, token: ByteArray): ByteString {
-        TODO()
+    @OptIn(ExperimentalEncodingApi::class)
+    suspend fun createHandshakeJWT(serverKeyPair: ECDSA.KeyPair, token: ByteArray): String {
+        val jwt: UnsignedJWT = jwt {
+            claims {
+                claim("salt", Base64.encode(token))
+            }
+        }
+
+        val signed = jwt.sign {
+            es384 { der(serverKeyPair.privateKey.encodeToByteArrayBlocking(privateFormat), curve) }
+        }
+
+        return signed.signedData
     }
 }

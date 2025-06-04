@@ -90,6 +90,7 @@ cryptography-core = { module = "dev.whyoleg.cryptography:cryptography-core", ver
 cryptography-random = { module = "dev.whyleg.cryptography:cryptography-random", version.ref = "cryptography" }
 cryptography-provider-jdk = { module = "dev.whyoleg.cryptography:cryptography-provider-jdk", version.ref = "cryptography" }
 jwt = { module = "com.appstractive:jwt-kt", version.ref = "jwt" }
+jwt-ecdsa = { module = "com.appstractive:jwt-ecdsa-kt", version.ref = "jwt" }
 
 [bundles]
 netty = ["netty-raknet", "netty-epoll", "netty-kqueue"]
