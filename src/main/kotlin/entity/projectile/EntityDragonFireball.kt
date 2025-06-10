@@ -54,7 +54,7 @@ class EntityDragonFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjectile
 
     protected fun onCollide() {
         this.close()
-        val entity = Entity.Companion.createEntity(
+        val entity = createEntity(
             EntityID.AREA_EFFECT_CLOUD,
             locator.chunk,
             CompoundTag().putList(

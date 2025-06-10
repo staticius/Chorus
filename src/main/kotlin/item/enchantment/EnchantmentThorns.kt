@@ -11,7 +11,7 @@ import kotlin.math.max
 
 
 class EnchantmentThorns :
-    Enchantment(Enchantment.Companion.ID_THORNS, "thorns", Rarity.VERY_RARE, EnchantmentType.ARMOR) {
+    Enchantment(ID_THORNS, "thorns", Rarity.VERY_RARE, EnchantmentType.ARMOR) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 10 + (level - 1) * 20
     }
@@ -31,7 +31,7 @@ class EnchantmentThorns :
         var thornsLevel = 0
 
         for (armor in entity.inventory.armorContents) {
-            val thorns = armor.getEnchantment(Enchantment.Companion.ID_THORNS)
+            val thorns = armor.getEnchantment(ID_THORNS)
             if (thorns != null) {
                 thornsLevel = max(thorns.level.toDouble(), thornsLevel.toDouble()).toInt()
             }

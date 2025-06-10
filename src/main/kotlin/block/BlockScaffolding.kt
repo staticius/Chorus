@@ -14,7 +14,7 @@ import org.chorus_oss.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus_oss.chorus.math.SimpleAxisAlignedBB
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 
-class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFallable(blockstate) {
     override val name: String
         get() = "Scaffolding"

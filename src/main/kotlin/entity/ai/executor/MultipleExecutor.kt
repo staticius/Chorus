@@ -26,7 +26,7 @@ class MultipleExecutor : IBehaviorExecutor {
             return CompletableFuture.allOf(*tasks.toTypedArray<CompletableFuture<*>>())
                 .whenComplete { s: Void?, t: Throwable? ->
                     if (t != null) {
-                        MultipleExecutor.log.error("阶段执行过程中存在异常：", t)
+                        log.error("阶段执行过程中存在异常：", t)
                     }
                 }.thenApply {
                     tasks.stream().map { task: CompletableFuture<*> ->

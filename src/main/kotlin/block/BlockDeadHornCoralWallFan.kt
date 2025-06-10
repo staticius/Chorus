@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
 class BlockDeadHornCoralWallFan : BlockDeadCoralWallFan {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 

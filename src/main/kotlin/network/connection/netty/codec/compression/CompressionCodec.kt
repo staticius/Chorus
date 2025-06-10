@@ -6,7 +6,8 @@ import io.netty.channel.ChannelHandlerContext
 import io.netty.handler.codec.MessageToMessageCodec
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.network.connection.netty.BedrockBatchWrapper
-import org.chorus_oss.chorus.network.protocol.types.*
+import org.chorus_oss.chorus.network.protocol.types.CompressionAlgorithm
+import org.chorus_oss.chorus.network.protocol.types.PacketCompressionAlgorithm
 
 class CompressionCodec(val strategy: CompressionStrategy, private val prefixed: Boolean) :
     MessageToMessageCodec<BedrockBatchWrapper, BedrockBatchWrapper>() {

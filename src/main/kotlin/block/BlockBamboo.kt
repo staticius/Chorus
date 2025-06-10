@@ -16,7 +16,7 @@ import org.chorus_oss.chorus.network.protocol.AnimatePacket
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockBamboo @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockBamboo @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockTransparent(blockState), FlowerPotBlock {
     override val name: String
         get() = "Bamboo"

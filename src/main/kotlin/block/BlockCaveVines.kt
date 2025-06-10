@@ -12,7 +12,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockTransparent(blockState) {
     override val name: String
         get() = "Cave Vines"
@@ -142,7 +142,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
 
     private var growth: Int
         get() = getPropertyValue(CommonBlockProperties.GROWING_PLANT_AGE)
-        private set(growth) {
+        set(growth) {
             setPropertyValue(CommonBlockProperties.GROWING_PLANT_AGE, growth)
         }
 

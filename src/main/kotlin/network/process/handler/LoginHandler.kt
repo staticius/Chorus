@@ -31,7 +31,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         //check the player login time
         if (pk.issueUnixTime != -1L && Server.instance.checkLoginTime && System.currentTimeMillis() - pk.issueUnixTime > 20000) {
             val message = "disconnectionScreen.noReason"
-            LoginHandler.log.debug("disconnection due to noReason")
+            log.debug("disconnection due to noReason")
             session.sendPlayStatus(PlayStatusPacket.LOGIN_FAILED_CLIENT, true)
             session.close(message)
             return
@@ -41,14 +41,14 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
 
         //verify the player if enable the xbox-auth
         if (!chainData.isXboxAuthed && server.settings.serverSettings.xboxAuth) {
-            LoginHandler.log.debug("disconnection due to notAuthenticated")
+            log.debug("disconnection due to notAuthenticated")
             session.close("disconnectionScreen.notAuthenticated")
             return
         }
 
         //Verify the number of server player
         if (server.onlinePlayers.size >= server.maxPlayers) {
-            LoginHandler.log.debug("disconnection due to serverFull")
+            log.debug("disconnection due to serverFull")
             session.close("disconnectionScreen.serverFull")
             return
         }
@@ -85,7 +85,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         if (currentInputMode <= InputMode.UNDEFINED.ordinal ||
             currentInputMode >= InputMode.COUNT.ordinal
         ) {
-            LoginHandler.log.debug("disconnection due to invalid input mode")
+            log.debug("disconnection due to invalid input mode")
             session.close("§cPacket handling error")
             return
         }
@@ -95,7 +95,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         if (defaultInputMode <= InputMode.UNDEFINED.ordinal ||
             defaultInputMode >= InputMode.COUNT.ordinal
         ) {
-            LoginHandler.log.debug("disconnection due to invalid input mode")
+            log.debug("disconnection due to invalid input mode")
             session.close("§cPacket handling error")
             return
         }
@@ -108,13 +108,13 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
             username.equals("rcon", ignoreCase = true) ||
             username.equals("console", ignoreCase = true)
         ) {
-            LoginHandler.log.debug("disconnection due to invalidName")
+            log.debug("disconnection due to invalidName")
             session.close("disconnectionScreen.invalidName")
             return
         }
 
         if (!pk.skin!!.isValid()) {
-            LoginHandler.log.debug("disconnection due to invalidSkin")
+            log.debug("disconnection due to invalidSkin")
             session.close("disconnectionScreen.invalidSkin")
             return
         }
@@ -145,7 +145,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         session.setAuthenticated()
 
         if (!server.isWhitelisted((info.username).lowercase())) {
-            LoginHandler.log.debug("disconnection due to white-listed")
+            log.debug("disconnection due to white-listed")
             session.close("Server is white-listed")
             return
         }
@@ -153,7 +153,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         val entry = server.bannedPlayers.entries[info.username.lowercase()]
         if (entry != null) {
             val reason = entry.reason
-            LoginHandler.log.debug("disconnection due to named ban")
+            log.debug("disconnection due to named ban")
             session.close(if (reason.isNotEmpty()) "You are banned. Reason: $reason" else "You are banned")
             return
         }
@@ -215,7 +215,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
 
             session.machine.fire(SessionState.ENCRYPTION)
         } catch (e: Exception) {
-            LoginHandler.log.error("Failed to prepare encryption", e)
+            log.error("Failed to prepare encryption", e)
             session.close("encryption error")
         }
     }

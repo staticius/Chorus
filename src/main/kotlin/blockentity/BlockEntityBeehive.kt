@@ -221,7 +221,7 @@ class BlockEntityBeehive(chunk: IChunk, nbt: CompoundTag) : BlockEntity(chunk, n
             return null
         }
         if (!Identifier.isValid(occupant.actorIdentifier)) {
-            BlockEntityBeehive.log.warn("Invalid beehive occupant identifier: {}", occupant.actorIdentifier)
+            log.warn("Invalid beehive occupant identifier: {}", occupant.actorIdentifier)
             occupant.actorIdentifier = "minecraft:bee"
         }
 

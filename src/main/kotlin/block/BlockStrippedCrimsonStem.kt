@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockStrippedCrimsonStem @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockStrippedCrimsonStem @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockStemStripped(blockstate) {
     override val name: String
         get() = "Stripped Crimson Stem"

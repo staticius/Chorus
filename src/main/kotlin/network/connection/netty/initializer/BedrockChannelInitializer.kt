@@ -1,6 +1,7 @@
 package org.chorus_oss.chorus.network.connection.netty.initializer
 
-import io.netty.channel.*
+import io.netty.channel.Channel
+import io.netty.channel.ChannelInitializer
 import org.chorus_oss.chorus.compression.CompressionProvider
 import org.chorus_oss.chorus.network.connection.BedrockPeer
 import org.chorus_oss.chorus.network.connection.BedrockSession
@@ -12,7 +13,8 @@ import org.chorus_oss.chorus.network.connection.netty.codec.packet.BedrockPacket
 import org.chorus_oss.chorus.network.connection.netty.codec.packet.BedrockPacketCodecV1
 import org.chorus_oss.chorus.network.connection.netty.codec.packet.BedrockPacketCodecV2
 import org.chorus_oss.chorus.network.connection.netty.codec.packet.BedrockPacketCodecV3
-import org.chorus_oss.chorus.network.protocol.types.*
+import org.chorus_oss.chorus.network.protocol.types.CompressionAlgorithm
+import org.chorus_oss.chorus.network.protocol.types.PacketCompressionAlgorithm
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption
 
 

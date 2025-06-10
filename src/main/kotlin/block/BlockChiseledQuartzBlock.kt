@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockChiseledQuartzBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockChiseledQuartzBlock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockQuartzBlock(blockstate) {
 
     override val properties: BlockProperties

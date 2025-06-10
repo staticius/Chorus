@@ -9,7 +9,6 @@ import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.tree.node.PlayersNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.utils.TextFormat
-import kotlin.collections.set
 
 class TitleCommand(name: String) : VanillaCommand(name, "commands.title.description") {
     init {

@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus_oss.chorus.utils.Faceable
 
-class BlockLadder @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockLadder @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate), Faceable {
     override val name: String
         get() = "Ladder"

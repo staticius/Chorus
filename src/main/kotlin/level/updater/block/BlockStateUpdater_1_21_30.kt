@@ -5,7 +5,6 @@ import org.chorus_oss.chorus.level.updater.Updater
 import org.chorus_oss.chorus.level.updater.util.tagupdater.CompoundTagEditHelper
 import org.chorus_oss.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
 import java.util.function.Function
-import kotlin.collections.set
 
 class BlockStateUpdater_1_21_30 : Updater {
     override fun registerUpdaters(ctx: CompoundTagUpdaterContext) {

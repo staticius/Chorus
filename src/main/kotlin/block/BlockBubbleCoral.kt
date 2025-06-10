@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockBubbleCoral @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockBubbleCoral @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCoral(blockstate) {
     override fun isDead(): Boolean {
         return false

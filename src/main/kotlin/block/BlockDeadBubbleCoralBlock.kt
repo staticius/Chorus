@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.block
 
 class BlockDeadBubbleCoralBlock : BlockCoralBlock {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 

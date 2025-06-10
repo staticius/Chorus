@@ -6,7 +6,6 @@ import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.network.protocol.UpdateSoftEnumPacket
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.Identifier
-import java.util.*
 import java.util.function.Supplier
 
 

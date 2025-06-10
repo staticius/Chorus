@@ -11,7 +11,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
 import java.util.concurrent.CancellationException
-import kotlin.collections.set
 
 class SNBTParserImplement(
     /**
@@ -790,7 +789,6 @@ class SNBTParserImplement(
     private fun `scan$SNBT_javacc$72$5`(): Boolean {
         remainingLookahead = UNLIMITED
         currentLookaheadToken = lastConsumedToken
-        val scanToEnd = false
         try {
             // BuildPredicateCode macro
             // End BuildPredicateCode macro
@@ -819,7 +817,6 @@ class SNBTParserImplement(
     private fun `scan$SNBT_javacc$74$5`(): Boolean {
         remainingLookahead = UNLIMITED
         currentLookaheadToken = lastConsumedToken
-        val scanToEnd = false
         try {
             // BuildPredicateCode macro
             // End BuildPredicateCode macro

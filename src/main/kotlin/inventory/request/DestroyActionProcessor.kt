@@ -19,7 +19,7 @@ class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyAction> {
             return null
         }
         if (player.gamemode != 1) {
-            DestroyActionProcessor.log.warn("only creative mode can destroy item")
+            log.warn("only creative mode can destroy item")
             return context.error()
         }
         val container = action.source.containerName.container
@@ -28,15 +28,15 @@ class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyAction> {
         val slot = sourceInventory.fromNetworkSlot(action.source.slot)
         var item = sourceInventory.getItem(slot)
         if (validateStackNetworkId(item.getNetId(), action.source.stackNetworkId)) {
-            DestroyActionProcessor.log.warn("mismatch stack network id!")
+            log.warn("mismatch stack network id!")
             return context.error()
         }
         if (item.isNothing) {
-            DestroyActionProcessor.log.warn("cannot destroy an air!")
+            log.warn("cannot destroy an air!")
             return context.error()
         }
         if (item.getCount() < count) {
-            DestroyActionProcessor.log.warn("cannot destroy more items than the current amount!")
+            log.warn("cannot destroy more items than the current amount!")
             return context.error()
         }
         if (item.getCount() > count) {

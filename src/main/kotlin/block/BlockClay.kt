@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.item.ItemClayBall
 import org.chorus_oss.chorus.item.ItemTool
 
 class BlockClay : BlockSolid, Natural {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

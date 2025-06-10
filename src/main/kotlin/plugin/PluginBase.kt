@@ -2,7 +2,10 @@ package org.chorus_oss.chorus.plugin
 
 import com.google.common.base.Preconditions
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.command.*
+import org.chorus_oss.chorus.command.Command
+import org.chorus_oss.chorus.command.CommandSender
+import org.chorus_oss.chorus.command.PluginCommand
+import org.chorus_oss.chorus.command.PluginIdentifiableCommand
 import org.chorus_oss.chorus.utils.Config
 import org.chorus_oss.chorus.utils.ConfigSection
 import org.chorus_oss.chorus.utils.Loggable
@@ -198,7 +201,7 @@ abstract class PluginBase : Plugin {
                     }
                 }
             } catch (e: IOException) {
-                PluginBase.log.error(
+                log.error(
                     "Error while saving resource {}, to {} (replace: {}, plugin:{})",
                     filename,
                     outputName,
@@ -238,7 +241,7 @@ abstract class PluginBase : Plugin {
                         )
                     )
                 } catch (e: IOException) {
-                    PluginBase.log.error(
+                    log.error(
                         "Error while reloading configs for the plugin {}",
                         description.name,
                         e

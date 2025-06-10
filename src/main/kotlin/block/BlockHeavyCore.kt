@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.AxisAlignedBB
 
 class BlockHeavyCore : BlockFlowable {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 

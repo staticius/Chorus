@@ -36,7 +36,6 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Consumer
 import javax.crypto.SecretKey
-import kotlin.collections.set
 
 class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
     private val closed = AtomicBoolean()

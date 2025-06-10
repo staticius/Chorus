@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockAllium(blockState: BlockState = Companion.properties.defaultState) : BlockFlower(blockState) {
+class BlockAllium(blockState: BlockState = properties.defaultState) : BlockFlower(blockState) {
     override val properties: BlockProperties
         get() = Companion.properties
 

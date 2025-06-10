@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.command.selector.SelectorType
 import org.chorus_oss.chorus.command.selector.args.CachedFilterSelectorArgument
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.level.Transform
-import java.util.*
 import java.util.function.Function
 import kotlin.math.abs
 

@@ -74,7 +74,7 @@ class Network @JvmOverloads constructor(
             try {
                 tmpIfs = SystemInfo().hardware.networkIFs
             } catch (t: Throwable) {
-                Network.log.warn(Server.instance.lang["chorus.start.hardwareMonitorDisabled"])
+                log.warn(Server.instance.lang["chorus.start.hardwareMonitorDisabled"])
             }
             hardWareNetworkInterfaces.set(tmpIfs)
         }, true)
@@ -162,7 +162,7 @@ class Network @JvmOverloads constructor(
         try {
             this.process()
         } catch (e: Exception) {
-            Network.log.error(
+            log.error(
                 server.lang.tr(
                     "chorus.server.networkError",
                     javaClass.name, Utils.getExceptionMessage(e)

@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.network.protocol.LevelEventPacket
 import java.util.*
 
-class BlockSponge @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
+class BlockSponge @JvmOverloads constructor(state: BlockState = properties.defaultState) :
     BlockSolid(state) {
     override val hardness: Double
         get() = 0.6

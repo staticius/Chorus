@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockBlastFurnace @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockBlastFurnace @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockLitBlastFurnace(blockstate) {
     override val name: String
         get() = "Blast Furnace"

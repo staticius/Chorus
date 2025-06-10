@@ -132,7 +132,7 @@ class StartGamePacket : DataPacket() {
                 byteBuf.writeBytes(write(customBlockDefinition.nbt, ByteOrder.LITTLE_ENDIAN, true))
             }
         } catch (e: IOException) {
-            StartGamePacket.log.error("Error while encoding NBT data of BlockPropertyData", e)
+            log.error("Error while encoding NBT data of BlockPropertyData", e)
         }
 
         byteBuf.writeString(this.multiplayerCorrelationId)

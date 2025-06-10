@@ -13,7 +13,7 @@ import org.chorus_oss.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus_oss.chorus.utils.Faceable
 import java.util.function.Supplier
 
-class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockStonecutterBlock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockInventoryHolder {
     override val name: String
         get() = "Stonecutter"

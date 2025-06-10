@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockChemistryTable @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockChemistryTable @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     Block(blockState) {
 
     override val properties

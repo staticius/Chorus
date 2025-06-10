@@ -10,7 +10,7 @@ import org.chorus_oss.chorus.level.vibration.VibrationType
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
 
-class BlockCake @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockCake @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockTransparent(blockState) {
     override val name: String
         get() = "Cake Block"

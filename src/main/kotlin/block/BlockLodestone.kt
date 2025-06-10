@@ -14,7 +14,7 @@ import org.chorus_oss.chorus.utils.Loggable
 import java.io.IOException
 
 class BlockLodestone : BlockSolid, BlockEntityHolder<BlockEntityLodestone> {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

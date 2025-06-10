@@ -18,7 +18,7 @@ class RequestAbilityProcessor : DataPacketProcessor<RequestAbilityPacket>() {
         val player = player.player
         val ability = pk.ability
         if (ability != PlayerAbility.FLYING) {
-            RequestAbilityProcessor.log.info("[" + player.getEntityName() + "] has tried to trigger " + ability + " ability " + (if (pk.boolValue) "on" else "off"))
+            log.info("[" + player.getEntityName() + "] has tried to trigger " + ability + " ability " + (if (pk.boolValue) "on" else "off"))
             return
         }
 

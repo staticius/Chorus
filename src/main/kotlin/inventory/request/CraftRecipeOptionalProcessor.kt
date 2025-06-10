@@ -28,7 +28,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
     ): ActionResponse? {
         val topWindow = player.topWindow
         if (topWindow.isEmpty) {
-            CraftRecipeOptionalProcessor.log.error("the player's inventory is empty!")
+            log.error("the player's inventory is empty!")
             return context.error()
         }
         val itemStackRequest = context.itemStackRequest
@@ -40,7 +40,7 @@ class CraftRecipeOptionalProcessor : ItemStackRequestActionProcessor<CraftRecipe
             val filterStrings = itemStackRequest.filterStrings
             filterString = filterStrings[filteredStringIndex]
             if (filterString.isBlank() || filterString.length > 64) {
-                CraftRecipeOptionalProcessor.log.debug(player.getEntityName() + ": FilterTextPacket with too long text")
+                log.debug(player.getEntityName() + ": FilterTextPacket with too long text")
                 return context.error()
             }
         }

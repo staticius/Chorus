@@ -10,7 +10,7 @@ import org.chorus_oss.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus_oss.chorus.utils.Faceable
 
 class BlockLightningRod : BlockTransparent, Faceable {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

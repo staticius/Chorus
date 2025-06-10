@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.level.generator.`object`.ObjectBigMushroom
 
-class BlockBrownMushroom @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockBrownMushroom @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockMushroom(blockstate) {
     override val name: String
         get() = "Brown Mushroom"

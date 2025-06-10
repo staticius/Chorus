@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemString
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockWeb @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWeb @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowable(blockstate) {
     override val hardness: Double
         get() = 4.0

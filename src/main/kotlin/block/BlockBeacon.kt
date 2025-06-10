@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockBeacon @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockBeacon @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate), BlockEntityHolder<BlockEntityBeacon> {
     override fun getBlockEntityClass(): Class<out BlockEntityBeacon> {
         return BlockEntityBeacon::class.java

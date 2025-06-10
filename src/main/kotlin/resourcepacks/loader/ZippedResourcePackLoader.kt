@@ -30,7 +30,7 @@ class ZippedResourcePackLoader(//资源包文件存放地址
                 if (!pack.isDirectory && fileExt != "key") { //directory resource packs temporarily unsupported
                     when (fileExt) {
                         "zip", "mcpack" -> resourcePack = ZippedResourcePack(pack)
-                        else -> ZippedResourcePackLoader.log.warn(
+                        else -> log.warn(
                             baseLang.tr(
                                 "chorus.resources.unknown-format",
                                 pack.name
@@ -40,10 +40,10 @@ class ZippedResourcePackLoader(//资源包文件存放地址
                 }
                 if (resourcePack != null) {
                     loadedResourcePacks.add(resourcePack)
-                    ZippedResourcePackLoader.log.info(baseLang.tr("chorus.resources.zip.loaded", pack.name))
+                    log.info(baseLang.tr("chorus.resources.zip.loaded", pack.name))
                 }
             } catch (e: IllegalArgumentException) {
-                ZippedResourcePackLoader.log.warn(baseLang.tr("chorus.resources.fail", pack.name, e.message!!), e)
+                log.warn(baseLang.tr("chorus.resources.fail", pack.name, e.message!!), e)
             }
         }
         return loadedResourcePacks

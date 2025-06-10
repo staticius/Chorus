@@ -2,9 +2,10 @@ package org.chorus_oss.chorus.level.format.palette
 
 import io.netty.buffer.ByteBuf
 import org.chorus_oss.chorus.nbt.stream.NBTInputStream
-import org.chorus_oss.chorus.nbt.tag.*
+import org.chorus_oss.chorus.nbt.tag.Tag
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
-import org.chorus_oss.chorus.utils.*
+import org.chorus_oss.chorus.utils.HashUtils
+import org.chorus_oss.chorus.utils.SemVersion
 import java.io.IOException
 
 object PaletteUtils {

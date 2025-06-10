@@ -64,7 +64,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     }
 
                     InventoryTransactionPacket.RELEASE_ITEM_ACTION_CONSUME -> {
-                        InventoryTransactionProcessor.log.debug(
+                        log.debug(
                             "Unexpected release item action consume from {}",
                             player.getEntityName()
                         )
@@ -162,7 +162,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
 
                     if (event.isKick) player.kick(PlayerKickEvent.Reason.INVALID_PVP, "Attempting to attack yourself")
 
-                    InventoryTransactionProcessor.log.warn(player.getEntityName() + " tried to attack oneself")
+                    log.warn(player.getEntityName() + " tried to attack oneself")
                     return
                 }
                 if (!player.canInteract(target.position, (if (player.isCreative) 8 else 5).toDouble())) {
@@ -428,7 +428,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
     }
 
     private fun logTriedToSetButHadInHand(player: Player, tried: Item, had: Item) {
-        InventoryTransactionProcessor.log.debug(
+        log.debug(
             "Tried to set item {} but {} had item {} in their hand slot",
             tried.id,
             player.player.getEntityName(),

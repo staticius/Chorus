@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 
 
-class BlockAir(blockState: BlockState = Companion.properties.defaultState) : BlockTransparent(blockState) {
+class BlockAir(blockState: BlockState = properties.defaultState) : BlockTransparent(blockState) {
     override val name: String
         get() = "Air"
 

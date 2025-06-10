@@ -9,7 +9,6 @@ import org.chorus_oss.chorus.utils.JSONUtils
 import org.chorus_oss.chorus.utils.Loggable
 import java.io.*
 import java.nio.charset.StandardCharsets
-import java.util.*
 import java.util.regex.MatchResult
 import java.util.regex.Pattern
 
@@ -184,7 +183,7 @@ class PluginI18n(private val plugin: PluginBase) {
                 )
             }
         } catch (e: IOException) {
-            PluginI18n.log.error("Failed to load language at {}", path, e)
+            log.error("Failed to load language at {}", path, e)
         }
     }
 
@@ -199,7 +198,7 @@ class PluginI18n(private val plugin: PluginBase) {
             MULTI_LANGUAGE[langName] =
                 parseLang(BufferedReader(InputStreamReader(stream, StandardCharsets.UTF_8)))
         } catch (e: IOException) {
-            PluginI18n.log.error("Failed to parse the language input stream", e)
+            log.error("Failed to parse the language input stream", e)
         }
     }
 
@@ -239,7 +238,7 @@ class PluginI18n(private val plugin: PluginBase) {
                 return reloadLang(lang, BufferedReader(InputStreamReader(stream, StandardCharsets.UTF_8)))
             }
         } catch (e: IOException) {
-            PluginI18n.log.error("Failed to load language at {}", path, e)
+            log.error("Failed to load language at {}", path, e)
             return false
         }
     }

@@ -74,13 +74,13 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
         this.closeOnCollide = false
 
         this.pickupMode =
-            (if (namedTag!!.contains(TAG_PICKUP)) namedTag!!.getByte(TAG_PICKUP) else EntityProjectile.Companion.PICKUP_ANY.toByte()).toInt()
+            (if (namedTag!!.contains(TAG_PICKUP)) namedTag!!.getByte(TAG_PICKUP) else PICKUP_ANY.toByte()).toInt()
         this.favoredSlot = if (namedTag!!.contains(TAG_FAVORED_SLOT)) namedTag!!.getInt(TAG_FAVORED_SLOT) else -1
         this.player = !namedTag!!.contains(TAG_PLAYER) || namedTag!!.getBoolean(TAG_PLAYER)
 
         if (namedTag!!.contains(TAG_CREATIVE)) {
-            if (pickupMode == EntityProjectile.Companion.PICKUP_ANY && namedTag!!.getBoolean(TAG_CREATIVE)) {
-                pickupMode = EntityProjectile.Companion.PICKUP_CREATIVE
+            if (pickupMode == PICKUP_ANY && namedTag!!.getBoolean(TAG_CREATIVE)) {
+                pickupMode = PICKUP_CREATIVE
             }
             namedTag!!.remove(TAG_CREATIVE)
         }

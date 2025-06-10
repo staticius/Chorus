@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.tree.node.IPlayersNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import kotlin.collections.set
 
 class PardonCommand(name: String) : VanillaCommand(name, "unban a player") {
     init {

@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemSpruceSign
 
-class BlockSpruceStandingSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSpruceStandingSign @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockStandingSign(blockstate) {
     override fun getWallSignId() = BlockSpruceWallSign.properties.identifier
 

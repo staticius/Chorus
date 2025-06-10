@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 import java.util.function.Supplier
 
-class BlockCraftingTable @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockCraftingTable @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockSolid(blockState), BlockInventoryHolder {
     override val name: String
         get() = "Crafting Table"

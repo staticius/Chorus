@@ -17,14 +17,14 @@ class CraftCreativeActionProcessor : ItemStackRequestActionProcessor<CraftCreati
     ): ActionResponse? {
         var item = Registries.CREATIVE[action.creativeItemNetworkId]
         if (!player.isCreative) {
-            CraftCreativeActionProcessor.log.warn(
+            log.warn(
                 "This player {} is get createitems in non-creative mode, which may be a hacker!",
                 player.getEntityName()
             )
             return context.error()
         }
         if (item == null) {
-            CraftCreativeActionProcessor.log.warn("Unknown creative item network id: {}", action.creativeItemNetworkId)
+            log.warn("Unknown creative item network id: {}", action.creativeItemNetworkId)
             return context.error()
         }
         item = item.clone().autoAssignStackNetworkId()

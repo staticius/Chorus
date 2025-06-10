@@ -198,7 +198,7 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                                     .add(FloatTag(0f))
                             )
 
-                        val snowgolem: Entity? = Entity.Companion.createEntity(
+                        val snowgolem: Entity? = createEntity(
                             EntityID.SNOW_GOLEM,
                             block.level.getChunk(block.position.chunkX, block.position.chunkZ),
                             nbt

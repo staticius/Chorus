@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.lang.TranslationContainer
-import kotlin.collections.set
 
 class WeatherCommand(name: String) : VanillaCommand(name, "commands.weather.description", "commands.weather.usage") {
     init {

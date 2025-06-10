@@ -119,7 +119,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
 
     override fun enablePlugin(plugin: Plugin) {
         if (plugin is PluginBase && !plugin.isEnabled) {
-            JavaPluginLoader.log.info(server.lang.tr("chorus.plugin.enable", plugin.description.versionedName))
+            log.info(server.lang.tr("chorus.plugin.enable", plugin.description.versionedName))
             plugin.isEnabled = true
             server.pluginManager.callEvent(PluginEnableEvent(plugin))
         }
@@ -132,7 +132,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
                 throw UnsupportedOperationException("The PowerNukkitX Internal Plugin cannot be disabled")
             }
 
-            JavaPluginLoader.log.info(server.lang.tr("chorus.plugin.disable", plugin.description.versionedName))
+            log.info(server.lang.tr("chorus.plugin.disable", plugin.description.versionedName))
 
             server.pluginManager.callEvent(PluginDisableEvent(plugin))
 
@@ -167,7 +167,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
     }
 
     private fun removeClass(name: String) {
-        val clazz = classes.remove(name)!!
+        classes.remove(name)!!
     }
 
     companion object : Loggable

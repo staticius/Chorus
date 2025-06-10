@@ -11,7 +11,6 @@ import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.item.enchantment.Enchantment
-import kotlin.collections.set
 
 class EnchantCommand(name: String) :
     VanillaCommand(name, "commands.enchant.description", "chorus.command.enchant.usage") {

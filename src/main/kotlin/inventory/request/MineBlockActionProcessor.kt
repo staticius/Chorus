@@ -20,13 +20,13 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
         val inventory = player.inventory
         val heldItemIndex = inventory.heldItemIndex
         if (heldItemIndex != action.hotbarSlot) {
-            MineBlockActionProcessor.log.warn("The held Item Index on the server side does not match the client side!")
+            log.warn("The held Item Index on the server side does not match the client side!")
             return context.error()
         }
 
         val itemInHand = inventory.itemInHand
         if (validateStackNetworkId(itemInHand.getNetId(), action.stackNetworkId)) {
-            MineBlockActionProcessor.log.warn("mismatch source stack network id!")
+            log.warn("mismatch source stack network id!")
             return context.error()
         }
 

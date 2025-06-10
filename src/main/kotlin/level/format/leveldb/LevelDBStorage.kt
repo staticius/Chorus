@@ -1,7 +1,12 @@
 package org.chorus_oss.chorus.level.format.leveldb
 
-import org.chorus_oss.chorus.level.format.*
-import org.iq80.leveldb.*
+import org.chorus_oss.chorus.level.format.Chunk
+import org.chorus_oss.chorus.level.format.IChunk
+import org.chorus_oss.chorus.level.format.LevelProvider
+import org.iq80.leveldb.CompressionType
+import org.iq80.leveldb.DB
+import org.iq80.leveldb.Options
+import org.iq80.leveldb.WriteOptions
 import org.iq80.leveldb.impl.Iq80DBFactory
 import java.io.IOException
 import java.nio.file.Path

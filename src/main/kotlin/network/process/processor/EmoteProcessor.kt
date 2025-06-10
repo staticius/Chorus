@@ -14,7 +14,7 @@ class EmoteProcessor : DataPacketProcessor<EmotePacket>() {
             return
         }
         if (pk.runtimeId != player.player.getRuntimeID()) {
-            EmoteProcessor.log.warn(
+            log.warn(
                 "{} sent EmotePacket with invalid entity id: {} != {}",
                 player.player.getEntityName(),
                 pk.runtimeId,
@@ -23,7 +23,11 @@ class EmoteProcessor : DataPacketProcessor<EmotePacket>() {
             return
         }
         if (!UUIDValidator.isValidUUID(pk.emoteID)) {
-            EmoteProcessor.log.warn("{} sent EmotePacket with invalid emoteId: {}", player.player.getEntityName(), pk.emoteID)
+            log.warn(
+                "{} sent EmotePacket with invalid emoteId: {}",
+                player.player.getEntityName(),
+                pk.emoteID
+            )
             return
         }
 

@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockRedNetherBrick @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockRedNetherBrick @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockNetherBrick(blockstate) {
     override val name: String
         get() = "Red Nether Bricks"

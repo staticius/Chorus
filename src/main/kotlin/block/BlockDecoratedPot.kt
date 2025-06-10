@@ -14,7 +14,7 @@ import org.chorus_oss.chorus.utils.Faceable
 import java.util.*
 
 class BlockDecoratedPot : BlockFlowable, Faceable, BlockEntityHolder<BlockEntityDecoratedPot> {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

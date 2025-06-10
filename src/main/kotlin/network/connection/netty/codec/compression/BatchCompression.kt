@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.network.connection.netty.codec.compression
 
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
-import org.chorus_oss.chorus.network.protocol.types.*
+import org.chorus_oss.chorus.network.protocol.types.CompressionAlgorithm
 
 interface BatchCompression {
     @Throws(Exception::class)

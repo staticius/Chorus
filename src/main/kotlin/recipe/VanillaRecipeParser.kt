@@ -14,8 +14,6 @@ import org.chorus_oss.chorus.utils.JSONUtils
 import org.chorus_oss.chorus.utils.Loggable
 import java.io.*
 import java.util.function.Consumer
-import kotlin.collections.component1
-import kotlin.collections.set
 import kotlin.math.max
 
 class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
@@ -25,7 +23,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
                 matchAndParse(reader)
             }
         } catch (e: IOException) {
-            VanillaRecipeParser.log.error(e.message)
+            log.error(e.message)
         }
     }
 
@@ -35,7 +33,7 @@ class VanillaRecipeParser(private val recipeRegistry: RecipeRegistry) {
                 matchAndParse(reader)
             }
         } catch (e: IOException) {
-            VanillaRecipeParser.log.error(e.message)
+            log.error(e.message)
         }
     }
 

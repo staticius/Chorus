@@ -9,7 +9,6 @@ import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.permission.BanEntry
 import org.chorus_oss.chorus.permission.BanList
 import org.chorus_oss.chorus.utils.TextFormat
-import kotlin.collections.set
 
 class BanListCommand(name: String) : VanillaCommand(name, "list all the banned players or IPs") {
     init {

@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.command.data
 
 import org.chorus_oss.chorus.command.tree.node.IParamNode
-import java.util.*
 
 class CommandParameter private constructor(
     @JvmField val name: String,

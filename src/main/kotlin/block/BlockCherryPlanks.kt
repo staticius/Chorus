@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockCherryPlanks @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockCherryPlanks @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockPlanks(blockState) {
     override val name: String
         get() = "Cherry Planks"

@@ -44,7 +44,7 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
                 "Attempting to interact with an invalid entity"
             )
 
-            InteractProcessor.log.warn(
+            log.warn(
                 Server.instance.lang.tr("chorus.player.invalidEntity", player.getEntityName())
             )
             return

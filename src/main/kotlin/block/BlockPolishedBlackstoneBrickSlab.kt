@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockPolishedBlackstoneBrickSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockPolishedBlackstoneBrickSlab @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSlab(blockstate, BlockID.POLISHED_BLACKSTONE_BRICK_DOUBLE_SLAB) {
     override fun getSlabName(): String {
         return "Polished Blackstone"

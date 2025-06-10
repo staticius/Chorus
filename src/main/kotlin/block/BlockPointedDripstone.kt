@@ -21,7 +21,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import java.util.*
 
-class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFallable(blockstate) {
     override val name: String
         get() = "Pointed Drip Stone"

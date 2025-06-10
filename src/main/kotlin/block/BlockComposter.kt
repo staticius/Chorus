@@ -12,7 +12,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.registry.Registries
 import java.util.*
 
-class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockComposter @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Composter"

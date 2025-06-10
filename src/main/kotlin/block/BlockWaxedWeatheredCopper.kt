@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockWaxedWeatheredCopper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWaxedWeatheredCopper @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockWeatheredCopper(blockstate) {
     override val name: String
         get() = "Waxed Weathered Copper"

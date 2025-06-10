@@ -21,7 +21,7 @@ import org.chorus_oss.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus_oss.chorus.utils.Faceable
 import org.chorus_oss.chorus.utils.RedstoneComponent
 
-open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockTransparent(blockState), RedstoneComponent, Faceable {
     override val name: String
         get() = "Oak Fence Gate"

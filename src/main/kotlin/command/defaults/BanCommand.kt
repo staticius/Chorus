@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.event.player.PlayerKickEvent
-import kotlin.collections.set
 
 class BanCommand(name: String) : VanillaCommand(name, "commands.ban.description", "%commands.ban.usage") {
     init {

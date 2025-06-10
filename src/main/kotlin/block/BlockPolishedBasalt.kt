@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
 
-class BlockPolishedBasalt @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockPolishedBasalt @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockBasalt(blockstate) {
     override val name: String
         get() = "Polished Basalt"

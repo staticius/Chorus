@@ -11,12 +11,13 @@ import org.chorus_oss.chorus.blockentity.BlockEntity
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.level.format.*
 import org.chorus_oss.chorus.level.format.bitarray.BitArrayVersion
-import org.chorus_oss.chorus.level.format.palette.*
+import org.chorus_oss.chorus.level.format.palette.BlockPalette
+import org.chorus_oss.chorus.level.format.palette.Palette
 import org.chorus_oss.chorus.level.util.LevelDBKeyUtil
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.registry.Registries
-import org.chorus_oss.chorus.utils.*
+import org.chorus_oss.chorus.utils.Utils
 import org.iq80.leveldb.DB
 import org.iq80.leveldb.WriteBatch
 import java.io.BufferedInputStream
@@ -24,7 +25,6 @@ import java.io.ByteArrayInputStream
 import java.io.IOException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
-import java.util.*
 
 class LevelDBChunkSerializer private constructor() {
     fun serialize(writeBatch: WriteBatch, chunk: IChunk) {
@@ -58,8 +58,7 @@ class LevelDBChunkSerializer private constructor() {
 
     @Throws(IOException::class)
     fun deserialize(db: DB, builder: IChunkBuilder) {
-        var versionValue =
-            db[LevelDBKeyUtil.VERSION.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)] ?: return
+        db[LevelDBKeyUtil.VERSION.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)] ?: return
         val finalized =
             db[LevelDBKeyUtil.FINALIZED_STATE.getKey(builder.chunkX, builder.chunkZ, builder.dimensionData)]
         if (finalized == null) {

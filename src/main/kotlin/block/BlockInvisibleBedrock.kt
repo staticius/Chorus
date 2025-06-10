@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 
-class BlockInvisibleBedrock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockInvisibleBedrock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Invisible Bedrock"

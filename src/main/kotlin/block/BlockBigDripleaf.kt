@@ -21,7 +21,7 @@ import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.utils.Faceable
 import kotlin.math.ceil
 
-class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockFlowable(blockState), Faceable {
     override val name: String
         get() = "Big Dripleaf"

@@ -72,7 +72,7 @@ class EntityArrow @JvmOverloads constructor(
         super.initEntity()
 
         this.pickupMode =
-            (if (namedTag!!.contains("pickup")) namedTag!!.getByte("pickup") else EntityProjectile.Companion.PICKUP_ANY.toByte()).toInt()
+            (if (namedTag!!.contains("pickup")) namedTag!!.getByte("pickup") else PICKUP_ANY.toByte()).toInt()
     }
 
     fun setCritical() {

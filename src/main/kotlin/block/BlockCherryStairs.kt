@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockCherryStairs @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockCherryStairs @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockStairsWood(blockState) {
     override val name: String
         get() = "Cherry Wood Stairs"

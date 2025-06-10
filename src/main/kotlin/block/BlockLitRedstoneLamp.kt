@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.level.Level
 
-class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockRedstoneLamp(blockstate) {
     override val name: String
         get() = "Lit Redstone Lamp"

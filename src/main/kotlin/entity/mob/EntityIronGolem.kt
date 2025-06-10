@@ -254,7 +254,7 @@ class EntityIronGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
                                         .add(FloatTag(0f))
                                 )
 
-                            val irongolem: Entity? = Entity.Companion.createEntity(
+                            val irongolem: Entity? = createEntity(
                                 EntityID.IRON_GOLEM,
                                 block.level.getChunk(block.position.chunkX, block.position.chunkZ),
                                 nbt

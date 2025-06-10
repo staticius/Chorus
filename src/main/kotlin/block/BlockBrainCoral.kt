@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-open class BlockBrainCoral @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockBrainCoral @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCoral(blockstate) {
 
     override fun isDead(): Boolean {

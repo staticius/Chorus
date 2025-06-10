@@ -1,6 +1,9 @@
 package org.chorus_oss.chorus.nbt.stream
 
-import java.io.*
+import java.io.FilterOutputStream
+import java.io.IOException
+import java.io.InterruptedIOException
+import java.io.OutputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.util.concurrent.*

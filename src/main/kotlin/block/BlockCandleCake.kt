@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.math.BlockFace
 
-open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockTransparent(blockState) {
     override val name: String
         get() = "Cake Block With $colorName Candle"

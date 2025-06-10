@@ -15,7 +15,7 @@ import kotlin.math.abs
 import kotlin.math.min
 
 //special thanks to wode
-open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockCommandBlock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityCommandBlock> {
     override val resistance: Double
         get() = 6000000.0

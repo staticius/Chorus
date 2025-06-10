@@ -1,6 +1,7 @@
 package org.chorus_oss.chorus.level.format
 
-import org.chorus_oss.chorus.block.*
+import org.chorus_oss.chorus.block.Block
+import org.chorus_oss.chorus.block.BlockState
 import org.chorus_oss.chorus.blockentity.BlockEntity
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.level.DimensionData

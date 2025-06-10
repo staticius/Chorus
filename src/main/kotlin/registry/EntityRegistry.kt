@@ -36,7 +36,6 @@ import java.nio.ByteOrder
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
-import kotlin.collections.set
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.isSubclassOf
@@ -604,7 +603,7 @@ class EntityRegistry : IRegistry<EntityDefinition, KClass<out Entity>?, KClass<o
                     cause.addSuppressed(exceptions[i])
                 }
             }
-            EntityRegistry.log.error("Could not create an entity of type {}", id, cause)
+            log.error("Could not create an entity of type {}", id, cause)
         } else {
             return entity
         }

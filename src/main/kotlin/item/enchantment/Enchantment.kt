@@ -1,10 +1,10 @@
 package org.chorus_oss.chorus.item.enchantment
 
 import io.netty.util.internal.EmptyArrays
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.enchantment.bow.EnchantmentBowFlame
 import org.chorus_oss.chorus.item.enchantment.bow.EnchantmentBowInfinity
 import org.chorus_oss.chorus.item.enchantment.bow.EnchantmentBowKnockback
@@ -23,13 +23,11 @@ import org.chorus_oss.chorus.item.enchantment.trident.EnchantmentTridentChanneli
 import org.chorus_oss.chorus.item.enchantment.trident.EnchantmentTridentImpaling
 import org.chorus_oss.chorus.item.enchantment.trident.EnchantmentTridentLoyalty
 import org.chorus_oss.chorus.item.enchantment.trident.EnchantmentTridentRiptide
-import org.chorus_oss.chorus.utils.*
-import java.util.*
+import org.chorus_oss.chorus.utils.Identifier
+import org.chorus_oss.chorus.utils.TextFormat
+import org.chorus_oss.chorus.utils.Utils
 import java.util.concurrent.ThreadLocalRandom
 import java.util.stream.Collectors
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 abstract class Enchantment : Cloneable {
     /**

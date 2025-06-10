@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 
-class BlockBedrock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockBedrock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate) {
     var burnIndefinitely: Boolean
         get() = getPropertyValue<Boolean, BooleanPropertyType>(CommonBlockProperties.INFINIBURN_BIT)

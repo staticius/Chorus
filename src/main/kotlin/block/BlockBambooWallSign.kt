@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemBambooSign
 
-class BlockBambooWallSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockBambooWallSign @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockWallSign(blockState) {
     override val name: String
         get() = "Bamboo Wall Sign"

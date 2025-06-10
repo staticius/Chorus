@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockUnpoweredComparator @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockUnpoweredComparator @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockRedstoneComparator(blockstate) {
     override val name: String
         get() = "Comparator Block Unpowered"

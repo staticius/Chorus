@@ -10,7 +10,6 @@ import org.chorus_oss.chorus.entity.ai.EntityAI
 import org.chorus_oss.chorus.item.ItemFilledMap
 import org.chorus_oss.chorus.plugin.InternalPlugin
 import org.chorus_oss.chorus.scheduler.AsyncTask
-import kotlin.collections.set
 
 class DebugCommand(name: String) : TestCommand(name, "commands.debug.description"),
     CoreCommand {

@@ -1,9 +1,5 @@
 package org.chorus_oss.chorus.nbt.tag
 
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
-
 class LinkedCompoundTag @JvmOverloads constructor(tags: MutableMap<String, Tag<*>> = LinkedHashMap()) :
     CompoundTag(tags) {
     override val tags: MutableMap<String, Tag<*>> = LinkedHashMap(super.tags)

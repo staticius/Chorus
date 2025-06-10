@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.enums.OxidizationLevel
 
-open class BlockOxidizedCutCopper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockOxidizedCutCopper @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCutCopper(blockstate) {
     override val name: String
         get() = "Cut Oxidized Copper"

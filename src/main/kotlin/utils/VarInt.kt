@@ -1,6 +1,8 @@
 package org.chorus_oss.chorus.utils
 
-import java.io.*
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
 
 object VarInt {
     private fun encodeZigZag32(v: Int): Long {

@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.MonsterEggStoneType
 import org.chorus_oss.chorus.item.Item
 
-class BlockMonsterEgg @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockMonsterEgg @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate) {
     var monsterEggStoneType: MonsterEggStoneType
         get() = getPropertyValue(CommonBlockProperties.MONSTER_EGG_STONE_TYPE)

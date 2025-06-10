@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus_oss.chorus.utils.ChorusRandom
 
 class BlockBuddingAmethyst : BlockSolid {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

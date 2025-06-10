@@ -25,7 +25,7 @@ import org.chorus_oss.chorus.utils.RedstoneComponent
 import kotlin.math.cos
 import kotlin.math.sin
 
-class BlockTNT @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
+class BlockTNT @JvmOverloads constructor(state: BlockState = properties.defaultState) :
     BlockSolid(state), RedstoneComponent, Natural {
     override val name: String
         get() = "TNT"

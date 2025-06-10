@@ -176,7 +176,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
          */
         fun creativeGroup(creativeGroup: String): Builder {
             if (creativeGroup.isBlank()) {
-                CustomBlockDefinition.log.error("creativeGroup has an invalid value!")
+                log.error("creativeGroup has an invalid value!")
                 return this
             }
             nbt.getCompound("components")
@@ -227,7 +227,7 @@ data class CustomBlockDefinition(val identifier: String, val nbt: CompoundTag) {
          */
         fun geometry(geometry: String): Builder {
             if (geometry.isBlank()) {
-                CustomBlockDefinition.log.error("geometry has an invalid value!")
+                log.error("geometry has an invalid value!")
                 return this
             }
             val components = nbt.getCompound("components")

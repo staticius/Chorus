@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockPolishedDeepslate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockPolishedDeepslate @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCobbledDeepslate(blockstate) {
 
     override val properties: BlockProperties

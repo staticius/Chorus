@@ -42,7 +42,7 @@ class FormWindowDialog @JvmOverloads constructor(
                 )
             }
         } catch (e: IOException) {
-            FormWindowDialog.log.error("Failed to load npc_data.json: ", e)
+            log.error("Failed to load npc_data.json: ", e)
         }
 
         requireNotNull(this.bindEntity) { "bindEntity cannot be null!" }

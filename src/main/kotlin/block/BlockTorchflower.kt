@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockTorchflower @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockTorchflower @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlower(blockstate) {
     override fun onActivate(
         item: Item,

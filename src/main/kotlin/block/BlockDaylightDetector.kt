@@ -15,7 +15,7 @@ import org.chorus_oss.chorus.utils.RedstoneComponent
 import kotlin.math.cos
 import kotlin.math.round
 
-open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
+open class BlockDaylightDetector @JvmOverloads constructor(state: BlockState = properties.defaultState) :
     BlockTransparent(state), RedstoneComponent, BlockEntityHolder<BlockEntityDaylightDetector> {
     override val name: String
         get() = "Daylight Detector"

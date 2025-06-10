@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockLightGrayConcrete @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockLightGrayConcrete @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockConcrete(blockstate) {
 
     override val properties: BlockProperties

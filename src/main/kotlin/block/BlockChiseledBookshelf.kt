@@ -16,7 +16,7 @@ import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.utils.Faceable
 
-class BlockChiseledBookshelf @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockChiseledBookshelf @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockBookshelf(blockState), BlockEntityHolder<BlockEntityChiseledBookshelf>, Faceable {
     override val name: String
         get() = "Chiseled Bookshelf"

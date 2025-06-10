@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 
-class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Farmland"

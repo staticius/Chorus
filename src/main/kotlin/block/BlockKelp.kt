@@ -10,7 +10,7 @@ import org.chorus_oss.chorus.level.particle.BoneMealParticle
 import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockKelp @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockKelp @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Kelp"

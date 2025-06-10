@@ -9,8 +9,9 @@ import io.netty.util.ReferenceCountUtil
 import io.netty.util.collection.CharObjectHashMap
 import io.netty.util.internal.EmptyArrays
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.Item.Companion.get
+import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf.Companion.of
 import org.chorus_oss.chorus.network.protocol.CraftingDataPacket
 import org.chorus_oss.chorus.network.protocol.types.RecipeUnlockingRequirement
@@ -347,10 +348,10 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
 
     override fun init() {
         if (isLoad.getAndSet(true)) return
-        RecipeRegistry.log.info("Loading recipes...")
+        log.info("Loading recipes...")
         this.loadRecipes()
         this.rebuildPacket()
-        RecipeRegistry.log.info("Loaded {} recipes.", recipeCount)
+        log.info("Loaded {} recipes.", recipeCount)
     }
 
     override fun get(key: String): Recipe? {
@@ -467,7 +468,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                 furnaceXpConfig.load(r)
             }
         } catch (e: IOException) {
-            RecipeRegistry.log.warn("Failed to load furnace xp config")
+            log.warn("Failed to load furnace xp config")
         }
 
         // INFORMATION:
@@ -777,7 +778,7 @@ class RecipeRegistry : IRegistry<String, Recipe?, Recipe> {
                 }
             }
         } catch (e: IOException) {
-            RecipeRegistry.log.warn("Failed to load recipes config")
+            log.warn("Failed to load recipes config")
         }
 
         // Allow to rename without crafting

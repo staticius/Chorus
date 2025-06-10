@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockBirchPlanks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockBirchPlanks @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockPlanks(blockstate) {
 
     override val properties: BlockProperties

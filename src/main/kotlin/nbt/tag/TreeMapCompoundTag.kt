@@ -1,9 +1,6 @@
 package org.chorus_oss.chorus.nbt.tag
 
 import java.util.*
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 class TreeMapCompoundTag : CompoundTag {
     constructor() : super(TreeMap<String, Tag<*>>())

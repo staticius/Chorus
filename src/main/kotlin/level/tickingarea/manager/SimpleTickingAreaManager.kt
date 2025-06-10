@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.level.tickingarea.manager
 import org.chorus_oss.chorus.level.Locator
 import org.chorus_oss.chorus.level.tickingarea.TickingArea
 import org.chorus_oss.chorus.level.tickingarea.storage.TickingAreaStorage
-import kotlin.collections.set
 
 class SimpleTickingAreaManager(storage: TickingAreaStorage) : TickingAreaManager(storage) {
     private var areaMap = storage.readTickingArea()

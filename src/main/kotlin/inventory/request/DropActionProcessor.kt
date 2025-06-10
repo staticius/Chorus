@@ -27,15 +27,15 @@ class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
         }
 
         if (validateStackNetworkId(item.getNetId(), action.source.stackNetworkId)) {
-            DropActionProcessor.log.warn("mismatch stack network id!")
+            log.warn("mismatch stack network id!")
             return context.error()
         }
         if (item.isNothing) {
-            DropActionProcessor.log.warn("cannot throw an air!")
+            log.warn("cannot throw an air!")
             return context.error()
         }
         if (item.getCount() < count) {
-            DropActionProcessor.log.warn("cannot throw more items than the current amount!")
+            log.warn("cannot throw more items than the current amount!")
             return context.error()
         }
         val drop = item.clone()

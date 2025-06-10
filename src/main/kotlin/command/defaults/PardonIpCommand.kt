@@ -9,7 +9,6 @@ import org.chorus_oss.chorus.command.utils.CommandLogger
 import java.net.InetAddress
 import java.net.UnknownHostException
 import java.util.regex.Pattern
-import kotlin.collections.set
 
 
 class PardonIpCommand(name: String) : VanillaCommand(name, "unban an IP") {

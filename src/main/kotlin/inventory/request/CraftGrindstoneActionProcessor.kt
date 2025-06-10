@@ -27,7 +27,7 @@ class CraftGrindstoneActionProcessor : ItemStackRequestActionProcessor<CraftGrin
     ): ActionResponse? {
         val topWindow = player.topWindow
         if (topWindow.isEmpty) {
-            CraftGrindstoneActionProcessor.log.error("the player's inventory is empty!")
+            log.error("the player's inventory is empty!")
             return context.error()
         }
         val inventory = topWindow.get() as GrindstoneInventory

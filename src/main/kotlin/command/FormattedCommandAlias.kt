@@ -28,7 +28,7 @@ class FormattedCommandAlias : Command {
                     sender.sendMessage(TextFormat.RED.toString() + e.message)
                 } else {
                     sender.sendMessage(TranslationContainer(TextFormat.RED.toString() + "%commands.generic.exception"))
-                    FormattedCommandAlias.log.warn(
+                    log.warn(
                         "An error has occurred while executing the formatted command alias {} by the sender {}",
                         commandLabel,
                         sender.name,

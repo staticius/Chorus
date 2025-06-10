@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockYellowTerracotta @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockYellowTerracotta @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockHardenedClay(blockstate) {
 
     override val properties: BlockProperties

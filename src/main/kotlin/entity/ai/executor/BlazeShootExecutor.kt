@@ -150,7 +150,7 @@ class BlazeShootExecutor(
             .putDouble("damage", 2.0)
 
         val p = 1.0
-        val f = min((p * p + p * 2) / 3, 1.0) * 3
+        min((p * p + p * 2) / 3, 1.0) * 3
 
         val projectile: Entity = Entity.createEntity(
             EntityID.SMALL_FIREBALL,

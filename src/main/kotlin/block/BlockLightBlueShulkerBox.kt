@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.tags.BlockTags
 
-class BlockLightBlueShulkerBox @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockLightBlueShulkerBox @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockUndyedShulkerBox(blockstate) {
 
     override val properties: BlockProperties

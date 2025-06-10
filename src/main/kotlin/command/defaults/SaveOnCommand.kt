@@ -5,7 +5,6 @@ import org.chorus_oss.chorus.command.CommandSender
 import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import kotlin.collections.set
 
 class SaveOnCommand(name: String) : VanillaCommand(name, "Enable auto saving") {
     init {

@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.level.updater.util.tagupdater
 
 import org.chorus_oss.chorus.level.updater.util.TagUtils
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
-import kotlin.collections.set
 
 class CompoundTagUpdaterContext {
     private val updaters: MutableList<CompoundTagUpdater> = ArrayList()

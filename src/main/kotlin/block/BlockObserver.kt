@@ -15,7 +15,7 @@ import org.chorus_oss.chorus.utils.RedstoneComponent
 import org.chorus_oss.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 import kotlin.math.abs
 
-class BlockObserver @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockObserver @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate), RedstoneComponent, Faceable {
     override val name: String
         get() = "Observer"

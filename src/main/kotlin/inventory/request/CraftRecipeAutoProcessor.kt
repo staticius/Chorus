@@ -50,7 +50,7 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
 
         val matched = success == action.ingredients.size
         if (!matched) {
-            CraftRecipeAutoProcessor.log.warn(
+            log.warn(
                 "Mismatched recipe! Network id: {},Recipe name: {},Recipe type: {}",
                 action.recipeNetworkId,
                 recipe.recipeId,
@@ -71,7 +71,7 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
                 }
             }
             if (consumeActions.size < consumeActionCountNeeded) {
-                CraftRecipeAutoProcessor.log.warn("Mismatched consume action count! Expected: " + consumeActionCountNeeded + ", Actual: " + consumeActions.size)
+                log.warn("Mismatched consume action count! Expected: " + consumeActionCountNeeded + ", Actual: " + consumeActions.size)
                 return context.error()
             }
             if (recipe.results.size == 1) {

@@ -16,7 +16,7 @@ import org.chorus_oss.chorus.utils.RedstoneComponent
 import java.util.*
 import kotlin.math.ceil
 
-class BlockTarget @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockTarget @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockTransparent(blockState), RedstoneComponent, BlockEntityHolder<BlockEntityTarget> {
     override val name: String
         get() = "Target"

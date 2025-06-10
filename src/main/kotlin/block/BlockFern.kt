@@ -13,7 +13,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockFern : BlockFlowable, FlowerPotBlock {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 

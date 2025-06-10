@@ -43,7 +43,7 @@ enum class LangCode(private val string: String) {
             try {
                 return enumValueOf<LangCode>(name)
             } catch (ignore: IllegalArgumentException) {
-                LangCode.log.error("Can't find LangCode for {},return null", name)
+                log.error("Can't find LangCode for {},return null", name)
                 return null
             }
         }

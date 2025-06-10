@@ -19,9 +19,8 @@ import org.chorus_oss.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus_oss.chorus.math.SimpleAxisAlignedBB
 import org.chorus_oss.chorus.utils.Faceable
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.collections.set
 
-class BlockCocoa @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockCocoa @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate), Faceable {
     override val name: String
         get() = "Cocoa"

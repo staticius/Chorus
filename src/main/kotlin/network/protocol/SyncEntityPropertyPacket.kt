@@ -17,7 +17,7 @@ class SyncEntityPropertyPacket(
         try {
             byteBuf.writeBytes(write(data!!, ByteOrder.BIG_ENDIAN, true))
         } catch (e: Exception) {
-            SyncEntityPropertyPacket.log.error("", e)
+            log.error("", e)
         }
     }
 
@@ -38,7 +38,7 @@ class SyncEntityPropertyPacket(
                     packet.data = read(stream, ByteOrder.BIG_ENDIAN, true)
                 }
             } catch (e: Exception) {
-                SyncEntityPropertyPacket.log.error("", e)
+                log.error("", e)
             }
 
             return packet

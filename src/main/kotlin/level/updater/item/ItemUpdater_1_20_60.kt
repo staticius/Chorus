@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.level.updater.item
 import org.chorus_oss.chorus.level.updater.Updater
 import org.chorus_oss.chorus.level.updater.util.tagupdater.CompoundTagEditHelper
 import org.chorus_oss.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
-import kotlin.collections.set
 
 class ItemUpdater_1_20_60 : Updater {
     override fun registerUpdaters(ctx: CompoundTagUpdaterContext) {

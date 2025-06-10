@@ -31,7 +31,7 @@ class TaskHandler(val plugin: Plugin?, val task: Runnable, val taskId: Int, val 
             lastRunTick = currentTick
             task.run()
         } catch (ex: RuntimeException) {
-            TaskHandler.log.error("Exception while invoking run", ex)
+            log.error("Exception while invoking run", ex)
         }
     }
 

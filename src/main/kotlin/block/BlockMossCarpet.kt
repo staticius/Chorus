@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.Item
 
-open class BlockMossCarpet @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockMossCarpet @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCarpet(blockstate) {
     override val name: String
         get() = "Moss Carpet"

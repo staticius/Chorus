@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockInfestedCrackedStoneBricks @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockInfestedCrackedStoneBricks @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockSolid(blockState) {
     override val name: String
         get() = "Infested Cracked Stone Bricks"

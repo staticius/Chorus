@@ -1,7 +1,8 @@
 package org.chorus_oss.chorus.registry
 
 import org.chorus_oss.chorus.block.*
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.item.Item
+import org.chorus_oss.chorus.item.ItemID
 import java.util.concurrent.atomic.AtomicBoolean
 
 class FuelRegistry : IRegistry<Item, Int?, Int> {

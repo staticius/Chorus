@@ -72,7 +72,7 @@ class ItemFlintAndSteel @JvmOverloads constructor(meta: Int = 0, count: Int = 1)
         if (!player.isCreative && useOn(block)) {
             if (this.damage >= this.maxDurability) {
                 this.count = 0
-                player.inventory.setItemInHand(Item.Companion.AIR)
+                player.inventory.setItemInHand(AIR)
             } else {
                 player.inventory.setItemInHand(this)
             }

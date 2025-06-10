@@ -50,7 +50,7 @@ class BlockEntityMovingBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawn
             val blockhash = HashUtils.fnv1a_32_nbt_palette(movingBlock)
             val blockState = Registries.BLOCKSTATE[blockhash]
             if (blockState == null) {
-                BlockEntityMovingBlock.log.error("Can't load moving block {}", movingBlock.toSNBT())
+                log.error("Can't load moving block {}", movingBlock.toSNBT())
             } else {
                 this.movingBlock = blockState.toBlock()
             }

@@ -14,7 +14,7 @@ import org.chorus_oss.chorus.nbt.tag.ListTag
 import org.chorus_oss.chorus.nbt.tag.StringTag
 import org.chorus_oss.chorus.nbt.tag.Tag
 
-class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockBrewingStand @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate), BlockEntityHolder<BlockEntityBrewingStand> {
     override val name: String
         get() = "Brewing Stand"

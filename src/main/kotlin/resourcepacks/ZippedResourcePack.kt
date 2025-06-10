@@ -36,7 +36,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
         try {
             this.sha256 = MessageDigest.getInstance("SHA-256").digest(Files.readAllBytes(this.file.toPath()))
         } catch (e: Exception) {
-            ZippedResourcePack.log.error("Failed to parse the SHA-256 of the resource pack {}", file, e)
+            log.error("Failed to parse the SHA-256 of the resource pack {}", file, e)
         }
 
         try {
@@ -50,17 +50,17 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
                         loadZip(zip)
                     }
                 } catch (e: IOException) {
-                    ZippedResourcePack.log.error("An error occurred while loading the zipped resource pack {}", file, e)
+                    log.error("An error occurred while loading the zipped resource pack {}", file, e)
                 }
             } else {
-                ZippedResourcePack.log.error(
+                log.error(
                     "An error occurred while loading the zipped resource pack {}",
                     file,
                     exception
                 )
             }
         } catch (e: IOException) {
-            ZippedResourcePack.log.error("An error occurred while loading the zipped resource pack {}", file, e)
+            log.error("An error occurred while loading the zipped resource pack {}", file, e)
         }
 
         require(this.verifyManifest()) {
@@ -100,7 +100,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
         val keyFile = File(parentFolder, file.name + ".key")
         if (keyFile.exists()) {
             this.encryptionKey = String(Files.readAllBytes(keyFile.toPath()), StandardCharsets.UTF_8)
-            ZippedResourcePack.log.debug(this.encryptionKey)
+            log.debug(this.encryptionKey)
         }
 
         val bytes = Files.readAllBytes(file.toPath())
@@ -120,7 +120,7 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
         try {
             byteBuffer!![offset, chunk]
         } catch (e: Exception) {
-            ZippedResourcePack.log.error(
+            log.error(
                 "An error occurred while processing the resource pack {} at offset:{} and length:{}",
                 packName, offset, length, e
             )

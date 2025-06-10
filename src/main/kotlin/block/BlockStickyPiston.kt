@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.type.IntPropertyType
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockStickyPiston @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockStickyPiston @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockPistonBase(blockstate) {
     init {
         sticky = true

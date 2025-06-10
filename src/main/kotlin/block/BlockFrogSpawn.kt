@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.level.Locator
 import org.chorus_oss.chorus.math.BlockFace
 
 class BlockFrogSpawn : BlockFlowable {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

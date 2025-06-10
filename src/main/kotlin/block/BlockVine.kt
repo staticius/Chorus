@@ -20,7 +20,7 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.max
 import kotlin.math.min
 
-class BlockVine @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockVine @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Vines"

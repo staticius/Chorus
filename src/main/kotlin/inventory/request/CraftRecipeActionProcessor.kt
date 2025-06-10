@@ -37,7 +37,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
         if (required > count || recipeInput.getShort("Damage")
                 .toInt() != damage || (recipeInput.getString("Name") != id)
         ) {
-            CraftRecipeActionProcessor.log.error(
+            log.error(
                 "The trade recipe does not match, expect {} actual {}, count {}",
                 recipeInput,
                 input,
@@ -49,7 +49,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             val tag = recipeInput.getCompound("tag")
             val compoundTag = input.namedTag
             if (tag != compoundTag) {
-                CraftRecipeActionProcessor.log.error(
+                log.error(
                     "The trade recipe tag does not match tag, expect {} actual {}",
                     tag,
                     compoundTag
@@ -65,12 +65,12 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
         if (action.recipeNetworkId >= PlayerEnchantOptionsPacket.ENCH_RECIPEID) {  //handle ench recipe
             val enchantOptionData = PlayerEnchantOptionsPacket.RECIPE_MAP[action.recipeNetworkId]
             if (enchantOptionData == null) {
-                CraftRecipeActionProcessor.log.error("Can't find enchant recipe from netId " + action.recipeNetworkId)
+                log.error("Can't find enchant recipe from netId " + action.recipeNetworkId)
                 return context.error()
             }
             val first = inventory.getItem(0)
             if (first.isNothing) {
-                CraftRecipeActionProcessor.log.error("Can't find enchant input!")
+                log.error("Can't find enchant input!")
                 return context.error()
             }
             var item = first.clone().autoAssignStackNetworkId()
@@ -98,7 +98,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
         } else if (action.recipeNetworkId >= TradeRecipeBuildUtils.TRADE_RECIPE_ID) { //handle village trade recipe
             val tradeRecipe = TradeRecipeBuildUtils.RECIPE_MAP[action.recipeNetworkId]
             if (tradeRecipe == null) {
-                CraftRecipeActionProcessor.log.error("Can't find trade recipe from netId {}", action.recipeNetworkId)
+                log.error("Can't find trade recipe from netId {}", action.recipeNetworkId)
                 return context.error()
             }
             val first = inventory.getUnclonedItem(0)
@@ -110,7 +110,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             }
             output.setCount(output.getCount() * action.numberOfRequestedCrafts)
             if (first.isNothing && second.isNothing) {
-                CraftRecipeActionProcessor.log.error("Can't find trade input!")
+                log.error("Can't find trade input!")
                 return context.error()
             }
             val ca = tradeRecipe.contains("buyA")
@@ -123,7 +123,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
 
             if (ca && cb) {
                 if ((first.isNothing || second.isNothing)) {
-                    CraftRecipeActionProcessor.log.error("Can't find trade input!")
+                    log.error("Can't find trade input!")
                     return context.error()
                 } else {
                     if (checkTrade(tradeRecipe.getCompound("buyA"), first, reductionA)) return context.error()
@@ -132,7 +132,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 }
             } else if (ca) {
                 if (first.isNothing) {
-                    CraftRecipeActionProcessor.log.error("Can't find trade input!")
+                    log.error("Can't find trade input!")
                     return context.error()
                 } else {
                     if (checkTrade(tradeRecipe.getCompound("buyA"), first, reductionA)) return context.error()
@@ -179,7 +179,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             } else if (recipe is SmithingTransformRecipe) {
                 return handleSmithingUpgrade(recipe, player, context)
             }
-            CraftRecipeActionProcessor.log.warn(
+            log.warn(
                 "Mismatched recipe! Network id: {},Recipe name: {},Recipe type: {}",
                 action.recipeNetworkId,
                 recipe.recipeId,
@@ -194,7 +194,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 // Skip empty slot because we have checked item type above
                 if (ingredient.isNothing) continue
                 if (ingredient.getCount() < numberOfRequestedCrafts) {
-                    CraftRecipeActionProcessor.log.warn(
+                    log.warn(
                         "Not enough ingredients in slot {}! Expected: {}, Actual: {}",
                         slot,
                         numberOfRequestedCrafts,
@@ -208,7 +208,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
             val consumeActions = findAllConsumeActions(context.itemStackRequest.actions, context.currentActionIndex + 1)
             val consumeActionCountNeeded = input.canConsumerItemCount()
             if (consumeActions.size != consumeActionCountNeeded) {
-                CraftRecipeActionProcessor.log.warn("Mismatched consume action count! Expected: " + consumeActionCountNeeded + ", Actual: " + consumeActions.size + " on inventory " + craft.javaClass.simpleName)
+                log.warn("Mismatched consume action count! Expected: " + consumeActionCountNeeded + ", Actual: " + consumeActions.size + " on inventory " + craft.javaClass.simpleName)
                 return context.error()
             }
             if (recipe.results.size == 1) {
@@ -231,11 +231,11 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
     ): ActionResponse? {
         val topWindow = player.topWindow
         if (topWindow.isEmpty) {
-            CraftRecipeActionProcessor.log.error("the player's haven't open any inventory!")
+            log.error("the player's haven't open any inventory!")
             return context.error()
         }
         if (topWindow.get() !is SmithingInventory) {
-            CraftRecipeActionProcessor.log.error("the player's haven't open smithing inventory! Instead " + topWindow.get().javaClass.simpleName)
+            log.error("the player's haven't open smithing inventory! Instead " + topWindow.get().javaClass.simpleName)
             return context.error()
         }
         val smithingInventory = topWindow.get() as SmithingInventory
@@ -264,11 +264,11 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
     fun handleSmithingTrim(player: Player, context: ItemStackRequestContext): ActionResponse? {
         val topWindow = player.topWindow
         if (topWindow.isEmpty) {
-            CraftRecipeActionProcessor.log.error("the player's haven't open any inventory!")
+            log.error("the player's haven't open any inventory!")
             return context.error()
         }
         if (topWindow.get() !is SmithingInventory) {
-            CraftRecipeActionProcessor.log.error("the player's haven't open smithing inventory!")
+            log.error("the player's haven't open smithing inventory!")
             return context.error()
         }
         val smithingInventory = topWindow.get() as SmithingInventory

@@ -22,7 +22,7 @@ import org.chorus_oss.chorus.utils.Loggable
 import kotlin.math.floor
 
 
-open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockStandingBanner @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBanner> {
     override fun getBlockEntityType(): String {
         return BlockEntityID.BANNER

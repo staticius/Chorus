@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
-class BlockWheat @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWheat @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCrops(blockstate) {
     override val name: String
         get() = "Wheat Block"

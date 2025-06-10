@@ -1,9 +1,8 @@
 package org.chorus_oss.chorus.registry
 
-import org.chorus_oss.chorus.entity.effect.*
+import org.chorus_oss.chorus.entity.effect.PotionType
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.set
 
 class PotionRegistry : IRegistry<String, PotionType?, PotionType> {
     override fun init() {

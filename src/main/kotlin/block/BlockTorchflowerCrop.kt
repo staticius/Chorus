@@ -12,7 +12,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.min
 
-class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCrops(blockstate) {
     override val name: String
         get() = "Torchflower Crop"

@@ -10,7 +10,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.AxisAlignedBB
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlower(blockstate) {
     override fun canPlantOn(block: Block): Boolean {
         return super.canPlantOn(block) || block.id == BlockID.NETHERRACK || block.id == BlockID.SOUL_SAND

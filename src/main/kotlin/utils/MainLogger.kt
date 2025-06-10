@@ -2,35 +2,35 @@ package org.chorus_oss.chorus.utils
 
 class MainLogger : ThreadedLogger() {
     override fun emergency(message: String?) {
-        MainLogger.log.error(message)
+        log.error(message)
     }
 
     override fun alert(message: String?) {
-        MainLogger.log.warn(message)
+        log.warn(message)
     }
 
     override fun critical(message: String?) {
-        MainLogger.log.error(message)
+        log.error(message)
     }
 
     override fun error(message: String?) {
-        MainLogger.log.error(message)
+        log.error(message)
     }
 
     override fun warning(message: String?) {
-        MainLogger.log.warn(message)
+        log.warn(message)
     }
 
     override fun notice(message: String?) {
-        MainLogger.log.warn(message)
+        log.warn(message)
     }
 
     override fun info(message: String?) {
-        MainLogger.log.info(message)
+        log.info(message)
     }
 
     override fun debug(message: String?) {
-        MainLogger.log.debug(message)
+        log.debug(message)
     }
 
     fun setLogDebug(logDebug: Boolean?) {
@@ -38,7 +38,7 @@ class MainLogger : ThreadedLogger() {
     }
 
     fun logException(t: Throwable?) {
-        MainLogger.log.error("", t)
+        log.error("", t)
     }
 
     override fun log(level: LogLevel, message: String?) {
@@ -50,35 +50,35 @@ class MainLogger : ThreadedLogger() {
     }
 
     override fun emergency(message: String?, t: Throwable?) {
-        MainLogger.log.error(message, t)
+        log.error(message, t)
     }
 
     override fun alert(message: String?, t: Throwable?) {
-        MainLogger.log.warn(message, t)
+        log.warn(message, t)
     }
 
     override fun critical(message: String?, t: Throwable?) {
-        MainLogger.log.error(message, t)
+        log.error(message, t)
     }
 
     override fun error(message: String?, t: Throwable?) {
-        MainLogger.log.error(message, t)
+        log.error(message, t)
     }
 
     override fun warning(message: String?, t: Throwable?) {
-        MainLogger.log.warn(message, t)
+        log.warn(message, t)
     }
 
     override fun notice(message: String?, t: Throwable?) {
-        MainLogger.log.warn(message, t)
+        log.warn(message, t)
     }
 
     override fun info(message: String?, t: Throwable?) {
-        MainLogger.log.info(message, t)
+        log.info(message, t)
     }
 
     override fun debug(message: String?, t: Throwable?) {
-        MainLogger.log.debug(message, t)
+        log.debug(message, t)
     }
 
     override fun log(level: LogLevel, message: String?, t: Throwable?) {

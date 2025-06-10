@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockSmoothStone @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockSmoothStone @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockSolid(blockState) {
     override val name: String
         get() = "Smooth Stone"

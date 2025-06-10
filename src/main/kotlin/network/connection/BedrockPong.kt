@@ -44,7 +44,7 @@ class BedrockPong(
     }
 
     fun update() {
-        channel!!.config().setAdvertisement(this.toByteBuf())
+        channel!!.config().advertisement = this.toByteBuf()
     }
 
     companion object {

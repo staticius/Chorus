@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.entity.mob.EntityIronGolem.Companion.checkAndSpawnG
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockLitPumpkin @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockLitPumpkin @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockPumpkin(blockstate) {
     override val name: String
         get() = "Jack o'Lantern"

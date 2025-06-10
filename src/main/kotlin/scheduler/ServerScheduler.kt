@@ -365,7 +365,7 @@ class ServerScheduler {
             try {
                 taskMap.remove(taskId)!!.cancel()
             } catch (ex: RuntimeException) {
-                ServerScheduler.log.error("Exception while invoking onCancel", ex)
+                log.error("Exception while invoking onCancel", ex)
             }
         }
     }
@@ -382,7 +382,7 @@ class ServerScheduler {
                 try {
                     taskHandler.cancel() /* It will remove from task map automatic in next main heartbeat. */
                 } catch (ex: RuntimeException) {
-                    ServerScheduler.log.error("Exception while invoking onCancel", ex)
+                    log.error("Exception while invoking onCancel", ex)
                 }
             }
         }
@@ -393,7 +393,7 @@ class ServerScheduler {
             try {
                 value.cancel()
             } catch (ex: RuntimeException) {
-                ServerScheduler.log.error("Exception while invoking onCancel", ex)
+                log.error("Exception while invoking onCancel", ex)
             }
         }
         taskMap.clear()
@@ -471,7 +471,7 @@ class ServerScheduler {
                     try {
                         taskHandler.run(currentTick)
                     } catch (e: Throwable) {
-                        ServerScheduler.log.error("Could not execute taskHandler {}", taskHandler.taskId, e)
+                        log.error("Could not execute taskHandler {}", taskHandler.taskId, e)
                     }
                 }
                 if (taskHandler.isRepeating) {
@@ -482,7 +482,7 @@ class ServerScheduler {
                         val removed = taskMap.remove(taskHandler.taskId)
                         removed?.cancel()
                     } catch (ex: RuntimeException) {
-                        ServerScheduler.log.error("Exception while invoking onCancel", ex)
+                        log.error("Exception while invoking onCancel", ex)
                     }
                 }
             }

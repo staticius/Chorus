@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.item.ItemTool
 
-open class BlockGoldOre @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockGoldOre @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockOre(blockstate) {
     override val name: String
         get() = "Gold Ore"

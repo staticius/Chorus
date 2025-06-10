@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.command.tree.node
 
 import org.chorus_oss.chorus.block.Block
-import org.chorus_oss.chorus.command.data.CommandEnum
 import org.chorus_oss.chorus.registry.Registries
 
 /**

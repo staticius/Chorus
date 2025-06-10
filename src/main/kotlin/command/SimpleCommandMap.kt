@@ -12,9 +12,6 @@ import org.chorus_oss.chorus.plugin.InternalPlugin
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.chorus.utils.TextFormat
 import org.chorus_oss.chorus.utils.Utils
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 
 class SimpleCommandMap(private val server: Server) : CommandMap {
@@ -275,7 +272,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
                             CommandLogger(target, sender, sentCommandLabel, args, result.value.messageContainer, plugin)
                         )
                     } catch (e: UnsupportedOperationException) {
-                        SimpleCommandMap.log.error("If you use paramtree, you must override execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) method to run the command!")
+                        log.error("If you use paramtree, you must override execute(CommandSender sender, String commandLabel, Map.Entry<String, ParamList> result, CommandLogger log) method to run the command!")
                         output = 0
                     }
                 } else {
@@ -291,7 +288,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
                 output = if (target.execute(sender, sentCommandLabel, args)) 1 else 0
             }
         } catch (e: Exception) {
-            SimpleCommandMap.log.error(
+            log.error(
                 server.lang.tr(
                     "chorus.command.exception",
                     cmdLine,

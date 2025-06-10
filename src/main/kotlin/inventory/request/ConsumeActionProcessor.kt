@@ -14,7 +14,7 @@ class ConsumeActionProcessor : ItemStackRequestActionProcessor<ConsumeAction> {
         // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly
         val count = action.count
         if (count == 0) {
-            ConsumeActionProcessor.log.warn("cannot consume 0 items!")
+            log.warn("cannot consume 0 items!")
 
             return context.error()
         }
@@ -23,19 +23,19 @@ class ConsumeActionProcessor : ItemStackRequestActionProcessor<ConsumeAction> {
         val slot = sourceContainer.fromNetworkSlot(action.source.slot)
         var item = sourceContainer.getItem(slot)
         if (validateStackNetworkId(item.getNetId(), action.source.stackNetworkId)) {
-            ConsumeActionProcessor.log.warn("mismatch stack network id!")
+            log.warn("mismatch stack network id!")
 
             return context.error()
         }
 
         if (item.isNothing) {
-            ConsumeActionProcessor.log.warn("cannot consume an air!")
+            log.warn("cannot consume an air!")
 
             return context.error()
         }
 
         if (item.getCount() < count) {
-            ConsumeActionProcessor.log.warn("cannot consume more items than the current amount!")
+            log.warn("cannot consume more items than the current amount!")
 
             return context.error()
         }

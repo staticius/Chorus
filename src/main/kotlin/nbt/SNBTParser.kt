@@ -5,7 +5,7 @@ import com.google.common.primitives.Ints
 import org.chorus_oss.chorus.nbt.snbt.*
 import org.chorus_oss.chorus.nbt.snbt.ast.*
 import org.chorus_oss.chorus.nbt.tag.*
-import java.io.*
+import java.io.StringReader
 
 class SNBTParser private constructor(snbt: String) {
     private val root: Node?

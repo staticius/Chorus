@@ -826,14 +826,14 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             val g: Int = (color[1] / count) and 0xff
             val b: Int = (color[2] / count) and 0xff
             setDataProperties(
-                java.util.Map.of<EntityDataType<*>, Any>(
+                Map.of<EntityDataType<*>, Any>(
                     EntityDataTypes.EFFECT_COLOR, (r shl 16) + (g shl 8) + b,
                     EntityDataTypes.EFFECT_AMBIENCE, if (ambient) 1 else 0
                 )
             )
         } else {
             setDataProperties(
-                java.util.Map.of<EntityDataType<*>, Any>(
+                Map.of<EntityDataType<*>, Any>(
                     EntityDataTypes.EFFECT_COLOR, 0,
                     EntityDataTypes.EFFECT_AMBIENCE, 0
                 )

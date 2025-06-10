@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockCoarseDirt @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockCoarseDirt @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockDirt(blockstate) {
 
     override val properties: BlockProperties

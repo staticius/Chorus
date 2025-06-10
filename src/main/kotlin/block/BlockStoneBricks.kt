@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.ItemTool
 
-open class BlockStoneBricks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockStoneBricks @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate) {
     override val hardness: Double
         get() = 1.5

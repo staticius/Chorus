@@ -114,12 +114,12 @@ class RawText private constructor(base: Component) {
             val components = cps.component_rawtext
             for (component in components!!.toTypedArray<Component>()) {
                 if (component.type == Component.ComponentType.SCORE) {
-                    val newComponent = Companion.preParseScore(component, sender)
+                    val newComponent = preParseScore(component, sender)
                     if (newComponent != null) components[components.indexOf(component)] = newComponent
                     else components.remove(component)
                 }
                 if (component.type == Component.ComponentType.SELECTOR) {
-                    val newComponent = Companion.preParseSelector(component, sender)
+                    val newComponent = preParseSelector(component, sender)
                     if (newComponent != null) components[components.indexOf(component)] = newComponent
                     else components.remove(component)
                 }

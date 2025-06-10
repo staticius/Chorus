@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 
 class BlockBlueIce : BlockPackedIce {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

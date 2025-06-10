@@ -17,17 +17,6 @@ import org.chorus_oss.chorus.utils.Loggable
 import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.List
-import kotlin.collections.Map
-import kotlin.collections.MutableList
-import kotlin.collections.MutableMap
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.forEach
-import kotlin.collections.listOf
-import kotlin.collections.set
 
 /**
  * CustomBlockDefinition用于获得发送给客户端的物品行为包数据。[CustomItemDefinition.SimpleBuilder]中提供的方法都是控制发送给客户端数据，如果需要控制服务端部分行为，请覆写[Item][org.chorus_oss.chorus.item.Item]中的方法。
@@ -140,7 +129,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
          */
         fun creativeGroup(creativeGroup: String): SimpleBuilder {
             if (creativeGroup.isBlank()) {
-                CustomItemDefinition.log.error("creativeGroup has an invalid value!")
+                log.error("creativeGroup has an invalid value!")
                 return this
             }
             nbt.getCompound("components")
@@ -280,7 +269,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
          */
         protected fun addRepairs(repairItemNames: List<String>, molang: String): SimpleBuilder {
             if (molang.isBlank()) {
-                CustomItemDefinition.log.error("repairAmount has an invalid value!")
+                log.error("repairAmount has an invalid value!")
                 return this
             }
 
@@ -349,12 +338,12 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
         }
 
         fun addRepairItemName(repairItemName: String, molang: String): ToolBuilder {
-            super.addRepairs(java.util.List.of(repairItemName), molang)
+            super.addRepairs(List.of(repairItemName), molang)
             return this
         }
 
         fun addRepairItemName(repairItemName: String, repairAmount: Int): ToolBuilder {
-            super.addRepairs(java.util.List.of(repairItemName), repairAmount.toString())
+            super.addRepairs(List.of(repairItemName), repairAmount.toString())
             return this
         }
 
@@ -924,7 +913,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
                 }
                 toolBlocks[ItemTags.IS_PICKAXE] = pickaxeBlocks
 
-                for (name in java.util.List.of<String>(
+                for (name in List.of<String>(
                     BlockID.CHEST,
                     BlockID.BOOKSHELF,
                     BlockID.MELON_BLOCK,
@@ -1081,7 +1070,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
                 }
                 toolBlocks[ItemTags.IS_AXE] = axeBlocks
 
-                for (name in java.util.List.of<String>(
+                for (name in List.of<String>(
                     BlockID.SOUL_SAND,
                     BlockID.SOUL_SOIL,
                     BlockID.DIRT_WITH_ROOTS,
@@ -1102,7 +1091,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
                 }
                 toolBlocks[ItemTags.IS_SHOVEL] = shovelBlocks
 
-                for (name in java.util.List.of<String>(
+                for (name in List.of<String>(
                     BlockID.NETHER_WART_BLOCK,
                     BlockID.HAY_BLOCK,
                     BlockID.TARGET,
@@ -1125,7 +1114,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
                 }
                 toolBlocks[ItemTags.IS_HOE] = hoeBlocks
 
-                for (name in java.util.List.of<String>(BlockID.WEB, BlockID.BAMBOO)) {
+                for (name in List.of<String>(BlockID.WEB, BlockID.BAMBOO)) {
                     swordBlocks[name] = DigProperty()
                 }
                 toolBlocks[ItemTags.IS_SWORD] = swordBlocks
@@ -1142,12 +1131,12 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
         }
 
         fun addRepairItemName(repairItemName: String, molang: String): ArmorBuilder {
-            super.addRepairs(java.util.List.of(repairItemName), molang)
+            super.addRepairs(List.of(repairItemName), molang)
             return this
         }
 
         fun addRepairItemName(repairItemName: String, repairAmount: Int): ArmorBuilder {
-            super.addRepairs(java.util.List.of(repairItemName), repairAmount.toString())
+            super.addRepairs(List.of(repairItemName), repairAmount.toString())
             return this
         }
 

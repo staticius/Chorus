@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.utils.TextFormat
-import kotlin.collections.set
 
 class PluginsCommand(name: String) : Command(
     name,

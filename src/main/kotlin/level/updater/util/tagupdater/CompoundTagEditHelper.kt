@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.level.updater.util.tagupdater
 
 import java.util.*
-import kotlin.collections.set
 
 class CompoundTagEditHelper(var rootTag: MutableMap<String, Any?>) {
     private val parentTag: Deque<MutableMap<String, Any?>> = ArrayDeque()

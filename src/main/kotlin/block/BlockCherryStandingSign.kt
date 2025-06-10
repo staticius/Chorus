@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemCherrySign
 
-class BlockCherryStandingSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockCherryStandingSign @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockStandingSign(blockState) {
     override fun getWallSignId(): String {
         return BlockCherryWallSign.properties.identifier

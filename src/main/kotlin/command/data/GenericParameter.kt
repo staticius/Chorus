@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus.command.data
 
-import org.chorus_oss.chorus.command.data.GenericParameter.CommandParameterSupplier
 import org.chorus_oss.chorus.command.tree.node.ChainedCommandNode
 import org.chorus_oss.chorus.command.tree.node.ItemNode
 

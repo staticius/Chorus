@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.utils.Rail.isRailBlock
 import org.chorus_oss.chorus.utils.RedstoneComponent
 import org.chorus_oss.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockGoldenRail @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockRail(blockstate), RedstoneComponent {
     init {
         canBePowered = true

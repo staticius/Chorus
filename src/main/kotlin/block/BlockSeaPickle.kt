@@ -17,7 +17,7 @@ import org.chorus_oss.chorus.math.SimpleAxisAlignedBB
 import org.chorus_oss.chorus.math.Vector2
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Sea Pickle"

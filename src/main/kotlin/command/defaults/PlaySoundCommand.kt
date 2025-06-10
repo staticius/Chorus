@@ -11,7 +11,6 @@ import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.level.Locator
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.network.protocol.PlaySoundPacket
-import java.util.*
 
 class PlaySoundCommand(name: String) : VanillaCommand(name, "commands.playsound.description") {
     init {

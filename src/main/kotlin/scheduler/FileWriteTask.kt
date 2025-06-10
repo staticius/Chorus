@@ -42,7 +42,7 @@ class FileWriteTask : AsyncTask {
         try {
             Utils.writeFile(file, contents)
         } catch (e: IOException) {
-            FileWriteTask.log.error("An error occurred while writing the file {}", file, e)
+            log.error("An error occurred while writing the file {}", file, e)
         }
     }
 

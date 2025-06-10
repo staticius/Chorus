@@ -74,7 +74,9 @@ import org.chorus_oss.chorus.network.protocol.CameraShakePacket.CameraShakeActio
 import org.chorus_oss.chorus.network.protocol.CameraShakePacket.CameraShakeType
 import org.chorus_oss.chorus.network.protocol.types.*
 import org.chorus_oss.chorus.network.protocol.types.GameType.Companion.from
-import org.chorus_oss.chorus.permission.*
+import org.chorus_oss.chorus.permission.PermissibleBase
+import org.chorus_oss.chorus.permission.Permission
+import org.chorus_oss.chorus.permission.PermissionAttachment
 import org.chorus_oss.chorus.plugin.InternalPlugin
 import org.chorus_oss.chorus.plugin.Plugin
 import org.chorus_oss.chorus.scheduler.AsyncTask
@@ -95,7 +97,8 @@ import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
 import java.net.InetSocketAddress
 import java.util.*
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Consumer
@@ -2344,7 +2347,7 @@ open class Player(
 
     @JvmOverloads
     fun updateTrackingPositions(delayed: Boolean = false) {
-        val server = Server.instance
+        Server.instance
         if (delayed) {
             if (delayedPosTrackingUpdate != null) {
                 delayedPosTrackingUpdate!!.cancel()

@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.block
 
 class BlockInfoUpdate : Block {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

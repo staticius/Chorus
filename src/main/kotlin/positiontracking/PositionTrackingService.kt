@@ -198,7 +198,7 @@ class PositionTrackingService(folder: File) : Closeable {
                             toRemove.computeIfAbsent(player) { mutableListOf() }.add(trackingHandler)
                         }
                     } catch (e: IOException) {
-                        PositionTrackingService.log.error(
+                        log.error(
                             "Failed to update the tracking handler {} for player {}",
                             trackingHandler,
                             player.getEntityName(),
@@ -262,7 +262,7 @@ class PositionTrackingService(folder: File) : Closeable {
                                 startTracking(player, trackingHandle, false)
                             }
                         } catch (e: IOException) {
-                            PositionTrackingService.log.error(
+                            log.error(
                                 "Failed to get the position of the tracking handler {}",
                                 trackingHandle,
                                 e
@@ -285,7 +285,7 @@ class PositionTrackingService(folder: File) : Closeable {
                             toRemove.add(trackingHandler)
                         }
                     } catch (e: IOException) {
-                        PositionTrackingService.log.error(
+                        log.error(
                             "Failed to update the tracking handler {} for player {}",
                             trackingHandler,
                             player.getEntityName(),

@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.math.BlockFace
 
 class BlockPodzol : BlockDirt {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockElement117 @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockElement117 @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     Block(blockstate) {
 
 

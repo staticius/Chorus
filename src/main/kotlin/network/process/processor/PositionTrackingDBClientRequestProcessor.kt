@@ -20,7 +20,7 @@ class PositionTrackingDBClientRequestProcessor : DataPacketProcessor<PositionTra
                 return
             }
         } catch (e: IOException) {
-            PositionTrackingDBClientRequestProcessor.log.warn(
+            log.warn(
                 "Failed to track the trackingHandler {}",
                 pk.trackingId,
                 e

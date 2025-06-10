@@ -2,12 +2,15 @@ package org.chorus_oss.chorus.level.format
 
 import com.google.common.base.Preconditions
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.block.*
+import org.chorus_oss.chorus.block.Block
+import org.chorus_oss.chorus.block.BlockAir
+import org.chorus_oss.chorus.block.BlockState
 import org.chorus_oss.chorus.blockentity.BlockEntity
 import org.chorus_oss.chorus.blockentity.BlockEntity.Companion.createBlockEntity
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.Entity.Companion.createEntity
-import org.chorus_oss.chorus.level.*
+import org.chorus_oss.chorus.level.DimensionData
+import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.biome.BiomeID
 import org.chorus_oss.chorus.math.BlockVector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
@@ -393,7 +396,7 @@ class Chunk : IChunk {
         try {
             unsafeChunkConsumer.accept(UnsafeChunk(this))
         } catch (e: Exception) {
-            Chunk.log.error("An error occurred while executing chunk batch operation", e)
+            log.error("An error occurred while executing chunk batch operation", e)
         } finally {
             blockLock.unlockWrite(stamp1)
             heightAndBiomeLock.unlockWrite(stamp2)
@@ -655,7 +658,7 @@ class Chunk : IChunk {
                 }
             } catch (e: Exception) {
                 try {
-                    Chunk.log.warn(
+                    log.warn(
                         "Block entity validation of {} at {}, {} {} {} failed, removing as invalid.",
                         entity.javaClass.name,
                         provider.level.name,
@@ -666,7 +669,7 @@ class Chunk : IChunk {
                     )
                 } catch (e2: Exception) {
                     e.addSuppressed(e2)
-                    Chunk.log.warn("Block entity validation failed", e)
+                    log.warn("Block entity validation failed", e)
                 }
             }
             entity.close()

@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
 
-class BlockCaveVinesBodyWithBerries @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockCaveVinesBodyWithBerries @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockCaveVines(blockState) {
     override val name: String
         get() = "Cave Vines Body With Berries"

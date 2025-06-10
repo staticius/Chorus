@@ -26,7 +26,7 @@ class EntityLingeringPotion(chunk: IChunk?, nbt: CompoundTag, shootingEntity: En
         super.splash(collidedWith)
         saveNBT()
         val pos: ListTag<*> = namedTag!!.getList("Pos", CompoundTag::class.java).copy() as ListTag<*>
-        val entity: EntityAreaEffectCloud? = Entity.Companion.createEntity(
+        val entity: EntityAreaEffectCloud? = createEntity(
             EntityID.AREA_EFFECT_CLOUD,
             locator.chunk,
             CompoundTag().putList("Pos", pos)

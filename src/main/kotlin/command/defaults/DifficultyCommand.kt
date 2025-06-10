@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.network.protocol.SetDifficultyPacket
-import kotlin.collections.set
 
 class DifficultyCommand(name: String) :
     VanillaCommand(name, "commands.difficulty.description", "%commands.difficulty.usage") {

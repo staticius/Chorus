@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.utils.Faceable
 
-open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockTorch @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowable(blockstate), Faceable {
     override val name: String
         get() = "Torch"

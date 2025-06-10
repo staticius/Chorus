@@ -10,7 +10,6 @@ import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.tree.node.BooleanNode
 import org.chorus_oss.chorus.command.tree.node.PlayersNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import kotlin.collections.set
 
 class AbilityCommand(name: String) : VanillaCommand(name, "commands.ability.description", "%commands.ability.usage") {
     init {

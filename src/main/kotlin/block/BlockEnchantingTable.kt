@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.StringTag
 
-class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockEnchantingTable @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate), BlockEntityHolder<BlockEntityEnchantTable> {
     override val name: String
         get() = "Enchanting Table"

@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockWarpedPlanks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWarpedPlanks @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockPlanks(blockstate) {
     override val name: String
         get() = "Warped Planks"

@@ -2,7 +2,8 @@ package org.chorus_oss.chorus.registry
 
 import com.google.gson.JsonParser
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.block.*
+import org.chorus_oss.chorus.block.Block
+import org.chorus_oss.chorus.block.BlockState
 import org.chorus_oss.chorus.utils.BlockColor
 import org.chorus_oss.chorus.utils.Loggable
 import org.jetbrains.annotations.ApiStatus

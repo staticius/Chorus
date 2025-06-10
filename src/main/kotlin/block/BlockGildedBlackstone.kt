@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockGildedBlackstone @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockGildedBlackstone @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Gilded Blackstone"

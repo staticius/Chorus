@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.item.enchantment.Enchantment
 import java.util.*
 
 class BlockGlowstone : BlockTransparent {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

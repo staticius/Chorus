@@ -22,9 +22,6 @@ import java.util.*
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutionException
 import java.util.function.Consumer
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 class VersionCommand(name: String) : Command(
     name,

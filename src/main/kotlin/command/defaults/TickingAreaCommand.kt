@@ -11,7 +11,6 @@ import org.chorus_oss.chorus.level.tickingarea.TickingArea
 import org.chorus_oss.chorus.level.tickingarea.manager.TickingAreaManager
 import org.chorus_oss.chorus.math.Vector2
 import org.chorus_oss.chorus.utils.TextFormat
-import kotlin.collections.set
 import kotlin.math.max
 import kotlin.math.min
 

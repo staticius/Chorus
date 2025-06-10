@@ -325,7 +325,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                                 nextState = "r",
                                 blendOutTime = 1f
                             )
-                            Entity.Companion.playAnimationOnEntities(builder, entities)
+                            playAnimationOnEntities(builder, entities)
                             entities.forEach(Consumer { entity1: Entity ->
                                 entity1.level!!.addSound(
                                     entity1.position,

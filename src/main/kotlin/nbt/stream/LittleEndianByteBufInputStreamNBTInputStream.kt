@@ -4,7 +4,6 @@ import org.chorus_oss.chorus.nbt.tag.*
 import org.chorus_oss.chorus.utils.LittleEndianByteBufInputStream
 import java.io.DataInput
 import java.io.IOException
-import kotlin.collections.set
 
 class LittleEndianByteBufInputStreamNBTInputStream(private val stream: LittleEndianByteBufInputStream) : DataInput,
     AutoCloseable {

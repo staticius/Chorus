@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 
 class BlockDragonEgg : BlockFallable {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

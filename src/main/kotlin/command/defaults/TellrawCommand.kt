@@ -10,7 +10,6 @@ import org.chorus_oss.chorus.command.tree.node.PlayersNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.lang.TranslationContainer
 import org.chorus_oss.chorus.utils.TextFormat
-import kotlin.collections.set
 
 class TellrawCommand(name: String) : VanillaCommand(name, "commands.tellraw.description") {
     init {

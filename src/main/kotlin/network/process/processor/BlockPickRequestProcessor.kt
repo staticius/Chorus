@@ -33,7 +33,7 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
 
         val pickEvent = PlayerBlockPickEvent(player, block, item)
         if (player.isSpectator) {
-            BlockPickRequestProcessor.log.debug(
+            log.debug(
                 "Got block-pick request from {} when in spectator mode",
                 player.getEntityName()
             )

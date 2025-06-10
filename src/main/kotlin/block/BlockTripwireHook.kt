@@ -19,7 +19,7 @@ import org.chorus_oss.chorus.utils.RedstoneComponent
 import org.chorus_oss.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
 
-class BlockTripwireHook @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
+class BlockTripwireHook @JvmOverloads constructor(state: BlockState = properties.defaultState) :
     BlockTransparent(state), RedstoneComponent {
     override val name: String
         get() = "Tripwire Hook"

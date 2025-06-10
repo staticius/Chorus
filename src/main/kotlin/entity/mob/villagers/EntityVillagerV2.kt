@@ -55,9 +55,6 @@ import org.chorus_oss.chorus.utils.ChorusRandom
 import org.chorus_oss.chorus.utils.TradeRecipeBuildUtils
 import org.chorus_oss.chorus.utils.Utils
 import java.util.function.Consumer
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 import kotlin.math.max
 import kotlin.math.min
 

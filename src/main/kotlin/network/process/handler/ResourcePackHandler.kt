@@ -25,12 +25,12 @@ class ResourcePackHandler(session: BedrockSession) : BedrockSessionPacketHandler
         val server = session.server
         when (pk.responseStatus) {
             ResourcePackClientResponsePacket.STATUS_REFUSED -> {
-                ResourcePackHandler.log.debug("ResourcePackClientResponsePacket STATUS_REFUSED")
+                log.debug("ResourcePackClientResponsePacket STATUS_REFUSED")
                 session.close("disconnectionScreen.noReason")
             }
 
             ResourcePackClientResponsePacket.STATUS_SEND_PACKS -> {
-                ResourcePackHandler.log.debug("ResourcePackClientResponsePacket STATUS_SEND_PACKS")
+                log.debug("ResourcePackClientResponsePacket STATUS_SEND_PACKS")
                 for (entry in pk.packEntries) {
                     val resourcePack = server.resourcePackManager.getPackById(entry.uuid)
                     if (resourcePack == null) {
@@ -51,7 +51,7 @@ class ResourcePackHandler(session: BedrockSession) : BedrockSessionPacketHandler
             }
 
             ResourcePackClientResponsePacket.STATUS_HAVE_ALL_PACKS -> {
-                ResourcePackHandler.log.debug("ResourcePackClientResponsePacket STATUS_HAVE_ALL_PACKS")
+                log.debug("ResourcePackClientResponsePacket STATUS_HAVE_ALL_PACKS")
                 val stackPacket = ResourcePackStackPacket()
                 stackPacket.mustAccept = server.forceResources && !server.forceResourcesAllowOwnPacks
                 stackPacket.resourcePackStack = server.resourcePackManager.resourceStack
@@ -77,7 +77,7 @@ class ResourcePackHandler(session: BedrockSession) : BedrockSessionPacketHandler
             }
 
             ResourcePackClientResponsePacket.STATUS_COMPLETED -> {
-                ResourcePackHandler.log.debug("ResourcePackClientResponsePacket STATUS_COMPLETED")
+                log.debug("ResourcePackClientResponsePacket STATUS_COMPLETED")
                 session.machine.fire(SessionState.PRE_SPAWN)
             }
         }

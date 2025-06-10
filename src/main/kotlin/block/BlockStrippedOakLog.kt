@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.WoodType
 
-class BlockStrippedOakLog @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockStrippedOakLog @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockWoodStripped(blockstate) {
     override fun getStrippedState(): BlockState {
         return BlockStrippedAcaciaLog.Companion.properties.defaultState

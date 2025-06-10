@@ -14,7 +14,7 @@ class FrameIdCodec(private val frameId: Int) : MessageToMessageCodec<RakMessage,
     @Throws(Exception::class)
     override fun encode(ctx: ChannelHandlerContext, msg: BedrockBatchWrapper, out: MutableList<Any>) {
         if (msg.compressed == null) {
-            FrameIdCodec.log.error("Bedrock batch was not compressed!")
+            log.error("Bedrock batch was not compressed!")
             throw IllegalStateException("Bedrock batch was not compressed")
         }
 

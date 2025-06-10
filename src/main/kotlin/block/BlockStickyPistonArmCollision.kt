@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockStickyPistonArmCollision @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockStickyPistonArmCollision @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockPistonArmCollision(blockstate) {
     override val name: String
         get() = "Sticky Piston Head"

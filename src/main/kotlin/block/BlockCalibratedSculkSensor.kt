@@ -14,7 +14,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.BlockFace.Companion.fromHorizontalIndex
 import org.chorus_oss.chorus.utils.RedstoneComponent
 
-class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockCalibratedSculkSensor @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowable(blockstate), BlockEntityHolder<BlockEntityCalibratedSculkSensor>, RedstoneComponent {
     override val name: String
         get() = "Calibrated Sculk Sensor"

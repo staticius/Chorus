@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus_oss.chorus.math.CompassRoseDirection
 
-class BlockWallBanner @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWallBanner @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockStandingBanner(blockstate) {
     override val name: String
         get() = "Wall Banner"

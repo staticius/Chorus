@@ -1,7 +1,9 @@
 package org.chorus_oss.chorus.network.connection
 
-import io.netty.channel.*
-import io.netty.handler.codec.*
+import io.netty.channel.Channel
+import io.netty.channel.ChannelHandlerContext
+import io.netty.channel.ChannelInboundHandlerAdapter
+import io.netty.handler.codec.DecoderException
 import io.netty.util.ReferenceCountUtil
 import io.netty.util.concurrent.ScheduledFuture
 import io.netty.util.internal.PlatformDependent

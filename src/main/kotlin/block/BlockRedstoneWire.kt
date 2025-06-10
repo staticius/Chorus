@@ -16,7 +16,7 @@ import org.chorus_oss.chorus.utils.RedstoneComponent
 import java.util.*
 import kotlin.math.max
 
-class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockFlowable(blockState), RedstoneComponent {
     override val name: String
         get() = "Redstone Wire"

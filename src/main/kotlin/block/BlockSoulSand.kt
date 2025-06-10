@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.event.block.BlockFormEvent
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.level.Level
 
-class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Soul Sand"

@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.blockentity.BlockEntitySculkShrieker
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.AxisAlignedBB
 
-class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSculkShrieker @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowable(blockstate), BlockEntityHolder<BlockEntitySculkShrieker> {
     override val name: String
         get() = "Sculk Shrieker"

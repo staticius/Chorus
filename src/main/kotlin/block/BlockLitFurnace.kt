@@ -17,7 +17,7 @@ import org.chorus_oss.chorus.nbt.tag.StringTag
 import org.chorus_oss.chorus.nbt.tag.Tag
 import org.chorus_oss.chorus.utils.Faceable
 
-open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockLitFurnace @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate), Faceable, BlockEntityHolder<BlockEntityFurnace> {
     override val name: String
         get() = "Burning Furnace"

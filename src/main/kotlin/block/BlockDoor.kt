@@ -24,7 +24,6 @@ import org.chorus_oss.chorus.math.BlockFace.AxisDirection
 import org.chorus_oss.chorus.math.SimpleAxisAlignedBB
 import org.chorus_oss.chorus.utils.Faceable
 import org.chorus_oss.chorus.utils.RedstoneComponent
-import kotlin.collections.set
 
 
 abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState), RedstoneComponent,

@@ -1,8 +1,10 @@
 package org.chorus_oss.chorus.entity
 
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.inventory.*
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.inventory.BaseInventory
+import org.chorus_oss.chorus.inventory.InventoryHolder
+import org.chorus_oss.chorus.inventory.InventoryType
+import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.network.protocol.MobArmorEquipmentPacket
 import org.chorus_oss.chorus.network.protocol.MobEquipmentPacket
 

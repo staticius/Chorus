@@ -16,7 +16,7 @@ class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
         val skin = pk.skin
 
         if (!skin.isValid()) {
-            PlayerSkinProcessor.log.warn(player.player.getEntityName() + ": PlayerSkinPacket with invalid skin")
+            log.warn(player.player.getEntityName() + ": PlayerSkinPacket with invalid skin")
             return
         }
 
@@ -30,7 +30,7 @@ class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
         ) > System.currentTimeMillis() - player.lastSkinChange
         if (tooQuick) {
             playerChangeSkinEvent.cancelled = true
-            PlayerSkinProcessor.log.warn("Player " + player.player.getEntityName() + " change skin too quick!")
+            log.warn("Player " + player.player.getEntityName() + " change skin too quick!")
         }
         Server.instance.pluginManager.callEvent(playerChangeSkinEvent)
         if (!playerChangeSkinEvent.cancelled) {

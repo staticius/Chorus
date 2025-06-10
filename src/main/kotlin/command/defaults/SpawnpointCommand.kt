@@ -13,7 +13,6 @@ import org.chorus_oss.chorus.network.protocol.types.SpawnPointType
 import org.chorus_oss.chorus.utils.TextFormat
 import java.text.DecimalFormat
 import java.util.stream.Collectors
-import kotlin.collections.set
 
 class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoint.description") {
     init {

@@ -15,7 +15,7 @@ class TextProcessor : DataPacketProcessor<TextPacket>() {
 
         val isXboxAuth = Server.instance.settings.serverSettings.xboxAuth
         if (isXboxAuth && pk.xboxUserId != player.player.loginChainData.xuid) {
-            TextProcessor.log.warn(
+            log.warn(
                 "{} sent TextPacket with invalid xuid : {} != {}",
                 player.player.getEntityName(),
                 pk.xboxUserId,

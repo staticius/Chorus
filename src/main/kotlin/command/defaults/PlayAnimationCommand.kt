@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.network.protocol.AnimateEntityPacket
-import kotlin.collections.set
 
 class PlayAnimationCommand(name: String) : VanillaCommand(name, "commands.playanimation.description") {
     init {

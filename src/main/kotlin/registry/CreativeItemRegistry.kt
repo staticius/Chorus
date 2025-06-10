@@ -3,8 +3,9 @@ package org.chorus_oss.chorus.registry
 import com.google.gson.Gson
 import io.netty.util.internal.EmptyArrays
 import org.chorus_oss.chorus.block.BlockAir
-import org.chorus_oss.chorus.item.*
+import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.Item.Companion.get
+import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.nbt.NBTIO.read
 import org.chorus_oss.chorus.network.protocol.types.inventory.creative.CreativeItemCategory
 import org.chorus_oss.chorus.network.protocol.types.inventory.creative.CreativeItemData
@@ -54,7 +55,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                     }
                     if (item.isNothing || (item.isBlock() && item.getSafeBlockState() == BlockAir.properties.defaultState)) {
                         item = Item.AIR
-                        CreativeItemRegistry.log.warn("load creative item {} damage {} is null", name, damage)
+                        log.warn("load creative item {} damage {} is null", name, damage)
                     }
                     val isBlock = tag.containsKey("block_state_b64")
                     if (isBlock) {
@@ -64,7 +65,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                         val block = Registries.BLOCKSTATE[blockHash]
                         if (block == null) {
                             item = Item.AIR
-                            CreativeItemRegistry.log.warn("load creative item {} blockHash {} is null", name, blockHash)
+                            log.warn("load creative item {} blockHash {} is null", name, blockHash)
                         } else {
                             item.blockState = block
                             val updateDamage = block.toItem()

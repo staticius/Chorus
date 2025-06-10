@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.blockentity.BlockEntityPistonArm
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.EntityHanging
 import org.chorus_oss.chorus.entity.EntityID
-import org.chorus_oss.chorus.entity.item.EntityPainting.PaintingPlacePredicate
 import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.item.ItemPainting

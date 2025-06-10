@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.level.Sound
 
-class BlockBambooTrapdoor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockBambooTrapdoor @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTrapdoor(blockstate) {
     override val name: String
         get() = "Bamboo Trapdoor"

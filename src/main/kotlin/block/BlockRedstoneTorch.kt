@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.utils.RedstoneComponent
 
-class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTorch(blockstate), RedstoneComponent {
     override val name: String
         get() = "Redstone Torch"

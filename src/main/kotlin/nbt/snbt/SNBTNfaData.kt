@@ -2,7 +2,6 @@
 package org.chorus_oss.chorus.nbt.snbt
 
 import org.chorus_oss.chorus.nbt.snbt.SNBTConstants.LexicalState
-import org.chorus_oss.chorus.nbt.snbt.SNBTNfaData.NfaFunction
 import java.util.*
 
 /**

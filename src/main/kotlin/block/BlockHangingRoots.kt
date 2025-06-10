@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockHangingRoots @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockHangingRoots @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockHanging(blockstate) {
     override fun place(
         item: Item?,

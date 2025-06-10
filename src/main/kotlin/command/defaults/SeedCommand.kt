@@ -6,7 +6,6 @@ import org.chorus_oss.chorus.command.CommandSender
 import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import kotlin.collections.set
 
 
 class SeedCommand(name: String) : VanillaCommand(name, "Show the level's seed") {

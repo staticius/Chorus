@@ -44,7 +44,7 @@ class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {
         val inv = player.getWindowById(pk.containerId)
 
         if (inv == null) {
-            MobEquipmentProcessor.log.debug(
+            log.debug(
                 "Player {} has no open container with window ID {}",
                 player.getEntityName(),
                 pk.containerId
@@ -63,7 +63,7 @@ class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {
             if (fixItem.equals(pk.item, false, true)) {
                 inv.setItem(pk.selectedSlot, fixItem)
             } else {
-                MobEquipmentProcessor.log.debug("Tried to equip {} but have {} in target slot", pk.item, fixItem)
+                log.debug("Tried to equip {} but have {} in target slot", pk.item, fixItem)
                 inv.sendContents(player)
             }
         }

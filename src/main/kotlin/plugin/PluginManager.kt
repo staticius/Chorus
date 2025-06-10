@@ -182,7 +182,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             val name = description.name
 
                             if (plugins.containsKey(name) || this.getPlugin(name) != null) {
-                                PluginManager.log.error(
+                                log.error(
                                     server.lang.tr(
                                         "chorus.plugin.duplicateError",
                                         name
@@ -203,7 +203,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                         )
                                     ) { "The getCompatibleAPI version don't match the format majorVersion.minorVersion.patch" }
                                 } catch (e: NullPointerException) {
-                                    PluginManager.log.error(
+                                    log.error(
                                         server.lang.tr(
                                             "chorus.plugin.loadError",
                                             name, "Wrong API format"
@@ -211,7 +211,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                     )
                                     continue
                                 } catch (e: IllegalArgumentException) {
-                                    PluginManager.log.error(
+                                    log.error(
                                         server.lang.tr(
                                             "chorus.plugin.loadError",
                                             name, "Wrong API format"
@@ -241,14 +241,14 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             }
 
                             if (compatible > 0) {
-                                PluginManager.log.error(
+                                log.error(
                                     server.lang.tr(
                                         "chorus.plugin.loadError",
                                         name, "%nukkit.plugin.incompatibleAPI"
                                     )
                                 )
                                 if (compatible == 1) {
-                                    PluginManager.log.error("The major version is not compatible, and the plugin will not load!")
+                                    log.error("The major version is not compatible, and the plugin will not load!")
                                     continue
                                 }
                             }
@@ -270,7 +270,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             }
                         }
                     } catch (e: Exception) {
-                        PluginManager.log.error(
+                        log.error(
                             server.lang.tr(
                                 "nukkit.plugin" +
                                         ".fileError", file.name, dictionary.toString(), Utils
@@ -292,7 +292,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             } else if (!plugins.containsKey(dependency)) {
                                 val language = server.lang
                                 val cause = language.tr("chorus.plugin.missingDependency", dependency)
-                                PluginManager.log.error(language.tr("chorus.plugin.loadError", name, cause))
+                                log.error(language.tr("chorus.plugin.loadError", name, cause))
                                 break
                             }
                         }
@@ -321,7 +321,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                         if (plugin != null) {
                             loadedPlugins[name] = plugin
                         } else {
-                            PluginManager.log.error(server.lang.tr("chorus.plugin.genericLoadError", name))
+                            log.error(server.lang.tr("chorus.plugin.genericLoadError", name))
                         }
                     }
                 }
@@ -337,14 +337,14 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             if (plugin != null) {
                                 loadedPlugins[name] = plugin
                             } else {
-                                PluginManager.log.error(server.lang.tr("chorus.plugin.genericLoadError", name))
+                                log.error(server.lang.tr("chorus.plugin.genericLoadError", name))
                             }
                         }
                     }
 
                     if (missingDependency) {
                         for (name in plugins.keys) {
-                            PluginManager.log.error(
+                            log.error(
                                 server.lang.tr(
                                     "chorus.plugin.loadError",
                                     name,
@@ -518,7 +518,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             try {
                 plugin.pluginLoader.disablePlugin(plugin)
             } catch (e: Exception) {
-                PluginManager.log.error(
+                log.error(
                     "An error occurred while disabling the plugin {}, {}, {}",
                     plugin.description.name, plugin.description.version, plugin.description.main, e
                 )
@@ -553,7 +553,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 try {
                     registration.callEvent(event)
                 } catch (e: Exception) {
-                    PluginManager.log.error(
+                    log.error(
                         server.lang.tr(
                             "chorus.plugin.eventError",
                             event.getSafeName(),
@@ -565,7 +565,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 }
             }
         } catch (e: IllegalAccessException) {
-            PluginManager.log.error("An error has occurred while calling the event {}", event, e)
+            log.error("An error has occurred while calling the event {}", event, e)
         }
     }
 
@@ -606,7 +606,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 // This loop checks for extending deprecated events
                 if (clazz.getAnnotation<Deprecated?>(Deprecated::class.java) != null) {
                     if (java.lang.String.valueOf(server.settings.baseSettings.deprecatedVerbose).toBoolean()) {
-                        PluginManager.log.warn(
+                        log.warn(
                             server.lang.tr(
                                 "chorus.plugin.deprecatedEvent",
                                 plugin.name,
@@ -622,7 +622,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             var eventExecutor = MethodEventExecutor.Companion.compile(listener.javaClass, method)
             if (eventExecutor == null) {
                 eventExecutor = MethodEventExecutor(method)
-                PluginManager.log.debug("Compile fast EventExecutor {} for {} failed!", eventClass.name, plugin.name)
+                log.debug("Compile fast EventExecutor {} for {} failed!", eventClass.name, plugin.name)
             }
             this.registerEvent(eventClass, listener, eh.priority, eventExecutor, plugin, eh.ignoreCancelled)
         }
@@ -645,7 +645,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
         try {
             getEventListeners(event).register(RegisteredListener(listener, executor, priority, plugin, ignoreCancelled))
         } catch (e: IllegalAccessException) {
-            PluginManager.log.error(
+            log.error(
                 "An error occurred while registering the event listener event:{}, listener:{} for plugin:{} version:{}",
                 event, listener, plugin.description.name, plugin.description.version, e
             )

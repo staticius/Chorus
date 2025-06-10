@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.tree.node.IPlayersNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.utils.TextFormat
-import kotlin.collections.set
 
 class OpCommand(name: String) : VanillaCommand(name, "commands.op.description") {
     init {

@@ -1,9 +1,6 @@
 package org.chorus_oss.chorus.item.randomitem
 
 import java.util.*
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 object RandomItem {
     private val selectors: MutableMap<Selector, Float> = HashMap()

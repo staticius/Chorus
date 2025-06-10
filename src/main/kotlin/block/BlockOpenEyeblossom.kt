@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.block
 
 class BlockOpenEyeblossom : BlockClosedEyeblossom {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 

@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.math.BlockFace
 
 open class BlockDirt : BlockSolid, Natural {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

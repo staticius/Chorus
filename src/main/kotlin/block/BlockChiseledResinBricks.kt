@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockChiseledResinBricks @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockChiseledResinBricks @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockResinBricks(blockstate) {
 
     override val properties: BlockProperties

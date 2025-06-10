@@ -1,10 +1,8 @@
 package org.chorus_oss.chorus.entity.ai.sensor
 
-import org.chorus_oss.chorus.entity.*
+import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.ai.memory.NullableMemoryType
 import org.chorus_oss.chorus.entity.mob.EntityMob
-import org.chorus_oss.chorus.utils.*
-import java.util.*
 import java.util.function.Function
 
 /**

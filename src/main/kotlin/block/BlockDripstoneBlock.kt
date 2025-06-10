@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockDripstoneBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockDripstoneBlock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Dripstone Block"

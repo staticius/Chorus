@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.lang.TranslationContainer
 import org.chorus_oss.chorus.utils.TextFormat
-import kotlin.collections.set
 
 class MeCommand(name: String) : VanillaCommand(name, "commands.me.description", "chorus.command.me.usage") {
     init {

@@ -8,7 +8,7 @@ object LevelProviderManager : Loggable {
 
     fun addProvider(name: String, clazz: Class<out LevelProvider>) {
         if (providers.putIfAbsent(name.trim { it <= ' ' }.lowercase(), clazz) != null) {
-            LevelProviderManager.log.error("Duplicate registration Level Provider {}", clazz)
+            log.error("Duplicate registration Level Provider {}", clazz)
         }
     }
 
@@ -20,7 +20,7 @@ object LevelProviderManager : Loggable {
                     return provider
                 }
             } catch (e: Exception) {
-                LevelProviderManager.log.error("An error occurred while getting the provider {}", path, e)
+                log.error("An error occurred while getting the provider {}", path, e)
             }
         }
         return null

@@ -25,7 +25,7 @@ import org.chorus_oss.chorus.utils.RedstoneComponent
 import kotlin.math.abs
 import kotlin.math.max
 
-class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockBell @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockTransparent(blockState), RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityBell> {
     override val name: String
         get() = "Bell"

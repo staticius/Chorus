@@ -87,7 +87,7 @@ object PluginI18nManager : Loggable {
             }
             return count > 0
         } else {
-            PluginI18nManager.log.error("The path does not represent a folder!")
+            log.error("The path does not represent a folder!")
             return false
         }
     }

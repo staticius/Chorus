@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.level.Locator
 import java.util.*
 import kotlin.math.abs
 
-class BlockPaleMossBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockPaleMossBlock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockMossBlock(blockstate) {
     override val name: String
         get() = "Pale Moss"

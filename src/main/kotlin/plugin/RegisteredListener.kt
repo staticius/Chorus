@@ -1,6 +1,9 @@
 package org.chorus_oss.chorus.plugin
 
-import org.chorus_oss.chorus.event.*
+import org.chorus_oss.chorus.event.Cancellable
+import org.chorus_oss.chorus.event.Event
+import org.chorus_oss.chorus.event.EventPriority
+import org.chorus_oss.chorus.event.Listener
 import org.chorus_oss.chorus.utils.EventException
 
 

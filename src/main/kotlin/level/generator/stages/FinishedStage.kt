@@ -5,7 +5,6 @@ import kotlinx.coroutines.Dispatchers
 import org.chorus_oss.chorus.level.format.ChunkState
 import org.chorus_oss.chorus.level.generator.ChunkGenerateContext
 import org.chorus_oss.chorus.level.generator.GenerateStage
-import java.util.concurrent.Executor
 
 class FinishedStage : GenerateStage() {
     override fun apply(context: ChunkGenerateContext) {

@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemDarkOakSign
 
-class BlockDarkoakWallSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockDarkoakWallSign @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockWallSign(blockState) {
     override fun getWallSignId(): String {
         return BlockID.DARKOAK_WALL_SIGN

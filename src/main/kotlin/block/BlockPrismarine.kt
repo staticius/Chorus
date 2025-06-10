@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemTool
 
 open class BlockPrismarine : BlockSolid {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

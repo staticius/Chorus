@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockAcaciaFence @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockAcaciaFence @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFence(blockstate) {
     override val name: String
         get() = "Acacia Fence"

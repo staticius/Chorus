@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.entity.EntityLiving
 import org.chorus_oss.chorus.item.ItemTool
 
-open class BlockStonePressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockStonePressurePlate @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockPressurePlateBase(blockstate) {
     init {
         this.onPitch = 0.6f

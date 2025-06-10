@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.entity.ai.route.finder
 
 import org.chorus_oss.chorus.entity.ai.route.data.Node
-import org.chorus_oss.chorus.math.*
+import org.chorus_oss.chorus.math.Vector3
 
 /**
  * 此接口抽象了一个寻路器

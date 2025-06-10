@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockCrimsonRoots @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockCrimsonRoots @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockHanging(blockstate), BlockFlowerPot.FlowerPotBlock, Natural {
     override val name: String
         get() = "Crimson Roots"

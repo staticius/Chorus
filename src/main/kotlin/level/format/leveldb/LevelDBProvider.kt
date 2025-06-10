@@ -3,7 +3,10 @@ package org.chorus_oss.chorus.level.format.leveldb
 import io.netty.buffer.ByteBufAllocator
 import io.netty.buffer.ByteBufOutputStream
 import org.chorus_oss.chorus.blockentity.BlockEntitySpawnable
-import org.chorus_oss.chorus.level.*
+import org.chorus_oss.chorus.level.DimensionData
+import org.chorus_oss.chorus.level.GameRule
+import org.chorus_oss.chorus.level.GameRules
+import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.format.*
 import org.chorus_oss.chorus.level.format.LevelConfig.GeneratorConfig
 import org.chorus_oss.chorus.level.format.leveldb.LevelDat.*
@@ -13,8 +16,12 @@ import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.IntTag
 import org.chorus_oss.chorus.network.protocol.types.GameType
-import org.chorus_oss.chorus.utils.*
-import org.iq80.leveldb.*
+import org.chorus_oss.chorus.utils.ChunkException
+import org.chorus_oss.chorus.utils.Loggable
+import org.chorus_oss.chorus.utils.SemVersion
+import org.chorus_oss.chorus.utils.Utils
+import org.iq80.leveldb.CompressionType
+import org.iq80.leveldb.Options
 import java.io.*
 import java.lang.ref.WeakReference
 import java.nio.ByteOrder
@@ -518,7 +525,7 @@ class LevelDBProvider(override val level: Level, override val path: String) : Le
                 return levelDatBuilder
             }
         } catch (e: FileNotFoundException) {
-            LevelDBProvider.log.error("The level.dat file does not exist!")
+            log.error("The level.dat file does not exist!")
         }
         throw RuntimeException("level.dat is null!")
     }

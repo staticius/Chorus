@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockLightBlock6 @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockLightBlock6 @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockLightBlock0(blockstate) {
     override val lightLevel: Int
         get() = 6

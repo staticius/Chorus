@@ -54,7 +54,7 @@ abstract class Task : Runnable {
         try {
             handler!!.cancel()
         } catch (ex: RuntimeException) {
-            Task.log.error("Exception while invoking onCancel", ex)
+            log.error("Exception while invoking onCancel", ex)
         }
     }
 

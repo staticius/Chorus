@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockWarpedSlab @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWarpedSlab @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSlab(blockstate, BlockID.WARPED_DOUBLE_SLAB) {
     override fun getSlabName() = "Warped"
 

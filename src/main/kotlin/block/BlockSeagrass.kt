@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.particle.BoneMealParticle
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSeagrass @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Seagrass"

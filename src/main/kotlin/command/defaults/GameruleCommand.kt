@@ -9,7 +9,6 @@ import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.GameRules
 import java.util.*
-import kotlin.collections.set
 
 class GameruleCommand(name: String) : VanillaCommand(name, "commands.gamerule.description") {
     init {

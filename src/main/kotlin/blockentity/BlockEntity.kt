@@ -199,13 +199,13 @@ abstract class BlockEntity(chunk: IChunk, nbt: CompoundTag) : Locator(chunk.prov
                             cause.addSuppressed(exceptions[i])
                         }
                     }
-                    BlockEntity.log.error(
+                    log.error(
                         "Could not create a block entity of type {} with {} args", type,
                         args.size, cause
                     )
                 }
             } else {
-                BlockEntity.log.debug("Block entity type {} is unknown", type)
+                log.debug("Block entity type {} is unknown", type)
             }
 
 

@@ -2,11 +2,13 @@
 package org.chorus_oss.chorus.nbt.snbt
 
 import org.chorus_oss.chorus.nbt.snbt.SNBTConstants.LexicalState
-import java.io.*
+import java.io.IOException
+import java.io.Reader
 import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.CharBuffer
-import java.nio.charset.*
+import java.nio.charset.Charset
+import java.nio.charset.StandardCharsets
 import java.util.*
 import kotlin.math.max
 

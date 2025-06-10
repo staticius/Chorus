@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.block
 
 class BlockPackedMud : BlockSolid {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

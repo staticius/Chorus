@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockPurpurPillar @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockPurpurPillar @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Purpur Pillar"

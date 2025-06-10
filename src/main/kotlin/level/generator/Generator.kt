@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.level.DimensionData
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.format.IChunk
-import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
 abstract class Generator(val dimensionData: DimensionData, val settings: Map<String?, Any>?) :

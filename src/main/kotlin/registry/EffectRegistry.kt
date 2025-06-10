@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.registry
 
 import org.chorus_oss.chorus.entity.effect.*
-import kotlin.collections.set
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.primaryConstructor

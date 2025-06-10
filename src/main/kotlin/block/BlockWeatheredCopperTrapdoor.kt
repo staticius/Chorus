@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockWeatheredCopperTrapdoor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWeatheredCopperTrapdoor @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCopperTrapdoor(blockstate) {
 
     override val properties: BlockProperties

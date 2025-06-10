@@ -16,7 +16,6 @@ import org.chorus_oss.chorus.math.VectorMath.calculateFace
 import org.chorus_oss.chorus.utils.Faceable
 import org.chorus_oss.chorus.utils.Loggable
 import java.util.*
-import kotlin.collections.set
 
 
 abstract class BlockWallBase(blockstate: BlockState) : BlockTransparent(blockstate), BlockConnectable, Loggable {

@@ -52,7 +52,7 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
             if (encryptionKeyEntry != null) {
                 this.encryptionKey =
                     String(jar.getInputStream(encryptionKeyEntry).readAllBytes(), StandardCharsets.UTF_8)
-                JarPluginResourcePack.log.debug(this.encryptionKey)
+                log.debug(this.encryptionKey)
             }
 
             jar.stream().forEach { entry: ZipEntry ->
@@ -78,14 +78,14 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
             try {
                 this.sha256 = MessageDigest.getInstance("SHA-256").digest(bytes)
             } catch (e: Exception) {
-                JarPluginResourcePack.log.error(
+                log.error(
                     "Failed to parse the SHA-256 of the resource pack inside of jar plugin {}",
                     jarPluginFile.name,
                     e
                 )
             }
         } catch (e: IOException) {
-            JarPluginResourcePack.log.error(
+            log.error(
                 "An error occurred while loading the resource pack inside of a jar plugin {}",
                 jarPluginFile,
                 e
@@ -111,7 +111,7 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
         try {
             zippedByteBuffer!![offset, chunk]
         } catch (e: Exception) {
-            JarPluginResourcePack.log.error(
+            log.error(
                 "An error occurred while processing the resource pack {} at offset:{} and length:{}",
                 packName, offset, length, e
             )

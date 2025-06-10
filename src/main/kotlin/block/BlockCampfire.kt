@@ -37,7 +37,7 @@ import org.chorus_oss.chorus.utils.Faceable
 import org.chorus_oss.chorus.utils.Loggable
 
 
-open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityCampfire>, Loggable {
     override fun getBlockEntityType(): String {
         return BlockEntityID.CAMPFIRE

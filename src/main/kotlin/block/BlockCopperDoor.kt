@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.OxidizationLevel
 
-class BlockCopperDoor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockCopperDoor @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCopperDoorBase(blockstate) {
     override val hardness: Double
         get() = 3.0

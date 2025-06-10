@@ -59,7 +59,7 @@ open class ConsoleCommandSender : CommandSender {
 
     override fun sendMessage(message: String) {
         for (line in message.trim { it <= ' ' }.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()) {
-            ConsoleCommandSender.log.info(line)
+            log.info(line)
         }
     }
 

@@ -154,7 +154,7 @@ class PlayerChunkManager(private val player: Player) {
                 } catch (ignore: InterruptedException) {
                 } catch (ignore: ExecutionException) {
                 } catch (e: TimeoutException) {
-                    PlayerChunkManager.log.warn("read chunk timeout {} {}", chunkX, chunkZ)
+                    log.warn("read chunk timeout {} {}", chunkX, chunkZ)
                 }
             } else {
                 chunkSendQueue.add(chunkHash)

@@ -13,7 +13,6 @@ import org.chorus_oss.chorus.inventory.EntityInventoryHolder
 import org.chorus_oss.chorus.inventory.InventoryHolder
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.level.Locator
-import kotlin.collections.set
 
 class ReplaceItemCommand(name: String) : VanillaCommand(name, "commands.replaceitem.description") {
     init {

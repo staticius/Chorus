@@ -9,7 +9,6 @@ import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.utils.TextFormat
 import java.util.function.Consumer
-import kotlin.collections.set
 
 class WorldCommand(name: String) : VanillaCommand(name, "chorus.command.world.description") {
     init {

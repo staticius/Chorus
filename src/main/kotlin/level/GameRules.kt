@@ -1,11 +1,9 @@
 package org.chorus_oss.chorus.level
 
 import com.google.common.base.Preconditions
-
 import org.chorus_oss.chorus.nbt.tag.*
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import java.util.*
-import kotlin.collections.set
 
 class GameRules private constructor() {
     private val gameRules = EnumMap<GameRule, Value<*>>(

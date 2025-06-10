@@ -19,11 +19,11 @@ class CraftLoomActionProcessor : ItemStackRequestActionProcessor<CraftLoomAction
     override fun handle(action: CraftLoomAction, player: Player, context: ItemStackRequestContext): ActionResponse? {
         val topWindow = player.topWindow
         if (topWindow.isEmpty) {
-            CraftLoomActionProcessor.log.error("the player's haven't open any inventory!")
+            log.error("the player's haven't open any inventory!")
             return context.error()
         }
         if (topWindow.get() !is LoomInventory) {
-            CraftLoomActionProcessor.log.error("the player's haven't open loom inventory!")
+            log.error("the player's haven't open loom inventory!")
             return context.error()
         }
         val loomInventory = topWindow.get() as LoomInventory

@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.math.AxisAlignedBB
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 
-class BlockBorderBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockBorderBlock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockWallBase(blockstate) {
     override val hardness: Double
         get() = -1.0

@@ -4,7 +4,6 @@ import org.chorus_oss.chorus.level.updater.Updater
 import org.chorus_oss.chorus.level.updater.util.tagupdater.CompoundTagUpdaterContext
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import java.util.function.Consumer
-import kotlin.collections.set
 
 object BlockStateUpdaters {
     private val CONTEXT: CompoundTagUpdaterContext

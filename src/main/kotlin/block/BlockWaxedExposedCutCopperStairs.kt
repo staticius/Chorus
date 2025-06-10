@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockWaxedExposedCutCopperStairs @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWaxedExposedCutCopperStairs @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockExposedCutCopperStairs(blockstate) {
     override val isWaxed: Boolean
         get() = true

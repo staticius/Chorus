@@ -159,7 +159,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
                         movedBlockEntity.putInt("x", movingBlock.position.floorX)
                         movedBlockEntity.putInt("y", movingBlock.position.floorY)
                         movedBlockEntity.putInt("z", movingBlock.position.floorZ)
-                        BlockEntity.Companion.createBlockEntity(
+                        createBlockEntity(
                             movedBlockEntity.getString("id"),
                             level.getChunk(movingBlock.position.chunkX, movingBlock.position.chunkZ), movedBlockEntity
                         )

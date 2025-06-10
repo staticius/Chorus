@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.level.Sound
 
-class BlockWarpedFenceGate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWarpedFenceGate @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFenceGate(blockstate) {
     override val name: String
         get() = "Warped Fence Gate"

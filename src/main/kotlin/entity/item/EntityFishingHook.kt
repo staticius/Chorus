@@ -245,13 +245,13 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
             Server.instance.pluginManager.callEvent(event)
 
             if (!event.cancelled) {
-                val itemEntity: EntityItem? = Entity.Companion.createEntity(
+                val itemEntity: EntityItem? = createEntity(
                     EntityID.ITEM,
                     level!!.getChunk(
                         position.x.toInt() shr 4,
                         position.z.toInt() shr 4, true
                     ),
-                    Entity.Companion.getDefaultNBT(
+                    getDefaultNBT(
                         pos,
                         event.motion, ThreadLocalRandom.current().nextFloat() * 360,
                         0f

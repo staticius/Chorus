@@ -9,7 +9,6 @@ import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.Vector3
 import java.text.DecimalFormat
-import kotlin.collections.set
 
 class SetWorldSpawnCommand(name: String) : VanillaCommand(name, "commands.setworldspawn.description") {
     init {

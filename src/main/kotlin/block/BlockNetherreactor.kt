@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockNetherreactor @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockNetherreactor @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate), BlockEntityHolder<BlockEntityNetherReactor> {
     override fun getBlockEntityType(): String {
         return BlockEntityID.NETHER_REACTOR

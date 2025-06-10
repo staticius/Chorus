@@ -68,7 +68,7 @@ class Config {
                 this.file!!.parentFile.mkdirs()
                 this.file!!.createNewFile()
             } catch (e: IOException) {
-                Config.log.error("Could not create Config {}", this.file.toString(), e)
+                log.error("Could not create Config {}", this.file.toString(), e)
             }
             this.rootSection = defaultMap
             this.save()
@@ -89,7 +89,7 @@ class Config {
                 try {
                     content = Utils.readFile(this.file!!)
                 } catch (e: IOException) {
-                    Config.log.error("An error occurred while loading the file {}", file, e)
+                    log.error("An error occurred while loading the file {}", file, e)
                 }
                 this.parseContent(content)
                 if (!this.isCorrect) return false
@@ -110,7 +110,7 @@ class Config {
             try {
                 content = Utils.readFile(inputStream)
             } catch (e: IOException) {
-                Config.log.error(
+                log.error(
                     "An error occurred while loading a config from an input stream, input: {}",
                     inputStream,
                     e
@@ -134,7 +134,7 @@ class Config {
             try {
                 content = Utils.readFile(inputStream)
             } catch (e: IOException) {
-                Config.log.error(
+                log.error(
                     "An error occurred while loading a config from an input stream, input: {}",
                     inputStream,
                     e
@@ -223,7 +223,7 @@ class Config {
             try {
                 Utils.writeFile(file!!, content.toString())
             } catch (e: IOException) {
-                Config.log.error("Failed to save the config file {}", file, e)
+                log.error("Failed to save the config file {}", file, e)
             }
         }
     }
@@ -451,7 +451,7 @@ class Config {
                 val value = line.substring(splitIndex + 1)
                 val valueLower = value.lowercase()
                 if (rootSection.containsKey(key)) {
-                    Config.log.debug(
+                    log.debug(
                         "[Config] Repeated property {} on file {}", key,
                         file.toString()
                     )
@@ -471,7 +471,7 @@ class Config {
                 ConfigSection(gson.fromJson(content, object : TypeToken<LinkedHashMap<String?, Any?>?>() {
                 }.type))
         } catch (e: Exception) {
-            Config.log.warn("Failed to parse the config file {}", file, e)
+            log.warn("Failed to parse the config file {}", file, e)
             throw e
         }
     }
@@ -500,7 +500,7 @@ class Config {
                 else -> this.isCorrect = false
             }
         } catch (e: Exception) {
-            Config.log.warn("Failed to parse the config file {}", file, e)
+            log.warn("Failed to parse the config file {}", file, e)
             throw e
         }
     }

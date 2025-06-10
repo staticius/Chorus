@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.utils.RedstoneComponent
 
-class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate), RedstoneComponent, BlockEntityHolder<BlockEntityCreakingHeart> {
     override val hardness: Double
         get() = 10.0

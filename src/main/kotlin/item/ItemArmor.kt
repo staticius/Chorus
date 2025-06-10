@@ -26,7 +26,7 @@ abstract class ItemArmor : Item, ItemDurable {
 
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
         var equip = false
-        var oldSlotItem: Item = Item.Companion.AIR
+        var oldSlotItem: Item = AIR
         if (this.isHelmet) {
             oldSlotItem = player.inventory.helmet
             if (player.inventory.setHelmet(this)) {

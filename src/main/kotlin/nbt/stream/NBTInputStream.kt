@@ -2,11 +2,13 @@ package org.chorus_oss.chorus.nbt.stream
 
 import org.chorus_oss.chorus.nbt.tag.*
 import org.chorus_oss.chorus.utils.VarInt
-import java.io.*
+import java.io.DataInput
+import java.io.DataInputStream
+import java.io.IOException
+import java.io.InputStream
 import java.nio.ByteOrder
-import java.nio.charset.*
+import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.set
 
 
 class NBTInputStream @JvmOverloads constructor(

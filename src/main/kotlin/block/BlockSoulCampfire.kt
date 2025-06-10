@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.Item.Companion.get
 
-class BlockSoulCampfire @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSoulCampfire @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCampfire(blockstate) {
     override val name: String
         get() = "Soul Campfire"

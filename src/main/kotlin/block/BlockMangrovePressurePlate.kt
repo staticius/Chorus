@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockMangrovePressurePlate @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockMangrovePressurePlate @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockWoodenPressurePlate(blockstate) {
     init {
         this.onPitch = 0.8f

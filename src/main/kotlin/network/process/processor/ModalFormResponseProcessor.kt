@@ -53,11 +53,11 @@ class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>(
                         is ElementSlider -> e.defaultValue = (res as Float)
                         is ElementToggle -> e.defaultValue = (res as Boolean)
                         is ElementStepSlider -> e.defaultStep = ((res as ElementResponse).elementId)
-                        else -> ModalFormResponseProcessor.log.warn("Illegal element {} within ServerSettings", e)
+                        else -> log.warn("Illegal element {} within ServerSettings", e)
                     }
                 }
             }
-        } else ModalFormResponseProcessor.log.warn("{} sent unknown form id {}", player.getEntityName(), pk.formId)
+        } else log.warn("{} sent unknown form id {}", player.getEntityName(), pk.formId)
     }
 
     override val packetId: Int

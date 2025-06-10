@@ -68,7 +68,7 @@ abstract class IterableThreadLocal<T> : ThreadLocal<T?>(), Iterable<T> {
                     }
                 }
             } catch (e: Exception) {
-                IterableThreadLocal.log.error("", e)
+                log.error("", e)
             }
         }
 

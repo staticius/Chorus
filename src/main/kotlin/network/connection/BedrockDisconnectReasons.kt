@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.network.connection
 
 import org.cloudburstmc.netty.channel.raknet.RakDisconnectReason
 import java.util.*
-import kotlin.collections.set
 
 object BedrockDisconnectReasons {
     const val DISCONNECTED: String = "disconnect.disconnected"

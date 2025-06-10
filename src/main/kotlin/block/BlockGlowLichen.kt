@@ -5,10 +5,9 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.type.IntPropertyType
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
-import kotlin.collections.set
 
 class BlockGlowLichen : BlockLichen {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

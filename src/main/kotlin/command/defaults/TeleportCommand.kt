@@ -12,7 +12,6 @@ import org.chorus_oss.chorus.level.Transform
 import org.chorus_oss.chorus.math.BVector3
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.network.protocol.types.PlayerAbility
-import kotlin.collections.set
 
 class TeleportCommand(name: String) :
     VanillaCommand(name, "commands.tp.description", "commands.tp.usage", arrayOf<String>("teleport")) {

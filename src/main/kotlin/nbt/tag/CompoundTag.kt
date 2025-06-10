@@ -3,9 +3,6 @@ package org.chorus_oss.chorus.nbt.tag
 import io.netty.util.internal.EmptyArrays
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 import kotlin.math.max
 
 open class CompoundTag @JvmOverloads constructor(open val tags: MutableMap<String, Tag<*>> = HashMap()) :

@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockDeadFireCoral @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockDeadFireCoral @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFireCoral(blockstate) {
 
     override fun isDead() = true

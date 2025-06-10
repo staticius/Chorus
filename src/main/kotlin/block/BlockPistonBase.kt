@@ -442,7 +442,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
                 return true
             }
 
-            if (toMove.size >= Companion.MOVE_BLOCK_LIMIT) {
+            if (toMove.size >= MOVE_BLOCK_LIMIT) {
                 return false
             }
 
@@ -470,7 +470,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
                     break
                 }
 
-                if (count + toMove.size > Companion.MOVE_BLOCK_LIMIT) {
+                if (count + toMove.size > MOVE_BLOCK_LIMIT) {
                     return false
                 }
 
@@ -515,7 +515,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
                     return true
                 }
 
-                if (toMove.size >= Companion.MOVE_BLOCK_LIMIT) {
+                if (toMove.size >= MOVE_BLOCK_LIMIT) {
                     return false
                 }
 

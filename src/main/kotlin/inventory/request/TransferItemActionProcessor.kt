@@ -24,15 +24,15 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
 
         var sourItem = source.getItem(sourceSlot)
         if (sourItem.isNothing) {
-            TransferItemActionProcessor.log.warn("transfer an air item is not allowed")
+            log.warn("transfer an air item is not allowed")
             return context.error()
         }
         if (validateStackNetworkId(sourItem.getNetId(), sourceStackNetworkId)) {
-            TransferItemActionProcessor.log.warn("mismatch source stack network id!")
+            log.warn("mismatch source stack network id!")
             return context.error()
         }
         if (sourItem.getCount() < count) {
-            TransferItemActionProcessor.log.warn(
+            log.warn(
                 "transfer an item that has not enough count is not allowed. Expected: {}, Actual: {}",
                 sourItem.getCount(),
                 count
@@ -70,15 +70,15 @@ abstract class TransferItemActionProcessor<T : TransferItemStackRequestAction?> 
 
         val destItem = destination.getItem(destinationSlot)
         if (!destItem.isNothing && !destItem.equals(sourItem, true, true)) {
-            TransferItemActionProcessor.log.warn("transfer an item to a slot that has a different item is not allowed")
+            log.warn("transfer an item to a slot that has a different item is not allowed")
             return context.error()
         }
         if (validateStackNetworkId(destItem.getNetId(), destinationStackNetworkId)) {
-            TransferItemActionProcessor.log.warn("mismatch destination stack network id!")
+            log.warn("mismatch destination stack network id!")
             return context.error()
         }
         if (destItem.getCount() + count > destItem.maxStackSize) {
-            TransferItemActionProcessor.log.warn("destination stack size bigger than the max stack size!")
+            log.warn("destination stack size bigger than the max stack size!")
             return context.error()
         }
 

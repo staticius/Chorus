@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.nbt.stream
 
-import java.util.concurrent.*
+import java.util.concurrent.Callable
 
 class PGZIPBlock(parent: PGZIPOutputStream) : Callable<ByteArray> {
     /**

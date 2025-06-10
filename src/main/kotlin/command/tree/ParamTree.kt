@@ -5,14 +5,10 @@ import org.chorus_oss.chorus.command.CommandSender
 import org.chorus_oss.chorus.command.PluginCommand
 import org.chorus_oss.chorus.command.data.CommandEnum
 import org.chorus_oss.chorus.command.data.CommandParamType
-import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.node.*
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.lang.CommandOutputContainer
 import org.chorus_oss.chorus.plugin.InternalPlugin
-import kotlin.collections.component1
-import kotlin.collections.component2
-import kotlin.collections.set
 
 class ParamTree {
     val root: Map<String, ParamList>

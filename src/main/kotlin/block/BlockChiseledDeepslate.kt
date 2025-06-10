@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockChiseledDeepslate @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockChiseledDeepslate @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockCobbledDeepslate(blockState) {
     override val name: String
         get() = "Chiseled Deepslate"

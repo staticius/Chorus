@@ -16,7 +16,7 @@ import org.chorus_oss.chorus.network.protocol.BlockEventPacket
 import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus_oss.chorus.utils.RedstoneComponent
 
-class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate), RedstoneComponent, BlockEntityHolder<BlockEntityMusic> {
     override val name: String
         get() = "Note Block"

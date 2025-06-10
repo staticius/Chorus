@@ -13,7 +13,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 
 class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 

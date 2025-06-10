@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockLightBlueCandleCake @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockLightBlueCandleCake @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCandleCake(blockstate) {
     override fun toCandleForm(): BlockCandle {
         return BlockLightBlueCandle()

@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockNetherBrickFence @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockNetherBrickFence @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFence(blockstate) {
     override val name: String
         get() = "Nether Brick Fence"

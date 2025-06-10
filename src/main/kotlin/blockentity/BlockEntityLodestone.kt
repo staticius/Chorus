@@ -54,7 +54,7 @@ class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
                 return
             }
         } catch (e: IOException) {
-            BlockEntityLodestone.log.error("Failed to remove the tracking position handler for {}", locator)
+            log.error("Failed to remove the tracking position handler for {}", locator)
             return
         }
 
@@ -64,7 +64,7 @@ class BlockEntityLodestone(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
             try {
                 positionTrackingService.invalidateHandler(handler)
             } catch (e: IOException) {
-                BlockEntityLodestone.log.error(
+                log.error(
                     "Failed to remove the tracking handler {} for position {}", handler,
                     locator, e
                 )

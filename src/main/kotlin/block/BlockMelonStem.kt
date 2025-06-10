@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockMelonStem @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockMelonStem @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCropsStem(blockstate) {
     override val name: String
         get() = "Melon Stem"

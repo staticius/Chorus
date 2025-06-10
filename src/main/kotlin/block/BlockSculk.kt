@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 
-class BlockSculk @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSculk @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate) {
     override val name: String
         get() = "Sculk"

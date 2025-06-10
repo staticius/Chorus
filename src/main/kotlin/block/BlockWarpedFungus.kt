@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.level.generator.`object`.BlockManager
 import org.chorus_oss.chorus.level.generator.`object`.legacytree.LegacyWarpedTree
 import org.chorus_oss.chorus.utils.ChorusRandom
 
-class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFungus(blockstate) {
     private val feature: LegacyWarpedTree = LegacyWarpedTree()
 

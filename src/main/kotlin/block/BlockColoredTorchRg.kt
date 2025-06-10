@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockColoredTorchRg @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockColoredTorchRg @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     Block(blockstate) {
 
     override val properties: BlockProperties

@@ -24,7 +24,7 @@ import org.chorus_oss.chorus.tags.BiomeTags
 import java.util.stream.Stream
 import kotlin.math.min
 
-class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFallable(blockstate) {
     override val name: String
         get() = "Top Snow"

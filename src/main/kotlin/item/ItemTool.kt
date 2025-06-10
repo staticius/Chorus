@@ -221,7 +221,7 @@ abstract class ItemTool @JvmOverloads constructor(id: String, meta: Int = 0, cou
                         return get(ItemID.Companion.NETHERITE_HOE)
                     }
                     if (toolType == TYPE_HANDS_ONLY) {
-                        return Item.Companion.AIR
+                        return AIR
                     }
                     return get(ItemID.Companion.NETHERITE_PICKAXE)
                 }

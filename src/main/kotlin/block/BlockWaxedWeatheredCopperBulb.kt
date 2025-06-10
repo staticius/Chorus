@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.OxidizationLevel
 
-class BlockWaxedWeatheredCopperBulb @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWaxedWeatheredCopperBulb @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCopperBulbBase(blockstate) {
     override val oxidizationLevel
         get(): OxidizationLevel {

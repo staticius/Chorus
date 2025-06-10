@@ -15,7 +15,7 @@ import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.Level
 
 class BlockMagma : BlockSolid {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

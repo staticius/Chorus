@@ -2,7 +2,9 @@ package org.chorus_oss.chorus.level
 
 
 import com.google.common.base.Preconditions
-import kotlinx.coroutines.*
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.*
@@ -28,9 +30,11 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.Item.Companion.get
 import org.chorus_oss.chorus.item.ItemBucket
 import org.chorus_oss.chorus.item.enchantment.Enchantment
-import org.chorus_oss.chorus.level.format.*
+import org.chorus_oss.chorus.level.format.ChunkState
+import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.level.format.LevelConfig.AntiXrayMode
 import org.chorus_oss.chorus.level.format.LevelConfig.GeneratorConfig
+import org.chorus_oss.chorus.level.format.LevelProvider
 import org.chorus_oss.chorus.level.generator.ChunkGenerateContext
 import org.chorus_oss.chorus.level.generator.Generator
 import org.chorus_oss.chorus.level.particle.DestroyBlockParticle
@@ -58,39 +62,18 @@ import org.chorus_oss.chorus.scheduler.BlockUpdateScheduler
 import org.chorus_oss.chorus.scheduler.ServerScheduler
 import org.chorus_oss.chorus.utils.*
 import java.awt.Color
-import java.io.*
-import java.lang.Runnable
+import java.io.File
 import java.lang.ref.SoftReference
 import java.util.*
 import java.util.concurrent.*
 import java.util.concurrent.atomic.AtomicReference
-import java.util.function.*
+import java.util.function.BiPredicate
+import java.util.function.Consumer
 import java.util.function.Function
+import java.util.function.Predicate
 import java.util.stream.IntStream
 import java.util.stream.Stream
-import kotlin.Any
-import kotlin.Array
-import kotlin.Boolean
-import kotlin.Double
-import kotlin.Exception
-import kotlin.Float
-import kotlin.IllegalStateException
-import kotlin.Int
-import kotlin.Long
-import kotlin.NullPointerException
-import kotlin.RuntimeException
-import kotlin.String
-import kotlin.Throwable
-import kotlin.addSuppressed
-import kotlin.also
-import kotlin.arrayOf
-import kotlin.arrayOfNulls
-import kotlin.code
-import kotlin.emptyArray
-import kotlin.intArrayOf
 import kotlin.math.*
-import kotlin.require
-import kotlin.synchronized
 
 
 class Level(
@@ -922,7 +905,7 @@ class Level(
                 }
 
                 if (this.isThundering()) {
-                    val chunks = chunks
+                    chunks
                     for (entry in this.chunks.entries) {
                         performThunder(entry.key, entry.value)
                     }
@@ -4013,7 +3996,7 @@ class Level(
         if (!blockEntities.isEmpty()) {
             val iter = blockEntities.values.iterator()
             while (iter.hasNext()) {
-                val blockEntity = iter.next()
+                iter.next()
             }
         }
 

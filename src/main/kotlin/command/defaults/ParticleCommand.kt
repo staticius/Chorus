@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.level.Locator
 import org.chorus_oss.chorus.level.ParticleEffect
-import kotlin.collections.set
 
 class ParticleCommand(name: String) : VanillaCommand(name, "commands.particle.description") {
     init {

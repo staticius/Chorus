@@ -88,7 +88,7 @@ class GameLoop private constructor(
                     runBlocking { delay(TimeUnit.NANOSECONDS.toMillis(nanoSleepTime)) }
                 }
             } catch (exception: InterruptedException) {
-                GameLoop.log.error("GameLoop interrupted", exception)
+                log.error("GameLoop interrupted", exception)
                 onStop.run()
                 return
             }

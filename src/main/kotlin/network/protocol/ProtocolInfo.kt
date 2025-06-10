@@ -33,6 +33,7 @@ interface ProtocolInfo {
         const val TAKE_ITEM_ENTITY_PACKET = 17
         const val MOVE_ENTITY_ABSOLUTE_PACKET = 18
         const val MOVE_PLAYER_PACKET = 19
+
         // UNUSED                                           = 20
         const val UPDATE_BLOCK_PACKET = 21
         const val ADD_PAINTING_PACKET = 22
@@ -74,6 +75,7 @@ interface ProtocolInfo {
 
         // UNUSED                                           = 55
         const val BLOCK_ACTOR_DATA_PACKET = 56
+
         // UNUSED                                           = 57
         const val LEVEL_CHUNK_PACKET = 58
         const val SET_COMMANDS_ENABLED_PACKET = 59
@@ -231,6 +233,7 @@ interface ProtocolInfo {
         // UNUSED                                           = ...
         // UNUSED                                           = 299
         const val CAMERA_INSTRUCTION_PACKET = 300
+
         // UNUSED                                           = 301
         const val TRIM_DATA = 302
         const val OPEN_SIGN = 303

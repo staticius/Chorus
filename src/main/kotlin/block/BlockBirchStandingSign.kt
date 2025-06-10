@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemBirchSign
 
-class BlockBirchStandingSign @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockBirchStandingSign @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockStandingSign(blockstate) {
     override fun getStandingSignId(): String {
         return Companion.properties.identifier

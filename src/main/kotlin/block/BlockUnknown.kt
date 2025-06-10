@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.block
 
 
-class BlockUnknown @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockUnknown @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     Block(blockstate) {
 
     override val name: String

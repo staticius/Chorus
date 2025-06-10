@@ -17,7 +17,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate) {
     override val name: String
         get() = "Chorus Flower"

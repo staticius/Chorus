@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockCrimsonNylium @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockCrimsonNylium @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockNylium(blockstate) {
     override val name: String
         get() = "Crimson Nylium"

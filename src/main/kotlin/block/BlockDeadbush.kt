@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.tags.BlockTags
 import java.util.*
 
-class BlockDeadbush @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockDeadbush @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockFlowable(blockState), FlowerPotBlock {
     override val name: String
         get() = "Dead Bush"

@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockYellowCarpet @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockYellowCarpet @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockCarpet(blockstate) {
 
     override val properties: BlockProperties

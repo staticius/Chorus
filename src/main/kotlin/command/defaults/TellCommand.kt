@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.tree.node.PlayersNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.lang.TranslationContainer
-import kotlin.collections.set
 
 class TellCommand(name: String) :
     VanillaCommand(name, "commands.tell.description", "", arrayOf<String>("w", "msg")) {

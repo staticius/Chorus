@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.level.updater.util.tagupdater
 import java.util.function.Consumer
 import java.util.function.Predicate
 import java.util.regex.Pattern
-import kotlin.collections.set
 
 class CompoundTagUpdater(val version: Int) : Comparable<CompoundTagUpdater> {
     private val builder: Builder = Builder()

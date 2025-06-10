@@ -13,7 +13,8 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 object EncryptionUtils {
     @Suppress("SpellCheckingInspection")
-    val mojangPublicKey: ECDSA.PublicKey = parseKey("MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAECRXueJeTDqNRRgJi/vlRufByu/2G0i2Ebt6YMar5QX/R0DIIyrJMcUpruK4QveTfJSTp3Shlq4Gk34cD/4GUWwkv0DVuzeuB+tXija7HBxii03NHDbPAD0AKnLr2wdAp")
+    val mojangPublicKey: ECDSA.PublicKey =
+        parseKey("MHYwEAYHKoZIzj0CAQYFK4EEACIDYgAECRXueJeTDqNRRgJi/vlRufByu/2G0i2Ebt6YMar5QX/R0DIIyrJMcUpruK4QveTfJSTp3Shlq4Gk34cD/4GUWwkv0DVuzeuB+tXija7HBxii03NHDbPAD0AKnLr2wdAp")
 
     val ecdsa = CryptographyProvider.Default.get(ECDSA)
     val aes = CryptographyProvider.Default.get(AES.CTR)
@@ -44,11 +45,22 @@ object EncryptionUtils {
         return CryptographyRandom.nextBytes(16)
     }
 
-    fun getSecretKey(localPrivateKey: ECDSA.PrivateKey, remotePublicKey: ECDSA.PublicKey, token: ByteArray): AES.CTR.Key {
-        val localECDHPrivateKey = ecdhPrivateKeyDecoder.decodeFromByteArrayBlocking(privateFormat, localPrivateKey.encodeToByteArrayBlocking(privateFormat))
-        val remoteECDHPublicKey = ecdhPublicKeyDecoder.decodeFromByteArrayBlocking(publicFormat, remotePublicKey.encodeToByteArrayBlocking(publicFormat))
+    fun getSecretKey(
+        localPrivateKey: ECDSA.PrivateKey,
+        remotePublicKey: ECDSA.PublicKey,
+        token: ByteArray
+    ): AES.CTR.Key {
+        val localECDHPrivateKey = ecdhPrivateKeyDecoder.decodeFromByteArrayBlocking(
+            privateFormat,
+            localPrivateKey.encodeToByteArrayBlocking(privateFormat)
+        )
+        val remoteECDHPublicKey = ecdhPublicKeyDecoder.decodeFromByteArrayBlocking(
+            publicFormat,
+            remotePublicKey.encodeToByteArrayBlocking(publicFormat)
+        )
 
-        val shared = localECDHPrivateKey.sharedSecretGenerator().generateSharedSecretToByteArrayBlocking(remoteECDHPublicKey)
+        val shared =
+            localECDHPrivateKey.sharedSecretGenerator().generateSharedSecretToByteArrayBlocking(remoteECDHPublicKey)
 
         val hasher = digest.hasher()
         val hash = hasher.hashBlocking(token + shared)

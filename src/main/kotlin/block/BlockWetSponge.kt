@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.network.protocol.LevelEventPacket
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockWetSponge @JvmOverloads constructor(state: BlockState = Companion.properties.defaultState) :
+class BlockWetSponge @JvmOverloads constructor(state: BlockState = properties.defaultState) :
     BlockSolid(state) {
     override val hardness: Double
         get() = 0.6

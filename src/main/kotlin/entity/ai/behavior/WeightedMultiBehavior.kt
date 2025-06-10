@@ -1,10 +1,9 @@
 package org.chorus_oss.chorus.entity.ai.behavior
 
+
 import org.chorus_oss.chorus.entity.ai.behaviorgroup.IBehaviorGroup
 import org.chorus_oss.chorus.entity.mob.EntityMob
-
-
-import java.util.concurrent.*
+import java.util.concurrent.ThreadLocalRandom
 
 /**
  * 由多个行为[IBehavior]组成的组（注意和行为组[IBehaviorGroup]区分）<br></br>

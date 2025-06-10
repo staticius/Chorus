@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemMangroveSign
 
-class BlockMangroveWallSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockMangroveWallSign @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockWallSign(blockState) {
     override fun getWallSignId(): String {
         return BlockID.MANGROVE_WALL_SIGN

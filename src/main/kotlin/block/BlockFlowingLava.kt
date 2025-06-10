@@ -19,7 +19,7 @@ import org.chorus_oss.chorus.math.Vector3
 import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 
-open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockLiquid(blockstate) {
     override val lightLevel: Int
         get() = 15

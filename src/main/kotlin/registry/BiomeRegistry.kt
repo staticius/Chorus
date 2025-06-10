@@ -2,7 +2,10 @@ package org.chorus_oss.chorus.registry
 
 import com.google.gson.GsonBuilder
 import org.chorus_oss.chorus.nbt.NBTIO.readTreeMapCompoundTag
-import org.chorus_oss.chorus.nbt.tag.*
+import org.chorus_oss.chorus.nbt.tag.CompoundTag
+import org.chorus_oss.chorus.nbt.tag.ListTag
+import org.chorus_oss.chorus.nbt.tag.StringTag
+import org.chorus_oss.chorus.nbt.tag.Tag
 import org.chorus_oss.chorus.registry.BiomeRegistry.BiomeDefinition
 import org.jetbrains.annotations.UnmodifiableView
 import java.io.IOException

@@ -11,12 +11,10 @@ import org.chorus_oss.chorus.command.selector.args.ISelectorArgument
 import org.chorus_oss.chorus.command.selector.args.impl.*
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.utils.StringUtils
-import java.util.*
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 import java.util.stream.Collectors
-import kotlin.collections.set
 
 /**
  * 目标选择器API

@@ -19,7 +19,6 @@ import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStack
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseStatus
 import org.chorus_oss.chorus.utils.Loggable
 import java.util.*
-import kotlin.collections.set
 
 
 class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPacket>() {
@@ -36,7 +35,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
                 context.currentActionIndex = (index)
                 val processor = PROCESSORS[action.type] as ItemStackRequestActionProcessor<ItemStackRequestAction>?
                 if (processor == null) {
-                    ItemStackRequestPacketProcessor.log.warn("Unhandled inventory action type {}", action.type)
+                    log.warn("Unhandled inventory action type {}", action.type)
                     continue
                 }
 

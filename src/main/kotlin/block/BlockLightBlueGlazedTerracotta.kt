@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockLightBlueGlazedTerracotta @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockLightBlueGlazedTerracotta @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockGlazedTerracotta(blockstate) {
 
     override val properties: BlockProperties

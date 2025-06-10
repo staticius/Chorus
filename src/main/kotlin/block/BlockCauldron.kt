@@ -27,7 +27,7 @@ import org.chorus_oss.chorus.utils.BlockColor
 import kotlin.math.sqrt
 
 class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 

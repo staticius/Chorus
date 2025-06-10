@@ -19,7 +19,7 @@ import org.chorus_oss.chorus.utils.Faceable
 import org.chorus_oss.chorus.utils.RedstoneComponent
 import org.chorus_oss.chorus.utils.RedstoneComponent.Companion.updateAroundRedstone
 
-class BlockLectern @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockLectern @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate), RedstoneComponent, Faceable, BlockEntityHolder<BlockEntityLectern> {
     override val name: String
         get() = "Lectern"

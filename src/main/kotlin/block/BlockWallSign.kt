@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus_oss.chorus.math.CompassRoseDirection
 
-open class BlockWallSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+open class BlockWallSign @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockStandingSign(blockState) {
     override fun getWallSignId() = id
 

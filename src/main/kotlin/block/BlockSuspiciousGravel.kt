@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 
-class BlockSuspiciousGravel @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSuspiciousGravel @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFallable(blockstate) {
     override val name: String
         get() = "Suspicious Gravel"

@@ -4,14 +4,12 @@ import org.chorus_oss.chorus.event.Event
 import org.chorus_oss.chorus.event.Listener
 import org.chorus_oss.chorus.utils.EventException
 import org.chorus_oss.chorus.utils.Loggable
-
 import org.objectweb.asm.*
 import java.lang.ref.WeakReference
 import java.lang.reflect.InaccessibleObjectException
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
-import java.util.*
 import java.util.concurrent.atomic.AtomicInteger
 
 

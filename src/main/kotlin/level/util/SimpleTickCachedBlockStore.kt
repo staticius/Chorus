@@ -4,7 +4,6 @@ import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.util.TickCachedBlockStore.CachedBlockComputer
 import java.util.concurrent.ConcurrentHashMap
-import kotlin.collections.set
 
 class SimpleTickCachedBlockStore(private val level: Level) : TickCachedBlockStore {
     private val tickCachedBlockStore =

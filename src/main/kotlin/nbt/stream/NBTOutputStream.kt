@@ -1,11 +1,15 @@
 package org.chorus_oss.chorus.nbt.stream
 
-import org.chorus_oss.chorus.nbt.tag.*
+import org.chorus_oss.chorus.nbt.tag.CompoundTag
+import org.chorus_oss.chorus.nbt.tag.ListTag
+import org.chorus_oss.chorus.nbt.tag.Tag
 import org.chorus_oss.chorus.utils.VarInt
-import java.io.*
+import java.io.DataOutput
+import java.io.DataOutputStream
+import java.io.IOException
+import java.io.OutputStream
 import java.nio.ByteOrder
-import java.nio.charset.*
-import java.util.*
+import java.nio.charset.StandardCharsets
 import java.util.concurrent.atomic.AtomicBoolean
 
 

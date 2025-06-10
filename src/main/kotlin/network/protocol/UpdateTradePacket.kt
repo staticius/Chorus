@@ -35,7 +35,7 @@ class UpdateTradePacket : DataPacket() {
         try {
             byteBuf.writeBytes(write(offers!!, ByteOrder.LITTLE_ENDIAN, true))
         } catch (e: IOException) {
-            UpdateTradePacket.log.error("", e)
+            log.error("", e)
         }
     }
 

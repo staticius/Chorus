@@ -11,7 +11,6 @@ import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.level.Locator
 import org.chorus_oss.chorus.level.Transform
-import kotlin.collections.set
 
 class ExecuteCommandOld(name: String) : VanillaCommand(name, "old execute command", "commands.execute.usage") {
     init {

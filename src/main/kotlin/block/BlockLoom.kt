@@ -13,7 +13,7 @@ import org.chorus_oss.chorus.math.BlockFace.Companion.horizontals
 import org.chorus_oss.chorus.utils.Faceable
 import java.util.function.Supplier
 
-class BlockLoom @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockLoom @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockSolid(blockState), Faceable, BlockInventoryHolder {
     override val name: String
         get() = "Loom"

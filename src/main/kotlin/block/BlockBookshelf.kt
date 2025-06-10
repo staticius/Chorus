@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.item.ItemTool
 
 open class BlockBookshelf : BlockSolid {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

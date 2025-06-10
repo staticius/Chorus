@@ -23,11 +23,11 @@ class SwapActionProcessor : ItemStackRequestActionProcessor<SwapAction> {
         val sourceItem = source.getItem(sourceSlot)
         val destinationItem = destination.getItem(destinationSlot)
         if (validateStackNetworkId(sourceItem.getNetId(), action.source.stackNetworkId)) {
-            SwapActionProcessor.log.warn("mismatch stack network id!")
+            log.warn("mismatch stack network id!")
             return context.error()
         }
         if (validateStackNetworkId(destinationItem.getNetId(), action.destination.stackNetworkId)) {
-            SwapActionProcessor.log.warn("mismatch stack network id!")
+            log.warn("mismatch stack network id!")
             return context.error()
         }
         source.setItem(sourceSlot, destinationItem, false)

@@ -19,7 +19,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.tags.BlockTags
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Sweet Berry Bush"

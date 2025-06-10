@@ -26,7 +26,7 @@ object ZlibChooser : Loggable {
             2 -> {
                 if (providers[providerIndex1] == null) providers[providerIndex1] = ZlibThreadLocal()
                 if (Libdeflate.isAvailable()) {
-                    ZlibChooser.log.info("{}{}", TextFormat.WHITE, lang.tr("chorus.zlib.acceleration-can-enable"))
+                    log.info("{}{}", TextFormat.WHITE, lang.tr("chorus.zlib.acceleration-can-enable"))
                 }
             }
 
@@ -36,7 +36,7 @@ object ZlibChooser : Loggable {
                     providers[providerIndex1] = libDeflateThreadLocal
                 }
             } else {
-                ZlibChooser.log.warn(lang.tr("chorus.zlib.unavailable"))
+                log.warn(lang.tr("chorus.zlib.unavailable"))
                 providerIndex1 = 2
                 if (providers[providerIndex1] == null) providers[providerIndex1] = ZlibThreadLocal()
             }
@@ -44,10 +44,10 @@ object ZlibChooser : Loggable {
             else -> throw UnsupportedOperationException("Invalid provider: $providerIndex1")
         }
         if (providerIndex1 < 2) {
-            ZlibChooser.log.warn(lang.tr("chorus.zlib.affect-performance"))
+            log.warn(lang.tr("chorus.zlib.affect-performance"))
         }
         currentProvider = providers[providerIndex1]!!
-        ZlibChooser.log.info(
+        log.info(
             "{}: {} ({})",
             lang.tr("chorus.zlib.selected"),
             providerIndex1,

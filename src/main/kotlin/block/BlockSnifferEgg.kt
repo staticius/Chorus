@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.math.BlockFace
 
 // TODO: complete
 class BlockSnifferEgg : BlockTransparent {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockstate: BlockState) : super(blockstate)
 

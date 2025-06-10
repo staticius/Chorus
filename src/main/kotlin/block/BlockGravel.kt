@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.utils.ChorusRandom
 
 
 class BlockGravel : BlockFallable, Natural {
-    constructor() : super(Companion.properties.defaultState)
+    constructor() : super(properties.defaultState)
 
     constructor(blockState: BlockState) : super(blockState)
 

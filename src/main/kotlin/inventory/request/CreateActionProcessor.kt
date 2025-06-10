@@ -18,7 +18,7 @@ class CreateActionProcessor : ItemStackRequestActionProcessor<CreateAction> {
         val itemStackRequestAction = Arrays.stream(context.itemStackRequest.actions)
             .filter { action1: ItemStackRequestAction? -> action1 is CraftRecipeAction }.findFirst()
         if (itemStackRequestAction.isEmpty) {
-            CreateActionProcessor.log.warn("Recipe not found in ItemStackRequest Context! Context: $context")
+            log.warn("Recipe not found in ItemStackRequest Context! Context: $context")
             return context.error()
         }
         val recipe =

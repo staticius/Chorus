@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.registry.Registries
 
-class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockMobSpawner @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockSolid(blockState) {
     override val name: String
         get() = "Monster Spawner"

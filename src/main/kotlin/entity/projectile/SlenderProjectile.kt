@@ -56,8 +56,8 @@ abstract class SlenderProjectile : EntityProjectile {
         val movZ: Double = dz
 
         val projectile: SlenderProjectile = this
-        val shootEntity: Entity = shootingEntity!!
-        val ticks: Int = ticksLived
+        shootingEntity!!
+        ticksLived
 
         val currentAABB: AxisAlignedBB = boundingBox.clone()
         val dirVector: Vector3 = Vector3(dx, dy, dz).multiply(1 / SPLIT_NUMBER.toDouble())

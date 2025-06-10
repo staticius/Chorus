@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 
-class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockStructureBlock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockSolid(blockstate), BlockEntityHolder<BlockEntityStructBlock> {
     var structureBlockType: StructureBlockType
         get() = getPropertyValue(CommonBlockProperties.STRUCTURE_BLOCK_TYPE)

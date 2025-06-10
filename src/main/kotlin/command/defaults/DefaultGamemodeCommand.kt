@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.command.data.CommandParamType
 import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import kotlin.collections.set
 
 class DefaultGamemodeCommand(name: String) : VanillaCommand(name, "commands.defaultgamemode.description") {
     init {

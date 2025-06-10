@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockUnpoweredRepeater @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockUnpoweredRepeater @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockRedstoneRepeater(blockstate) {
     init {
         this.isPowered = false

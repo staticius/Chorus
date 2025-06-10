@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.level.generator.`object`.BlockManager
 import org.chorus_oss.chorus.level.generator.`object`.legacytree.LegacyCrimsonTree
 import org.chorus_oss.chorus.utils.ChorusRandom
 
-class BlockCrimsonFungus @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockCrimsonFungus @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFungus(blockstate) {
     private val feature = LegacyCrimsonTree()
 

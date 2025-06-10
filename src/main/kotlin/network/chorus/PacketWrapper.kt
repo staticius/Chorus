@@ -13,14 +13,16 @@ data class PacketWrapper(
     companion object : ProtoCodec<PacketWrapper> {
         override fun serialize(value: PacketWrapper, stream: Sink) {
             PacketHeader.serialize(value.header, stream)
-            PacketRegistry.get(value.packet)?.serialize(value.packet, stream) ?: throw RuntimeException("PacketCodec not found for ${value.packet}")
+            PacketRegistry.get(value.packet)?.serialize(value.packet, stream)
+                ?: throw RuntimeException("PacketCodec not found for ${value.packet}")
         }
 
         override fun deserialize(stream: Source): PacketWrapper {
             val header: PacketHeader
             return PacketWrapper(
                 header = PacketHeader.deserialize(stream).also { header = it },
-                packet = PacketRegistry.get(header.packetID.toInt())?.deserialize(stream) as? Packet ?: throw RuntimeException("PacketCodec not found for id: ${header.packetID}")
+                packet = PacketRegistry.get(header.packetID.toInt())?.deserialize(stream) as? Packet
+                    ?: throw RuntimeException("PacketCodec not found for id: ${header.packetID}")
             )
         }
     }

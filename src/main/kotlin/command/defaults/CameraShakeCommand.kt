@@ -10,7 +10,6 @@ import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.network.protocol.CameraShakePacket
 import java.util.function.Consumer
 import java.util.stream.Collectors
-import kotlin.collections.set
 
 class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screenshake.description") {
     init {

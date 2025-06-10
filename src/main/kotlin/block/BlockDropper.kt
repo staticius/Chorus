@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.dispenser.DropperDispenseBehavior
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockDropper @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockDropper @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockDispenser(blockstate) {
     override val name: String
         get() = "Dropper"

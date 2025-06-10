@@ -5,7 +5,7 @@ import java.util.*
 
 
 class EnchantmentDurability :
-    Enchantment(Enchantment.Companion.ID_DURABILITY, "durability", Rarity.UNCOMMON, EnchantmentType.BREAKABLE) {
+    Enchantment(ID_DURABILITY, "durability", Rarity.UNCOMMON, EnchantmentType.BREAKABLE) {
     override fun getMinEnchantAbility(level: Int): Int {
         return 5 + (level - 1) * 8
     }

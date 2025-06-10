@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.math.BlockFace
 /**
  * Alias still water
  */
-class BlockWater @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWater @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowingWater(blockstate) {
     override fun place(
         item: Item?,

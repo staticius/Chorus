@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockRawIronBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockRawIronBlock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     Block(blockstate) {
     override val name: String
         get() = "Block of Raw Iron"

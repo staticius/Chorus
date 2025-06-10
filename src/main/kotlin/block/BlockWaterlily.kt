@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.AxisAlignedBB
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockWaterlily @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowable(blockstate) {
     override val name: String
         get() = "Lily Pad"

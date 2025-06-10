@@ -22,7 +22,7 @@ class PacketViolationWarningProcessor : DataPacketProcessor<PacketViolationWarni
                     return@filter false
                 }
             }.map { obj: Field -> obj.name }.findFirst()
-        PacketViolationWarningProcessor.log.warn(
+        log.warn(
             "Violation warning from {}{}",
             player.player.getEntityName(),
             packetName.map<String> { name: String -> " for packet $name" }

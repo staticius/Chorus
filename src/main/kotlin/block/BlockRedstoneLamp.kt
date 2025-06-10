@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.utils.RedstoneComponent
 
-open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockSolid(blockState), RedstoneComponent {
     override val name: String
         get() = "Redstone Lamp"

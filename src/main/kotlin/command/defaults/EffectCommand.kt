@@ -11,7 +11,6 @@ import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.effect.Effect
 import org.chorus_oss.chorus.entity.effect.InstantEffect
 import org.chorus_oss.chorus.entity.item.EntityItem
-import kotlin.collections.set
 
 class EffectCommand(name: String) : Command(name, "commands.effect.description", "chorus.command.effect.usage") {
     init {

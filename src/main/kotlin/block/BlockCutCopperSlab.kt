@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.OxidizationLevel
 
 open class BlockCutCopperSlab @JvmOverloads constructor(
-    blockState: BlockState = Companion.properties.defaultState,
+    blockState: BlockState = properties.defaultState,
     doubleSlabId: String
 ) : BlockSlabCopperBase(blockState, doubleSlabId) {
 

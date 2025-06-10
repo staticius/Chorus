@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.enums.OxidizationLevel
 
-class BlockChiseledCopper @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockChiseledCopper @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockChiseledCopperBase(blockState) {
     override val oxidizationLevel: OxidizationLevel
         get() = OxidizationLevel.UNAFFECTED

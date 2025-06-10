@@ -103,7 +103,7 @@ class EntityEnderPearl @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTa
         )
         if (level!!.gameRules.getBoolean(GameRule.DO_MOB_SPAWNING)) {
             if (ThreadLocalRandom.current().nextInt(1, 20) == 1) {
-                val endermite: EntityEndermite? = Entity.Companion.createEntity(
+                val endermite: EntityEndermite? = createEntity(
                     EntityID.ENDERMITE,
                     level!!.getChunk(destination.floorX shr 4, destination.floorZ shr 4), CompoundTag()
                         .putList(

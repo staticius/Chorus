@@ -12,7 +12,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.utils.ChorusRandom
 import org.chorus_oss.chorus.utils.Faceable
 
-class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockSmallDripleafBlock @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlowable(blockstate), Faceable {
     override val name: String
         get() = "Small Dripleaf"

@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockTallGrass @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockTallGrass @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockDoublePlant(blockstate) {
     override val doublePlantType: DoublePlantType
         get() = DoublePlantType.GRASS

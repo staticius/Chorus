@@ -8,9 +8,9 @@ import org.chorus_oss.chorus.utils.Loggable
 import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.collections.set
 import kotlin.reflect.KClass
-import kotlin.reflect.full.*
+import kotlin.reflect.full.companionObject
+import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
 import kotlin.reflect.typeOf
 

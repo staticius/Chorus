@@ -5,7 +5,9 @@ import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufInputStream
 import io.netty.buffer.ByteBufOutputStream
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.block.*
+import org.chorus_oss.chorus.block.BlockID
+import org.chorus_oss.chorus.block.BlockState
+import org.chorus_oss.chorus.block.BlockUnknown
 import org.chorus_oss.chorus.level.format.SubChunk
 import org.chorus_oss.chorus.level.format.bitarray.BitArray
 import org.chorus_oss.chorus.level.format.bitarray.BitArrayVersion
@@ -16,7 +18,9 @@ import org.chorus_oss.chorus.nbt.stream.NBTInputStream
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.TreeMapCompoundTag
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
-import org.chorus_oss.chorus.utils.*
+import org.chorus_oss.chorus.utils.ByteBufVarInt
+import org.chorus_oss.chorus.utils.HashUtils
+import org.chorus_oss.chorus.utils.Loggable
 import java.io.IOException
 import java.nio.ByteOrder
 
@@ -251,7 +255,7 @@ open class Palette<V> {
             // this way the only possibility is that the block hash is not represented in block_palette.nbt
             if (resultingBlockState == null || resultingBlockState === unknownState) {
                 resultingBlockState = unknownState
-                Palette.log.warn(
+                log.warn(
                     "missing block palette, blockHash: {}, blockId {}",
                     hash,
                     oldBlockNbt.getString("name")

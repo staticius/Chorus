@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockDandelion @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockDandelion @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockFlower(blockstate) {
 
     override val uncommonFlower: Block

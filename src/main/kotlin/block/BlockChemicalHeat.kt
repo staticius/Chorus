@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockChemicalHeat @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockChemicalHeat @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     Block(blockState) {
 
     override val properties: BlockProperties

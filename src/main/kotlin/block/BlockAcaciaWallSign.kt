@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemAcaciaSign
 
-class BlockAcaciaWallSign @JvmOverloads constructor(blockState: BlockState = Companion.properties.defaultState) :
+class BlockAcaciaWallSign @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
     BlockWallSign(blockState) {
     override fun getWallSignId(): String {
         return BlockID.ACACIA_WALL_SIGN

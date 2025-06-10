@@ -25,7 +25,7 @@ import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.chorus.utils.TextFormat
 
 
-class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.properties.defaultState) :
+class BlockBed @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
     BlockTransparent(blockstate), Faceable, BlockEntityHolder<BlockEntityBed>, Loggable {
     override fun getBlockEntityClass(): Class<out BlockEntityBed> {
         return BlockEntityBed::class.java

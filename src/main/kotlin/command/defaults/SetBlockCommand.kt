@@ -10,7 +10,6 @@ import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.level.Locator
-import kotlin.collections.set
 
 class SetBlockCommand(name: String) : VanillaCommand(name, "commands.setblock.description") {
     init {
