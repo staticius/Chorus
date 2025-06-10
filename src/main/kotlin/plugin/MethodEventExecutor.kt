@@ -27,9 +27,9 @@ class MethodEventExecutor(val method: Method?) : EventExecutor {
                 }
             }
         } catch (ex: InvocationTargetException) {
-            throw EventException(if (ex.cause != null) ex.cause else ex)
+            throw EventException(ex.cause ?: ex)
         } catch (ex: ClassCastException) {
-            MethodEventExecutor.log.debug("Ignoring a ClassCastException", ex)
+            log.debug("Ignoring a ClassCastException", ex)
             // We are going to ignore ClassCastException because EntityDamageEvent can't be cast to EntityDamageByEntityEvent
         } catch (t: Throwable) {
             throw EventException(t)

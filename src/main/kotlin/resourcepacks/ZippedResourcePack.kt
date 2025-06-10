@@ -110,19 +110,19 @@ class ZippedResourcePack(file: File) : AbstractResourcePack() {
         byteBuffer!!.flip()
     }
 
-    override fun getPackChunk(off: Int, len: Int): ByteArray {
-        val chunk = if (this.packSize - off > len) {
-            ByteArray(len)
+    override fun getPackChunk(offset: Int, length: Int): ByteArray {
+        val chunk = if (this.packSize - offset > length) {
+            ByteArray(length)
         } else {
-            ByteArray(this.packSize - off)
+            ByteArray(this.packSize - offset)
         }
 
         try {
-            byteBuffer!![off, chunk]
+            byteBuffer!![offset, chunk]
         } catch (e: Exception) {
             ZippedResourcePack.log.error(
                 "An error occurred while processing the resource pack {} at offset:{} and length:{}",
-                packName, off, len, e
+                packName, offset, length, e
             )
         }
 

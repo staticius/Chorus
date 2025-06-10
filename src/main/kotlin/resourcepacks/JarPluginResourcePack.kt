@@ -101,19 +101,19 @@ class JarPluginResourcePack(jarPluginFile: File) : AbstractResourcePack() {
     override val packSize: Int
         get() = zippedByteBuffer!!.limit()
 
-    override fun getPackChunk(off: Int, len: Int): ByteArray {
-        val chunk = if (this.packSize - off > len) {
-            ByteArray(len)
+    override fun getPackChunk(offset: Int, length: Int): ByteArray {
+        val chunk = if (this.packSize - offset > length) {
+            ByteArray(length)
         } else {
-            ByteArray(this.packSize - off)
+            ByteArray(this.packSize - offset)
         }
 
         try {
-            zippedByteBuffer!![off, chunk]
+            zippedByteBuffer!![offset, chunk]
         } catch (e: Exception) {
             JarPluginResourcePack.log.error(
                 "An error occurred while processing the resource pack {} at offset:{} and length:{}",
-                packName, off, len, e
+                packName, offset, length, e
             )
         }
 
