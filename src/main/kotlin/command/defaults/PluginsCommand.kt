@@ -40,7 +40,7 @@ class PluginsCommand(name: String) : Command(
                 list.append(TextFormat.WHITE.toString() + ", ")
             }
             list.append(if (plugin.isEnabled) TextFormat.GREEN else TextFormat.RED)
-            list.append(plugin.description.fullName)
+            list.append(plugin.description.versionedName)
         }
         log.addMessage("chorus.command.plugins.success", plugins.size.toString(), list.toString()).output()
     }

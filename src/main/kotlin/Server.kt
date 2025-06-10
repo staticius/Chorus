@@ -491,7 +491,7 @@ class Server internal constructor(
         this.serverID = UUID.randomUUID()
         pluginManager.loadPlugins(this.pluginPath)
 
-        this.enablePlugins(PluginLoadOrder.STARTUP)
+        this.enablePlugins(PluginLoadOrder.Startup)
 
         addProvider("leveldb", LevelDBProvider::class.java)
 
@@ -509,7 +509,7 @@ class Server internal constructor(
 
         this.autoSaveTicks = settings.baseSettings.autosave
 
-        this.enablePlugins(PluginLoadOrder.POSTWORLD)
+        this.enablePlugins(PluginLoadOrder.PostWorld)
 
         EntityProperty.init()
         buildPacketData()
@@ -649,8 +649,8 @@ class Server internal constructor(
         pluginManager.loadPlugins(this.pluginPath)
         functionManager.reload()
 
-        this.enablePlugins(PluginLoadOrder.STARTUP)
-        this.enablePlugins(PluginLoadOrder.POSTWORLD)
+        this.enablePlugins(PluginLoadOrder.Startup)
+        this.enablePlugins(PluginLoadOrder.PostWorld)
         pluginManager.callEvent(ServerStartedEvent())
     }
 
@@ -1218,7 +1218,7 @@ class Server internal constructor(
             }
         }
 
-        if (type == PluginLoadOrder.POSTWORLD) {
+        if (type == PluginLoadOrder.PostWorld) {
             registerCorePermissions()
         }
     }

@@ -15,15 +15,13 @@ import java.util.regex.Pattern
 
 class JavaPluginLoader(private val server: Server) : PluginLoader {
     private val classes: MutableMap<String, Class<*>> = HashMap()
-
-
-    protected val classLoaders: MutableMap<String?, PluginClassLoader> = HashMap()
+    private val classLoaders: MutableMap<String?, PluginClassLoader> = HashMap()
 
     @Throws(Exception::class)
     override fun loadPlugin(file: File): Plugin? {
         val description = this.getPluginDescription(file)
         if (description != null) {
-            JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.load", description.fullName))
+            log.info(server.baseLang.tr("chorus.plugin.load", description.versionedName))
             val dataFolder = File(file.parentFile, description.name)
             check(!(dataFolder.exists() && !dataFolder.isDirectory)) { "Projected dataFolder '" + dataFolder + "' for " + description.name + " exists and is not a directory" }
 
@@ -48,8 +46,8 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
                 } catch (e: ClassCastException) {
                     throw PluginException("Error whilst initializing main class `" + description.main + "'", e)
                 } catch (e: InstantiationException) {
-                    JavaPluginLoader.log.error(
-                        "An exception happened while initializing the plgin {}, {}, {}, {}",
+                    log.error(
+                        "An exception happened while initializing the plugin {}, {}, {}, {}",
                         file,
                         className,
                         description.name,
@@ -57,8 +55,8 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
                         e
                     )
                 } catch (e: IllegalAccessException) {
-                    JavaPluginLoader.log.error(
-                        "An exception happened while initializing the plgin {}, {}, {}, {}",
+                    log.error(
+                        "An exception happened while initializing the plugin {}, {}, {}, {}",
                         file,
                         className,
                         description.name,
@@ -66,7 +64,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
                         e
                     )
                 }
-            } catch (e: ClassNotFoundException) {
+            } catch (_: ClassNotFoundException) {
                 throw PluginException("Couldn't load plugin " + description.name + ": main class not found")
             }
         }
@@ -93,7 +91,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
                     }
                 }
                 jar.getInputStream(entry).use { stream ->
-                    return PluginDescription(Utils.readFile(stream))
+                    return PluginDescription.fromString(Utils.readFile(stream))
                 }
             }
         } catch (e: IOException) {
@@ -121,7 +119,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
 
     override fun enablePlugin(plugin: Plugin) {
         if (plugin is PluginBase && !plugin.isEnabled) {
-            JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.enable", plugin.description.fullName))
+            JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.enable", plugin.description.versionedName))
             plugin.isEnabled = true
             server.pluginManager.callEvent(PluginEnableEvent(plugin))
         }
@@ -134,7 +132,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
                 throw UnsupportedOperationException("The PowerNukkitX Internal Plugin cannot be disabled")
             }
 
-            JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.disable", plugin.description.fullName))
+            JavaPluginLoader.log.info(server.baseLang.tr("chorus.plugin.disable", plugin.description.versionedName))
 
             server.pluginManager.callEvent(PluginDisableEvent(plugin))
 

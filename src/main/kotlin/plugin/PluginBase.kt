@@ -270,7 +270,7 @@ abstract class PluginBase : Plugin {
          *
          *
          */
-        get() = description.fullName
+        get() = description.versionedName
 
     companion object : Loggable
 }

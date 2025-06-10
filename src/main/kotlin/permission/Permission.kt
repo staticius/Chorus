@@ -1,25 +1,16 @@
 package org.chorus_oss.chorus.permission
 
+import kotlinx.serialization.Serializable
 import org.chorus_oss.chorus.Server
 
-
-class Permission @JvmOverloads constructor(
-    @JvmField val name: String,
-    description: String? = null,
-    defualtValue: String? = null,
-    children: MutableMap<String?, Boolean> = HashMap()
+@Serializable
+class Permission(
+    val name: String,
+    var description: String = "",
+    private var defaultValue: String = DEFAULT_PERMISSION,
+    val children: MutableMap<String?, Boolean> = HashMap()
 ) {
-    var description: String = description ?: ""
-
-    var children: MutableMap<String?, Boolean> = HashMap()
-        private set
-
-    private var defaultValue: String
-
     init {
-        this.defaultValue = defualtValue ?: DEFAULT_PERMISSION
-        this.children = children
-
         this.recalculatePermissibles()
     }
 
@@ -130,7 +121,7 @@ class Permission @JvmOverloads constructor(
                 desc = data["description"] as String?
             }
 
-            return Permission(name, desc, defaultValue, children)
+            return Permission(name, desc ?: "", defaultValue ?: DEFAULT_PERMISSION, children)
         }
     }
 }

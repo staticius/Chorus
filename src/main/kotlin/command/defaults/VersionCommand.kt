@@ -156,10 +156,7 @@ class VersionCommand(name: String) : Command(
                 if (desc.description != null) {
                     sender.sendMessage(desc.description!!)
                 }
-                if (desc.website != null) {
-                    sender.sendMessage("Website: " + desc.website!!)
-                }
-                val authors: List<String> = desc.getAuthors()
+                val authors: List<String> = desc.authors
                 val authorsString = arrayOf("")
                 authors.forEach(Consumer { s: String -> authorsString[0] += s })
                 if (authors.size == 1) {

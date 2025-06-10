@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.plugin
 
 
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.command.PluginCommand
 import org.chorus_oss.chorus.command.SimpleCommandMap
 import org.chorus_oss.chorus.event.*
 import org.chorus_oss.chorus.event.HandlerList.Companion.unregisterAll
@@ -81,20 +80,23 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
     fun loadInternalPlugin() {
         val pluginLoader = fileAssociations[JavaPluginLoader::class.java.name]!!
         val plugin: InternalPlugin = InternalPlugin.Companion.INSTANCE
-        val info: MutableMap<String, Any> = HashMap()
-        info["name"] = "PowerNukkitX"
-        info["version"] = server.chorusVersion
-        info["website"] = "https://github.com/PowerNukkitX/PowerNukkitX"
-        info["main"] = InternalPlugin::class.java.name
         val file = try {
             File(Server::class.java.protectionDomain.codeSource.location.toURI())
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             File(".")
         }
-        val description = PluginDescription(info)
+
+        val description = PluginDescription(
+            name = "Chorus",
+            main = InternalPlugin::class.java.name,
+            version = server.chorusVersion,
+            api = emptyList(),
+            description = "https://github.com/Chorus-OSS/Chorus",
+        )
+
         plugin.init(
             pluginLoader,
-            javaClass.classLoader, server, description, File("PowerNukkitX"), file
+            javaClass.classLoader, server, description, File("Chorus"), file
         )
         plugins[description.name] = plugin
         enablePlugin(plugin)
@@ -119,17 +121,10 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             val plugin = loader.loadPlugin(file)
                             if (plugin != null) {
                                 plugins[plugin.description.name] = plugin
-
-                                val pluginCommands = this.parseYamlCommands(plugin)
-
-                                if (!pluginCommands.isEmpty()) {
-                                    commandMap.registerAll(plugin.description.name, pluginCommands)
-                                }
-
                                 return plugin
                             }
                         } catch (e: Exception) {
-                            PluginManager.log.error("Could not load plugin", e)
+                            log.error("Could not load plugin", e)
                             return null
                         }
                     }
@@ -199,7 +194,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
 
                             var compatible = 0
 
-                            for (version in description.compatibleAPIs) {
+                            for (version in description.api) {
                                 try {
                                     //Check the format: majorVersion.minorVersion.patch
                                     require(
@@ -261,9 +256,9 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
 
                             plugins[name] = file
 
-                            softDependencies[name] = description.softDepend
+                            softDependencies[name] = description.softDependencies
 
-                            dependencies[name] = description.depend
+                            dependencies[name] = description.dependencies
 
                             for (before in description.loadBefore) {
                                 if (softDependencies.containsKey(before)) {
@@ -493,75 +488,13 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 }
                 plugin.pluginLoader.enablePlugin(plugin)
             } catch (e: Throwable) {
-                PluginManager.log.error(
+                log.error(
                     "An error occurred while enabling the plugin {}, {}, {}",
                     plugin.description.name, plugin.description.version, plugin.description.main, e
                 )
                 this.disablePlugin(plugin)
             }
         }
-    }
-
-    protected fun parseYamlCommands(plugin: Plugin): List<PluginCommand<*>> {
-        val pluginCmds: MutableList<PluginCommand<*>> = ArrayList()
-
-        for ((key, value) in plugin.description.commands) {
-            if (key.contains(":")) {
-                PluginManager.log.error(
-                    server.baseLang.tr(
-                        "chorus.plugin.commandError",
-                        key,
-                        plugin.description.fullName
-                    )
-                )
-                continue
-            }
-            if (value is Map<*, *>) {
-                val newCmd = PluginCommand(key, plugin)
-
-                if (value.containsKey("description")) {
-                    newCmd.description = (value["description"] as String?)!!
-                }
-
-                if (value.containsKey("usage")) {
-                    newCmd.usage = (value["usage"] as String?)!!
-                }
-
-                if (value.containsKey("aliases")) {
-                    val aliases = value["aliases"]
-                    if (aliases is List<*>) {
-                        val aliasList: MutableList<String> = ArrayList()
-                        for (alias in aliases as List<String>) {
-                            if (alias.contains(":")) {
-                                PluginManager.log.error(
-                                    server.baseLang.tr(
-                                        "chorus.plugin.aliasError",
-                                        alias,
-                                        plugin.description.fullName
-                                    )
-                                )
-                                continue
-                            }
-                            aliasList.add(alias)
-                        }
-
-                        newCmd.aliases = (aliasList.toTypedArray())
-                    }
-                }
-
-                if (value.containsKey("permission")) {
-                    newCmd.permission = value["permission"] as String
-                }
-
-                if (value.containsKey("permission-message")) {
-                    newCmd.permissionMessage = value["permission-message"] as String
-                }
-
-                pluginCmds.add(newCmd)
-            }
-        }
-
-        return pluginCmds
     }
 
     fun disablePlugins() {
@@ -625,7 +558,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                         server.baseLang.tr(
                             "chorus.plugin.eventError",
                             event.getSafeName(),
-                            registration.plugin.description.fullName,
+                            registration.plugin.description.versionedName,
                             e.message!!,
                             registration.listener.javaClass.name
                         ), e
@@ -650,7 +583,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             Collections.addAll(methods, *publicMethods)
             Collections.addAll(methods, *privateMethods)
         } catch (e: NoClassDefFoundError) {
-            plugin.logger.error("Plugin " + plugin.description.fullName + " has failed to register events for " + listener.javaClass + " because " + e.message + " does not exist.")
+            plugin.logger.error("Plugin " + plugin.description.versionedName + " has failed to register events for " + listener.javaClass + " because " + e.message + " does not exist.")
             return
         }
 
@@ -662,7 +595,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             }
             val checkClass: Class<*> = method.parameterTypes[0]
             if (method.parameterTypes.size != 1 || !Event::class.java.isAssignableFrom(checkClass)) {
-                plugin.logger.error(plugin.description.fullName + " attempted to register an invalid EventHandler method signature \"" + method.toGenericString() + "\" in " + listener.javaClass)
+                plugin.logger.error(plugin.description.versionedName + " attempted to register an invalid EventHandler method signature \"" + method.toGenericString() + "\" in " + listener.javaClass)
                 continue
             }
 
