@@ -109,7 +109,7 @@ open class BlockEntityItemFrame(chunk: IChunk, nbt: CompoundTag) : BlockEntitySp
 
         val event = ItemFrameUseEvent(player, this.block, this, before, ItemFrameUseEvent.Action.DROP)
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) return false
+        if (event.cancelled) return false
 
         val drop = dropItemAndGetEntity(player)
         if (drop != null) {

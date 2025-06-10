@@ -45,7 +45,7 @@ class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>(
             Server.instance.pluginManager.callEvent(event)
 
             // Apply responses as default settings
-            if (!event.isCancelled && window is CustomForm) {
+            if (!event.cancelled && window is CustomForm) {
                 (response as CustomResponse).responses.forEach { (i, res) ->
                     when (val e: Element = window.elements[i]) {
                         is ElementDropdown -> e.defaultOption = ((res as ElementResponse).elementId)

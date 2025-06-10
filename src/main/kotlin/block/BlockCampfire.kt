@@ -150,7 +150,7 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = Comp
 
         val ev = EntityCombustByBlockEvent(this, entity, 8)
         instance.pluginManager.callEvent(ev)
-        if (!ev.isCancelled && entity.isAlive()) {
+        if (!ev.cancelled && entity.isAlive()) {
             entity.setOnFire(ev.duration)
         }
     }

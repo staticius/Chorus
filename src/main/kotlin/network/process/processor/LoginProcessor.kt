@@ -17,7 +17,7 @@ class LoginProcessor : DataPacketProcessor<LoginPacket>() {
         val event = PlayerDuplicatedLoginEvent(player)
         Server.instance.pluginManager.callEvent(event)
 
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return
         }
 

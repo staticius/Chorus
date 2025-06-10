@@ -36,7 +36,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
             if (up().isSolid) {
                 val farmEvent = FarmLandDecayEvent(null, this)
                 Server.instance.pluginManager.callEvent(farmEvent)
-                if (farmEvent.isCancelled) return 0
+                if (farmEvent.cancelled) return 0
 
                 level.setBlock(this.position, get(BlockID.DIRT), direct = false, update = true)
 
@@ -111,7 +111,7 @@ class BlockFarmland @JvmOverloads constructor(blockstate: BlockState = Companion
             } else {
                 val farmEvent = FarmLandDecayEvent(null, this)
                 Server.instance.pluginManager.callEvent(farmEvent)
-                if (farmEvent.isCancelled) return 0
+                if (farmEvent.cancelled) return 0
                 level.setBlock(this.position, get(BlockID.DIRT), direct = false, update = true)
             }
 

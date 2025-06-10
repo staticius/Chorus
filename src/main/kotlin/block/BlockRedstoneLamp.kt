@@ -51,7 +51,7 @@ open class BlockRedstoneLamp @JvmOverloads constructor(blockState: BlockState = 
                 // Redstone event
                 val ev = RedstoneUpdateEvent(this)
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return 0
                 }
 

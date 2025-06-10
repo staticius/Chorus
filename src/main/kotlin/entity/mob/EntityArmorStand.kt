@@ -152,7 +152,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
 
         val ev: PlayerChangeArmorStandEvent = PlayerChangeArmorStandEvent(player, this, item, slot)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) return false
+        if (ev.cancelled) return false
 
         var changed: Boolean = false
         if (isArmor) {
@@ -312,11 +312,11 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
     override fun attack(source: EntityDamageEvent): Boolean {
         when (source.cause) {
             DamageCause.FALL -> {
-                source.isCancelled = true
+                source.cancelled = true
                 level!!.addSound(this.position, Sound.MOB_ARMOR_STAND_LAND)
             }
 
-            DamageCause.CONTACT, DamageCause.HUNGER, DamageCause.MAGIC, DamageCause.DROWNING, DamageCause.SUFFOCATION, DamageCause.PROJECTILE -> source.isCancelled =
+            DamageCause.CONTACT, DamageCause.HUNGER, DamageCause.MAGIC, DamageCause.DROWNING, DamageCause.SUFFOCATION, DamageCause.PROJECTILE -> source.cancelled =
                 true
 
             DamageCause.FIRE, DamageCause.FIRE_TICK, DamageCause.LAVA -> if (hasEffect(EffectType.FIRE_RESISTANCE)) {
@@ -328,7 +328,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
 
         if (source.cause != DamageCause.ENTITY_ATTACK) {
             if (namedTag!!.getByte("InvulnerableTimer") > 0) {
-                source.isCancelled = true
+                source.cancelled = true
             }
             if (super.attack(source)) {
                 namedTag!!.putByte("InvulnerableTimer", 9)
@@ -338,7 +338,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         }
 
         Server.instance.pluginManager.callEvent(source)
-        if (source.isCancelled) {
+        if (source.cancelled) {
             return false
         }
         setLastDamageCause(source)

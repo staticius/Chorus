@@ -147,7 +147,7 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
 
             Server.instance.pluginManager.callEvent(ev)
 
-            if (!ev.isCancelled) {
+            if (!ev.cancelled) {
                 updateState(power)
             }
         }

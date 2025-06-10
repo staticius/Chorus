@@ -22,7 +22,7 @@ class ChorusConsole(private val server: Server) : SimpleTerminalConsole() {
         if (executingCommands.get()) {
             val event = ServerCommandEvent(server.consoleSender, command)
             server.pluginManager.callEvent(event)
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 server.scheduler.scheduleTask(
                     InternalPlugin.INSTANCE
                 ) { server.executeCommand(event.sender, event.command) }

@@ -78,7 +78,7 @@ class HumanInventory(human: IHuman) //9+27+4
             val ev = PlayerItemHeldEvent(player, this.getItem(slot), slot)
             Server.instance.pluginManager.callEvent(ev)
 
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 this.sendContents(this.viewers)
                 return false
             }
@@ -364,7 +364,7 @@ class HumanInventory(human: IHuman) //9+27+4
         if (!ignoreArmorEvents && index >= ARMORS_INDEX) {
             val ev = EntityArmorChangeEvent((holder as IHuman).getEntity(), this.getItem(index), item, index)
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 this.sendArmorSlot(index, this.viewers)
                 return false
             }
@@ -372,7 +372,7 @@ class HumanInventory(human: IHuman) //9+27+4
         } else {
             val ev = EntityInventoryChangeEvent((holder as IHuman).getEntity(), this.getItem(index), item, index)
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 this.sendSlot(index, this.viewers)
                 return false
             }
@@ -394,7 +394,7 @@ class HumanInventory(human: IHuman) //9+27+4
                     old!!, item, index
                 )
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     this.sendSlot(index, this.viewers)
                     return false
                 }
@@ -405,7 +405,7 @@ class HumanInventory(human: IHuman) //9+27+4
                     old!!, item, index
                 )
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     this.sendSlot(index, this.viewers)
                     return false
                 }

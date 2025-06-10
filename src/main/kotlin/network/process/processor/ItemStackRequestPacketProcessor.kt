@@ -46,7 +46,7 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
 
                 val response = if (event.response != null) {
                     event.response
-                } else if (event.isCancelled) {
+                } else if (event.cancelled) {
                     context.error()
                 } else {
                     processor.handle(action, player, context)
@@ -140,8 +140,8 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
             )
 
             Server.instance.pluginManager.callEvent(transferEvent)
-            if (transferEvent.isCancelled) {
-                event.isCancelled = true
+            if (transferEvent.cancelled) {
+                event.cancelled = true
             }
         }
 

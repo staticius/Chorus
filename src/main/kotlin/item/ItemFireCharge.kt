@@ -48,7 +48,7 @@ class ItemFireCharge @JvmOverloads constructor(meta: Int? = 0, count: Int = 1) :
                 val e = BlockIgniteEvent(block, null, player, BlockIgniteEvent.BlockIgniteCause.FLINT_AND_STEEL)
                 Server.instance.pluginManager.callEvent(e)
 
-                if (!e.isCancelled) {
+                if (!e.cancelled) {
                     level.setBlock(fire.position, fire, true)
                     level.addLevelEvent(block.position, LevelEventPacket.EVENT_SOUND_GHAST_FIREBALL, 78642)
                     level.scheduleUpdate(fire, fire.tickRate() + ThreadLocalRandom.current().nextInt(10))

@@ -1253,7 +1253,7 @@ class Server internal constructor(
     fun onPlayerLogin(socketAddress: InetSocketAddress?, player: Player) {
         val ev: PlayerLoginEvent
         pluginManager.callEvent(PlayerLoginEvent(player, "Plugin reason").also { ev = it })
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             player.close(player.leaveMessage, ev.kickMessage)
             return
         }

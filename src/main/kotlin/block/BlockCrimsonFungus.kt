@@ -37,7 +37,7 @@ class BlockCrimsonFungus @JvmOverloads constructor(blockstate: BlockState = Comp
         )
         val ev = StructureGrowEvent(this, blockManager.blocks)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
         blockManager.applySubChunkUpdate(ev.blockList)

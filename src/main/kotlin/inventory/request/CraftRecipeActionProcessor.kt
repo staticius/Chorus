@@ -85,7 +85,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
                 player
             )
             Server.instance.pluginManager.callEvent(event)
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 if ((player.gamemode and 0x01) == 0) {
                     player.setExperience(player.experience, player.experienceLevel - (enchantOptionData.entry + 1))
                 }
@@ -169,7 +169,7 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeAc
         }
         val craftItemEvent = CraftItemEvent(player, items.toTypedArray(), recipe, numberOfRequestedCrafts)
         Server.instance.pluginManager.callEvent(craftItemEvent)
-        if (craftItemEvent.isCancelled) {
+        if (craftItemEvent.cancelled) {
             return context.error()
         }
         val matched = recipe.match(input)

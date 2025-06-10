@@ -147,7 +147,7 @@ class EntityEnderman(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
                 }
             }
             TeleportExecutor(16, 5, 16).execute(this)
-            source.setCancelled()
+            source.cancelled = true
             return false
         }
         return super.attack(source)

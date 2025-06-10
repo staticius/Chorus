@@ -33,7 +33,7 @@ class RequestAbilityProcessor : DataPacketProcessor<RequestAbilityPacket>() {
 
         val playerToggleFlightEvent = PlayerToggleFlightEvent(player, pk.boolValue)
         Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
-        if (playerToggleFlightEvent.isCancelled) {
+        if (playerToggleFlightEvent.cancelled) {
             player.adventureSettings.update()
         } else {
             player.adventureSettings[AdventureSettings.Type.FLYING] = playerToggleFlightEvent.isFlying

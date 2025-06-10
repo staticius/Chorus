@@ -241,7 +241,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         val signChangeEvent = SignChangeEvent(this.block, player, lines)
 
         if (!namedTag.contains(TAG_LOCKED_FOR_EDITING_BY) || player.getRuntimeID() != this.editorEntityRuntimeId) {
-            signChangeEvent.setCancelled()
+            signChangeEvent.cancelled = true
         }
 
         if (player.removeFormat) {
@@ -252,7 +252,7 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
 
         Server.instance.pluginManager.callEvent(signChangeEvent)
 
-        if (!signChangeEvent.isCancelled && player.isOpenSignFront != null) {
+        if (!signChangeEvent.cancelled && player.isOpenSignFront != null) {
             this.setText(player.isOpenSignFront!!, *signChangeEvent.lines)
             this.editorEntityRuntimeId = null
             player.isOpenSignFront = null

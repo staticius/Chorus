@@ -56,7 +56,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
             val ev: BlockGrowEvent = BlockGrowEvent(this, block)
             Server.instance.pluginManager.callEvent(ev)
 
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 return false
             }
 
@@ -86,7 +86,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
         )
 
         Server.instance.pluginManager.callEvent(event)
-        if (!event.isCancelled) {
+        if (!event.cancelled) {
             level.setBlock(this.position, event.newState, true, true)
             val drops: Array<Item> = event.drops
             if (drops != null) {
@@ -118,7 +118,7 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = Com
                         CommonBlockProperties.GROWTH, growth + 1
                     )
                 )
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     level.setBlock(this.position, event.newState, true, true)
                 }
             }

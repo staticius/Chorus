@@ -185,7 +185,7 @@ class BlockLectern @JvmOverloads constructor(blockstate: BlockState = Companion.
 
         val dropBookEvent = LecternDropBookEvent(player, lectern, book)
         Server.instance.pluginManager.callEvent(dropBookEvent)
-        if (dropBookEvent.isCancelled) {
+        if (dropBookEvent.cancelled) {
             return
         }
 

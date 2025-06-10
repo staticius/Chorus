@@ -48,7 +48,7 @@ abstract class BlockCoralFan(blockstate: BlockState) : BlockFlowable(blockstate)
 
                 if (!isDead && (getLevelBlockAtLayer(1) !is BlockFlowingWater) && (getLevelBlockAtLayer(1) !is BlockFrostedIce)) {
                     val event = BlockFadeEvent(this, getDeadCoralFan())
-                    if (!event.isCancelled) {
+                    if (!event.cancelled) {
                         level.setBlock(this.position, event.newState, direct = true, update = true)
                     }
                 }

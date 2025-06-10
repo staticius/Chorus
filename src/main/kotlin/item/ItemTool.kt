@@ -43,7 +43,7 @@ abstract class ItemTool @JvmOverloads constructor(id: String, meta: Int = 0, cou
             val pluginManager = Server.instance.pluginManager
             pluginManager.callEvent(event) //Method gets called on server start before plugin manager is initiated
 
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 super.damage = (event.newDurability)
                 getOrCreateNamedTag().putInt("Damage", event.newDurability)
             }

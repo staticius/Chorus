@@ -75,7 +75,7 @@ class BlockEntityCampfire(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnabl
                 if (burnTimeLeft <= 0) {
                     val product = Item.get(recipe.result.id, recipe.result.damage, item.getCount())
                     val event = CampfireSmeltEvent(this, item, product)
-                    if (!event.isCancelled) {
+                    if (!event.cancelled) {
                         inventory.setItem(slot, Item.AIR)
                         val random = ThreadLocalRandom.current()
                         level.dropItem(

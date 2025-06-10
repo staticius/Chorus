@@ -194,7 +194,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
                         )
                         Server.instance.pluginManager.callEvent(ev)
 
-                        if (ev.isCancelled) continue
+                        if (ev.cancelled) continue
 
                         val items: Array<Item> = hopperInv.addItem(itemToAdd)
 
@@ -250,7 +250,7 @@ class BlockHopper @JvmOverloads constructor(blockstate: BlockState = Companion.p
                 )
                 Server.instance.pluginManager.callEvent(ev)
 
-                if (ev.isCancelled) continue
+                if (ev.cancelled) continue
 
                 val items: Array<Item> = hopperInv.addItem(item)
 

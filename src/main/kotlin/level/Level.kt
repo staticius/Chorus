@@ -537,12 +537,12 @@ class Level(
         val ev: LevelUnloadEvent = LevelUnloadEvent(this)
 
         if (this === Server.instance.defaultLevel && !force) {
-            ev.setCancelled()
+            ev.cancelled = true
         }
 
         Server.instance.pluginManager.callEvent(ev)
 
-        if (!force && ev.isCancelled) {
+        if (!force && ev.cancelled) {
             return false
         }
 
@@ -768,7 +768,7 @@ class Level(
                 val event: BlockUpdateEvent = BlockUpdateEvent(block)
                 Server.instance.pluginManager.callEvent(event)
 
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     block.onUpdate(BLOCK_UPDATE_NORMAL)
                     if (queuedUpdate.neighbor != null) {
                         block.onNeighborChange(queuedUpdate.neighbor.getOpposite())
@@ -980,7 +980,7 @@ class Level(
             val bolt: EntityLightningBolt = EntityLightningBolt(chunk, nbt)
             val ev: LightningStrikeEvent = LightningStrikeEvent(this, bolt)
             Server.instance.pluginManager.callEvent(ev)
-            if (!ev.isCancelled) {
+            if (!ev.cancelled) {
                 bolt.spawnToAll()
             } else {
                 bolt.isEffect = (false)
@@ -2233,7 +2233,7 @@ class Level(
 
             val ev: BlockUpdateEvent = BlockUpdateEvent(block)
             Server.instance.pluginManager.callEvent(ev)
-            if (!ev.isCancelled) {
+            if (!ev.cancelled) {
                 for (entity in this.getNearbyEntities(
                     SimpleAxisAlignedBB(
                         (x - 1).toDouble(),
@@ -2490,13 +2490,13 @@ class Level(
                 val ev: BlockBreakEvent =
                     BlockBreakEvent(player, target, face, item, eventDrops, player.isCreative, fastBreak)
                 if (!player.isOp && isInSpawnRadius(target.position)) {
-                    ev.setCancelled()
+                    ev.cancelled = true
                 } else if (!ev.instaBreak && ev.isFastBreak) {
-                    ev.setCancelled()
+                    ev.cancelled = true
                 }
 
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return null
                 }
 
@@ -2670,11 +2670,11 @@ class Level(
             )
             //                                handle spawn protect
             if (player.gamemode > 2 || (!player.isOp && isInSpawnRadius(target.position))) {
-                ev.setCancelled()
+                ev.cancelled = true
             }
 
             Server.instance.pluginManager.callEvent(ev)
-            if (!ev.isCancelled) {
+            if (!ev.cancelled) {
                 target.onTouch(vector, item, face, fx, fy, fz, player, ev.action)
                 if (ev.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK && target.canBeActivated() && target.onActivate(
                         item,
@@ -2824,15 +2824,15 @@ class Level(
                     }
                 }
                 if (!canPlace) {
-                    event.setCancelled()
+                    event.cancelled = true
                 }
             }
             if (!player.isOp && isInSpawnRadius(target.position)) {
-                event.setCancelled()
+                event.cancelled = true
             }
 
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 return null
             }
         }
@@ -3738,7 +3738,7 @@ class Level(
         if (chunk != null && chunk.provider != null) {
             val ev: ChunkUnloadEvent = ChunkUnloadEvent(chunk)
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 return false
             }
         }
@@ -4102,7 +4102,7 @@ class Level(
         val ev = WeatherChangeEvent(this, raining)
         Server.instance.pluginManager.callEvent(ev)
 
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
 
@@ -4136,7 +4136,7 @@ class Level(
         val ev: ThunderChangeEvent = ThunderChangeEvent(this, thundering)
         Server.instance.pluginManager.callEvent(ev)
 
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
 

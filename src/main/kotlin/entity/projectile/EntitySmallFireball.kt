@@ -59,7 +59,7 @@ open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjec
     override fun onCollideWithEntity(entity: Entity) {
         val projectileHitEvent: ProjectileHitEvent = ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity))
         Server.instance.pluginManager.callEvent(projectileHitEvent)
-        if (projectileHitEvent.isCancelled) return
+        if (projectileHitEvent.cancelled) return
         level!!.vibrationManager.callVibrationEvent(
             VibrationEvent(
                 this,
@@ -73,7 +73,7 @@ open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjec
             this.hadCollision = true
             val event: EntityCombustByEntityEvent = EntityCombustByEntityEvent(this, entity, 5)
             Server.instance.pluginManager.callEvent(event)
-            if (!event.isCancelled) entity.setOnFire(event.duration)
+            if (!event.cancelled) entity.setOnFire(event.duration)
         }
         afterCollisionWithEntity(entity)
         this.close()
@@ -104,7 +104,7 @@ open class EntitySmallFireball(chunk: IChunk?, nbt: CompoundTag?) : EntityProjec
                     BlockIgniteEvent.BlockIgniteCause.FIREBALL
                 )
                 Server.instance.pluginManager.callEvent(e)
-                if (!e.isCancelled) {
+                if (!e.cancelled) {
                     level!!.setBlock(fire.position, fire, true)
                 }
             }

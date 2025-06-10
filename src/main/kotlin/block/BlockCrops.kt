@@ -65,7 +65,7 @@ abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
 
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return false
                 }
 
@@ -100,7 +100,7 @@ abstract class BlockCrops(blockState: BlockState) : BlockFlowable(blockState) {
                     val ev = BlockGrowEvent(this, block)
                     instance.pluginManager.callEvent(ev)
 
-                    if (!ev.isCancelled) {
+                    if (!ev.cancelled) {
                         level.setBlock(this.position, ev.newState, direct = false, update = true)
                     } else {
                         return Level.BLOCK_UPDATE_RANDOM

@@ -50,7 +50,7 @@ class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
             val event: PlayerMapInfoRequestEvent
             Server.instance.pluginManager.callEvent(PlayerMapInfoRequestEvent(player, mapItem).also { event = it })
 
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 val map = mapItem as ItemFilledMap
                 if (map.trySendImage(player)) {
                     return

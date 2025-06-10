@@ -73,7 +73,7 @@ class BlockRedstoneTorch @JvmOverloads constructor(blockstate: BlockState = Comp
                 val ev = RedstoneUpdateEvent(this)
                 Server.instance.pluginManager.callEvent(ev)
 
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return 0
                 }
 

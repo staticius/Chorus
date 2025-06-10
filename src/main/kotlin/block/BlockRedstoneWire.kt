@@ -194,7 +194,7 @@ class BlockRedstoneWire @JvmOverloads constructor(blockState: BlockState = Compa
         // Redstone event
         val ev = RedstoneUpdateEvent(this)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return 0
         }
 

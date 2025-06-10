@@ -40,7 +40,7 @@ class BlockUnlitRedstoneTorch @JvmOverloads constructor(blockstate: BlockState =
             } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
                 val ev = RedstoneUpdateEvent(this)
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return 0
                 }
 

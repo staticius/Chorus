@@ -47,7 +47,7 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companio
                             CommonBlockProperties.DEAD_BIT, !isDead
                         )
                     )
-                    if (!event.isCancelled) {
+                    if (!event.cancelled) {
                         level.setBlock(this.position, event.newState, true, true)
                     }
                     return type
@@ -58,7 +58,7 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companio
                         CommonBlockProperties.DEAD_BIT, !isDead
                     )
                 )
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     level.setBlock(this.position, event.newState, true, true)
                 }
             }
@@ -139,7 +139,7 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companio
             val blockGrowEvent: BlockGrowEvent = BlockGrowEvent(this, block)
             instance.pluginManager.callEvent(blockGrowEvent)
 
-            if (blockGrowEvent.isCancelled) {
+            if (blockGrowEvent.cancelled) {
                 return false
             }
 
@@ -176,7 +176,7 @@ class BlockSeaPickle @JvmOverloads constructor(blockstate: BlockState = Companio
                                 CommonBlockProperties.CLUSTER_COUNT, random.nextInt(3)
                             )
                         )
-                        if (!blockSpreadEvent.isCancelled) {
+                        if (!blockSpreadEvent.cancelled) {
                             level.setBlock(up.position, 1, BlockFlowingWater(), true, false)
                             level.setBlock(up.position, blockSpreadEvent.newState, true, true)
                         }

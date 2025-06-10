@@ -50,7 +50,7 @@ open class BlockIce : BlockTransparent {
                     if (level.dimension == Level.DIMENSION_NETHER) get(BlockID.AIR) else get(BlockID.FLOWING_WATER)
                 )
                 Server.instance.pluginManager.callEvent(event)
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     level.setBlock(this.position, event.newState, true)
                 }
                 return Level.BLOCK_UPDATE_RANDOM

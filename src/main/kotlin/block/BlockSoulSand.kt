@@ -42,7 +42,7 @@ class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState = Companion
             val up = up()
             if (up is BlockFlowingWater && (up.liquidDepth == 0 || up.liquidDepth == 8)) {
                 val event = BlockFormEvent(up, BlockBubbleColumn())
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     if (event.newState.waterloggingLevel > 0) {
                         level.setBlock(up.position, 1, BlockFlowingWater(), true, false)
                     }

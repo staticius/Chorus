@@ -170,7 +170,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         }
         val ev = DataPacketSendEvent(player, packet)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return
         }
         peer.sendPacket(this.subClientId, 0, packet)
@@ -210,7 +210,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
 
         val ev = DataPacketSendEvent(player, packet)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return
         }
 
@@ -224,7 +224,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         }
         val ev = DataPacketSendEvent(player, packet)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return
         }
         peer.sendPacketSync(this.subClientId, 0, packet)
@@ -287,10 +287,10 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
             else -> 25000
         }
         if (ev.packetBuffer.length > predictMaxBuffer) {
-            ev.setCancelled()
+            ev.cancelled = true
         }
 
-        if (ev.isCancelled) return
+        if (ev.cancelled) return
 
         if (nettyThreadOwned.get()) {
             val c = consumer.get()
@@ -439,7 +439,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         val ev = DataPacketReceiveEvent(player, packet)
         Server.instance.pluginManager.callEvent(ev)
 
-        if (ev.isCancelled) return
+        if (ev.cancelled) return
 
         if (this.packetHandler == null) return
 

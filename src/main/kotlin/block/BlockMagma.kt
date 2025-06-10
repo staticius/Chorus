@@ -72,7 +72,7 @@ class BlockMagma : BlockSolid {
                         true
                     )
                 )
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     if (event.newState.waterloggingLevel > 0) {
                         level.setBlock(up.position, 1, BlockFlowingWater(), true, false)
                     }

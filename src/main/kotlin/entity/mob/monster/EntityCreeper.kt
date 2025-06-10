@@ -155,7 +155,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         val ev = CreeperPowerEvent(this, bolt, CreeperPowerEvent.PowerCause.LIGHTNING)
         Server.instance.pluginManager.callEvent(ev)
 
-        if (!ev.isCancelled) {
+        if (!ev.cancelled) {
             this.setDataProperty(EntityDataTypes.Companion.HORSE_TYPE, 1)
             namedTag!!.putBoolean("powered", true)
         }
@@ -168,7 +168,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         )
         Server.instance.pluginManager.callEvent(ev)
 
-        if (!ev.isCancelled) {
+        if (!ev.cancelled) {
             this.setDataProperty(EntityDataTypes.Companion.HORSE_TYPE, if (powered) 1 else 0)
             namedTag!!.putBoolean("powered", powered)
         }

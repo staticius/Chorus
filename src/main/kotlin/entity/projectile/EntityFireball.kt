@@ -79,7 +79,7 @@ class EntityFireball(chunk: IChunk?, nbt: CompoundTag?) : EntitySmallFireball(ch
         val ev: EntityExplosionPrimeEvent = EntityExplosionPrimeEvent(this, 1.2)
         ev.fireChance = .4
         Server.instance.pluginManager.callEvent(ev)
-        if (!ev.isCancelled) {
+        if (!ev.cancelled) {
             val explosion = Explosion(this.locator, ev.force.toFloat().toDouble(), this.shootingEntity!!)
             explosion.fireChance = ev.fireChance
             if (ev.isBlockBreaking && level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {

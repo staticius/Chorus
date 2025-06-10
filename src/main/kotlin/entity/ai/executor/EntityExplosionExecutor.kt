@@ -60,7 +60,7 @@ class EntityExplosionExecutor @JvmOverloads constructor(
 
         Server.instance.pluginManager.callEvent(ev)
 
-        if (!ev.isCancelled) {
+        if (!ev.cancelled) {
             val explosion = Explosion(entity.locator, ev.force.toFloat().toDouble(), entity)
 
             if (ev.isBlockBreaking && entity.level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {

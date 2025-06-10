@@ -160,7 +160,7 @@ class BlockCocoa @JvmOverloads constructor(blockstate: BlockState = Companion.pr
         block.setPropertyValue(CommonBlockProperties.AGE_3, age + 1)
         val ev = BlockGrowEvent(this, block)
         instance.pluginManager.callEvent(ev)
-        return !ev.isCancelled && level.setBlock(
+        return !ev.cancelled && level.setBlock(
             this.position,
             ev.newState, direct = true, update = true
         )

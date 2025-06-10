@@ -27,7 +27,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
     override fun addScoreboard(scoreboard: IScoreboard): Boolean {
         val event = ScoreboardObjectiveChangeEvent(scoreboard, ScoreboardObjectiveChangeEvent.ActionType.ADD)
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
         scoreboards[scoreboard.objectiveName] = scoreboard
@@ -43,7 +43,7 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
         val removed = scoreboards[objectiveName] ?: return false
         val event = ScoreboardObjectiveChangeEvent(removed, ScoreboardObjectiveChangeEvent.ActionType.REMOVE)
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
         scoreboards.remove(objectiveName)

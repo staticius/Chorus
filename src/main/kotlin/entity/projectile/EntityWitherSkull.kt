@@ -88,7 +88,7 @@ open class EntityWitherSkull(chunk: IChunk?, nbt: CompoundTag?) : EntityProjecti
         val ev: EntityExplosionPrimeEvent = EntityExplosionPrimeEvent(this, getStrength().toDouble())
         ev.fireChance = 0.0
         Server.instance.pluginManager.callEvent(ev)
-        if (!ev.isCancelled) {
+        if (!ev.cancelled) {
             val explosion = Explosion(this.locator, ev.force.toFloat().toDouble(), this.shootingEntity!!)
             explosion.fireChance = ev.fireChance
             if (ev.isBlockBreaking && level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {

@@ -35,7 +35,7 @@ class BlockWarpedFungus @JvmOverloads constructor(blockstate: BlockState = Compa
         )
         val ev: StructureGrowEvent = StructureGrowEvent(this, blockManager.blocks)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
         blockManager.applySubChunkUpdate(ev.blockList)

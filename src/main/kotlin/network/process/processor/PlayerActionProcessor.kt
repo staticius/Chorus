@@ -102,7 +102,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
 
                     val playerToggleSprintEvent = PlayerToggleSprintEvent(player, true)
                     Server.instance.pluginManager.callEvent(playerToggleSprintEvent)
-                    if (playerToggleSprintEvent.isCancelled) {
+                    if (playerToggleSprintEvent.cancelled) {
                         player.sendData(player)
                     } else {
                         player.setSprinting(true)
@@ -116,7 +116,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
 
                     val playerToggleSprintEvent = PlayerToggleSprintEvent(player, false)
                     Server.instance.pluginManager.callEvent(playerToggleSprintEvent)
-                    if (playerToggleSprintEvent.isCancelled) {
+                    if (playerToggleSprintEvent.cancelled) {
                         player.sendData(player)
                     } else {
                         player.setSprinting(false)
@@ -130,7 +130,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
 
                     val playerToggleSneakEvent = PlayerToggleSneakEvent(player, true)
                     Server.instance.pluginManager.callEvent(playerToggleSneakEvent)
-                    if (playerToggleSneakEvent.isCancelled) {
+                    if (playerToggleSneakEvent.cancelled) {
                         player.sendData(player)
                     } else {
                         player.setSneaking(true)
@@ -144,7 +144,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
 
                     val playerToggleSneakEvent = PlayerToggleSneakEvent(player, false)
                     Server.instance.pluginManager.callEvent(playerToggleSneakEvent)
-                    if (playerToggleSneakEvent.isCancelled) {
+                    if (playerToggleSneakEvent.cancelled) {
                         player.sendData(player)
                     } else {
                         player.setSneaking(false)
@@ -165,7 +165,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
 
                     val playerToggleGlideEvent = PlayerToggleGlideEvent(player, true)
                     Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
-                    if (playerToggleGlideEvent.isCancelled) {
+                    if (playerToggleGlideEvent.cancelled) {
                         player.sendData(player)
                     } else {
                         player.setGliding(true)
@@ -179,7 +179,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
 
                     val playerToggleGlideEvent = PlayerToggleGlideEvent(player, false)
                     Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
-                    if (playerToggleGlideEvent.isCancelled) {
+                    if (playerToggleGlideEvent.cancelled) {
                         player.sendData(player)
                     } else {
                         player.setGliding(false)
@@ -194,7 +194,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                     val ptse = PlayerToggleSwimEvent(player, true)
                     Server.instance.pluginManager.callEvent(ptse)
 
-                    if (ptse.isCancelled) {
+                    if (ptse.cancelled) {
                         player.sendData(player)
                     } else {
                         player.setSwimming(true)
@@ -209,7 +209,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                     val ev = PlayerToggleSwimEvent(player, false)
                     Server.instance.pluginManager.callEvent(ev)
 
-                    if (ev.isCancelled) {
+                    if (ev.cancelled) {
                         player.sendData(player)
                     } else {
                         player.setSwimming(false)
@@ -252,7 +252,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                     val playerToggleSpinAttackEvent = PlayerToggleSpinAttackEvent(player, true)
                     Server.instance.pluginManager.callEvent(playerToggleSpinAttackEvent)
 
-                    if (playerToggleSpinAttackEvent.isCancelled) {
+                    if (playerToggleSpinAttackEvent.cancelled) {
                         player.sendPosition(
                             player.position,
                             player.rotation.yaw,
@@ -276,7 +276,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                     val playerToggleSpinAttackEvent = PlayerToggleSpinAttackEvent(player, false)
                     Server.instance.pluginManager.callEvent(playerToggleSpinAttackEvent)
 
-                    if (playerToggleSpinAttackEvent.isCancelled) {
+                    if (playerToggleSpinAttackEvent.cancelled) {
                         player.sendData(player)
                     } else {
                         player.setSpinAttacking(false)
@@ -295,7 +295,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                     }
                     val playerToggleFlightEvent = PlayerToggleFlightEvent(player, true)
                     Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
-                    if (playerToggleFlightEvent.isCancelled) {
+                    if (playerToggleFlightEvent.cancelled) {
                         player.adventureSettings.update()
                     } else {
                         player.adventureSettings[AdventureSettings.Type.FLYING] = playerToggleFlightEvent.isFlying
@@ -309,7 +309,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
 
                     val playerToggleFlightEvent = PlayerToggleFlightEvent(player, false)
                     Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
-                    if (playerToggleFlightEvent.isCancelled) {
+                    if (playerToggleFlightEvent.cancelled) {
                         player.adventureSettings.update()
                     } else {
                         player.adventureSettings[AdventureSettings.Type.FLYING] = playerToggleFlightEvent.isFlying

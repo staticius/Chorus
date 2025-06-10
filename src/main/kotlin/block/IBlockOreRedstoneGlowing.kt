@@ -21,7 +21,7 @@ interface IBlockOreRedstoneGlowing {
             val level = level
             val event = BlockFadeEvent(block, unlitBlock)
             Server.instance.pluginManager.callEvent(event)
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 level.setBlock(block.position, event.newState, direct = true, update = true)
             }
 

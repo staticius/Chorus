@@ -154,7 +154,7 @@ class PotionThrowExecutor(
 
         val projectev = ProjectileLaunchEvent(projectile as EntityProjectile, entity)
         Server.instance.pluginManager.callEvent(projectev)
-        if (projectev.isCancelled) {
+        if (projectev.cancelled) {
             projectile.kill()
         } else {
             projectile.spawnToAll()

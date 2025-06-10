@@ -90,7 +90,7 @@ class BlockEntityCreakingHeart(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpa
                         CreatureSpawnEvent.SpawnReason.CREAKING_HEART
                     )
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     ent.close()
                 } else {
                     linkedCreaking = (ent as EntityCreaking)

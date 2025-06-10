@@ -75,7 +75,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
         val projectileHitEvent = ProjectileHitEvent(this, MovingObjectPosition.fromEntity(entity))
         Server.instance.pluginManager.callEvent(projectileHitEvent)
 
-        if (projectileHitEvent.isCancelled) {
+        if (projectileHitEvent.cancelled) {
             return
         }
 
@@ -101,7 +101,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
             if (this.fireTicks > 0) {
                 val event: EntityCombustByEntityEvent = EntityCombustByEntityEvent(this, entity, 5)
                 Server.instance.pluginManager.callEvent(event)
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     entity.setOnFire(event.duration)
                 }
             }

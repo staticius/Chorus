@@ -542,7 +542,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
             val event = EntitySpawnEvent(this)
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 this.close(false)
             } else {
                 this.scheduleUpdate()
@@ -703,7 +703,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             val event = EntityEffectRemoveEvent(this, effect)
             Server.instance.pluginManager.callEvent(event)
 
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 return
             }
 
@@ -737,7 +737,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             val event = EntityEffectUpdateEvent(this, oldEffect, effect)
             Server.instance.pluginManager.callEvent(event)
 
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 return
             }
         }
@@ -1051,7 +1051,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
         //事件回调函数
         Server.instance.pluginManager.callEvent(source)
-        if (source.isCancelled) {
+        if (source.cancelled) {
             return false
         }
 
@@ -1120,7 +1120,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                         player.inventory.clear(player.inventory.heldItemIndex, true)
                     }
 
-                    source.isCancelled = true
+                    source.cancelled = true
                     return false
                 }
             }
@@ -1152,7 +1152,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
     fun heal(source: EntityRegainHealthEvent) {
         Server.instance.pluginManager.callEvent(source)
-        if (source.isCancelled) {
+        if (source.cancelled) {
             return
         }
         this.setHealthSafe(this.health + source.amount)
@@ -1427,7 +1427,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             val ev = EntityPortalEnterEvent(this, PortalType.NETHER)
             Server.instance.pluginManager.callEvent(ev) //call event
 
-            if (!ev.isCancelled && (level!!.dimension == Level.DIMENSION_OVERWORLD || level!!.dimension == Level.DIMENSION_NETHER)) {
+            if (!ev.cancelled && (level!!.dimension == Level.DIMENSION_OVERWORLD || level!!.dimension == Level.DIMENSION_NETHER)) {
                 val newPos: Locator? = PortalHelper.convertPosBetweenNetherAndOverworld(
                     Locator(
                         position.x, position.y, position.z,
@@ -1657,7 +1657,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         // Entity entering a vehicle
         val ev = EntityVehicleEnterEvent(entity, this)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
 
@@ -1681,7 +1681,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         // Run the events
         val ev = EntityVehicleExitEvent(entity, this)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             val seatIndex: Int = passengers.indexOf(entity)
             if (seatIndex == 0) {
                 this.broadcastLinkPacket(entity, EntityLink.Type.RIDER)
@@ -1856,7 +1856,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
         val event = EntityFallEvent(this, down, fallDistance1)
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return
         }
         fallDistance1 = event.fallDistance
@@ -1896,7 +1896,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                 if (this is EntityFlyable) return
                 val farmEvent = FarmLandDecayEvent(this, down)
                 Server.instance.pluginManager.callEvent(farmEvent)
-                if (farmEvent.isCancelled) return
+                if (farmEvent.cancelled) return
                 level!!.setBlock(down.position, Block.get(BlockID.DIRT), direct = false, update = true)
                 return
             }
@@ -1920,10 +1920,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
             EntityInteractEvent(this, block)
         }
 
-        ev.isCancelled = cancelled
+        ev.cancelled = cancelled
 
         Server.instance.pluginManager.callEvent(ev)
-        return ev.isCancelled
+        return ev.cancelled
     }
 
     open fun applyEntityCollision(entity: Entity) {
@@ -1983,7 +1983,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
         val ev = EntityLevelChangeEvent(this, this.level!!, targetLevel)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
 
@@ -2393,7 +2393,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
                     val ev = EntityPortalEnterEvent(this, PortalType.END)
                     Server.instance.pluginManager.callEvent(ev)
 
-                    if (!ev.isCancelled && (level!!.dimension == Level.DIMENSION_OVERWORLD || level!!.dimension == Level.DIMENSION_THE_END)) {
+                    if (!ev.cancelled && (level!!.dimension == Level.DIMENSION_OVERWORLD || level!!.dimension == Level.DIMENSION_THE_END)) {
                         val newPos: Locator? = PortalHelper.moveToTheEnd(this.transform)
                         if (newPos != null) {
                             if (newPos.level.dimension == Level.DIMENSION_THE_END) {
@@ -2559,7 +2559,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         if (!this.justCreated) {
             val ev = EntityMotionEvent(this, motion)
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 return false
             }
         }
@@ -2628,7 +2628,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         if (cause != null) {
             val ev = EntityTeleportEvent(this, from, to, cause)
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 return false
             }
             to = ev.to
@@ -2709,7 +2709,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
 
                     Server.instance.pluginManager.callEvent(event)
 
-                    if (event.isCancelled) {
+                    if (event.cancelled) {
                         this.closed = false
                         return
                     }

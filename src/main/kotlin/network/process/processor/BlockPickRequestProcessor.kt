@@ -37,12 +37,12 @@ class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() 
                 "Got block-pick request from {} when in spectator mode",
                 player.getEntityName()
             )
-            pickEvent.setCancelled()
+            pickEvent.cancelled = true
         }
 
         Server.instance.pluginManager.callEvent(pickEvent)
 
-        if (!pickEvent.isCancelled) {
+        if (!pickEvent.cancelled) {
             var itemExists = false
             var itemSlot = -1
             for (slot in 0..<player.inventory.size) {

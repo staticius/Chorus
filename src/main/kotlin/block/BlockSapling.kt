@@ -201,7 +201,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
                 )
                 val ev = StructureGrowEvent(this, blockManager.blocks)
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return
                 }
                 if (level.getBlock(vector3).id == BlockID.DIRT_WITH_ROOTS) {
@@ -224,7 +224,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
                 )
                 val ev = StructureGrowEvent(this, blockManager.blocks)
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return
                 }
                 if (level.getBlock(vector3).id == BlockID.DIRT_WITH_ROOTS) {
@@ -248,7 +248,7 @@ abstract class BlockSapling(blockstate: BlockState) : BlockFlowable(blockstate),
         val success: Boolean = generator?.generate(blockManager, ChorusRandom.create(), vector3) == true
         val ev = StructureGrowEvent(this, blockManager.blocks)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled || !success) {
+        if (ev.cancelled || !success) {
             if (bigTree) {
                 level.setBlock(vector3, this, direct = true, update = false)
                 level.setBlock(vector3.add(1.0, 0.0, 0.0), this, direct = true, update = false)

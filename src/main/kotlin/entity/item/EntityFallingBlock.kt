@@ -170,7 +170,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                             Block.get(BlockID.SNOW_LAYER).setPropertyValue(CommonBlockProperties.HEIGHT, 7)
                         )
                         Server.instance.pluginManager.callEvent(event)
-                        if (!event.isCancelled) {
+                        if (!event.cancelled) {
                             level!!.setBlock(floorPos, event.to, true)
 
                             val abovePos: Vector3 = floorPos.up()
@@ -182,7 +182,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                                     ).setPropertyValue(CommonBlockProperties.HEIGHT, mergedHeight - 8 - 1)
                                 )
                                 Server.instance.pluginManager.callEvent(event2)
-                                if (!event2.isCancelled) {
+                                if (!event2.cancelled) {
                                     level!!.setBlock(abovePos, event2.to, true)
                                 }
                             }
@@ -194,7 +194,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                                 .setPropertyValue(CommonBlockProperties.HEIGHT, mergedHeight - 1)
                         )
                         Server.instance.pluginManager.callEvent(event)
-                        if (!event.isCancelled) {
+                        if (!event.cancelled) {
                             level!!.setBlock(floorPos, event.to, true)
                         }
                     }
@@ -208,7 +208,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
                 } else {
                     val event: EntityBlockChangeEvent = EntityBlockChangeEvent(this, block, Block.get(blockState))
                     Server.instance.pluginManager.callEvent(event)
-                    if (!event.isCancelled) {
+                    if (!event.cancelled) {
                         val eventTo: Block = event.to
 
                         if (breakOnGround) {

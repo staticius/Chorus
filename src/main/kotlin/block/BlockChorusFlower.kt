@@ -99,7 +99,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Compa
                         val ev = BlockGrowEvent(this, block)
                         instance.pluginManager.callEvent(ev)
 
-                        if (!ev.isCancelled) {
+                        if (!ev.cancelled) {
                             level.setBlock(this.position, get(BlockID.CHORUS_PLANT))
                             level.setBlock(block.position, ev.newState)
                             level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW)
@@ -124,7 +124,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Compa
                                 val ev = BlockGrowEvent(this, block)
                                 instance.pluginManager.callEvent(ev)
 
-                                if (!ev.isCancelled) {
+                                if (!ev.cancelled) {
                                     level.setBlock(this.position, get(BlockID.CHORUS_PLANT))
                                     level.setBlock(block.position, ev.newState)
                                     level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_GROW)
@@ -140,7 +140,7 @@ class BlockChorusFlower @JvmOverloads constructor(blockstate: BlockState = Compa
                         val ev = BlockGrowEvent(this, block)
                         instance.pluginManager.callEvent(ev)
 
-                        if (!ev.isCancelled) {
+                        if (!ev.cancelled) {
                             level.setBlock(block.position, ev.newState)
                             level.addSound(position.add(0.5, 0.5, 0.5), Sound.BLOCK_CHORUSFLOWER_DEATH)
                         } else {

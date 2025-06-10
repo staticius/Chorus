@@ -622,7 +622,7 @@ open class Player(
             if (target.isAir) PlayerInteractEvent.Action.LEFT_CLICK_AIR else PlayerInteractEvent.Action.LEFT_CLICK_BLOCK
         )
         Server.instance.pluginManager.callEvent(playerInteractEvent)
-        if (playerInteractEvent.isCancelled) {
+        if (playerInteractEvent.cancelled) {
             inventory.sendHeldItem(this)
             level!!.sendBlocks(arrayOf(this), arrayOf<Block?>(target), UpdateBlockPacket.FLAG_ALL_PRIORITY, false)
             if (target.getLevelBlockAtLayer(1) is BlockLiquid) {
@@ -1036,7 +1036,7 @@ open class Player(
                     val ev = EntityPortalEnterEvent(this, PortalType.END)
                     Server.instance.pluginManager.callEvent(ev)
 
-                    if (!ev.isCancelled) {
+                    if (!ev.cancelled) {
                         val newPos = moveToTheEnd(this.locator)
                         if (newPos != null) {
                             if (newPos.level.dimension == Level.DIMENSION_THE_END) {
@@ -1053,7 +1053,7 @@ open class Player(
                                 if (!this.hasSeenCredits && !this.showingCredits) {
                                     val playerShowCreditsEvent = PlayerShowCreditsEvent(this)
                                     Server.instance.pluginManager.callEvent(playerShowCreditsEvent)
-                                    if (!playerShowCreditsEvent.isCancelled) {
+                                    if (!playerShowCreditsEvent.cancelled) {
                                         this.showCredits()
                                     }
                                 }
@@ -1137,7 +1137,7 @@ open class Player(
             if (diff > 1.2) {
                 val event = PlayerInvalidMoveEvent(this, true)
                 Server.instance.pluginManager.callEvent(event)
-                if (!event.isCancelled && (event.isRevert.also { invalidMotion = it })) {
+                if (!event.cancelled && (event.isRevert.also { invalidMotion = it })) {
                     log.warn(Server.instance.baseLang.tr("chorus.player.invalidMove", this.getEntityName()))
                 }
             }
@@ -1184,7 +1184,7 @@ open class Player(
             val ev = PlayerMoveEvent(this, last, now)
             Server.instance.pluginManager.callEvent(ev)
 
-            if (!(ev.isCancelled.also { invalidMotion = it })) { //Yes, this is intended
+            if (!(ev.cancelled.also { invalidMotion = it })) { //Yes, this is intended
                 if (now != ev.to && this.riding == null) { //If plugins modify the destination
                     if (this.gamemode != SPECTATOR) level!!.vibrationManager.callVibrationEvent(
                         VibrationEvent(
@@ -1329,7 +1329,7 @@ open class Player(
                         }
                         val ev = WaterFrostEvent(block, this)
                         Server.instance.pluginManager.callEvent(ev)
-                        if (!ev.isCancelled) {
+                        if (!ev.cancelled) {
                             level!!.setBlock(block.position, layer, Block.get(BlockID.FROSTED_ICE), true, false)
                             level!!.scheduleUpdate(
                                 level!!.getBlock(block.position, layer),
@@ -2399,7 +2399,7 @@ open class Player(
                 this,
                 level!!.getBlock(pos)
             ).also { ev = it })
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
 
@@ -2472,7 +2472,7 @@ open class Player(
         val event = PlayerAchievementAwardedEvent(this, achievementId)
         Server.instance.pluginManager.callEvent(event)
 
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
 
@@ -2537,7 +2537,7 @@ open class Player(
         val ev: PlayerGameModeChangeEvent
         Server.instance.pluginManager.callEvent(PlayerGameModeChangeEvent(this, gamemode, newSettings).also { ev = it })
 
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
 
@@ -2859,7 +2859,7 @@ open class Player(
                                 val ev = PlayerInvalidMoveEvent(this, true)
                                 Server.instance.pluginManager.callEvent(ev)
 
-                                if (!ev.isCancelled) {
+                                if (!ev.cancelled) {
                                     this.setMotion(Vector3(0.0, expectedVelocity, 0.0))
                                 }
                             } else if (this.kick(
@@ -3081,7 +3081,7 @@ open class Player(
             if (msg.trim { it <= ' ' }.isNotEmpty() && msg.length <= 512 && messageLimitCounter-- > 0) {
                 val chatEvent = PlayerChatEvent(this, msg)
                 Server.instance.pluginManager.callEvent(chatEvent)
-                if (!chatEvent.isCancelled) {
+                if (!chatEvent.cancelled) {
                     Server.instance.broadcastMessage(
                         Server.instance.baseLang.tr(
                             chatEvent.format, *arrayOf<String>(
@@ -3153,7 +3153,7 @@ open class Player(
                 this, reason,
                 leaveMessage
             ).also { ev = it })
-        if (!ev.isCancelled) {
+        if (!ev.cancelled) {
             val message = if (isAdmin) {
                 if (!Server.instance.bannedPlayers.isBanned(getEntityName())) {
                     "Kicked by admin." + (if (!reasonString.isEmpty()) " Reason: $reasonString" else "")
@@ -3886,7 +3886,7 @@ open class Player(
 
         Server.instance.pluginManager.callEvent(ev)
 
-        if (!ev.isCancelled) {
+        if (!ev.cancelled) {
             if (this.fishing != null) {
                 this.stopFishing(false)
             }
@@ -4062,7 +4062,7 @@ open class Player(
             experienceLevel, exp, level
         )
         Server.instance.pluginManager.callEvent(expEvent)
-        if (expEvent.isCancelled) {
+        if (expEvent.cancelled) {
             return
         }
         exp = expEvent.newExperience
@@ -4210,10 +4210,10 @@ open class Player(
         }
 
         if (this.isSpectator || this.isCreative) {
-            //source.setCancelled();
+            //source.cancelled = true;
             return false
         } else if (adventureSettings[AdventureSettings.Type.ALLOW_FLIGHT] && source.cause == DamageCause.FALL) {
-            //source.setCancelled();
+            //source.cancelled = true;
             return false
         } else if (source.cause == DamageCause.FALL) {
             if (level!!.getBlock(
@@ -4222,7 +4222,7 @@ open class Player(
                 ).id == BlockID.SLIME
             ) {
                 if (!this.isSneaking()) {
-                    //source.setCancelled();
+                    //source.cancelled = true;
                     this.resetFallDistance()
                     return false
                 }
@@ -4366,7 +4366,7 @@ open class Player(
         if (cause != null) {
             val event = PlayerTeleportEvent(this, from, to, cause)
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) return false
+            if (event.cancelled) return false
             to = event.to!!
         }
 
@@ -4996,11 +4996,11 @@ open class Player(
 
                 val pickupMode = entity.pickupMode
                 if (pickupMode == EntityProjectile.PICKUP_NONE || (pickupMode == EntityProjectile.PICKUP_CREATIVE && !this.isCreative)) {
-                    ev.setCancelled()
+                    ev.cancelled = true
                 }
 
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return false
                 }
 
@@ -5040,11 +5040,11 @@ open class Player(
 
                 val pickupMode = entity.pickupMode
                 if (pickupMode == EntityProjectile.PICKUP_NONE || (pickupMode == EntityProjectile.PICKUP_CREATIVE && !this.isCreative)) {
-                    ev.setCancelled()
+                    ev.cancelled = true
                 }
 
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return false
                 }
 
@@ -5075,7 +5075,7 @@ open class Player(
                         val ev: InventoryPickupItemEvent
                         Server.instance.pluginManager
                             .callEvent(InventoryPickupItemEvent(inventory!!, entity).also { ev = it })
-                        if (ev.isCancelled) {
+                        if (ev.cancelled) {
                             return false
                         }
 
@@ -5238,7 +5238,7 @@ open class Player(
         )
         val ev = ProjectileLaunchEvent(fishingHook, this)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             fishingHook.close()
         } else {
             this.fishing = fishingHook
@@ -5367,7 +5367,7 @@ open class Player(
         }
         val ev = DataPacketSendEvent(this, packet)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
         session.sendPacketImmediately(packet)

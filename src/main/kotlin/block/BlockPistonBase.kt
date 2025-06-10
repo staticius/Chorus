@@ -221,7 +221,7 @@ abstract class BlockPistonBase(blockstate: BlockState) : BlockTransparent(blocks
             calculator.blocksToDestroy, extending
         )
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
 

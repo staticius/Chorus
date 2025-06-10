@@ -80,7 +80,7 @@ open class EntitySplashPotion(chunk: IChunk?, nbt: CompoundTag, shootingEntity: 
         val event: PotionCollideEvent = PotionCollideEvent(potion, this)
         Server.instance.pluginManager.callEvent(event)
 
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return
         }
 

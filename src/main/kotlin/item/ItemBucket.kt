@@ -187,7 +187,7 @@ open class ItemBucket : Item {
                         player, block, face, target,
                         this, result
                     ).also { ev = it })
-                if (!ev.isCancelled) {
+                if (!ev.cancelled) {
                     player.level!!.setBlock(target.position, target.layer, Block.get(BlockID.AIR), true, true)
 
                     level.vibrationManager.callVibrationEvent(
@@ -255,20 +255,20 @@ open class ItemBucket : Item {
             val ev = PlayerBucketEmptyEvent(player, placementBlock, face, target, this, result)
             val canBeFlowedInto = placementBlock.canBeFlowedInto() || placementBlock.id == BlockID.BAMBOO
             if (usesWaterlogging) {
-                ev.isCancelled = placementBlock.waterloggingLevel <= 0 && !canBeFlowedInto
+                ev.cancelled = placementBlock.waterloggingLevel <= 0 && !canBeFlowedInto
             } else {
-                ev.isCancelled = !canBeFlowedInto
+                ev.cancelled = !canBeFlowedInto
             }
 
             var nether = false
             if (!canBeUsedOnDimension(player.level!!.dimension)) {
-                ev.isCancelled = true
+                ev.cancelled = true
                 nether = !isLava
             }
 
             Server.instance.pluginManager.callEvent(ev)
 
-            if (!ev.isCancelled) {
+            if (!ev.cancelled) {
                 player.level!!.setBlock(placementBlock.position, placementBlock.layer, targetBlock, true, true)
                 player.level!!.sendBlocks(
                     arrayOf(player),
@@ -313,7 +313,7 @@ open class ItemBucket : Item {
                 }
             }
             val ev = PlayerBucketEmptyEvent(player, targetBlock, face, target, this, result)
-            if (!ev.isCancelled) {
+            if (!ev.cancelled) {
                 target.level.setBlock(target.position, targetBlock, true, true)
                 player.level!!.addSound(target.position, Sound.BUCKET_FILL_POWDER_SNOW)
 

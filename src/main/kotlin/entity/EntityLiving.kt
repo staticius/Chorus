@@ -419,11 +419,11 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
         val knockBack: Boolean = damager !is EntityProjectile
         val event = EntityDamageBlockedEvent(this, source, knockBack, true)
         if (!blocked || !source.canBeReducedByArmor()) {
-            event.setCancelled()
+            event.cancelled = true
         }
 
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
 

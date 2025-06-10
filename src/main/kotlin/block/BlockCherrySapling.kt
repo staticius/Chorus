@@ -59,7 +59,7 @@ class BlockCherrySapling @JvmOverloads constructor(blockState: BlockState = Comp
         if (generate) {
             val ev = StructureGrowEvent(this, blockManager.blocks)
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 return
             }
             if (level.getBlock(vector3).id == BlockID.DIRT_WITH_ROOTS) {

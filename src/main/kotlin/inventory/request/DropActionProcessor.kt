@@ -22,7 +22,7 @@ class DropActionProcessor : ItemStackRequestActionProcessor<DropAction> {
 
         val ev: PlayerDropItemEvent
         Server.instance.pluginManager.callEvent(PlayerDropItemEvent(player, item).also { ev = it })
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return context.error()
         }
 

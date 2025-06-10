@@ -305,7 +305,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
                         this.lastOutput = null
                         val event = CommandBlockExecuteEvent(this.levelBlock, cmd)
                         Server.instance.pluginManager.callEvent(event)
-                        if (event.isCancelled) {
+                        if (event.cancelled) {
                             return false
                         }
                         this.successCount = Server.instance.executeCommand(this, cmd)

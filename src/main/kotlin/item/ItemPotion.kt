@@ -43,7 +43,7 @@ class ItemPotion @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
         }
         val consumeEvent = PlayerItemConsumeEvent(player, this)
         Server.instance.pluginManager.callEvent(consumeEvent)
-        if (consumeEvent.isCancelled) {
+        if (consumeEvent.cancelled) {
             return false
         }
         val potion = PotionType.get(this.damage)

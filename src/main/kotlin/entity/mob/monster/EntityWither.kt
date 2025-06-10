@@ -360,7 +360,7 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
     private fun explode() {
         val ev = EntityExplosionPrimeEvent(this, 7.0)
         Server.instance.pluginManager.callEvent(ev)
-        if (!ev.isCancelled) {
+        if (!ev.cancelled) {
             val explosion = Explosion(this.locator, ev.force.toFloat().toDouble(), this)
             if (ev.isBlockBreaking && level!!.gameRules.getBoolean(GameRule.MOB_GRIEFING)) {
                 explosion.explodeA()

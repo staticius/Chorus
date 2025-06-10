@@ -29,7 +29,7 @@ class EnchantmentFireAspect :
             val ev = EntityCombustByEntityEvent(attacker, entity, duration)
             Server.instance.pluginManager.callEvent(ev)
 
-            if (!ev.isCancelled) {
+            if (!ev.cancelled) {
                 entity.setOnFire(ev.duration)
             }
         }

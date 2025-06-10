@@ -29,11 +29,11 @@ class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
             Server.instance.settings.playerSettings.skinChangeCooldown.toLong()
         ) > System.currentTimeMillis() - player.lastSkinChange
         if (tooQuick) {
-            playerChangeSkinEvent.isCancelled = true
+            playerChangeSkinEvent.cancelled = true
             PlayerSkinProcessor.log.warn("Player " + playerHandle.username + " change skin too quick!")
         }
         Server.instance.pluginManager.callEvent(playerChangeSkinEvent)
-        if (!playerChangeSkinEvent.isCancelled) {
+        if (!playerChangeSkinEvent.cancelled) {
             player.lastSkinChange = System.currentTimeMillis()
             player.skin = (skin)
         }

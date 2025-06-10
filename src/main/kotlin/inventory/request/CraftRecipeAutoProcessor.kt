@@ -28,7 +28,7 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
 
         val craftItemEvent = CraftItemEvent(player, eventItems, recipe, 1)
         Server.instance.pluginManager.callEvent(craftItemEvent)
-        if (craftItemEvent.isCancelled) {
+        if (craftItemEvent.cancelled) {
             return context.error()
         }
 

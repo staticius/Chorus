@@ -14,7 +14,7 @@ class ServerSettingsRequestProcessor : DataPacketProcessor<ServerSettingsRequest
             PlayerServerSettingsRequestEvent(playerHandle.player, HashMap(playerHandle.serverSettings))
         Server.instance.pluginManager.callEvent(settingsRequestEvent)
 
-        if (!settingsRequestEvent.isCancelled) {
+        if (!settingsRequestEvent.cancelled) {
             settingsRequestEvent.getSettings().forEach { (id, window) ->
                 val re = ServerSettingsResponsePacket()
                 re.formId = id

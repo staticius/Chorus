@@ -140,7 +140,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                         )
                 val entityShootBowEvent = EntityShootCrossbowEvent(player, this, entity)
                 Server.instance.pluginManager.callEvent(entityShootBowEvent)
-                if (entityShootBowEvent.isCancelled) {
+                if (entityShootBowEvent.cancelled) {
                     entityShootBowEvent.getProjectile(0).close()
                     player.inventory.sendContents(player)
                 } else {
@@ -148,7 +148,7 @@ class ItemCrossbow @JvmOverloads constructor(meta: Int = 0, count: Int = 1) :
                     proj.setMotion(proj.getMotion().multiply(3.5))
                     val projectile = ProjectileLaunchEvent(proj, player)
                     Server.instance.pluginManager.callEvent(projectile)
-                    if (projectile.isCancelled) {
+                    if (projectile.cancelled) {
                         proj.close()
                     } else {
                         proj.spawnToAll()

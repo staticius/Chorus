@@ -45,7 +45,7 @@ abstract class BlockCoralBlock(blockstate: BlockState) : BlockSolid(blockstate) 
                     }
                 }
                 val event = BlockFadeEvent(this, toDead())
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     level.setBlock(this.position, event.newState, direct = true, update = true)
                 }
             }

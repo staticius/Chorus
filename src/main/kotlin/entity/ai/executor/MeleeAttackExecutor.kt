@@ -167,7 +167,7 @@ open class MeleeAttackExecutor(
             ev.isBreakShield = item.canBreakShield()
 
             target!!.attack(ev)
-            if (!ev.isCancelled) {
+            if (!ev.cancelled) {
                 for (e in effects) {
                     target!!.addEffect(e)
                 }

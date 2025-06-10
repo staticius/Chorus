@@ -77,7 +77,7 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
         if (diff == 0f || !entity.canBePushed() || entity is Player) return
         val event = EntityMoveByPistonEvent(entity, entity.locator.position)
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) return
+        if (event.cancelled) return
         entity.onPushByPiston(this)
         if (entity.closed) return
         //需要抵消重力

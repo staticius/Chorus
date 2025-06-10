@@ -319,7 +319,7 @@ abstract class BlockDoor(blockState: BlockState) : BlockTransparent(blockState),
         val event = DoorToggleEvent(this, player1!!)
         Server.instance.pluginManager.callEvent(event)
 
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
 

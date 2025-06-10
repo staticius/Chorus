@@ -26,7 +26,7 @@ class AnimateProcessor : DataPacketProcessor<AnimatePacket>() {
 
         val animationEvent = PlayerAnimationEvent(player, pk)
         Server.instance.pluginManager.callEvent(animationEvent)
-        if (animationEvent.isCancelled) {
+        if (animationEvent.cancelled) {
             return
         }
         animation = animationEvent.animationType

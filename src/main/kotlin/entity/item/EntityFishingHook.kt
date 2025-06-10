@@ -244,7 +244,7 @@ class EntityFishingHook @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundT
             val event = PlayerFishEvent(player, this, item, experience, motion)
             Server.instance.pluginManager.callEvent(event)
 
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 val itemEntity: EntityItem? = Entity.Companion.createEntity(
                     EntityID.ITEM,
                     level!!.getChunk(

@@ -184,7 +184,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
             )
             ev.ignitions = (fireIgnitions)
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 return false
             } else {
                 yield = ev.yield
@@ -198,7 +198,7 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                 fireIgnitions, yield, this.fireChance
             )
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 return false
             } else {
                 yield = ev.yield
@@ -316,14 +316,14 @@ class Explosion protected constructor(private val source: Locator, size: Double,
                 if (!affectedBlocks.contains(level.getBlock(sideBlock)) && !updateBlocks.contains(index)) {
                     var ev: BlockUpdateEvent = BlockUpdateEvent(level.getBlock(sideBlock))
                     Server.instance.pluginManager.callEvent(ev)
-                    if (!ev.isCancelled) {
+                    if (!ev.cancelled) {
                         ev.block.onUpdate(Level.BLOCK_UPDATE_NORMAL)
                     }
                     val layer1 = level.getBlock(sideBlock, 1)
                     if (!layer1.isAir) {
                         ev = BlockUpdateEvent(layer1)
                         Server.instance.pluginManager.callEvent(ev)
-                        if (!ev.isCancelled) {
+                        if (!ev.cancelled) {
                             ev.block.onUpdate(Level.Companion.BLOCK_UPDATE_NORMAL)
                         }
                     }

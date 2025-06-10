@@ -44,7 +44,7 @@ class BlockNetherWart @JvmOverloads constructor(blockstate: BlockState = Compani
                     val ev = BlockGrowEvent(this, block)
                     instance.pluginManager.callEvent(ev)
 
-                    if (!ev.isCancelled) {
+                    if (!ev.cancelled) {
                         level.setBlock(this.position, ev.newState, direct = true, update = true)
                     } else {
                         return Level.BLOCK_UPDATE_RANDOM

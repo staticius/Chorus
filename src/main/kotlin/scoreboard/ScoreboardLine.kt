@@ -24,7 +24,7 @@ class ScoreboardLine @JvmOverloads constructor(
                 ScoreboardLineChangeEvent.ActionType.SCORE_CHANGE
             )
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 return false
             }
             score1 = event.newValue

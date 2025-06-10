@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.utils.EventException
  *
  * 服务器中可能发生的事情称作**事件**。定义一个需要它在一个事件发生时被运行的过程，这个过程称作**监听器**。<br></br>
  * Things that happens in the server is called a **event**. Define a procedure that should be executed
- * when a event happens, this procedure is called a **listener**.
+ * when an event happens, this procedure is called a **listener**.
  *
  *
  * Nukkit调用事件的处理器时，会通过参数的类型判断需要被监听的事件。<br></br>
@@ -22,14 +22,14 @@ import org.chorus_oss.chorus.utils.EventException
  * @see org.chorus_oss.chorus.event.EventHandler
  */
 abstract class Event {
-    protected var eventName: String? = null
+    protected var name: String? = null
 
-    open var isCancelled: Boolean = false
+    open var cancelled: Boolean = false
         get() {
             if (this !is Cancellable) {
                 throw EventException("Event is not Cancellable")
             }
-            return false // TODO: field
+            return field // TODO: field
         }
         set(value) {
             if (this !is Cancellable) {
@@ -38,11 +38,7 @@ abstract class Event {
             field = value
         }
 
-    fun getSafeEventName(): String {
-        return eventName ?: javaClass.name
-    }
-
-    open fun setCancelled() {
-        isCancelled = true
+    fun getSafeName(): String {
+        return name ?: javaClass.name
     }
 }

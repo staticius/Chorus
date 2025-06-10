@@ -37,7 +37,7 @@ class EnchantInventory(table: BlockEntityEnchantTable) : ContainerInventory(tabl
                     )
 
                     val event = PlayerEnchantOptionsRequestEvent(viewer, this, options)
-                    if (!event.isCancelled && !event.options.isEmpty()) {
+                    if (!event.cancelled && !event.options.isEmpty()) {
                         val pk = PlayerEnchantOptionsPacket()
                         pk.options = event.options
                         viewer.dataPacket(pk)

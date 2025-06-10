@@ -624,7 +624,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                     PluginManager.log.error(
                         server.baseLang.tr(
                             "chorus.plugin.eventError",
-                            event.getSafeEventName(),
+                            event.getSafeName(),
                             registration.plugin.description.fullName,
                             e.message!!,
                             registration.listener.javaClass.name

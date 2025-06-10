@@ -88,7 +88,7 @@ open class ItemSpawnEgg : Item {
         val ev = CreatureSpawnEvent(networkId, block, nbt, SpawnReason.SPAWN_EGG)
         Server.instance.pluginManager.callEvent(ev)
 
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
 

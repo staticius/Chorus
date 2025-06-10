@@ -133,7 +133,7 @@ class BlockEntityMobSpawner(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
                         )
                         Server.instance.pluginManager.callEvent(ev)
 
-                        if (ev.isCancelled) {
+                        if (ev.cancelled) {
                             continue
                         }
                         ent.spawnToAll()

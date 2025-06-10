@@ -210,7 +210,7 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = Companion.pro
 
         val event = BellRingEvent(this, cause, causeEntity!!)
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
 

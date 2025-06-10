@@ -73,7 +73,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
         if (isFull) {
             val event = ComposterEmptyEvent(this, player!!, item, Item.get(ItemID.BONE_MEAL), 0)
             Server.instance.pluginManager.callEvent(event)
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 setPropertyValue(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
                 level.setBlock(this.position, this, direct = true, update = true)
                 level.dropItem(position.add(0.5, 0.85, 0.5), event.getDrop(), event.motion, false, 10)
@@ -91,7 +91,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
         val event = ComposterFillEvent(this, player!!, item, chance, success)
         Server.instance.pluginManager.callEvent(event)
 
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return true
         }
 
@@ -119,7 +119,7 @@ class BlockComposter @JvmOverloads constructor(blockstate: BlockState = Companio
     fun empty(item: Item?, player: Player?): Item? {
         val event = ComposterEmptyEvent(this, player!!, item!!, ItemBoneMeal(), 0)
         Server.instance.pluginManager.callEvent(event)
-        if (!event.isCancelled) {
+        if (!event.cancelled) {
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.COMPOSTER_FILL_LEVEL, event.getNewLevel())
             level.setBlock(this.position, this, direct = true, update = true)
             if (item != null) {

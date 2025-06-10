@@ -57,7 +57,7 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = Compan
             this.tilt, tilt
         )
         instance.pluginManager.callEvent(event)
-        if (event.isCancelled) return false
+        if (event.cancelled) return false
         this.setPropertyValue(CommonBlockProperties.BIG_DRIPLEAF_TILT, tilt)
         return true
     }

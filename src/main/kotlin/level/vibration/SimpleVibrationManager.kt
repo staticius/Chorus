@@ -21,7 +21,7 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
     override fun callVibrationEvent(event: VibrationEvent) {
         val vibrationOccurPluginEvent: VibrationOccurEvent = VibrationOccurEvent(event)
         Server.instance.pluginManager.callEvent(vibrationOccurPluginEvent)
-        if (vibrationOccurPluginEvent.isCancelled) {
+        if (vibrationOccurPluginEvent.cancelled) {
             return
         }
         for (listener in listeners) {
@@ -37,7 +37,7 @@ class SimpleVibrationManager(protected var level: Level) : VibrationManager {
                 level.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
                     val vibrationArrivePluginEvent: VibrationArriveEvent = VibrationArriveEvent(event, listener)
                     Server.instance.pluginManager.callEvent(vibrationArrivePluginEvent)
-                    if (vibrationArrivePluginEvent.isCancelled) {
+                    if (vibrationArrivePluginEvent.cancelled) {
                         return@scheduleDelayedTask
                     }
                     listener.onVibrationArrive(event)

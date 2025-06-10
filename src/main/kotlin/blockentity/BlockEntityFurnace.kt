@@ -228,7 +228,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         var fuel1 = fuel
         val ev = FurnaceBurnEvent(this, fuel1, if (fuel1.fuelTime == null) 0 else fuel1.fuelTime!!)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return
         }
 
@@ -307,7 +307,7 @@ open class BlockEntityFurnace(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
                         Server.instance.recipeRegistry.getRecipeXp(smelt).toFloat()
                     )
                     Server.instance.pluginManager.callEvent(ev)
-                    if (!ev.isCancelled) {
+                    if (!ev.cancelled) {
                         inventory.setResult(ev.result)
                         raw.setCount(raw.getCount() - 1)
                         if (raw.getCount() == 0) {

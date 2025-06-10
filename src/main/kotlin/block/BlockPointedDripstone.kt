@@ -97,7 +97,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
         if (AirUp) {
             val event = BlockFallEvent(this)
             instance.pluginManager.callEvent(event)
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 return
             }
             var block = blockUp as BlockPointedDripstone?
@@ -346,7 +346,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
                 if ((cauldron!!.cauldronLiquid == CauldronLiquid.LAVA || cauldron.isEmpty) && cauldron.fillLevel < 6 && nextDouble <= 15.0 / 256.0) {
                     val event = CauldronFilledByDrippingLiquidEvent(cauldron, CauldronLiquid.LAVA, 1)
                     instance.pluginManager.callEvent(event)
-                    if (event.isCancelled) return
+                    if (event.cancelled) return
                     cauldron.cauldronLiquid = event.liquid
                     cauldron.fillLevel = cauldron.fillLevel + event.liquidLevelIncrement
                     cauldron.level.setBlock(cauldron.position, cauldron, true, true)
@@ -359,7 +359,7 @@ class BlockPointedDripstone @JvmOverloads constructor(blockstate: BlockState = C
                 if ((cauldron!!.cauldronLiquid == CauldronLiquid.WATER || cauldron.isEmpty) && cauldron.fillLevel < 6 && nextDouble <= 45.0 / 256.0) {
                     val event = CauldronFilledByDrippingLiquidEvent(cauldron, CauldronLiquid.WATER, 1)
                     instance.pluginManager.callEvent(event)
-                    if (event.isCancelled) return
+                    if (event.cancelled) return
                     cauldron.cauldronLiquid = event.liquid
                     cauldron.fillLevel = cauldron.fillLevel + event.liquidLevelIncrement
                     cauldron.level.setBlock(cauldron.position, cauldron, true, true)

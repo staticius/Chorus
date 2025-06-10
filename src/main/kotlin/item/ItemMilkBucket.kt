@@ -23,7 +23,7 @@ class ItemMilkBucket : ItemBucket(ItemID.Companion.MILK_BUCKET) {
         val event = PlayerItemConsumeEvent(player, this)
         Server.instance.pluginManager.callEvent(event)
 
-        if (event.isCancelled) {
+        if (event.cancelled) {
             player.inventory.sendContents(player)
             return false
         }

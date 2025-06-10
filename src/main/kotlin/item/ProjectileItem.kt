@@ -59,7 +59,7 @@ abstract class ProjectileItem(id: String, meta: Int, count: Int, name: String?) 
                 val ev = ProjectileLaunchEvent(projectile, player)
 
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     projectile.kill()
                 } else {
                     if (!player.isCreative) {

@@ -104,7 +104,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             this.addFreezingTicks(1)
             val event = EntityFreezeEvent(this)
             Server.instance.pluginManager.callEvent(event)
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 this.setMovementSpeedF(0.05.coerceAtLeast(movementSpeed - 3.58e-4).toFloat())
             }
         } else if (this.getFreezingTicks() > 0 && !collidedWithPowderSnow) {

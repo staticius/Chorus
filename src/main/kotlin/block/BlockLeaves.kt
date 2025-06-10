@@ -113,7 +113,7 @@ abstract class BlockLeaves(blockState: BlockState) : BlockTransparent(blockState
                 } else {
                     val ev = LeavesDecayEvent(this)
                     instance.pluginManager.callEvent(ev)
-                    if (!ev.isCancelled) {
+                    if (!ev.cancelled) {
                         level.useBreakOn(this.position)
                     }
                 }

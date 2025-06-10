@@ -72,7 +72,7 @@ open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
             if (up().lightFilter > 1) {
                 val ev = BlockFadeEvent(this, get(BlockID.DIRT))
                 instance.pluginManager.callEvent(ev)
-                if (!ev.isCancelled) {
+                if (!ev.cancelled) {
                     level.setBlock(this.position, ev.newState)
                     return type
                 }
@@ -98,7 +98,7 @@ open class BlockGrassBlock(blockstate: BlockState) : BlockDirt(blockstate) {
                 ) {
                     val ev = BlockSpreadEvent(block, this, get(BlockID.GRASS_BLOCK))
                     instance.pluginManager.callEvent(ev)
-                    if (!ev.isCancelled) {
+                    if (!ev.cancelled) {
                         level.setBlock(block.position, ev.newState)
                     }
                 }

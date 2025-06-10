@@ -31,7 +31,7 @@ open class BlockBubbleCoral @JvmOverloads constructor(blockstate: BlockState = C
                 }
             }
             val event = BlockFadeEvent(this, getDeadCoral())
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 level.setBlock(this.position, event.newState, direct = true, update = true)
             }
             return type

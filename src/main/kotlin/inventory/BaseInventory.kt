@@ -107,7 +107,7 @@ abstract class BaseInventory(
         if (holder is Entity) {
             val ev = EntityInventoryChangeEvent(holder, this.getItem(index), item1, index)
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 this.sendSlot(index, this.viewers)
                 return false
             }
@@ -353,7 +353,7 @@ abstract class BaseInventory(
                     old!!, item, index
                 )
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     this.sendSlot(index, this.viewers)
                     return false
                 }
@@ -381,7 +381,7 @@ abstract class BaseInventory(
     override fun open(who: Player): Boolean {
         val ev = InventoryOpenEvent(this, who)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
         this.onOpen(who)

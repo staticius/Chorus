@@ -52,7 +52,7 @@ class BlockMycelium : BlockDirt {
                     if (block.up().isTransparent) {
                         val ev = BlockSpreadEvent(block, this, get(BlockID.MYCELIUM))
                         Server.instance.pluginManager.callEvent(ev)
-                        if (!ev.isCancelled) {
+                        if (!ev.cancelled) {
                             level.setBlock(block.position, ev.newState)
                         }
                     }

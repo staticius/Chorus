@@ -137,7 +137,7 @@ abstract class BlockVinesNether
         val ev = BlockGrowEvent(this, growing)
         instance.pluginManager.callEvent(ev)
 
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
 
@@ -177,7 +177,7 @@ abstract class BlockVinesNether
             val ev = BlockGrowEvent(this, growing.clone())
             instance.pluginManager.callEvent(ev)
 
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 break
             }
 

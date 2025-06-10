@@ -72,7 +72,7 @@ abstract class ItemArmor : Item, ItemDurable {
             val pluginManager = Server.instance.pluginManager
             pluginManager.callEvent(event) //Method gets called on server start before plugin manager is initiated
 
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 super.damage = (event.newDurability)
                 getOrCreateNamedTag().putInt("Damage", event.newDurability)
             }

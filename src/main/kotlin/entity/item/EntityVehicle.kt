@@ -100,14 +100,14 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
             val byEvent = VehicleDamageByEntityEvent(this, damagingEntity, source.finalDamage.toDouble())
             Server.instance.pluginManager.callEvent(byEvent)
 
-            if (byEvent.isCancelled) return false
+            if (byEvent.cancelled) return false
 
             instantKill = damagingEntity is Player && damagingEntity.isCreative
         } else {
             val damageEvent = VehicleDamageEvent(this, source.finalDamage.toDouble())
             Server.instance.pluginManager.callEvent(damageEvent)
 
-            if (damageEvent.isCancelled) return false
+            if (damageEvent.cancelled) return false
         }
 
         if (instantKill || health - source.finalDamage < 1) {
@@ -117,12 +117,12 @@ abstract class EntityVehicle(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, 
                 val byDestroyEvent = VehicleDestroyByEntityEvent(this, damagingEntity)
                 Server.instance.pluginManager.callEvent(byDestroyEvent)
 
-                if (byDestroyEvent.isCancelled) return false
+                if (byDestroyEvent.cancelled) return false
             } else {
                 val destroyEvent = VehicleDestroyEvent(this)
                 Server.instance.pluginManager.callEvent(destroyEvent)
 
-                if (destroyEvent.isCancelled) return false
+                if (destroyEvent.cancelled) return false
             }
         }
 

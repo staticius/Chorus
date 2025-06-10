@@ -58,10 +58,10 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
 
         val ev = EntityCombustByBlockEvent(this, entity, 8)
         if (entity is EntityArrow) {
-            ev.setCancelled()
+            ev.cancelled = true
         }
         Server.instance.pluginManager.callEvent(ev)
-        if (!ev.isCancelled && entity.isAlive() && entity.noDamageTicks == 0) {
+        if (!ev.cancelled && entity.isAlive() && entity.noDamageTicks == 0) {
             entity.setOnFire(ev.duration)
         }
     }
@@ -90,7 +90,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
             if (!this.isBlockTopFacingSurfaceSolid(down) && !this.canNeighborBurn()) {
                 val event = BlockFadeEvent(this, get(BlockID.AIR))
                 Server.instance.pluginManager.callEvent(event)
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     level.setBlock(this.position, event.newState, true)
                 }
             } else if (level.gameRules.getBoolean(GameRule.DO_FIRE_TICK) && !level.isUpdateScheduled(
@@ -115,7 +115,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
             if (!this.isBlockTopFacingSurfaceSolid(down) && !this.canNeighborBurn()) {
                 val event = BlockFadeEvent(this, get(BlockID.AIR))
                 Server.instance.pluginManager.callEvent(event)
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     level.setBlock(this.position, event.newState, true)
                 }
             }
@@ -138,14 +138,14 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
                     if (!this.isBlockTopFacingSurfaceSolid(down) || meta > 3) {
                         val event = BlockFadeEvent(this, get(BlockID.AIR))
                         Server.instance.pluginManager.callEvent(event)
-                        if (!event.isCancelled) {
+                        if (!event.cancelled) {
                             level.setBlock(this.position, event.newState, true)
                         }
                     }
                 } else if (!forever && (down.burnAbility <= 0) && meta == 15 && random.nextInt(4) == 0) {
                     val event = BlockFadeEvent(this, get(BlockID.AIR))
                     Server.instance.pluginManager.callEvent(event)
-                    if (!event.isCancelled) {
+                    if (!event.cancelled) {
                         level.setBlock(this.position, event.newState, true)
                     }
                 } else {
@@ -194,7 +194,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
                                             )
                                             Server.instance.pluginManager.callEvent(e)
 
-                                            if (!e.isCancelled) {
+                                            if (!e.cancelled) {
                                                 level.setBlock(
                                                     block.position, get(
                                                         blockState.setPropertyValue(
@@ -235,7 +235,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
                 val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.SPREAD)
                 Server.instance.pluginManager.callEvent(e)
 
-                if (!e.isCancelled) {
+                if (!e.cancelled) {
                     level.setBlock(
                         block.position, get(
                             blockState.setPropertyValue(
@@ -251,7 +251,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
                 val ev = BlockBurnEvent(block)
                 Server.instance.pluginManager.callEvent(ev)
 
-                if (!ev.isCancelled) {
+                if (!ev.cancelled) {
                     level.setBlock(block.position, get(BlockID.AIR), true)
                 }
             }
@@ -340,7 +340,7 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = Companio
         ) {
             val event = BlockFadeEvent(this, get(BlockID.AIR))
             Server.instance.pluginManager.callEvent(event)
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 level.setBlock(this.position, event.newState, true)
             }
             return true

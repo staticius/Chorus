@@ -273,7 +273,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
 
         val event = EntityFallEvent(this, down, fallDistance)
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return
         }
         fallDistance = event.fallDistance
@@ -299,7 +299,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
                 }
                 val farmEvent = FarmLandDecayEvent(this, down)
                 Server.instance.pluginManager.callEvent(farmEvent)
-                if (farmEvent.isCancelled) return
+                if (farmEvent.cancelled) return
                 level!!.setBlock(down.position, BlockDirt(), false, true)
                 return
             }

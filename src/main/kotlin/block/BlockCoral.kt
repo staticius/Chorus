@@ -33,7 +33,7 @@ abstract class BlockCoral(blockstate: BlockState) : BlockFlowable(blockstate) {
         } else if (type == Level.BLOCK_UPDATE_SCHEDULED) {
             if (!isDead() && (getLevelBlockAtLayer(1) !is BlockFlowingWater) && (getLevelBlockAtLayer(1) !is BlockFrostedIce)) {
                 val event = BlockFadeEvent(this, getDeadCoral())
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     setDead(event.newState)
                 }
             }

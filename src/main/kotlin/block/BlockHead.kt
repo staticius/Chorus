@@ -91,7 +91,7 @@ abstract class BlockHead(blockState: BlockState) : BlockTransparent(blockState),
 
         val ev = RedstoneUpdateEvent(this)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return 0
         }
 

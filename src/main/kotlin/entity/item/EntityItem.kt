@@ -241,7 +241,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
             if (this.age > 6000) {
                 val ev: ItemDespawnEvent = ItemDespawnEvent(this)
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     this.age = 0
                 } else {
                     this.kill()

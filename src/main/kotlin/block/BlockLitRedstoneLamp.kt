@@ -32,7 +32,7 @@ class BlockLitRedstoneLamp @JvmOverloads constructor(blockstate: BlockState = Co
             // Redstone event
             val ev = RedstoneUpdateEvent(this)
             Server.instance.pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 return 0
             }
 

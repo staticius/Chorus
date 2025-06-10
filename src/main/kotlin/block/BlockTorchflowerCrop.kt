@@ -58,7 +58,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Co
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
 
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return false
                 }
 
@@ -92,7 +92,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Co
                     val ev = BlockGrowEvent(this, block)
                     instance.pluginManager.callEvent(ev)
 
-                    if (ev.isCancelled) {
+                    if (ev.cancelled) {
                         return 0
                     } else {
                         level.setBlock(this.position, ev.newState, false, true)
@@ -105,7 +105,7 @@ class BlockTorchflowerCrop @JvmOverloads constructor(blockstate: BlockState = Co
                     val ev = BlockGrowEvent(this, block)
                     instance.pluginManager.callEvent(ev)
 
-                    if (!ev.isCancelled) {
+                    if (!ev.cancelled) {
                         level.setBlock(this.position, ev.newState, false, true)
                     } else {
                         return Level.BLOCK_UPDATE_RANDOM

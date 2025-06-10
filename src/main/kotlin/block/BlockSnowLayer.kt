@@ -216,7 +216,7 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = Companio
         )
         val event = BlockFadeEvent(toMelt, newState)
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
 

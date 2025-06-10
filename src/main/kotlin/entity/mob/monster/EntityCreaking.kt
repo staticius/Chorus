@@ -95,7 +95,7 @@ class EntityCreaking(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nb
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
-        if (source.isCancelled) return false
+        if (source.cancelled) return false
         if (creakingHeart == null) return super.attack(source)
         if (this.isClosed() || !this.isAlive()) {
             return false

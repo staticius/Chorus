@@ -32,7 +32,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
 
         val ev = EntityCombustByBlockEvent(this, entity, 8)
         Server.instance.pluginManager.callEvent(ev)
-        if (!ev.isCancelled // Making sure the entity is actually alive and not invulnerable.
+        if (!ev.cancelled // Making sure the entity is actually alive and not invulnerable.
             && entity.isAlive()
             && entity.noDamageTicks == 0
         ) {
@@ -80,7 +80,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
                             val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)
                             Server.instance.pluginManager.callEvent(e)
 
-                            if (!e.isCancelled) {
+                            if (!e.cancelled) {
                                 val fire = get(BlockID.FIRE)
                                 level.setBlock(v, fire, true)
                                 level.scheduleUpdate(fire, fire.tickRate())
@@ -102,7 +102,7 @@ open class BlockFlowingLava @JvmOverloads constructor(blockstate: BlockState = C
                         val e = BlockIgniteEvent(block, this, null, BlockIgniteEvent.BlockIgniteCause.LAVA)
                         Server.instance.pluginManager.callEvent(e)
 
-                        if (!e.isCancelled) {
+                        if (!e.cancelled) {
                             val fire = get(BlockID.FIRE)
                             level.setBlock(v, fire, true)
                             level.scheduleUpdate(fire, fire.tickRate())

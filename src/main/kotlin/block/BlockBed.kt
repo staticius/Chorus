@@ -97,7 +97,7 @@ class BlockBed @JvmOverloads constructor(blockstate: BlockState = Companion.prop
 
             val event = BlockExplosionPrimeEvent(this, player, 5.0)
             event.isIncendiary = true
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 return true
             }
 

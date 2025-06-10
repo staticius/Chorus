@@ -184,7 +184,7 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Compa
                     .toInt() == 0 || up.blockState.specialValue().toInt() == 8)
             ) {
                 val event = BlockFromToEvent(this, up)
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     level.setBlock(up.position, 1, BlockFlowingWater(), direct = true, update = false)
                     level.setBlock(up.position, 0, BlockBubbleColumn(this.blockState), direct = true, update = true)
                 }
@@ -204,7 +204,7 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = Compa
 
     private fun fadeOut(water: Block) {
         val event = BlockFadeEvent(this, water.clone())
-        if (!event.isCancelled) {
+        if (!event.cancelled) {
             level.setBlock(this.position, 1, BlockAir(), direct = true, update = false)
             level.setBlock(this.position, 0, event.newState, direct = true, update = true)
         }

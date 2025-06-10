@@ -177,7 +177,7 @@ open class BlockTrapdoor @JvmOverloads constructor(blockState: BlockState = Comp
         val event = DoorToggleEvent(this, player)
         Server.instance.pluginManager.callEvent(event)
 
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
 

@@ -37,7 +37,7 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
         val event = PlayerFoodLevelChangeEvent(this.player, food1, saturation)
         Server.instance.pluginManager.callEvent(event)
 
-        if (event.isCancelled) {
+        if (event.cancelled) {
             this.sendFood(this.food)
             return
         }
@@ -59,7 +59,7 @@ class PlayerFood(val player: Player, private var food: Int, private var saturati
         val event = PlayerFoodLevelChangeEvent(player, food, saturation1)
         Server.instance.pluginManager.callEvent(event)
 
-        if (!event.isCancelled) {
+        if (!event.cancelled) {
             this.saturation = event.foodSaturationLevel
         }
     }

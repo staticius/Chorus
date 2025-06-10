@@ -128,7 +128,7 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
 
         val ev = InventoryOpenEvent(this, who)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
         this.onOpen(who)

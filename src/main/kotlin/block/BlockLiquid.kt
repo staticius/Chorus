@@ -306,7 +306,7 @@ abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
                     }
                     val event = BlockFromToEvent(this, to)
                     Server.instance.pluginManager.callEvent(event)
-                    if (!event.isCancelled) {
+                    if (!event.cancelled) {
                         level.setBlock(this.position, layer, event.to, true, true)
                         if (!decayed) {
                             level.scheduleUpdate(this, this.tickRate())
@@ -384,7 +384,7 @@ abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
 
             val event = LiquidFlowEvent(block, this, newFlowDecay)
             Server.instance.pluginManager.callEvent(event)
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 if (block.layer == 0 && !block.isAir) {
                     level.useBreakOn(block.position, if (block is BlockWeb) Item.get(ItemID.WOODEN_SWORD) else null)
                 }
@@ -586,7 +586,7 @@ abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
     fun liquidCollide(cause: Block?, result: Block): Boolean {
         val event = BlockFromToEvent(this, result)
         Server.instance.pluginManager.callEvent(event)
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
         level.setBlock(this.position, event.to, true, true)

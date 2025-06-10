@@ -95,7 +95,7 @@ class BlockMangrovePropagule @JvmOverloads constructor(blockstate: BlockState = 
         objectMangroveTree.generate(chunkManager, ChorusRandom(), this.position)
         val ev = StructureGrowEvent(this, chunkManager.blocks)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return
         }
         chunkManager.applySubChunkUpdate(ev.blockList)

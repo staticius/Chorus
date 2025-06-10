@@ -73,7 +73,7 @@ class Scoreboard @JvmOverloads constructor(
                 ScoreboardLineChangeEvent.ActionType.ADD_LINE
             )
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) return false
+            if (event.cancelled) return false
             line1 = event.line!!
         }
         lines[line1.scorer] = line1
@@ -101,7 +101,7 @@ class Scoreboard @JvmOverloads constructor(
                 ScoreboardLineChangeEvent.ActionType.REMOVE_LINE
             )
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) return false
+            if (event.cancelled) return false
         }
         lines.remove(scorer)
         allViewers.forEach(Consumer { viewer: IScoreboardViewer -> viewer.removeLine(removed) })
@@ -114,7 +114,7 @@ class Scoreboard @JvmOverloads constructor(
             val event =
                 ScoreboardLineChangeEvent(this, null, 0, 0, ScoreboardLineChangeEvent.ActionType.REMOVE_ALL_LINES)
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) return false
+            if (event.cancelled) return false
         }
         if (send) {
             lines.keys.forEach(Consumer { scorer: IScorer? -> this.removeLine(scorer) })

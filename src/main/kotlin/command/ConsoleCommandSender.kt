@@ -73,7 +73,7 @@ open class ConsoleCommandSender : CommandSender {
                 var text = Server.instance.baseLang.tr(TranslationContainer(msg.messageId, *msg.parameters))
                 val event = ConsoleCommandOutputEvent(this, text)
                 Server.instance.pluginManager.callEvent(event)
-                if (event.isCancelled) continue
+                if (event.cancelled) continue
                 text = event.message
                 this.sendMessage(text)
             }

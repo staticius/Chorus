@@ -121,7 +121,7 @@ class BlockCactus @JvmOverloads constructor(state: BlockState = Companion.proper
                 }
                 val event = BlockGrowEvent(b, get(BlockID.CACTUS))
                 instance.pluginManager.callEvent(event)
-                if (!event.isCancelled) {
+                if (!event.cancelled) {
                     level.setBlock(b.position, event.newState, true)
                 }
                 break

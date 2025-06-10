@@ -161,7 +161,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             val e = StartBrewEvent(this)
             Server.instance.pluginManager.callEvent(e)
 
-            if (e.isCancelled) {
+            if (e.cancelled) {
                 return false
             }
 
@@ -180,7 +180,7 @@ class BlockEntityBrewingStand(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         val e = BrewEvent(this)
         Server.instance.pluginManager.callEvent(e)
 
-        if (e.isCancelled) {
+        if (e.cancelled) {
             stopBrewing()
             return true
         }

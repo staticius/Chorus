@@ -78,7 +78,7 @@ interface Oxidizable {
             val nextBlock = getBlockWithOxidizationLevel(OxidizationLevel.entries[oxiLvl + 1])
             val event = BlockFadeEvent(block, nextBlock)
             Server.instance.pluginManager.callEvent(event)
-            if (!event.isCancelled) {
+            if (!event.cancelled) {
                 block.level.setBlock(block.position, event.newState)
             }
         }

@@ -137,7 +137,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     this, item, get(newBucketID, 0, 1, item.compoundTag)
                 )
                 Server.instance.pluginManager.callEvent(ev)
-                if (!ev.isCancelled) {
+                if (!ev.cancelled) {
                     replaceBucket(item, player, ev.item)
                     this.setFillLevel(CommonBlockProperties.FILL_LEVEL.min, player) // empty
                     level.setBlock(this.position, this, true)
@@ -158,7 +158,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                     this, item, get(ItemID.BUCKET, 0, 1, item.compoundTag)
                 )
                 Server.instance.pluginManager.callEvent(ev)
-                if (!ev.isCancelled) {
+                if (!ev.cancelled) {
                     if (player.isSurvival || player.isAdventure) {
                         replaceBucket(item, player, ev.item)
                     }
@@ -447,7 +447,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                             this, item, get(ItemID.LAVA_BUCKET, 0, 1, bucket.compoundTag)
                         )
                         Server.instance.pluginManager.callEvent(ev)
-                        if (!ev.isCancelled) {
+                        if (!ev.cancelled) {
                             replaceBucket(bucket, player, ev.item)
                             this.setFillLevel(CommonBlockProperties.FILL_LEVEL.min, player) //empty
                             level.setBlock(this.position, BlockCauldron(), true)
@@ -465,7 +465,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
                             this, item, get(ItemID.BUCKET, 0, 1, bucket.compoundTag)
                         )
                         Server.instance.pluginManager.callEvent(ev)
-                        if (!ev.isCancelled) {
+                        if (!ev.cancelled) {
                             replaceBucket(bucket, player, ev.item)
 
                             if (be.hasPotion()) { //if has potion
@@ -630,7 +630,7 @@ class BlockCauldron : BlockSolid, BlockEntityHolder<BlockEntityCauldron> {
     override fun onEntityCollide(entity: Entity) {
         val ev = EntityCombustByBlockEvent(this, entity, 15)
         Server.instance.pluginManager.callEvent(ev)
-        if (!ev.isCancelled) {
+        if (!ev.cancelled) {
             // Making sure the entity is actually alive and not invulnerable.
             if (cauldronLiquid == CauldronLiquid.LAVA && entity.isAlive() && entity.noDamageTicks == 0) {
                 entity.setOnFire(ev.duration)

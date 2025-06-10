@@ -53,7 +53,7 @@ class ItemFlintAndSteel @JvmOverloads constructor(meta: Int = 0, count: Int = 1)
                 val e = BlockIgniteEvent(block, null, player, BlockIgniteEvent.BlockIgniteCause.FLINT_AND_STEEL)
                 Server.instance.pluginManager.callEvent(e)
 
-                if (!e.isCancelled) {
+                if (!e.cancelled) {
                     level.setBlock(fire.position, fire, true)
                     level.scheduleUpdate(fire, fire.tickRate() + ThreadLocalRandom.current().nextInt(10))
                 }

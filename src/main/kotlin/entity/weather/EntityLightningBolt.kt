@@ -54,7 +54,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
                         BlockIgniteEvent(block, null, this, BlockIgniteEvent.BlockIgniteCause.LIGHTNING)
                     Server.instance.pluginManager.callEvent(e)
 
-                    if (!e.isCancelled) {
+                    if (!e.cancelled) {
                         level!!.setBlock(fire.position, fire, true)
                         level!!.scheduleUpdate(fire, fire.tickRate() + ThreadLocalRandom.current().nextInt(10))
                     }
@@ -140,7 +140,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
                     val next: Block = (current as Oxidizable).getBlockWithOxidizationLevel(entry.value)
                     val event: BlockFadeEvent = BlockFadeEvent(current, next)
                     Server.instance.pluginManager.callEvent(event)
-                    if (event.isCancelled) {
+                    if (event.cancelled) {
                         break
                     }
                     level!!.setBlock(entry.key.position, event.newState)
@@ -167,7 +167,7 @@ class EntityLightningBolt(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt
                             BlockIgniteEvent(block, null, this, BlockIgniteEvent.BlockIgniteCause.LIGHTNING)
                         Server.instance.pluginManager.callEvent(event)
 
-                        if (!event.isCancelled) {
+                        if (!event.cancelled) {
                             val fire: Block = Block.get(BlockID.FIRE)
                             level!!.setBlock(block.position, fire)
                             level!!.scheduleUpdate(fire, fire.tickRate())

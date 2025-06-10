@@ -74,7 +74,7 @@ class BlockDragonEgg : BlockFallable {
             if (to.isAir) {
                 val event = BlockFromToEvent(this, to)
                 Server.instance.pluginManager.callEvent(event)
-                if (event.isCancelled) return
+                if (event.cancelled) return
                 to = event.to
 
                 val diffX = position.floorX - to.position.floorX

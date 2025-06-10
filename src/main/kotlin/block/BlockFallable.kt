@@ -20,7 +20,7 @@ abstract class BlockFallable(blockstate: BlockState) : BlockSolid(blockstate) {
             ) {
                 val event = BlockFallEvent(this)
                 Server.instance.pluginManager.callEvent(event)
-                if (event.isCancelled) {
+                if (event.cancelled) {
                     return type
                 }
 

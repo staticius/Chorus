@@ -42,7 +42,7 @@ class BlockBambooSapling @JvmOverloads constructor(blockstate: BlockState = Comp
                 newState.bambooLeafSize = BambooLeafSize.SMALL_LEAVES
                 val blockGrowEvent = BlockGrowEvent(up, newState)
                 Server.instance.pluginManager.callEvent(blockGrowEvent)
-                if (!blockGrowEvent.isCancelled) {
+                if (!blockGrowEvent.cancelled) {
                     val newState1 = blockGrowEvent.newState
                     newState1.position.y = up.position.y
                     newState1.position.x = position.x

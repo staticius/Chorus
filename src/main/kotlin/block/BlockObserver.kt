@@ -65,7 +65,7 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState = Companion
             val ev = RedstoneUpdateEvent(this)
             val pluginManager = Server.instance.pluginManager
             pluginManager.callEvent(ev)
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 return 0
             }
 
@@ -104,7 +104,7 @@ class BlockObserver @JvmOverloads constructor(blockstate: BlockState = Companion
 
         val ev = RedstoneUpdateEvent(this)
         server.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return
         }
 

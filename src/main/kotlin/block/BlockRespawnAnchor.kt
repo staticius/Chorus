@@ -74,7 +74,7 @@ class BlockRespawnAnchor : Block {
     fun explode(player: Player?) {
         val event = BlockExplosionPrimeEvent(this, player, 5.0)
         event.isIncendiary = true
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return
         }
 

@@ -111,7 +111,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState = Compani
             val itemOnFrame: Item = item.clone()
             val event = ItemFrameUseEvent(player, this, itemFrame, itemOnFrame, ItemFrameUseEvent.Action.PUT)
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) return false
+            if (event.cancelled) return false
             if (player != null && !player.isCreative) {
                 itemOnFrame.setCount(itemOnFrame.getCount() - 1)
                 player.inventory.setItemInHand(itemOnFrame)
@@ -126,7 +126,7 @@ open class BlockFrame @JvmOverloads constructor(blockstate: BlockState = Compani
         } else {
             val event = ItemFrameUseEvent(player, this, itemFrame, null, ItemFrameUseEvent.Action.ROTATION)
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) return false
+            if (event.cancelled) return false
             itemFrame.itemRotation = (itemFrame.itemRotation + 1) % 8
             if (isStoringMap) {
                 isStoringMap = false

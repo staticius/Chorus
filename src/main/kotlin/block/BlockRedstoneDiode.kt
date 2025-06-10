@@ -103,7 +103,7 @@ abstract class BlockRedstoneDiode(blockstate: BlockState) : BlockFlowable(blocks
                 // Redstone event
                 val ev = RedstoneUpdateEvent(this)
                 Server.instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return 0
                 }
 

@@ -63,7 +63,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.pr
                         val ev = BlockGrowEvent(block, get(BlockID.REEDS))
                         instance.pluginManager.callEvent(ev)
 
-                        if (!ev.isCancelled) {
+                        if (!ev.cancelled) {
                             level.setBlock(block.position, ev.newState, true)
                             success = true
                         }
@@ -128,7 +128,7 @@ class BlockReeds @JvmOverloads constructor(blockstate: BlockState = Companion.pr
             val ev: BlockGrowEvent = BlockGrowEvent(up, get(BlockID.REEDS))
             instance.pluginManager.callEvent(ev)
 
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 return type
             }
 

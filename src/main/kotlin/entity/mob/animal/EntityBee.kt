@@ -124,7 +124,7 @@ class EntityBee(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     override fun attack(source: EntityDamageEvent): Boolean {
         if (source.cause == DamageCause.SUFFOCATION) {
             if (ticksLived < 10) {
-                source.setCancelled()
+                source.cancelled = true
                 return false
             }
         }

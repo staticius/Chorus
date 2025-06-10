@@ -73,7 +73,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         if (pk.inputData.contains(AuthInputAction.START_SPRINTING)) {
             val event = PlayerToggleSprintEvent(player, true)
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 player.sendData(player)
             } else {
                 player.setSprinting(true)
@@ -82,7 +82,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         if (pk.inputData.contains(AuthInputAction.STOP_SPRINTING)) {
             val event = PlayerToggleSprintEvent(player, false)
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 player.sendData(player)
             } else {
                 player.setSprinting(false)
@@ -91,7 +91,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         if (pk.inputData.contains(AuthInputAction.START_SNEAKING)) {
             val event = PlayerToggleSneakEvent(player, true)
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 player.sendData(player)
             } else {
                 player.setSneaking(true)
@@ -100,7 +100,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         if (pk.inputData.contains(AuthInputAction.STOP_SNEAKING)) {
             val event = PlayerToggleSneakEvent(player, false)
             Server.instance.pluginManager.callEvent(event)
-            if (event.isCancelled) {
+            if (event.cancelled) {
                 player.sendData(player)
             } else {
                 player.setSneaking(false)
@@ -116,7 +116,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         if (pk.inputData.contains(AuthInputAction.START_SWIMMING)) {
             val playerSwimmingEvent = PlayerToggleSwimEvent(player, true)
             Server.instance.pluginManager.callEvent(playerSwimmingEvent)
-            if (playerSwimmingEvent.isCancelled) {
+            if (playerSwimmingEvent.cancelled) {
                 player.sendData(player)
             } else {
                 player.setSwimming(true)
@@ -125,7 +125,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         if (pk.inputData.contains(AuthInputAction.STOP_SWIMMING)) {
             val playerSwimmingEvent = PlayerToggleSwimEvent(player, false)
             Server.instance.pluginManager.callEvent(playerSwimmingEvent)
-            if (playerSwimmingEvent.isCancelled) {
+            if (playerSwimmingEvent.cancelled) {
                 player.sendData(player)
             } else {
                 player.setSwimming(false)
@@ -134,7 +134,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         if (pk.inputData.contains(AuthInputAction.START_GLIDING)) {
             val playerToggleGlideEvent = PlayerToggleGlideEvent(player, true)
             Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
-            if (playerToggleGlideEvent.isCancelled) {
+            if (playerToggleGlideEvent.cancelled) {
                 player.sendData(player)
             } else {
                 player.setGliding(true)
@@ -143,7 +143,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         if (pk.inputData.contains(AuthInputAction.STOP_GLIDING)) {
             val playerToggleGlideEvent = PlayerToggleGlideEvent(player, false)
             Server.instance.pluginManager.callEvent(playerToggleGlideEvent)
-            if (playerToggleGlideEvent.isCancelled) {
+            if (playerToggleGlideEvent.cancelled) {
                 player.sendData(player)
             } else {
                 player.setGliding(false)
@@ -157,7 +157,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
             }
             val playerToggleFlightEvent = PlayerToggleFlightEvent(player, true)
             Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
-            if (playerToggleFlightEvent.isCancelled) {
+            if (playerToggleFlightEvent.cancelled) {
                 player.adventureSettings.update()
             } else {
                 player.adventureSettings[AdventureSettings.Type.FLYING] = playerToggleFlightEvent.isFlying
@@ -166,7 +166,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         if (pk.inputData.contains(AuthInputAction.STOP_FLYING)) {
             val playerToggleFlightEvent = PlayerToggleFlightEvent(player, false)
             Server.instance.pluginManager.callEvent(playerToggleFlightEvent)
-            if (playerToggleFlightEvent.isCancelled) {
+            if (playerToggleFlightEvent.cancelled) {
                 player.adventureSettings.update()
             } else {
                 player.adventureSettings[AdventureSettings.Type.FLYING] = playerToggleFlightEvent.isFlying

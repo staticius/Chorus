@@ -133,7 +133,7 @@ open class BlockFenceGate @JvmOverloads constructor(blockState: BlockState = Com
         val event = DoorToggleEvent(this, player!!)
         Server.instance.pluginManager.callEvent(event)
 
-        if (event.isCancelled) {
+        if (event.cancelled) {
             return false
         }
 

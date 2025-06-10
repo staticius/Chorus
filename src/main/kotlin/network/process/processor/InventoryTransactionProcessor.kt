@@ -101,9 +101,9 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
             InventoryTransactionPacket.USE_ITEM_ON_ENTITY_ACTION_INTERACT -> {
                 val playerInteractEntityEvent =
                     PlayerInteractEntityEvent(player, target, item, useItemOnEntityData.clickPos)
-                if (player.isSpectator) playerInteractEntityEvent.setCancelled()
+                if (player.isSpectator) playerInteractEntityEvent.cancelled = true
                 Server.instance.pluginManager.callEvent(playerInteractEntityEvent)
-                if (playerInteractEntityEvent.isCancelled) {
+                if (playerInteractEntityEvent.cancelled) {
                     return
                 }
                 if (target !is EntityArmorStand) {
@@ -202,13 +202,13 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     if (item.applyEnchantments()) enchantments else null
                 )
                 entityDamageByEntityEvent.isBreakShield = item.canBreakShield()
-                if (player.isSpectator) entityDamageByEntityEvent.setCancelled()
+                if (player.isSpectator) entityDamageByEntityEvent.cancelled = true
                 if ((target is Player) && !player.level!!.gameRules.getBoolean(GameRule.PVP)) {
-                    entityDamageByEntityEvent.setCancelled()
+                    entityDamageByEntityEvent.cancelled = true
                 }
 
                 //保存攻击的目标在lastAttackEntity
-                if (!entityDamageByEntityEvent.isCancelled) {
+                if (!entityDamageByEntityEvent.cancelled) {
                     playerHandle.setLastAttackEntity(entityDamageByEntityEvent.entity)
                 }
                 if (target is EntityLiving) {
@@ -394,7 +394,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 val interactEvent =
                     PlayerInteractEvent(player, item, directionVector, face, PlayerInteractEvent.Action.RIGHT_CLICK_AIR)
                 Server.instance.pluginManager.callEvent(interactEvent)
-                if (interactEvent.isCancelled) {
+                if (interactEvent.cancelled) {
                     if (interactEvent.item != null && interactEvent.item.isArmor) {
                         player.inventory.sendArmorContents(player)
                     }
@@ -445,7 +445,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
 
             val ev: PlayerDropItemEvent
             Server.instance.pluginManager.callEvent(PlayerDropItemEvent(player, item).also { ev = it })
-            if (ev.isCancelled) {
+            if (ev.cancelled) {
                 player.inventory.sendContents(player)
                 return
             }

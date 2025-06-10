@@ -46,7 +46,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                     block.growth = growth + 4
                     val ev = BlockGrowEvent(this, block)
                     instance.pluginManager.callEvent(ev)
-                    if (!ev.isCancelled) {
+                    if (!ev.cancelled) {
                         level.setBlock(this.position, ev.newState, direct = false, update = true)
                     } else {
                         return type
@@ -58,7 +58,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                     block.growth = maxGrowth
                     val ev = BlockGrowEvent(this, block)
                     instance.pluginManager.callEvent(ev)
-                    if (!ev.isCancelled) {
+                    if (!ev.cancelled) {
                         level.setBlock(this.position, ev.newState, direct = false, update = true)
                     } else {
                         return type
@@ -73,7 +73,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                 block.growth = maxGrowth
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
-                if (!ev.isCancelled) {
+                if (!ev.cancelled) {
                     level.setBlock(down().position, ev.newState, direct = false, update = true)
                 } else {
                     return type
@@ -83,7 +83,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                 block.growth = 0
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
-                if (!ev.isCancelled) {
+                if (!ev.cancelled) {
                     level.setBlock(down().position, ev.newState, direct = false, update = true)
                 }
             }
@@ -110,7 +110,7 @@ open class BlockCaveVines @JvmOverloads constructor(blockState: BlockState = Com
                 block.growth = max
                 val ev = BlockGrowEvent(this, block)
                 instance.pluginManager.callEvent(ev)
-                if (ev.isCancelled) {
+                if (ev.cancelled) {
                     return false
                 }
                 level.setBlock(this.position, ev.newState, direct = false, update = true)

@@ -27,7 +27,7 @@ class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
         }
         val playerCommandPreprocessEvent = PlayerCommandPreprocessEvent(playerHandle.player, pk.command)
         Server.instance.pluginManager.callEvent(playerCommandPreprocessEvent)
-        if (playerCommandPreprocessEvent.isCancelled) {
+        if (playerCommandPreprocessEvent.cancelled) {
             return
         }
         Server.instance.executeCommand(playerCommandPreprocessEvent.player, playerCommandPreprocessEvent.message!!)

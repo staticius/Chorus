@@ -129,7 +129,7 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
 
         val ev = InventoryOpenEvent(this, who)
         Server.instance.pluginManager.callEvent(ev)
-        if (ev.isCancelled) {
+        if (ev.cancelled) {
             return false
         }
         this.onOpen(who)
