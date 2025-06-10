@@ -24,18 +24,20 @@ import org.chorus_oss.chorus.utils.EventException
 abstract class Event {
     protected var name: String? = null
 
-    open var cancelled: Boolean = false
+    protected var cancel = false
+
+    open var cancelled: Boolean
         get() {
             if (this !is Cancellable) {
                 throw EventException("Event is not Cancellable")
             }
-            return field // TODO: field
+            return cancel // TODO: field
         }
         set(value) {
             if (this !is Cancellable) {
                 throw EventException("Event is not Cancellable")
             }
-            field = value
+            cancel = value
         }
 
     fun getSafeName(): String {

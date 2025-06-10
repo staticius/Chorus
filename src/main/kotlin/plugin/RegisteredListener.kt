@@ -14,7 +14,7 @@ class RegisteredListener(
     @Throws(EventException::class)
     fun callEvent(event: Event) {
         if (event is Cancellable) {
-            if (event.isCancelled && isIgnoringCancelled) {
+            if (event.cancelled && isIgnoringCancelled) {
                 return
             }
         }

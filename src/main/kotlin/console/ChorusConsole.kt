@@ -46,7 +46,7 @@ class ChorusConsole(private val server: Server) : SimpleTerminalConsole() {
 
     override fun buildReader(builder: LineReaderBuilder): LineReader {
         builder.completer(ChorusConsoleCompleter(server))
-        builder.appName("PowerNukkitX")
+        builder.appName("Chorus")
         builder.option(LineReader.Option.HISTORY_BEEP, false)
         builder.option(LineReader.Option.HISTORY_IGNORE_DUPS, true)
         builder.option(LineReader.Option.HISTORY_IGNORE_SPACE, true)
