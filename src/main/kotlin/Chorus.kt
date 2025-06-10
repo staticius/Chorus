@@ -12,10 +12,7 @@ import org.chorus_oss.chorus.nbt.stream.PGZIPOutputStream
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.chorus.utils.Utils.dynamic
 import java.io.*
-import java.nio.file.Files
-import java.nio.file.Paths
 import java.util.*
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  *   _____  _
@@ -41,33 +38,30 @@ object Chorus : Loggable {
     var ANSI: Boolean = true
     var TITLE: Boolean = false
     var shortTitle: Boolean = requiresShortTitle()
-    var DEBUG: Int = 1
-    var CHROME_DEBUG_PORT: Int = -1
-    var JS_DEBUG_LIST: List<String> = LinkedList()
 
     @JvmStatic
     fun main(args: Array<String>) {
         ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.DISABLED)
 
-        val disableSentry = AtomicBoolean(false)
-        disableSentry.set(System.getProperty("disableSentry", "false").toBoolean())
-
-        val propertiesPath = Paths.get(DATA_PATH, "server.properties")
-        if (!disableSentry.get() && Files.isRegularFile(propertiesPath)) {
-            val properties = Properties()
-            try {
-                FileReader(propertiesPath.toFile()).use { reader ->
-                    properties.load(reader)
-                    var value = properties.getProperty("disable-auto-bug-report", "false")
-                    if (value.equals("on", ignoreCase = true) || value == "1") {
-                        value = "true"
-                    }
-                    disableSentry.set(value.lowercase().toBoolean())
-                }
-            } catch (e: IOException) {
-                log.error("Failed to load server.properties to check disable-auto-bug-report.", e)
-            }
-        }
+//        val disableSentry = AtomicBoolean(false)
+//        disableSentry.set(System.getProperty("disableSentry", "false").toBoolean())
+//
+//        val propertiesPath = Paths.get(DATA_PATH, "server.properties")
+//        if (!disableSentry.get() && Files.isRegularFile(propertiesPath)) {
+//            val properties = Properties()
+//            try {
+//                FileReader(propertiesPath.toFile()).use { reader ->
+//                    properties.load(reader)
+//                    var value = properties.getProperty("disable-auto-bug-report", "false")
+//                    if (value.equals("on", ignoreCase = true) || value == "1") {
+//                        value = "true"
+//                    }
+//                    disableSentry.set(value.lowercase().toBoolean())
+//                }
+//            } catch (e: IOException) {
+//                log.error("Failed to load server.properties to check disable-auto-bug-report.", e)
+//            }
+//        }
 
         // Force IPv4 since Chorus is not compatible with IPv6
         System.setProperty("java.net.preferIPv4Stack", "true")
@@ -98,16 +92,6 @@ object Chorus : Loggable {
             parser.accepts("language", "Set a predefined language").withOptionalArg().ofType(
                 String::class.java
             )
-        val chromeDebugPortSpec: OptionSpec<Int> =
-            parser.accepts("chrome-debug", "Debug javascript using chrome dev tool with specific port.")
-                .withRequiredArg().ofType(
-                    Int::class.java
-                )
-        val jsDebugPortSpec: OptionSpec<String> =
-            parser.accepts("js-debug", "Debug javascript using chrome dev tool with specific port.").withRequiredArg()
-                .ofType(
-                    String::class.java
-                )
 
         // Parse arguments
         val options = parser.parse(*args)
@@ -116,7 +100,7 @@ object Chorus : Loggable {
             try {
                 // Display help page
                 parser.printHelpOn(System.out)
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 // ignore
             }
             return
@@ -133,22 +117,12 @@ object Chorus : Loggable {
             try {
                 val level = Level.valueOf(verbosity)
                 logLevel = level
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 // ignore
             }
         }
 
         val language = options.valueOf(languageSpec)
-
-        if (options.has(chromeDebugPortSpec)) {
-            CHROME_DEBUG_PORT = options.valueOf(chromeDebugPortSpec)
-        }
-
-        if (options.has(jsDebugPortSpec)) {
-            JS_DEBUG_LIST =
-                Arrays.stream(options.valueOf(jsDebugPortSpec).split(",".toRegex()).dropLastWhile { it.isEmpty() }
-                    .toTypedArray()).toList()
-        }
 
         try {
             if (TITLE) {
@@ -193,7 +167,7 @@ object Chorus : Loggable {
             val properties = Properties()
             try {
                 properties.load(gitFileStream)
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 return null
             }
             return properties
@@ -226,7 +200,7 @@ object Chorus : Loggable {
                         }
                     }
                 }
-            } catch (e: IOException) {
+            } catch (_: IOException) {
                 return "Unknown-Chorus-SNAPSHOT"
             }
         }

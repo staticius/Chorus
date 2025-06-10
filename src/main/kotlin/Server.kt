@@ -162,7 +162,6 @@ class Server internal constructor(
     private var maxTick = 20f
     private var maxUse = 0f
 
-    private var sendUsageTicker = 0
     private var console: ChorusConsole
 
     private var consoleJob: Job
@@ -238,8 +237,6 @@ class Server internal constructor(
 
     var serverID: UUID
         private set
-
-    private val uniquePlayers: MutableSet<UUID> = HashSet()
 
     private val players: MutableMap<InetSocketAddress?, Player> = ConcurrentHashMap()
     private val playerList: MutableMap<UUID, Player> = ConcurrentHashMap()
@@ -376,8 +373,6 @@ class Server internal constructor(
         if (targetLevel != null && targetLevel.intLevel() > currentLevel!!.intLevel()) {
             Chorus.logLevel = targetLevel
         }
-
-        log.info("Loading {}...", TextFormat.GREEN.toString() + "server.properties" + TextFormat.RESET)
 
         this.checkLoginTime = settings.serverSettings.checkLoginTime
 
@@ -927,11 +922,6 @@ class Server internal constructor(
             this.doAutoSave()
         }
 
-        if (this.sendUsageTicker > 0 && --this.sendUsageTicker == 0) {
-            this.sendUsageTicker = 6000
-            //todo sendUsage
-        }
-
         val nowNano = System.nanoTime()
         val tick = min(20.0, 1000000000 / max(1000000.0, (nowNano.toDouble() - tickTimeNano))).toFloat()
         val use = min(1.0, ((nowNano - tickTimeNano).toDouble()) / 50000000).toFloat()
@@ -1269,9 +1259,6 @@ class Server internal constructor(
         }
 
         players[socketAddress] = player
-        if (this.sendUsageTicker > 0) {
-            uniquePlayers.add(player.getUUID())
-        }
     }
 
     @ApiStatus.Internal
