@@ -18,7 +18,6 @@ import org.chorus_oss.chorus.blockentity.BlockEntitySpawnable
 import org.chorus_oss.chorus.camera.data.CameraPreset.Companion.presets
 import org.chorus_oss.chorus.command.CommandSender
 import org.chorus_oss.chorus.command.utils.RawText
-import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import org.chorus_oss.chorus.dialog.window.FormWindowDialog
 import org.chorus_oss.chorus.entity.*
 import org.chorus_oss.chorus.entity.Attribute.Companion.getAttribute
@@ -2455,7 +2454,7 @@ open class Player(
     }
 
     fun awardAchievement(achievementId: String): Boolean {
-        if (!Server.instance.properties[ServerPropertiesKeys.ACHIEVEMENTS, true]) {
+        if (!Server.instance.settings.levelSettings.default.achievements) {
             return false
         }
 

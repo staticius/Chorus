@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.network.process.processor
 
 import org.chorus_oss.chorus.PlayerHandle
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.TextPacket

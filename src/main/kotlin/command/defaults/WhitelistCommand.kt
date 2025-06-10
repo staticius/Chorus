@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.tree.node.StringNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import org.chorus_oss.chorus.utils.TextFormat
 import kotlin.collections.set
 

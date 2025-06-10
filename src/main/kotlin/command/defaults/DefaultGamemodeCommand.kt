@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.command.data.CommandParamType
 import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import kotlin.collections.set
 
 class DefaultGamemodeCommand(name: String) : VanillaCommand(name, "commands.defaultgamemode.description") {
@@ -45,7 +44,7 @@ class DefaultGamemodeCommand(name: String) : VanillaCommand(name, "commands.defa
 
         val valid = gameMode in 0..3
         if (valid) {
-            Server.instance.properties[ServerPropertiesKeys.GAMEMODE, gameMode]
+            Server.instance.settings.levelSettings.default.gamemode = gameMode
             log.addSuccess("commands.defaultgamemode.success", Server.getGamemodeString(gameMode)).output()
             return 1
         } else {

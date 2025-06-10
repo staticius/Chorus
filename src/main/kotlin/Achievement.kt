@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus
 
-import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import org.chorus_oss.chorus.utils.TextFormat
 
 class Achievement(val message: String, vararg requires: String) {
@@ -10,8 +9,7 @@ class Achievement(val message: String, vararg requires: String) {
         val translation: String = Server.instance.baseLang
             .tr("chat.type.achievement", player.displayName, TextFormat.GREEN.toString() + this.message)
 
-        if (Server.instance.properties
-                .get(ServerPropertiesKeys.ANNOUNCE_PLAYER_ACHIEVEMENTS, true)
+        if (Server.instance.settings.levelSettings.default.announceAchievements
         ) {
             Server.instance.broadcastMessage(translation)
         } else {
@@ -46,8 +44,7 @@ class Achievement(val message: String, vararg requires: String) {
                 TextFormat.GREEN.toString() + achievements[achievementId]!!.message + TextFormat.RESET
             )
 
-            if (Server.instance.properties
-                    .get(ServerPropertiesKeys.ANNOUNCE_PLAYER_ACHIEVEMENTS, true)
+            if (Server.instance.settings.levelSettings.default.announceAchievements
             ) {
                 Server.instance.broadcastMessage(translation)
             } else {

@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.network.process.handler
 
 
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.connection.util.EncryptionUtils.createHandshakeJwt
 import org.chorus_oss.chorus.network.connection.util.EncryptionUtils.createKeyPair

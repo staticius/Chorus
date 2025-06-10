@@ -6,7 +6,6 @@ import org.chorus_oss.chorus.PlayerHandle
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.blockentity.BlockEntitySpawnable
-import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import org.chorus_oss.chorus.entity.EntityLiving
 import org.chorus_oss.chorus.entity.data.EntityFlag
 import org.chorus_oss.chorus.entity.mob.EntityArmorStand
@@ -172,7 +171,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 } else if (target is Player) {
                     if ((target.gamemode and 0x01) > 0) {
                         return
-                    } else if (!Server.instance.properties.get(ServerPropertiesKeys.PVP, true)) {
+                    } else if (!Server.instance.settings.levelSettings.default.pvp) {
                         return
                     }
                 }

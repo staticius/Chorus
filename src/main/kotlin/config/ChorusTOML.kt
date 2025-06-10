@@ -149,6 +149,9 @@ class ChorusTOML {
 
     @Serializable
     class LevelSettings {
+        @SerialName("default")
+        var default: DefaultSettings = DefaultSettings()
+
         @TomlComments("Enable dynamic tick rate")
         @SerialName("auto-tick-rate")
         var autoTickRate: Boolean = true
@@ -180,6 +183,53 @@ class ChorusTOML {
         @TomlComments("Enable level multi-threading")
         @SerialName("level-thread")
         var levelThread: Boolean = false
+
+        @Serializable
+        class DefaultSettings {
+            var name: String = "world"
+
+            var seed: String = ""
+
+            @SerialName("spawn-protection")
+            var spawnProtection: Int = 16
+
+            @SerialName("allow-nether")
+            var allowNether: Boolean = true
+
+            @SerialName("allow-the-end")
+            var allowTheEnd: Boolean = true
+
+            @SerialName("auto-save")
+            var autoSave: Boolean = true
+
+            @SerialName("spawn-mobs")
+            var spawnMobs: Boolean = true
+
+            @SerialName("spawn-monsters")
+            var spawnMonsters: Boolean = true
+
+            @SerialName("view-distance")
+            var viewDistance: Int = 8
+
+            var achievements: Boolean = true
+
+            @SerialName("announce-achievements")
+            var announceAchievements: Boolean = true
+
+            @SerialName("allow-flight")
+            var allowFlight: Boolean = false
+
+            var gamemode: Int = 0
+
+            @SerialName("force-gamemode")
+            var forceGamemode: Boolean = false
+
+            var hardcore: Boolean = false
+
+            var pvp: Boolean = true
+
+            var difficulty: Int = 1
+        }
     }
 
     @Serializable

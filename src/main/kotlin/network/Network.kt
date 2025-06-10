@@ -16,7 +16,6 @@ import io.netty.channel.socket.DatagramChannel
 import io.netty.channel.socket.nio.NioDatagramChannel
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import org.chorus_oss.chorus.network.connection.BedrockPeer
 import org.chorus_oss.chorus.network.connection.BedrockPong
 import org.chorus_oss.chorus.network.connection.BedrockSession

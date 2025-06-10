@@ -15,8 +15,6 @@ import org.chorus_oss.chorus.command.defaults.WorldCommand
 import org.chorus_oss.chorus.command.function.FunctionManager
 import org.chorus_oss.chorus.compression.ZlibChooser.setProvider
 import org.chorus_oss.chorus.config.ChorusTOML
-import org.chorus_oss.chorus.config.ServerProperties
-import org.chorus_oss.chorus.config.ServerPropertiesKeys
 import org.chorus_oss.chorus.console.ChorusConsole
 import org.chorus_oss.chorus.dispenser.DispenseBehaviorRegister
 import org.chorus_oss.chorus.entity.Attribute
@@ -126,9 +124,7 @@ class Server internal constructor(
     val pluginPath: String = File(pluginPath).absolutePath + "/"
     val commandDataPath: String = File(dataPath).absolutePath + "/command_data"
 
-    val properties: ServerProperties = ServerProperties(this.dataPath)
-
-    lateinit var bannedPlayers: BanList
+    var bannedPlayers: BanList
         private set
 
     var bannedIPs: BanList
@@ -207,7 +203,8 @@ class Server internal constructor(
         private set
 
     private var serverAuthoritativeMovementMode = 0
-    val allowFlight: Boolean = properties[ServerPropertiesKeys.ALLOW_FLIGHT, false]
+    val allowFlight: Boolean
+        get() = settings.levelSettings.default.allowFlight
     private var difficulty = Int.MAX_VALUE
     var defaultGamemode: Int = Int.MAX_VALUE
         /**
@@ -290,8 +287,10 @@ class Server internal constructor(
     var defaultNether: Level? = null
     var defaultEnd: Level? = null
 
-    val allowNether: Boolean = properties[ServerPropertiesKeys.ALLOW_NETHER, true]
-    val allowEnd: Boolean = properties[ServerPropertiesKeys.ALLOW_THE_END, true]
+    val allowNether: Boolean
+        get() = settings.levelSettings.default.allowNether
+    val allowEnd: Boolean
+        get() = settings.levelSettings.default.allowTheEnd
 
     /** */
     init {
@@ -421,9 +420,9 @@ class Server internal constructor(
         this.bannedIPs = BanList(this.dataPath + "banned-ips.json")
         bannedIPs.load()
         this.maxPlayers = settings.serverSettings.maxPlayers
-        this.setAutoSave(properties[ServerPropertiesKeys.AUTO_SAVE, true])
-        if (properties[ServerPropertiesKeys.HARDCORE, false] && this.getDifficulty() < 3) {
-            properties[ServerPropertiesKeys.DIFFICULTY, 3]
+        this.setAutoSave(settings.levelSettings.default.autoSave)
+        if (settings.levelSettings.default.hardcore && this.getDifficulty() < 3) {
+            settings.levelSettings.default.difficulty = 3
         }
 
         log.info(
@@ -505,8 +504,6 @@ class Server internal constructor(
         this.network = Network(this)
         tickingAreaManager.loadAllTickingArea()
 
-        properties.save()
-
         if (this.defaultLevel == null) {
             log.error(this.baseLang.tr("chorus.level.defaultError"))
             this.forceShutdown()
@@ -548,11 +545,11 @@ class Server internal constructor(
         }
 
         if (this.defaultLevel == null) {
-            var levelFolder = properties.get(ServerPropertiesKeys.LEVEL_NAME, "world")
+            var levelFolder = settings.levelSettings.default.name
             if (levelFolder.trim { it <= ' ' }.isEmpty()) {
                 log.warn("level-name cannot be null, using default")
                 levelFolder = "world"
-                properties.get(ServerPropertiesKeys.LEVEL_NAME, levelFolder)
+                settings.levelSettings.default.name = levelFolder
             }
 
             if (!this.loadLevel(levelFolder)) {
@@ -561,8 +558,7 @@ class Server internal constructor(
                 val generatorConfig = HashMap<Int, GeneratorConfig>()
                 //spawn seed
                 val seed: Long
-                val seedString =
-                    properties.get(ServerPropertiesKeys.LEVEL_SEED, System.currentTimeMillis()).toString()
+                val seedString = settings.levelSettings.default.seed
                 seed = try {
                     seedString.toLong()
                 } catch (e: NumberFormatException) {
@@ -607,11 +603,10 @@ class Server internal constructor(
         pluginManager.clearPlugins()
         commandMap.clearCommands()
 
-        log.info("Reloading properties...")
-        properties.reload()
         this.maxPlayers = settings.serverSettings.maxPlayers
-        if (properties[ServerPropertiesKeys.HARDCORE, false] && this.getDifficulty() < 3) {
-            properties[ServerPropertiesKeys.DIFFICULTY, 3.also { difficulty = it }]
+        if (settings.levelSettings.default.hardcore && this.getDifficulty() < 3) {
+            difficulty = 3
+            settings.levelSettings.default.difficulty = difficulty
         }
 
         bannedIPs.load()
@@ -2212,7 +2207,7 @@ class Server internal constructor(
         /**
          * @return 可视距离<br></br>server view distance
          */
-        get() = properties[ServerPropertiesKeys.VIEW_DISTANCE, 10]
+        get() = settings.levelSettings.default.viewDistance
 
     val ip: String
         /**
@@ -2251,21 +2246,10 @@ class Server internal constructor(
          *
          * @return gamemode id
          */
-        get() {
-            return try {
-                properties[ServerPropertiesKeys.GAMEMODE, 0] and 3
-            } catch (exception: NumberFormatException) {
-                getGamemodeFromString(
-                    properties.get(
-                        ServerPropertiesKeys.GAMEMODE,
-                        "survival"
-                    )
-                ) and 3
-            }
-        }
+        get() = settings.levelSettings.default.gamemode and 3
 
     val forceGamemode: Boolean
-        get() = properties[ServerPropertiesKeys.FORCE_GAMEMODE, false]
+        get() = settings.levelSettings.default.forceGamemode
 
     /**
      * 获得服务器游戏难度
@@ -2277,7 +2261,7 @@ class Server internal constructor(
      */
     fun getDifficulty(): Int {
         if (this.difficulty == Int.MAX_VALUE) {
-            this.difficulty = getDifficultyFromString(properties.get(ServerPropertiesKeys.DIFFICULTY, "1"))
+            this.difficulty = settings.levelSettings.default.difficulty
         }
         return this.difficulty
     }
@@ -2295,7 +2279,7 @@ class Server internal constructor(
         if (value < 0) value = 0
         if (value > 3) value = 3
         this.difficulty = value
-        properties[ServerPropertiesKeys.DIFFICULTY, value]
+        settings.levelSettings.default.difficulty = value
     }
 
     /**
@@ -2309,13 +2293,13 @@ class Server internal constructor(
         /**
          * @return 得到服务器出生点保护半径<br></br>Get server birth point protection radius
          */
-        get() = properties[ServerPropertiesKeys.SPAWN_PROTECTION, 16]
+        get() = settings.levelSettings.default.spawnProtection
 
     val isHardcore: Boolean
         /**
          * @return 服务器是否为硬核模式<br></br>Whether the server is in hardcore mode
          */
-        get() = properties[ServerPropertiesKeys.HARDCORE, false]
+        get() = settings.levelSettings.default.hardcore
 
     var motd: String
         /**
