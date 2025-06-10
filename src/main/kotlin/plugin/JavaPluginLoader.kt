@@ -77,7 +77,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
         return this.loadPlugin(File(filename))
     }
 
-    override fun getPluginDescription(file: File): PluginDescription? {
+    override fun getPluginDescription(file: File): PluginTOML? {
         try {
             JarFile(file).use { jar ->
                 var entry = jar.getJarEntry("powernukkitx.yml")
@@ -91,7 +91,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
                     }
                 }
                 jar.getInputStream(entry).use { stream ->
-                    return PluginDescription.fromString(Utils.readFile(stream))
+                    return PluginTOML.fromString(Utils.readFile(stream))
                 }
             }
         } catch (e: IOException) {
@@ -99,7 +99,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
         }
     }
 
-    override fun getPluginDescription(filename: String): PluginDescription? {
+    override fun getPluginDescription(filename: String): PluginTOML? {
         return this.getPluginDescription(File(filename))
     }
 
@@ -109,7 +109,7 @@ class JavaPluginLoader(private val server: Server) : PluginLoader {
     private fun initPlugin(
         plugin: PluginBase,
         classLoader: ClassLoader,
-        description: PluginDescription,
+        description: PluginTOML,
         dataFolder: File,
         file: File
     ) {

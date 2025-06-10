@@ -85,7 +85,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
             File(".")
         }
 
-        val description = PluginDescription(
+        val description = PluginTOML(
             name = "Chorus",
             main = InternalPlugin::class.java.name,
             version = server.chorusVersion,

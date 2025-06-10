@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.permission.Permission
 import org.chorus_oss.chorus.utils.PluginException
 
 @Serializable
-class PluginDescription(
+class PluginTOML(
     var name: String,
     /**
      * The main class name of the plugin.
@@ -58,10 +58,10 @@ class PluginDescription(
         get() = "${this.name} v${this.version}"
 
     companion object {
-        fun fromString(string: String): PluginDescription {
+        fun fromString(string: String): PluginTOML {
             return Toml(
                 inputConfig = TomlInputConfig(ignoreUnknownNames = true)
-            ).decodeFromString<PluginDescription>(string)
+            ).decodeFromString<PluginTOML>(string)
         }
     }
 }

@@ -74,7 +74,7 @@ interface PluginLoader {
      * @see .getPluginDescription
      *
      */
-    fun getPluginDescription(filename: String): PluginDescription?
+    fun getPluginDescription(filename: String): PluginTOML?
 
     /**
      * 通过插件的 `File`对象，来获得描述这个插件的 `PluginDescription`对象。<br></br>
@@ -90,7 +90,7 @@ interface PluginLoader {
      * @see .getPluginDescription
      *
      */
-    fun getPluginDescription(file: File): PluginDescription?
+    fun getPluginDescription(file: File): PluginTOML?
 
     /**
      * 返回这个插件加载器支持的文件类型。<br></br>

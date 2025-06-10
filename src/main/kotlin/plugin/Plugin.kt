@@ -17,7 +17,7 @@ import java.io.InputStream
  *
  * @see org.chorus_oss.chorus.plugin.PluginBase
  *
- * @see org.chorus_oss.chorus.plugin.PluginDescription
+ * @see org.chorus_oss.chorus.plugin.PluginTOML
  *
  *
  */
@@ -102,19 +102,19 @@ interface Plugin : CommandExecutor {
     val dataFolder: File?
 
     /**
-     * 返回描述这个Nukkit插件的[PluginDescription]对象。<br></br>
-     * The description this Nukkit plugin as a [PluginDescription] object.
+     * 返回描述这个Nukkit插件的[PluginTOML]对象。<br></br>
+     * The description this Nukkit plugin as a [PluginTOML] object.
      *
      *
      * 对于jar格式的Nukkit插件，插件的描述在plugin.yml文件内定义。<br></br>
      * For jar-packed Nukkit plugins, the description is defined in the 'plugin.yml' file.
      *
      * @return 这个插件的描述。<br></br>A description of this plugin.
-     * @see org.chorus_oss.chorus.plugin.PluginDescription
+     * @see org.chorus_oss.chorus.plugin.PluginTOML
      *
      *
      */
-    val description: PluginDescription
+    val description: PluginTOML
 
     /**
      * 读取这个插件特定的资源文件，并返回为`InputStream`对象。<br></br>

@@ -63,7 +63,7 @@ interface CommandSender : Permissible {
      * @return 命令发送者的名称.<br></br>the name of the command sender.
      * @see org.chorus_oss.chorus.Player.getName
      * @see org.chorus_oss.chorus.command.ConsoleCommandSender.getName
-     * @see org.chorus_oss.chorus.plugin.PluginDescription
+     * @see org.chorus_oss.chorus.plugin.PluginTOML
      *
      *
      */

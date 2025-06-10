@@ -17,7 +17,7 @@ import java.io.InputStream
  * 一般的Nukkit插件需要继承的类。<br></br>
  * A class to be extended by a normal Nukkit plugin.
  *
- * @see org.chorus_oss.chorus.plugin.PluginDescription
+ * @see org.chorus_oss.chorus.plugin.PluginTOML
  */
 
 abstract class PluginBase : Plugin {
@@ -51,7 +51,7 @@ abstract class PluginBase : Plugin {
      */
     var isInitialized: Boolean = false
         private set
-    override lateinit var description: PluginDescription
+    override lateinit var description: PluginTOML
         protected set
     override var dataFolder: File? = null
         protected set
@@ -115,7 +115,7 @@ abstract class PluginBase : Plugin {
         loader: PluginLoader,
         classLoader: ClassLoader,
         server: Server,
-        description: PluginDescription,
+        description: PluginTOML,
         dataFolder: File,
         file: File
     ) {
@@ -266,7 +266,7 @@ abstract class PluginBase : Plugin {
          * `HelloWorld v1.0.0`
          *
          * @return 这个插件完整的名字。<br></br>The full name of this plugin.
-         * @see org.chorus_oss.chorus.plugin.PluginDescription.getFullName
+         * @see org.chorus_oss.chorus.plugin.PluginTOML.getFullName
          *
          *
          */
