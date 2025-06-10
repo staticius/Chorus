@@ -30,7 +30,7 @@ import org.chorus_oss.chorus.event.player.PlayerLoginEvent
 import org.chorus_oss.chorus.event.server.ServerStartedEvent
 import org.chorus_oss.chorus.event.server.ServerStopEvent
 import org.chorus_oss.chorus.item.enchantment.Enchantment
-import org.chorus_oss.chorus.lang.BaseLang
+import org.chorus_oss.chorus.lang.Lang
 import org.chorus_oss.chorus.lang.LangCode
 import org.chorus_oss.chorus.lang.TextContainer
 import org.chorus_oss.chorus.level.DimensionEnum
@@ -229,7 +229,7 @@ class Server internal constructor(
     private var autoSaveTicker = 0
     private var autoSaveTicks = 6000
 
-    var baseLang: BaseLang
+    var lang: Lang
         private set
 
     var baseLangCode: LangCode
@@ -355,7 +355,7 @@ class Server internal constructor(
             val configInstance = Config(config)
             chooseLanguage = configInstance.getString("settings.language", "eng")
         }
-        this.baseLang = BaseLang(chooseLanguage)
+        this.lang = Lang(chooseLanguage)
         this.baseLangCode = mapInternalLang(chooseLanguage)
         log.info("Loading {}...", TextFormat.GREEN.toString() + "chorus.toml" + TextFormat.RESET)
 
@@ -376,9 +376,9 @@ class Server internal constructor(
 
         this.checkLoginTime = settings.serverSettings.checkLoginTime
 
-        log.info(this.baseLang.tr("language.selected", baseLang.name, baseLang.getLang()))
+        log.info(this.lang.tr("language.selected", lang.name, lang.getLang()))
         log.info(
-            this.baseLang.tr(
+            this.lang.tr(
                 "chorus.server.start",
                 TextFormat.AQUA.toString() + this.version + TextFormat.RESET
             )
@@ -422,14 +422,14 @@ class Server internal constructor(
         }
 
         log.info(
-            this.baseLang.tr(
+            this.lang.tr(
                 "chorus.server.info",
                 name,
                 TextFormat.YELLOW.toString() + this.chorusVersion + TextFormat.RESET + " (" + TextFormat.YELLOW + this.gitCommit + TextFormat.RESET + ")" + TextFormat.RESET,
                 apiVersion
             )
         )
-        log.info(this.baseLang.tr("chorus.server.license"))
+        log.info(this.lang.tr("chorus.server.license"))
         this.consoleSender = ConsoleCommandSender()
 
         run {
@@ -501,7 +501,7 @@ class Server internal constructor(
         tickingAreaManager.loadAllTickingArea()
 
         if (this.defaultLevel == null) {
-            log.error(this.baseLang.tr("chorus.level.defaultError"))
+            log.error(this.lang.tr("chorus.level.defaultError"))
             this.forceShutdown()
 
             throw RuntimeException()
@@ -742,21 +742,21 @@ class Server internal constructor(
         this.tick = 0
 
         log.info(
-            this.baseLang.tr(
+            this.lang.tr(
                 "chorus.server.defaultGameMode", getGamemodeString(
                     gamemode
                 )
             )
         )
         log.info(
-            this.baseLang.tr(
+            this.lang.tr(
                 "chorus.server.networkStart",
                 TextFormat.YELLOW.toString() + (ip.ifEmpty { "*" }),
                 TextFormat.YELLOW.toString() + port.toString()
             )
         )
         log.info(
-            this.baseLang.tr(
+            this.lang.tr(
                 "chorus.server.startFinished",
                 ((System.currentTimeMillis() - Chorus.START_TIME).toDouble() / 1000).toString()
             )
@@ -860,7 +860,7 @@ class Server internal constructor(
                     }
                 } catch (e: Exception) {
                     log.error(
-                        this.baseLang.tr(
+                        this.lang.tr(
                             "chorus.level.tickError",
                             level.folderPath, getExceptionMessage(e)
                         ), e
@@ -1586,12 +1586,12 @@ class Server internal constructor(
                 return readCompressed(bytes)
             }
         } catch (e: IOException) {
-            log.warn(this.baseLang.tr("chorus.data.playerCorrupted", uuid), e)
+            log.warn(this.lang.tr("chorus.data.playerCorrupted", uuid), e)
         }
 
         if (create) {
             if (settings.playerSettings.savePlayerData) {
-                log.info(this.baseLang.tr("chorus.data.playerNotFound", uuid))
+                log.info(this.lang.tr("chorus.data.playerNotFound", uuid))
             }
             val spawn = defaultLevel!!.safeSpawn
             val nbt = CompoundTag()
@@ -1967,7 +1967,7 @@ class Server internal constructor(
         val jpath = Path.of(path)
         path = jpath.toString()
         if (!jpath.toFile().exists()) {
-            log.warn(this.baseLang.tr("chorus.level.notFound", levelFolderName))
+            log.warn(this.lang.tr("chorus.level.notFound", levelFolderName))
             return null
         }
 
@@ -1984,7 +1984,7 @@ class Server internal constructor(
             //verify the provider
             val provider = getProvider(path)
             if (provider == null) {
-                log.error(this.baseLang.tr("chorus.level.loadError", levelFolderName, "Unknown provider"))
+                log.error(this.lang.tr("chorus.level.loadError", levelFolderName, "Unknown provider"))
                 return null
             }
             val map: MutableMap<Int, GeneratorConfig> = HashMap()
@@ -2035,14 +2035,14 @@ class Server internal constructor(
             val level: Level
             try {
                 if (!LevelDBProvider.isValid(pathS)) {
-                    log.error(this.baseLang.tr("chorus.level.loadError", levelFolderName1, "the level does not exist"))
+                    log.error(this.lang.tr("chorus.level.loadError", levelFolderName1, "the level does not exist"))
                     return false
                 }
                 level = Level(
                     levelName, pathS, generators.size, LevelDBProvider::class.java, value
                 )
             } catch (e: Exception) {
-                log.error(this.baseLang.tr("chorus.level.loadError", levelFolderName1, e.message!!), e)
+                log.error(this.lang.tr("chorus.level.loadError", levelFolderName1, e.message!!), e)
                 return false
             }
             levels[level.id] = level
@@ -2110,7 +2110,7 @@ class Server internal constructor(
                 pluginManager.callEvent(LevelInitEvent(level))
                 pluginManager.callEvent(LevelLoadEvent(level))
             } catch (e: Exception) {
-                log.error(this.baseLang.tr("chorus.level.generationError", name, getExceptionMessage(e)), e)
+                log.error(this.lang.tr("chorus.level.generationError", name, getExceptionMessage(e)), e)
                 return false
             }
         }

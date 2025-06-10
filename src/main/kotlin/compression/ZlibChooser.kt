@@ -19,7 +19,7 @@ object ZlibChooser : Loggable {
     @JvmStatic
     fun setProvider(providerIndex: Int) {
         var providerIndex1 = providerIndex
-        val lang = Server.instance.baseLang
+        val lang = Server.instance.lang
         when (providerIndex1) {
             0 -> if (providers[providerIndex1] == null) providers[providerIndex1] = ZlibOriginal()
             1 -> if (providers[providerIndex1] == null) providers[providerIndex1] = ZlibSingleThreadLowMem()

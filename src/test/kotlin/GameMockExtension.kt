@@ -16,7 +16,7 @@ import org.chorus_oss.chorus.inventory.HumanInventory
 import org.chorus_oss.chorus.inventory.HumanOffHandInventory
 import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.item.enchantment.Enchantment
-import org.chorus_oss.chorus.lang.BaseLang
+import org.chorus_oss.chorus.lang.Lang
 import org.chorus_oss.chorus.level.*
 import org.chorus_oss.chorus.level.format.LevelConfig
 import org.chorus_oss.chorus.level.format.LevelConfig.GeneratorConfig
@@ -159,7 +159,7 @@ class GameMockExtension : MockitoExtension() {
                 Mockito.`when`(server.scheduler).thenReturn(serverScheduler)
                 Mockito.`when`(banList.entries).thenReturn(LinkedHashMap())
                 Mockito.`when`(server.bannedIPs).thenReturn(banList)
-                Mockito.`when`(server.baseLang).thenReturn(BaseLang("eng", "src/main/resources/language"))
+                Mockito.`when`(server.lang).thenReturn(Lang("eng", "src/main/resources/language"))
                 val serverSettings = ChorusTOML.load(File("chorus.toml"))
                 Mockito.`when`(server.settings).thenReturn(serverSettings)
                 Mockito.`when`(server.apiVersion).thenReturn("1.0.0")

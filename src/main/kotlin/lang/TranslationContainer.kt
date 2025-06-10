@@ -1,10 +1,10 @@
 package org.chorus_oss.chorus.lang
 
 /**
- * 一个带有多语言功能的占位符插值文本容器，多语言功能通过[BaseLang]实现.
+ * 一个带有多语言功能的占位符插值文本容器，多语言功能通过[Lang]实现.
  *
  *
- * A placeholder interpolation text container with multi-language functionality,the multilingualism is implemented via [BaseLang].
+ * A placeholder interpolation text container with multi-language functionality,the multilingualism is implemented via [Lang].
  */
 class TranslationContainer : TextContainer {
     /**

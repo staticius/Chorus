@@ -17,7 +17,6 @@ import java.lang.reflect.Method
 import java.util.*
 import java.util.function.Consumer
 import java.util.regex.Pattern
-import kotlin.Any
 import kotlin.Array
 import kotlin.Boolean
 import kotlin.Exception
@@ -184,7 +183,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
 
                             if (plugins.containsKey(name) || this.getPlugin(name) != null) {
                                 PluginManager.log.error(
-                                    server.baseLang.tr(
+                                    server.lang.tr(
                                         "chorus.plugin.duplicateError",
                                         name
                                     )
@@ -205,7 +204,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                     ) { "The getCompatibleAPI version don't match the format majorVersion.minorVersion.patch" }
                                 } catch (e: NullPointerException) {
                                     PluginManager.log.error(
-                                        server.baseLang.tr(
+                                        server.lang.tr(
                                             "chorus.plugin.loadError",
                                             name, "Wrong API format"
                                         ), e
@@ -213,7 +212,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                                     continue
                                 } catch (e: IllegalArgumentException) {
                                     PluginManager.log.error(
-                                        server.baseLang.tr(
+                                        server.lang.tr(
                                             "chorus.plugin.loadError",
                                             name, "Wrong API format"
                                         ), e
@@ -243,7 +242,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
 
                             if (compatible > 0) {
                                 PluginManager.log.error(
-                                    server.baseLang.tr(
+                                    server.lang.tr(
                                         "chorus.plugin.loadError",
                                         name, "%nukkit.plugin.incompatibleAPI"
                                     )
@@ -272,7 +271,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                         }
                     } catch (e: Exception) {
                         PluginManager.log.error(
-                            server.baseLang.tr(
+                            server.lang.tr(
                                 "nukkit.plugin" +
                                         ".fileError", file.name, dictionary.toString(), Utils
                                     .getExceptionMessage(e)
@@ -291,7 +290,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             if (loadedPlugins.containsKey(dependency) || this.getPlugin(dependency) != null) {
                                 dependencies[name]!!.remove(dependency)
                             } else if (!plugins.containsKey(dependency)) {
-                                val language = server.baseLang
+                                val language = server.lang
                                 val cause = language.tr("chorus.plugin.missingDependency", dependency)
                                 PluginManager.log.error(language.tr("chorus.plugin.loadError", name, cause))
                                 break
@@ -322,7 +321,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                         if (plugin != null) {
                             loadedPlugins[name] = plugin
                         } else {
-                            PluginManager.log.error(server.baseLang.tr("chorus.plugin.genericLoadError", name))
+                            PluginManager.log.error(server.lang.tr("chorus.plugin.genericLoadError", name))
                         }
                     }
                 }
@@ -338,7 +337,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                             if (plugin != null) {
                                 loadedPlugins[name] = plugin
                             } else {
-                                PluginManager.log.error(server.baseLang.tr("chorus.plugin.genericLoadError", name))
+                                PluginManager.log.error(server.lang.tr("chorus.plugin.genericLoadError", name))
                             }
                         }
                     }
@@ -346,7 +345,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                     if (missingDependency) {
                         for (name in plugins.keys) {
                             PluginManager.log.error(
-                                server.baseLang.tr(
+                                server.lang.tr(
                                     "chorus.plugin.loadError",
                                     name,
                                     "%nukkit.plugin.circularDependency"
@@ -555,7 +554,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                     registration.callEvent(event)
                 } catch (e: Exception) {
                     PluginManager.log.error(
-                        server.baseLang.tr(
+                        server.lang.tr(
                             "chorus.plugin.eventError",
                             event.getSafeName(),
                             registration.plugin.description.versionedName,
@@ -608,7 +607,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 if (clazz.getAnnotation<Deprecated?>(Deprecated::class.java) != null) {
                     if (java.lang.String.valueOf(server.settings.baseSettings.deprecatedVerbose).toBoolean()) {
                         PluginManager.log.warn(
-                            server.baseLang.tr(
+                            server.lang.tr(
                                 "chorus.plugin.deprecatedEvent",
                                 plugin.name,
                                 clazz.name,

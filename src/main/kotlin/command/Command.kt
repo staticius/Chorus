@@ -131,13 +131,13 @@ abstract class Command @JvmOverloads constructor(
 
         if (plugin === InternalPlugin.INSTANCE) {
             customData.description =
-                Server.instance.baseLang.tr(this.description, CommandOutputContainer.EMPTY_STRING, "commands.", false)
+                Server.instance.lang.tr(this.description, CommandOutputContainer.EMPTY_STRING, "commands.", false)
         } else if (plugin is PluginBase) {
             val i18n = PluginI18nManager.getI18n(plugin)
             if (i18n != null) {
                 customData.description = i18n.tr(player.languageCode, this.description)
             } else {
-                customData.description = Server.instance.baseLang.tr(this.description)
+                customData.description = Server.instance.lang.tr(this.description)
             }
         }
 
@@ -353,7 +353,7 @@ abstract class Command @JvmOverloads constructor(
 
             val m: TextContainer = message.clone()
             val resultStr =
-                "[" + source.name + ": " + (if (m.text != Server.instance.baseLang.tr(m.text)) "%" else "") + m.text + "]"
+                "[" + source.name + ": " + (if (m.text != Server.instance.lang.tr(m.text)) "%" else "") + m.text + "]"
 
             val users =
                 Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)

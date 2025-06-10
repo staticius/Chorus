@@ -292,7 +292,7 @@ class SimpleCommandMap(private val server: Server) : CommandMap {
             }
         } catch (e: Exception) {
             SimpleCommandMap.log.error(
-                server.baseLang.tr(
+                server.lang.tr(
                     "chorus.command.exception",
                     cmdLine,
                     target.toString(),

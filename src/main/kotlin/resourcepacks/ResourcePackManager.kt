@@ -54,7 +54,7 @@ class ResourcePackManager(private val loaders: MutableSet<ResourcePackLoader>) {
         })
 
         ResourcePackManager.log.info(
-            Server.instance.baseLang
+            Server.instance.lang
                 .tr("chorus.resources.success", resourcePacks.size.toString())
         )
     }

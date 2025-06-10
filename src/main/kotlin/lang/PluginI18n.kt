@@ -122,7 +122,7 @@ class PluginI18n(private val plugin: PluginBase) {
         } else if (fallbackMap?.containsKey(id) == true) {
             fallbackMap[id]
         } else {
-            Server.instance.baseLang.internalGet(id)
+            Server.instance.lang.internalGet(id)
         }
     }
 
@@ -145,7 +145,7 @@ class PluginI18n(private val plugin: PluginBase) {
             })!!.containsKey(id)) {
             fallbackMap[id]
         } else {
-            Server.instance.baseLang[id]
+            Server.instance.lang[id]
         }
     }
 

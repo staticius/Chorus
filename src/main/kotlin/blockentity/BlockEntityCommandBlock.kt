@@ -425,7 +425,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         if (level.gameRules.getBoolean(GameRule.COMMAND_BLOCK_OUTPUT)) {
             message.text =
                 TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + "[" + this.name + ": " + TextFormat.RESET +
-                        (if (message.text != Server.instance.baseLang.get(message.text)) "%" else "") + message.text + "]"
+                        (if (message.text != Server.instance.lang.get(message.text)) "%" else "") + message.text + "]"
             val users =
                 Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
             for (user in users) {

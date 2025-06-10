@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.network
 import com.google.common.base.Strings
 import com.google.common.util.concurrent.ThreadFactoryBuilder
 import io.netty.bootstrap.ServerBootstrap
-import io.netty.channel.Channel
 import io.netty.channel.EventLoopGroup
 import io.netty.channel.epoll.Epoll
 import io.netty.channel.epoll.EpollDatagramChannel
@@ -75,7 +74,7 @@ class Network @JvmOverloads constructor(
             try {
                 tmpIfs = SystemInfo().hardware.networkIFs
             } catch (t: Throwable) {
-                Network.log.warn(Server.instance.baseLang["chorus.start.hardwareMonitorDisabled"])
+                Network.log.warn(Server.instance.lang["chorus.start.hardwareMonitorDisabled"])
             }
             hardWareNetworkInterfaces.set(tmpIfs)
         }, true)
@@ -164,7 +163,7 @@ class Network @JvmOverloads constructor(
             this.process()
         } catch (e: Exception) {
             Network.log.error(
-                server.baseLang.tr(
+                server.lang.tr(
                     "chorus.server.networkError",
                     javaClass.name, Utils.getExceptionMessage(e)
                 ), e

@@ -21,7 +21,7 @@ class LangTest {
         Assertions.assertEquals("hhdaosidhja", i18n!!.tr(LangCode.en_US, "test1", "hhdaosidhja"))
         Assertions.assertEquals("hello \n world", i18n!!.tr(LangCode.en_US, "test2"))
         Assertions.assertEquals("你好 \n 世界", i18n!!.tr(LangCode.zh_CN, "test2"))
-        Assertions.assertEquals("Hello \n World", Server.instance.baseLang.tr("Hello \n World"))
+        Assertions.assertEquals("Hello \n World", Server.instance.lang.tr("Hello \n World"))
     }
 
     @Test

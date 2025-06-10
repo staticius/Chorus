@@ -15,13 +15,13 @@ class ZippedResourcePackLoader(//资源包文件存放地址
         if (!path.exists()) {
             path.mkdirs()
         } else require(path.isDirectory) {
-            Server.instance.baseLang
+            Server.instance.lang
                 .tr("chorus.resources.invalid-path", path.name)
         }
     }
 
     override fun loadPacks(): List<ResourcePack> {
-        val baseLang = Server.instance.baseLang
+        val baseLang = Server.instance.lang
         val loadedResourcePacks: MutableList<ResourcePack> = ArrayList()
         for (pack in path.listFiles()!!) {
             try {

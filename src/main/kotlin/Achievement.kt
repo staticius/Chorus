@@ -6,7 +6,7 @@ class Achievement(val message: String, vararg requires: String) {
     val requires: Array<String> = arrayOf(*requires)
 
     fun broadcast(player: Player) {
-        val translation: String = Server.instance.baseLang
+        val translation: String = Server.instance.lang
             .tr("chat.type.achievement", player.displayName, TextFormat.GREEN.toString() + this.message)
 
         if (Server.instance.settings.levelSettings.default.announceAchievements
@@ -38,7 +38,7 @@ class Achievement(val message: String, vararg requires: String) {
             if (!achievements.containsKey(achievementId)) {
                 return false
             }
-            val translation: String = Server.instance.baseLang.tr(
+            val translation: String = Server.instance.lang.tr(
                 "chat.type.achievement",
                 player.displayName,
                 TextFormat.GREEN.toString() + achievements[achievementId]!!.message + TextFormat.RESET

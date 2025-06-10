@@ -270,7 +270,7 @@ class Level(
             baseTickThread.start()
         }
         log.info(
-            Server.instance.baseLang.tr(
+            Server.instance.lang.tr(
                 "chorus.level.init",
                 TextFormat.GREEN.toString() + this.folderName + TextFormat.RESET
             )
@@ -547,7 +547,7 @@ class Level(
         }
 
         log.info(
-            Server.instance.baseLang.tr(
+            Server.instance.lang.tr(
                 "chorus.level.unloading",
                 TextFormat.GREEN.toString() + this.getLevelName() + TextFormat.WHITE
             )
@@ -863,7 +863,7 @@ class Level(
             }
         } catch (e: Exception) {
             log.error(
-                Server.instance.baseLang.tr(
+                Server.instance.lang.tr(
                     "chorus.level.tickError",
                     this.folderPath, Utils.getExceptionMessage(e)
                 ), e
@@ -3201,7 +3201,7 @@ class Level(
         //to be changed later as the Dim0 will be deleted to be put in a config.json file of the world
         val levelNameDim = levelProvider.name.replace(" Dim0", "")
         log.info(
-            Server.instance.baseLang.tr(
+            Server.instance.lang.tr(
                 "chorus.level.preparing",
                 TextFormat.GREEN.toString() + levelNameDim + TextFormat.RESET
             )
@@ -3766,7 +3766,7 @@ class Level(
             }
             levelProvider.unloadChunk(x, z, safe)
         } catch (e: Exception) {
-            log.error(Server.instance.baseLang.tr("chorus.level.chunkUnloadError", e.toString()), e)
+            log.error(Server.instance.lang.tr("chorus.level.chunkUnloadError", e.toString()), e)
         }
 
         return true

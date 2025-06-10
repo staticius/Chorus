@@ -11,7 +11,7 @@ import java.util.*
 
 class JarPluginResourcePackLoader(protected val jarPath: File) : ResourcePackLoader {
     override fun loadPacks(): List<ResourcePack> {
-        val baseLang = Server.instance.baseLang
+        val baseLang = Server.instance.lang
         val loadedResourcePacks: MutableList<ResourcePack> = ArrayList()
         for (jar in Objects.requireNonNull<Array<File>>(jarPath.listFiles())) {
             try {

@@ -1137,7 +1137,7 @@ open class Player(
                 val event = PlayerInvalidMoveEvent(this, true)
                 Server.instance.pluginManager.callEvent(event)
                 if (!event.cancelled && (event.isRevert.also { invalidMotion = it })) {
-                    log.warn(Server.instance.baseLang.tr("chorus.player.invalidMove", this.getEntityName()))
+                    log.warn(Server.instance.lang.tr("chorus.player.invalidMove", this.getEntityName()))
                 }
             }
             if (invalidMotion) {
@@ -1547,7 +1547,7 @@ open class Player(
         }
 
         log.info(
-            Server.instance.baseLang.tr(
+            Server.instance.lang.tr(
                 "chorus.player.logIn",
                 TextFormat.AQUA.toString() + this.getEntityName() + TextFormat.WHITE,
                 this.address,
@@ -3082,7 +3082,7 @@ open class Player(
                 Server.instance.pluginManager.callEvent(chatEvent)
                 if (!chatEvent.cancelled) {
                     Server.instance.broadcastMessage(
-                        Server.instance.baseLang.tr(
+                        Server.instance.lang.tr(
                             chatEvent.format, *arrayOf<String>(
                                 chatEvent.player.displayName, chatEvent.message!!
                             )
@@ -3208,7 +3208,7 @@ open class Player(
     override fun sendMessage(message: String) {
         val pk = TextPacket()
         pk.type = TextPacket.TYPE_RAW
-        pk.message = Server.instance.baseLang.tr(message)
+        pk.message = Server.instance.lang.tr(message)
         this.dataPacket(pk)
     }
 
@@ -3270,12 +3270,12 @@ open class Player(
         val pk = TextPacket()
         if (Server.instance.settings.baseSettings.forceServerTranslate) {
             pk.type = TextPacket.TYPE_RAW
-            pk.message = Server.instance.baseLang.tr(message, *parameters)
+            pk.message = Server.instance.lang.tr(message, *parameters)
         } else {
             pk.type = TextPacket.TYPE_TRANSLATION
-            pk.message = Server.instance.baseLang.tr(message, parameters, "nukkit.", true)
+            pk.message = Server.instance.lang.tr(message, parameters, "nukkit.", true)
             for (i in parameters.indices) {
-                parameters[i] = Server.instance.baseLang.tr(parameters[i], parameters, "nukkit.", true)
+                parameters[i] = Server.instance.lang.tr(parameters[i], parameters, "nukkit.", true)
             }
             pk.parameters = parameters
         }
@@ -3301,7 +3301,7 @@ open class Player(
         val pk = TextPacket()
         pk.type = TextPacket.TYPE_CHAT
         pk.source = source
-        pk.message = Server.instance.baseLang.tr(message)
+        pk.message = Server.instance.lang.tr(message)
         this.dataPacket(pk)
     }
 
@@ -3558,12 +3558,12 @@ open class Player(
         }
         //output logout infomation
         log.info(
-            Server.instance.baseLang.tr(
+            Server.instance.lang.tr(
                 "chorus.player.logOut",
                 TextFormat.AQUA.toString() + this.getEntityName() + TextFormat.WHITE,
                 this.address,
                 port.toString(),
-                Server.instance.baseLang.tr(reason1)
+                Server.instance.lang.tr(reason1)
             )
         )
 
