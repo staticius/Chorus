@@ -21,7 +21,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
 
         this.startGame()
 
-        SpawnResponseHandler.log.debug("Sending item components")
+        log.debug("Sending item components")
         val itemRegistryPacket = ItemRegistryPacket()
         val entries = mutableSetOf<ItemRegistryPacket.Entry>()
 
@@ -49,7 +49,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         itemRegistryPacket.entries = entries.toTypedArray()
         player!!.dataPacket(itemRegistryPacket)
 
-        SpawnResponseHandler.log.debug("Sending actor identifiers")
+        log.debug("Sending actor identifiers")
         player.dataPacket(
             AvailableActorIdentifiersPacket(
                 Registries.ENTITY.tag
@@ -59,7 +59,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         // 注册实体属性
         // Register entity attributes
 
-        SpawnResponseHandler.log.debug("Sending actor properties")
+        log.debug("Sending actor properties")
         for (pk in getPacketCache()) {
             player.dataPacket(pk)
         }
@@ -72,16 +72,16 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
 //            )
 //        )
 
-        SpawnResponseHandler.log.debug("Sending attributes")
+        log.debug("Sending attributes")
         player.syncAttributes()
 
-        SpawnResponseHandler.log.debug("Sending available commands")
+        log.debug("Sending available commands")
         this.session.syncAvailableCommands()
 
         // 发送玩家权限列表
         // Send player permission list
 
-        SpawnResponseHandler.log.debug("Sending abilities")
+        log.debug("Sending abilities")
         val col = setOf(player)
         server.onlinePlayers.values.forEach { p: Player ->
             if (p !== player) {
@@ -90,19 +90,19 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
             }
         }
 
-        SpawnResponseHandler.log.debug("Sending effects")
+        log.debug("Sending effects")
         player.sendPotionEffects(player)
 
-        SpawnResponseHandler.log.debug("Sending actor metadata")
+        log.debug("Sending actor metadata")
         player.sendData(player)
 
-        SpawnResponseHandler.log.debug("Sending inventory")
+        log.debug("Sending inventory")
         this.session.syncInventory()
 
-        SpawnResponseHandler.log.debug("Sending creative content")
+        log.debug("Sending creative content")
         this.session.syncCreativeContent()
 
-        SpawnResponseHandler.log.debug("Sending trim data")
+        log.debug("Sending trim data")
         val trimDataPacket = TrimDataPacket()
         trimDataPacket.materials.addAll(TrimData.trimMaterials)
         trimDataPacket.patterns.addAll(TrimData.trimPatterns)
@@ -113,7 +113,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         player.setCanClimb(true)
         player.sendMovementSpeed(player.movementSpeed)
 
-        SpawnResponseHandler.log.debug("Sending player list")
+        log.debug("Sending player list")
         server.addOnlinePlayer(player)
         server.onPlayerCompleteLoginSequence(player)
 
@@ -170,7 +170,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
     }
 
     override fun handle(pk: SetLocalPlayerAsInitializedPacket) {
-        SpawnResponseHandler.log.debug(
+        log.debug(
             "receive SetLocalPlayerAsInitializedPacket for {}",
             player!!.playerInfo.username
         )

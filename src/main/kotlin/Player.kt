@@ -4447,7 +4447,6 @@ open class Player(
     fun refreshBlockEntity(delay: Int) {
         level!!.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
             for (b in level!!.getBlockEntities().values) {
-                if (b == null) continue
                 if (b is BlockEntitySpawnable) {
                     val setAir = UpdateBlockPacket()
                     setAir.blockRuntimeId = BlockAir.STATE.blockStateHash()
