@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.network.process.processor
 
 import org.chorus_oss.chorus.AdventureSettings
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.BlockFrame
 import org.chorus_oss.chorus.block.BlockLectern
@@ -20,8 +20,8 @@ import org.chorus_oss.chorus.utils.Loggable
 
 
 class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: PlayerActionPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: PlayerActionPacket) {
+        val player = player.player
         if (!player.spawned || (!player.isAlive() && pk.action != PlayerActionPacket.ACTION_RESPAWN && pk.action != PlayerActionPacket.ACTION_DIMENSION_CHANGE_ACK)) {
             return
         }
@@ -37,7 +37,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                         return
                     }
 
-                    playerHandle.onBlockBreakStart(pos, face)
+                    player.player.onBlockBreakStart(pos, face)
                 }
 
                 PlayerActionPacket.ACTION_ABORT_BREAK, PlayerActionPacket.ACTION_STOP_BREAK -> {
@@ -45,21 +45,21 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                         return
                     }
 
-                    playerHandle.onBlockBreakAbort(pos)
+                    player.player.onBlockBreakAbort(pos)
                 }
 
                 PlayerActionPacket.ACTION_CREATIVE_PLAYER_DESTROY_BLOCK -> {
                     // Used by client to get book from lecterns and items from item frame in creative mode since 1.20.70
-                    val blockLectern = playerHandle.player.level!!.getBlock(pos)
-                    if (blockLectern is BlockLectern && blockLectern.position.distance(playerHandle.player.position) <= 6) {
-                        blockLectern.dropBook(playerHandle.player)
+                    val blockLectern = player.player.level!!.getBlock(pos)
+                    if (blockLectern is BlockLectern && blockLectern.position.distance(player.player.position) <= 6) {
+                        blockLectern.dropBook(player.player)
                     }
                     if (blockLectern is BlockFrame && blockLectern.blockEntity != null) {
-                        blockLectern.blockEntity!!.dropItem(playerHandle.player)
+                        blockLectern.blockEntity!!.dropItem(player.player)
                     }
                     if (Server.instance.getServerAuthoritativeMovement() > 0) return@switch //ServerAuthorInput not use player
 
-                    playerHandle.onBlockBreakComplete(BlockVector3(pk.x, pk.y, pk.z), face)
+                    player.player.onBlockBreakComplete(BlockVector3(pk.x, pk.y, pk.z), face)
                 }
 
                 PlayerActionPacket.ACTION_CONTINUE_BREAK -> {
@@ -67,7 +67,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                         return
                     }
 
-                    playerHandle.onBlockBreakContinue(pos, face)
+                    player.player.onBlockBreakContinue(pos, face)
                 }
 
                 PlayerActionPacket.ACTION_GET_UPDATED_BLOCK -> {
@@ -83,7 +83,7 @@ class PlayerActionProcessor : DataPacketProcessor<PlayerActionPacket>() {
                     if (!player.spawned || player.isAlive() || !player.isOnline) {
                         return
                     }
-                    playerHandle.respawn()
+                    player.player.respawn()
                 }
 
                 PlayerActionPacket.ACTION_JUMP -> {

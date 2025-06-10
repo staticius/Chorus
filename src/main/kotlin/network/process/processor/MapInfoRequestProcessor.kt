@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.blockentity.BlockEntityItemFrame
 import org.chorus_oss.chorus.event.player.PlayerMapInfoRequestEvent
@@ -14,8 +14,8 @@ import org.chorus_oss.chorus.scheduler.AsyncTask
 
 
 class MapInfoRequestProcessor : DataPacketProcessor<MapInfoRequestPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: MapInfoRequestPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: MapInfoRequestPacket) {
+        val player = player.player
         var mapItem: Item? = null
         var index = 0
         var offhand = false

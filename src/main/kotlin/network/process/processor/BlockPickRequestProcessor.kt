@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerBlockPickEvent
 import org.chorus_oss.chorus.inventory.HumanInventory
@@ -11,11 +11,11 @@ import org.chorus_oss.chorus.utils.Loggable
 
 
 class BlockPickRequestProcessor : DataPacketProcessor<BlockPickRequestPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: BlockPickRequestPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: BlockPickRequestPacket) {
+        val player = player.player
         val block = player.level!!.getBlock(pk.position.asVector3(), false)
         if (block.position.distanceSquared(player.position) > 1000) {
-            BlockPickRequestProcessor.log.debug(playerHandle.username + ": Block pick request for a block too far away")
+            log.debug(player.player.getEntityName() + ": Block pick request for a block too far away")
             return
         }
         val item = block.toItem()

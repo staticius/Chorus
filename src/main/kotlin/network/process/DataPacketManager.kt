@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.network.process.processor.*
 import org.chorus_oss.chorus.network.protocol.DataPacket
 
@@ -24,10 +24,10 @@ class DataPacketManager {
         return PROCESSORS.containsKey(packetId)
     }
 
-    fun <T : DataPacket> processPacket(playerHandle: PlayerHandle, packet: T) {
+    fun <T : DataPacket> processPacket(player: Player, packet: T) {
         val processor = PROCESSORS[packet.pid()] as DataPacketProcessor<T>?
         if (processor != null) {
-            processor.handle(playerHandle, packet)
+            processor.handle(player, packet)
         } else {
             throw UnsupportedOperationException(
                 "No processor found for packet " + packet::class.java.name + " with id " + packet.pid() + "."

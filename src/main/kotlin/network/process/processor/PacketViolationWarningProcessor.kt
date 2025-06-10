@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.PacketViolationWarningPacket
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
@@ -10,7 +10,7 @@ import java.util.*
 
 
 class PacketViolationWarningProcessor : DataPacketProcessor<PacketViolationWarningPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: PacketViolationWarningPacket) {
+    override fun handle(player: Player, pk: PacketViolationWarningPacket) {
         val packetName = Arrays.stream(
             ProtocolInfo::class.java.declaredFields
         )
@@ -24,7 +24,7 @@ class PacketViolationWarningProcessor : DataPacketProcessor<PacketViolationWarni
             }.map { obj: Field -> obj.name }.findFirst()
         PacketViolationWarningProcessor.log.warn(
             "Violation warning from {}{}",
-            playerHandle.player.getEntityName(),
+            player.player.getEntityName(),
             packetName.map<String> { name: String -> " for packet $name" }
                 .orElse("") + ": " + pk)
     }

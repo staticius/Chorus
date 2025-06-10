@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.entity.data.EntityFlag
 import org.chorus_oss.chorus.inventory.HumanInventory
 import org.chorus_oss.chorus.item.Item.Companion.get
@@ -12,8 +12,8 @@ import org.chorus_oss.chorus.utils.Loggable
 
 
 class MobEquipmentProcessor : DataPacketProcessor<MobEquipmentPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: MobEquipmentPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: MobEquipmentPacket) {
+        val player = player.player
         if (!player.spawned || !player.isAlive()) {
             return
         }

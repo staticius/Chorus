@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerChangeSkinEvent
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
@@ -11,12 +11,12 @@ import org.chorus_oss.chorus.utils.Loggable
 import java.util.concurrent.TimeUnit
 
 class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: PlayerSkinPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: PlayerSkinPacket) {
+        val player = player.player
         val skin = pk.skin
 
         if (!skin.isValid()) {
-            PlayerSkinProcessor.log.warn(playerHandle.username + ": PlayerSkinPacket with invalid skin")
+            PlayerSkinProcessor.log.warn(player.player.getEntityName() + ": PlayerSkinPacket with invalid skin")
             return
         }
 
@@ -30,7 +30,7 @@ class PlayerSkinProcessor : DataPacketProcessor<PlayerSkinPacket>() {
         ) > System.currentTimeMillis() - player.lastSkinChange
         if (tooQuick) {
             playerChangeSkinEvent.cancelled = true
-            PlayerSkinProcessor.log.warn("Player " + playerHandle.username + " change skin too quick!")
+            PlayerSkinProcessor.log.warn("Player " + player.player.getEntityName() + " change skin too quick!")
         }
         Server.instance.pluginManager.callEvent(playerChangeSkinEvent)
         if (!playerChangeSkinEvent.cancelled) {

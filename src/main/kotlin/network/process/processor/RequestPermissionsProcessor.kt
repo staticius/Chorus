@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerHackDetectedEvent
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
@@ -8,13 +8,13 @@ import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.RequestPermissionsPacket
 
 class RequestPermissionsProcessor : DataPacketProcessor<RequestPermissionsPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: RequestPermissionsPacket) {
-        if (!playerHandle.player.isOp) {
+    override fun handle(player: Player, pk: RequestPermissionsPacket) {
+        if (!player.player.isOp) {
             val event =
-                PlayerHackDetectedEvent(playerHandle.player, PlayerHackDetectedEvent.HackType.PERMISSION_REQUEST)
+                PlayerHackDetectedEvent(player.player, PlayerHackDetectedEvent.HackType.PERMISSION_REQUEST)
             Server.instance.pluginManager.callEvent(event)
 
-            if (event.isKick) playerHandle.player.kick("Illegal permission operation", true)
+            if (event.isKick) player.player.kick("Illegal permission operation", true)
 
             return
         }

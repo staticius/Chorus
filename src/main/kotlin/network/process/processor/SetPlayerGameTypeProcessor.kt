@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.command.Command
 import org.chorus_oss.chorus.lang.TranslationContainer
@@ -9,9 +9,9 @@ import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.SetPlayerGameTypePacket
 
 class SetPlayerGameTypeProcessor : DataPacketProcessor<SetPlayerGameTypePacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: SetPlayerGameTypePacket) {
-        if (pk.gamemode != playerHandle.player.gamemode && playerHandle.player.hasPermission("chorus.command.gamemode")) {
-            playerHandle.player.setGamemode(
+    override fun handle(player: Player, pk: SetPlayerGameTypePacket) {
+        if (pk.gamemode != player.player.gamemode && player.player.hasPermission("chorus.command.gamemode")) {
+            player.player.setGamemode(
                 when (pk.gamemode) {
                     0, 1, 2 -> pk.gamemode
                     6 -> 3
@@ -20,10 +20,10 @@ class SetPlayerGameTypeProcessor : DataPacketProcessor<SetPlayerGameTypePacket>(
                 }
             )
             Command.broadcastCommandMessage(
-                playerHandle.player,
+                player.player,
                 TranslationContainer(
                     "commands.gamemode.success.self",
-                    Server.getGamemodeString(playerHandle.player.gamemode)
+                    Server.getGamemodeString(player.player.gamemode)
                 )
             )
         }

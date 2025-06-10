@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerFormRespondedEvent
 import org.chorus_oss.chorus.event.player.PlayerSettingsRespondedEvent
@@ -15,8 +15,8 @@ import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 import org.chorus_oss.chorus.utils.Loggable
 
 class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: ModalFormResponsePacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: ModalFormResponsePacket) {
+        val player = player.player
         if (!player.spawned || !player.isAlive()) {
             return
         }
@@ -26,15 +26,15 @@ class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>(
             return
         }
 
-        if (playerHandle.formWindows.containsKey(pk.formId)) {
-            val window = playerHandle.formWindows.remove(pk.formId)!!
+        if (player.player.formWindows.containsKey(pk.formId)) {
+            val window = player.player.formWindows.remove(pk.formId)!!
 
             val response = window.respond(player, pk.data.trim { it <= ' ' })
 
             val event = PlayerFormRespondedEvent(player, pk.formId, window, response!!)
             Server.instance.pluginManager.callEvent(event)
-        } else if (playerHandle.serverSettings.containsKey(pk.formId)) {
-            val window = playerHandle.serverSettings[pk.formId]!!
+        } else if (player.player.serverSettings.containsKey(pk.formId)) {
+            val window = player.player.serverSettings[pk.formId]!!
 
             val response = window.respond(player, pk.data.trim { it <= ' ' })
 

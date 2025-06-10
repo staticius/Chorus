@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerEditBookEvent
 import org.chorus_oss.chorus.item.Item
@@ -15,8 +15,8 @@ import org.chorus_oss.chorus.utils.Loggable
 
 
 class BookEditProcessor : DataPacketProcessor<BookEditPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: BookEditPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: BookEditPacket) {
+        val player = player.player
 
         val oldBook = player.inventory.getItem(pk.bookSlot.toInt())
         if (oldBook.id != ItemID.WRITABLE_BOOK) {

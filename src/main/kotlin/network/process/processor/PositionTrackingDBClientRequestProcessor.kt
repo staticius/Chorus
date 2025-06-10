@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.PositionTrackingDBClientRequestPacket
@@ -11,8 +11,8 @@ import java.io.IOException
 
 
 class PositionTrackingDBClientRequestProcessor : DataPacketProcessor<PositionTrackingDBClientRequestPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: PositionTrackingDBClientRequestPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: PositionTrackingDBClientRequestPacket) {
+        val player = player.player
         try {
             val positionTracking =
                 Server.instance.getPositionTrackingService().startTracking(player, pk.trackingId, true)

@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
@@ -13,12 +13,12 @@ import org.chorus_oss.chorus.network.protocol.types.CommandBlockMode
 import java.util.function.Consumer
 
 class CommandBlockUpdateProcessor : DataPacketProcessor<CommandBlockUpdatePacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: CommandBlockUpdatePacket) {
-        if (playerHandle.player.isOp && playerHandle.player.isCreative) {
+    override fun handle(player: Player, pk: CommandBlockUpdatePacket) {
+        if (player.player.isOp && player.player.isCreative) {
             if (pk.isBlock) {
                 val commandBlockData = pk.commandBlockHolderData as CommandBlockUpdatePacket.CommandBlockData
 
-                val blockEntity = playerHandle.player.level!!.getBlockEntity(
+                val blockEntity = player.player.level!!.getBlockEntity(
                     commandBlockData.blockPosition
                 )
                 if (blockEntity is BlockEntityCommandBlock) {
@@ -60,7 +60,7 @@ class CommandBlockUpdateProcessor : DataPacketProcessor<CommandBlockUpdatePacket
                         blockEntity.trigger()
                     }
                     blockEntity.levelBlockAround.forEach(Consumer { b: Block -> b.onUpdate(Level.BLOCK_UPDATE_REDSTONE) }) //update redstone
-                    playerHandle.player.level!!.setBlock(blockEntity.position, cmdBlock, true)
+                    player.player.level!!.setBlock(blockEntity.position, cmdBlock, true)
                 }
             }
         }

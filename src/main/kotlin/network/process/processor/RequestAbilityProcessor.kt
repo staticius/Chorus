@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.network.process.processor
 
 import org.chorus_oss.chorus.AdventureSettings
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerIllegalFlightEvent
 import org.chorus_oss.chorus.event.player.PlayerKickEvent
@@ -14,8 +14,8 @@ import org.chorus_oss.chorus.utils.Loggable
 
 
 class RequestAbilityProcessor : DataPacketProcessor<RequestAbilityPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: RequestAbilityPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: RequestAbilityPacket) {
+        val player = player.player
         val ability = pk.ability
         if (ability != PlayerAbility.FLYING) {
             RequestAbilityProcessor.log.info("[" + player.getEntityName() + "] has tried to trigger " + ability + " ability " + (if (pk.boolValue) "on" else "off"))

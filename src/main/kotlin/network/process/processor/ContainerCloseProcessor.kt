@@ -1,27 +1,27 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.inventory.SpecialWindowId
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.ContainerClosePacket
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 
 class ContainerCloseProcessor : DataPacketProcessor<ContainerClosePacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: ContainerClosePacket) {
-        val player = playerHandle.player
-        if (!player.spawned || pk.containerID == SpecialWindowId.PLAYER.id && !playerHandle.inventoryOpen) {
+    override fun handle(player: Player, pk: ContainerClosePacket) {
+        val player = player.player
+        if (!player.spawned || pk.containerID == SpecialWindowId.PLAYER.id && !player.player.inventoryOpen) {
             return
         }
 
         val inventory = player.getWindowById(pk.containerID)
 
-        if (playerHandle.windowIndex.containsKey(pk.containerID)) {
+        if (player.player.windowIndex.containsKey(pk.containerID)) {
             if (pk.containerID == SpecialWindowId.PLAYER.id) {
-                playerHandle.closingWindowId = pk.containerID
+                player.player.closingWindowId = pk.containerID
                 player.inventory.close(player)
-                playerHandle.inventoryOpen = false
+                player.player.inventoryOpen = false
             } else {
-                playerHandle.removeWindow(playerHandle.windowIndex[pk.containerID]!!)
+                player.player.removeWindow(player.player.windowIndex[pk.containerID]!!)
             }
         }
 

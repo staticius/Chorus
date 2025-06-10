@@ -174,7 +174,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
             "receive SetLocalPlayerAsInitializedPacket for {}",
             player!!.playerInfo.username
         )
-        handle!!.onPlayerLocallyInitialized()
+        player!!.onPlayerLocallyInitialized()
     }
 
     companion object : Loggable

@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.inventory.ItemStackRequestActionEvent
 import org.chorus_oss.chorus.event.player.PlayerTransferItemEvent
@@ -23,8 +23,8 @@ import kotlin.collections.set
 
 
 class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: ItemStackRequestPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: ItemStackRequestPacket) {
+        val player = player.player
         val responses: MutableList<ItemStackResponse> = ArrayList()
         for (request in pk.requests) {
             val actions = request.actions

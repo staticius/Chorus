@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.entity.EntityRideable
 import org.chorus_oss.chorus.entity.custom.CustomEntity
@@ -18,8 +18,8 @@ import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 import org.chorus_oss.chorus.utils.Loggable
 
 class InteractProcessor : DataPacketProcessor<InteractPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: InteractPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: InteractPacket) {
+        val player = player.player
         if (!player.spawned || !player.isAlive()) {
             return
         }
@@ -79,8 +79,8 @@ class InteractProcessor : DataPacketProcessor<InteractPacket>() {
                 } else if (targetEntity.getRuntimeID() != player.getRuntimeID()) {
                     return
                 }
-                if (!playerHandle.inventoryOpen) {
-                    playerHandle.inventoryOpen = player.inventory.open(player)
+                if (!player.player.inventoryOpen) {
+                    player.player.inventoryOpen = player.inventory.open(player)
                 }
             }
 

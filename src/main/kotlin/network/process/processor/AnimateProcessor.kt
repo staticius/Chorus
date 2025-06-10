@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.entity.item.EntityBoat
 import org.chorus_oss.chorus.event.player.PlayerAnimationEvent
@@ -10,8 +10,8 @@ import org.chorus_oss.chorus.network.protocol.AnimatePacket.Action
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 
 class AnimateProcessor : DataPacketProcessor<AnimatePacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: AnimatePacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: AnimatePacket) {
+        val player = player.player
         if (!player.spawned || !player.isAlive()) {
             return
         }
@@ -45,7 +45,7 @@ class AnimateProcessor : DataPacketProcessor<AnimatePacket>() {
         }
 
         if (animationEvent.animationType == Action.SWING_ARM) {
-            player.setItemCoolDown(PlayerHandle.noShieldDelay, "shield")
+            player.setItemCoolDown(Player.NO_SHIELD_DELAY, "shield")
         }
 
         Server.broadcastPacket(

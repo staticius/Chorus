@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.network.process.processor
 
 import org.chorus_oss.chorus.AdventureSettings
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.PlayerHandle
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.blockentity.BlockEntitySpawnable
@@ -33,16 +32,16 @@ import java.util.*
 class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPacket>() {
     private var lastUsedItem: Item? = null
 
-    override fun handle(playerHandle: PlayerHandle, pk: InventoryTransactionPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: InventoryTransactionPacket) {
+        val player = player.player
         if (player.isSpectator) {
             player.sendAllInventories()
             return
         }
         if (pk.transactionType == InventoryTransactionPacket.TransactionType.USE_ITEM) {
-            handleUseItem(playerHandle, pk)
+            handleUseItem(player, pk)
         } else if (pk.transactionType == InventoryTransactionPacket.TransactionType.USE_ITEM_ON_ENTITY) {
-            handleUseItemOnEntity(playerHandle, pk)
+            handleUseItemOnEntity(player, pk)
         } else if (pk.transactionType == InventoryTransactionPacket.TransactionType.RELEASE_ITEM) {
             val releaseItemData = pk.transactionData as ReleaseItemData
             try {
@@ -88,8 +87,8 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
     override val packetId: Int
         get() = ProtocolInfo.INVENTORY_TRANSACTION_PACKET
 
-    private fun handleUseItemOnEntity(playerHandle: PlayerHandle, pk: InventoryTransactionPacket) {
-        val player = playerHandle.player
+    private fun handleUseItemOnEntity(player: Player, pk: InventoryTransactionPacket) {
+        val player = player.player
         val useItemOnEntityData = pk.transactionData as UseItemOnEntityData
         val target = player.level!!.getEntity(useItemOnEntityData.entityRuntimeId) ?: return
         val type = useItemOnEntityData.actionType
@@ -145,7 +144,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     if (item.isNothing || player.inventory.itemInHand.id == item.id) {
                         player.inventory.setItemInHand(item)
                     } else {
-                        logTriedToSetButHadInHand(playerHandle, item, player.inventory.itemInHand)
+                        logTriedToSetButHadInHand(player, item, player.inventory.itemInHand)
                     }
                 } else {
                     //Otherwise nametag still gets consumed on client side
@@ -209,7 +208,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
 
                 //保存攻击的目标在lastAttackEntity
                 if (!entityDamageByEntityEvent.cancelled) {
-                    playerHandle.setLastAttackEntity(entityDamageByEntityEvent.entity)
+                    player.player.lastAttackEntity = (entityDamageByEntityEvent.entity)
                 }
                 if (target is EntityLiving) {
                     target.preAttack(player)
@@ -234,7 +233,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                         if (item.isNothing || player.inventory.itemInHand.id === item.id) {
                             player.inventory.setItemInHand(item)
                         } else {
-                            logTriedToSetButHadInHand(playerHandle, item, player.inventory.itemInHand)
+                            logTriedToSetButHadInHand(player, item, player.inventory.itemInHand)
                         }
                     }
                 }
@@ -242,8 +241,8 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
         }
     }
 
-    private fun handleUseItem(playerHandle: PlayerHandle, pk: InventoryTransactionPacket) {
-        val player = playerHandle.player
+    private fun handleUseItem(player: Player, pk: InventoryTransactionPacket) {
+        val player = player.player
         val useItemData = pk.transactionData as UseItemData
         val blockVector = useItemData.blockPos
         val face = useItemData.face
@@ -253,11 +252,11 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
             InventoryTransactionPacket.USE_ITEM_ACTION_CLICK_BLOCK -> {
                 // Remove if client bug is ever fixed
                 val spamBug =
-                    (playerHandle.lastRightClickPos != null && System.currentTimeMillis() - playerHandle.lastRightClickTime < 100.0 && blockVector.distanceSquared(
-                        playerHandle.lastRightClickPos!!
+                    (player.player.lastRightClickPos != null && System.currentTimeMillis() - player.player.lastRightClickTime < 100.0 && blockVector.distanceSquared(
+                        player.player.lastRightClickPos!!
                     ) < 0.00001)
-                playerHandle.lastRightClickPos = blockVector.asVector3()
-                playerHandle.lastRightClickTime = System.currentTimeMillis().toDouble()
+                player.player.lastRightClickPos = blockVector.asVector3()
+                player.player.lastRightClickTime = System.currentTimeMillis().toDouble()
                 if (spamBug) {
                     return
                 }
@@ -295,7 +294,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                                 if (oldItem.id == i!!.id || i!!.isNothing) {
                                     player.inventory.setItemInHand(i!!)
                                 } else {
-                                    logTriedToSetButHadInHand(playerHandle, i!!, oldItem)
+                                    logTriedToSetButHadInHand(player, i!!, oldItem)
                                 }
                                 player.inventory.sendHeldItem(player.viewers.values)
                             }
@@ -343,7 +342,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                             if (oldItem.id == i!!.id || i!!.isNothing) {
                                 player.inventory.setItemInHand(i!!)
                             } else {
-                                logTriedToSetButHadInHand(playerHandle, i!!, oldItem)
+                                logTriedToSetButHadInHand(player, i!!, oldItem)
                             }
                             player.inventory.sendHeldItem(player.viewers.values)
                         }
@@ -406,7 +405,7 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                         if (item.isNothing || player.inventory.itemInHand.id == item.id) {
                             player.inventory.setItemInHand(item)
                         } else {
-                            logTriedToSetButHadInHand(playerHandle, item, player.inventory.itemInHand)
+                            logTriedToSetButHadInHand(player, item, player.inventory.itemInHand)
                         }
                     }
                     if (!player.isUsingItem(item.id)) {
@@ -428,11 +427,11 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
         }
     }
 
-    private fun logTriedToSetButHadInHand(playerHandle: PlayerHandle, tried: Item, had: Item) {
+    private fun logTriedToSetButHadInHand(player: Player, tried: Item, had: Item) {
         InventoryTransactionProcessor.log.debug(
             "Tried to set item {} but {} had item {} in their hand slot",
             tried.id,
-            playerHandle.username,
+            player.player.getEntityName(),
             had.id
         )
     }

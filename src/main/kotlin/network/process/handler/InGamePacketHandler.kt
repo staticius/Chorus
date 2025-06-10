@@ -9,7 +9,7 @@ class InGamePacketHandler(session: BedrockSession) : BedrockSessionPacketHandler
 
     fun managerHandle(pk: DataPacket) {
         if (manager.canProcess(pk.pid())) {
-            manager.processPacket(handle!!, pk)
+            manager.processPacket(player!!, pk)
         }
     }
 }

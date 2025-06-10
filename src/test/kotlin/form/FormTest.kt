@@ -41,8 +41,6 @@ class FormTest {
 
         test.send(player, 1)
         val dataPacketManager = player.session.dataPacketManager
-        val playerHandle = PlayerHandle(player)
-
         val modalFormResponsePacket = ModalFormResponsePacket()
         modalFormResponsePacket.formId = 1
         modalFormResponsePacket.data = "[\"1\",\"input\",\"\",\"6\",\"0\",\"false\"]"
@@ -80,7 +78,7 @@ class FormTest {
                 }
             ))
 
-        dataPacketManager.processPacket(playerHandle, modalFormResponsePacket)
+        dataPacketManager.processPacket(player, modalFormResponsePacket)
         testPluginManager.resetAll()
     }
 
@@ -103,7 +101,6 @@ class FormTest {
         test.send(player, 1)
 
         val dataPacketManager = player.session.dataPacketManager
-        val playerHandle = PlayerHandle(player)
 
         val modalFormResponsePacket = ModalFormResponsePacket()
         modalFormResponsePacket.formId = 1
@@ -130,7 +127,7 @@ class FormTest {
                 }
             ))
 
-        dataPacketManager.processPacket(playerHandle, modalFormResponsePacket)
+        dataPacketManager.processPacket(player, modalFormResponsePacket)
         testPluginManager.resetAll()
     }
 
@@ -142,7 +139,6 @@ class FormTest {
         test.send(player, 1)
 
         val dataPacketManager = player.session.dataPacketManager
-        val playerHandle = PlayerHandle(player)
 
         val modalFormResponsePacket = ModalFormResponsePacket()
         modalFormResponsePacket.formId = 1
@@ -165,7 +161,7 @@ class FormTest {
                 }
             ))
 
-        dataPacketManager.processPacket(playerHandle, modalFormResponsePacket)
+        dataPacketManager.processPacket(player, modalFormResponsePacket)
         testPluginManager.resetAll()
     }
 }

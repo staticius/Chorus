@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.entity.item.EntityBoat
 import org.chorus_oss.chorus.event.vehicle.VehicleMoveEvent
@@ -10,8 +10,8 @@ import org.chorus_oss.chorus.network.protocol.MoveEntityAbsolutePacket
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 
 class MoveEntityAbsoluteProcessor : DataPacketProcessor<MoveEntityAbsolutePacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: MoveEntityAbsolutePacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: MoveEntityAbsolutePacket) {
+        val player = player.player
         if (!player.isAlive() || !player.spawned || player.getRiding() == null) {
             return
         }

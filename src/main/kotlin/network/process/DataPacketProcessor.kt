@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.network.protocol.DataPacket
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 
@@ -12,7 +12,7 @@ import org.chorus_oss.chorus.network.protocol.ProtocolInfo
  * performance lower.
  */
 abstract class DataPacketProcessor<T : DataPacket> {
-    abstract fun handle(playerHandle: PlayerHandle, pk: T)
+    abstract fun handle(player: Player, pk: T)
 
     abstract val packetId: Int
 

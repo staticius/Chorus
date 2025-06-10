@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.network.process.processor
 
 import org.chorus_oss.chorus.AdventureSettings
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.PlayerHandle
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.entity.item.EntityBoat
 import org.chorus_oss.chorus.entity.item.EntityMinecartAbstract
@@ -21,8 +20,8 @@ import kotlin.math.abs
 import kotlin.math.sqrt
 
 class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: PlayerAuthInputPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: PlayerAuthInputPacket) {
+        val player = player.player
         if (!pk.blockActionData.isEmpty()) {
             for (action in pk.blockActionData.values) {
                 //hack 自从1.19.70开始，创造模式剑客户端不会发送PREDICT_DESTROY_BLOCK，但仍然发送START_DESTROY_BLOCK，过滤掉
@@ -33,30 +32,30 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
                 val blockFace = fromIndex(action.facing)
 
                 val lastBreakPos =
-                    if (playerHandle.lastBlockAction == null) null else playerHandle.lastBlockAction!!.position
+                    if (player.player.lastBlockAction == null) null else player.player.lastBlockAction!!.position
                 if (lastBreakPos != null && (lastBreakPos.x != blockPos.x || lastBreakPos.y != blockPos.y || lastBreakPos.z != blockPos.z)) {
-                    playerHandle.onBlockBreakAbort(lastBreakPos.asVector3())
-                    playerHandle.onBlockBreakStart(blockPos.asVector3(), blockFace)
+                    player.player.onBlockBreakAbort(lastBreakPos.asVector3())
+                    player.player.onBlockBreakStart(blockPos.asVector3(), blockFace)
                 }
 
                 when (action.action) {
-                    PlayerActionType.START_DESTROY_BLOCK, PlayerActionType.CONTINUE_DESTROY_BLOCK -> playerHandle.onBlockBreakStart(
+                    PlayerActionType.START_DESTROY_BLOCK, PlayerActionType.CONTINUE_DESTROY_BLOCK -> player.player.onBlockBreakStart(
                         blockPos.asVector3(),
                         blockFace
                     )
 
-                    PlayerActionType.ABORT_DESTROY_BLOCK, PlayerActionType.STOP_DESTROY_BLOCK -> playerHandle.onBlockBreakAbort(
+                    PlayerActionType.ABORT_DESTROY_BLOCK, PlayerActionType.STOP_DESTROY_BLOCK -> player.player.onBlockBreakAbort(
                         blockPos.asVector3()
                     )
 
                     PlayerActionType.PREDICT_DESTROY_BLOCK -> {
-                        playerHandle.onBlockBreakAbort(blockPos.asVector3())
-                        playerHandle.onBlockBreakComplete(blockPos, blockFace)
+                        player.player.onBlockBreakAbort(blockPos.asVector3())
+                        player.player.onBlockBreakComplete(blockPos, blockFace)
                     }
 
                     else -> Unit
                 }
-                playerHandle.lastBlockAction = action
+                player.player.lastBlockAction = action
             }
         }
 
@@ -66,7 +65,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
             if (dataPacketManager != null) {
                 val itemStackRequestPacket = ItemStackRequestPacket()
                 itemStackRequestPacket.requests.add(pk.itemStackRequest!!)
-                dataPacketManager.processPacket(playerHandle, itemStackRequestPacket)
+                dataPacketManager.processPacket(player, itemStackRequestPacket)
             }
         }
 
@@ -172,7 +171,7 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
                 player.adventureSettings[AdventureSettings.Type.FLYING] = playerToggleFlightEvent.isFlying
             }
         }
-        val clientPosition = pk.position!!.asVector3().subtract(0.0, playerHandle.baseOffset.toDouble(), 0.0)
+        val clientPosition = pk.position!!.asVector3().subtract(0.0, player.player.getBaseOffset().toDouble(), 0.0)
         var yaw = pk.yaw % 360
         val pitch = pk.pitch % 360
         var headYaw = pk.headYaw % 360
@@ -196,9 +195,9 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
         } else if (riding is EntityBoat && pk.inputData.contains(AuthInputAction.IN_CLIENT_PREDICTED_IN_VEHICLE)) {
             if (riding.getRuntimeID() == pk.predictedVehicle && riding.isControlling(player)) {
                 if (check(clientLoc, player)) {
-                    val offsetLoc = clientLoc.add(0.0, playerHandle.baseOffset.toDouble(), 0.0)
+                    val offsetLoc = clientLoc.add(0.0, player.player.getBaseOffset().toDouble(), 0.0)
                     riding.onInput(offsetLoc)
-                    playerHandle.handleMovement(offsetLoc)
+                    player.player.handleMovement(offsetLoc)
                 }
                 return
             }
@@ -207,15 +206,15 @@ class PlayerAuthInputProcessor : DataPacketProcessor<PlayerAuthInputPacket>() {
                 val playerLoc: Transform
                 if (riding.hasOwner() && !riding.getSaddle().isNothing) {
                     riding.onInput(clientLoc.add(0.0, riding.getHeight().toDouble(), 0.0))
-                    playerLoc = clientLoc.add(0.0, (playerHandle.baseOffset + riding.getHeight()).toDouble(), 0.0)
+                    playerLoc = clientLoc.add(0.0, (player.player.getBaseOffset() + riding.getHeight()).toDouble(), 0.0)
                 } else {
                     playerLoc = clientLoc.add(0.0, 0.8, 0.0)
                 }
-                playerHandle.handleMovement(playerLoc)
+                player.player.handleMovement(playerLoc)
                 return
             }
         }
-        playerHandle.offerMovementTask(clientLoc)
+        player.player.offerMovementTask(clientLoc)
     }
 
     override val packetId: Int

@@ -296,8 +296,7 @@ class GameMockExtension : MockitoExtension() {
                     HumanEnderChestInventory(player)
                 )
             )
-            val playerHandle = PlayerHandle(player)
-            playerHandle.addDefaultWindows()
+            player.addDefaultWindows()
             TestUtils.setField(Player::class.java, player, "foodData", PlayerFood(player, 20, 20f))
             try {
                 FileUtils.copyDirectory(File("src/test/resources/level"), File("src/test/resources/newlevel"))

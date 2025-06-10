@@ -1,13 +1,13 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.RespawnPacket
 
 class RespawnProcessor : DataPacketProcessor<RespawnPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: RespawnPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: RespawnPacket) {
+        val player = player.player
         if (player.isAlive()) {
             return
         }

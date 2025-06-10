@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.item.ItemFood
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
@@ -8,8 +8,8 @@ import org.chorus_oss.chorus.network.protocol.EntityEventPacket
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 
 class EntityEventProcessor : DataPacketProcessor<EntityEventPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: EntityEventPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: EntityEventPacket) {
+        val player = player.player
         if (!player.spawned || !player.isAlive()) {
             return
         }

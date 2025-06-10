@@ -463,7 +463,6 @@ open class Player(
      * The entity that the player is attacked last.
      */
     var lastBeAttackEntity: Entity? = null
-    private val playerHandle = PlayerHandle(this)
     val playerChunkManager: PlayerChunkManager
 
     /**
@@ -3572,7 +3571,7 @@ open class Player(
         for (inv in windows.keys) {
             if (permanentWindows.contains(windows[inv])) {
                 val windowId = this.getWindowId(inv)
-                playerHandle.closingWindowId = windowId
+                this.closingWindowId = windowId
                 inv.close(this)
                 updateTrackingPositions(true)
             }
@@ -4775,7 +4774,7 @@ open class Player(
         Preconditions.checkNotNull(inventory)
         if (!permanentWindows.contains(windows[inventory])) {
             val windowId = this.getWindowId(inventory)
-            playerHandle.closingWindowId = windowId
+            this.closingWindowId = windowId
             inventory.close(this)
             windows.remove(inventory)
             updateTrackingPositions(true)

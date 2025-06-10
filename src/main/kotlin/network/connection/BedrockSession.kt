@@ -8,7 +8,6 @@ import io.netty.buffer.ByteBufAllocator
 import io.netty.buffer.Unpooled
 import io.netty.util.internal.PlatformDependent
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.PlayerHandle
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.command.data.CommandDataVersions
 import org.chorus_oss.chorus.event.player.PlayerCreationEvent
@@ -47,7 +46,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
 
     @JvmField
     val machine: StateMachine<SessionState, SessionState>
-    var handle: PlayerHandle? = null
+    var player: Player? = null
         private set
     private var info: PlayerInfo? = null
     protected var packetHandler: PacketHandler? = null
@@ -127,7 +126,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
                 this.packetHandler = (SpawnResponseHandler(this))
                 // The reason why teleport player to their position is for gracefully client-side spawn,
                 // although we need some hacks, It is definitely a fairly worthy trade.
-                handle!!.player.setImmobile(true) // TODO: HACK: fix client-side falling pre-spawn
+                player!!.setImmobile(true) // TODO: HACK: fix client-side falling pre-spawn
             })
             .onExit(Action { this.onClientSpawned() })
             .permit(SessionState.IN_GAME, SessionState.IN_GAME)
@@ -389,7 +388,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         }
 
     fun onPlayerCreated(player: Player) {
-        this.handle = PlayerHandle(player)
+        this.player = player
         Server.instance.onPlayerLogin(address, player)
     }
 
@@ -397,7 +396,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         log.debug("Sending spawn notification, waiting for spawn response")
         val state = machine.state
         check(state == SessionState.PRE_SPAWN) { "attempt to notifyTerrainReady when the state is " + state.name }
-        handle!!.doFirstSpawn()
+        player!!.doFirstSpawn()
     }
 
     fun onSessionStartSuccess() {
@@ -525,9 +524,6 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
 
     val server: Server
         get() = Server.instance
-
-    val player: Player?
-        get() = if (this.handle == null) null else handle!!.player
 
     val dataPacketManager: DataPacketManager?
         get() {

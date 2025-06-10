@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.dialog.response.FormResponseDialog
 import org.chorus_oss.chorus.dialog.window.FormWindowDialog
@@ -12,8 +12,8 @@ import org.chorus_oss.chorus.network.protocol.NPCRequestPacket
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 
 class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: NPCRequestPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: NPCRequestPacket) {
+        val player = player.player
         //若sceneName字段为空，则为玩家在编辑NPC，我们并不需要记录对话框，直接通过entityRuntimeId获取实体即可
         val entity = player.level!!.getEntity(pk.entityRuntimeId)
         if (pk.sceneName.isEmpty() && entity is EntityNPC) {
@@ -28,14 +28,14 @@ class NPCRequestProcessor : DataPacketProcessor<NPCRequestPacket>() {
             Server.instance.pluginManager.callEvent(event)
             return
         }
-        if (playerHandle.dialogWindows.getIfPresent(pk.sceneName) != null) {
+        if (player.player.dialogWindows.getIfPresent(pk.sceneName) != null) {
             //remove the window from the map only if the requestType is EXECUTE_CLOSING_COMMANDS
             val dialog: FormWindowDialog?
             if (pk.requestType == NPCRequestPacket.RequestType.EXECUTE_CLOSING_COMMANDS) {
-                dialog = playerHandle.dialogWindows.getIfPresent(pk.sceneName)
-                playerHandle.dialogWindows.invalidate(pk.sceneName)
+                dialog = player.player.dialogWindows.getIfPresent(pk.sceneName)
+                player.player.dialogWindows.invalidate(pk.sceneName)
             } else {
-                dialog = playerHandle.dialogWindows.getIfPresent(pk.sceneName)
+                dialog = player.player.dialogWindows.getIfPresent(pk.sceneName)
             }
 
             val response = FormResponseDialog(pk, dialog!!)

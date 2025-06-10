@@ -1,14 +1,14 @@
 package org.chorus_oss.chorus.network.process.processor
 
-import org.chorus_oss.chorus.PlayerHandle
+import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.blockentity.BlockEntitySpawnable
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.BlockActorDataPacket
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 
 class BlockEntityDataProcessor : DataPacketProcessor<BlockActorDataPacket>() {
-    override fun handle(playerHandle: PlayerHandle, pk: BlockActorDataPacket) {
-        val player = playerHandle.player
+    override fun handle(player: Player, pk: BlockActorDataPacket) {
+        val player = player.player
         if (!player.spawned || !player.isAlive()) {
             return
         }
