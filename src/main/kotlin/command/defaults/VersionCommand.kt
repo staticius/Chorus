@@ -124,7 +124,7 @@ class VersionCommand(name: String) : Command(
             sender.sendMessage(
                 TranslationContainer(
                     "chorus.server.info.extended", Server.instance.name,
-                    Server.instance.nukkitVersion + " (" + Server.instance.gitCommit + ")",
+                    Server.instance.chorusVersion + " (" + Server.instance.gitCommit + ")",
                     Server.instance.apiVersion,
                     Server.instance.version,
                     ProtocolInfo.PROTOCOL_VERSION.toString()

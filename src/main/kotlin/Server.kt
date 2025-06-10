@@ -106,6 +106,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.round
+import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
 /**
@@ -193,13 +194,13 @@ class Server internal constructor(
     </P> */
     var checkLoginTime: Boolean = false
 
-    lateinit var entityMetadata: EntityMetadataStore
+    var entityMetadata: EntityMetadataStore
         private set
-    lateinit var playerMetadata: PlayerMetadataStore
+    var playerMetadata: PlayerMetadataStore
         private set
-    lateinit var levelMetadata: LevelMetadataStore
+    var levelMetadata: LevelMetadataStore
         private set
-    lateinit var network: Network
+    var network: Network
         private set
 
     private var serverAuthoritativeMovementMode = 0
@@ -229,13 +230,13 @@ class Server internal constructor(
     private var autoSaveTicker = 0
     private var autoSaveTicks = 6000
 
-    lateinit var baseLang: BaseLang
+    var baseLang: BaseLang
         private set
 
-    lateinit var baseLangCode: LangCode
+    var baseLangCode: LangCode
         private set
 
-    lateinit var serverID: UUID
+    var serverID: UUID
         private set
 
     private val uniquePlayers: MutableSet<UUID> = HashSet()
@@ -357,14 +358,14 @@ class Server internal constructor(
             val configInstance = Config(config)
             chooseLanguage = configInstance.getString("settings.language", "eng")
         }
-        this.baseLang = BaseLang(chooseLanguage!!)
-        this.baseLangCode = mapInternalLang(chooseLanguage!!)
+        this.baseLang = BaseLang(chooseLanguage)
+        this.baseLangCode = mapInternalLang(chooseLanguage)
         log.info("Loading {}...", TextFormat.GREEN.toString() + "chorus.toml" + TextFormat.RESET)
 
         this.settings = ChorusTOML.load(config)
         this.settings.save(config)
 
-        settings.baseSettings.language = chooseLanguage!!
+        settings.baseSettings.language = chooseLanguage
 
         this.computeScope = CoroutineScope(Dispatchers.Default)
 
@@ -429,7 +430,7 @@ class Server internal constructor(
             this.baseLang.tr(
                 "chorus.server.info",
                 name,
-                TextFormat.YELLOW.toString() + this.nukkitVersion + TextFormat.RESET + " (" + TextFormat.YELLOW + this.gitCommit + TextFormat.RESET + ")" + TextFormat.RESET,
+                TextFormat.YELLOW.toString() + this.chorusVersion + TextFormat.RESET + " (" + TextFormat.YELLOW + this.gitCommit + TextFormat.RESET + ")" + TextFormat.RESET,
                 apiVersion
             )
         )
@@ -954,20 +955,16 @@ class Server internal constructor(
     }
 
     val ticksPerSecond: Float
-        get() = (Math.round(this.maxTick * 100).toFloat()) / 100
+        get() = ((this.maxTick * 100).roundToInt().toFloat()) / 100
 
     val ticksPerSecondAverage: Float
-        get() {
-            return tickAverage.getAverage()
-        }
+        get() = tickAverage.getAverage()
 
     val tickUsage: Float
         get() = round((this.maxUse * 100).toDouble()).toFloat()
 
     val tickUsageAverage: Float
-        get() {
-            return useAverage.getAverage()
-        }
+        get() = useAverage.getAverage()
 
     // TODO: Fix title tick
     fun titleTick() {
@@ -978,9 +975,9 @@ class Server internal constructor(
         val runtime = Runtime.getRuntime()
         val used = round((runtime.totalMemory() - runtime.freeMemory()).toDouble() / 1024 / 1024)
         val max = round((runtime.maxMemory().toDouble()) / 1024 / 1024)
-        val usage = Math.round(used / max * 100).toString() + "%"
+        val usage = (used / max * 100).roundToInt().toString() + "%"
         var title = (0x1b.toChar().toString() + "]0;" + this.name + " "
-                + this.nukkitVersion
+                + this.chorusVersion
                 + " | " + this.gitCommit
                 + " | Online " + players.size + "/" + this.maxPlayers
                 + " | Memory " + usage)
@@ -1211,11 +1208,7 @@ class Server internal constructor(
 
     fun getPluginCommand(name: String): PluginIdentifiableCommand? {
         val command = commandMap.getCommand(name)
-        return if (command is PluginIdentifiableCommand) {
-            command
-        } else {
-            null
-        }
+        return command as? PluginIdentifiableCommand
     }
 
     // endregion
@@ -1822,7 +1815,7 @@ class Server internal constructor(
          */
         get() = "Chorus"
 
-    val nukkitVersion
+    val chorusVersion
         get() = Chorus.VERSION
 
     val gitCommit: String
@@ -2399,8 +2392,8 @@ class Server internal constructor(
     }
 
     companion object : Loggable {
-        const val BROADCAST_CHANNEL_ADMINISTRATIVE: String = "nukkit.broadcast.admin"
-        const val BROADCAST_CHANNEL_USERS: String = "nukkit.broadcast.user"
+        const val BROADCAST_CHANNEL_ADMINISTRATIVE: String = "chorus.broadcast.admin"
+        const val BROADCAST_CHANNEL_USERS: String = "chorus.broadcast.user"
 
         // endregion
         // region server singleton - Server 单例

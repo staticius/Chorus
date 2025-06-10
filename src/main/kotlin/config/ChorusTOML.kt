@@ -149,6 +149,7 @@ class ChorusTOML {
 
     @Serializable
     class LevelSettings {
+        @TomlComments("Settings to use for the default level")
         @SerialName("default")
         var default: DefaultSettings = DefaultSettings()
 

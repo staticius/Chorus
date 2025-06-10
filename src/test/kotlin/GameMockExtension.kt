@@ -174,7 +174,7 @@ class GameMockExtension : MockitoExtension() {
                 Mockito.`when`(server.onlinePlayers).thenReturn(HashMap())
                 Mockito.`when`(server.gamemode).thenReturn(1)
                 Mockito.`when`(server.name).thenReturn("PNX")
-                Mockito.`when`(server.nukkitVersion).thenReturn("1.0.0")
+                Mockito.`when`(server.chorusVersion).thenReturn("1.0.0")
                 Mockito.`when`(server.gitCommit).thenReturn("1.0.0")
                 Mockito.`when`(server.maxPlayers).thenReturn(100)
                 Mockito.`when`(server.hasWhitelist()).thenReturn(false)

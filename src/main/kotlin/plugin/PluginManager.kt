@@ -83,7 +83,7 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
         val plugin: InternalPlugin = InternalPlugin.Companion.INSTANCE
         val info: MutableMap<String, Any> = HashMap()
         info["name"] = "PowerNukkitX"
-        info["version"] = server.nukkitVersion
+        info["version"] = server.chorusVersion
         info["website"] = "https://github.com/PowerNukkitX/PowerNukkitX"
         info["main"] = InternalPlugin::class.java.name
         val file = try {
