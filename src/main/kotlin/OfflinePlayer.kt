@@ -1,8 +1,6 @@
 package org.chorus_oss.chorus
 
-import org.chorus_oss.chorus.metadata.MetadataValue
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
-import org.chorus_oss.chorus.plugin.Plugin
 import java.util.*
 
 /**
@@ -80,27 +78,4 @@ class OfflinePlayer(override var uuid: UUID) :
         return true
     }
 
-    override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        Server.instance.playerMetadata.setMetadata(this, metadataKey, newMetadataValue)
-    }
-
-    override fun getMetadata(metadataKey: String): List<MetadataValue?> {
-        return Server.instance.playerMetadata.getMetadata(this, metadataKey)
-    }
-
-    override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue? {
-        return Server.instance.playerMetadata.getMetadata(this, metadataKey, plugin)
-    }
-
-    override fun hasMetadata(metadataKey: String): Boolean {
-        return Server.instance.playerMetadata.hasMetadata(this, metadataKey)
-    }
-
-    override fun hasMetadata(metadataKey: String, plugin: Plugin): Boolean {
-        return Server.instance.playerMetadata.hasMetadata(this, metadataKey, plugin)
-    }
-
-    override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        Server.instance.playerMetadata.removeMetadata(this, metadataKey, owningPlugin)
-    }
 }

@@ -25,7 +25,6 @@ import org.chorus_oss.chorus.event.block.BlockUpdateEvent
 import org.chorus_oss.chorus.event.level.*
 import org.chorus_oss.chorus.event.player.PlayerInteractEvent
 import org.chorus_oss.chorus.event.weather.LightningStrikeEvent
-import org.chorus_oss.chorus.inventory.BlockInventoryHolder
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.Item.Companion.get
 import org.chorus_oss.chorus.item.ItemBucket
@@ -47,16 +46,11 @@ import org.chorus_oss.chorus.level.vibration.VibrationEvent
 import org.chorus_oss.chorus.level.vibration.VibrationManager
 import org.chorus_oss.chorus.level.vibration.VibrationType
 import org.chorus_oss.chorus.math.*
-import org.chorus_oss.chorus.metadata.BlockMetadataStore
-import org.chorus_oss.chorus.metadata.MetadataValue
-import org.chorus_oss.chorus.metadata.Metadatable
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.*
 import org.chorus_oss.chorus.network.protocol.*
 import org.chorus_oss.chorus.network.protocol.types.PlayerAbility
 import org.chorus_oss.chorus.network.protocol.types.SpawnPointType
-import org.chorus_oss.chorus.plugin.InternalPlugin
-import org.chorus_oss.chorus.plugin.Plugin
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.scheduler.BlockUpdateScheduler
 import org.chorus_oss.chorus.scheduler.ServerScheduler
@@ -82,8 +76,7 @@ class Level(
     val dimensionCount: Int,
     provider: Class<out LevelProvider>,
     generatorConfig: GeneratorConfig
-) :
-    Metadatable, Loggable {
+) : Loggable {
     val players = ConcurrentHashMap<Long, Player>()
     val entities = ConcurrentHashMap<Long, Entity>()
     val blockEntities = ConcurrentHashMap<Long, BlockEntity>()
@@ -151,7 +144,7 @@ class Level(
     var tickRateOptDelay: Int = 1
 
     lateinit var gameRules: GameRules
-    private lateinit var provider: AtomicReference<LevelProvider>
+    private var provider: AtomicReference<LevelProvider>
     private var time: Float
     private var nextTimeSendTick = 0
     val name: String
@@ -161,14 +154,13 @@ class Level(
     private val mutableBlock: Vector3? = null
 
     @JvmField
-    var autoSave: Boolean
-    private var blockMetadata: BlockMetadataStore?
+    var autoSave: Boolean = Server.instance.getAutoSave()
     private val temporalVector: Vector3
     private val chunkTickRadius: Int
     private val chunksPerTicks: Int
     private val clearChunksOnTick: Boolean
-    lateinit var generator: Generator
-    private val generatorClass: Class<out Generator>?
+    var generator: Generator
+    private val generatorClass = Registries.GENERATOR[generatorConfig.name]
 
     private var updateLCG: Int = ThreadLocalRandom.current().nextInt()
         get() = (((field * 3) xor LCG_CONSTANT).also { field = it })
@@ -260,10 +252,6 @@ class Level(
         )
     }
 
-    fun getBlockMetadata(): BlockMetadataStore? {
-        return this.blockMetadata
-    }
-
     fun getProvider(): LevelProvider {
         return provider.get()
     }
@@ -307,7 +295,6 @@ class Level(
             levelProvider.close()
         }
         provider.set(null)
-        this.blockMetadata = null
     }
 
     fun addSound(pos: Vector3, sound: Sound) {
@@ -3153,9 +3140,6 @@ class Level(
 
     /** */
     init {
-        this.blockMetadata = BlockMetadataStore(this)
-        this.autoSave = Server.instance.getAutoSave()
-        this.generatorClass = Registries.GENERATOR[generatorConfig.name]
         if (generatorClass == null) {
             throw NullPointerException("Can't find generator for " + generatorConfig.name + " The level " + name + " can't be load!")
         }
@@ -3973,25 +3957,6 @@ class Level(
      * @return the list
      */
     fun doLevelGarbageCollection(force: Boolean) {
-        //gcBlockInventoryMetaData
-        for (entry in HashMap(
-            getBlockMetadata()!!.blockMetadataMap
-        ).entries) {
-            val key = entry.key
-            val split = key.split(":")
-            val value = entry.value
-            if (split[3] == BlockInventoryHolder.KEY && value.containsKey(InternalPlugin.INSTANCE)) {
-                val block = getBlock(
-                    Integer.parseInt(split[0]), Integer.parseInt(split[1]), Integer.parseInt(
-                        split[2]
-                    )
-                )
-                if (block !is BlockInventoryHolder) {
-                    getBlockMetadata()!!.removeMetadata(block, key, InternalPlugin.INSTANCE)
-                }
-            }
-        }
-
         // remove all invaild block entities.
         if (!blockEntities.isEmpty()) {
             val iter = blockEntities.values.iterator()
@@ -4055,30 +4020,6 @@ class Level(
                 }
             }
         }
-    }
-
-    override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        Server.instance.levelMetadata.setMetadata(this, metadataKey, newMetadataValue)
-    }
-
-    override fun getMetadata(metadataKey: String): List<MetadataValue> {
-        return Server.instance.levelMetadata.getMetadata(this, metadataKey)
-    }
-
-    override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue? {
-        return Server.instance.levelMetadata.getMetadata(this, metadataKey, plugin)
-    }
-
-    override fun hasMetadata(metadataKey: String): Boolean {
-        return Server.instance.levelMetadata.hasMetadata(this, metadataKey)
-    }
-
-    override fun hasMetadata(metadataKey: String, plugin: Plugin): Boolean {
-        return Server.instance.levelMetadata.hasMetadata(this, metadataKey, plugin)
-    }
-
-    override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        Server.instance.levelMetadata.removeMetadata(this, metadataKey, owningPlugin)
     }
 
     fun setRaining(raining: Boolean): Boolean {

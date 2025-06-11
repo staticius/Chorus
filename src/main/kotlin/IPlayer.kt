@@ -1,6 +1,5 @@
 package org.chorus_oss.chorus
 
-import org.chorus_oss.chorus.metadata.Metadatable
 import org.chorus_oss.chorus.permission.ServerOperator
 import java.util.*
 
@@ -12,7 +11,7 @@ import java.util.*
  * @see org.chorus_oss.chorus.Player
  * @see org.chorus_oss.chorus.OfflinePlayer
  */
-interface IPlayer : ServerOperator, Metadatable {
+interface IPlayer : ServerOperator {
     val isOnline: Boolean
 
     val name: String?

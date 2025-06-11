@@ -64,7 +64,6 @@ import org.chorus_oss.chorus.level.particle.PunchBlockParticle
 import org.chorus_oss.chorus.level.vibration.VibrationEvent
 import org.chorus_oss.chorus.level.vibration.VibrationType
 import org.chorus_oss.chorus.math.*
-import org.chorus_oss.chorus.metadata.MetadataValue
 import org.chorus_oss.chorus.nbt.tag.*
 import org.chorus_oss.chorus.network.connection.BedrockDisconnectReasons
 import org.chorus_oss.chorus.network.connection.BedrockSession
@@ -4847,22 +4846,6 @@ open class Player(
             }
             this.removeWindow(value)
         }
-    }
-
-    override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        Server.instance.playerMetadata.setMetadata(this, metadataKey, newMetadataValue)
-    }
-
-    override fun getMetadata(metadataKey: String): List<MetadataValue> {
-        return Server.instance.playerMetadata.getMetadata(this, metadataKey)
-    }
-
-    override fun hasMetadata(metadataKey: String): Boolean {
-        return Server.instance.playerMetadata.hasMetadata(this, metadataKey)
-    }
-
-    override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        Server.instance.playerMetadata.removeMetadata(this, metadataKey, owningPlugin)
     }
 
     override fun onChunkChanged(chunk: IChunk) {

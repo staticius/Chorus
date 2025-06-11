@@ -22,13 +22,10 @@ import org.chorus_oss.chorus.math.AxisAlignedBB
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.IVector3
 import org.chorus_oss.chorus.math.Vector3
-import org.chorus_oss.chorus.metadata.MetadataValue
-import org.chorus_oss.chorus.metadata.Metadatable
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
 import org.chorus_oss.chorus.nbt.tag.StringTag
 import org.chorus_oss.chorus.nbt.tag.Tag
-import org.chorus_oss.chorus.plugin.Plugin
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.tags.BlockTags.getTagSet
 import org.chorus_oss.chorus.utils.BlockColor
@@ -38,8 +35,7 @@ import java.util.function.Predicate
 import kotlin.math.pow
 
 
-abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!),
-    Metadatable, AxisAlignedBB, IVector3, Loggable {
+abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!), AxisAlignedBB, IVector3, Loggable {
 
     var color: BlockColor = BlockColor.VOID_BLOCK_COLOR
         get() {
@@ -869,30 +865,6 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
             val name = javaClass.name
             return name.substring(16)
         }
-
-    override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        level.getBlockMetadata()?.setMetadata(this, metadataKey, newMetadataValue)
-    }
-
-    override fun getMetadata(metadataKey: String): List<MetadataValue?>? {
-        return level.getBlockMetadata()?.getMetadata(this, metadataKey)
-    }
-
-    override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue? {
-        return level.getBlockMetadata()?.getMetadata(this, metadataKey, plugin)
-    }
-
-    override fun hasMetadata(metadataKey: String): Boolean {
-        return level.getBlockMetadata()?.hasMetadata(this, metadataKey) ?: false
-    }
-
-    override fun hasMetadata(metadataKey: String, plugin: Plugin): Boolean {
-        return level.getBlockMetadata()?.hasMetadata(this, metadataKey, plugin) ?: false
-    }
-
-    override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        level.getBlockMetadata()?.removeMetadata(this, metadataKey, owningPlugin)
-    }
 
     override fun clone(): Block {
         return super.clone() as Block

@@ -31,8 +31,6 @@ import org.chorus_oss.chorus.level.particle.ExplodeParticle
 import org.chorus_oss.chorus.level.vibration.VibrationEvent
 import org.chorus_oss.chorus.level.vibration.VibrationType
 import org.chorus_oss.chorus.math.*
-import org.chorus_oss.chorus.metadata.MetadataValue
-import org.chorus_oss.chorus.metadata.Metadatable
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.FloatTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
@@ -41,7 +39,6 @@ import org.chorus_oss.chorus.network.protocol.*
 import org.chorus_oss.chorus.network.protocol.AnimateEntityPacket.Animation
 import org.chorus_oss.chorus.network.protocol.types.EntityLink
 import org.chorus_oss.chorus.network.protocol.types.PropertySyncData
-import org.chorus_oss.chorus.plugin.Plugin
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.scheduler.Task
 import org.chorus_oss.chorus.tags.ItemTags
@@ -60,7 +57,7 @@ import kotlin.concurrent.Volatile
 import kotlin.math.*
 import kotlin.random.Random
 
-abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDataTypes, IVector3 {
+abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVector3 {
     var chested: Boolean = false
     open var color: Byte = 0
     open var color2: Byte = 0
@@ -2838,30 +2835,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : Metadatable, EntityDa
         var flags: Byte = getEntityDataMap().getOrDefault(EntityDataTypes.PLAYER_FLAGS, 0.toByte()) as Byte
         flags = (flags.toInt() xor (1 shl entityFlag.getValue()).toByte().toInt()).toByte()
         this.setDataProperty(EntityDataTypes.PLAYER_FLAGS, flags)
-    }
-
-    override fun setMetadata(metadataKey: String, newMetadataValue: MetadataValue) {
-        Server.instance.entityMetadata.setMetadata(this, metadataKey, newMetadataValue)
-    }
-
-    override fun getMetadata(metadataKey: String): List<MetadataValue?>? {
-        return Server.instance.entityMetadata.getMetadata(this, metadataKey)
-    }
-
-    override fun getMetadata(metadataKey: String, plugin: Plugin): MetadataValue? {
-        return Server.instance.entityMetadata.getMetadata(this, metadataKey, plugin)
-    }
-
-    override fun hasMetadata(metadataKey: String): Boolean {
-        return Server.instance.entityMetadata.hasMetadata(this, metadataKey)
-    }
-
-    override fun hasMetadata(metadataKey: String, plugin: Plugin): Boolean {
-        return Server.instance.entityMetadata.hasMetadata(this, metadataKey, plugin)
-    }
-
-    override fun removeMetadata(metadataKey: String, owningPlugin: Plugin) {
-        Server.instance.entityMetadata.removeMetadata(this, metadataKey, owningPlugin)
     }
 
 

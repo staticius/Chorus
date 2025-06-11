@@ -46,9 +46,6 @@ import org.chorus_oss.chorus.level.tickingarea.manager.SimpleTickingAreaManager
 import org.chorus_oss.chorus.level.tickingarea.manager.TickingAreaManager
 import org.chorus_oss.chorus.level.tickingarea.storage.JSONTickingAreaStorage
 import org.chorus_oss.chorus.level.updater.block.BlockStateUpdaterBase
-import org.chorus_oss.chorus.metadata.EntityMetadataStore
-import org.chorus_oss.chorus.metadata.LevelMetadataStore
-import org.chorus_oss.chorus.metadata.PlayerMetadataStore
 import org.chorus_oss.chorus.nbt.NBTIO.readCompressed
 import org.chorus_oss.chorus.nbt.NBTIO.writeGZIPCompressed
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
@@ -193,12 +190,6 @@ class Server internal constructor(
     </P> */
     var checkLoginTime: Boolean = false
 
-    var entityMetadata: EntityMetadataStore
-        private set
-    var playerMetadata: PlayerMetadataStore
-        private set
-    var levelMetadata: LevelMetadataStore
-        private set
     var network: Network
         private set
 
@@ -405,10 +396,6 @@ class Server internal constructor(
         if (settings.baseSettings.waterdogpe) {
             this.checkLoginTime = false
         }
-
-        this.entityMetadata = EntityMetadataStore()
-        this.playerMetadata = PlayerMetadataStore()
-        this.levelMetadata = LevelMetadataStore()
         this.operators = Config(this.dataPath + "ops.txt", Config.ENUM)
         this.whitelist = Config(this.dataPath + "white-list.txt", Config.ENUM)
         this.bannedPlayers = BanList(this.dataPath + "banned-players.json")
