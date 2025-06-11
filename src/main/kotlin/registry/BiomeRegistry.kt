@@ -35,43 +35,45 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
             throw RuntimeException(e)
         }
 
-        try {
-            BiomeRegistry::class.java.classLoader.getResourceAsStream("biome_definitions.nbt").use { stream ->
-                stream ?: throw RuntimeException("Could not load biome_definitions.nbt")
-                val compoundTag = readTreeMapCompoundTag(stream, ByteOrder.BIG_ENDIAN, true)
-                val tags: Map<String, Tag<*>> = compoundTag.tags
-                for ((key, value1) in tags) {
-                    val id = NAME2ID[key]!!
-                    val value = value1 as CompoundTag?
-                    val tags1 = value!!.getList("tags", StringTag::class.java)
-                    val list =
-                        tags1.all.stream().map { obj: StringTag? -> obj!!.parseValue() }.collect(Collectors.toSet())
-                    val biomeDefinition = BiomeDefinition(
-                        value.getFloat("ash"),
-                        value.getFloat("blue_spores"),
-                        value.getFloat("depth"),
-                        value.getFloat("downfall"),
-                        value.getFloat("height"),
-                        value.getString("name_hash"),
-                        value.getByte("rain"),
-                        value.getFloat("red_spores"),
-                        list,
-                        value.getFloat("temperature"),
-                        value.getFloat("waterColorA"),
-                        value.getFloat("waterColorB"),
-                        value.getFloat("waterColorG"),
-                        value.getFloat("waterColorR"),
-                        value.getFloat("waterTransparency"),
-                        value.getFloat("white_ash")
-                    )
-                    register(id, biomeDefinition)
-                }
-            }
-        } catch (e: IOException) {
-            throw RuntimeException(e)
-        } catch (e: RegisterException) {
-            throw RuntimeException(e)
-        }
+        // TODO: New Biome Stuff
+
+//        try {
+//            BiomeRegistry::class.java.classLoader.getResourceAsStream("biome_definitions.nbt").use { stream ->
+//                stream ?: throw RuntimeException("Could not load biome_definitions.nbt")
+//                val compoundTag = readTreeMapCompoundTag(stream, ByteOrder.BIG_ENDIAN, true)
+//                val tags: Map<String, Tag<*>> = compoundTag.tags
+//                for ((key, value1) in tags) {
+//                    val id = NAME2ID[key]!!
+//                    val value = value1 as CompoundTag?
+//                    val tags1 = value!!.getList("tags", StringTag::class.java)
+//                    val list =
+//                        tags1.all.stream().map { obj: StringTag? -> obj!!.parseValue() }.collect(Collectors.toSet())
+//                    val biomeDefinition = BiomeDefinition(
+//                        value.getFloat("ash"),
+//                        value.getFloat("blue_spores"),
+//                        value.getFloat("depth"),
+//                        value.getFloat("downfall"),
+//                        value.getFloat("height"),
+//                        value.getString("name_hash"),
+//                        value.getByte("rain"),
+//                        value.getFloat("red_spores"),
+//                        list,
+//                        value.getFloat("temperature"),
+//                        value.getFloat("waterColorA"),
+//                        value.getFloat("waterColorB"),
+//                        value.getFloat("waterColorG"),
+//                        value.getFloat("waterColorR"),
+//                        value.getFloat("waterTransparency"),
+//                        value.getFloat("white_ash")
+//                    )
+//                    register(id, biomeDefinition)
+//                }
+//            }
+//        } catch (e: IOException) {
+//            throw RuntimeException(e)
+//        } catch (e: RegisterException) {
+//            throw RuntimeException(e)
+//        }
     }
 
     override operator fun get(key: Int): BiomeDefinition? {

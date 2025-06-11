@@ -1,5 +1,6 @@
 package org.chorus_oss.chorus.network.protocol
 
+import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.nbt.NBTIO.write
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
@@ -9,12 +10,14 @@ import java.io.IOException
 import java.nio.ByteOrder
 
 class ItemRegistryPacket : DataPacket() {
-    var entries: Array<Entry>? = emptyArray()
+    var entries: Array<Entry> = emptyArray()
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeUnsignedVarInt(entries!!.size)
+        Server.log.info("Encoding ItemRegistryPacket")
+
+        byteBuf.writeUnsignedVarInt(entries.size)
         try {
-            for (entry in entries!!) {
+            for (entry in entries) {
                 byteBuf.writeString(entry.name)
                 byteBuf.writeShortLE(entry.runtimeId)
                 byteBuf.writeBoolean(entry.componentBased)
