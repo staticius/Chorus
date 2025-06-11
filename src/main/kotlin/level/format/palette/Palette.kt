@@ -32,7 +32,7 @@ open class Palette<V> {
     @JvmOverloads
     constructor(first: V, version: BitArrayVersion = BitArrayVersion.V2) {
         this.bitArray = version.createArray(SubChunk.SIZE)
-        this.palette = ArrayList(16)
+        this.palette = mutableListOf()
         palette.add(first)
     }
 
@@ -89,7 +89,7 @@ open class Palette<V> {
         byteBuf.writeByte(getPaletteHeader(bitArray.version, true))
         for (word in bitArray.words) byteBuf.writeIntLE(word)
         bitArray.writeSizeToNetwork(byteBuf, palette.size)
-        for (value in this.palette) ByteBufVarInt.writeInt(byteBuf, serializer.serialize(value))
+        for (value in palette) ByteBufVarInt.writeInt(byteBuf, serializer.serialize(value))
     }
 
     fun writeToStoragePersistent(byteBuf: ByteBuf, serializer: PersistentDataSerializer<V>) {

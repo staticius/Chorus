@@ -18,7 +18,7 @@ class BlockPalette : Palette<BlockState> {
     private var obfuscatePalette: BlockPalette? = null
     private var blockChangeCache: Long = 0
 
-    constructor(first: BlockState) : super(first, MutableList<BlockState>(16) { BlockAir.STATE }, BitArrayVersion.V2)
+    constructor(first: BlockState) : super(first, mutableListOf(), BitArrayVersion.V2)
 
     constructor(first: BlockState, version: BitArrayVersion) : super(first, version)
 

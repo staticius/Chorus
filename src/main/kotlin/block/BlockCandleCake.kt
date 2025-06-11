@@ -119,7 +119,7 @@ open class BlockCandleCake @JvmOverloads constructor(blockState: BlockState = pr
             level.addSound(this.position, Sound.FIRE_IGNITE)
             level.setBlock(this.position, this, direct = true, update = true)
             return true
-        } else if (player != null && (player.foodData.isHungry || player.isCreative)) {
+        } else if (player != null && (player.foodData!!.isHungry || player.isCreative)) {
             val cake: Block = BlockCake()
             level.setBlock(this.position, cake, direct = true, update = true)
             level.dropItem(

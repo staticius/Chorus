@@ -337,12 +337,12 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                             true
                         ).also { i = it }) != null
                     ) {
-                        player.foodData.exhaust(0.005)
-                        if (!i!!.equals(oldItem) || i!!.getCount() != oldItem.getCount()) {
-                            if (oldItem.id == i!!.id || i!!.isNothing) {
-                                player.inventory.setItemInHand(i!!)
+                        player.foodData?.exhaust(0.005)
+                        if (i!! != oldItem || i.getCount() != oldItem.getCount()) {
+                            if (oldItem.id == i.id || i.isNothing) {
+                                player.inventory.setItemInHand(i)
                             } else {
-                                logTriedToSetButHadInHand(player, i!!, oldItem)
+                                logTriedToSetButHadInHand(player, i, oldItem)
                             }
                             player.inventory.sendHeldItem(player.viewers.values)
                         }

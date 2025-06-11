@@ -111,13 +111,13 @@ class BlockCake @JvmOverloads constructor(blockState: BlockState = properties.de
             return false
         }
         val damage = biteCount
-        if (player != null && (player.foodData.isHungry || player.isCreative || Server.instance.getDifficulty() == 0)
+        if (player != null && (player.foodData!!.isHungry || player.isCreative || Server.instance.getDifficulty() == 0)
         ) {
             if (damage < CommonBlockProperties.BITE_COUNTER.max) biteCount = damage + 1
             if (damage >= CommonBlockProperties.BITE_COUNTER.max) {
                 level.setBlock(this.position, get(BlockID.AIR), true)
             } else {
-                player.foodData.addFood(2, 0.4f)
+                player.foodData?.addFood(2, 0.4f)
                 level.setBlock(this.position, this, true)
             }
             level.addLevelSoundEvent(this.position, LevelSoundEventPacket.SOUND_BURP)

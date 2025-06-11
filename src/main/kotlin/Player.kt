@@ -288,7 +288,7 @@ open class Player(
      *
      * @return the food data
      */
-    lateinit var foodData: PlayerFood
+    var foodData: PlayerFood? = null
     protected var enableClientCommand: Boolean = true
         private set(value) {
             field = value
@@ -653,8 +653,8 @@ open class Player(
             val i =
                 level!!.useBreakOn(block.position, oldItem, this, true)
             if (this.isSurvival || this.isAdventure) {
-                foodData.exhaust(0.005)
-                if (!i!!.equals(oldItem) || i.getCount() != oldItem!!.getCount()) {
+                foodData?.exhaust(0.005)
+                if (i!! != oldItem || i.getCount() != oldItem.getCount()) {
                     inventory.setItemInHand(i)
                     inventory.sendHeldItem(viewers.values)
                 }
@@ -722,7 +722,7 @@ open class Player(
             handItem =
                 level!!.useBreakOn(blockPos.asVector3(), face, handItem, this, true)
             if (handItem != null && this.isSurvival) {
-                foodData.exhaust(0.005)
+                foodData?.exhaust(0.005)
                 if (handItem.equals(clone) && handItem.getCount() == clone.getCount()) {
                     return
                 }
@@ -875,8 +875,8 @@ open class Player(
 
         //FoodLevel
         val food = this.foodData
-        if (food.isHungry) {
-            food.sendFood()
+        if (food?.isHungry == true) {
+            food?.sendFood()
         }
 
         val scoreboardManager = Server.instance.scoreboardManager
@@ -1288,7 +1288,7 @@ open class Player(
     fun handleLogicInMove(invalidMotion: Boolean, distance: Double) {
         if (!invalidMotion) {
             //处理饱食度更新
-            if (foodData.isEnabled && Server.instance.getDifficulty() > 0) {
+            if (foodData?.isEnabled == true && Server.instance.getDifficulty() > 0) {
                 //UpdateFoodExpLevel
                 if (distance >= 0.05) {
                     var jump = 0.0
@@ -1299,12 +1299,12 @@ open class Player(
                         if (this.inAirTicks == 3 && swimming == 0.0) {
                             jump = 0.2
                         }
-                        foodData.exhaust(0.1 * distance2 + jump + swimming)
+                        foodData?.exhaust(0.1 * distance2 + jump + swimming)
                     } else {
                         if (this.inAirTicks == 3 && swimming == 0.0) {
                             jump = 0.05
                         }
-                        foodData.exhaust(jump + swimming)
+                        foodData?.exhaust(jump + swimming)
                     }
                 }
             }
@@ -1611,15 +1611,9 @@ open class Player(
         this.setGamemode(this.gamemode, false, null, true)
         this.sendData(hasSpawned.values.toTypedArray(), entityDataMap)
         this.spawnToAll()
-        Arrays.stream(level!!.getEntities()).filter { entity: Entity ->
-            entity.viewers.containsKey(
-                this.loaderId
-            ) && entity is EntityBoss
-        }.forEach { entity: Entity ->
-            (entity as EntityBoss).addBossbar(
-                this
-            )
-        }
+        level!!.getEntities()
+            .filter { it.viewers.containsKey(this.loaderId) && it is EntityBoss }
+            .forEach { (it as EntityBoss).addBossbar(this) }
         this.refreshBlockEntity(1)
     }
 
@@ -1709,7 +1703,7 @@ open class Player(
 
         this.removeAllEffects()
         this.setHealthSafe(getMaxHealth().toFloat())
-        foodData.setFood(20, 20f)
+        foodData?.setFood(20, 20f)
 
         this.sendData(this)
 
@@ -2712,7 +2706,7 @@ open class Player(
                 .setMaxValue(getMaxHealth().toFloat())
                 .setValue(if (health > 0) (if (health < getMaxHealth()) health else getMaxHealth().toFloat()) else 0f),
             getAttribute(Attribute.MAX_HUNGER)
-                .setValue(foodData.getFood().toFloat()),
+                .setValue(foodData!!.getFood().toFloat()),
             getAttribute(Attribute.MOVEMENT_SPEED).setValue(this.movementSpeed),
             getAttribute(Attribute.EXPERIENCE_LEVEL).setValue(
                 experienceLevel.toFloat()
@@ -2890,7 +2884,7 @@ open class Player(
                 }
 
                 if (this.foodData != null) {
-                    foodData.tick(tickDiff)
+                    foodData!!.tick(tickDiff)
                 }
 
                 //鞘翅检查和耐久计算
@@ -3717,8 +3711,8 @@ open class Player(
             namedTag!!.putString("lastIP", this.address)
             namedTag!!.putInt("EXP", this.experience)
             namedTag!!.putInt("expLevel", this.experienceLevel)
-            namedTag!!.putInt("foodLevel", foodData.getFood())
-            namedTag!!.putFloat("foodSaturationLevel", foodData.getSaturation())
+            namedTag!!.putInt("foodLevel", foodData!!.getFood())
+            namedTag!!.putFloat("foodSaturationLevel", foodData!!.getSaturation())
             namedTag!!.putInt("enchSeed", this.enchSeed)
 
             val fogIdentifiers = ListTag<StringTag>()
@@ -4235,7 +4229,7 @@ open class Player(
                 if (source is EntityDamageByEntityEvent) {
                     val damager = source.damager
                     if (damager is Player) {
-                        damager.foodData.exhaust(0.1)
+                        damager.foodData?.exhaust(0.1)
                     }
                     //保存攻击玩家的实体在lastBeAttackEntity
                     this.lastBeAttackEntity = source.damager

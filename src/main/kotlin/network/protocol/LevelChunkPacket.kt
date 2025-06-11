@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.network.protocol
 
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 
-class LevelChunkPacket : DataPacket() {
+class LevelChunkPacket() : DataPacket() {
     @JvmField
     var chunkX: Int = 0
 

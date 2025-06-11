@@ -32,12 +32,12 @@ data class SubChunk(
         arrayOf<BlockPalette>(
             BlockPalette(
                 BlockAir.properties.defaultState,
-                MutableList<BlockState>(16) { BlockAir.STATE },
+                mutableListOf(),
                 BitArrayVersion.V2
             ),
             BlockPalette(
                 BlockAir.properties.defaultState,
-                MutableList<BlockState>(16) { BlockAir.STATE },
+                mutableListOf(),
                 BitArrayVersion.V2
             )
         ),
@@ -138,13 +138,21 @@ data class SubChunk(
     }
 
     fun writeToBuf(byteBuf: ByteBuf) {
+//        byteBuf.writeByte(VERSION)
+//        byteBuf.writeByte(layers.size)
+//        byteBuf.writeByte(y.toInt())
+//
+//        for (layer in layers) {
+//            layer.writeToNetwork(byteBuf) { it.blockStateHash() }
+//        }
+
         byteBuf.writeByte(VERSION)
-        byteBuf.writeByte(layers.size)
+        byteBuf.writeByte(2)
         byteBuf.writeByte(y.toInt())
 
-        for (layer in layers) {
-            layer.writeToNetwork(byteBuf) { it.blockStateHash() }
-        }
+
+        layers[0].writeToNetwork(byteBuf) { it.blockStateHash() }
+        layers[1].writeToNetwork(byteBuf) { it.blockStateHash() }
     }
 
     fun writeObfuscatedToBuf(level: Level, byteBuf: ByteBuf) {

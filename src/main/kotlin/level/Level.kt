@@ -3428,10 +3428,11 @@ class Level(
                 doLevelGarbageCollection(false)
             }
         } catch (e: Exception) {
-            Server.instance.logger.error("Subtick Thread for level " + folderName + " failed.", e)
+            Server.instance.logger.error("Subtick Thread for level $folderName failed.", e)
         }
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     private fun processChunkRequest() {
         for (index in chunkSendQueue.keys) {
             val x = getHashX(index)

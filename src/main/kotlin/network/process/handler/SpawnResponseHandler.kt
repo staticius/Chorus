@@ -172,9 +172,9 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
     override fun handle(pk: SetLocalPlayerAsInitializedPacket) {
         log.debug(
             "receive SetLocalPlayerAsInitializedPacket for {}",
-            player!!.playerInfo.username
+            player?.playerInfo?.username
         )
-        player!!.onPlayerLocallyInitialized()
+        player?.onPlayerLocallyInitialized()
     }
 
     companion object : Loggable

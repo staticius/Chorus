@@ -32,10 +32,10 @@ abstract class ItemFood : Item {
         get() = 31
 
     override fun onClickAir(player: Player, directionVector: Vector3): Boolean {
-        if (player.foodData.isHungry || !this.isRequiresHunger || player.isCreative) {
+        if (player.foodData!!.isHungry || !this.isRequiresHunger || player.isCreative) {
             return true
         }
-        player.foodData.sendFood()
+        player.foodData?.sendFood()
         return false
     }
 
@@ -53,7 +53,7 @@ abstract class ItemFood : Item {
         }
 
         if (this.onEaten(player)) {
-            player.foodData.addFood(this)
+            player.foodData?.addFood(this)
             player.completeUsingItem(this.runtimeId.toShort(), CompletedUsingItemPacket.ItemUseMethod.EAT)
 
             if (player.isAdventure || player.isSurvival) {
