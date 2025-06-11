@@ -1017,7 +1017,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVec
     open fun despawnFrom(player: Player) {
         if (hasSpawned.containsKey(player.loaderId)) {
             val pk = RemoveEntityPacket()
-            pk.eid = this.getRuntimeID()
+            pk.entityRuntimeID = this.getRuntimeID()
             player.dataPacket(pk)
             hasSpawned.remove(player.loaderId)
         }
@@ -2687,7 +2687,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVec
     }
 
     fun despawnFromAll() {
-        for (player: Player in ArrayList(hasSpawned.values)) {
+        for (player in hasSpawned.values) {
             this.despawnFrom(player)
         }
     }

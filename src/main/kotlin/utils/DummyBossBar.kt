@@ -222,7 +222,7 @@ class DummyBossBar private constructor(builder: Builder) {
 
     private fun removeBossEntity() {
         val pkRemove = RemoveEntityPacket()
-        pkRemove.eid = bossBarId
+        pkRemove.entityRuntimeID = bossBarId
         player.dataPacket(pkRemove)
     }
 

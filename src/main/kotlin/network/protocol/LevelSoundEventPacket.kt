@@ -10,19 +10,19 @@ open class LevelSoundEventPacket : DataPacket() {
     var y: Float = 0f
     var z: Float = 0f
     var extraData: Int = -1
-    var entityIdentifier: String? = null
+    var entityIdentifier: String = ""
     var isBabyMob: Boolean = false
     var isGlobal: Boolean = false
     var entityUniqueID: ActorUniqueID = 0
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeUnsignedVarInt(this.sound)
+        byteBuf.writeVarInt(this.sound)
         byteBuf.writeVector3f(this.x, this.y, this.z)
         byteBuf.writeVarInt(this.extraData)
-        byteBuf.writeString(entityIdentifier!!)
+        byteBuf.writeString(this.entityIdentifier)
         byteBuf.writeBoolean(this.isBabyMob)
         byteBuf.writeBoolean(this.isGlobal)
-        byteBuf.writeActorUniqueID(this.entityUniqueID)
+        byteBuf.writeLongLE(this.entityUniqueID)
     }
 
     override fun pid(): Int {
@@ -37,7 +37,7 @@ open class LevelSoundEventPacket : DataPacket() {
         override fun decode(byteBuf: HandleByteBuf): LevelSoundEventPacket {
             val packet = LevelSoundEventPacket()
 
-            packet.sound = byteBuf.readUnsignedVarInt()
+            packet.sound = byteBuf.readVarInt()
             val v = byteBuf.readVector3f()
             packet.x = v.x
             packet.y = v.y
@@ -46,6 +46,7 @@ open class LevelSoundEventPacket : DataPacket() {
             packet.entityIdentifier = byteBuf.readString()
             packet.isBabyMob = byteBuf.readBoolean()
             packet.isGlobal = byteBuf.readBoolean()
+            packet.entityUniqueID = byteBuf.readLongLE()
 
             return packet
         }

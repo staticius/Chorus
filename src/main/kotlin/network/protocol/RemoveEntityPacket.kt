@@ -5,10 +5,14 @@ import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 
 class RemoveEntityPacket : DataPacket() {
     @JvmField
-    var eid: Long = 0
+    var entityRuntimeID: Long = 0
+
+    override fun toString(): String {
+        return "RemoveEntityPacket(entityRuntimeID=$entityRuntimeID)"
+    }
 
     override fun encode(byteBuf: HandleByteBuf) {
-        byteBuf.writeActorUniqueID(this.eid)
+        byteBuf.writeActorUniqueID(this.entityRuntimeID)
     }
 
     override fun pid(): Int {

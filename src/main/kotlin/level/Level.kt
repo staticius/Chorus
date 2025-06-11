@@ -817,7 +817,7 @@ class Level(
                 val chunkZ = getHashZ(index)
                 val chunkPlayers: Array<Player> =
                     getChunkPlayers(chunkX, chunkZ).values.toTypedArray()
-                if (chunkPlayers.size > 0) {
+                if (chunkPlayers.isNotEmpty()) {
                     for (pk in chunkPackets[index]!!) {
                         Server.broadcastPacket(chunkPlayers, pk)
                     }

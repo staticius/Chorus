@@ -842,7 +842,7 @@ open class Player(
         session.syncInventory()
         this.resetInventory()
 
-        this.enableClientCommand = (true)
+        this.enableClientCommand = true
 
         val setTimePacket = SetTimePacket()
         setTimePacket.time = level!!.getTime()
@@ -4144,7 +4144,7 @@ open class Player(
 
     override fun syncAttributes() {
         val pk = UpdateAttributesPacket()
-        pk.entries = attributes.values.stream().filter { obj: Attribute -> obj.isSyncable() }.toList().toTypedArray()
+        pk.entries = attributes.values.filter { it.isSyncable() }.toTypedArray()
         pk.entityId = this.getRuntimeID()
         this.dataPacket(pk)
     }
@@ -4193,8 +4193,7 @@ open class Player(
      * @param speed 属性值<br></br>the speed value
      */
     fun sendMovementSpeed(speed: Float) {
-        val attribute: Attribute =
-            attributes.computeIfAbsent(Attribute.MOVEMENT_SPEED) { getAttribute(it) }
+        val attribute: Attribute = attributes.computeIfAbsent(Attribute.MOVEMENT_SPEED, Attribute::getAttribute)
         attribute.setValue(speed)
         this.syncAttribute(attribute)
     }
@@ -5045,34 +5044,31 @@ open class Player(
                 if (entity.pickupDelay <= 0) {
                     val item = entity.item
 
-                    if (item != null) {
-                        if (!this.isCreative && !this.inventory.canAddItem(item)) {
-                            return false
-                        }
-
-                        val ev: InventoryPickupItemEvent
-                        Server.instance.pluginManager
-                            .callEvent(InventoryPickupItemEvent(inventory!!, entity).also { ev = it })
-                        if (ev.cancelled) {
-                            return false
-                        }
-
-                        if (item.getSafeBlockState().toBlock() is BlockWood) {
-                            this.awardAchievement("mineWood")
-                        } else if (item.id == ItemID.DIAMOND) {
-                            this.awardAchievement("diamond")
-                        }
-
-                        val pk = TakeItemEntityPacket()
-                        pk.entityId = this.getRuntimeID()
-                        pk.target = entity.getRuntimeID()
-                        Server.broadcastPacket(entity.viewers.values, pk)
-                        this.dataPacket(pk)
-
-                        this.inventory.addItem(item.clone())
-                        entity.close()
-                        return true
+                    if (!this.isCreative && !this.inventory.canAddItem(item)) {
+                        return false
                     }
+
+                    val ev: InventoryPickupItemEvent
+                    Server.instance.pluginManager.callEvent(InventoryPickupItemEvent(inventory!!, entity).also { ev = it })
+                    if (ev.cancelled) {
+                        return false
+                    }
+
+                    if (item.getSafeBlockState().toBlock() is BlockWood) {
+                        this.awardAchievement("mineWood")
+                    } else if (item.id == ItemID.DIAMOND) {
+                        this.awardAchievement("diamond")
+                    }
+
+                    val pk = TakeItemEntityPacket()
+                    pk.entityId = this.getRuntimeID()
+                    pk.target = entity.getRuntimeID()
+                    Server.broadcastPacket(entity.viewers.values, pk)
+                    this.dataPacket(pk)
+
+                    this.inventory.addItem(item.clone())
+                    entity.close()
+                    return true
                 }
             }
         }

@@ -33,7 +33,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     protected var invisible: Boolean = false
     var movementSpeed: Float = DEFAULT_SPEED
         set(value) {
-            field = round(value.toDouble()).toFloat()
+            field = round(value.toDouble() * 100).toFloat() / 100
         }
     protected var turtleTicks: Int = 0
     private var attackTimeByShieldKb: Boolean = false
@@ -390,7 +390,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
      * @param speed 速度大小<br></br>Speed value
      */
     open fun setMovementSpeedF(speed: Float) {
-        this.movementSpeed = round(speed.toDouble()).toFloat()
+        this.movementSpeed = round(speed.toDouble() * 100).toFloat() / 100
     }
 
     fun getAirTicks(): Int {

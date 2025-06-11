@@ -211,7 +211,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
     override fun despawnFrom(player: Player) {
         if (hasSpawned.containsKey(player.loaderId)) {
             val pk: RemoveEntityPacket = RemoveEntityPacket()
-            pk.eid = this.getRuntimeID()
+            pk.entityRuntimeID = this.getRuntimeID()
             player.dataPacket(pk)
             hasSpawned.remove(player.loaderId)
         }

@@ -32,6 +32,10 @@ class UpdateAttributesPacket : DataPacket() {
         return ProtocolInfo.Companion.UPDATE_ATTRIBUTES_PACKET
     }
 
+    override fun toString(): String {
+        return "UpdateAttributesPacket(entries=${entries.contentToString()}, entityId=$entityId, frame=$frame)"
+    }
+
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }

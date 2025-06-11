@@ -21,26 +21,26 @@ class Attribute private constructor(
     var shouldSend: Boolean
 ) :
     Cloneable {
-    protected var currentValue: Float
+    private var currentValue: Float
 
     init {
         this.currentValue = this.defaultValue
     }
 
     fun setMinValue(minValue: Float): Attribute {
-        require(!(minValue > this.maxValue)) { "Value " + minValue + " is bigger than the maxValue!" }
+        require(!(minValue > this.maxValue)) { "Value $minValue is bigger than the maxValue!" }
         this.minValue = minValue
         return this
     }
 
     fun setMaxValue(maxValue: Float): Attribute {
-        require(!(maxValue < this.minValue)) { "Value " + maxValue + " is bigger than the minValue!" }
+        require(!(maxValue < this.minValue)) { "Value $maxValue is bigger than the minValue!" }
         this.maxValue = maxValue
         return this
     }
 
     fun setDefaultValue(defaultValue: Float): Attribute {
-        require(!(defaultValue > this.maxValue || defaultValue < this.minValue)) { "Value " + defaultValue + " exceeds the range!" }
+        require(!(defaultValue > this.maxValue || defaultValue < this.minValue)) { "Value $defaultValue exceeds the range!" }
         this.defaultValue = defaultValue
         return this
     }
@@ -56,7 +56,7 @@ class Attribute private constructor(
     fun setValue(value: Float, fit: Boolean): Attribute {
         var value1: Float = value
         if (value1 > this.maxValue || value1 < this.minValue) {
-            require(fit) { "Value " + value1 + " exceeds the range!" }
+            require(fit) { "Value $value1 exceeds the range!" }
             value1 = value1.coerceAtLeast(this.minValue).coerceAtMost(this.maxValue)
         }
         this.currentValue = value1
@@ -72,12 +72,7 @@ class Attribute private constructor(
     }
 
     override fun toString(): String {
-        return name + "{" +
-                "min=" + minValue +
-                ", max=" + maxValue +
-                ", def=" + defaultValue +
-                ", val=" + currentValue +
-                '}'
+        return "Attribute(id=$id, name=$name, minValue=$minValue, maxValue=$maxValue, value=${getValue()}, defaultMinimum=$defaultMinimum, defaultMaximum=$defaultMaximum, defaultValue=$defaultValue, shouldSend=$shouldSend)"
     }
 
     companion object {
@@ -202,7 +197,7 @@ class Attribute private constructor(
             defaultValue: Float,
             shouldSend: Boolean
         ): Attribute? {
-            require(!(minValue > maxValue || defaultValue > maxValue || defaultValue < minValue)) { "Invalid ranges: min value: " + minValue + ", max value: " + maxValue + ", defaultValue: " + defaultValue }
+            require(!(minValue > maxValue || defaultValue > maxValue || defaultValue < minValue)) { "Invalid ranges: min value: $minValue, max value: $maxValue, defaultValue: $defaultValue" }
             return attributes.put(
                 id,
                 Attribute(id, name, minValue, maxValue, defaultMinimum, defaultMaximum, defaultValue, shouldSend)
