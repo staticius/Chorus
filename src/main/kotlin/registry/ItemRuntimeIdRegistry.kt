@@ -88,7 +88,7 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
 
     @Throws(RegisterException::class)
     override fun register(key: String, value: Int) {
-        if (REGISTRY.putIfAbsent(key, value) == Int.MAX_VALUE) {
+        if (REGISTRY.putIfAbsent(key, value) == null) {
             ID2NAME[value] = key
         } else {
             throw RegisterException("The item: " + key + "runtime id has been registered!")
@@ -106,7 +106,7 @@ class ItemRuntimeIdRegistry : IRegistry<String, Int, Int> {
     }
 
     private fun register0(key: String, value: Int) {
-        if (REGISTRY.putIfAbsent(key, value) == Int.MAX_VALUE) {
+        if (REGISTRY.putIfAbsent(key, value) == null) {
             ID2NAME[value] = key
         }
     }
