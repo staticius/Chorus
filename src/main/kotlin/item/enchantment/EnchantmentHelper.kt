@@ -26,7 +26,7 @@ object EnchantmentHelper {
         val bookshelfCount = countBookshelves(tablePos)
         val baseRequiredLevel = random.nextRange(1, 8) + (bookshelfCount shr 1) + random.nextRange(0, bookshelfCount)
 
-        return java.util.listOf(
+        return listOf(
             createEnchantOption(random, input, floor(max((baseRequiredLevel / 3.0), 1.0)).toInt(), 0),
             createEnchantOption(
                 random,

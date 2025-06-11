@@ -576,7 +576,7 @@ interface CommonBlockProperties {
 
         val OMINOUS: BooleanPropertyType = BooleanPropertyType.of("ominous", false)
 
-        val VALUES: List<BlockPropertyType<*>> = java.util.listOf<BlockPropertyType<*>>(
+        val VALUES: List<BlockPropertyType<*>> = listOf<BlockPropertyType<*>>(
             OMINOUS,
             VAULT_STATE,
             TRIAL_SPAWNER_STATE,
