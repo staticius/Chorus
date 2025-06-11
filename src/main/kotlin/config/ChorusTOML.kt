@@ -72,7 +72,7 @@ class ChorusTOML {
 
     @Serializable
     data class ServerSettings(
-        var motd: String = "Chorus",
+        var motd: String = "Chorus Server",
         @SerialName("sub-motd")
         var subMotd: String = "chorus-oss.org",
         var ip: String = "0.0.0.0",

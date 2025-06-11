@@ -100,7 +100,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
      */
     fun getCreativeItemIndex(item: Item): Int {
         for (i in 0..<MAP.size) {
-            if (item.equals(MAP[i]!!, !item.isTool, false)) {
+            if (item.equals(MAP[i]!!, !item.isTool)) {
                 return i
             }
         }

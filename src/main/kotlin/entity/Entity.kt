@@ -2755,7 +2755,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVec
     }
 
     fun setDataProperty(key: EntityDataType<*>, value: Any, send: Boolean): Boolean {
-        if (getEntityDataMap().contains(key) && getEntityDataMap().get(key) == value) {
+        if (getEntityDataMap().contains(key) && getEntityDataMap()[key] == value) {
             return false
         }
 

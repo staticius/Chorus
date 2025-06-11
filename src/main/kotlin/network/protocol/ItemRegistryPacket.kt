@@ -13,8 +13,6 @@ class ItemRegistryPacket : DataPacket() {
     var entries: Array<Entry> = emptyArray()
 
     override fun encode(byteBuf: HandleByteBuf) {
-        Server.log.info("Encoding ItemRegistryPacket")
-
         byteBuf.writeUnsignedVarInt(entries.size)
         try {
             for (entry in entries) {

@@ -626,7 +626,7 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, KClass<out Item>> {
             }
             item.damage = meta
             return item
-        } catch (e: Throwable) {
+        } catch (_: Throwable) {
             return null
         }
     }

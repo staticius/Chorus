@@ -81,19 +81,15 @@ open class ConsoleCommandSender : CommandSender {
     }
 
     override val locator: Locator
-        get() {
-            throw UnsupportedOperationException("Can't get locator of ConsoleCommandSender")
-        }
+        get() = Locator(Server.instance.defaultLevel!!)
 
     override val transform: Transform
-        get() {
-            throw UnsupportedOperationException("Can't get transform of ConsoleCommandSender")
-        }
+        get() = Transform(Server.instance.defaultLevel!!)
 
     override val name get() = "CONSOLE"
 
     override var isOp = true
-        set(_) = throw UnsupportedOperationException("Can't set isOp of ConsoleCommandSender")
+        set(_) {}
 
     companion object : Loggable
 }

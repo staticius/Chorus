@@ -27,21 +27,21 @@ class OfflinePlayer(override var uuid: UUID) :
     override val isOnline: Boolean
         get() = this.player != null
 
-    override val name: String?
+    override val name: String
         get() {
             if (namedTag.contains("NameTag")) {
                 return namedTag.getString("NameTag")
             }
-            return null
+            return "OfflinePlayer"
         }
 
     override var isOp: Boolean
-        get() = Server.instance.isOp(name!!.lowercase())
+        get() = Server.instance.isOp(name.lowercase())
         set(value) {
             if (value) {
-                Server.instance.addOp(name!!.lowercase())
+                Server.instance.addOp(name.lowercase())
             } else {
-                Server.instance.removeOp(name!!.lowercase())
+                Server.instance.removeOp(name.lowercase())
             }
         }
 
