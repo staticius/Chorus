@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockMud : BlockSolid, Natural {
+class BlockMud(blockState: BlockState = properties.defaultState) : BlockSolid(blockState), Natural {
     override val name: String
         get() = "Mud"
 

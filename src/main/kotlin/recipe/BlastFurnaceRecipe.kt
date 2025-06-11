@@ -9,8 +9,8 @@ class BlastFurnaceRecipe(recipeId: String?, result: Item, ingredient: Item) :
     SmeltingRecipe(
         recipeId
             ?: RecipeRegistry.computeRecipeId(
-                List.of(result),
-                List.of(DefaultDescriptor(ingredient)),
+                listOf(result),
+                listOf(DefaultDescriptor(ingredient)),
                 RecipeType.BLAST_FURNACE
             )
     ) {

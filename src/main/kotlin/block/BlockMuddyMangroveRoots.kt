@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockMuddyMangroveRoots : BlockSolid, Natural {
+class BlockMuddyMangroveRoots(blockState: BlockState = properties.defaultState) : BlockSolid(blockState), Natural {
     override val name: String
         get() = "Muddy Mangrove Roots"
 

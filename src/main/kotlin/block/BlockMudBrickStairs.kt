@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
 
-class BlockMudBrickStairs : BlockStairs {
+class BlockMudBrickStairs(blockState: BlockState = properties.defaultState) : BlockStairs(blockState) {
     override val name: String
         get() = "Mud Bricks Stair"
 

@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockPrismarineBricks : BlockPrismarine {
+class BlockPrismarineBricks(blockState: BlockState = properties.defaultState) : BlockPrismarine(blockState) {
     override val properties: BlockProperties
         get() = Companion.properties
 

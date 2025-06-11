@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockObsidian : BlockSolid {
+class BlockObsidian(blockState: BlockState = properties.defaultState) : BlockSolid(blockState) {
     override val name: String
         get() = "Obsidian"
 

@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.DoublePlantType
 
-class BlockSunflower : BlockDoublePlant {
+class BlockSunflower(blockState: BlockState = properties.defaultState) : BlockDoublePlant(blockState) {
     override val doublePlantType: DoublePlantType
         get() = DoublePlantType.SUNFLOWER
 

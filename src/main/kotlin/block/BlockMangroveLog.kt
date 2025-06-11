@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockMangroveLog : BlockLog {
+class BlockMangroveLog(blockState: BlockState = properties.defaultState) : BlockLog(blockState) {
     override val name: String
         get() = "Mangrove Log"
 

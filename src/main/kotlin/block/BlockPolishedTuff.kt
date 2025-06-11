@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.block
 
-class BlockPolishedTuff @JvmOverloads constructor(blockstate: BlockState = properties.defaultState) :
-    BlockTuff(blockstate) {
+class BlockPolishedTuff @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
+    BlockTuff(blockState) {
     override val name: String
         get() = "Polished Tuff"
 

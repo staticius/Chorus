@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.item.ItemSnowball
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockSnow : BlockSolid {
+class BlockSnow(blockState: BlockState = properties.defaultState) : BlockSolid(blockState) {
     override val name: String
         get() = "Snow"
 

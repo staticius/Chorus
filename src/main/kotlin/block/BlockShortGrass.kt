@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.level.particle.BoneMealParticle
 import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockShortGrass : BlockFlowable {
+class BlockShortGrass(blockState: BlockState = properties.defaultState) : BlockFlowable(blockState) {
     override fun canBeReplaced(): Boolean {
         return true
     }

@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockNetherrack : BlockSolid {
+class BlockNetherrack(blockState: BlockState = properties.defaultState) : BlockSolid(blockState) {
     override val resistance: Double
         get() = 0.4
 

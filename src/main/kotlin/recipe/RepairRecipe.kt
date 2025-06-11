@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.registry.RecipeRegistry
 import java.util.List
 
 class RepairRecipe(val inventoryType: InventoryType, result: Item, ingredients: Collection<Item>) :
-    BaseRecipe(RecipeRegistry.computeRecipeIdWithItem(List.of(result), ingredients, RecipeType.REPAIR)) {
+    BaseRecipe(RecipeRegistry.computeRecipeIdWithItem(listOf(result), ingredients, RecipeType.REPAIR)) {
     init {
         results.add(result.clone())
         for (item in ingredients) {

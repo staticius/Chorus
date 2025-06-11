@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockNetheriteBlock : BlockSolid {
+class BlockNetheriteBlock(blockState: BlockState = properties.defaultState) : BlockSolid(blockState) {
     override val name: String
         get() = "Netherite Block"
 

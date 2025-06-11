@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.item.ItemTool
 
 
-open class BlockSand : BlockFallable, Natural {
+open class BlockSand(blockState: BlockState = properties.defaultState) : BlockFallable(blockState), Natural {
     override val hardness: Double
         get() = 0.5
 

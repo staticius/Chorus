@@ -13,7 +13,7 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.utils.ChorusRandom
 
-class BlockMycelium : BlockDirt {
+class BlockMycelium(blockState: BlockState = properties.defaultState) : BlockDirt(blockState) {
     override val name: String
         get() = "Mycelium"
 

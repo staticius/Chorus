@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockTubeCoralFan : BlockCoralFan {
+class BlockTubeCoralFan(blockState: BlockState = properties.defaultState) : BlockCoralFan(blockState) {
     override val name: String
         get() = "Tube Coral Fan"
 

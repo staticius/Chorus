@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockShroomlight : BlockTransparent {
+class BlockShroomlight(blockState: BlockState = properties.defaultState) : BlockTransparent(blockState) {
     override val name: String
         get() = "Shroomlight"
 

@@ -198,7 +198,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 if (!existInCloseList(vec)) {
                     val nodeNear = getOpenNode(vec)
                     if (nodeNear == null) {
-                        openList.offer(
+                        openlistOffer(
                             Node(
                                 vec, node, node.cost, calH(
                                     vec,
@@ -224,7 +224,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
-                    openList.offer(
+                    openlistOffer(
                         Node(
                             vec, node, cost, calH(
                                 vec,
@@ -249,7 +249,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
-                    openList.offer(
+                    openlistOffer(
                         Node(
                             vec, node, cost, calH(
                                 vec,
@@ -274,7 +274,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
-                    openList.offer(
+                    openlistOffer(
                         Node(
                             vec, node, cost, calH(
                                 vec,
@@ -299,7 +299,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 val cost = getBlockMoveCostAt(entity.level!!, vec) + DIRECT_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
-                    openList.offer(
+                    openlistOffer(
                         Node(
                             vec, node, cost, calH(
                                 vec,
@@ -326,7 +326,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
-                    openList.offer(
+                    openlistOffer(
                         Node(
                             vec, node, cost, calH(
                                 vec,
@@ -351,7 +351,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
-                    openList.offer(
+                    openlistOffer(
                         Node(
                             vec, node, cost, calH(
                                 vec,
@@ -377,7 +377,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
-                    openList.offer(
+                    openlistOffer(
                         Node(
                             vec, node, cost, calH(
                                 vec,
@@ -402,7 +402,7 @@ open class SimpleFlatAStarRouteFinder(blockEvaluator: IPosEvaluator?, protected 
                 val cost = getBlockMoveCostAt(entity.level!!, vec) + OBLIQUE_MOVE_COST + node.cost
                 val nodeNear = getOpenNode(vec)
                 if (nodeNear == null) {
-                    openList.offer(
+                    openlistOffer(
                         Node(
                             vec, node, cost, calH(
                                 vec,

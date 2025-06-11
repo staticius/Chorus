@@ -9,8 +9,8 @@ class ContainerRecipe(recipeId: String?, input: Item, ingredient: Item, output: 
     MixRecipe(
         recipeId
             ?: RecipeRegistry.computeRecipeIdWithItem(
-                List.of(output),
-                List.of(input, ingredient),
+                listOf(output),
+                listOf(input, ingredient),
                 RecipeType.CONTAINER
             ),
         input, ingredient, output

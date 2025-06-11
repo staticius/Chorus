@@ -338,12 +338,12 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
         }
 
         fun addRepairItemName(repairItemName: String, molang: String): ToolBuilder {
-            super.addRepairs(List.of(repairItemName), molang)
+            super.addRepairs(listOf(repairItemName), molang)
             return this
         }
 
         fun addRepairItemName(repairItemName: String, repairAmount: Int): ToolBuilder {
-            super.addRepairs(List.of(repairItemName), repairAmount.toString())
+            super.addRepairs(listOf(repairItemName), repairAmount.toString())
             return this
         }
 
@@ -913,7 +913,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
                 }
                 toolBlocks[ItemTags.IS_PICKAXE] = pickaxeBlocks
 
-                for (name in List.of<String>(
+                for (name in listOf<String>(
                     BlockID.CHEST,
                     BlockID.BOOKSHELF,
                     BlockID.MELON_BLOCK,
@@ -1070,7 +1070,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
                 }
                 toolBlocks[ItemTags.IS_AXE] = axeBlocks
 
-                for (name in List.of<String>(
+                for (name in listOf<String>(
                     BlockID.SOUL_SAND,
                     BlockID.SOUL_SOIL,
                     BlockID.DIRT_WITH_ROOTS,
@@ -1091,7 +1091,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
                 }
                 toolBlocks[ItemTags.IS_SHOVEL] = shovelBlocks
 
-                for (name in List.of<String>(
+                for (name in listOf<String>(
                     BlockID.NETHER_WART_BLOCK,
                     BlockID.HAY_BLOCK,
                     BlockID.TARGET,
@@ -1114,7 +1114,7 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
                 }
                 toolBlocks[ItemTags.IS_HOE] = hoeBlocks
 
-                for (name in List.of<String>(BlockID.WEB, BlockID.BAMBOO)) {
+                for (name in listOf<String>(BlockID.WEB, BlockID.BAMBOO)) {
                     swordBlocks[name] = DigProperty()
                 }
                 toolBlocks[ItemTags.IS_SWORD] = swordBlocks
@@ -1131,12 +1131,12 @@ data class CustomItemDefinition(@JvmField val identifier: String, @JvmField val 
         }
 
         fun addRepairItemName(repairItemName: String, molang: String): ArmorBuilder {
-            super.addRepairs(List.of(repairItemName), molang)
+            super.addRepairs(listOf(repairItemName), molang)
             return this
         }
 
         fun addRepairItemName(repairItemName: String, repairAmount: Int): ArmorBuilder {
-            super.addRepairs(List.of(repairItemName), repairAmount.toString())
+            super.addRepairs(listOf(repairItemName), repairAmount.toString())
             return this
         }
 

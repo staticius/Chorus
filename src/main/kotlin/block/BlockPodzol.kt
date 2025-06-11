@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockPodzol : BlockDirt {
+class BlockPodzol(blockState: BlockState = properties.defaultState) : BlockDirt(blockState) {
     override val name: String
         get() = "Podzol"
 

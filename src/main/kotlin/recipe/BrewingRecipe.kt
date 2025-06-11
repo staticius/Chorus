@@ -9,8 +9,8 @@ class BrewingRecipe(recipeId: String?, input: Item, ingredient: Item, output: It
     MixRecipe(
         recipeId
             ?: RecipeRegistry.computeRecipeIdWithItem(
-                List.of(output),
-                List.of(input, ingredient),
+                listOf(output),
+                listOf(input, ingredient),
                 RecipeType.BREWING
             ), input, ingredient, output
     ) {

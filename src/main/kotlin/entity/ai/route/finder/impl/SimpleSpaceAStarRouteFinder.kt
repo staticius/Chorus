@@ -35,7 +35,7 @@ open class SimpleSpaceAStarRouteFinder(blockEvaluator: IPosEvaluator?, entity: E
                         if (cost < 0) continue
                         val nodeNear = getOpenNode(vec)
                         if (nodeNear == null) {
-                            openList.offer(
+                            openlistOffer(
                                 Node(
                                     vec, node, cost, calH(
                                         vec,

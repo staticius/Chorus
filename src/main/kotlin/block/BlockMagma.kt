@@ -14,7 +14,7 @@ import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.Level
 
-class BlockMagma : BlockSolid {
+class BlockMagma(blockState: BlockState = properties.defaultState) : BlockSolid(blockState) {
     override val name: String
         get() = "Magma Block"
 

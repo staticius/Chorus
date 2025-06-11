@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockTubeCoralBlock : BlockCoralBlock {
+class BlockTubeCoralBlock(blockState: BlockState = properties.defaultState) : BlockCoralBlock(blockState) {
     override fun toDead(): BlockCoralBlock {
         return BlockDeadTubeCoralBlock()
     }

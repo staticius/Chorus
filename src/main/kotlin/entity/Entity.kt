@@ -823,14 +823,14 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVec
             val g: Int = (color[1] / count) and 0xff
             val b: Int = (color[2] / count) and 0xff
             setDataProperties(
-                Map.of<EntityDataType<*>, Any>(
+                mapOf<EntityDataType<*>, Any>(
                     EntityDataTypes.EFFECT_COLOR, (r shl 16) + (g shl 8) + b,
                     EntityDataTypes.EFFECT_AMBIENCE, if (ambient) 1 else 0
                 )
             )
         } else {
             setDataProperties(
-                Map.of<EntityDataType<*>, Any>(
+                mapOf<EntityDataType<*>, Any>(
                     EntityDataTypes.EFFECT_COLOR, 0,
                     EntityDataTypes.EFFECT_AMBIENCE, 0
                 )

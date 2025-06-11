@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockMangroveLeaves : BlockLeaves {
+class BlockMangroveLeaves(blockState: BlockState = properties.defaultState) : BlockLeaves(blockState) {
     override fun getType() = WoodType.MANGROVE
 
     override val name: String

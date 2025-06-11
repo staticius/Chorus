@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
 
 // TODO: complete
-class BlockSnifferEgg : BlockTransparent {
+class BlockSnifferEgg(blockState: BlockState = properties.defaultState) : BlockTransparent(blockState) {
     override val name: String
         get() = "Sniffer Egg"
 

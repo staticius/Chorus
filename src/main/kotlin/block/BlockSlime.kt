@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockSlime : BlockTransparent {
+class BlockSlime(blockState: BlockState = properties.defaultState) : BlockTransparent(blockState) {
     override val hardness: Double
         get() = 0.0
 

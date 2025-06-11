@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.level.Locator
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 
-class BlockPowderSnow : BlockTransparent {
+class BlockPowderSnow(blockState: BlockState = properties.defaultState) : BlockTransparent(blockState) {
     override val name: String
         get() = "Powder Snow"
 
