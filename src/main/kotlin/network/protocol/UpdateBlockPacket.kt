@@ -27,19 +27,16 @@ open class UpdateBlockPacket : DataPacket() {
         byteBuf.writeUnsignedVarInt(dataLayer)
     }
 
-    class Entry(
-        val x: Int,
-        val z: Int,
-        val y: Int, val blockId: String, val blockData: Int,
-        val flags: Int
-    )
-
     override fun pid(): Int {
         return ProtocolInfo.Companion.UPDATE_BLOCK_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    override fun toString(): String {
+        return "UpdateBlockPacket(x=$x, y=$y, z=$z, blockRuntimeId=$blockRuntimeId, flags=$flags, dataLayer=$dataLayer)"
     }
 
     companion object {

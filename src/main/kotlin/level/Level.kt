@@ -1099,7 +1099,7 @@ class Level(
             }
 
             val bPos = pos.asBlockVector3()
-            val updateBlockPacket: UpdateBlockPacket = UpdateBlockPacket()
+            val updateBlockPacket = UpdateBlockPacket()
             updateBlockPacket.x = bPos.x
             updateBlockPacket.y = bPos.y
             updateBlockPacket.z = bPos.z

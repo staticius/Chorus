@@ -62,13 +62,15 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
 
         // Verify if the titleId match with DeviceOs
         val predictedDeviceOS = getPredictedDeviceOS(chainData)
-        if (predictedDeviceOS != chainData.deviceOS) {
+        if (predictedDeviceOS != chainData.deviceOS && server.settings.serverSettings.xboxAuth) {
+            log.debug("disconnection due to mismatched device os, predicted: $predictedDeviceOS, actual: ${chainData.deviceOS}")
             session.close("§cPacket handling error")
             return
         }
 
         // Verify if the language is valid
         if (!isValidLanguage(chainData.languageCode!!)) {
+            log.debug("disconnection due to invalid language")
             session.close("§cPacket handling error")
             return
         }
@@ -76,6 +78,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         // Verify if the GameVersion has valid format
         if (chainData.gameVersion!!.split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray().size != 3 && !Server.instance.settings.debugSettings.allowBeta) {
+            log.debug("disconnection due to invalid game version")
             session.close("§cPacket handling error")
             return
         }

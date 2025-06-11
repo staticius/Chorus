@@ -290,11 +290,11 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                                 player
                             ).also { i = it }) != null
                         ) {
-                            if (!i!!.equals(oldItem) || i!!.getCount() != oldItem.getCount()) {
-                                if (oldItem.id == i!!.id || i!!.isNothing) {
-                                    player.inventory.setItemInHand(i!!)
+                            if (i!! != oldItem || i.getCount() != oldItem.getCount()) {
+                                if (oldItem.id == i.id || i.isNothing) {
+                                    player.inventory.setItemInHand(i)
                                 } else {
-                                    logTriedToSetButHadInHand(player, i!!, oldItem)
+                                    logTriedToSetButHadInHand(player, i, oldItem)
                                 }
                                 player.inventory.sendHeldItem(player.viewers.values)
                             }
