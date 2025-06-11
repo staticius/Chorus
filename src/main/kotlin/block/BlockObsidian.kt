@@ -4,10 +4,6 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTool
 
 class BlockObsidian : BlockSolid {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
     override val name: String
         get() = "Obsidian"
 

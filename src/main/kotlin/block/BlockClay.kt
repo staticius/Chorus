@@ -4,11 +4,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemClayBall
 import org.chorus_oss.chorus.item.ItemTool
 
-class BlockClay : BlockSolid, Natural {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockClay(blockState: BlockState = properties.defaultState) : BlockSolid(blockState), Natural {
     override val hardness: Double
         get() = 0.6
 

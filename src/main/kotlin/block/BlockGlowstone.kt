@@ -5,11 +5,7 @@ import org.chorus_oss.chorus.item.ItemGlowstoneDust
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import java.util.*
 
-class BlockGlowstone : BlockTransparent {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockGlowstone(blockState: BlockState = properties.defaultState) : BlockTransparent(blockState) {
     override val name: String
         get() = "Glowstone"
 

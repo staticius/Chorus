@@ -7,11 +7,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.level.Locator
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockFrogSpawn : BlockFlowable {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockFrogSpawn(blockState: BlockState = properties.defaultState) : BlockFlowable(blockState) {
     override val name: String
         get() = "Frog Spawn"
 

@@ -3,11 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.WoodType
 
-class BlockDarkOakSapling : BlockSapling {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockDarkOakSapling(blockState: BlockState = properties.defaultState) : BlockSapling(blockState) {
     override fun getWoodType(): WoodType {
         return WoodType.DARK_OAK
     }

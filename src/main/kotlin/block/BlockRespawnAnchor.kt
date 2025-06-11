@@ -16,10 +16,6 @@ import org.chorus_oss.chorus.network.protocol.types.SpawnPointType
 import org.chorus_oss.chorus.utils.TextFormat
 
 class BlockRespawnAnchor : Block {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
     override val name: String
         get() = "Respawn Anchor"
 

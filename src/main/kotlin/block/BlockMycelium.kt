@@ -14,10 +14,6 @@ import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.utils.ChorusRandom
 
 class BlockMycelium : BlockDirt {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
     override val name: String
         get() = "Mycelium"
 

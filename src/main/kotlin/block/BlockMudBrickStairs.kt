@@ -4,10 +4,6 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
 
 class BlockMudBrickStairs : BlockStairs {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
     override val name: String
         get() = "Mud Bricks Stair"
 

@@ -12,10 +12,6 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.utils.Faceable
 
 open class BlockPumpkin : BlockSolid, Faceable, Natural {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
     override val name: String
         get() = "Pumpkin"
 

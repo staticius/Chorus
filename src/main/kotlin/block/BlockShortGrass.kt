@@ -12,10 +12,6 @@ import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockShortGrass : BlockFlowable {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
     override fun canBeReplaced(): Boolean {
         return true
     }

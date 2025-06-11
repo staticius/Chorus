@@ -10,10 +10,6 @@ import org.chorus_oss.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus_oss.chorus.utils.Faceable
 
 class BlockLightningRod : BlockTransparent, Faceable {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
     override val name: String
         get() = "LightningRod"
 

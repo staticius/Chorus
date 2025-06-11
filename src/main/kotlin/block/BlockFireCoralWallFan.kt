@@ -2,11 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockFireCoralWallFan : BlockCoralWallFan {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockFireCoralWallFan(blockState: BlockState = properties.defaultState) : BlockCoralWallFan(blockState) {
     override val name: String
         get() = "Fire Coral"
 

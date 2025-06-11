@@ -2,11 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockDeadTubeCoralFan : BlockCoralFanDead {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockDeadTubeCoralFan(blockState: BlockState = properties.defaultState) : BlockCoralFanDead(blockState) {
     override val properties: BlockProperties
         get() = Companion.properties
 

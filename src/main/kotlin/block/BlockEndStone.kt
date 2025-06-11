@@ -2,11 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.ItemTool
 
-open class BlockEndStone : BlockSolid {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+open class BlockEndStone(blockState: BlockState = properties.defaultState) : BlockSolid(blockState) {
     override val name: String
         get() = "End Stone"
 

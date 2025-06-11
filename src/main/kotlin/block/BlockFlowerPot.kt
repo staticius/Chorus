@@ -12,11 +12,7 @@ import org.chorus_oss.chorus.math.AxisAlignedBB
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 
-class BlockFlowerPot : BlockFlowable, BlockEntityHolder<BlockEntityFlowerPot> {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockFlowerPot(blockState: BlockState = properties.defaultState) : BlockFlowable(blockState), BlockEntityHolder<BlockEntityFlowerPot> {
     override val waterloggingLevel: Int
         get() = 1
 

@@ -1,10 +1,6 @@
 package org.chorus_oss.chorus.block
 
 class BlockWhiteTulip : BlockFlower {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
     override val properties: BlockProperties
         get() = Companion.properties
 

@@ -4,10 +4,6 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.DoublePlantType
 
 class BlockPeony : BlockDoublePlant {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
     override val doublePlantType: DoublePlantType
         get() = DoublePlantType.PAEONIA
 

@@ -2,11 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.item.Item
 
-open class BlockGlassPane : BlockThin {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+open class BlockGlassPane(blockState: BlockState = properties.defaultState) : BlockThin(blockState) {
     override val name: String
         get() = "Glass Pane"
 

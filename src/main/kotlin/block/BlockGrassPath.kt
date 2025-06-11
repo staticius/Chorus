@@ -6,11 +6,7 @@ import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockGrassPath : BlockGrassBlock {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockGrassPath(blockState: BlockState = properties.defaultState) : BlockGrassBlock(blockState) {
     override val name: String
         get() = "Dirt Path"
 

@@ -8,11 +8,7 @@ import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.utils.ChorusRandom
 
 
-class BlockGravel : BlockFallable, Natural {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockGravel(blockState: BlockState = properties.defaultState) : BlockFallable(blockState), Natural {
     override val hardness: Double
         get() = 0.6
 

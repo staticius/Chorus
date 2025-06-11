@@ -5,10 +5,6 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
 
 class BlockMangroveRoots : BlockTransparent {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
     override val name: String
         get() = "Mangrove Roots"
 

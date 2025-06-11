@@ -5,11 +5,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 
-class BlockDeny : BlockSolid {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockDeny(blockState: BlockState = properties.defaultState) : BlockSolid(blockState) {
     override val hardness: Double
         get() = -1.0
 

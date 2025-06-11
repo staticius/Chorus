@@ -6,10 +6,6 @@ import org.chorus_oss.chorus.item.ItemBlock
 import org.chorus_oss.chorus.item.ItemTool
 
 open class BlockPrismarine : BlockSolid {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
     override val hardness: Double
         get() = 1.5
 

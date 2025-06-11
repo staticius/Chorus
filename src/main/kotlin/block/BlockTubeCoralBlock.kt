@@ -1,10 +1,6 @@
 package org.chorus_oss.chorus.block
 
 class BlockTubeCoralBlock : BlockCoralBlock {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
     override fun toDead(): BlockCoralBlock {
         return BlockDeadTubeCoralBlock()
     }

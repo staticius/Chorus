@@ -15,10 +15,6 @@ import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.Level
 
 class BlockMagma : BlockSolid {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
     override val name: String
         get() = "Magma Block"
 

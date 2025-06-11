@@ -1,11 +1,7 @@
 package org.chorus_oss.chorus.block
 
 
-class BlockBlueIce : BlockPackedIce {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockBlueIce(blockState: BlockState = properties.defaultState) : BlockPackedIce(blockState) {
     override val name: String
         get() = "Blue Ice"
 

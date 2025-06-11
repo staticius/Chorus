@@ -3,10 +3,6 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
 class BlockTubeCoralWallFan : BlockCoralWallFan {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
     override val name: String
         get() = "Tube Coral"
 

@@ -12,11 +12,7 @@ import org.chorus_oss.chorus.network.protocol.LevelEventPacket
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.abs
 
-class BlockDragonEgg : BlockFallable {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockDragonEgg(blockState: BlockState = properties.defaultState) : BlockFallable(blockState) {
     override val name: String
         get() = "Dragon Egg"
 

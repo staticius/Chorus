@@ -1,10 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockBlueOrchid : BlockFlower {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockBlueOrchid(blockState: BlockState = properties.defaultState) : BlockFlower(blockState) {
     override val properties: BlockProperties
         get() = Companion.properties
 

@@ -12,11 +12,7 @@ import org.chorus_oss.chorus.level.particle.BoneMealParticle
 import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
-class BlockFern : BlockFlowable, FlowerPotBlock {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockFern(blockState: BlockState = properties.defaultState) : BlockFlowable(blockState), FlowerPotBlock {
     override fun canBeReplaced(): Boolean {
         return true
     }

@@ -1,10 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockBrainCoralBlock : BlockCoralBlock {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockBrainCoralBlock(blockState: BlockState = properties.defaultState) : BlockCoralBlock(blockState) {
     override fun toDead(): BlockCoralBlock {
         return BlockDeadBrainCoralBlock()
     }

@@ -3,10 +3,6 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.math.BlockFace
 
 class BlockSlime : BlockTransparent {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
     override val hardness: Double
         get() = 0.0
 

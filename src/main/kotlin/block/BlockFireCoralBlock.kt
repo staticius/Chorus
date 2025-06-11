@@ -1,10 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockFireCoralBlock : BlockCoralBlock {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockFireCoralBlock(blockState: BlockState = properties.defaultState) : BlockCoralBlock(blockState) {
     override fun toDead(): BlockCoralBlock {
         return BlockDeadFireCoralBlock()
     }

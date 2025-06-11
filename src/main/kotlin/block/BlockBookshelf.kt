@@ -5,11 +5,7 @@ import org.chorus_oss.chorus.item.Item.Companion.get
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.item.ItemTool
 
-open class BlockBookshelf : BlockSolid {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+open class BlockBookshelf(blockState: BlockState = properties.defaultState) : BlockSolid(blockState) {
     override val name: String
         get() = "Bookshelf"
 

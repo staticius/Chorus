@@ -9,11 +9,7 @@ import org.chorus_oss.chorus.level.particle.BoneMealParticle
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 
-class BlockDirtWithRoots : BlockDirt {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockDirtWithRoots(blockState: BlockState = properties.defaultState) : BlockDirt(blockState) {
     override val name: String
         get() = "Dirt With Roots"
 

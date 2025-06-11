@@ -8,11 +8,7 @@ import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.level.Level
 
 
-open class BlockIce : BlockTransparent {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+open class BlockIce(blockState: BlockState = properties.defaultState) : BlockTransparent(blockState) {
     override val name: String
         get() = "Ice"
 

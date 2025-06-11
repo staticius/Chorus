@@ -6,11 +6,7 @@ import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.math.BlockFace
 
-open class BlockDirt : BlockSolid, Natural {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+open class BlockDirt(blockState: BlockState = properties.defaultState) : BlockSolid(blockState), Natural {
     override fun canBeActivated(): Boolean {
         return true
     }

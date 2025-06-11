@@ -1,10 +1,6 @@
 package org.chorus_oss.chorus.block
 
-class BlockInfoUpdate : Block {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockInfoUpdate(blockState: BlockState = properties.defaultState) : Block(blockState) {
     override val name: String
         get() = "Info Update Block"
 

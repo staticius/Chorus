@@ -8,10 +8,6 @@ import org.chorus_oss.chorus.math.BlockFace
 
 // TODO: complete
 class BlockSnifferEgg : BlockTransparent {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
     override val name: String
         get() = "Sniffer Egg"
 

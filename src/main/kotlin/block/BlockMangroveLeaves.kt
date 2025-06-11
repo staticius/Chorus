@@ -10,10 +10,6 @@ import org.chorus_oss.chorus.math.BlockFace
 import java.util.concurrent.ThreadLocalRandom
 
 class BlockMangroveLeaves : BlockLeaves {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
     override fun getType() = WoodType.MANGROVE
 
     override val name: String

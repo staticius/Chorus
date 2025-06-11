@@ -6,11 +6,7 @@ import org.chorus_oss.chorus.block.property.type.IntPropertyType
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.math.BlockFace
 
-class BlockGlowLichen : BlockLichen {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockGlowLichen(blockState: BlockState = properties.defaultState) : BlockLichen(blockState) {
     override val name: String
         get() = "Glow Lichen"
 

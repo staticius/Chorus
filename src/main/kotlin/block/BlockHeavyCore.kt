@@ -3,11 +3,7 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.AxisAlignedBB
 
-class BlockHeavyCore : BlockFlowable {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockHeavyCore(blockState: BlockState = properties.defaultState) : BlockFlowable(blockState) {
     override fun recalculateBoundingBox(): AxisAlignedBB {
         return this
     }

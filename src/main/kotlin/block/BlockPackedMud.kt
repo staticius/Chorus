@@ -1,10 +1,6 @@
 package org.chorus_oss.chorus.block
 
 class BlockPackedMud : BlockSolid {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
     override val name: String
         get() = "Packed Mud"
 

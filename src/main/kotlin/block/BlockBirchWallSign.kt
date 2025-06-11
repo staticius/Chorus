@@ -4,10 +4,7 @@ import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemBirchSign
 
-class BlockBirchWallSign : BlockWallSign {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
+class BlockBirchWallSign(blockState: BlockState = properties.defaultState) : BlockWallSign(blockState) {
 
     override val name: String
         get() = "Birch Wall Sign"

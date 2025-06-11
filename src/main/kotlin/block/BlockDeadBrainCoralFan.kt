@@ -2,11 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockDeadBrainCoralFan : BlockCoralFanDead {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockstate: BlockState) : super(blockstate)
-
+class BlockDeadBrainCoralFan(blockState: BlockState = properties.defaultState) : BlockCoralFanDead(blockState) {
     val wallFanId: String
         get() = BlockID.DEAD_BRAIN_CORAL_WALL_FAN
 

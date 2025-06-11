@@ -2,11 +2,7 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 
-class BlockCherryLog : BlockLog {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockCherryLog(blockState: BlockState = properties.defaultState) : BlockLog(blockState) {
     override val hardness: Double
         get() = 2.0
 

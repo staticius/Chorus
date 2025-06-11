@@ -8,11 +8,7 @@ import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 
-class BlockConduit : BlockTransparent, BlockEntityHolder<BlockEntityConduit> {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockConduit(blockState: BlockState = properties.defaultState) : BlockTransparent(blockState), BlockEntityHolder<BlockEntityConduit> {
     override val name: String
         get() = "Conduit"
 

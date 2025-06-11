@@ -1,11 +1,7 @@
 package org.chorus_oss.chorus.block
 
 
-class BlockDriedKelpBlock : BlockSolid {
-    constructor() : super(properties.defaultState)
-
-    constructor(blockState: BlockState) : super(blockState)
-
+class BlockDriedKelpBlock(blockState: BlockState = properties.defaultState) : BlockSolid(blockState) {
     override val name: String
         get() = "Dried Kelp Block"
 
