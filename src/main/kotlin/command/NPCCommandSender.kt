@@ -25,7 +25,7 @@ class NPCCommandSender(private val npc: EntityNPC, val initiator: Player) : Comm
 
     override fun sendCommandOutput(container: CommandOutputContainer) {}
 
-    override val name get() = npc.getEntityName()
+    override val senderName get() = npc.getEntityName()
 
     override val isPlayer: Boolean
         get() = false

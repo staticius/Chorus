@@ -47,7 +47,7 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
         }
         when (result.key) {
             "add" -> {
-                val players_str = players.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(" "))
+                val players_str = players.stream().map { obj: Player -> obj.getEntityName() }.collect(Collectors.joining(" "))
                 val intensity = list.getResult<Float>(2)!!
                 val second = list.getResult<Float>(3)!!
                 val shakeType = when (val type = list.getResult<String>(4)) {
@@ -67,7 +67,7 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
             }
 
             "stop" -> {
-                val playersStr = players.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(" "))
+                val playersStr = players.stream().map { obj: Player -> obj.getEntityName() }.collect(Collectors.joining(" "))
                 val packet = CameraShakePacket(
                     intensity = -1f,
                     seconds = -1f,

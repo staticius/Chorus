@@ -316,11 +316,11 @@ abstract class Command @JvmOverloads constructor(
             val users =
                 Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)
 
-            val result = TranslationContainer("chat.type.admin", source.name, message)
+            val result = TranslationContainer("chat.type.admin", source.senderName, message)
 
             val colored = TranslationContainer(
                 TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + "%chat.type.admin",
-                source.name,
+                source.senderName,
                 message
             )
 
@@ -351,7 +351,7 @@ abstract class Command @JvmOverloads constructor(
 
             val m: TextContainer = message.clone()
             val resultStr =
-                "[" + source.name + ": " + (if (m.text != Server.instance.lang.tr(m.text)) "%" else "") + m.text + "]"
+                "[" + source.senderName + ": " + (if (m.text != Server.instance.lang.tr(m.text)) "%" else "") + m.text + "]"
 
             val users =
                 Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)

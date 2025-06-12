@@ -104,7 +104,6 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                 return i
             }
         }
-        log.warn("Couldn't find creative item index for ${item.id}")
         return -1
     }
 
@@ -208,11 +207,11 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
 
     companion object : Loggable {
         val NETWORK_ITEMS: MutableList<Item> = mutableListOf()
-        val MAP: MutableMap<Int, Item> = LinkedHashMap()
-        val INTERNAL_DIFF_ITEM: MutableMap<Int, Item> = HashMap()
+        val MAP: MutableMap<Int, Item> = mutableMapOf()
+        val INTERNAL_DIFF_ITEM: MutableMap<Int, Item> = mutableMapOf()
         val isLoad: AtomicBoolean = AtomicBoolean(false)
 
-        val creativeGroups: MutableSet<CreativeItemGroup> = LinkedHashSet()
-        val creativeItemData: MutableSet<CreativeItemData> = LinkedHashSet()
+        val creativeGroups: MutableList<CreativeItemGroup> = mutableListOf()
+        val creativeItemData: MutableList<CreativeItemData> = mutableListOf()
     }
 }

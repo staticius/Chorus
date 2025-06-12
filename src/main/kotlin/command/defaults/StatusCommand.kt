@@ -5,6 +5,7 @@ import org.chorus_oss.chorus.Chorus
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.command.CommandSender
 import org.chorus_oss.chorus.command.data.CommandParameter
+import org.chorus_oss.chorus.math.round
 import org.chorus_oss.chorus.utils.TextFormat
 import oshi.SystemInfo
 import oshi.hardware.HardwareAbstractionLayer
@@ -57,7 +58,7 @@ class StatusCommand(name: String) :
 
             sender.sendMessage(
                 TextFormat.GOLD.toString() + "Current TPS: " + tpsColor + round(
-                    tps.toDouble()
+                    tps.toDouble(), 2
                 )
             )
 
@@ -65,9 +66,9 @@ class StatusCommand(name: String) :
 
 
             val runtime = Runtime.getRuntime()
-            val totalMB = round((runtime.totalMemory().toDouble()) / 1024 / 1024)
-            val usedMB = round((runtime.totalMemory() - runtime.freeMemory()).toDouble() / 1024 / 1024)
-            val maxMB = round((runtime.maxMemory().toDouble()) / 1024 / 1024)
+            val totalMB = round((runtime.totalMemory().toDouble()) / 1024 / 1024, 2)
+            val usedMB = round((runtime.totalMemory() - runtime.freeMemory()).toDouble() / 1024 / 1024, 2)
+            val maxMB = round((runtime.maxMemory().toDouble()) / 1024 / 1024, 2)
             val usage = usedMB / maxMB * 100
             var usageColor = TextFormat.GREEN
 
@@ -77,7 +78,7 @@ class StatusCommand(name: String) :
 
             sender.sendMessage(
                 TextFormat.GOLD.toString() + "Used VM memory: " + usageColor + usedMB + " MB. (" + round(
-                    usage
+                    usage, 2
                 ) + "%)"
             )
 
@@ -101,7 +102,7 @@ class StatusCommand(name: String) :
                             TextFormat.RED + level.entities.size + TextFormat.GREEN + " entities, " +
                             TextFormat.RED + level.blockEntities.size + TextFormat.GREEN + " blockEntities." +
                             " Time " + (if (level.tickRate > 1 || level.tickRateTime > 40) TextFormat.RED else TextFormat.YELLOW) + round(
-                        level.tickRateTime.toDouble()
+                        level.tickRateTime.toDouble(), 2
                     ) + "ms" +
                             (" [delayOpt " + (level.tickRateOptDelay - 1) + "]") +
                             (if (level.tickRate > 1) " (tick rate " + (19 - level.tickRate) + ")" else "") +
@@ -128,7 +129,7 @@ class StatusCommand(name: String) :
                 }
                 sender.sendMessage(
                     TextFormat.GOLD.toString() + "Current TPS: " + tpsColor + round(
-                        tps.toDouble()
+                        tps.toDouble(), 2
                     )
                 )
                 // 游戏刻负载
@@ -150,7 +151,7 @@ class StatusCommand(name: String) :
                                 TextFormat.RED + level.entities.size + TextFormat.GREEN + " entities, " +
                                 TextFormat.RED + level.blockEntities.size + TextFormat.GREEN + " blockEntities." +
                                 " Time " + (if (level.tickRate > 1 || level.tickRateTime > 40) TextFormat.RED else TextFormat.YELLOW) + round(
-                            level.tickRateTime.toDouble()
+                            level.tickRateTime.toDouble(), 2
                         ) + "ms" +
                                 (" [delayOpt " + (level.tickRateOptDelay - 1) + "]") +
                                 (if (level.tickRate > 1) " (tick rate " + (19 - level.tickRate) + ")" else "")
@@ -243,10 +244,10 @@ class StatusCommand(name: String) :
                 sender.sendMessage(TextFormat.YELLOW.toString() + ">>> " + TextFormat.WHITE + "Memory Info" + TextFormat.YELLOW + " <<<" + TextFormat.RESET)
                 //JVM内存
                 val runtime = Runtime.getRuntime()
-                val totalMB = round((runtime.totalMemory().toDouble()) / 1024 / 1024)
+                val totalMB = round((runtime.totalMemory().toDouble()) / 1024 / 1024, 2)
                 val usedMB =
-                    round((runtime.totalMemory() - runtime.freeMemory()).toDouble() / 1024 / 1024)
-                val maxMB = round((runtime.maxMemory().toDouble()) / 1024 / 1024)
+                    round((runtime.totalMemory() - runtime.freeMemory()).toDouble() / 1024 / 1024, 2)
+                val maxMB = round((runtime.maxMemory().toDouble()) / 1024 / 1024, 2)
                 var usage = usedMB / maxMB * 100
                 var usageColor = TextFormat.GREEN
                 if (usage > 85) {
@@ -255,7 +256,7 @@ class StatusCommand(name: String) :
                 sender.sendMessage(TextFormat.GOLD.toString() + "JVM memory: ")
                 sender.sendMessage(
                     TextFormat.GOLD.toString() + "  Used JVM memory: " + usageColor + usedMB + " MB. (" + round(
-                        usage
+                        usage, 2
                     ) + "%)"
                 )
                 sender.sendMessage(TextFormat.GOLD.toString() + "  Total JVM memory: " + TextFormat.RED + totalMB + " MB.")
@@ -270,7 +271,7 @@ class StatusCommand(name: String) :
                 sender.sendMessage(
                     TextFormat.GOLD.toString() + "  Physical memory: " + TextFormat.GREEN + usageColor + formatMB(
                         usedPhysicalMemory
-                    ) + " / " + formatMB(allPhysicalMemory) + ". (" + round(usage) + "%)"
+                    ) + " / " + formatMB(allPhysicalMemory) + ". (" + round(usage, 2) + "%)"
                 )
                 usage = usedVirtualMemory.toDouble() / allVirtualMemory * 100
                 usageColor = TextFormat.GREEN
@@ -280,7 +281,7 @@ class StatusCommand(name: String) :
                 sender.sendMessage(
                     TextFormat.GOLD.toString() + "  Virtual memory: " + TextFormat.GREEN + usageColor + formatMB(
                         usedVirtualMemory
-                    ) + " / " + formatMB(allVirtualMemory) + ". (" + round(usage) + "%)"
+                    ) + " / " + formatMB(allVirtualMemory) + ". (" + round(usage, 2) + "%)"
                 )
                 if (physicalMemories.size > 0) sender.sendMessage(TextFormat.GOLD.toString() + "  Hardware list: ")
                 for (each in physicalMemories) {
@@ -341,19 +342,19 @@ class StatusCommand(name: String) :
         }
 
         private fun formatKB(bytes: Double): String {
-            return round((bytes / 1024 * 1000)).toString() + " KB"
+            return round((bytes / 1024 * 1000), 2).toString() + " KB"
         }
 
         private fun formatKB(bytes: Long): String {
-            return round((bytes / 1024.0 * 1000)).toString() + " KB"
+            return round((bytes / 1024.0 * 1000), 2).toString() + " KB"
         }
 
         private fun formatMB(bytes: Double): String {
-            return round((bytes / 1024 / 1024 * 1000)).toString() + " MB"
+            return round((bytes / 1024 / 1024 * 1000), 2).toString() + " MB"
         }
 
         private fun formatMB(bytes: Long): String {
-            return round((bytes / 1024.0 / 1024 * 1000)).toString() + " MB"
+            return round((bytes / 1024.0 / 1024 * 1000), 2).toString() + " MB"
         }
 
         private fun formatFreq(hz: Long): String {

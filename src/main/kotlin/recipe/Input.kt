@@ -30,9 +30,9 @@ class Input(
     val flatItems: Array<Item>
         get() {
             return Array(col * row) { i ->
-                val col = i % col
-                val row = i / col
-                data[row][col]
+                val c = i % col
+                val r = i / col
+                data[r][c]
             }
         }
 

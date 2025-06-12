@@ -59,7 +59,7 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
             log.addNoTargetMatch().output()
             return 0
         }
-        val entities_str = entities.stream().map { obj: Entity -> obj.name }.collect(Collectors.joining(" "))
+        val entities_str = entities.stream().map { obj: Entity -> obj.getEntityName() }.collect(Collectors.joining(" "))
         val amount = list.getResult<Int>(1)!!
         if (amount < 0) {
             log.addError("commands.damage.specify.damage").output()
@@ -88,7 +88,7 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
                     return 1
                 } else {
                     log.addError(
-                        "commands.damage.failed", failed.stream().map { obj: Entity -> obj.name }.collect(
+                        "commands.damage.failed", failed.stream().map { obj: Entity -> obj.getEntityName() }.collect(
                             Collectors.joining(" ")
                         )
                     ).output()
@@ -125,7 +125,7 @@ class DamageCommand(name: String) : VanillaCommand(name, "commands.damage.descri
                     return 1
                 } else {
                     log.addError(
-                        "commands.damage.failed", failed.stream().map { obj: Entity -> obj.name }.collect(
+                        "commands.damage.failed", failed.stream().map { obj: Entity -> obj.getEntityName() }.collect(
                             Collectors.joining(" ")
                         )
                     ).output()

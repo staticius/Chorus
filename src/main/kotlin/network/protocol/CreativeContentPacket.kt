@@ -6,14 +6,13 @@ import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.inventory.creative.CreativeItemData
 import org.chorus_oss.chorus.network.protocol.types.inventory.creative.CreativeItemGroup
 import org.chorus_oss.chorus.registry.CreativeItemRegistry
+import org.chorus_oss.chorus.utils.Loggable
 
 data class CreativeContentPacket(
-    val groups: List<CreativeItemGroup> = CreativeItemRegistry.creativeGroups.toList(),
-    val writeEntries: List<CreativeItemData> = CreativeItemRegistry.creativeItemData.toList()
+    val groups: List<CreativeItemGroup> = CreativeItemRegistry.creativeGroups,
+    val writeEntries: List<CreativeItemData> = CreativeItemRegistry.creativeItemData
 ) : DataPacket() {
     override fun encode(byteBuf: HandleByteBuf) {
-        // TODO: Fix this packet. There's something wrong with the CreativeItemData
-
         byteBuf.writeArray(this.groups) { buf, group ->
             this.writeGroup(buf, group)
         }
@@ -41,4 +40,6 @@ data class CreativeContentPacket(
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
+
+    companion object : Loggable
 }

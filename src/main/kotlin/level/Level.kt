@@ -681,14 +681,14 @@ class Level(
                     this.tickRate = (baseTickRate + 1).coerceAtLeast(autoTickRateLimit.coerceAtMost(tickMs / 50))
                     log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                        this.getLevelName(), round(tickMs.toDouble()),
+                        this.getLevelName(), round(tickMs.toDouble(), 2),
                         tickRate
                     )
                 } else if ((tickMs / this.tickRate) >= 50 && this.tickRate < autoTickRateLimit) {
                     this.tickRate += 1
                     log.debug(
                         "Level \"{}\" took {}ms, setting tick rate to {} ticks",
-                        this.getLevelName(), round(tickMs.toDouble()),
+                        this.getLevelName(), round(tickMs.toDouble(), 2),
                         tickRate
                     )
                 }
@@ -1673,12 +1673,12 @@ class Level(
     }
 
     fun hasCollision(entity: Entity?, bb: AxisAlignedBB, entities: Boolean): Boolean {
-        val minX = floor(round(bb.minX)).toInt()
-        val minY = floor(round(bb.minY)).toInt()
-        val minZ = floor(round(bb.minZ)).toInt()
-        val maxX = ceil(round(bb.maxX) - 0.00001).toInt()
-        val maxY = ceil(round(bb.maxY) - 0.00001).toInt()
-        val maxZ = ceil(round(bb.maxZ) - 0.00001).toInt()
+        val minX = floor(round(bb.minX, 4)).toInt()
+        val minY = floor(round(bb.minY, 4)).toInt()
+        val minZ = floor(round(bb.minZ, 4)).toInt()
+        val maxX = ceil(round(bb.maxX, 4) - 0.00001).toInt()
+        val maxY = ceil(round(bb.maxY, 4) - 0.00001).toInt()
+        val maxZ = ceil(round(bb.maxZ, 4) - 0.00001).toInt()
 
         for (z in minZ..maxZ) {
             for (x in minX..maxX) {

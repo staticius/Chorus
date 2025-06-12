@@ -14,7 +14,7 @@ import java.util.*
 interface IPlayer : ServerOperator {
     val isOnline: Boolean
 
-    val name: String
+    fun getEntityName(): String
 
     var uuid: UUID
 

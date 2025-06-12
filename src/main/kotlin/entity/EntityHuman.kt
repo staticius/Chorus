@@ -14,7 +14,7 @@ import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.protocol.AddPlayerPacket
 import org.chorus_oss.chorus.network.protocol.MovePlayerPacket
-import org.chorus_oss.chorus.network.protocol.RemoveEntityPacket
+import org.chorus_oss.chorus.network.protocol.RemoveActorPacket
 import org.chorus_oss.chorus.network.protocol.SetEntityLinkPacket
 import org.chorus_oss.chorus.network.protocol.types.*
 import java.util.*
@@ -210,8 +210,8 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
 
     override fun despawnFrom(player: Player) {
         if (hasSpawned.containsKey(player.loaderId)) {
-            val pk: RemoveEntityPacket = RemoveEntityPacket()
-            pk.entityRuntimeID = this.getRuntimeID()
+            val pk = RemoveActorPacket()
+            pk.actorUniqueID = this.getUniqueID()
             player.dataPacket(pk)
             hasSpawned.remove(player.loaderId)
         }

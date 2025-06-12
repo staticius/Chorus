@@ -46,6 +46,7 @@ import org.chorus_oss.chorus.level.tickingarea.manager.SimpleTickingAreaManager
 import org.chorus_oss.chorus.level.tickingarea.manager.TickingAreaManager
 import org.chorus_oss.chorus.level.tickingarea.storage.JSONTickingAreaStorage
 import org.chorus_oss.chorus.level.updater.block.BlockStateUpdaterBase
+import org.chorus_oss.chorus.math.round
 import org.chorus_oss.chorus.nbt.NBTIO.readCompressed
 import org.chorus_oss.chorus.nbt.NBTIO.writeGZIPCompressed
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
@@ -839,7 +840,7 @@ class Server internal constructor(
                             log.debug(
                                 "Level \"{}\" took {}ms, setting tick rate to {} ticks",
                                 level.getLevelName(),
-                                round(tickMs.toDouble()),
+                                round(tickMs.toDouble(), 2),
                                 level.tickRate
                             )
                             level.tickRateCounter = level.tickRate
@@ -950,8 +951,8 @@ class Server internal constructor(
         }
 
         val runtime = Runtime.getRuntime()
-        val used = round((runtime.totalMemory() - runtime.freeMemory()).toDouble() / 1024 / 1024)
-        val max = round((runtime.maxMemory().toDouble()) / 1024 / 1024)
+        val used = round((runtime.totalMemory() - runtime.freeMemory()).toDouble() / 1024 / 1024, 2)
+        val max = round((runtime.maxMemory().toDouble()) / 1024 / 1024, 2)
         val usage = (used / max * 100).roundToInt().toString() + "%"
         var title = (0x1b.toChar().toString() + "]0;" + this.name + " "
                 + this.chorusVersion
@@ -959,8 +960,8 @@ class Server internal constructor(
                 + " | Online " + players.size + "/" + this.maxPlayers
                 + " | Memory " + usage)
         if (!Chorus.shortTitle) {
-            title += (" | U " + round((network.upload / 1024 * 1000))
-                    + " D " + round((network.download / 1024 * 1000)) + " kB/s")
+            title += (" | U " + round((network.upload / 1024 * 1000), 2)
+                    + " D " + round((network.download / 1024 * 1000), 2) + " kB/s")
         }
         title += (" | TPS " + this.ticksPerSecond
                 + " | Load " + this.tickUsage + "%" + 0x07.toChar())

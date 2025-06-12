@@ -56,7 +56,7 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
                     }
                     log.addSuccess(
                         "commands.spawnpoint.success.multiple.specific",
-                        players.stream().map { obj: Player -> obj.name }.collect(
+                        players.stream().map { obj: Player -> obj.getEntityName() }.collect(
                             Collectors.joining(" ")
                         ),
                         round2.format(locator.position.x),
@@ -73,7 +73,7 @@ class SpawnpointCommand(name: String) : VanillaCommand(name, "commands.spawnpoin
             val pos = players[0].locator
             players[0].setSpawn(pos, SpawnPointType.PLAYER)
             log.addSuccess(
-                "commands.spawnpoint.success.single", sender.name,
+                "commands.spawnpoint.success.single", sender.senderName,
                 round2.format(pos.position.x),
                 round2.format(pos.position.y),
                 round2.format(pos.position.z)

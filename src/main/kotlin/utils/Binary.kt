@@ -5,6 +5,7 @@ import org.chorus_oss.chorus.entity.data.EntityDataMap
 import org.chorus_oss.chorus.math.BlockVector3
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.math.Vector3f
+import org.chorus_oss.chorus.math.round
 import org.chorus_oss.chorus.nbt.NBTIO.write
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import java.io.IOException
@@ -248,7 +249,7 @@ class Binary {
         fun readFloat(bytes: ByteArray, accuracy: Int = -1): Float {
             val `val` = java.lang.Float.intBitsToFloat(readInt(bytes))
             return if (accuracy > -1) {
-                round(`val`.toDouble()).toFloat()
+                round(`val`.toDouble(), accuracy).toFloat()
             } else {
                 `val`
             }
@@ -262,7 +263,7 @@ class Binary {
         fun readLFloat(bytes: ByteArray, accuracy: Int = -1): Float {
             val `val` = java.lang.Float.intBitsToFloat(readLInt(bytes))
             return if (accuracy > -1) {
-                round(`val`.toDouble()).toFloat()
+                round(`val`.toDouble(), accuracy).toFloat()
             } else {
                 `val`
             }

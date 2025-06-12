@@ -221,8 +221,8 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun removeBossEntity() {
-        val pkRemove = RemoveEntityPacket()
-        pkRemove.entityRuntimeID = bossBarId
+        val pkRemove = RemoveActorPacket()
+        pkRemove.actorUniqueID = bossBarId
         player.dataPacket(pkRemove)
     }
 

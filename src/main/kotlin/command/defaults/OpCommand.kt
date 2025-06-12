@@ -33,13 +33,13 @@ class OpCommand(name: String) : VanillaCommand(name, "commands.op.description") 
 
         for (player in players) {
             if (player.isOp) {
-                log.addError("commands.op.failed", player.name!!).output()
+                log.addError("commands.op.failed", player.getEntityName()!!).output()
             } else {
                 player.isOp = true
                 if (player.isOnline) {
                     log.outputObjectWhisper(player.player!!, TextFormat.GRAY.toString() + "%commands.op.message")
                 }
-                log.addSuccess("commands.op.success", player.name!!).output(true)
+                log.addSuccess("commands.op.success", player.getEntityName()!!).output(true)
             }
         }
         return players.size

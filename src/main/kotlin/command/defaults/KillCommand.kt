@@ -57,7 +57,7 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
             }
 
             for (entity in entities) {
-                if (entity.getEntityName() == sender.name) {
+                if (entity.getEntityName() == sender.senderName) {
                     if (!sender.hasPermission("chorus.command.kill.self")) {
                         continue
                     }
@@ -69,7 +69,7 @@ class KillCommand(name: String) : VanillaCommand(name, "commands.kill.descriptio
                     entity.kill()
                 }
             }
-            val message = entities.stream().map { obj: Entity -> obj.name }.collect(Collectors.joining(", "))
+            val message = entities.stream().map { obj: Entity -> obj.getEntityName() }.collect(Collectors.joining(", "))
             log.addSuccess("commands.kill.successful", message).successCount(entities.size).output(true)
             return entities.size
         } else {

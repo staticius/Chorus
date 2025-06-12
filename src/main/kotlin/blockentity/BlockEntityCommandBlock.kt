@@ -226,7 +226,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
                 nbt.putList(ICommandBlock.Companion.TAG_LAST_OUTPUT_PARAMS, this.lastOutputParams!!)
             }
             if (this.hasName()) {
-                nbt.putString(ICommandBlock.Companion.TAG_CUSTOM_NAME, this.name)
+                nbt.putString(ICommandBlock.Companion.TAG_CUSTOM_NAME, this.senderName)
             }
             return nbt
         }
@@ -237,7 +237,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
             return blockId == BlockID.COMMAND_BLOCK || blockId == BlockID.CHAIN_COMMAND_BLOCK || blockId == BlockID.REPEATING_COMMAND_BLOCK
         }
 
-    override var name: String
+    override var senderName: String
         get() {
             return if (this.hasName()) namedTag.getString(ICommandBlock.TAG_CUSTOM_NAME) else "!"
         }
@@ -424,7 +424,7 @@ class BlockEntityCommandBlock(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpaw
         }
         if (level.gameRules.getBoolean(GameRule.COMMAND_BLOCK_OUTPUT)) {
             message.text =
-                TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + "[" + this.name + ": " + TextFormat.RESET +
+                TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + "[" + this.senderName + ": " + TextFormat.RESET +
                         (if (message.text != Server.instance.lang.get(message.text)) "%" else "") + message.text + "]"
             val users =
                 Server.instance.pluginManager.getPermissionSubscriptions(Server.BROADCAST_CHANNEL_ADMINISTRATIVE)

@@ -120,6 +120,9 @@ open class Player(
     var fogCommandStack: List<String> = ArrayList()
     var formatVersion: String = ""
 
+    override val senderName
+        get() = getEntityName()
+
     //    @NotNull public Boolean hasSeenCredits = false;
     //    @NotNull public List<EntityItemSlot> inventory = new ArrayList<>();
     var leftShoulderRiderID: Long = 0L
@@ -1538,7 +1541,7 @@ open class Player(
             fogStack.add(
                 i, PlayerFogPacket.Fog(
                     tryParse(
-                        fogIdentifiers.get(i).data
+                        fogIdentifiers[i].data
                     )!!, userProvidedFogIds[i].data
                 )
             )
@@ -1556,9 +1559,9 @@ open class Player(
                 port.toString(),
                 getRuntimeID().toString(),
                 this.level!!.getLevelName(),
-                round(position.x).toString(),
-                round(position.y).toString(),
-                round(position.z).toString()
+                round(position.x, 4).toString(),
+                round(position.y, 4).toString(),
+                round(position.z, 4).toString()
             )
         )
     }

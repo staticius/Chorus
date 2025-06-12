@@ -2,6 +2,7 @@ package org.chorus_oss.chorus.command.defaults
 
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.command.CommandSender
+import org.chorus_oss.chorus.math.round
 import org.chorus_oss.chorus.utils.TextFormat
 import org.chorus_oss.chorus.utils.ThreadCache
 import kotlin.math.round
@@ -46,7 +47,7 @@ class GarbageCollectorCommand(name: String) :
         sender.sendMessage(TextFormat.GOLD.toString() + "Block Entities: " + TextFormat.RED + tilesCollected)
         sender.sendMessage(
             TextFormat.GOLD.toString() + "Memory freed: " + TextFormat.RED + round(
-                (freedMemory / 1024.0 / 1024.0)
+                (freedMemory / 1024.0 / 1024.0), 2
             ) + " MB"
         )
         return true

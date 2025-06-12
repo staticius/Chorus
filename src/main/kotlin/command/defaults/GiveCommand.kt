@@ -106,7 +106,7 @@ class GiveCommand(name: String) : VanillaCommand(name, "commands.give.descriptio
             "commands.give.success",
             item.displayName + " (" + item.id + (if (item.damage != 0) ":" + item.damage else "") + ")",
             item.getCount().toString(),
-            players.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(","))
+            players.stream().map { obj: Player -> obj.getEntityName() }.collect(Collectors.joining(","))
         )
             .successCount(players.size).output(true)
         return players.size

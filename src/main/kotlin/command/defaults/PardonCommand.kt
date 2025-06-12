@@ -32,8 +32,8 @@ class PardonCommand(name: String) : VanillaCommand(name, "unban a player") {
             return 0
         }
         for (player in players) {
-            Server.instance.bannedPlayers.remove(player.name!!)
-            log.addSuccess("commands.unban.success", player.name!!)
+            Server.instance.bannedPlayers.remove(player.getEntityName()!!)
+            log.addSuccess("commands.unban.success", player.getEntityName()!!)
         }
         log.successCount(players.size).output(true)
         return players.size

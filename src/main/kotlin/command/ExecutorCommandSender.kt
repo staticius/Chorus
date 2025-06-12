@@ -39,7 +39,7 @@ class ExecutorCommandSender(executor: CommandSender, entity: Entity?, executeTra
         executor!!.sendCommandOutput(container)
     }
 
-    override val name get() = entity!!.name
+    override val senderName get() = entity!!.getEntityName()
 
     override val locator: Locator
         get() {

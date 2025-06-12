@@ -20,25 +20,25 @@ class Transform : Locator {
 
     constructor(x: Double, y: Double, z: Double, level: Level) : this(x, y, z, 0.0, level)
 
-    constructor(x: Double, y: Double, z: Double, yaw: Double, level: Level) : this(x, y, z, yaw, 0.0, level)
+    constructor(x: Double, y: Double, z: Double, pitch: Double, level: Level) : this(x, y, z, pitch, 0.0, level)
 
-    constructor(x: Double, y: Double, z: Double, yaw: Double, pitch: Double, level: Level) : this(
+    constructor(x: Double, y: Double, z: Double, pitch: Double, yaw: Double, level: Level) : this(
         x,
         y,
         z,
-        yaw,
         pitch,
+        yaw,
         0.0,
         level
     )
 
-    constructor(x: Double, y: Double, z: Double, yaw: Double, pitch: Double, headYaw: Double, level: Level) : super(
+    constructor(x: Double, y: Double, z: Double, pitch: Double, yaw: Double, headYaw: Double, level: Level) : super(
         x,
         y,
         z,
         level
     ) {
-        this.rotation = Rotator2(yaw, pitch)
+        this.rotation = Rotator2(pitch, yaw)
         this.headYaw = headYaw
     }
 
@@ -202,7 +202,7 @@ class Transform : Locator {
             pitch: Double = 0.0,
             headYaw: Double = 0.0
         ): Transform {
-            return Transform(pos.x, pos.y, pos.z, yaw, pitch, headYaw, level)
+            return Transform(pos.x, pos.y, pos.z, pitch, yaw, headYaw, level)
         }
     }
 }

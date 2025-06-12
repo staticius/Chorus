@@ -47,7 +47,7 @@ class StopSoundCommand(name: String) : VanillaCommand(name, "commands.stopsound.
             packet.stopAll = true
         }
         Server.broadcastPacket(targets, packet)
-        val players_str = targets.stream().map { obj: Player -> obj.name }.collect(Collectors.joining(" "))
+        val players_str = targets.stream().map { obj: Player -> obj.getEntityName() }.collect(Collectors.joining(" "))
         if (packet.stopAll) {
             log.addSuccess("commands.stopsound.success.all", players_str).output()
         } else {

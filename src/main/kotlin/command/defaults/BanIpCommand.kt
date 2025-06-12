@@ -50,7 +50,7 @@ class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.descript
                 val player = Server.instance.getPlayer(value)
                 if (player != null) {
                     this.processIPBan(player.address, sender, reason)
-                    log.addSuccess("commands.banip.success.players", player.address, player.name).output(true)
+                    log.addSuccess("commands.banip.success.players", player.address, player.getEntityName()).output(true)
                     return 1
                 } else {
                     val name = value.lowercase()
@@ -97,7 +97,7 @@ class BanIpCommand(name: String) : VanillaCommand(name, "commands.banip.descript
     }
 
     private fun processIPBan(ip: String, sender: CommandSender, reason: String) {
-        Server.instance.bannedIPs.addBan(ip, reason, null, sender.name)
+        Server.instance.bannedIPs.addBan(ip, reason, null, sender.senderName)
 
         for (player in ArrayList(Server.instance.onlinePlayers.values)) {
             if (player.address == ip) {

@@ -376,7 +376,7 @@ class CommandLogger(
     private fun broadcastMessage(key: String, value: Array<String>, target: CommandSender): TranslationContainer {
         val message = TranslationContainer(TextFormat.clean(key), *value)
         val resultStr =
-            "[" + target.name + ": " + (if (message.text != Server.instance.lang.get(message.text)) "%" else "") + message.text + "]"
+            "[" + target.senderName + ": " + (if (message.text != Server.instance.lang.get(message.text)) "%" else "") + message.text + "]"
         val coloredStr = TextFormat.GRAY.toString() + "" + TextFormat.ITALIC + resultStr
         message.text = coloredStr
         return message

@@ -61,13 +61,13 @@ interface CommandSender : Permissible {
      * `if(sender instanceof ConsoleCommandSender) .....;`
      *
      * @return 命令发送者的名称.<br></br>the name of the command sender.
-     * @see org.chorus_oss.chorus.Player.getName
+     * @see org.chorus_oss.chorus.Player.getEntityName
      * @see org.chorus_oss.chorus.command.ConsoleCommandSender.getName
      * @see org.chorus_oss.chorus.plugin.PluginTOML
      *
      *
      */
-    val name: String
+    val senderName: String
 
     /**
      * @return 发送者是否为玩家<br></br>whether the sender is a player

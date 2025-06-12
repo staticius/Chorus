@@ -2,6 +2,7 @@ package org.chorus_oss.chorus.event.entity
 
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.effect.EffectType
+import org.chorus_oss.chorus.event.HandlerList
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 
 
@@ -61,4 +62,8 @@ open class EntityDamageByEntityEvent : EntityDamageEvent {
             }
             return if (enchantments!!.isNotEmpty()) enchantments!!.clone() else Enchantment.EMPTY_ARRAY
         }
+
+    companion object {
+        val handlers: HandlerList = HandlerList()
+    }
 }

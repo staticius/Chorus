@@ -25,7 +25,7 @@ class MeCommand(name: String) : VanillaCommand(name, "commands.me.description", 
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        val name = sender.name
+        val name = sender.senderName
 
         val message = if (result.key == "message") {
             result.value.getResult(0) ?: ""

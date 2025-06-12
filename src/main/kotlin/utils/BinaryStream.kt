@@ -140,14 +140,14 @@ class BinaryStream {
     }
 
     val short: Int
-        get() = Binary.readShort(this.get(2))
+        get() = Binary.readShort(this[2])
 
     fun putShort(s: Int) {
         this.put(Binary.writeShort(s))
     }
 
     val lShort: Int
-        get() = Binary.readLShort(this.get(2))
+        get() = Binary.readLShort(this[2])
 
     fun putLShort(s: Int) {
         this.put(Binary.writeLShort(s))
@@ -157,7 +157,7 @@ class BinaryStream {
         get() = getFloat(-1)
 
     fun getFloat(accuracy: Int): Float {
-        return Binary.readFloat(this.get(4), accuracy)
+        return Binary.readFloat(this[4], accuracy)
     }
 
     fun putFloat(v: Float) {
@@ -168,7 +168,7 @@ class BinaryStream {
         get() = getLFloat(-1)
 
     fun getLFloat(accuracy: Int): Float {
-        return Binary.readLFloat(this.get(4), accuracy)
+        return Binary.readLFloat(this[4], accuracy)
     }
 
     fun putLFloat(v: Float) {
@@ -176,14 +176,14 @@ class BinaryStream {
     }
 
     val triad: Int
-        get() = Binary.readTriad(this.get(3))
+        get() = Binary.readTriad(this[3])
 
     fun putTriad(triad: Int) {
         this.put(Binary.writeTriad(triad))
     }
 
     val lTriad: Int
-        get() = Binary.readLTriad(this.get(3))
+        get() = Binary.readLTriad(this[3])
 
     fun putLTriad(triad: Int) {
         this.put(Binary.writeLTriad(triad))
@@ -204,7 +204,7 @@ class BinaryStream {
     }
 
     val byteArray: ByteArray
-        get() = this.get(unsignedVarInt.toInt())
+        get() = this[unsignedVarInt.toInt()]
 
     fun putByteArray(b: ByteArray) {
         this.putUnsignedVarInt(b.size.toLong())

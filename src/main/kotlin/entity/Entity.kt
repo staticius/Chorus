@@ -44,6 +44,7 @@ import org.chorus_oss.chorus.scheduler.Task
 import org.chorus_oss.chorus.tags.ItemTags
 import org.chorus_oss.chorus.utils.ChunkException
 import org.chorus_oss.chorus.utils.Identifier
+import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.chorus.utils.PortalHelper
 import org.chorus_oss.chorus.utils.TextFormat
 import java.awt.Color
@@ -298,8 +299,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVec
 
     @JvmField
     var maxHealth: Int = 20
-    var name: String = ""
-        protected set
+    protected var idName: String? = null
 
     @Volatile
     private var initialized: Boolean = false
@@ -321,8 +321,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVec
                 result.append(part[0].uppercaseChar()).append(part.substring(1)).append(" ")
             }
         }
-        this.name = result.toString().trim { it <= ' ' }.intern()
-        return name
+        this.idName = result.toString().trim { it <= ' ' }.intern()
+        return idName ?: ""
     }
 
     init {
@@ -884,7 +884,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVec
      * The name that English name of the type of this entity.
      */
     open fun getOriginalName(): String {
-        return if (name == null) idConvertToName() else name
+        return idName ?: idConvertToName()
     }
 
     /**
@@ -1016,8 +1016,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVec
 
     open fun despawnFrom(player: Player) {
         if (hasSpawned.containsKey(player.loaderId)) {
-            val pk = RemoveEntityPacket()
-            pk.entityRuntimeID = this.getRuntimeID()
+            val pk = RemoveActorPacket()
+            pk.actorUniqueID = this.getUniqueID()
             player.dataPacket(pk)
             hasSpawned.remove(player.loaderId)
         }
@@ -2773,7 +2773,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVec
     }
 
     fun <T : Any> getDataProperty(key: EntityDataType<T>): T {
-        return getEntityDataMap()[key] as T
+        return getDataProperty(key, key.getDefaultValue())
     }
 
     fun <T : Any> getDataProperty(key: EntityDataType<T>, d: T): T {
@@ -3182,7 +3182,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVec
             return position.clone()
         }
 
-    companion object {
+    companion object : Loggable {
         const val TAG_CHESTED: String = "Chested"
         const val TAG_COLOR: String = "Color"
         const val TAG_COLOR2: String = "Color2"

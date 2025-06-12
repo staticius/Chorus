@@ -211,7 +211,7 @@ interface PacketHandler {
 
     fun handle(pk: PositionTrackingDBServerBroadcastPacket) {}
 
-    fun handle(pk: RemoveEntityPacket) {}
+    fun handle(pk: RemoveActorPacket) {}
 
     fun handle(pk: RemoveObjectivePacket) {}
 

@@ -96,8 +96,6 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
     override fun initEntity() {
         super.initEntity()
 
-        name.isNullOrBlank()
-
         this.behaviorGroup = requireBehaviorGroup()
 
         memoryStorage[CoreMemoryTypes.ENTITY_SPAWN_TIME] = level!!.tick

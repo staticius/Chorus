@@ -39,7 +39,7 @@ class DeOpCommand(name: String) : VanillaCommand(name, "commands.deop.descriptio
             if (player.isOnline) {
                 log.outputObjectWhisper(player.player!!, TextFormat.GRAY.toString() + "%commands.deop.message")
             }
-            log.addSuccess("commands.deop.success", player.name!!).output(true)
+            log.addSuccess("commands.deop.success", player.getEntityName()!!).output(true)
         }
         return players.size
     }

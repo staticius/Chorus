@@ -25,7 +25,15 @@ class EntityEventPacket : DataPacket() {
         handler.handle(this)
     }
 
-    companion object {
+    companion object : PacketDecoder<EntityEventPacket> {
+        override fun decode(byteBuf: HandleByteBuf): EntityEventPacket {
+            return EntityEventPacket().also {
+                it.eid = byteBuf.readActorRuntimeID()
+                it.event = byteBuf.readByte().toInt()
+                it.data = byteBuf.readVarInt()
+            }
+        }
+
         const val NONE: Int = 0
         const val JUMP: Int = 1
         const val HURT_ANIMATION: Int = 2
@@ -86,5 +94,6 @@ class EntityEventPacket : DataPacket() {
         const val ENTITY_GROW_UP: Int = 76
         const val VIBRATION_DETECTED: Int = 77
         const val DRINK_MILK: Int = 78
+
     }
 }

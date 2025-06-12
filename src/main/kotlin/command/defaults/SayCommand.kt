@@ -24,7 +24,7 @@ class SayCommand(name: String) : VanillaCommand(name, "commands.say.description"
         result: Map.Entry<String, ParamList>,
         log: CommandLogger
     ): Int {
-        val senderString = sender.name
+        val senderString = sender.senderName
         val message = result.value.getResult<String>(0)!!
         Server.instance.broadcastMessage(TranslationContainer("%chat.type.announcement", senderString, message))
         return 1

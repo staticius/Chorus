@@ -18,6 +18,7 @@ import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.math.Vector3
+import org.chorus_oss.chorus.math.round
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.FloatTag
 import org.chorus_oss.chorus.network.protocol.AnimatePacket
@@ -33,7 +34,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
     protected var invisible: Boolean = false
     var movementSpeed: Float = DEFAULT_SPEED
         set(value) {
-            field = round(value.toDouble() * 100).toFloat() / 100
+            field = round(value, 2)
         }
     protected var turtleTicks: Int = 0
     private var attackTimeByShieldKb: Boolean = false
@@ -390,7 +391,7 @@ abstract class EntityLiving(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, n
      * @param speed 速度大小<br></br>Speed value
      */
     open fun setMovementSpeedF(speed: Float) {
-        this.movementSpeed = round(speed.toDouble() * 100).toFloat() / 100
+        this.movementSpeed = round(speed, 2)
     }
 
     fun getAirTicks(): Int {

@@ -27,46 +27,45 @@ class OfflinePlayer(override var uuid: UUID) :
     override val isOnline: Boolean
         get() = this.player != null
 
-    override val name: String
-        get() {
-            if (namedTag.contains("NameTag")) {
-                return namedTag.getString("NameTag")
-            }
-            return "OfflinePlayer"
+    override fun getEntityName(): String {
+        if (namedTag.contains("NameTag")) {
+            return namedTag.getString("NameTag")
         }
+        return "OfflinePlayer"
+    }
 
     override var isOp: Boolean
-        get() = Server.instance.isOp(name.lowercase())
+        get() = Server.instance.isOp(getEntityName().lowercase())
         set(value) {
             if (value) {
-                Server.instance.addOp(name.lowercase())
+                Server.instance.addOp(getEntityName().lowercase())
             } else {
-                Server.instance.removeOp(name.lowercase())
+                Server.instance.removeOp(getEntityName().lowercase())
             }
         }
 
     override var isBanned: Boolean
-        get() = Server.instance.bannedPlayers.isBanned(this.name)
+        get() = Server.instance.bannedPlayers.isBanned(this.getEntityName())
         set(value) {
             if (value) {
-                Server.instance.bannedPlayers.addBan(this.name!!, null, null, null)
+                Server.instance.bannedPlayers.addBan(this.getEntityName()!!, null, null, null)
             } else {
-                Server.instance.bannedPlayers.remove(this.name!!)
+                Server.instance.bannedPlayers.remove(this.getEntityName()!!)
             }
         }
 
     override var isWhitelisted: Boolean
-        get() = Server.instance.isWhitelisted(name!!.lowercase())
+        get() = Server.instance.isWhitelisted(getEntityName()!!.lowercase())
         set(value) {
             if (value) {
-                Server.instance.addWhitelist(name!!.lowercase())
+                Server.instance.addWhitelist(getEntityName()!!.lowercase())
             } else {
-                Server.instance.removeWhitelist(name!!.lowercase())
+                Server.instance.removeWhitelist(getEntityName()!!.lowercase())
             }
         }
 
     override val player: Player?
-        get() = if (name != null) Server.instance.getPlayerExact(name!!) else null
+        get() = if (getEntityName() != null) Server.instance.getPlayerExact(getEntityName()!!) else null
 
     override val firstPlayed: Long
         get() = namedTag.getLong("firstPlayed")

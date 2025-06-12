@@ -28,14 +28,14 @@ class BanCommand(name: String) : VanillaCommand(name, "commands.ban.description"
         val list = result.value
         val name = list.getResult<String>(0)!!
         val reason = list.getResult<String>(1)
-        Server.instance.bannedPlayers.addBan(name, reason, null, sender.name)
+        Server.instance.bannedPlayers.addBan(name, reason, null, sender.senderName)
 
         val player = Server.instance.getPlayerExact(name)
         player?.kick(
             PlayerKickEvent.Reason.NAME_BANNED,
             if (reason!!.isNotEmpty()) "Banned by admin. Reason: $reason" else "Banned by admin"
         )
-        log.addSuccess("commands.ban.success", player?.name ?: name).output(true)
+        log.addSuccess("commands.ban.success", player?.getEntityName() ?: name).output(true)
         return 1
     }
 }

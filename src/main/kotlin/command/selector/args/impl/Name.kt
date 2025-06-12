@@ -26,8 +26,8 @@ class Name : CachedSimpleSelectorArgument() {
             } else have.add(name1)
         }
         return Predicate { entity: Entity ->
-            have.stream().allMatch { name: String -> entity.name == name } && dontHave.stream()
-                .noneMatch { name: String -> entity.name == name }
+            have.stream().allMatch { name: String -> entity.getEntityName() == name } && dontHave.stream()
+                .noneMatch { name: String -> entity.getEntityName() == name }
         }
     }
 

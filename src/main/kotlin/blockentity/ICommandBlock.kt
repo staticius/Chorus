@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.inventory.InventoryHolder
 import org.chorus_oss.chorus.plugin.InternalPlugin
 
 interface ICommandBlock : CommandSender, InventoryHolder {
-    override val name: String
+    override val senderName: String
 
     fun hasName(): Boolean
 

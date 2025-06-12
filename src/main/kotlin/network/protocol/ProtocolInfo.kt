@@ -27,7 +27,7 @@ interface ProtocolInfo {
         const val START_GAME_PACKET = 11
         const val ADD_PLAYER_PACKET = 12
         const val ADD_ACTOR_PACKET = 13
-        const val REMOVE_ENTITY_PACKET = 14
+        const val REMOVE_ACTOR_PACKET = 14
         const val ADD_ITEM_ACTOR_PACKET = 15
         const val SERVER_POST_MOVE_POSITION = 16
         const val TAKE_ITEM_ENTITY_PACKET = 17

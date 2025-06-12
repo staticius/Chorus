@@ -86,7 +86,7 @@ open class ConsoleCommandSender : CommandSender {
     override val transform: Transform
         get() = Transform(Server.instance.defaultLevel!!)
 
-    override val name get() = "CONSOLE"
+    override val senderName get() = "CONSOLE"
 
     override var isOp = true
         set(_) {}
