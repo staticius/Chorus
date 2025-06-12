@@ -104,6 +104,7 @@ class CreativeItemRegistry : ItemID, IRegistry<Int, Item?, Item> {
                 return i
             }
         }
+        log.warn("Couldn't find creative item index for ${item.id}")
         return -1
     }
 

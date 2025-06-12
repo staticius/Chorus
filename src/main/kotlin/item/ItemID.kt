@@ -84,6 +84,8 @@ interface ItemID {
 
         const val BLUE_DYE: String = "minecraft:blue_dye"
 
+        const val BLUE_EGG: String = "minecraft:blue_egg"
+
         const val BOAT: String = "minecraft:boat"
 
         const val BOGGED_SPAWN_EGG: String = "minecraft:bogged_spawn_egg"
@@ -115,6 +117,8 @@ interface ItemID {
         const val BROWN_BUNDLE: String = "minecraft:brown_bundle"
 
         const val BROWN_DYE: String = "minecraft:brown_dye"
+
+        const val BROWN_EGG: String = "minecraft:brown_egg"
 
         const val BRUSH: String = "minecraft:brush"
 

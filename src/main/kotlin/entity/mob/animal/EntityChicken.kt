@@ -1,5 +1,6 @@
 package org.chorus_oss.chorus.entity.mob.animal
 
+import org.chorus_oss.chorus.entity.ClimateVariant
 import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.EntityWalkable
 import org.chorus_oss.chorus.entity.ai.behavior.Behavior
@@ -28,7 +29,7 @@ import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 
-class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
+class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, ClimateVariant {
     override fun getEntityIdentifier(): String {
         return EntityID.CHICKEN
     }
@@ -150,6 +151,11 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
     override fun initEntity() {
         this.maxHealth = 4
         super.initEntity()
+        if (namedTag!!.contains("variant")) {
+            this.climateVariant = ClimateVariant.Companion.Variant.get(namedTag!!.getString("variant"))
+        } else {
+            this.climateVariant = this.getBiomeVariant(this.level!!.getBiomeId(this.position.x.toInt(), this.position.y.toInt(), this.position.z.toInt()))
+        }
     }
 
     override fun isBreedingItem(item: Item): Boolean {

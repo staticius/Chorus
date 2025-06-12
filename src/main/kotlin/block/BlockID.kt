@@ -290,7 +290,11 @@ interface BlockID {
 
         const val BUDDING_AMETHYST: String = "minecraft:budding_amethyst"
 
+        const val BUSH: String = "minecraft:bush"
+
         const val CACTUS: String = "minecraft:cactus"
+
+        const val CACTUS_FLOWER: String = "minecraft:cactus_flower"
 
         const val CAKE: String = "minecraft:cake"
 
@@ -1022,6 +1026,8 @@ interface BlockID {
 
         const val FIRE: String = "minecraft:fire"
 
+        const val FIREFLY_BUSH: String = "minecraft:firefly_bush"
+
         const val FIRE_CORAL: String = "minecraft:fire_coral"
 
         const val FIRE_CORAL_BLOCK: String = "minecraft:fire_coral_block"
@@ -1307,6 +1313,8 @@ interface BlockID {
         const val LARGE_FERN: String = "minecraft:large_fern"
 
         const val LAVA: String = "minecraft:lava"
+
+        const val LEAF_LITTER: String = "minecraft:leaf_litter"
 
         const val LECTERN: String = "minecraft:lectern"
 
@@ -2024,6 +2032,8 @@ interface BlockID {
 
         const val SEAGRASS: String = "minecraft:seagrass"
 
+        const val SHORT_DRY_GRASS: String = "minecraft:short_dry_grass"
+
         const val SHORT_GRASS: String = "minecraft:short_grass"
 
         const val SHROOMLIGHT: String = "minecraft:shroomlight"
@@ -2227,6 +2237,8 @@ interface BlockID {
         const val SWEET_BERRY_BUSH: String = "minecraft:sweet_berry_bush"
 
         const val TALL_GRASS: String = "minecraft:tall_grass"
+
+        const val TALL_DRY_GRASS: String = "minecraft:tall_dry_grass"
 
         const val TARGET: String = "minecraft:target"
 
@@ -2477,6 +2489,8 @@ interface BlockID {
         const val WHITE_TULIP: String = "minecraft:white_tulip"
 
         const val WHITE_WOOL: String = "minecraft:white_wool"
+
+        const val WILDFLOWERS: String = "minecraft:wildflowers"
 
         const val WITHER_ROSE: String = "minecraft:wither_rose"
 

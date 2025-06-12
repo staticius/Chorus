@@ -1,5 +1,6 @@
 package org.chorus_oss.chorus.entity.projectile.throwable
 
+import org.chorus_oss.chorus.entity.ClimateVariant
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.item.ItemEgg
@@ -10,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom
 
 
 class EntityEgg @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shootingEntity: Entity? = null) :
-    EntityThrowable(chunk, nbt, shootingEntity) {
+    EntityThrowable(chunk, nbt, shootingEntity), ClimateVariant {
     override fun getEntityIdentifier(): String {
         return EntityID.EGG
     }
@@ -60,5 +61,14 @@ class EntityEgg @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag, shoo
 
     override fun getOriginalName(): String {
         return "Egg"
+    }
+
+    override fun initEntity() {
+        super.initEntity()
+        if (namedTag!!.contains("variant")) {
+            this.climateVariant = ClimateVariant.Companion.Variant.get(namedTag!!.getString("variant"))
+        } else {
+            this.climateVariant = ClimateVariant.Companion.Variant.Temperate
+        }
     }
 }

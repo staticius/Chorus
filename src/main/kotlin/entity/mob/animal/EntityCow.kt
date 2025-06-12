@@ -1,6 +1,7 @@
 package org.chorus_oss.chorus.entity.mob.animal
 
 import org.chorus_oss.chorus.Player
+import org.chorus_oss.chorus.entity.ClimateVariant
 import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.EntityWalkable
 import org.chorus_oss.chorus.entity.ai.behavior.Behavior
@@ -30,7 +31,7 @@ import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.utils.Utils
 
-class EntityCow(chunk: IChunk?, nbt: CompoundTag?) : EntityAnimal(chunk, nbt!!), EntityWalkable {
+class EntityCow(chunk: IChunk?, nbt: CompoundTag?) : EntityAnimal(chunk, nbt!!), EntityWalkable, ClimateVariant {
     override fun getEntityIdentifier(): String {
         return EntityID.COW
     }
@@ -121,6 +122,11 @@ class EntityCow(chunk: IChunk?, nbt: CompoundTag?) : EntityAnimal(chunk, nbt!!),
     override fun initEntity() {
         this.maxHealth = 10
         super.initEntity()
+        if (namedTag!!.contains("variant")) {
+            this.climateVariant = ClimateVariant.Companion.Variant.get(namedTag!!.getString("variant"))
+        } else {
+            this.climateVariant = this.getBiomeVariant(this.level!!.getBiomeId(this.position.x.toInt(), this.position.y.toInt(), this.position.z.toInt()))
+        }
     }
 
     override fun onInteract(player: Player, item: Item, clickedPos: Vector3): Boolean {

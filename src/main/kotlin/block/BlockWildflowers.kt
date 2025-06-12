@@ -7,12 +7,10 @@ import org.chorus_oss.chorus.block.property.type.IntPropertyType
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.level.particle.BoneMealParticle
 import org.chorus_oss.chorus.math.BlockFace
-import org.chorus_oss.chorus.tags.BlockTags
 
-class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState = properties.defaultState) :
-    BlockFlowable(blockState) {
-    override val name: String
-        get() = "Pink Petals"
+class BlockWildflowers(blockState: BlockState = properties.defaultState) : BlockFlower(blockState) {
+    override val properties: BlockProperties
+        get() = Companion.properties
 
     override fun place(
         item: Item?,
@@ -24,22 +22,16 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState = propert
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!isSupportValid(block.down())) {
-            return false
-        }
+        if (!BlockSweetBerryBush.isSupportValid(block.down())) return false
 
         if (player != null) {
             setPropertyValue(
                 CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
-                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse()[player.getHorizontalFacing().getOpposite()]!!
+                CommonPropertyMap.CARDINAL_BLOCKFACE.inverse().get(player.getHorizontalFacing().getOpposite())!!
             )
         }
 
-        return level.setBlock(this.position, this)
-    }
-
-    override fun canBeActivated(): Boolean {
-        return true
+        return this.level.setBlock(this.position, this)
     }
 
     override fun onActivate(
@@ -67,9 +59,9 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState = propert
             return true
         }
 
-        if (item.blockId == BlockID.PINK_PETALS && getPropertyValue(CommonBlockProperties.GROWTH) < 3) {
+        if (item.blockId == this.id && getPropertyValue(CommonBlockProperties.GROWTH) < 3) {
             setPropertyValue(
-                CommonBlockProperties.GROWTH, getPropertyValue<Int, IntPropertyType>(
+                CommonBlockProperties.GROWTH, getPropertyValue(
                     CommonBlockProperties.GROWTH
                 ) + 1
             )
@@ -81,18 +73,11 @@ class BlockPinkPetals @JvmOverloads constructor(blockState: BlockState = propert
         return false
     }
 
-    override val properties: BlockProperties
-        get() = Companion.properties
-
     companion object {
         val properties: BlockProperties = BlockProperties(
-            BlockID.PINK_PETALS,
-            CommonBlockProperties.GROWTH, CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION
+            BlockID.WILDFLOWERS,
+            CommonBlockProperties.MINECRAFT_CARDINAL_DIRECTION,
+            CommonBlockProperties.GROWTH
         )
-
-
-        private fun isSupportValid(block: Block): Boolean {
-            return block.`is`(BlockTags.DIRT)
-        }
     }
 }

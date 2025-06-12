@@ -1,6 +1,7 @@
 package org.chorus_oss.chorus.entity.mob.animal
 
 import org.chorus_oss.chorus.block.BlockID
+import org.chorus_oss.chorus.entity.ClimateVariant
 import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.EntityWalkable
 import org.chorus_oss.chorus.entity.ai.behavior.Behavior
@@ -28,7 +29,7 @@ import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 
-class EntityPig(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable {
+class EntityPig(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityWalkable, ClimateVariant {
     override fun getEntityIdentifier(): String {
         return EntityID.PIG
     }
@@ -112,6 +113,11 @@ class EntityPig(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
     public override fun initEntity() {
         this.maxHealth = 10
         super.initEntity()
+        if (namedTag!!.contains("variant")) {
+            this.climateVariant = ClimateVariant.Companion.Variant.get(namedTag!!.getString("variant"))
+        } else {
+            this.climateVariant = this.getBiomeVariant(this.level!!.getBiomeId(this.position.x.toInt(), this.position.y.toInt(), this.position.z.toInt()))
+        }
     }
 
     override fun getOriginalName(): String {
