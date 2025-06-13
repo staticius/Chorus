@@ -13,6 +13,6 @@ abstract class BlockDefinition(
 
     init {
         Identifier.assertValid(identifier)
-        require(states.sumOf { it.size } <= 16) { "BlockDefinition \"$identifier\" exceeds the state limit" }
+        require(states.fold(1) { acc, state -> acc * state.values.size } <= 65536) { "BlockDefinition \"$identifier\" exceeds the permutation limit" }
     }
 }
