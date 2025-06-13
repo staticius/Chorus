@@ -9,7 +9,8 @@ abstract class BlockDefinition(
     val components: List<BlockComponent> = emptyList(),
     val permutations: List<BlockPermutationDefinition> = emptyList(),
 ) {
-    val defaultPermutation: BlockPermutation = BlockPermutation.getDefault(identifier, states)
+    val allPermutations: List<BlockPermutation> = BlockPermutation.getPermutations(identifier, states)
+    val defaultPermutation: BlockPermutation = allPermutations.first()
 
     init {
         Identifier.assertValid(identifier)
