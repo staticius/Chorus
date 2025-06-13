@@ -7,23 +7,18 @@ import org.chorus_oss.chorus.nbt.tag.CompoundTag
 
 data class BlockPermutation(
     val identifier: String,
-    val state: Map<String, Any>
+    val states: Map<String, Any>
 ) {
-    val hash: Int = BlockStates.getHash(identifier, state)
-    val tag: CompoundTag = BlockStates.getTag(identifier, state)
+    val hash: Int = BlockStates.getHash(identifier, states)
+    val tag: CompoundTag = BlockStates.getTag(identifier, states)
 
     fun <T : Any> getState(state: BlockState<T>): T? {
         @Suppress("UNCHECKED_CAST")
-        return this.state[state.identifier] as? T?
-    }
-
-    fun <T> getState(identifier: String): T? {
-        @Suppress("UNCHECKED_CAST")
-        return this.state[identifier] as? T?
+        return this.states[state.identifier] as? T?
     }
 
     fun getState(identifier: String): Any? {
-        return this.state[identifier]
+        return this.states[identifier]
     }
 
     fun <T : Any> withState(blockState: BlockState<T>, value: T): BlockPermutation {
@@ -33,16 +28,16 @@ data class BlockPermutation(
     fun withState(identifier: String, value: Any): BlockPermutation {
         this.validateState(identifier, value)
 
-        return this.copy(state = this.state + (identifier to value))
+        return this.copy(states = this.states + (identifier to value))
     }
 
-    fun withStates(vararg states: Pair<BlockState<*>, Any>): BlockPermutation {
-        return withStates(states.toMap())
-    }
+//    fun withStates(vararg states: Pair<BlockState<*>, Any>): BlockPermutation {
+//        return withStates(states.toMap())
+//    }
 
-    fun withStates(states: Map<BlockState<*>, Any>): BlockPermutation {
-        return withStates(states.entries.associate { it.key.identifier to it.value })
-    }
+//    fun withStates(states: Map<BlockState<*>, Any>): BlockPermutation {
+//        return withStates(states.entries.associate { it.key.identifier to it.value })
+//    }
 
     fun withStates(vararg states: Pair<String, Any>): BlockPermutation {
         return withStates(states.toMap())
@@ -51,11 +46,11 @@ data class BlockPermutation(
     fun withStates(states: Map<String, Any>): BlockPermutation {
         states.forEach { this.validateState(it.key, it.value) }
 
-        return this.copy(state = this.state + states)
+        return this.copy(states = this.states + states)
     }
 
     private fun validateState(identifier: String, value: Any) {
-        val existing = requireNotNull(this.state[identifier]) {
+        val existing = requireNotNull(this.states[identifier]) {
             "BlockDefinition \"${this.identifier}\" does not support state \"${identifier}\""
         }
 

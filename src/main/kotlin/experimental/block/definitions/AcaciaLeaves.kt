@@ -7,6 +7,6 @@ object AcaciaLeaves : BlockDefinition(
     identifier = "minecraft:acacia_leaves",
     states = listOf(
         CommonStates.persistentBit,
-        CommonStates.updateBit,
+        CommonStates.updateBit
     )
 )

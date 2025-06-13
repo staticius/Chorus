@@ -7,6 +7,6 @@ object ActivatorRail : BlockDefinition(
     identifier = "minecraft:activator_rail",
     states = listOf(
         CommonStates.railDataBit,
-        CommonStates.railDirection6
+        CommonStates.railDirection
     )
 )

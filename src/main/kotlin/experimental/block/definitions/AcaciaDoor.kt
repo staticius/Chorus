@@ -9,6 +9,6 @@ object AcaciaDoor : BlockDefinition(
         CommonStates.minecraftCardinalDirection,
         CommonStates.openBit,
         CommonStates.upperBlockBit,
-        CommonStates.doorHingeBit,
+        CommonStates.doorHingeBit
     )
 )

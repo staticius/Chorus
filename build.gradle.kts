@@ -70,6 +70,7 @@ dependencies {
     implementation(libs.jwt)
     implementation(libs.jwt.ecdsa)
     implementation(libs.fleks)
+    implementation(libs.kotlin.poet)
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))

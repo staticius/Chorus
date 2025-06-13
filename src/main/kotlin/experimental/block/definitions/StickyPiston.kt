@@ -1,0 +1,10 @@
+package org.chorus_oss.chorus.experimental.block.definitions
+
+import org.chorus_oss.chorus.experimental.block.BlockDefinition
+import org.chorus_oss.chorus.experimental.block.state.CommonStates
+
+object StickyPiston :
+    BlockDefinition(
+        identifier = "minecraft:sticky_piston",
+        states = listOf(CommonStates.facingDirection)
+    )

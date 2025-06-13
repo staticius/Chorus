@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object AndesiteStairs : BlockDefinition(
-    identifier = "minecraft:andesite_stair",
+    identifier = "minecraft:andesite_stairs",
     states = listOf(
         CommonStates.upsideDownBit,
         CommonStates.weirdoDirection

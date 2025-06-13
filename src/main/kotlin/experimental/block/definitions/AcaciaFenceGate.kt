@@ -8,6 +8,6 @@ object AcaciaFenceGate : BlockDefinition(
     states = listOf(
         CommonStates.inWallBit,
         CommonStates.minecraftCardinalDirection,
-        CommonStates.openBit,
+        CommonStates.openBit
     )
 )

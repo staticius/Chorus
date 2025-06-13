@@ -2,6 +2,7 @@ package org.chorus_oss.chorus.registry
 
 import org.chorus_oss.chorus.block.*
 import org.chorus_oss.chorus.block.customblock.CustomBlockDefinition
+import org.chorus_oss.chorus.experimental.generator.BlockDefinitionGenerator
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.plugin.Plugin
 import org.chorus_oss.chorus.utils.Loggable
@@ -1110,6 +1111,10 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
             register(BlockID.YELLOW_TERRACOTTA, BlockYellowTerracotta::class)
             register(BlockID.YELLOW_WOOL, BlockYellowWool::class)
             register(BlockID.ZOMBIE_HEAD, BlockZombieHead::class)
+
+//            for (property in PROPERTIES.values) {
+//                BlockDefinitionGenerator.generateDefinition(property)
+//            }
         } catch (ignore: RegisterException) {
         }
     }
