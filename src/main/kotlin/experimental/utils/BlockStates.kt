@@ -1,5 +1,6 @@
 package org.chorus_oss.chorus.experimental.utils
 
+import org.chorus_oss.chorus.block.BlockState
 import org.chorus_oss.chorus.block.BlockStateImpl
 import org.chorus_oss.chorus.block.property.type.BlockPropertyType
 import org.chorus_oss.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
@@ -56,5 +57,9 @@ object BlockStates {
         }
 
         return states
+    }
+
+    fun getMaskMap(identifier: String, states: List<BlockPropertyType<*>>): Map<Short, BlockStateImpl> {
+        return getAllStates(identifier, states).values.associateBy { it.specialValue() }
     }
 }

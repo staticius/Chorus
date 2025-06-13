@@ -5,6 +5,8 @@ import org.chorus_oss.chorus.experimental.block.BlockPermutation
 
 object Dirt : BlockDefinition(
     identifier = "minecraft:dirt",
+    states = emptyList(),
+    components = emptyList(),
     permutations = listOf(
         BlockPermutation(
             condition = { it.identifier == "minecraft:dirt" },

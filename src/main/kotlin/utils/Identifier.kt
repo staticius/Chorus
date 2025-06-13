@@ -36,7 +36,6 @@ class Identifier private constructor(id: Array<String>) {
     }
 
     companion object {
-        const val NAMESPACE_SEPARATOR: Char = ':'
         const val DEFAULT_NAMESPACE: String = "minecraft"
 
         /**
@@ -54,7 +53,7 @@ class Identifier private constructor(id: Array<String>) {
         fun tryParse(id: String): Identifier? {
             return try {
                 Identifier(id)
-            } catch (lv: InvalidIdentifierException) {
+            } catch (_: InvalidIdentifierException) {
                 null
             }
         }
@@ -62,7 +61,7 @@ class Identifier private constructor(id: Array<String>) {
         fun of(namespace: String, path: String): Identifier? {
             return try {
                 Identifier(namespace, path)
-            } catch (lv: InvalidIdentifierException) {
+            } catch (_: InvalidIdentifierException) {
                 null
             }
         }

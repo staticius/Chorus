@@ -117,7 +117,6 @@ class BlockStateImpl(
         properties: BlockProperties,
         values: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>
     ): BlockState? {
-        Preconditions.checkNotNull(properties)
         val bits = properties.specialValueBits
         if (bits <= 16) {
             return properties.getBlockState(BlockState.computeSpecialValue(bits, values))
