@@ -41,7 +41,7 @@ class EnumPropertyType<T : Enum<T>>(name: String, val enumClass: Class<T>, defau
         }
 
         override fun toString(): String {
-            return "EnumPropertyValue(name=" + name + ", value=" + value + ")"
+            return "EnumPropertyValue(name=$name, value=$value)"
         }
     }
 

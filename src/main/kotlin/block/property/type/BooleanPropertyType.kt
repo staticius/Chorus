@@ -31,7 +31,7 @@ class BooleanPropertyType private constructor(name: String, defaultData: Boolean
         override fun getSerializedValue(): Byte = (if (value) 1 else 0).toByte()
 
         override fun toString(): String {
-            return "BoolPropertyValue(name=${name}, value=${value})"
+            return "BoolPropertyValue(name=$name, value=$value)"
         }
     }
 
