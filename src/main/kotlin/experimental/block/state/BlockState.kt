@@ -23,9 +23,6 @@ data class BlockState<T : Any>(
     val defaultValue: T
         get() = values.first()
 
-    val size: Int
-        get() = Int.SIZE_BITS - (values.size - 1).countLeadingZeroBits()
-
     companion object {
         fun from(identifier: String, range: IntRange): BlockState<Int> {
             return BlockState(identifier, range.toList())
