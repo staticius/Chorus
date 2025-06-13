@@ -1,5 +1,6 @@
 package org.chorus_oss.chorus.experimental.block
 
+import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.experimental.block.state.BlockState
 import org.chorus_oss.chorus.experimental.utils.BlockStates
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
@@ -64,6 +65,18 @@ data class BlockPermutation(
     }
 
     companion object {
+        private val UnknownBlockPermutations = mutableMapOf<Int, BlockPermutation>()
+
+        fun getUnknown(hash: Int, tag: CompoundTag): BlockPermutation {
+            return UnknownBlockPermutations.computeIfAbsent(
+                hash
+            ) {
+                BlockPermutation(BlockID.UNKNOWN, emptyMap()).apply {
+                    tag.putCompound("Block", tag)
+                }
+            }
+        }
+
         fun getDefault(identifier: String, states: List<BlockState<*>>): BlockPermutation {
             return BlockPermutation(
                 identifier,
