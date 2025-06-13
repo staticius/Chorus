@@ -368,7 +368,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
     open val itemId: String
         get() = id
 
-    val propertyValues: MutableList<BlockPropertyValue<*, *, *>>
+    val propertyValues: List<BlockPropertyValue<*, *, *>>
         get() = blockState.blockPropertyValues
 
     val isAir: Boolean
@@ -400,7 +400,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         return this
     }
 
-    fun setPropertyValues(values: MutableList<BlockPropertyValue<*, *, *>>): Block {
+    fun setPropertyValues(values: List<BlockPropertyValue<*, *, *>>): Block {
         this.blockState = blockState.setPropertyValues(
             properties, *values.toTypedArray()
         )
