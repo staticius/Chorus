@@ -1,4 +1,4 @@
-package org.chorus_oss.chorus.definitions.block
+package org.chorus_oss.chorus.experimental.block
 
 import org.chorus_oss.chorus.block.BlockState
 

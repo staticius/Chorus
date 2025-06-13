@@ -19,7 +19,7 @@ interface BlockState {
 
     fun unsignedBlockStateHash(): Long
 
-    val blockPropertyValues: @UnmodifiableView MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>
+    val blockPropertyValues: List<BlockPropertyType.BlockPropertyValue<*, *, *>>
 
     val blockStateTag: @UnmodifiableView CompoundTagView
 
@@ -61,7 +61,7 @@ interface BlockState {
             return BlockStateImpl.makeUnknownBlockState(hash, blockTag)
         }
 
-        fun computeSpecialValue(propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>): Short {
+        fun computeSpecialValue(propertyValues: List<BlockPropertyType.BlockPropertyValue<*, *, *>>): Short {
             var specialValueBits: Byte = 0
             for (value in propertyValues) specialValueBits =
                 (specialValueBits + (value.propertyType.bitSize)).toByte()
@@ -70,7 +70,7 @@ interface BlockState {
 
         fun computeSpecialValue(
             specialValueBits: Byte,
-            propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>
+            propertyValues: List<BlockPropertyType.BlockPropertyValue<*, *, *>>
         ): Short {
             var specialValueBits1 = specialValueBits
             var specialValue: Short = 0

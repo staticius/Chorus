@@ -2,28 +2,19 @@ package org.chorus_oss.chorus.block
 
 import org.chorus_oss.chorus.block.property.type.BlockPropertyType
 import org.chorus_oss.chorus.block.property.type.BlockPropertyType.BlockPropertyValue
+import org.chorus_oss.chorus.experimental.utils.BlockStates
 import org.chorus_oss.chorus.tags.BlockTags.register
-import org.chorus_oss.chorus.utils.HashUtils
 import org.chorus_oss.chorus.utils.Identifier.Companion.assertValid
-import org.jetbrains.annotations.UnmodifiableView
-import java.util.*
 
 class BlockProperties(identifier: String, blockTags: Set<String>, vararg properties: BlockPropertyType<*>) {
-
     val identifier: String
     private val propertyTypeSet: Set<BlockPropertyType<*>>
-    var specialValueMap: Map<Short, BlockState>
-        private set
-
-
-    var defaultState: BlockState
-        private set
+    val specialValueMap: Map<Short, BlockState>
+    val defaultState: BlockState
     val specialValueBits: Byte
 
     constructor(identifier: String, vararg properties: BlockPropertyType<*>) : this(
-        identifier,
-        setOf<String>(),
-        *properties
+        identifier, setOf<String>(), *properties
     )
 
     init {
@@ -32,81 +23,15 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
         this.identifier = identifier.intern()
         this.propertyTypeSet = mutableSetOf(*properties)
 
-        var specialValueBits: Byte = 0
-        for (value in this.propertyTypeSet) {
-            specialValueBits = (specialValueBits + value.bitSize).toByte()
+        this.specialValueBits = propertyTypeSet.sumOf { it.bitSize.toInt() }.toByte().also {
+            if (it > 16) throw IllegalStateException("State limit exceeded for block: $identifier")
         }
-        this.specialValueBits = specialValueBits
 
-        if (this.specialValueBits <= 16) {
-            val mapBlockStatePair = initStates()
-            val blockStateHashMap = mapBlockStatePair.first
-            this.defaultState = mapBlockStatePair.second
-            this.specialValueMap = blockStateHashMap.values.associateBy { it.specialValue() }
-        } else {
-            throw IllegalArgumentException()
-        }
-    }
+        val propertyList = propertyTypeSet.toList()
 
-    private fun initStates(): Pair<Map<Int, BlockStateImpl>, BlockStateImpl> {
-        val propertyTypeList = propertyTypeSet.toList()
-        val size = propertyTypeList.size
-        if (size == 0) {
-            val blockState = BlockStateImpl(identifier, mutableListOf())
-            return Pair(hashMapOf(blockState.blockStateHash() to blockState), blockState)
-        }
-        val blockStates = HashMap<Int, BlockStateImpl>()
-
-        // to keep track of next element in each of
-        // the n arrays
-        val indices = IntArray(size) { 0 }
-
-        while (true) {
-            // Generate BlockState
-            val values = mutableListOf<BlockPropertyValue<*, *, *>>()
-            for (i in 0..<size) {
-                val type = propertyTypeList[i]
-                values.add(type.tryCreateValue(type.validValues[indices[i]])!!)
-            }
-            val state = BlockStateImpl(identifier, values.toMutableList())
-            blockStates[state.blockStateHash()] = state
-
-            // find the rightmost array that has more
-            // elements left after the current element
-            // in that array
-            var next = size - 1
-            while (next >= 0 && (indices[next] + 1 >= propertyTypeList[next].validValues.size)) {
-                next--
-            }
-
-            // no such array is found so no more
-            // combinations left
-            if (next < 0) break
-
-            // if found move to next element in that
-            // array
-            indices[next]++
-
-            // for all arrays to the right of this
-            // array current index again points to
-            // first element
-            for (i in next + 1..<size) {
-                indices[i] = 0
-            }
-        }
-        val defaultStateHash: Int = HashUtils.computeBlockStateHash(
-            this.identifier,
-            propertyTypeSet.map { it.tryCreateValue(it.defaultValue)!! }.toList()
-        )
-        var defaultState: BlockStateImpl? = null
-        for (s in blockStates.values) {
-            if (s.blockStateHash() == defaultStateHash) {
-                defaultState = s
-                break
-            }
-        }
-        requireNotNull(defaultState) { "Can't find default block state for block: $identifier" }
-        return Pair(blockStates, defaultState)
+        this.defaultState = BlockStates.getDefaultState(identifier, propertyList)
+        this.specialValueMap =
+            BlockStates.getAllStates(identifier, propertyList).values.associateBy { it.specialValue() }
     }
 
     fun getBlockState(specialValue: Short): BlockState? {
@@ -114,8 +39,7 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
     }
 
     fun <DATATYPE, PROPERTY : BlockPropertyType<DATATYPE>> getBlockState(
-        property: PROPERTY,
-        value: DATATYPE
+        property: PROPERTY, value: DATATYPE
     ): BlockState {
         return defaultState.setPropertyValue(this, property, value)
     }
@@ -144,7 +68,7 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
         return getBlockState(specialValue.toShort())?.getPropertyValue(p) ?: p.defaultValue
     }
 
-    fun getPropertyTypeSet(): @UnmodifiableView MutableSet<BlockPropertyType<*>> {
-        return Collections.unmodifiableSet(propertyTypeSet)
+    fun getPropertyTypeSet(): Set<BlockPropertyType<*>> {
+        return propertyTypeSet
     }
 }

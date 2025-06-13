@@ -8,19 +8,18 @@ import org.chorus_oss.chorus.nbt.tag.LinkedCompoundTag
 import org.chorus_oss.chorus.nbt.tag.TreeMapCompoundTag
 import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 import org.chorus_oss.chorus.utils.HashUtils
-import org.jetbrains.annotations.UnmodifiableView
 
 class BlockStateImpl(
     override val identifier: String,
-    val blockHash: Int,
+    val hash: Int,
     private val inSpecialValue: Short,
-    override val blockPropertyValues: @UnmodifiableView MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>,
+    override val blockPropertyValues: List<BlockPropertyType.BlockPropertyValue<*, *, *>>,
     override val blockStateTag: CompoundTagView
 ) : BlockState {
     constructor(
         identifier: String,
         blockStateHash: Int,
-        propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>
+        propertyValues: List<BlockPropertyType.BlockPropertyValue<*, *, *>>
     ) : this(
         identifier.intern(),
         blockStateHash,
@@ -29,18 +28,18 @@ class BlockStateImpl(
         buildBlockStateTag(identifier, propertyValues)
     )
 
-    constructor(identifier: String, propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>) : this(
+    constructor(identifier: String, propertyValues: List<BlockPropertyType.BlockPropertyValue<*, *, *>>) : this(
         identifier,
         HashUtils.computeBlockStateHash(identifier, propertyValues),
         propertyValues
     )
 
     override fun blockStateHash(): Int {
-        return this.blockHash
+        return this.hash
     }
 
     override fun unsignedBlockStateHash(): Long {
-        return Integer.toUnsignedLong(this.blockHash)
+        return Integer.toUnsignedLong(this.hash)
     }
 
     override fun specialValue(): Short {
@@ -159,7 +158,7 @@ class BlockStateImpl(
 
         private fun buildBlockStateTag(
             identifier: String,
-            propertyValues: MutableList<BlockPropertyType.BlockPropertyValue<*, *, *>>
+            propertyValues: List<BlockPropertyType.BlockPropertyValue<*, *, *>>
         ): CompoundTagView {
             val states = TreeMapCompoundTag()
             for (value in propertyValues) {
