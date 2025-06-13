@@ -28,7 +28,11 @@ data class BlockState<T : Any>(
             return BlockState(identifier, range.toList())
         }
 
-        fun from(identifier: String, min: Int = 0, max: Int): BlockState<Int> {
+        fun from(identifier: String, max: Int): BlockState<Int> {
+            return from(identifier, 0, max)
+        }
+
+        fun from(identifier: String, min: Int, max: Int): BlockState<Int> {
             return from(identifier, min..max)
         }
 
@@ -37,7 +41,7 @@ data class BlockState<T : Any>(
         }
 
         fun <T : Enum<T>> from(identifier: String, enumClass: Class<T>): BlockState<String> {
-            return BlockState(identifier, enumClass.enumConstants.toList().map { it.name.lowercase() })
+            return from(identifier, enumClass.enumConstants.toList())
         }
 
         fun <T : Enum<T>> from(identifier: String, enumClass: KClass<T>): BlockState<String> {
