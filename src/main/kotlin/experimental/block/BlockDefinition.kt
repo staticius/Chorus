@@ -9,11 +9,11 @@ abstract class BlockDefinition(
     val components: List<BlockComponent> = emptyList(),
     val permutations: List<BlockPermutationDefinition> = emptyList(),
 ) {
-    val allPermutations: List<BlockPermutation> = BlockPermutation.getPermutations(identifier, states)
-    val defaultPermutation: BlockPermutation = allPermutations.first()
-
     init {
         Identifier.assertValid(identifier)
         require(states.fold(1) { acc, state -> acc * state.values.size } <= 65536) { "BlockDefinition \"$identifier\" exceeds the permutation limit" }
     }
+
+    val allPermutations: List<BlockPermutation> = BlockPermutation.getPermutations(identifier, states)
+    val defaultPermutation: BlockPermutation = allPermutations.first()
 }
