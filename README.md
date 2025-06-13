@@ -7,4 +7,10 @@
             Minecraft: Bedrock server software, open source and written in Kotlin
         </strong>
     </p>
+    <h1 align="center">
+        DO NOT USE IN PRODUCTION
+    </h1>
+    <h3 align="center">
+        Very broken...
+    </h3>
 </p>
