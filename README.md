@@ -10,7 +10,7 @@
     <h1 align="center">
         DO NOT USE IN PRODUCTION
     </h1>
-    <h3 align="center">
-        Very broken...
-    </h3>
+    <h4 align="center">
+        Chorus is currently in early development, bugs should be expected
+    </h4>
 </p>
