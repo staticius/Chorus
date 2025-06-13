@@ -41,6 +41,7 @@ protocol = "1.0-SNAPSHOT"
 kotlinx-io = "0.7.0"
 cryptography = "0.4.0"
 jwt = "1.1.0"
+fleks = "2.11"
 
 [libraries]
 libdeflate = { module = "cn.powernukkitx:libdeflate-java", version.ref = "cn-powernukkitx-libdeflate-java" }
@@ -91,6 +92,7 @@ cryptography-random = { module = "dev.whyoleg.cryptography:cryptography-random",
 cryptography-provider-jdk = { module = "dev.whyoleg.cryptography:cryptography-provider-jdk", version.ref = "cryptography" }
 jwt = { module = "com.appstractive:jwt-kt", version.ref = "jwt" }
 jwt-ecdsa = { module = "com.appstractive:jwt-ecdsa-kt", version.ref = "jwt" }
+fleks = { module = "io.github.quillraven.fleks:Fleks", version.ref = "fleks" }
 
 [bundles]
 netty = ["netty-raknet", "netty-epoll", "netty-kqueue"]

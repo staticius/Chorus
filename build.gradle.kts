@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.cryptography.provider.jdk)
     implementation(libs.jwt)
     implementation(libs.jwt.ecdsa)
+    implementation(libs.fleks)
 
     implementation(kotlin("stdlib-jdk8"))
     implementation(kotlin("reflect"))
