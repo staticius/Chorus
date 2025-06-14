@@ -2422,8 +2422,7 @@ class Level(
             return null
         }
 
-        val isSilkTouch = target.isSilkTouch(vector.vector3, layer, face, item, player) ||
-                (item.getEnchantment(Enchantment.ID_SILK_TOUCH) != null && item.applyEnchantments())
+        val isSilkTouch = item.getEnchantment(Enchantment.ID_SILK_TOUCH) != null && item.applyEnchantments()
 
         if (player != null) {
             val eventDrops = if (immediateDestroy || player.isCreative) {

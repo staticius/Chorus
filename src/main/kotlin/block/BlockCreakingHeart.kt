@@ -125,10 +125,6 @@ class BlockCreakingHeart @JvmOverloads constructor(blockstate: BlockState = prop
             } else 0
         }
 
-    override fun isSilkTouch(vector: Vector3?, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
-        return false
-    }
-
     override val properties: BlockProperties
         get() = Companion.properties
 

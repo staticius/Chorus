@@ -118,10 +118,6 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         return false
     }
 
-    open fun isSilkTouch(vector: Vector3?, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
-        return false
-    }
-
     open fun onUpdate(type: Int): Int {
         return 0
     }
