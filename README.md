@@ -1,6 +1,6 @@
 <p align="center">
-    <a href="https://enderverse-creations.com">
-      <img src=".github/img/chorus.png" width=25% alt="Chorus">
+    <a>
+      <img src=".github/img/chorus-oss.png" width=25% alt="Chorus" style="border-radius: 8px;">
     </a>
     <p align="center">
         <strong>
