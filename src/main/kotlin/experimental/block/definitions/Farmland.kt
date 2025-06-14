@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Farmland :
-    BlockDefinition(
-        identifier = "minecraft:farmland",
-        states = listOf(CommonStates.moisturizedAmount)
-    )
+    BlockDefinition(identifier = "minecraft:farmland", states = listOf(CommonStates.moisturizedAmount))

@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object CherryWallSign :
-    BlockDefinition(
-        identifier = "minecraft:cherry_wall_sign",
-        states = listOf(CommonStates.facingDirection)
-    )
+    BlockDefinition(identifier = "minecraft:cherry_wall_sign", states = listOf(CommonStates.facingDirection))

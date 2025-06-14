@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object DeepslateBrickStairs : BlockDefinition(
     identifier = "minecraft:deepslate_brick_stairs",
-    states = listOf(
-        CommonStates.upsideDownBit,
-        CommonStates.weirdoDirection
-    )
+    states = listOf(CommonStates.upsideDownBit, CommonStates.weirdoDirection)
 )

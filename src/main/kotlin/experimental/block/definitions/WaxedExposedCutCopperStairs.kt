@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object WaxedExposedCutCopperStairs : BlockDefinition(
     identifier = "minecraft:waxed_exposed_cut_copper_stairs",
-    states = listOf(
-        CommonStates.upsideDownBit,
-        CommonStates.weirdoDirection
-    )
+    states = listOf(CommonStates.upsideDownBit, CommonStates.weirdoDirection)
 )

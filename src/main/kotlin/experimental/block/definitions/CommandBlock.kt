@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object CommandBlock : BlockDefinition(
     identifier = "minecraft:command_block",
-    states = listOf(
-        CommonStates.conditionalBit,
-        CommonStates.facingDirection
-    )
+    states = listOf(CommonStates.conditionalBit, CommonStates.facingDirection)
 )

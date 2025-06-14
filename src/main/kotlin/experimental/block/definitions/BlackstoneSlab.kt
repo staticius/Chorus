@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object BlackstoneSlab :
-    BlockDefinition(
-        identifier = "minecraft:blackstone_slab",
-        states = listOf(CommonStates.minecraftVerticalHalf)
-    )
+    BlockDefinition(identifier = "minecraft:blackstone_slab", states = listOf(CommonStates.minecraftVerticalHalf))

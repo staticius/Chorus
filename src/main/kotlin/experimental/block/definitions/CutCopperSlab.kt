@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object CutCopperSlab :
-    BlockDefinition(
-        identifier = "minecraft:cut_copper_slab",
-        states = listOf(CommonStates.minecraftVerticalHalf)
-    )
+    BlockDefinition(identifier = "minecraft:cut_copper_slab", states = listOf(CommonStates.minecraftVerticalHalf))

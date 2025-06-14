@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object SuspiciousSand : BlockDefinition(
     identifier = "minecraft:suspicious_sand",
-    states = listOf(
-        CommonStates.hanging,
-        CommonStates.brushedProgress
-    )
+    states = listOf(CommonStates.brushedProgress, CommonStates.hanging)
 )

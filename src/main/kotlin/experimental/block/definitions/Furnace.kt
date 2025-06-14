@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Furnace :
-    BlockDefinition(
-        identifier = "minecraft:furnace",
-        states = listOf(CommonStates.minecraftCardinalDirection)
-    )
+    BlockDefinition(identifier = "minecraft:furnace", states = listOf(CommonStates.minecraftCardinalDirection))

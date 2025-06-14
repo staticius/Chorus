@@ -5,9 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Bed : BlockDefinition(
     identifier = "minecraft:bed",
-    states = listOf(
-        CommonStates.direction,
-        CommonStates.headPieceBit,
-        CommonStates.occupiedBit
-    )
+    states = listOf(CommonStates.direction, CommonStates.headPieceBit, CommonStates.occupiedBit)
 )

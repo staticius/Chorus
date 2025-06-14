@@ -4,10 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object SnowLayer :
-    BlockDefinition(
-        identifier = "minecraft:snow_layer",
-        states = listOf(
-            CommonStates.coveredBit,
-            CommonStates.height
-        )
-    )
+    BlockDefinition(identifier = "minecraft:snow_layer", states = listOf(CommonStates.coveredBit, CommonStates.height))

@@ -6,9 +6,9 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 object CherryDoor : BlockDefinition(
     identifier = "minecraft:cherry_door",
     states = listOf(
+        CommonStates.doorHingeBit,
         CommonStates.minecraftCardinalDirection,
         CommonStates.openBit,
-        CommonStates.upperBlockBit,
-        CommonStates.doorHingeBit
+        CommonStates.upperBlockBit
     )
 )

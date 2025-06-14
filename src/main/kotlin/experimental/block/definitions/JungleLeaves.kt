@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object JungleLeaves : BlockDefinition(
     identifier = "minecraft:jungle_leaves",
-    states = listOf(
-        CommonStates.persistentBit,
-        CommonStates.updateBit
-    )
+    states = listOf(CommonStates.persistentBit, CommonStates.updateBit)
 )

@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object JungleStairs : BlockDefinition(
     identifier = "minecraft:jungle_stairs",
-    states = listOf(
-        CommonStates.upsideDownBit,
-        CommonStates.weirdoDirection
-    )
+    states = listOf(CommonStates.upsideDownBit, CommonStates.weirdoDirection)
 )

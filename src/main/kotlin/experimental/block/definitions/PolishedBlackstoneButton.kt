@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object PolishedBlackstoneButton : BlockDefinition(
     identifier = "minecraft:polished_blackstone_button",
-    states = listOf(
-        CommonStates.buttonPressedBit,
-        CommonStates.facingDirection
-    )
+    states = listOf(CommonStates.buttonPressedBit, CommonStates.facingDirection)
 )

@@ -4,10 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object LimeCandle :
-    BlockDefinition(
-        identifier = "minecraft:lime_candle",
-        states = listOf(
-            CommonStates.candles,
-            CommonStates.lit
-        )
-    )
+    BlockDefinition(identifier = "minecraft:lime_candle", states = listOf(CommonStates.candles, CommonStates.lit))

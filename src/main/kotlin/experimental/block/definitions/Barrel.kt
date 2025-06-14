@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Barrel : BlockDefinition(
     identifier = "minecraft:barrel",
-    states = listOf(
-        CommonStates.facingDirection,
-        CommonStates.openBit
-    )
+    states = listOf(CommonStates.facingDirection, CommonStates.openBit)
 )

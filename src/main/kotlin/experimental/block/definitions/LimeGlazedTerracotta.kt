@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object LimeGlazedTerracotta :
-    BlockDefinition(
-        identifier = "minecraft:lime_glazed_terracotta",
-        states = listOf(CommonStates.facingDirection)
-    )
+    BlockDefinition(identifier = "minecraft:lime_glazed_terracotta", states = listOf(CommonStates.facingDirection))

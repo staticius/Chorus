@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object SculkShrieker : BlockDefinition(
     identifier = "minecraft:sculk_shrieker",
-    states = listOf(
-        CommonStates.active,
-        CommonStates.canSummon
-    )
+    states = listOf(CommonStates.active, CommonStates.canSummon)
 )

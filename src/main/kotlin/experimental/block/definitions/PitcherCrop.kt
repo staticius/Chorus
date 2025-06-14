@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object PitcherCrop : BlockDefinition(
     identifier = "minecraft:pitcher_crop",
-    states = listOf(
-        CommonStates.growth,
-        CommonStates.upperBlockBit
-    )
+    states = listOf(CommonStates.growth, CommonStates.upperBlockBit)
 )

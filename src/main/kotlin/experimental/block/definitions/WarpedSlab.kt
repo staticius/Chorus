@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object WarpedSlab :
-    BlockDefinition(
-        identifier = "minecraft:warped_slab",
-        states = listOf(CommonStates.minecraftVerticalHalf)
-    )
+    BlockDefinition(identifier = "minecraft:warped_slab", states = listOf(CommonStates.minecraftVerticalHalf))

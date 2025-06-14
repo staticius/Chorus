@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object CryingObsidian : BlockDefinition(
-    identifier = "minecraft:crying_obsidian",
-    states = listOf()
-)
+object CryingObsidian : BlockDefinition(identifier = "minecraft:crying_obsidian", states = listOf())

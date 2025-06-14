@@ -5,9 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Crafter : BlockDefinition(
     identifier = "minecraft:crafter",
-    states = listOf(
-        CommonStates.crafting,
-        CommonStates.orientation,
-        CommonStates.triggeredBit
-    )
+    states = listOf(CommonStates.crafting, CommonStates.orientation, CommonStates.triggeredBit)
 )

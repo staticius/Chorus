@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object MelonStem : BlockDefinition(
     identifier = "minecraft:melon_stem",
-    states = listOf(
-        CommonStates.facingDirection,
-        CommonStates.growth
-    )
+    states = listOf(CommonStates.facingDirection, CommonStates.growth)
 )

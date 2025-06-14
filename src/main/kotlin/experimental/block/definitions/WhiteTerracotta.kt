@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object WhiteTerracotta : BlockDefinition(
-    identifier = "minecraft:white_terracotta",
-    states = listOf()
-)
+object WhiteTerracotta : BlockDefinition(identifier = "minecraft:white_terracotta", states = listOf())

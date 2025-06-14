@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object UnpoweredRepeater : BlockDefinition(
     identifier = "minecraft:unpowered_repeater",
-    states = listOf(
-        CommonStates.minecraftCardinalDirection,
-        CommonStates.repeaterDelay
-    )
+    states = listOf(CommonStates.minecraftCardinalDirection, CommonStates.repeaterDelay)
 )

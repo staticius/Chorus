@@ -5,9 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object PoweredComparator : BlockDefinition(
     identifier = "minecraft:powered_comparator",
-    states = listOf(
-        CommonStates.minecraftCardinalDirection,
-        CommonStates.outputLitBit,
-        CommonStates.outputSubtractBit
-    )
+    states = listOf(CommonStates.minecraftCardinalDirection, CommonStates.outputLitBit, CommonStates.outputSubtractBit)
 )

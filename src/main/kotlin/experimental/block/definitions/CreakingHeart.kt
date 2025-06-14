@@ -5,9 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object CreakingHeart : BlockDefinition(
     identifier = "minecraft:creaking_heart",
-    states = listOf(
-        CommonStates.natural,
-        CommonStates.creakingHeartState,
-        CommonStates.pillarAxis
-    )
+    states = listOf(CommonStates.creakingHeartState, CommonStates.natural, CommonStates.pillarAxis)
 )

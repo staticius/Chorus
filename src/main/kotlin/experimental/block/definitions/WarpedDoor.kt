@@ -6,9 +6,9 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 object WarpedDoor : BlockDefinition(
     identifier = "minecraft:warped_door",
     states = listOf(
+        CommonStates.doorHingeBit,
         CommonStates.minecraftCardinalDirection,
         CommonStates.openBit,
-        CommonStates.upperBlockBit,
-        CommonStates.doorHingeBit
+        CommonStates.upperBlockBit
     )
 )

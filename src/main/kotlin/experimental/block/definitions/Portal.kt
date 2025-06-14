@@ -3,7 +3,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
-object Portal : BlockDefinition(
-    identifier = "minecraft:portal",
-    states = listOf(CommonStates.portalAxis)
-)
+object Portal : BlockDefinition(identifier = "minecraft:portal", states = listOf(CommonStates.portalAxis))

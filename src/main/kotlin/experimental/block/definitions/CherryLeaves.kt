@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object CherryLeaves : BlockDefinition(
     identifier = "minecraft:cherry_leaves",
-    states = listOf(
-        CommonStates.persistentBit,
-        CommonStates.updateBit
-    )
+    states = listOf(CommonStates.persistentBit, CommonStates.updateBit)
 )

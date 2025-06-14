@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object SeaPickle : BlockDefinition(
     identifier = "minecraft:sea_pickle",
-    states = listOf(
-        CommonStates.clusterCount,
-        CommonStates.deadBit
-    )
+    states = listOf(CommonStates.clusterCount, CommonStates.deadBit)
 )

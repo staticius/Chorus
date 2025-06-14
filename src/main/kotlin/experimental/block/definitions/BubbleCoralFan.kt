@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object BubbleCoralFan :
-    BlockDefinition(
-        identifier = "minecraft:bubble_coral_fan",
-        states = listOf(CommonStates.coralFanDirection)
-    )
+    BlockDefinition(identifier = "minecraft:bubble_coral_fan", states = listOf(CommonStates.coralFanDirection))

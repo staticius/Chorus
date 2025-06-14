@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object BirchDoubleSlab :
-    BlockDefinition(
-        identifier = "minecraft:birch_double_slab",
-        states = listOf(CommonStates.minecraftVerticalHalf)
-    )
+    BlockDefinition(identifier = "minecraft:birch_double_slab", states = listOf(CommonStates.minecraftVerticalHalf))

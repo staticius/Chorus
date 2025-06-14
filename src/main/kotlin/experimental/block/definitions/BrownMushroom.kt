@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object BrownMushroom : BlockDefinition(
-    identifier = "minecraft:brown_mushroom",
-    states = listOf()
-)
+object BrownMushroom : BlockDefinition(identifier = "minecraft:brown_mushroom", states = listOf())

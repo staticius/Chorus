@@ -5,9 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object CrimsonFenceGate : BlockDefinition(
     identifier = "minecraft:crimson_fence_gate",
-    states = listOf(
-        CommonStates.inWallBit,
-        CommonStates.minecraftCardinalDirection,
-        CommonStates.openBit
-    )
+    states = listOf(CommonStates.inWallBit, CommonStates.minecraftCardinalDirection, CommonStates.openBit)
 )

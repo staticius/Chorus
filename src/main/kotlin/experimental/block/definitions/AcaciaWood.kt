@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object AcaciaWood :
-    BlockDefinition(
-        identifier = "minecraft:acacia_wood",
-        states = listOf(CommonStates.pillarAxis)
-    )
+    BlockDefinition(identifier = "minecraft:acacia_wood", states = listOf(CommonStates.pillarAxis))

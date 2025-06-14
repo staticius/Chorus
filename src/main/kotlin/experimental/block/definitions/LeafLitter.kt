@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object LeafLitter : BlockDefinition(
     identifier = "minecraft:leaf_litter",
-    states = listOf(
-        CommonStates.minecraftCardinalDirection,
-        CommonStates.growth
-    )
+    states = listOf(CommonStates.growth, CommonStates.minecraftCardinalDirection)
 )

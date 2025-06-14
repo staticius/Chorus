@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object RespawnAnchor :
-    BlockDefinition(
-        identifier = "minecraft:respawn_anchor",
-        states = listOf(CommonStates.respawnAnchorCharge)
-    )
+    BlockDefinition(identifier = "minecraft:respawn_anchor", states = listOf(CommonStates.respawnAnchorCharge))

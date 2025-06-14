@@ -5,9 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object TripwireHook : BlockDefinition(
     identifier = "minecraft:tripwire_hook",
-    states = listOf(
-        CommonStates.direction,
-        CommonStates.attachedBit,
-        CommonStates.poweredBit
-    )
+    states = listOf(CommonStates.attachedBit, CommonStates.direction, CommonStates.poweredBit)
 )

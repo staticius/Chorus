@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object WitherRose : BlockDefinition(
-    identifier = "minecraft:wither_rose",
-    states = listOf()
-)
+object WitherRose : BlockDefinition(identifier = "minecraft:wither_rose", states = listOf())

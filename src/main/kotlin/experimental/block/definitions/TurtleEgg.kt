@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object TurtleEgg : BlockDefinition(
     identifier = "minecraft:turtle_egg",
-    states = listOf(
-        CommonStates.crackedState,
-        CommonStates.turtleEggCount
-    )
+    states = listOf(CommonStates.crackedState, CommonStates.turtleEggCount)
 )

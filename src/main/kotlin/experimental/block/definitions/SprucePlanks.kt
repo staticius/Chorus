@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object SprucePlanks : BlockDefinition(
-    identifier = "minecraft:spruce_planks",
-    states = listOf()
-)
+object SprucePlanks : BlockDefinition(identifier = "minecraft:spruce_planks", states = listOf())

@@ -1112,10 +1112,8 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
             register(BlockID.YELLOW_WOOL, BlockYellowWool::class)
             register(BlockID.ZOMBIE_HEAD, BlockZombieHead::class)
 
-//            for (property in PROPERTIES.values) {
-//                BlockDefinitionGenerator.generateDefinition(property)
-//            }
-        } catch (ignore: RegisterException) {
+            BlockDefinitionGenerator.generateDefinitions(PROPERTIES.values.toList())
+        } catch (_: RegisterException) {
         }
     }
 
@@ -1394,7 +1392,7 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
         private val isLoad = AtomicBoolean(false)
         private val KEYSET: MutableSet<String> = HashSet()
         private val CACHE_CONSTRUCTORS = mutableMapOf<String, (BlockState?) -> Block>()
-        private val PROPERTIES = HashMap<String, BlockProperties>()
+        private val PROPERTIES = mutableMapOf<String, BlockProperties>()
         private val CUSTOM_BLOCK_DEFINITIONS: MutableMap<Plugin, MutableList<CustomBlockDefinition>> = LinkedHashMap()
 
         val skipBlockSet: Set<String> = setOf(

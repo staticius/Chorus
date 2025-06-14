@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object TrialSpawner : BlockDefinition(
     identifier = "minecraft:trial_spawner",
-    states = listOf(
-        CommonStates.ominous,
-        CommonStates.trialSpawnerState
-    )
+    states = listOf(CommonStates.ominous, CommonStates.trialSpawnerState)
 )

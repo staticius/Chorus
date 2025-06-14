@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object BambooButton : BlockDefinition(
     identifier = "minecraft:bamboo_button",
-    states = listOf(
-        CommonStates.buttonPressedBit,
-        CommonStates.facingDirection
-    )
+    states = listOf(CommonStates.buttonPressedBit, CommonStates.facingDirection)
 )

@@ -2,13 +2,41 @@ package org.chorus_oss.chorus.experimental.generator
 
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.BlockProperties
+import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import java.io.File
 
 object BlockDefinitionGenerator {
-    fun generateDefinition(properties: BlockProperties) {
+    fun generateDefinitions(properties: List<BlockProperties>) {
+        val objects = properties.map { generateDefinition(it) }
+        val objectsString = objects.joinToString(", ") { it }
+
+        val listOfObjects = PropertySpec.builder("definitions", List::class.parameterizedBy(BlockDefinition::class))
+            .initializer("listOf($objectsString)")
+            .build()
+
+        val fileBuilder = FileSpec.builder("org.chorus_oss.chorus.experimental.block", "Definitions")
+            .addProperty(listOfObjects)
+            .apply {
+                for (obj in objects) {
+                    addImport("org.chorus_oss.chorus.experimental.block.definitions", obj)
+                }
+            }
+
+        val path = File(Server.instance.dataPath + "generated/")
+        if (!path.exists()) {
+            path.mkdirs()
+        }
+
+        val fileSpec = fileBuilder.build()
+        fileSpec.writeTo(path)
+    }
+
+    fun generateDefinition(properties: BlockProperties): String {
         val identifier = properties.identifier
         val trimmedIdentifier = identifier.substringAfter(':')
         val pascalIdentifier = trimmedIdentifier.split('_').joinToString("") { it.replaceFirstChar(Char::uppercase)  }
@@ -18,7 +46,7 @@ object BlockDefinitionGenerator {
                 if (index == 0) word else word.replaceFirstChar(Char::uppercase)
             }
             .joinToString("")
-        }
+        }.sorted()
 
         val formattedStates = componentIDs.joinToString(", ") { "CommonStates.$it"}
 
@@ -44,5 +72,7 @@ object BlockDefinitionGenerator {
 
         val fileSpec = fileBuilder.build()
         fileSpec.writeTo(path)
+
+        return pascalIdentifier
     }
 }

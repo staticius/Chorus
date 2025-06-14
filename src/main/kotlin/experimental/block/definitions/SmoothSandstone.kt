@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object SmoothSandstone : BlockDefinition(
-    identifier = "minecraft:smooth_sandstone",
-    states = listOf()
-)
+object SmoothSandstone : BlockDefinition(identifier = "minecraft:smooth_sandstone", states = listOf())

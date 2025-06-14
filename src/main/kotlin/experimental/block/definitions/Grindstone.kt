@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Grindstone : BlockDefinition(
     identifier = "minecraft:grindstone",
-    states = listOf(
-        CommonStates.attachment,
-        CommonStates.direction
-    )
+    states = listOf(CommonStates.attachment, CommonStates.direction)
 )

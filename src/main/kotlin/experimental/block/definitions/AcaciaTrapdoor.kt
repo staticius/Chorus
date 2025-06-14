@@ -5,9 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object AcaciaTrapdoor : BlockDefinition(
     identifier = "minecraft:acacia_trapdoor",
-    states = listOf(
-        CommonStates.direction,
-        CommonStates.openBit,
-        CommonStates.upsideDownBit
-    )
+    states = listOf(CommonStates.direction, CommonStates.openBit, CommonStates.upsideDownBit)
 )

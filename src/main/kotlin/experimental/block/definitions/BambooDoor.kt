@@ -6,7 +6,9 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 object BambooDoor : BlockDefinition(
     identifier = "minecraft:bamboo_door",
     states = listOf(
-        CommonStates.minecraftCardinalDirection, CommonStates.openBit, CommonStates.upperBlockBit,
-        CommonStates.doorHingeBit
+        CommonStates.doorHingeBit,
+        CommonStates.minecraftCardinalDirection,
+        CommonStates.openBit,
+        CommonStates.upperBlockBit
     )
 )

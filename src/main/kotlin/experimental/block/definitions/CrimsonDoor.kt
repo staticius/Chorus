@@ -6,9 +6,9 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 object CrimsonDoor : BlockDefinition(
     identifier = "minecraft:crimson_door",
     states = listOf(
+        CommonStates.doorHingeBit,
         CommonStates.minecraftCardinalDirection,
         CommonStates.openBit,
-        CommonStates.upperBlockBit,
-        CommonStates.doorHingeBit
+        CommonStates.upperBlockBit
     )
 )

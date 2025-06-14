@@ -5,9 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object BigDripleaf : BlockDefinition(
     identifier = "minecraft:big_dripleaf",
-    states = listOf(
-        CommonStates.bigDripleafHead,
-        CommonStates.bigDripleafTilt,
-        CommonStates.minecraftCardinalDirection
-    )
+    states = listOf(CommonStates.bigDripleafHead, CommonStates.bigDripleafTilt, CommonStates.minecraftCardinalDirection)
 )

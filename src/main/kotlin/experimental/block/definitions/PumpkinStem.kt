@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object PumpkinStem : BlockDefinition(
     identifier = "minecraft:pumpkin_stem",
-    states = listOf(
-        CommonStates.facingDirection,
-        CommonStates.growth
-    )
+    states = listOf(CommonStates.facingDirection, CommonStates.growth)
 )

@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object Prismarine : BlockDefinition(
-    identifier = "minecraft:prismarine",
-    states = listOf()
-)
+object Prismarine : BlockDefinition(identifier = "minecraft:prismarine", states = listOf())

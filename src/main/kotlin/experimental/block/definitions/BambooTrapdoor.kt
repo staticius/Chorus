@@ -5,9 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object BambooTrapdoor : BlockDefinition(
     identifier = "minecraft:bamboo_trapdoor",
-    states = listOf(
-        CommonStates.direction,
-        CommonStates.openBit,
-        CommonStates.upsideDownBit
-    )
+    states = listOf(CommonStates.direction, CommonStates.openBit, CommonStates.upsideDownBit)
 )

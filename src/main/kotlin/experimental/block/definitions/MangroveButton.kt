@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object MangroveButton : BlockDefinition(
     identifier = "minecraft:mangrove_button",
-    states = listOf(
-        CommonStates.buttonPressedBit,
-        CommonStates.facingDirection
-    )
+    states = listOf(CommonStates.buttonPressedBit, CommonStates.facingDirection)
 )

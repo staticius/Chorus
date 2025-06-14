@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object SculkCatalyst :
-    BlockDefinition(
-        identifier = "minecraft:sculk_catalyst",
-        states = listOf(CommonStates.bloom)
-    )
+    BlockDefinition(identifier = "minecraft:sculk_catalyst", states = listOf(CommonStates.bloom))

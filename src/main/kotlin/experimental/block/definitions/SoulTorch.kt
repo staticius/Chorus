@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object SoulTorch :
-    BlockDefinition(
-        identifier = "minecraft:soul_torch",
-        states = listOf(CommonStates.torchFacingDirection)
-    )
+    BlockDefinition(identifier = "minecraft:soul_torch", states = listOf(CommonStates.torchFacingDirection))

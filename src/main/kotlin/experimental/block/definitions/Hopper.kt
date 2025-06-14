@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Hopper : BlockDefinition(
     identifier = "minecraft:hopper",
-    states = listOf(
-        CommonStates.facingDirection,
-        CommonStates.toggleBit
-    )
+    states = listOf(CommonStates.facingDirection, CommonStates.toggleBit)
 )

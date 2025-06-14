@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object BoneBlock : BlockDefinition(
     identifier = "minecraft:bone_block",
-    states = listOf(
-        CommonStates.deprecated,
-        CommonStates.pillarAxis
-    )
+    states = listOf(CommonStates.deprecated, CommonStates.pillarAxis)
 )

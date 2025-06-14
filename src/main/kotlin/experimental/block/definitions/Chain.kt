@@ -3,7 +3,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
-object Chain : BlockDefinition(
-    identifier = "minecraft:chain",
-    states = listOf(CommonStates.pillarAxis)
-)
+object Chain : BlockDefinition(identifier = "minecraft:chain", states = listOf(CommonStates.pillarAxis))

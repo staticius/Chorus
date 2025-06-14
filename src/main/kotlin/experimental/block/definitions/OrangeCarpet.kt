@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object OrangeCarpet : BlockDefinition(
-    identifier = "minecraft:orange_carpet",
-    states = listOf()
-)
+object OrangeCarpet : BlockDefinition(identifier = "minecraft:orange_carpet", states = listOf())

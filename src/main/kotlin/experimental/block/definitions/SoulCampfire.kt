@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object SoulCampfire : BlockDefinition(
     identifier = "minecraft:soul_campfire",
-    states = listOf(
-        CommonStates.extinguished,
-        CommonStates.minecraftCardinalDirection
-    )
+    states = listOf(CommonStates.extinguished, CommonStates.minecraftCardinalDirection)
 )

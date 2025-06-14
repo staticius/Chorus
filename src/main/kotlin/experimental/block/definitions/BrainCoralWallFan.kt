@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object BrainCoralWallFan :
-    BlockDefinition(
-        identifier = "minecraft:brain_coral_wall_fan",
-        states = listOf(CommonStates.coralDirection)
-    )
+    BlockDefinition(identifier = "minecraft:brain_coral_wall_fan", states = listOf(CommonStates.coralDirection))

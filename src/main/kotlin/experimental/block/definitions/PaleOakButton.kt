@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object PaleOakButton : BlockDefinition(
     identifier = "minecraft:pale_oak_button",
-    states = listOf(
-        CommonStates.buttonPressedBit,
-        CommonStates.facingDirection
-    )
+    states = listOf(CommonStates.buttonPressedBit, CommonStates.facingDirection)
 )

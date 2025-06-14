@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object Deadbush : BlockDefinition(
-    identifier = "minecraft:deadbush",
-    states = listOf()
-)
+object Deadbush : BlockDefinition(identifier = "minecraft:deadbush", states = listOf())

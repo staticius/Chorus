@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object WeatheredCopperBulb : BlockDefinition(
     identifier = "minecraft:weathered_copper_bulb",
-    states = listOf(
-        CommonStates.lit,
-        CommonStates.poweredBit
-    )
+    states = listOf(CommonStates.lit, CommonStates.poweredBit)
 )

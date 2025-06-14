@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object PinkPetals : BlockDefinition(
     identifier = "minecraft:pink_petals",
-    states = listOf(
-        CommonStates.growth,
-        CommonStates.minecraftCardinalDirection
-    )
+    states = listOf(CommonStates.growth, CommonStates.minecraftCardinalDirection)
 )

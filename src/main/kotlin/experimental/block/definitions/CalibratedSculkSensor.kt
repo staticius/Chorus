@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object CalibratedSculkSensor : BlockDefinition(
     identifier = "minecraft:calibrated_sculk_sensor",
-    states = listOf(
-        CommonStates.minecraftCardinalDirection,
-        CommonStates.sculkSensorPhase
-    )
+    states = listOf(CommonStates.minecraftCardinalDirection, CommonStates.sculkSensorPhase)
 )

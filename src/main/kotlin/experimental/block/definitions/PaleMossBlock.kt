@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object PaleMossBlock : BlockDefinition(
-    identifier = "minecraft:pale_moss_block",
-    states = listOf()
-)
+object PaleMossBlock : BlockDefinition(identifier = "minecraft:pale_moss_block", states = listOf())

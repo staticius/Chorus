@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Cauldron : BlockDefinition(
     identifier = "minecraft:cauldron",
-    states = listOf(
-        CommonStates.cauldronLiquid,
-        CommonStates.fillLevel
-    )
+    states = listOf(CommonStates.cauldronLiquid, CommonStates.fillLevel)
 )

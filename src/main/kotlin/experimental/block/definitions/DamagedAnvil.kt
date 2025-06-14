@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object DamagedAnvil :
-    BlockDefinition(
-        identifier = "minecraft:damaged_anvil",
-        states = listOf(CommonStates.minecraftCardinalDirection)
-    )
+    BlockDefinition(identifier = "minecraft:damaged_anvil", states = listOf(CommonStates.minecraftCardinalDirection))

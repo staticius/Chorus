@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object WhiteCarpet : BlockDefinition(
-    identifier = "minecraft:white_carpet",
-    states = listOf()
-)
+object WhiteCarpet : BlockDefinition(identifier = "minecraft:white_carpet", states = listOf())

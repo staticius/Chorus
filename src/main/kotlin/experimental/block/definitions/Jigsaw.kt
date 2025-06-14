@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Jigsaw : BlockDefinition(
     identifier = "minecraft:jigsaw",
-    states = listOf(
-        CommonStates.facingDirection,
-        CommonStates.rotation
-    )
+    states = listOf(CommonStates.facingDirection, CommonStates.rotation)
 )

@@ -5,8 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Lectern : BlockDefinition(
     identifier = "minecraft:lectern",
-    states = listOf(
-        CommonStates.minecraftCardinalDirection,
-        CommonStates.poweredBit
-    )
+    states = listOf(CommonStates.minecraftCardinalDirection, CommonStates.poweredBit)
 )

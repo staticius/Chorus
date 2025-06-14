@@ -5,9 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object Bell : BlockDefinition(
     identifier = "minecraft:bell",
-    states = listOf(
-        CommonStates.attachment,
-        CommonStates.direction,
-        CommonStates.toggleBit
-    )
+    states = listOf(CommonStates.attachment, CommonStates.direction, CommonStates.toggleBit)
 )

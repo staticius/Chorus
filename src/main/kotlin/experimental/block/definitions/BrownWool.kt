@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object BrownWool : BlockDefinition(
-    identifier = "minecraft:brown_wool",
-    states = listOf()
-)
+object BrownWool : BlockDefinition(identifier = "minecraft:brown_wool", states = listOf())

@@ -6,9 +6,9 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 object IronDoor : BlockDefinition(
     identifier = "minecraft:iron_door",
     states = listOf(
+        CommonStates.doorHingeBit,
         CommonStates.minecraftCardinalDirection,
         CommonStates.openBit,
-        CommonStates.upperBlockBit,
-        CommonStates.doorHingeBit
+        CommonStates.upperBlockBit
     )
 )

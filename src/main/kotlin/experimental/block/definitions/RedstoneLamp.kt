@@ -2,7 +2,4 @@ package org.chorus_oss.chorus.experimental.block.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 
-object RedstoneLamp : BlockDefinition(
-    identifier = "minecraft:redstone_lamp",
-    states = listOf()
-)
+object RedstoneLamp : BlockDefinition(identifier = "minecraft:redstone_lamp", states = listOf())

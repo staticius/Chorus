@@ -6,9 +6,9 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 object TripWire : BlockDefinition(
     identifier = "minecraft:trip_wire",
     states = listOf(
-        CommonStates.poweredBit,
-        CommonStates.suspendedBit,
         CommonStates.attachedBit,
-        CommonStates.disarmedBit
+        CommonStates.disarmedBit,
+        CommonStates.poweredBit,
+        CommonStates.suspendedBit
     )
 )

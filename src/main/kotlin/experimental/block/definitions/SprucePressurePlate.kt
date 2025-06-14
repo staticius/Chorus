@@ -4,7 +4,4 @@ import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object SprucePressurePlate :
-    BlockDefinition(
-        identifier = "minecraft:spruce_pressure_plate",
-        states = listOf(CommonStates.redstoneSignal)
-    )
+    BlockDefinition(identifier = "minecraft:spruce_pressure_plate", states = listOf(CommonStates.redstoneSignal))
