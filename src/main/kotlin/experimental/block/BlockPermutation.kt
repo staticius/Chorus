@@ -13,8 +13,13 @@ data class BlockPermutation(
     val tag: CompoundTag = BlockStates.getTag(identifier, states)
 
     fun <T : Any> getState(state: BlockState<T>): T? {
+        return getState<T>(state.identifier)
+    }
+
+    @JvmName("getStateTyped")
+    fun <T : Any> getState(identifier: String): T? {
         @Suppress("UNCHECKED_CAST")
-        return this.states[state.identifier] as? T?
+        return getState(identifier) as? T?
     }
 
     fun getState(identifier: String): Any? {
@@ -31,18 +36,20 @@ data class BlockPermutation(
         return this.copy(states = this.states + (identifier to value))
     }
 
-//    fun withStates(vararg states: Pair<BlockState<*>, Any>): BlockPermutation {
-//        return withStates(states.toMap())
-//    }
+    fun withStates(vararg states: Pair<BlockState<*>, Any>): BlockPermutation {
+        return withStates(states.toMap())
+    }
 
-//    fun withStates(states: Map<BlockState<*>, Any>): BlockPermutation {
-//        return withStates(states.entries.associate { it.key.identifier to it.value })
-//    }
+    fun withStates(states: Map<BlockState<*>, Any>): BlockPermutation {
+        return withStates(states.entries.associate { it.key.identifier to it.value })
+    }
 
+    @JvmName("withStatesByIdentifier")
     fun withStates(vararg states: Pair<String, Any>): BlockPermutation {
         return withStates(states.toMap())
     }
 
+    @JvmName("withStatesByIdentifier")
     fun withStates(states: Map<String, Any>): BlockPermutation {
         states.forEach { this.validateState(it.key, it.value) }
 
