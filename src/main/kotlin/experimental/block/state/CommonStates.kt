@@ -128,7 +128,7 @@ object CommonStates {
 
     val dragDown: BlockState<Boolean> = BlockState.from("drag_down")
 
-    val DRIPSTONE_THICKNESS: BlockState<String> = BlockState.from(
+    val dripstoneThickness: BlockState<String> = BlockState.from(
         "dripstone_thickness", DripstoneThickness::class
     )
 

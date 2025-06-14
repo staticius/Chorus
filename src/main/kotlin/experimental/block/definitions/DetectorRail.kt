@@ -5,5 +5,5 @@ import org.chorus_oss.chorus.experimental.block.state.CommonStates
 
 object DetectorRail : BlockDefinition(
     identifier = "minecraft:detector_rail",
-    states = listOf(CommonStates.railDataBit, CommonStates.railDirection)
+    states = listOf(CommonStates.railDataBit, CommonStates.railDirection6)
 )
