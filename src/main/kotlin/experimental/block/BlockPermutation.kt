@@ -7,7 +7,8 @@ import org.chorus_oss.chorus.nbt.tag.CompoundTag
 
 data class BlockPermutation(
     val identifier: String,
-    val states: Map<String, Any>
+    val states: Map<String, Any>,
+    val components: List<BlockComponent> = emptyList(),
 ) {
     val hash: Int = BlockStates.getHash(identifier, states)
     val tag: CompoundTag = BlockStates.getTag(identifier, states)
@@ -57,12 +58,16 @@ data class BlockPermutation(
     }
 
     private fun validateState(identifier: String, value: Any) {
-        val existing = requireNotNull(this.states[identifier]) {
-            "BlockDefinition \"${this.identifier}\" does not support state \"${identifier}\""
+        val definition = requireNotNull(BlockRegistry[this.identifier]) {
+            "BlockDefinition not found for \"${this.identifier}\""
         }
 
-        require(existing::class == value::class) {
-            "BlockState \"${identifier}\" has type ${existing::class.simpleName}, but got type ${value::class.simpleName}"
+        val validValues = requireNotNull(definition.stateValues[identifier]) {
+            "BlockState \"${identifier}\" is invalid for \"${this.identifier}\""
+        }
+
+        require(value in validValues) {
+            "Value \"$value\" is invalid for BlockState \"${identifier}\""
         }
     }
 
@@ -77,16 +82,6 @@ data class BlockPermutation(
                     tag.putCompound("Block", tag)
                 }
             }
-        }
-
-        fun getPermutations(identifier: String, states: List<BlockState<*>>): List<BlockPermutation> {
-            return states.fold(listOf(mapOf<String, Any>())) { acc, state ->
-                    acc.flatMap { map ->
-                        state.values.map {
-                            map + (state.identifier to it)
-                        }
-                    }
-                }.map { BlockPermutation(identifier, it) }
         }
     }
 }
