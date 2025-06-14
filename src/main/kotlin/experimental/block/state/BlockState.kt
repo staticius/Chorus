@@ -12,7 +12,7 @@ data class BlockState<T : Any>(
         require(values.size >= 2) {
             "BlockState \"$identifier\" must have at least 2 values"
         }
-        require(values.size <= 16) {
+        require(values.size <= 16 || identifier in ignoreLimitFor) {
             "BlockState \"$identifier\" must have at most 16 values"
         }
         require(values.all { it is Boolean } || values.all { it is Int } || values.all { it is String }) {
@@ -24,6 +24,15 @@ data class BlockState<T : Any>(
         get() = values.first()
 
     companion object {
+        internal val ignoreLimitFor = listOf(
+            "books_stored",
+            "growing_plant_age",
+            "kelp_age",
+            "multi_face_direction_bits",
+            "twisting_vines_age",
+            "weeping_vines_age"
+        )
+
         fun from(identifier: String, range: IntRange): BlockState<Int> {
             return BlockState(identifier, range.toList())
         }
