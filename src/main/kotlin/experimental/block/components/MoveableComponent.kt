@@ -4,6 +4,7 @@ import com.github.quillraven.fleks.Component
 import com.github.quillraven.fleks.ComponentType
 import org.chorus_oss.chorus.experimental.block.BlockComponent
 
+@Suppress("unused")
 data class MoveableComponent(
     val movement: Movement = Movement.Both,
     val sticky: Boolean = false,
