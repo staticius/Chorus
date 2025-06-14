@@ -1112,7 +1112,7 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
             register(BlockID.YELLOW_WOOL, BlockYellowWool::class)
             register(BlockID.ZOMBIE_HEAD, BlockZombieHead::class)
 
-            BlockDefinitionGenerator.generateDefinitions(PROPERTIES.values.toList())
+//            BlockDefinitionGenerator.generateDefinitions(PROPERTIES.values.toList())
         } catch (_: RegisterException) {
         }
     }

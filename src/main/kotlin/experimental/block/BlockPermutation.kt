@@ -54,7 +54,7 @@ data class BlockPermutation(
             "BlockDefinition \"${this.identifier}\" does not support state \"${identifier}\""
         }
 
-        require (existing::class == value::class) {
+        require(existing::class == value::class) {
             "BlockState \"${identifier}\" has type ${existing::class.simpleName}, but got type ${value::class.simpleName}"
         }
     }
@@ -73,52 +73,13 @@ data class BlockPermutation(
         }
 
         fun getPermutations(identifier: String, states: List<BlockState<*>>): List<BlockPermutation> {
-            val size = states.size
-            if (size == 0) {
-                val blockState = BlockPermutation(identifier, emptyMap())
-                return mutableListOf(blockState)
-            }
-            val permutations = mutableListOf<BlockPermutation>()
-
-            // to keep track of next element in each of
-            // the n arrays
-            val indices = MutableList(size) { 0 }
-
-            while (true) {
-                // Generate BlockState
-                val values = mutableMapOf<String, Any>()
-                for (i in 0..<size) {
-                    val type = states[i]
-                    values.put(type.identifier, type.values[indices[i]])
-                }
-                val state = BlockPermutation(identifier, values)
-                permutations.add(state)
-
-                // find the rightmost array that has more
-                // elements left after the current element
-                // in that array
-                var next = size - 1
-                while (next >= 0 && (indices[next] + 1 >= states[next].values.size)) {
-                    next--
-                }
-
-                // no such array is found so no more
-                // combinations left
-                if (next < 0) break
-
-                // if found move to next element in that
-                // array
-                indices[next]++
-
-                // for all arrays to the right of this
-                // array current index again points to
-                // first element
-                for (i in next + 1..<size) {
-                    indices[i] = 0
-                }
-            }
-
-            return permutations
+            return states.fold(listOf(mapOf<String, Any>())) { acc, state ->
+                    acc.flatMap { map ->
+                        state.values.map {
+                            map + (state.identifier to it)
+                        }
+                    }
+                }.map { BlockPermutation(identifier, it) }
         }
     }
 }

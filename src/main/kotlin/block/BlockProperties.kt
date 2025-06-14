@@ -31,7 +31,7 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
 
         this.defaultState = BlockStates.getDefaultState(identifier, propertyList)
         this.specialValueMap =
-            BlockStates.getAllStates(identifier, propertyList).values.associateBy { it.specialValue() }
+            BlockStates.getAllStates(identifier, propertyList).associateBy { it.specialValue() }
     }
 
     fun getBlockState(specialValue: Short): BlockState? {
