@@ -1,6 +1,6 @@
 <p align="center">
     <a>
-      <img src=".github/img/chorus-oss.png" width=25% alt="Chorus" style="border-radius: 8px;">
+      <img src=".github/img/chorus-oss.png" width=25% alt="Chorus">
     </a>
     <p align="center">
         <strong>
