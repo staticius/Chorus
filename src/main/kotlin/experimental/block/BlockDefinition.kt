@@ -4,6 +4,8 @@ import org.chorus_oss.chorus.experimental.block.state.BlockState
 import org.chorus_oss.chorus.utils.Identifier
 import org.chorus_oss.chorus.utils.Loggable
 
+// TODO: MenuCategory
+
 abstract class BlockDefinition(
     val identifier: String,
     val states: List<BlockState<*>> = emptyList(),
