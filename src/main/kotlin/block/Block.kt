@@ -1006,7 +1006,7 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
             }
         }
 
-        return Optional.empty<Block?>()
+        return Optional.empty<Block>()
     }
 
     val isBlockChangeAllowed: Boolean
