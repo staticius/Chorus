@@ -61,7 +61,8 @@ enum class PlayerActionType {
     /**
      * @since v622
      */
-    RECEIVED_SERVER_DATA,
+    @Deprecated("Since v818")
+    CLIENT_ACK_SERVER_DATA,
 
     /**
      * @since v766

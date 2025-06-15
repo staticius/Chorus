@@ -27,6 +27,7 @@ data class CameraInstructionPacket(
             byteBuf.writeNotNull(s.viewOffset, byteBuf::writeVector2f)
             byteBuf.writeNotNull(s.entityOffset, byteBuf::writeVector3f)
             byteBuf.writeOptional(s.defaultPreset) { value -> byteBuf.writeBoolean(value) }
+            byteBuf.writeBoolean(s.removeIgnoreStartingValuesComponent)
         }
 
         byteBuf.writeNotNull(clear) { byteBuf.writeBoolean(true) }

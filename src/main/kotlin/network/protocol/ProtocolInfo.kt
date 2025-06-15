@@ -4,12 +4,12 @@ import org.chorus_oss.chorus.utils.SemVersion
 
 interface ProtocolInfo {
     companion object {
-        const val PROTOCOL_VERSION = 800
+        const val PROTOCOL_VERSION = 818
 
-        const val GAME_VERSION_NET = "1.21.80"
+        const val GAME_VERSION_NET = "1.21.90"
         const val GAME_VERSION_STR = "v$GAME_VERSION_NET"
 
-        val GAME_VERSION = SemVersion(1, 21, 8, 0, 0)
+        val GAME_VERSION = SemVersion(1, 21, 9, 0, 0)
 
         val BLOCK_STATE_VERSION_NO_REVISION =
             (GAME_VERSION.major shl 24) or (GAME_VERSION.minor shl 16) or (GAME_VERSION.patch shl 8)
@@ -253,7 +253,7 @@ interface ProtocolInfo {
         const val CAMERA_AIM_ASSIST_PACKET = 316
         const val CONTAINER_REGISTRY_CLEANUP_PACKET = 317
         const val MOVEMENT_EFFECT_PACKET = 318
-        const val SET_MOVEMENT_AUTHORITY_PACKET = 319
+        // UNUSED = 319
         const val CAMERA_AIM_ASSIST_PRESETS_PACKET = 320
         const val CLIENT_CAMERA_AIM_ASSIST_PACKET = 321
         const val CLIENT_MOVEMENT_PREDICTION_SYNC_PACKET = 322
@@ -262,5 +262,6 @@ interface ProtocolInfo {
         const val PLAYER_UPDATE_ENTITY_OVERRIDES_PACKET = 325
         const val PLAYER_LOCATION_PACKET = 326
         const val CLIENTBOUND_CONTROL_SCHEME_SET_PACKET = 327
+        const val SERVER_SCRIPT_DEBUG_DRAWER_PACKET = 328
     }
 }

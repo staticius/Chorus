@@ -10,6 +10,7 @@ class ResourcePacksInfoPacket : DataPacket() {
     var isForcedToAccept: Boolean = false
     var hasAddonPacks: Boolean = false
     var isScriptingEnabled: Boolean = false
+    var isVibrantVisualsForceDisabled: Boolean = false
 
     var worldTemplateId: UUID? = null
 
@@ -21,6 +22,7 @@ class ResourcePacksInfoPacket : DataPacket() {
         byteBuf.writeBoolean(this.isForcedToAccept)
         byteBuf.writeBoolean(this.hasAddonPacks)
         byteBuf.writeBoolean(this.isScriptingEnabled)
+        byteBuf.writeBoolean(this.isVibrantVisualsForceDisabled)
         byteBuf.writeUUID(worldTemplateId!!)
         byteBuf.writeString(worldTemplateVersion!!)
         this.encodePacks(byteBuf, this.resourcePackEntries, false)

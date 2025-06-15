@@ -1,6 +1,7 @@
 package org.chorus_oss.chorus.utils
 
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.network.connection.util.EncryptionUtils.mojangPublicKey
@@ -165,24 +166,22 @@ class ClientChainData private constructor(buffer: BinaryStream) : LoginChainData
     }
 
     private fun decodeChainData() {
-        val map = JSONUtils.from<Map<String, List<String>>>(
-            String(
-                bs[bs.lInt], StandardCharsets.UTF_8
-            ),
-            object : TypeToken<Map<String?, List<String?>?>?>() {
-            }.type
+        val chainString = String(
+            bs[bs.lInt], StandardCharsets.UTF_8
         )
-        if (map.isEmpty() || !map.containsKey("chain") || map["chain"]!!.isEmpty()) return
-        val chains = map["chain"]!!
 
-        // Validate keys
-        isXboxAuthed = try {
-            verifyChain(chains)
-        } catch (e: Exception) {
+        val jwt = JsonParser.parseString(chainString).asJsonObject
+        val certificateString = jwt["Certificate"].asString
+        val certificate = JsonParser.parseString(certificateString).asJsonObject
+        val chain = certificate["chain"].asJsonArray.map { it.asString }
+
+        this.isXboxAuthed = try {
+            verifyChain(chain)
+        } catch (_: Exception) {
             false
         }
 
-        for (c in chains) {
+        for (c in chain) {
             val chainMap = decodeToken(c) ?: continue
             if (chainMap.has("extraData")) {
                 val extra = chainMap["extraData"].asJsonObject
