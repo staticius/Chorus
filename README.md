@@ -1,5 +1,5 @@
 <p align="center">
-    <a>
+    <a href="https://chorus-oss.org">
       <img src=".github/img/chorus-oss.png" width=25% alt="Chorus">
     </a>
     <p align="center">
