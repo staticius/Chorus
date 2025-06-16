@@ -1,7 +1,8 @@
 package org.chorus_oss.chorus.experimental.block.components
 
-import com.github.quillraven.fleks.EntityTag
-import org.chorus_oss.chorus.experimental.block.BlockComponent
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
 
-@Suppress("unused")
-data object ReplaceableComponent : BlockComponent, EntityTag()
+data object ReplaceableComponent : Component<ReplaceableComponent>, ComponentType<ReplaceableComponent>() {
+    override fun type(): ComponentType<ReplaceableComponent> = ReplaceableComponent
+}

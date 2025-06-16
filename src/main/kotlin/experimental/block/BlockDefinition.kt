@@ -1,16 +1,17 @@
 package org.chorus_oss.chorus.experimental.block
 
+import com.github.quillraven.fleks.Component
+import com.github.quillraven.fleks.ComponentType
 import org.chorus_oss.chorus.experimental.block.state.BlockState
 import org.chorus_oss.chorus.utils.Identifier
-import org.chorus_oss.chorus.utils.Loggable
 
 // TODO: MenuCategory
 
 abstract class BlockDefinition(
     val identifier: String,
     val states: List<BlockState<*>> = emptyList(),
-    components: List<BlockComponent> = emptyList(),
-    permutations: List<Pair<(Map<String, Any>) -> Boolean, List<BlockComponent>>> = emptyList(),
+    val components: List<Component<*>> = emptyList(),
+    val permutations: List<Permutation> = emptyList(),
 ) {
     init {
         Identifier.assertValid(identifier)
@@ -19,20 +20,14 @@ abstract class BlockDefinition(
         }
     }
 
-    val permutations = states.fold(listOf(emptyMap<String, Any>())) { acc, state ->
-        acc.flatMap { map ->
-            state.values.map {
-                map + (state.identifier to it)
-            }
-        }
-    }.map {
-        BlockPermutation(
-            identifier,
-            it,
-            components + permutations.filter { p -> p.first(it) }.flatMap { p -> p.second })
+    data class Permutation(
+        val condition: (Map<String, Any>) -> Boolean,
+        val components: List<Component<*>>,
+    ) {
+        constructor(condition: (Map<String, Any>) -> Boolean, vararg components: Component<*>) : this(condition, components.toList())
+
+        constructor(components: List<Component<*>>, condition: (Map<String, Any>) -> Boolean) : this(condition, components)
+
+        constructor(vararg components: Component<*>, condition: (Map<String, Any>) -> Boolean) : this(condition, components.toList())
     }
-
-    val defaultPermutation: BlockPermutation = this.permutations.first()
-
-    val stateValues: Map<String, List<Any>> = this.states.associate { it.identifier to it.values }
 }
