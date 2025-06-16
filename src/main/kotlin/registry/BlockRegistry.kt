@@ -2,6 +2,7 @@ package org.chorus_oss.chorus.registry
 
 import org.chorus_oss.chorus.block.*
 import org.chorus_oss.chorus.block.customblock.CustomBlockDefinition
+import org.chorus_oss.chorus.experimental.generator.BlockDefinitionGenerator
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.plugin.Plugin
 import org.chorus_oss.chorus.utils.Loggable
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.reflect.KClass
+import kotlin.reflect.KFunction
 import kotlin.reflect.full.companionObject
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
@@ -1110,11 +1112,22 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
             register(BlockID.YELLOW_TERRACOTTA, BlockYellowTerracotta::class)
             register(BlockID.YELLOW_WOOL, BlockYellowWool::class)
             register(BlockID.ZOMBIE_HEAD, BlockZombieHead::class)
-
-//            BlockRegistry += definitions
-//            BlockDefinitionGenerator.generateDefinitions(PROPERTIES.values.toList())
         } catch (_: RegisterException) {
         }
+    }
+
+    fun runDefinitionGenerator() {
+        log.info("Starting BlockDefinitionGenerator")
+        BlockDefinitionGenerator.populateFromProperties(PROPERTIES)
+        BlockDefinitionGenerator.populateFromInstances(CACHE_CONSTRUCTORS.map {
+            try { it.value(null) }
+            catch (_: Throwable) {
+                log.error("Error occurred while creating instance of ${it.key}")
+                null
+            }
+        }.filterNotNull())
+        BlockDefinitionGenerator.buildDefinitions()
+        log.info("Finished BlockDefinitionGenerator")
     }
 
     val keySet: @UnmodifiableView MutableSet<String>
@@ -1139,8 +1152,12 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
             if (properties.returnType == typeOf<BlockProperties>()) {
                 val blockProperties = properties.call(companionInstance) as BlockProperties
 
-                val constructor = value.constructors.find {
+                val constructor = value.constructors.find { it ->
                     val param = it.parameters.firstOrNull() ?: return@find false
+
+                    if (it.parameters.size > 1) {
+                        if (it.parameters.subList(1, it.parameters.size).any { !it.isOptional }) return@find false
+                    }
 
                     param.type == typeOf<BlockState>()
                 } ?: throw RuntimeException("Block: $value must have a constructor with a BlockState param!")
@@ -1154,8 +1171,7 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
                 } else {
                     KEYSET.add(key)
                     PROPERTIES[key] = blockProperties
-
-
+                    CLASSES[key] = value
 
                     blockProperties.specialValueMap.values.forEach { v: BlockState ->
                         Registries.BLOCKSTATE.registerInternal(v)
@@ -1394,6 +1410,8 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
         private val CACHE_CONSTRUCTORS = mutableMapOf<String, (BlockState?) -> Block>()
         private val PROPERTIES = mutableMapOf<String, BlockProperties>()
         private val CUSTOM_BLOCK_DEFINITIONS: MutableMap<Plugin, MutableList<CustomBlockDefinition>> = LinkedHashMap()
+
+        private val CLASSES = mutableMapOf<String, KClass<out Block>>()
 
         val skipBlockSet: Set<String> = setOf(
             "minecraft:camera",

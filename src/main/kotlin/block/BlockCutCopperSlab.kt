@@ -3,10 +3,11 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.OxidizationLevel
 
-open class BlockCutCopperSlab @JvmOverloads constructor(
+open class BlockCutCopperSlab constructor(
     blockState: BlockState = properties.defaultState,
-    doubleSlabId: String
+    doubleSlabId: String = BlockID.DOUBLE_CUT_COPPER_SLAB,
 ) : BlockSlabCopperBase(blockState, doubleSlabId) {
+    constructor(blockState: BlockState) : this(blockState, BlockID.DOUBLE_CUT_COPPER_SLAB)
 
     override fun getSlabName(): String {
         val sb = StringBuilder(30)

@@ -61,10 +61,12 @@ class BlockPermutation internal constructor(
         return resolve(this.identifier, this.states + states)
     }
 
+    @JvmName("plusByIdentifier")
     operator fun plus(state: Pair<String, Any>): BlockPermutation = withStates(state)
 
     operator fun <T : Any> plus(state: Pair<BlockState<T>, T>) = withStates(state)
 
+    @JvmName("plusByIdentifier")
     operator fun plus(states: Map<String, Any>) = withStates(states)
 
     operator fun plus(states: Map<BlockState<*>, Any>) = withStates(states)

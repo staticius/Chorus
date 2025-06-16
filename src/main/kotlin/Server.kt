@@ -64,6 +64,7 @@ import org.chorus_oss.chorus.permission.DefaultPermissions.registerCorePermissio
 import org.chorus_oss.chorus.plugin.*
 import org.chorus_oss.chorus.positiontracking.PositionTrackingService
 import org.chorus_oss.chorus.recipe.Recipe
+import org.chorus_oss.chorus.registry.BlockRegistry
 import org.chorus_oss.chorus.registry.RecipeRegistry
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.resourcepacks.ResourcePackManager
@@ -721,6 +722,8 @@ class Server internal constructor(
     }
 
     fun start() {
+        Registries.BLOCK.runDefinitionGenerator()
+
         for (entry in bannedIPs.entries.values) {
             try {
                 network.blockAddress(InetAddress.getByName(entry.name))
