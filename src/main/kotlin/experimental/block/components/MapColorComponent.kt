@@ -10,7 +10,7 @@ data class MapColorComponent(
     val g: Int,
     val b: Int,
     val a: Int,
-) : BlockComponent, Component<MapColorComponent> {
+) : BlockComponent<MapColorComponent> {
     override fun type(): ComponentType<MapColorComponent> = MapColorComponent
 
     companion object : ComponentType<MapColorComponent>()

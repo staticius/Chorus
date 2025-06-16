@@ -1,0 +1,15 @@
+package org.chorus_oss.chorus.experimental.block.generated.definitions
+
+import org.chorus_oss.chorus.experimental.block.BlockDefinition
+import org.chorus_oss.chorus.experimental.block.components.*
+
+object LightBlock0 : BlockDefinition(
+    identifier = "minecraft:light_block_0",
+    components = listOf(
+        TransparentComponent(transparent = true),
+        InternalFrictionComponent(internalFriction = 0.95f),
+        ReplaceableComponent,
+        MineableComponent(hardness = 0.0f),
+        CollisionBoxComponent(enabled = false)
+    )
+)

@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.experimental.block.BlockComponent
 
 data class FrictionComponent(
     val friction: Float
-) : BlockComponent, Component<FrictionComponent> {
+) : BlockComponent<FrictionComponent> {
     override fun type(): ComponentType<FrictionComponent> = FrictionComponent
 
     companion object : ComponentType<FrictionComponent>()

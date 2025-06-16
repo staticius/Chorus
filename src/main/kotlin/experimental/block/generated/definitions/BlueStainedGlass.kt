@@ -1,0 +1,15 @@
+package org.chorus_oss.chorus.experimental.block.generated.definitions
+
+import org.chorus_oss.chorus.experimental.block.BlockDefinition
+import org.chorus_oss.chorus.experimental.block.components.MapColorComponent
+import org.chorus_oss.chorus.experimental.block.components.MineableComponent
+import org.chorus_oss.chorus.experimental.block.components.TransparentComponent
+
+object BlueStainedGlass : BlockDefinition(
+    identifier = "minecraft:blue_stained_glass",
+    components = listOf(
+        TransparentComponent(transparent = true),
+        MapColorComponent(r = 51, g = 76, b = 178, a = 255),
+        MineableComponent(hardness = 0.3f)
+    )
+)

@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.experimental.block.BlockComponent
 
 data class TransparentComponent(
     val transparent: Boolean,
-): BlockComponent, Component<TransparentComponent> {
+): BlockComponent<TransparentComponent> {
     override fun type(): ComponentType<TransparentComponent> = TransparentComponent
 
     companion object : ComponentType<TransparentComponent>()

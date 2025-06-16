@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.experimental.block.BlockComponent
 data class TickComponent(
     val range: IntRange,
     val looping: Boolean,
-): BlockComponent, Component<TickComponent> {
+): BlockComponent<TickComponent> {
     override fun type(): ComponentType<TickComponent> = TickComponent
 
     constructor(min: Int, max: Int, looping: Boolean): this(min..max, looping)

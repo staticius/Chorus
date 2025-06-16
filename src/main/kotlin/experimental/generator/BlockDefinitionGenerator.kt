@@ -9,22 +9,25 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.block.BlockProperties
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
-import org.chorus_oss.chorus.experimental.block.components.MoveableComponent
 import org.chorus_oss.chorus.registry.BlockRegistry.Companion.CACHE_CONSTRUCTORS
 import org.chorus_oss.chorus.registry.BlockRegistry.Companion.PROPERTIES
 import org.chorus_oss.chorus.utils.BlockColor
 import org.chorus_oss.chorus.utils.Loggable
+import org.chorus_oss.protocol.types.IVector3
 import java.io.File
+import kotlin.math.roundToInt
 import kotlin.reflect.KClass
 
 object BlockDefinitionGenerator : Loggable {
     val properties = mutableMapOf<String, BlockProperties>()
     val components = mutableMapOf<String, MutableList<Pair<String, String>>>()
+    val extraImports = mutableMapOf<String, MutableList<Pair<String, String>>>()
 
     data class AutogenData(
         val identifier: String,
         val properties: BlockProperties,
-        val components: MutableList<Pair<String, String>>
+        val components: MutableList<Pair<String, String>>,
+        val extraImports: MutableList<Pair<String, String>>
     )
 
     fun run() {
@@ -48,6 +51,7 @@ object BlockDefinitionGenerator : Loggable {
     fun populateFromInstances(instances: List<Block>) {
         instances.forEach {
             val components = this.components.computeIfAbsent(it.properties.identifier) { mutableListOf() }
+            val extraImports = this.extraImports.computeIfAbsent(it.properties.identifier) { mutableListOf() }
 
             val componentGenerators: MutableList<Pair<String, () -> String?>> = mutableListOf(
                 Pair("SolidComponent") { if (!it.isSolid) "(solid = false)" else null },
@@ -101,6 +105,35 @@ object BlockDefinitionGenerator : Loggable {
 
                         "(movement = $movement, sticky = $sticky)"
                     } else null
+                },
+                Pair("CollisionBoxComponent") {
+                    val collision = it.collisionBoundingBox
+                    if (it.canPassThrough() || collision == null) {
+                        "(enabled = false)"
+                    } else if (collision.maxX != 1.0
+                        || collision.maxY != 1.0
+                        || collision.maxZ != 1.0
+                        || collision.minX != 0.0
+                        || collision.minY != 0.0
+                        || collision.minZ != 0.0) {
+
+                        val convertedOrigin = IVector3(
+                            x = (collision.minX * 16).roundToInt(),
+                            y = (collision.minY * 16).roundToInt(),
+                            z = (collision.minZ * 16).roundToInt()
+                        )
+
+                        val convertedSize = IVector3(
+                            x = (collision.maxX * 16).roundToInt(),
+                            y = (collision.maxY * 16).roundToInt(),
+                            z = (collision.maxZ * 16).roundToInt()
+                        )
+
+                        "(origin = $convertedOrigin, size = $convertedSize)".also {
+                            extraImports.add("org.chorus_oss.protocol.types" to "IVector3")
+                        }
+                    }
+                    else null
                 }
             )
 
@@ -126,8 +159,9 @@ object BlockDefinitionGenerator : Loggable {
 
         this.properties.forEach {
             val components = this.components[it.key] ?: mutableListOf()
+            val extraImports = this.extraImports[it.key] ?: mutableListOf()
 
-            autogenData += AutogenData(it.key, it.value, components)
+            autogenData += AutogenData(it.key, it.value, components, extraImports)
         }
 
         val objects = autogenData.map { generateDefinition(it) }
@@ -137,11 +171,11 @@ object BlockDefinitionGenerator : Loggable {
             .initializer("listOf($objectsString)")
             .build()
 
-        val fileBuilder = FileSpec.builder("org.chorus_oss.chorus.experimental.block", "Definitions")
+        val fileBuilder = FileSpec.builder("org.chorus_oss.chorus.experimental.block.generated", "Definitions")
             .addProperty(listOfObjects)
             .apply {
                 for (obj in objects) {
-                    addImport("org.chorus_oss.chorus.experimental.block.definitions", obj)
+                    addImport("org.chorus_oss.chorus.experimental.block.generated.definitions", obj)
                 }
             }
 
@@ -157,16 +191,26 @@ object BlockDefinitionGenerator : Loggable {
     fun generateDefinition(genData: AutogenData): String {
         val properties = genData.properties
         val components = genData.components
+        val extraImports = genData.extraImports
 
         val identifier = properties.identifier
         val trimmedIdentifier = identifier.substringAfter(':')
         val pascalIdentifier = trimmedIdentifier.split('_').joinToString("") { it.replaceFirstChar(Char::uppercase)  }
 
-        val states = properties.getPropertyTypeSet().toList().map { it.name.split("_", ":")
+        val states = properties.getPropertyTypeSet().toList().map {
+            var autoName = it.name.split("_", ":")
             .mapIndexed { index, word ->
                 if (index == 0) word else word.replaceFirstChar(Char::uppercase)
             }
             .joinToString("")
+
+            when (it.name) {
+                "age", "rail_direction" -> {
+                    autoName += it.validValues.size
+                }
+            }
+
+            autoName
         }.sorted()
 
         val formattedStates = states.joinToString(", ") { "CommonStates.$it"}
@@ -187,7 +231,7 @@ object BlockDefinitionGenerator : Loggable {
             }
             .build()
 
-        val fileBuilder = FileSpec.builder("org.chorus_oss.chorus.experimental.block.definitions", pascalIdentifier)
+        val fileBuilder = FileSpec.builder("org.chorus_oss.chorus.experimental.block.generated.definitions", pascalIdentifier)
             .addType(blockObject)
 
         if (hasStates) {
@@ -198,6 +242,10 @@ object BlockDefinitionGenerator : Loggable {
             components.forEach {
                 if (it.first != "TODO") fileBuilder.addImport("org.chorus_oss.chorus.experimental.block.components", it.first)
             }
+        }
+
+        extraImports.forEach {
+            fileBuilder.addImport(it.first, it.second)
         }
 
         val path = File(Server.instance.dataPath + "generated/")

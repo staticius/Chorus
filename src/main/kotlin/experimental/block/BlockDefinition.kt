@@ -1,7 +1,5 @@
 package org.chorus_oss.chorus.experimental.block
 
-import com.github.quillraven.fleks.Component
-import com.github.quillraven.fleks.ComponentType
 import org.chorus_oss.chorus.experimental.block.state.BlockState
 import org.chorus_oss.chorus.utils.Identifier
 
@@ -10,7 +8,7 @@ import org.chorus_oss.chorus.utils.Identifier
 abstract class BlockDefinition(
     val identifier: String,
     val states: List<BlockState<*>> = emptyList(),
-    val components: List<Component<*>> = emptyList(),
+    val components: List<BlockComponent<*>> = emptyList(),
     val permutations: List<Permutation> = emptyList(),
 ) {
     init {
@@ -22,12 +20,12 @@ abstract class BlockDefinition(
 
     data class Permutation(
         val condition: (Map<String, Any>) -> Boolean,
-        val components: List<Component<*>>,
+        val components: List<BlockComponent<*>>,
     ) {
-        constructor(condition: (Map<String, Any>) -> Boolean, vararg components: Component<*>) : this(condition, components.toList())
+        constructor(condition: (Map<String, Any>) -> Boolean, vararg components: BlockComponent<*>) : this(condition, components.toList())
 
-        constructor(components: List<Component<*>>, condition: (Map<String, Any>) -> Boolean) : this(condition, components)
+        constructor(components: List<BlockComponent<*>>, condition: (Map<String, Any>) -> Boolean) : this(condition, components)
 
-        constructor(vararg components: Component<*>, condition: (Map<String, Any>) -> Boolean) : this(condition, components.toList())
+        constructor(vararg components: BlockComponent<*>, condition: (Map<String, Any>) -> Boolean) : this(condition, components.toList())
     }
 }
