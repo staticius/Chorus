@@ -37,17 +37,7 @@ import kotlin.math.pow
 
 abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!), AxisAlignedBB, IVector3, Loggable {
 
-    var color: BlockColor = BlockColor.VOID_BLOCK_COLOR
-        get() {
-            if (field == BlockColor.VOID_BLOCK_COLOR) {
-                field = VANILLA_BLOCK_COLOR_MAP[blockState.blockStateHash().toLong()] ?: BlockColor.VOID_BLOCK_COLOR
-                if (field == BlockColor.VOID_BLOCK_COLOR) {
-                    log.error("Failed to get color of block $name")
-                    log.error("Current block state hash: ${blockState.blockStateHash()}")
-                }
-            }
-            return field
-        }
+    var color: BlockColor = VANILLA_BLOCK_COLOR_MAP[blockState.blockStateHash().toLong()] ?: BlockColor.VOID_BLOCK_COLOR
 
     open val frictionFactor: Double = 0.6
 

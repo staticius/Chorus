@@ -29,6 +29,7 @@ import org.chorus_oss.chorus.event.level.LevelLoadEvent
 import org.chorus_oss.chorus.event.player.PlayerLoginEvent
 import org.chorus_oss.chorus.event.server.ServerStartedEvent
 import org.chorus_oss.chorus.event.server.ServerStopEvent
+import org.chorus_oss.chorus.experimental.generator.BlockDefinitionGenerator
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.lang.Lang
 import org.chorus_oss.chorus.lang.LangCode
@@ -722,7 +723,7 @@ class Server internal constructor(
     }
 
     fun start() {
-        Registries.BLOCK.runDefinitionGenerator()
+        BlockDefinitionGenerator.run()
 
         for (entry in bannedIPs.entries.values) {
             try {

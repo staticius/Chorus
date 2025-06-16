@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.registry
 
 import org.chorus_oss.chorus.block.*
 import org.chorus_oss.chorus.block.customblock.CustomBlockDefinition
-import org.chorus_oss.chorus.experimental.generator.BlockDefinitionGenerator
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.plugin.Plugin
 import org.chorus_oss.chorus.utils.Loggable
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.UnmodifiableView
 import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.reflect.KClass
-import kotlin.reflect.KFunction
 import kotlin.reflect.full.companionObject
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.isAccessible
@@ -1116,20 +1114,6 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
         }
     }
 
-    fun runDefinitionGenerator() {
-        log.info("Starting BlockDefinitionGenerator")
-        BlockDefinitionGenerator.populateFromProperties(PROPERTIES)
-        BlockDefinitionGenerator.populateFromInstances(CACHE_CONSTRUCTORS.map {
-            try { it.value(null) }
-            catch (_: Throwable) {
-                log.error("Error occurred while creating instance of ${it.key}")
-                null
-            }
-        }.filterNotNull())
-        BlockDefinitionGenerator.buildDefinitions()
-        log.info("Finished BlockDefinitionGenerator")
-    }
-
     val keySet: @UnmodifiableView MutableSet<String>
         get() = Collections.unmodifiableSet(KEYSET)
 
@@ -1407,11 +1391,11 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
     companion object {
         private val isLoad = AtomicBoolean(false)
         private val KEYSET: MutableSet<String> = HashSet()
-        private val CACHE_CONSTRUCTORS = mutableMapOf<String, (BlockState?) -> Block>()
-        private val PROPERTIES = mutableMapOf<String, BlockProperties>()
+        val CACHE_CONSTRUCTORS = mutableMapOf<String, (BlockState?) -> Block>()
+        val PROPERTIES = mutableMapOf<String, BlockProperties>()
         private val CUSTOM_BLOCK_DEFINITIONS: MutableMap<Plugin, MutableList<CustomBlockDefinition>> = LinkedHashMap()
 
-        private val CLASSES = mutableMapOf<String, KClass<out Block>>()
+        val CLASSES = mutableMapOf<String, KClass<out Block>>()
 
         val skipBlockSet: Set<String> = setOf(
             "minecraft:camera",

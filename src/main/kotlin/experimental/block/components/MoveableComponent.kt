@@ -11,8 +11,8 @@ data class MoveableComponent(
 ): BlockComponent, Component<MoveableComponent> {
     enum class Movement {
         Both,
-        Pull,
-        Pop,
+        Push,
+        Break,
         None
     }
 

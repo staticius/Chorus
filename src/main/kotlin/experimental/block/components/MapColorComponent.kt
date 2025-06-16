@@ -6,7 +6,10 @@ import org.chorus_oss.chorus.experimental.block.BlockComponent
 import org.chorus_oss.chorus.utils.BlockColor
 
 data class MapColorComponent(
-    val color: BlockColor,
+    val r: Int,
+    val g: Int,
+    val b: Int,
+    val a: Int,
 ) : BlockComponent, Component<MapColorComponent> {
     override fun type(): ComponentType<MapColorComponent> = MapColorComponent
 
