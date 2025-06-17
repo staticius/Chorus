@@ -124,9 +124,9 @@ object BlockDefinitionGenerator : Loggable {
                         )
 
                         val convertedSize = IVector3(
-                            x = (collision.maxX * 16).roundToInt(),
-                            y = (collision.maxY * 16).roundToInt(),
-                            z = (collision.maxZ * 16).roundToInt()
+                            x = ((collision.maxX - collision.minX) * 16).roundToInt(),
+                            y = ((collision.maxY - collision.minY) * 16).roundToInt(),
+                            z = ((collision.maxZ - collision.minZ) * 16).roundToInt()
                         )
 
                         if (it.canPassThrough()) {

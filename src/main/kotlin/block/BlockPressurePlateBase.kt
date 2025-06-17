@@ -38,13 +38,13 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
     }
 
     override var minX: Double
-        get() = position.x + 0.625
+        get() = position.x + 0.0625
         set(minX) {
             super.minX = minX
         }
 
     override var minZ: Double
-        get() = position.z + 0.625
+        get() = position.z + 0.0625
         set(minZ) {
             super.minZ = minZ
         }
@@ -118,10 +118,10 @@ abstract class BlockPressurePlateBase(blockState: BlockState) : BlockFlowable(bl
 
     override fun recalculateCollisionBoundingBox(): AxisAlignedBB? {
         return SimpleAxisAlignedBB(
-            position.x + 0.125,
+            position.x + 0.0625,
             position.y,
-            position.z + 0.125,
-            position.x + 0.875, position.y + 0.25, position.z + 0.875
+            position.z + 0.0625,
+            position.x + 0.9375, position.y + 0.25, position.z + 0.9375
         )
     }
 
