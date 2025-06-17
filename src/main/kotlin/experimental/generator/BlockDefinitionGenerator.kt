@@ -108,7 +108,7 @@ object BlockDefinitionGenerator : Loggable {
                 },
                 Pair("CollisionBoxComponent") {
                     val collision = it.collisionBoundingBox
-                    if (it.canPassThrough() || collision == null) {
+                    if (collision == null) {
                         "(enabled = false)"
                     } else if (collision.maxX != 1.0
                         || collision.maxY != 1.0
@@ -129,7 +129,11 @@ object BlockDefinitionGenerator : Loggable {
                             z = (collision.maxZ * 16).roundToInt()
                         )
 
-                        "(origin = $convertedOrigin, size = $convertedSize)".also {
+                        if (it.canPassThrough()) {
+                            "(origin = $convertedOrigin, size = $convertedSize, enabled = false)"
+                        } else {
+                            "(origin = $convertedOrigin, size = $convertedSize)"
+                        }.also {
                             extraImports.add("org.chorus_oss.protocol.types" to "IVector3")
                         }
                     }
