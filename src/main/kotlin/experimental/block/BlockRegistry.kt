@@ -1,6 +1,7 @@
 package org.chorus_oss.chorus.experimental.block
 
 import com.github.quillraven.fleks.configureWorld
+import org.chorus_oss.chorus.experimental.block.generated.definitions
 
 object BlockRegistry {
     @PublishedApi
@@ -11,6 +12,10 @@ object BlockRegistry {
 
     /** Hash -> Permutation */
     private val permutations = mutableMapOf<Int, BlockPermutation>()
+
+    init {
+        this += definitions
+    }
 
     fun register(vararg definitions: BlockDefinition) = definitions.forEach(::register)
 

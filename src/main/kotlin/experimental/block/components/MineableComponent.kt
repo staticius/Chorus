@@ -11,5 +11,9 @@ data class MineableComponent(
 ) : BlockComponent<MineableComponent> {
     override fun type(): ComponentType<MineableComponent> = MineableComponent
 
-    companion object : ComponentType<MineableComponent>()
+    companion object : ComponentType<MineableComponent>() {
+        val DEFAULT = MineableComponent(
+            hardness = 10f
+        )
+    }
 }

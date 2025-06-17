@@ -9,5 +9,9 @@ data class FrictionComponent(
 ) : BlockComponent<FrictionComponent> {
     override fun type(): ComponentType<FrictionComponent> = FrictionComponent
 
-    companion object : ComponentType<FrictionComponent>()
+    companion object : ComponentType<FrictionComponent>() {
+        val DEFAULT = FrictionComponent(
+            friction = 0.6f
+        )
+    }
 }

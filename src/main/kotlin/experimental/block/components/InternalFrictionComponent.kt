@@ -9,5 +9,9 @@ data class InternalFrictionComponent(
 ) : BlockComponent<InternalFrictionComponent> {
     override fun type(): ComponentType<InternalFrictionComponent> = InternalFrictionComponent
 
-    companion object : ComponentType<InternalFrictionComponent>()
+    companion object : ComponentType<InternalFrictionComponent>() {
+        val DEFAULT = InternalFrictionComponent(
+            internalFriction = 1f
+        )
+    }
 }

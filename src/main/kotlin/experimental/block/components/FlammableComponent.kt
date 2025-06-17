@@ -10,5 +10,10 @@ data class FlammableComponent(
 ): BlockComponent<FlammableComponent> {
     override fun type(): ComponentType<FlammableComponent> = FlammableComponent
 
-    companion object : ComponentType<FlammableComponent>()
+    companion object : ComponentType<FlammableComponent>() {
+        val DEFAULT = FlammableComponent(
+            catchChance = 0,
+            destroyChance = 0,
+        )
+    }
 }
