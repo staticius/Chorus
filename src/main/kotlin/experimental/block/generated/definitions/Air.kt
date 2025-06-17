@@ -9,8 +9,8 @@ object Air : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         ReplaceableComponent,
-        MineableComponent(hardness = 0.0f),
-        CollisionBoxComponent(enabled = false)
+        MineableComponent(hardness = 0.0f)
     )
 )

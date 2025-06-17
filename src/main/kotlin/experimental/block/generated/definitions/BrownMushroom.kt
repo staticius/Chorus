@@ -11,6 +11,7 @@ object BrownMushroom : BlockDefinition(
         MapColorComponent(r = 102, g = 76, b = 51, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
         LightEmissionComponent(emission = 1),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

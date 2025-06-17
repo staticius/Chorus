@@ -10,7 +10,7 @@ object PowderSnow : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 255, g = 255, b = 255, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
-        MineableComponent(hardness = 0.25f),
-        CollisionBoxComponent(enabled = false)
+        LightDampeningComponent(dampening = 1),
+        MineableComponent(hardness = 0.25f)
     )
 )

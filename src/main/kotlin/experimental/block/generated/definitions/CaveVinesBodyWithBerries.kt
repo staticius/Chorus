@@ -12,6 +12,7 @@ object CaveVinesBodyWithBerries : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 0, g = 124, b = 0, a = 255),
         LightEmissionComponent(emission = 14),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.0f)
     )
 )

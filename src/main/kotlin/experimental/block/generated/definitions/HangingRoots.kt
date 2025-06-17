@@ -10,6 +10,7 @@ object HangingRoots : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 0, g = 124, b = 0, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         FlammableComponent(catchChance = 5, destroyChance = 0),
         MineableComponent(hardness = 0.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),

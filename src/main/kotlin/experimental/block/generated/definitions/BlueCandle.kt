@@ -12,8 +12,14 @@ object BlueCandle : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 51, g = 76, b = 178, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.1f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)
+    ),
+    permutations = listOf(
+        Permutation({ it["candles"] == 1 }, listOf(LightEmissionComponent(emission = 3))),
+        Permutation({ it["candles"] == 2 }, listOf(LightEmissionComponent(emission = 6))),
+        Permutation({ it["candles"] == 3 }, listOf(LightEmissionComponent(emission = 9)))
     )
 )

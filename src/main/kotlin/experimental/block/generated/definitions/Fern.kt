@@ -9,6 +9,7 @@ object Fern : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         ReplaceableComponent,
         FlammableComponent(catchChance = 60, destroyChance = 100),
         MineableComponent(hardness = 0.0f),

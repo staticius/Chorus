@@ -11,6 +11,7 @@ object StickyPistonArmCollision : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 112, g = 112, b = 112, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 1.5f),
         MoveableComponent(movement = MoveableComponent.Movement.None, sticky = false)
     )

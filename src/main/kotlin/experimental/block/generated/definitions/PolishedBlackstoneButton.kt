@@ -11,6 +11,7 @@ object PolishedBlackstoneButton : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.5f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

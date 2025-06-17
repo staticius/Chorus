@@ -12,9 +12,9 @@ object SculkVein : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 13, g = 18, b = 23, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         ReplaceableComponent,
         MineableComponent(hardness = 0.2f),
-        MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
-        CollisionBoxComponent(enabled = false)
+        MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false)
     )
 )

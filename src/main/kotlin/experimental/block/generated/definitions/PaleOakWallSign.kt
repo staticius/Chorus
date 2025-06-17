@@ -11,6 +11,7 @@ object PaleOakWallSign : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 255, g = 252, b = 245, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 1.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

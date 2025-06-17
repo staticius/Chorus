@@ -10,6 +10,7 @@ object CrimsonFungus : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 112, g = 2, b = 0, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

@@ -12,8 +12,8 @@ object Portal : BlockDefinition(
         TransparentComponent(transparent = true),
         InternalFrictionComponent(internalFriction = 0.95f),
         LightEmissionComponent(emission = 11),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = -1.0f),
-        MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
-        CollisionBoxComponent(enabled = false)
+        MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false)
     )
 )

@@ -11,6 +11,7 @@ object DecoratedPot : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 142, g = 60, b = 46, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false)
     )

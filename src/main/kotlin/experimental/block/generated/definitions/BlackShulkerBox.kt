@@ -9,6 +9,7 @@ object BlackShulkerBox : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 25, g = 25, b = 25, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 2.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false)
     )

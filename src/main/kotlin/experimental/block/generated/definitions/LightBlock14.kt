@@ -9,6 +9,7 @@ object LightBlock14 : BlockDefinition(
         TransparentComponent(transparent = true),
         InternalFrictionComponent(internalFriction = 0.95f),
         LightEmissionComponent(emission = 14),
+        LightDampeningComponent(dampening = 1),
         ReplaceableComponent,
         MineableComponent(hardness = 0.0f),
         CollisionBoxComponent(enabled = false)

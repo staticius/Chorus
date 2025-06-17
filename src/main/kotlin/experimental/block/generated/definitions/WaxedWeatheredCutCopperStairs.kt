@@ -1,12 +1,9 @@
 package org.chorus_oss.chorus.experimental.block.generated.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
-import org.chorus_oss.chorus.experimental.block.components.CollisionBoxComponent
-import org.chorus_oss.chorus.experimental.block.components.MapColorComponent
-import org.chorus_oss.chorus.experimental.block.components.MineableComponent
-import org.chorus_oss.chorus.experimental.block.components.TransparentComponent
+import org.chorus_oss.chorus.experimental.block.components.*
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
-import org.chorus_oss.protocol.types.IVector3
+import org.chorus_oss.chorus.math.Vector3f
 
 object WaxedWeatheredCutCopperStairs : BlockDefinition(
     identifier = "minecraft:waxed_weathered_cut_copper_stairs",
@@ -14,7 +11,49 @@ object WaxedWeatheredCutCopperStairs : BlockDefinition(
     components = listOf(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 58, g = 142, b = 140, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 3.0f),
-        CollisionBoxComponent(origin = IVector3(x = 0, y = 0, z = 0), size = IVector3(x = 16, y = 8, z = 16))
+        CollisionBoxComponent(
+            origin = Vector3f(x = 0.0f, y = 0.5f, z = 0.0f),
+            size = Vector3f(x = 1.0f, y = 0.5f, z = 1.0f)
+        )
+    ),
+    permutations = listOf(
+        Permutation(
+        { it["upside_down_bit"] == false },
+        listOf(
+            CollisionBoxComponent(
+                origin = Vector3f(x = 0.0f, y = 0.0f, z = 0.0f),
+                size = Vector3f(x = 1.0f, y = 0.5f, z = 1.0f)
+            )
+        )
+    ),
+        Permutation(
+            { it["upside_down_bit"] == false && it["weirdo_direction"] == 1 },
+            listOf(
+                CollisionBoxComponent(
+                    origin = Vector3f(x = 0.0f, y = 0.0f, z = 0.0f),
+                    size = Vector3f(x = 1.0f, y = 0.5f, z = 1.0f)
+                )
+            )
+        ),
+        Permutation(
+            { it["upside_down_bit"] == false && it["weirdo_direction"] == 2 },
+            listOf(
+                CollisionBoxComponent(
+                    origin = Vector3f(x = 0.0f, y = 0.0f, z = 0.0f),
+                    size = Vector3f(x = 1.0f, y = 0.5f, z = 1.0f)
+                )
+            )
+        ),
+        Permutation(
+            { it["upside_down_bit"] == false && it["weirdo_direction"] == 3 },
+            listOf(
+                CollisionBoxComponent(
+                    origin = Vector3f(x = 0.0f, y = 0.0f, z = 0.0f),
+                    size = Vector3f(x = 1.0f, y = 0.5f, z = 1.0f)
+                )
+            )
+        )
     )
 )

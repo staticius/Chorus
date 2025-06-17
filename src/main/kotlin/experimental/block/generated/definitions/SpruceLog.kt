@@ -13,5 +13,11 @@ object SpruceLog : BlockDefinition(
         MapColorComponent(r = 129, g = 86, b = 49, a = 255),
         FlammableComponent(catchChance = 5, destroyChance = 10),
         MineableComponent(hardness = 2.0f)
+    ),
+    permutations = listOf(
+        Permutation(
+        { it["pillar_axis"] == "x" },
+        listOf(MapColorComponent(r = 102, g = 76, b = 51, a = 255))
+    ), Permutation({ it["pillar_axis"] == "z" }, listOf(MapColorComponent(r = 102, g = 76, b = 51, a = 255)))
     )
 )

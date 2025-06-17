@@ -13,9 +13,9 @@ object SoulFire : BlockDefinition(
         MapColorComponent(r = 102, g = 153, b = 216, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
         LightEmissionComponent(emission = 15),
+        LightDampeningComponent(dampening = 1),
         ReplaceableComponent,
         MineableComponent(hardness = 0.0f),
-        MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
-        CollisionBoxComponent(enabled = false)
+        MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false)
     )
 )

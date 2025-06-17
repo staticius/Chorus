@@ -12,6 +12,7 @@ object SoulTorch : BlockDefinition(
         TransparentComponent(transparent = true),
         InternalFrictionComponent(internalFriction = 0.95f),
         LightEmissionComponent(emission = 10),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

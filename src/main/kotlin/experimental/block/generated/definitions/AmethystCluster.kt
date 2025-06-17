@@ -12,6 +12,7 @@ object AmethystCluster : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 153, g = 90, b = 205, a = 255),
         LightEmissionComponent(emission = 5),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 1.5f)
     )
 )

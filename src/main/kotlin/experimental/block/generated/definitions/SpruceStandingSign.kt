@@ -11,6 +11,7 @@ object SpruceStandingSign : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 129, g = 86, b = 49, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 1.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

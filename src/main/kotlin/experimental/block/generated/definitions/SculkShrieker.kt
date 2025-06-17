@@ -11,6 +11,7 @@ object SculkShrieker : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 13, g = 18, b = 23, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 3.0f),
         MoveableComponent(movement = MoveableComponent.Movement.None, sticky = false)
     )

@@ -13,9 +13,9 @@ object Fire : BlockDefinition(
         MapColorComponent(r = 255, g = 0, b = 0, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
         LightEmissionComponent(emission = 15),
+        LightDampeningComponent(dampening = 1),
         ReplaceableComponent,
         MineableComponent(hardness = 0.0f),
-        MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
-        CollisionBoxComponent(enabled = false)
+        MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false)
     )
 )

@@ -10,6 +10,7 @@ object PaleOakLeaves : BlockDefinition(
     components = listOf(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 167, g = 167, b = 167, a = 255),
+        LightDampeningComponent(dampening = 1),
         FlammableComponent(catchChance = 30, destroyChance = 60),
         MineableComponent(hardness = 0.2f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false)

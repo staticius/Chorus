@@ -12,6 +12,7 @@ object NetherWart : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 153, g = 51, b = 51, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

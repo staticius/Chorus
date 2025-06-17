@@ -11,6 +11,7 @@ object BambooStandingSign : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 229, g = 229, b = 51, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 1.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

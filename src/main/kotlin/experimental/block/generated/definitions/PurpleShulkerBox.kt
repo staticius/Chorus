@@ -9,6 +9,7 @@ object PurpleShulkerBox : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 153, g = 90, b = 205, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 2.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false)
     )

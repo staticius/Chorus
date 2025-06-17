@@ -13,5 +13,11 @@ object PaleOakLog : BlockDefinition(
         MapColorComponent(r = 255, g = 252, b = 245, a = 255),
         FlammableComponent(catchChance = 5, destroyChance = 10),
         MineableComponent(hardness = 2.0f)
+    ),
+    permutations = listOf(
+        Permutation(
+        { it["pillar_axis"] == "x" },
+        listOf(MapColorComponent(r = 112, g = 112, b = 112, a = 255))
+    ), Permutation({ it["pillar_axis"] == "z" }, listOf(MapColorComponent(r = 112, g = 112, b = 112, a = 255)))
     )
 )

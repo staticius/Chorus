@@ -9,6 +9,7 @@ object WaxedOxidizedCopperGrate : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 22, g = 126, b = 134, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 3.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Both, sticky = false),
         CollisionBoxComponent(enabled = false)

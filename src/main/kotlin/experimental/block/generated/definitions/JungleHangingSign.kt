@@ -16,6 +16,7 @@ object JungleHangingSign : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 151, g = 109, b = 77, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 1.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

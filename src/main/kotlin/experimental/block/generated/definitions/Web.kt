@@ -10,6 +10,7 @@ object Web : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 199, g = 199, b = 199, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 4.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

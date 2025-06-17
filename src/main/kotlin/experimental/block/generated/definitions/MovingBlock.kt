@@ -10,7 +10,7 @@ object MovingBlock : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 112, g = 112, b = 112, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
-        MoveableComponent(movement = MoveableComponent.Movement.None, sticky = false),
-        CollisionBoxComponent(enabled = false)
+        LightDampeningComponent(dampening = 1),
+        MoveableComponent(movement = MoveableComponent.Movement.None, sticky = false)
     )
 )

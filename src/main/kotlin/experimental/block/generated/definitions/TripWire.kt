@@ -1,11 +1,9 @@
 package org.chorus_oss.chorus.experimental.block.generated.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
-import org.chorus_oss.chorus.experimental.block.components.CollisionBoxComponent
-import org.chorus_oss.chorus.experimental.block.components.InternalFrictionComponent
-import org.chorus_oss.chorus.experimental.block.components.MineableComponent
-import org.chorus_oss.chorus.experimental.block.components.TransparentComponent
+import org.chorus_oss.chorus.experimental.block.components.*
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
+import org.chorus_oss.chorus.math.Vector3f
 
 object TripWire : BlockDefinition(
     identifier = "minecraft:trip_wire",
@@ -18,7 +16,12 @@ object TripWire : BlockDefinition(
     components = listOf(
         TransparentComponent(transparent = true),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.0f),
-        CollisionBoxComponent(enabled = false)
+        CollisionBoxComponent(
+            origin = Vector3f(x = 0.0f, y = 0.0f, z = 0.0f),
+            size = Vector3f(x = 1.0f, y = 0.5f, z = 1.0f),
+            enabled = false
+        )
     )
 )

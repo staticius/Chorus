@@ -3,6 +3,7 @@ package org.chorus_oss.chorus.experimental.block.generated.definitions
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.experimental.block.components.*
 import org.chorus_oss.chorus.experimental.block.state.CommonStates
+import org.chorus_oss.chorus.math.Vector3f
 
 object WarpedPressurePlate : BlockDefinition(
     identifier = "minecraft:warped_pressure_plate",
@@ -12,8 +13,13 @@ object WarpedPressurePlate : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 76, g = 127, b = 153, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.5f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
-        CollisionBoxComponent(enabled = false)
+        CollisionBoxComponent(
+            origin = Vector3f(x = 0.0625f, y = 0.0f, z = 0.0625f),
+            size = Vector3f(x = 0.875f, y = 0.25f, z = 0.875f),
+            enabled = false
+        )
     )
 )

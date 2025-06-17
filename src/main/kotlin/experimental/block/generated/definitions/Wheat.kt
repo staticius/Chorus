@@ -12,6 +12,7 @@ object Wheat : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 229, g = 229, b = 51, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)

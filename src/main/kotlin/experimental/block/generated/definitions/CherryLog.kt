@@ -13,5 +13,11 @@ object CherryLog : BlockDefinition(
         MapColorComponent(r = 209, g = 177, b = 161, a = 255),
         FlammableComponent(catchChance = 5, destroyChance = 5),
         MineableComponent(hardness = 2.0f)
+    ),
+    permutations = listOf(
+        Permutation(
+        { it["pillar_axis"] == "x" },
+        listOf(MapColorComponent(r = 57, g = 41, b = 35, a = 255))
+    ), Permutation({ it["pillar_axis"] == "z" }, listOf(MapColorComponent(r = 57, g = 41, b = 35, a = 255)))
     )
 )

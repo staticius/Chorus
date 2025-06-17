@@ -5,41 +5,38 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.joinToCode
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.Block
 import org.chorus_oss.chorus.block.BlockProperties
+import org.chorus_oss.chorus.block.BlockState
+import org.chorus_oss.chorus.block.property.type.EnumPropertyType
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
 import org.chorus_oss.chorus.registry.BlockRegistry.Companion.CACHE_CONSTRUCTORS
 import org.chorus_oss.chorus.registry.BlockRegistry.Companion.PROPERTIES
 import org.chorus_oss.chorus.utils.BlockColor
 import org.chorus_oss.chorus.utils.Loggable
-import org.chorus_oss.protocol.types.IVector3
 import java.io.File
-import kotlin.math.roundToInt
 import kotlin.reflect.KClass
 
 object BlockDefinitionGenerator : Loggable {
     val properties = mutableMapOf<String, BlockProperties>()
     val components = mutableMapOf<String, MutableList<Pair<String, String>>>()
+    val permutations = mutableMapOf<String, MutableList<Pair<String, MutableList<Pair<String, String>>>>>()
     val extraImports = mutableMapOf<String, MutableList<Pair<String, String>>>()
 
     data class AutogenData(
         val identifier: String,
         val properties: BlockProperties,
         val components: MutableList<Pair<String, String>>,
+        val permutations: MutableList<Pair<String, MutableList<Pair<String, String>>>>,
         val extraImports: MutableList<Pair<String, String>>
     )
 
     fun run() {
         log.info("Starting BlockDefinitionGenerator")
         populateFromProperties(PROPERTIES)
-        populateFromInstances(CACHE_CONSTRUCTORS.map {
-            try { it.value(null) }
-            catch (_: Throwable) {
-                log.error("Error occurred while creating instance of ${it.key}")
-                null
-            }
-        }.filterNotNull())
+        populateFromConstructors(CACHE_CONSTRUCTORS)
         buildDefinitions()
         log.info("Finished BlockDefinitionGenerator")
     }
@@ -48,109 +45,176 @@ object BlockDefinitionGenerator : Loggable {
 
     }
 
-    fun populateFromInstances(instances: List<Block>) {
-        instances.forEach {
-            val components = this.components.computeIfAbsent(it.properties.identifier) { mutableListOf() }
-            val extraImports = this.extraImports.computeIfAbsent(it.properties.identifier) { mutableListOf() }
+    fun populateFromConstructors(constructors: Map<String, (BlockState?) -> Block>) {
+        constructors.forEach {
+            val properties = properties[it.key]!!
+            val instances = properties.allStates.mapNotNull { s ->
+                try {
+                    it.value(s)
+                } catch (_: Throwable) {
+                    log.error("Error occurred while creating instance of ${it.key}")
+                    null
+                }
+            }
+            val default: Block = requireNotNull(instances.find { b -> b.isDefaultState }) {
+                "Default block instance not found for ${it.key}"
+            }
+            val permutations = instances.filter { s -> !s.isDefaultState }
 
-            val componentGenerators: MutableList<Pair<String, () -> String?>> = mutableListOf(
-                Pair("SolidComponent") { if (!it.isSolid) "(solid = false)" else null },
-                Pair("TransparentComponent") { if (it.isTransparent) "(transparent = true)" else null },
-                Pair("MapColorComponent") {
-                    if (it.color != BlockColor.VOID_BLOCK_COLOR) {
-                        with(it.color) {
-                            "(r = $red, g = $green, b = $blue, a = $alpha)"
-                        }
-                    } else null
-                },
-                Pair("FrictionComponent") {
-                    if (it.frictionFactor != 0.6) "(friction = ${it.frictionFactor}f)" else null
-                },
-                Pair("InternalFrictionComponent") {
-                    if (it.passableBlockFrictionFactor != 1.0) "(internalFriction = ${it.passableBlockFrictionFactor}f)" else null
-                },
-                Pair("LightEmissionComponent") {
-                    if (it.lightLevel != 0) "(emission = ${it.lightLevel})" else null
-                },
-                Pair("LightDampeningComponent") {
-                    if (it.lightFilter != (if (it.isSolid && !it.isTransparent) 15 else 1)) {
-                        "(dampening = ${it.lightFilter})"
-                    } else null
-                },
-                Pair("ReplaceableComponent") {
-                    if (it.canBeReplaced()) "" else null
-                },
-                Pair("FlammableComponent") {
-                    if (it.burnChance != 0 || it.burnAbility != 0) "(catchChance = ${it.burnChance}, destroyChance = ${it.burnAbility})"
-                    else null
-                },
-                Pair("MineableComponent") {
-                    if (it.hardness != 10.0) "(hardness = ${it.hardness}f)" else null
-                },
-                Pair("MoveableComponent") {
-                    if (!it.canBePushed() || (!it.canBePulled() || !it.sticksToPiston()) || it.breaksWhenMoved() || it.canSticksBlock()) {
-                        val push = it.canBePushed()
-                        val pull = (it.canBePulled() || it.sticksToPiston())
-                        val movement = if (it.breaksWhenMoved()) {
-                            "MoveableComponent.Movement.Break"
-                        } else if (push && pull) {
-                            "MoveableComponent.Movement.Both"
-                        } else if (push) {
-                            "MoveableComponent.Movement.Push"
-                        } else {
-                            "MoveableComponent.Movement.None"
-                        }
+            populateFromInstance(default, null)
+            permutations.forEach { p -> populateFromInstance(p, default) }
+        }
+    }
 
-                        val sticky = it.canSticksBlock()
+    fun populateFromInstance(instance: Block, default: Block?) {
+        val it = instance
 
-                        "(movement = $movement, sticky = $sticky)"
-                    } else null
-                },
-                Pair("CollisionBoxComponent") {
-                    val collision = it.collisionBoundingBox
-                    if (collision == null) {
+        val components = this.components.computeIfAbsent(it.properties.identifier) { mutableListOf() }
+        val permutations = this.permutations.computeIfAbsent(it.properties.identifier) { mutableListOf() }
+        val extraImports = this.extraImports.computeIfAbsent(it.properties.identifier) { mutableListOf() }
+
+        val isPermutation = default != null
+
+        val componentGenerators: MutableList<Pair<String, () -> String?>> = mutableListOf(
+            Pair("SolidComponent") { if (it.isSolid != (default?.isSolid ?: true)) "(solid = false)" else null },
+            Pair("TransparentComponent") { if (it.isTransparent != (default?.isTransparent ?: false)) "(transparent = true)" else null },
+            Pair("MapColorComponent") {
+                if (it.color != (default?.color ?: BlockColor.VOID_BLOCK_COLOR)) {
+                    with(it.color) {
+                        "(r = $red, g = $green, b = $blue, a = $alpha)"
+                    }
+                } else null
+            },
+            Pair("FrictionComponent") {
+                if (it.frictionFactor != (default?.frictionFactor ?: 0.6)) "(friction = ${it.frictionFactor}f)" else null
+            },
+            Pair("InternalFrictionComponent") {
+                if (it.passableBlockFrictionFactor != (default?.passableBlockFrictionFactor ?: 1.0)) "(internalFriction = ${it.passableBlockFrictionFactor}f)" else null
+            },
+            Pair("LightEmissionComponent") {
+                if (it.lightLevel != (default?.lightLevel ?: 0)) "(emission = ${it.lightLevel})" else null
+            },
+            Pair("LightDampeningComponent") {
+                if (it.lightFilter != (default?.lightFilter ?: 15)) {
+                    "(dampening = ${it.lightFilter})"
+                } else null
+            },
+            Pair("ReplaceableComponent") {
+                if (it.canBeReplaced() != (default?.canBeReplaced() ?: false)) "" else null
+            },
+            Pair("FlammableComponent") {
+                if (
+                    it.burnChance != (default?.burnChance ?: 0)
+                    || it.burnAbility != (default?.burnAbility ?: 0)
+                    ) "(catchChance = ${it.burnChance}, destroyChance = ${it.burnAbility})"
+                else null
+            },
+            Pair("MineableComponent") {
+                if (it.hardness != (default?.hardness ?: 10.0)) "(hardness = ${it.hardness}f)" else null
+            },
+            Pair("MoveableComponent") {
+                if (
+                    it.canBePushed() != (default?.canBePushed() ?: true) ||
+                    (
+                        it.canBePulled() != (default?.canBePulled() ?: true)
+                        || it.sticksToPiston() != (default?.sticksToPiston() ?: true)
+                    )
+                    || it.breaksWhenMoved() != (default?.breaksWhenMoved() ?: false)
+                    || it.canSticksBlock() != (default?.canSticksBlock() ?: false)
+                    ) {
+                    val push = it.canBePushed()
+                    val pull = (it.canBePulled() || it.sticksToPiston())
+                    val movement = if (it.breaksWhenMoved()) {
+                        "MoveableComponent.Movement.Break"
+                    } else if (push && pull) {
+                        "MoveableComponent.Movement.Both"
+                    } else if (push) {
+                        "MoveableComponent.Movement.Push"
+                    } else {
+                        "MoveableComponent.Movement.None"
+                    }
+
+                    val sticky = it.canSticksBlock()
+
+                    "(movement = $movement, sticky = $sticky)"
+                } else null
+            },
+            Pair("CollisionBoxComponent") {
+                val collision = it.collisionBoundingBox
+
+                val notDefault = (collision?.maxX != (default?.collisionBoundingBox?.maxX ?: 1.0)
+                        || collision.maxY != (default?.collisionBoundingBox?.maxY ?: 1.0)
+                        || collision.maxZ != (default?.collisionBoundingBox?.maxZ ?: 1.0)
+                        || collision.minX != (default?.collisionBoundingBox?.minX ?: 0.0)
+                        || collision.minY != (default?.collisionBoundingBox?.minY ?: 0.0)
+                        || collision.minZ != (default?.collisionBoundingBox?.minZ ?: 0.0))
+
+                if (notDefault) {
+                    if (collision == null && (default == null || default.collisionBoundingBox != null)) {
                         "(enabled = false)"
-                    } else if (collision.maxX != 1.0
-                        || collision.maxY != 1.0
-                        || collision.maxZ != 1.0
-                        || collision.minX != 0.0
-                        || collision.minY != 0.0
-                        || collision.minZ != 0.0) {
-
-                        val convertedOrigin = IVector3(
-                            x = (collision.minX * 16).roundToInt(),
-                            y = (collision.minY * 16).roundToInt(),
-                            z = (collision.minZ * 16).roundToInt()
-                        )
-
-                        val convertedSize = IVector3(
-                            x = ((collision.maxX - collision.minX) * 16).roundToInt(),
-                            y = ((collision.maxY - collision.minY) * 16).roundToInt(),
-                            z = ((collision.maxZ - collision.minZ) * 16).roundToInt()
-                        )
+                    } else if (collision != null) {
+                        val origin = "Vector3f(x = ${collision.minX}f, y = ${collision.minY}f,z = ${collision.minZ}f)"
+                        val size = "Vector3f(x = ${collision.maxX - collision.minX}f, y = ${collision.maxY - collision.minY}f, z = ${collision.maxZ - collision.minZ}f)"
 
                         if (it.canPassThrough()) {
-                            "(origin = $convertedOrigin, size = $convertedSize, enabled = false)"
+                            "(origin = $origin, size = $size, enabled = false)"
                         } else {
-                            "(origin = $convertedOrigin, size = $convertedSize)"
+                            "(origin = $origin, size = $size)"
                         }.also {
-                            extraImports.add("org.chorus_oss.protocol.types" to "IVector3")
+                            extraImports.add("org.chorus_oss.chorus.math" to "Vector3f")
                         }
-                    }
-                    else null
+                    } else null
                 }
-            )
-
-            componentGenerators.forEach { gen ->
-                val pair = try {
-                    val generated = gen.second() ?: return@forEach
-                    gen.first to generated
-                } catch (t: Throwable) {
-                    log.error("Error occurred while generating \"${gen.first}\" for \"${it.properties.identifier}\" from instance, inserting TODO")
-                    "TODO" to "(\"${gen.first}\")"
-                }
-                components.add(pair)
+                else null
             }
+        )
+
+        val componentPairs = mutableListOf<Pair<String, String>>()
+
+        componentGenerators.forEach { gen ->
+            val pair = try {
+                val generated = gen.second() ?: return@forEach
+                gen.first to generated
+            } catch (t: Throwable) {
+                log.error("Error occurred while generating \"${gen.first}\" for \"${it.properties.identifier}\" from instance, inserting TODO")
+                "TODO" to "(\"${gen.first}\")"
+            }
+            componentPairs.add(pair)
+        }
+
+        if (isPermutation && componentPairs.isNotEmpty()) {
+            val permutationStates = instance.blockState.blockPropertyValues.associate {
+                it.propertyType.name to when(it) {
+                    is EnumPropertyType.EnumPropertyValue -> it.getSerializedValue()
+                    else -> it.value
+                }
+            }
+            val defaultStates = default.blockState.blockPropertyValues.associate {
+                it.propertyType.name to when(it) {
+                    is EnumPropertyType.EnumPropertyValue -> it.getSerializedValue()
+                    else -> it.value
+                }
+            }
+
+            val conditions = mutableMapOf<String, String>()
+
+            permutationStates.forEach {
+                val default = defaultStates[it.key]
+                if (it.value != default) {
+                    conditions[it.key] = when (it.value) {
+                        is String -> "\"${it.value}\""
+                        else -> "${it.value}"
+                    }
+                }
+            }
+
+            val condition = conditions.entries.joinToString(prefix = "{ ", separator = " && ", postfix = " }") {
+                "it[\"${it.key}\"] == ${it.value}"
+            }
+
+            permutations.add(condition to componentPairs)
+        } else {
+            components.addAll(componentPairs)
         }
     }
 
@@ -163,9 +227,10 @@ object BlockDefinitionGenerator : Loggable {
 
         this.properties.forEach {
             val components = this.components[it.key] ?: mutableListOf()
+            val permutations = this.permutations[it.key] ?: mutableListOf()
             val extraImports = this.extraImports[it.key] ?: mutableListOf()
 
-            autogenData += AutogenData(it.key, it.value, components, extraImports)
+            autogenData += AutogenData(it.key, it.value, components, permutations, extraImports)
         }
 
         val objects = autogenData.map { generateDefinition(it) }
@@ -195,6 +260,7 @@ object BlockDefinitionGenerator : Loggable {
     fun generateDefinition(genData: AutogenData): String {
         val properties = genData.properties
         val components = genData.components
+        val permutations = genData.permutations
         val extraImports = genData.extraImports
 
         val identifier = properties.identifier
@@ -217,13 +283,42 @@ object BlockDefinitionGenerator : Loggable {
             autoName
         }.sorted()
 
-        val formattedStates = states.joinToString(", ") { "CommonStates.$it"}
 
         val hasStates = states.isNotEmpty()
         val hasComponents = components.isNotEmpty()
+        val hasPermutations = permutations.isNotEmpty()
 
+        val imports = mutableMapOf<String, String>()
+
+        val formattedStates = states.joinToString(", ") { "CommonStates.$it"}
         val formattedComponents = components.joinToString(", ") {
             "${it.first}${it.second}"
+        }
+        val formattedPermutations = permutations.joinToString(", ") {
+            val formattedSubComponents = it.second.joinToString(", ") { comp ->
+                "${comp.first}${comp.second}"
+            }
+            "Permutation(${it.first}, listOf($formattedSubComponents)) "
+        }
+
+        if (hasStates) imports.putIfAbsent("CommonStates", "org.chorus_oss.chorus.experimental.block.state")
+
+        if (hasComponents) {
+            components.forEach {
+                if (it.first != "TODO") imports.putIfAbsent(it.first, "org.chorus_oss.chorus.experimental.block.components")
+            }
+        }
+
+        if (hasPermutations) {
+            permutations.forEach {
+                it.second.forEach { comp ->
+                    if (comp.first != "TODO") imports.putIfAbsent(comp.first, "org.chorus_oss.chorus.experimental.block.components")
+                }
+            }
+        }
+
+        extraImports.forEach {
+            imports.putIfAbsent(it.second, it.first)
         }
 
         val blockObject = TypeSpec.objectBuilder(pascalIdentifier)
@@ -232,24 +327,15 @@ object BlockDefinitionGenerator : Loggable {
             .apply {
                 if (hasStates) addSuperclassConstructorParameter("states = listOf($formattedStates)")
                 if (hasComponents) addSuperclassConstructorParameter("components = listOf($formattedComponents)")
+                if (hasPermutations) addSuperclassConstructorParameter("permutations = listOf($formattedPermutations)")
             }
             .build()
 
         val fileBuilder = FileSpec.builder("org.chorus_oss.chorus.experimental.block.generated.definitions", pascalIdentifier)
             .addType(blockObject)
 
-        if (hasStates) {
-            fileBuilder.addImport("org.chorus_oss.chorus.experimental.block.state", "CommonStates")
-        }
-
-        if (hasComponents) {
-            components.forEach {
-                if (it.first != "TODO") fileBuilder.addImport("org.chorus_oss.chorus.experimental.block.components", it.first)
-            }
-        }
-
-        extraImports.forEach {
-            fileBuilder.addImport(it.first, it.second)
+        imports.forEach {
+            fileBuilder.addImport(it.value, it.key)
         }
 
         val path = File(Server.instance.dataPath + "generated/")

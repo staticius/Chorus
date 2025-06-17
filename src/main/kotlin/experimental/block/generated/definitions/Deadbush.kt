@@ -10,6 +10,7 @@ object Deadbush : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 143, g = 119, b = 72, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         ReplaceableComponent,
         MineableComponent(hardness = 0.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),

@@ -12,8 +12,8 @@ object BubbleColumn : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 64, g = 64, b = 255, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         ReplaceableComponent,
-        MineableComponent(hardness = 100.0f),
-        CollisionBoxComponent(enabled = false)
+        MineableComponent(hardness = 100.0f)
     )
 )

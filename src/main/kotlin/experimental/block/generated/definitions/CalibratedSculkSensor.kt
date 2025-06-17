@@ -11,6 +11,7 @@ object CalibratedSculkSensor : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 13, g = 18, b = 23, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Both, sticky = false)
     )

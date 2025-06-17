@@ -1,18 +1,19 @@
 package org.chorus_oss.chorus.experimental.block.generated.definitions
 
 import org.chorus_oss.chorus.experimental.block.BlockDefinition
-import org.chorus_oss.chorus.experimental.block.components.CollisionBoxComponent
-import org.chorus_oss.chorus.experimental.block.components.MapColorComponent
-import org.chorus_oss.chorus.experimental.block.components.MineableComponent
-import org.chorus_oss.chorus.experimental.block.components.TransparentComponent
-import org.chorus_oss.protocol.types.IVector3
+import org.chorus_oss.chorus.experimental.block.components.*
+import org.chorus_oss.chorus.math.Vector3f
 
 object CrimsonFence : BlockDefinition(
     identifier = "minecraft:crimson_fence",
     components = listOf(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 112, g = 2, b = 0, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 2.0f),
-        CollisionBoxComponent(origin = IVector3(x = 0, y = 0, z = 0), size = IVector3(x = 16, y = 24, z = 16))
+        CollisionBoxComponent(
+            origin = Vector3f(x = 0.0f, y = 0.0f, z = 0.0f),
+            size = Vector3f(x = 1.0f, y = 1.5f, z = 1.0f)
+        )
     )
 )

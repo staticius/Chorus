@@ -12,9 +12,24 @@ object SeaPickle : BlockDefinition(
         TransparentComponent(transparent = true),
         MapColorComponent(r = 102, g = 127, b = 51, a = 255),
         InternalFrictionComponent(internalFriction = 0.95f),
-        LightEmissionComponent(emission = 6),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 0.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)
+    ),
+    permutations = listOf(
+        Permutation({ it["dead_bit"] == false }, listOf(LightEmissionComponent(emission = 6))),
+        Permutation(
+            { it["cluster_count"] == 1 && it["dead_bit"] == false },
+            listOf(LightEmissionComponent(emission = 9))
+        ),
+        Permutation(
+            { it["cluster_count"] == 2 && it["dead_bit"] == false },
+            listOf(LightEmissionComponent(emission = 12))
+        ),
+        Permutation(
+            { it["cluster_count"] == 3 && it["dead_bit"] == false },
+            listOf(LightEmissionComponent(emission = 15))
+        )
     )
 )

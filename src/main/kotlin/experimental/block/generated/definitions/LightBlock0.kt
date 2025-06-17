@@ -8,6 +8,7 @@ object LightBlock0 : BlockDefinition(
     components = listOf(
         TransparentComponent(transparent = true),
         InternalFrictionComponent(internalFriction = 0.95f),
+        LightDampeningComponent(dampening = 1),
         ReplaceableComponent,
         MineableComponent(hardness = 0.0f),
         CollisionBoxComponent(enabled = false)

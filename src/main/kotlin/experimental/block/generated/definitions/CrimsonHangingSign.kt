@@ -16,6 +16,7 @@ object CrimsonHangingSign : BlockDefinition(
         SolidComponent(solid = false),
         TransparentComponent(transparent = true),
         MapColorComponent(r = 112, g = 2, b = 0, a = 255),
+        LightDampeningComponent(dampening = 1),
         MineableComponent(hardness = 1.0f),
         MoveableComponent(movement = MoveableComponent.Movement.Break, sticky = false),
         CollisionBoxComponent(enabled = false)
