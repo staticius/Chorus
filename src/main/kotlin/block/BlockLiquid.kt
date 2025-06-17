@@ -38,10 +38,6 @@ abstract class BlockLiquid(state: BlockState) : BlockTransparent(state) {
         return Item.EMPTY_ARRAY
     }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override fun isBreakable(vector: Vector3, layer: Int, face: BlockFace?, item: Item?, player: Player?): Boolean {
         return false
     }

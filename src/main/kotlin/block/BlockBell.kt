@@ -128,10 +128,6 @@ class BlockBell @JvmOverloads constructor(blockState: BlockState = properties.de
         }
     }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return recalculateBoundingBox().expand(0.000001, 0.000001, 0.000001)
     }

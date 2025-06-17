@@ -112,10 +112,6 @@ class BlockTurtleEgg @JvmOverloads constructor(blockstate: BlockState = properti
         return false
     }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override var minX: Double
         get() = position.x + (3.0 / 16)
         set(minX) {

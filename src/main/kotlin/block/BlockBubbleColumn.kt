@@ -138,10 +138,6 @@ class BlockBubbleColumn @JvmOverloads constructor(blockstate: BlockState = prope
     override val resistance: Double
         get() = 500.0
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override fun canHarvestWithHand(): Boolean {
         return false
     }

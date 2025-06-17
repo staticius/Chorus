@@ -33,10 +33,6 @@ open class BlockFire @JvmOverloads constructor(blockstate: BlockState = properti
             setPropertyValue<Int, IntPropertyType>(CommonBlockProperties.AGE_16, age)
         }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override val name: String
         get() = "Fire Block"
 

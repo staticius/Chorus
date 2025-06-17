@@ -13,6 +13,8 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
     val defaultState: BlockState
     val specialValueBits: Byte
 
+    val allStates: List<BlockState>
+
     constructor(identifier: String, vararg properties: BlockPropertyType<*>) : this(
         identifier, setOf<String>(), *properties
     )
@@ -29,9 +31,10 @@ class BlockProperties(identifier: String, blockTags: Set<String>, vararg propert
 
         val propertyList = propertyTypeSet.toList()
 
-        this.defaultState = BlockStates.getDefaultState(identifier, propertyList)
-        this.specialValueMap =
-            BlockStates.getAllStates(identifier, propertyList).associateBy { it.specialValue() }
+        this.allStates = BlockStates.getAllStates(identifier, propertyList)
+
+        this.defaultState = this.allStates.first()
+        this.specialValueMap = this.allStates.associateBy { it.specialValue() }
     }
 
     fun getBlockState(specialValue: Short): BlockState? {

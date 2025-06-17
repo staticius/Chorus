@@ -16,14 +16,6 @@ class BlockLadder @JvmOverloads constructor(blockstate: BlockState = properties.
     override val name: String
         get() = "Ladder"
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
-    override fun canBeClimbed(): Boolean {
-        return true
-    }
-
     override val isSolid: Boolean
         get() = false
 

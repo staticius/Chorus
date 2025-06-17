@@ -266,10 +266,6 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
         return false
     }
 
-    open fun hasEntityCollision(): Boolean {
-        return false
-    }
-
     open fun canPassThrough(): Boolean {
         return false
     }
@@ -328,10 +324,6 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
          * @return 挖掘方块的最低工具级别
          */
         get() = 0
-
-    open fun canBeClimbed(): Boolean {
-        return false
-    }
 
     open val name: String
         get() {

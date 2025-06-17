@@ -50,10 +50,6 @@ class BlockEndPortal @JvmOverloads constructor(blockState: BlockState = properti
     override val lightLevel: Int
         get() = 15
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override val collisionBoundingBox: AxisAlignedBB
         get() = this
 

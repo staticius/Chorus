@@ -147,10 +147,6 @@ class BlockSweetBerryBush @JvmOverloads constructor(blockstate: BlockState = pro
         return false
     }
 
-    override fun hasEntityCollision(): Boolean {
-        return growth > 0
-    }
-
     override fun onEntityCollide(entity: Entity) {
         if (growth > 0) {
             if (entity.positionChanged && !entity.isSneaking() && ThreadLocalRandom.current().nextInt(20) == 0) {

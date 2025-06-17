@@ -154,10 +154,6 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = proper
         return true
     }
 
-    override fun canBeClimbed(): Boolean {
-        return true
-    }
-
     override fun canBeFlowedInto(): Boolean {
         return false
     }
@@ -172,10 +168,6 @@ class BlockScaffolding @JvmOverloads constructor(blockstate: BlockState = proper
 
     override fun onEntityCollide(entity: Entity) {
         entity.resetFallDistance()
-    }
-
-    override fun hasEntityCollision(): Boolean {
-        return true
     }
 
     override val boundingBox: AxisAlignedBB

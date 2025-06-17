@@ -35,15 +35,7 @@ class BlockVine @JvmOverloads constructor(blockstate: BlockState = properties.de
         return true
     }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override fun canBeReplaced(): Boolean {
-        return true
-    }
-
-    override fun canBeClimbed(): Boolean {
         return true
     }
 

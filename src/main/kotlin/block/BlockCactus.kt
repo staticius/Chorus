@@ -31,10 +31,6 @@ class BlockCactus @JvmOverloads constructor(state: BlockState = properties.defau
     override val waterloggingLevel: Int
         get() = 1
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override var minX: Double
         get() = position.x + 0.0625
         set(minX) {

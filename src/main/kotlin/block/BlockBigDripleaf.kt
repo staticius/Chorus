@@ -207,10 +207,6 @@ class BlockBigDripleaf @JvmOverloads constructor(blockState: BlockState = proper
         return 0
     }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override fun onEntityCollide(entity: Entity) {
         if (!isHead || tilt != BigDripleafTilt.NONE || entity is EntityProjectile) return
         setTiltAndScheduleTick(BigDripleafTilt.UNSTABLE)

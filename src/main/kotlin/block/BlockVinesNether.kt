@@ -328,19 +328,11 @@ abstract class BlockVinesNether
         entity.resetFallDistance()
     }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override val hardness: Double
         get() = 0.0
 
     override val resistance: Double
         get() = 0.0
-
-    override fun canBeClimbed(): Boolean {
-        return true
-    }
 
     override fun canBeFlowedInto(): Boolean {
         return true

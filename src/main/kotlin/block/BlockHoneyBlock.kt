@@ -23,10 +23,6 @@ class BlockHoneyBlock @JvmOverloads constructor(blockstate: BlockState = propert
     override val resistance: Double
         get() = 0.0
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override fun onEntityCollide(entity: Entity) {
         if (!entity.onGround && entity.motion.y <= 0.08 &&
             (entity !is Player || !entity.adventureSettings.get(AdventureSettings.Type.FLYING))

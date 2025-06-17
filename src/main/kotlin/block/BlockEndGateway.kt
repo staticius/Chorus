@@ -52,10 +52,6 @@ class BlockEndGateway(blockState: BlockState = properties.defaultState) : BlockS
     override val lightLevel: Int
         get() = 15
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override fun toItem(): Item {
         return Item.AIR
     }

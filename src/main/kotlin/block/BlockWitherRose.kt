@@ -42,10 +42,6 @@ class BlockWitherRose @JvmOverloads constructor(blockstate: BlockState = propert
         return this
     }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override val properties: BlockProperties
         get() = Companion.properties
 

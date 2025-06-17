@@ -25,10 +25,6 @@ class BlockSoulSand @JvmOverloads constructor(blockstate: BlockState = propertie
             super.maxY = maxY
         }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override val isSoulSpeedCompatible: Boolean
         get() = true
 

@@ -128,10 +128,6 @@ open class BlockCampfire @JvmOverloads constructor(blockstate: BlockState = prop
         return true
     }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override fun onEntityCollide(entity: Entity) {
         if (isExtinguished) {
             if (entity.isOnFire()) {

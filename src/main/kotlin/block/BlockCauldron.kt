@@ -615,10 +615,6 @@ class BlockCauldron(blockState: BlockState = properties.defaultState) : BlockSol
     override val lightLevel: Int
         get() = if (cauldronLiquid == CauldronLiquid.LAVA) 15 else 0
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override fun recalculateCollisionBoundingBox(): AxisAlignedBB {
         return shrink(0.3, 0.3, 0.3)
     }

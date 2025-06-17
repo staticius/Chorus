@@ -56,10 +56,6 @@ class BlockPortal @JvmOverloads constructor(blockstate: BlockState = properties.
         return result
     }
 
-    override fun hasEntityCollision(): Boolean {
-        return true
-    }
-
     override fun canHarvestWithHand(): Boolean {
         return false
     }
