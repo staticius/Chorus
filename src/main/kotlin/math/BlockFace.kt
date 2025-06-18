@@ -227,7 +227,7 @@ enum class BlockFace(
         }
     }
 
-    enum class Plane : Predicate<BlockFace?>, Iterable<BlockFace?> {
+    enum class Plane : Predicate<BlockFace?>, Iterable<BlockFace> {
         HORIZONTAL,
         VERTICAL;
 
@@ -247,7 +247,7 @@ enum class BlockFace(
         }
 
         override fun iterator(): MutableIterator<BlockFace> {
-            return Iterators.forArray(*faces)
+            return faces.toMutableList().iterator()
         }
 
         companion object {
