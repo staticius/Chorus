@@ -37,7 +37,6 @@ data class CameraPresetsPacket(
         byteBuf.writeNotNull(preset.yawLimitMax) { value -> byteBuf.writeFloatLE(value) }
         byteBuf.writeNotNull(preset.listener) { l -> byteBuf.writeByte(l.ordinal) }
         byteBuf.writeOptional(preset.playEffect) { value -> byteBuf.writeBoolean(value) }
-        byteBuf.writeOptional(preset.alignTargetAndCameraForward) { value -> byteBuf.writeBoolean(value) }
         writeCameraPresetAimAssist(byteBuf, preset.aimAssist)
         byteBuf.writeNotNull(preset.controlScheme) { value -> byteBuf.writeByte(value.ordinal) }
     }

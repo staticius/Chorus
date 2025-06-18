@@ -625,6 +625,12 @@ open class LevelSoundEventPacket : DataPacket() {
         val STATE_CHANGE: Int = Utils.dynamic(552)
         val IMITATE_HAPPY_GHAST: Int = Utils.dynamic(553)
         val UNEQUIP_GENERIC: Int = Utils.dynamic(554)
-        val UNDEFINED: Int = Utils.dynamic(555)
+        val RECORD_TEARS: Int = Utils.dynamic(555)
+        val THE_END_LIGHT_FLASH: Int = Utils.dynamic(556)
+        val LEAD_LEASH: Int = Utils.dynamic(557)
+        val LEAD_UNLEASH: Int = Utils.dynamic(558)
+        val LEAD_BREAK: Int = Utils.dynamic(559)
+        val UNSADDLE: Int = Utils.dynamic(560)
+        val UNDEFINED: Int = Utils.dynamic(561)
     }
 }

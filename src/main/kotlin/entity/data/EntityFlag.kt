@@ -123,7 +123,8 @@ enum class EntityFlag(private val value: Int) {
     BODY_ROTATION_AXIS_ALIGNED(120),
     COLLIDABLE(121),
     WASD_AIR_CONTROLLED(122),
-    DOES_SERVER_AUTH_ONLY_DISMOUNT(123);
+    DOES_SERVER_AUTH_ONLY_DISMOUNT(123),
+    BODY_ROTATION_ALWAYS_FOLLOWS_HEAD(124);
 
     fun getValue(): Int {
         return value

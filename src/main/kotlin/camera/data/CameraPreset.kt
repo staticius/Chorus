@@ -46,8 +46,6 @@ class CameraPreset @JvmOverloads constructor(
     val blockListeningRadius: OptionalValue<Float> =
         OptionalValue.ofNullable(blockListeningRadius)
     val playEffect: OptionalValue<Boolean> = OptionalValue.ofNullable(playEffect)
-    val alignTargetAndCameraForward: OptionalValue<Boolean> =
-        OptionalValue.ofNullable(alignTargetAndCameraForward)
     val aimAssist: OptionalValue<CameraPresetAimAssist> =
         OptionalValue.ofNullable(aimAssist)
 

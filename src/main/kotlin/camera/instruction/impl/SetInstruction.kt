@@ -15,5 +15,6 @@ data class SetInstruction(
     val preset: CameraPreset? = null,
     val viewOffset: Vector2f? = null,
     val entityOffset: Vector3f? = null,
-    val defaultPreset: OptionalValue<Boolean> = OptionalValue.empty()
+    val defaultPreset: OptionalValue<Boolean> = OptionalValue.empty(),
+    val removeIgnoreStartingValuesComponent: Boolean = false
 ) : CameraInstruction
