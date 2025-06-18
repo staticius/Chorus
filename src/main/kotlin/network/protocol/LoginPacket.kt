@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.network.protocol
 
 import com.google.gson.Gson
 import com.google.gson.JsonObject
-import com.google.gson.reflect.TypeToken
+import com.google.gson.JsonParser
 import org.chorus_oss.chorus.entity.data.Skin
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.utils.*
@@ -24,16 +24,17 @@ class LoginPacket(
         private set
 
     private fun decodeChainData(binaryStream: BinaryStream) {
-        val map: Map<String, List<String>> = JSONUtils.from(
-            String(
-                binaryStream[binaryStream.lInt], StandardCharsets.UTF_8
-            ),
-            object : TypeToken<Map<String, List<String>>>() {}
+        val chainString = String(
+            binaryStream[binaryStream.lInt], StandardCharsets.UTF_8
         )
-        if (map.isEmpty() || !map.containsKey("chain") || map["chain"]!!.isEmpty()) return
-        val chains = map["chain"]!!
-        for (c in chains) {
-            val chainMap = decodeJWT(c) ?: continue
+
+        val jwt = JsonParser.parseString(chainString).asJsonObject
+        val certificateString = jwt["Certificate"].asString
+        val certificate = JsonParser.parseString(certificateString).asJsonObject
+        val chain = certificate["chain"].asJsonArray
+
+        for (c in chain) {
+            val chainMap = decodeJWT(c.asString) ?: continue
             if (chainMap.has("extraData")) {
                 if (chainMap.has("iat")) {
                     this.issueUnixTime = chainMap["iat"].asLong * 1000
@@ -169,14 +170,7 @@ class LoginPacket(
     companion object : PacketDecoder<LoginPacket> {
         override fun decode(byteBuf: HandleByteBuf): LoginPacket {
             val packet = LoginPacket(
-                protocol = run {
-                    var protocol = byteBuf.readInt()
-                    if (protocol == 0) {
-                        byteBuf.readerIndex(byteBuf.readerIndex() + 2)
-                        protocol = byteBuf.readInt()
-                    }
-                    protocol
-                }
+                protocol = byteBuf.readInt()
             )
 
             packet.buffer = BinaryStream(byteBuf.readByteArray(), 0)

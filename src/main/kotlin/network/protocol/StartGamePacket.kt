@@ -94,11 +94,10 @@ class StartGamePacket : DataPacket() {
 
     var isSoundsServerAuthoritative: Boolean = false
 
-    private val serverId = ""
-
-    private val worldId = ""
-
-    private val scenarioId = ""
+    val serverId = ""
+    val worldId = ""
+    val scenarioId = ""
+    val ownerId = ""
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeActorUniqueID(this.entityUniqueId)
@@ -112,9 +111,6 @@ class StartGamePacket : DataPacket() {
         byteBuf.writeString(worldName!!)
         byteBuf.writeString(this.premiumWorldTemplateId)
         byteBuf.writeBoolean(this.isTrial)
-        byteBuf.writeVarInt(
-            this.serverAuthoritativeMovement ?: if (this.isMovementServerAuthoritative) 1 else 0
-        ) // 2 - rewind
         byteBuf.writeVarInt(0) // RewindHistorySize
         if (this.serverAuthoritativeMovement != null) {
             byteBuf.writeBoolean(serverAuthoritativeMovement!! > 0) // isServerAuthoritativeBlockBreaking
@@ -223,6 +219,7 @@ class StartGamePacket : DataPacket() {
         byteBuf.writeString(serverId)
         byteBuf.writeString(worldId)
         byteBuf.writeString(scenarioId)
+        byteBuf.writeString(ownerId)
         /* Level settings end */
     }
 
