@@ -726,6 +726,8 @@ interface BlockID {
 
         const val DRAGON_HEAD: String = "minecraft:dragon_head"
 
+        const val DRIED_GHAST: String = "minecraft:dried_ghast"
+
         const val DRIED_KELP_BLOCK: String = "minecraft:dried_kelp_block"
 
         const val DRIPSTONE_BLOCK: String = "minecraft:dripstone_block"

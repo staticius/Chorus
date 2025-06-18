@@ -367,6 +367,7 @@ class BlockRegistry : IRegistry<String, Block?, KClass<out Block>>, Loggable {
             register(BlockID.DOUBLE_CUT_COPPER_SLAB, BlockDoubleCutCopperSlab::class)
             register(BlockID.DRAGON_EGG, BlockDragonEgg::class)
             register(BlockID.DRAGON_HEAD, BlockDragonHead::class)
+            register(BlockID.DRIED_GHAST, BlockDriedGhast::class)
             register(BlockID.DRIED_KELP_BLOCK, BlockDriedKelpBlock::class)
             register(BlockID.DRIPSTONE_BLOCK, BlockDripstoneBlock::class)
             register(BlockID.DROPPER, BlockDropper::class)

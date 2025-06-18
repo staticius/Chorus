@@ -576,6 +576,8 @@ interface CommonBlockProperties {
 
         val OMINOUS: BooleanPropertyType = BooleanPropertyType.of("ominous", false)
 
+        val REHYDRATION_LEVEL: IntPropertyType = IntPropertyType.of("rehydration_level", 0, 3, 0)
+
         val VALUES: List<BlockPropertyType<*>> = listOf<BlockPropertyType<*>>(
             OMINOUS,
             VAULT_STATE,
