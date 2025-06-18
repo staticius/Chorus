@@ -1920,7 +1920,7 @@ class Level(
                 x,
                 y,
                 z,
-                Math.max(0, getHighestAdjacentBlockSkyLight(x, y, z) - sourceBlock.lightFilter)
+                0.coerceAtLeast(getHighestAdjacentBlockSkyLight(x, y, z) - sourceBlock.lightFilter)
             )
         }
     }

@@ -33,7 +33,7 @@ open class Palette<V> {
     constructor(first: V, version: BitArrayVersion = BitArrayVersion.V2) {
         this.bitArray = version.createArray(SubChunk.SIZE)
         this.palette = mutableListOf()
-        palette.add(first)
+        this.palette.add(first)
     }
 
     constructor(first: V, palette: MutableList<V>, version: BitArrayVersion) {
@@ -188,14 +188,9 @@ open class Palette<V> {
     }
 
     val isEmpty: Boolean
-        get() {
-            if (palette.size == 1) {
-                for (word in bitArray.words) if (word.toLong() != 0L) {
-                    return false
-                }
-                return true
-            } else return false
-        }
+        get() = if (palette.size == 1) {
+            bitArray.words.all { it == 0 }
+        } else false
 
     @Throws(IOException::class)
     protected fun addBlockPalette(

@@ -9,5 +9,9 @@ data class LightDampeningComponent(
 ): BlockComponent<LightDampeningComponent> {
     override fun type(): ComponentType<LightDampeningComponent> = LightDampeningComponent
 
-    companion object : ComponentType<LightDampeningComponent>()
+    companion object : ComponentType<LightDampeningComponent>() {
+        val DEFAULT = LightDampeningComponent(
+            dampening = 15
+        )
+    }
 }

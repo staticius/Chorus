@@ -18,6 +18,9 @@ abstract class BlockDefinition(
         }
     }
 
+    val default: BlockPermutation
+        get() = BlockPermutation.resolve(this.identifier)
+
     data class Permutation(
         val condition: (Map<String, Any>) -> Boolean,
         val components: List<BlockComponent<*>>,

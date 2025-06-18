@@ -9,5 +9,9 @@ data class TransparentComponent(
 ): BlockComponent<TransparentComponent> {
     override fun type(): ComponentType<TransparentComponent> = TransparentComponent
 
-    companion object : ComponentType<TransparentComponent>()
+    companion object : ComponentType<TransparentComponent>() {
+        val DEFAULT = TransparentComponent(
+            transparent = false,
+        )
+    }
 }
