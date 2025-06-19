@@ -199,9 +199,9 @@ class CrossBowShootExecutor(
     private fun playBowAnimation(entity: Entity, chargeAmount: Int) {
         if (chargeAmount == 0) {
             entity.level!!.addSound(entity.position, Sound.CROSSBOW_LOADING_START)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
+            entity.setDataProperty(EntityDataTypes.TARGET_EID, target!!.getRuntimeID())
             entity.setDataFlag(EntityFlag.USING_ITEM)
-        } else entity.setDataProperty(EntityDataTypes.Companion.CHARGE_AMOUNT, chargeAmount * 2)
+        } else entity.setDataProperty(EntityDataTypes.CHARGE_AMOUNT, chargeAmount * 2)
         if (chargeAmount == 30) entity.level!!.addSound(entity.position, Sound.CROSSBOW_LOADING_MIDDLE)
         if (chargeAmount == 60) {
             entity.setDataFlag(EntityFlag.CHARGED)
@@ -210,8 +210,8 @@ class CrossBowShootExecutor(
     }
 
     private fun stopBowAnimation(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
-        entity.setDataProperty(EntityDataTypes.Companion.CHARGE_AMOUNT, 0)
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
+        entity.setDataProperty(EntityDataTypes.CHARGE_AMOUNT, 0)
         entity.setDataFlag(EntityFlag.USING_ITEM, false)
         entity.setDataFlag(EntityFlag.CHARGED, false)
     }

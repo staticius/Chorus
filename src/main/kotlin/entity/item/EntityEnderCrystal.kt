@@ -115,11 +115,11 @@ class EntityEnderCrystal(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
     }
 
     fun getBeamTarget(): BlockVector3 {
-        return this.getDataProperty<BlockVector3>(EntityDataTypes.Companion.BLOCK_TARGET_POS)
+        return this.getDataProperty<BlockVector3>(EntityDataTypes.BLOCK_TARGET_POS)
     }
 
     fun setBeamTarget(beamTarget: BlockVector3?) {
-        this.setDataProperty(EntityDataTypes.Companion.BLOCK_TARGET_POS, beamTarget!!)
+        this.setDataProperty(EntityDataTypes.BLOCK_TARGET_POS, beamTarget!!)
     }
 
     override fun getOriginalName(): String {

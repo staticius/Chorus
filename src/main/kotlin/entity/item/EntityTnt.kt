@@ -69,7 +69,7 @@ class EntityTnt @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, pro
         }
 
         this.setDataFlag(EntityFlag.IGNITED, true)
-        this.setDataProperty(EntityDataTypes.Companion.FUSE_TIME, fuse)
+        this.setDataProperty(EntityDataTypes.FUSE_TIME, fuse)
 
         level!!.addSound(this.position, Sound.RANDOM_FUSE)
     }
@@ -95,7 +95,7 @@ class EntityTnt @JvmOverloads constructor(chunk: IChunk?, nbt: CompoundTag?, pro
         }
 
         if (fuse % 5 == 0) {
-            this.setDataProperty(EntityDataTypes.Companion.FUSE_TIME, fuse)
+            this.setDataProperty(EntityDataTypes.FUSE_TIME, fuse)
         }
 
         lastUpdate = currentTick

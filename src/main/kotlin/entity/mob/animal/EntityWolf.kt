@@ -229,8 +229,8 @@ class EntityWolf(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), E
         //同步owner eid
         if (hasOwner()) {
             val owner = owner
-            if (owner != null && getDataProperty<Long>(EntityDataTypes.Companion.OWNER_EID) != owner.getUniqueID()) {
-                this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, owner.getUniqueID())
+            if (owner != null && getDataProperty<Long>(EntityDataTypes.OWNER_EID) != owner.getUniqueID()) {
+                this.setDataProperty(EntityDataTypes.OWNER_EID, owner.getUniqueID())
             }
         }
         return super.onUpdate(currentTick)

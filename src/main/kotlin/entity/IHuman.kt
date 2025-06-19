@@ -23,7 +23,7 @@ interface IHuman : InventoryHolder {
     fun initHumanEntity(human: Entity) {
         human.setPlayerFlag(PlayerFlag.SLEEP)
         human.setDataFlag(EntityFlag.HAS_GRAVITY)
-        human.setDataProperty(EntityDataTypes.Companion.BED_POSITION, BlockVector3(0, 0, 0), false)
+        human.setDataProperty(EntityDataTypes.BED_POSITION, BlockVector3(0, 0, 0), false)
 
         if (human !is Player) {
             if (human.namedTag!!.contains("NameTag")) {

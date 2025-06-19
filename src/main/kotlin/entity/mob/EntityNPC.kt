@@ -108,12 +108,12 @@ class EntityNPC(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), Entit
             if (response.requestType === NPCRequestPacket.RequestType.SET_ACTIONS) {
                 if (!response.data.isEmpty()) {
                     this.dialog.buttonJSONData = response.data
-                    this.setDataProperty(EntityDataTypes.Companion.ACTIONS, response.data)
+                    this.setDataProperty(EntityDataTypes.ACTIONS, response.data)
                 }
             }
             if (response.requestType === NPCRequestPacket.RequestType.SET_INTERACTION_TEXT) {
                 this.dialog.content = response.data
-                this.setDataProperty(EntityDataTypes.Companion.INTERACT_TEXT, response.data)
+                this.setDataProperty(EntityDataTypes.INTERACT_TEXT, response.data)
             }
             if (response.requestType === NPCRequestPacket.RequestType.SET_NAME) {
                 this.dialog.title = response.data

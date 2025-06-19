@@ -52,7 +52,7 @@ class EntityEvocationFang(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chun
 
     override fun onUpdate(currentTick: Int): Boolean {
         val ticks = 18 - ticksLived
-        setDataProperty(EntityDataTypes.Companion.DATA_LIFETIME_TICKS, ticks)
+        setDataProperty(EntityDataTypes.DATA_LIFETIME_TICKS, ticks)
         if (ticks == -1) close()
         return super.onUpdate(currentTick)
     }

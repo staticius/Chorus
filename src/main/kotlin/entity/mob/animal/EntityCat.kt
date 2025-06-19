@@ -193,8 +193,8 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
         //同步owner eid
         if (hasOwner()) {
             val owner = owner
-            if (owner != null && getDataProperty<Long>(EntityDataTypes.Companion.OWNER_EID) != owner.getUniqueID()) {
-                this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, owner.getUniqueID())
+            if (owner != null && getDataProperty<Long>(EntityDataTypes.OWNER_EID) != owner.getUniqueID()) {
+                this.setDataProperty(EntityDataTypes.OWNER_EID, owner.getUniqueID())
             }
         }
         return super.onUpdate(currentTick)
@@ -205,12 +205,12 @@ class EntityCat(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), En
         super.initEntity()
         if (this.isBaby()) {
             this.setDataProperty(
-                EntityDataTypes.Companion.AMBIENT_SOUND_EVENT_NAME,
+                EntityDataTypes.AMBIENT_SOUND_EVENT_NAME,
                 LevelSoundEventPacket.SOUND_AMBIENT_BABY
             )
         } else {
             this.setDataProperty(
-                EntityDataTypes.Companion.AMBIENT_SOUND_EVENT_NAME,
+                EntityDataTypes.AMBIENT_SOUND_EVENT_NAME,
                 LevelSoundEventPacket.SOUND_AMBIENT
             )
         }

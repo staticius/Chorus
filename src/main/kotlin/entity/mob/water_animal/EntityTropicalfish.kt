@@ -72,9 +72,9 @@ class EntityTropicalfish(chunk: IChunk?, nbt: CompoundTag) : EntityWaterAnimal(c
         } else {
             this.color2 = getRandomColor2()
         }
-        this.setDataProperty(EntityDataTypes.Companion.MARK_VARIANT, this.mark_variant)
-        this.setDataProperty(EntityDataTypes.Companion.VARIANT, this.variant)
-        this.setDataProperty(EntityDataTypes.Companion.COLOR_2, this.color2)
+        this.setDataProperty(EntityDataTypes.MARK_VARIANT, this.mark_variant)
+        this.setDataProperty(EntityDataTypes.VARIANT, this.variant)
+        this.setDataProperty(EntityDataTypes.COLOR_2, this.color2)
     }
 
     private fun getRandomColor(): Int {

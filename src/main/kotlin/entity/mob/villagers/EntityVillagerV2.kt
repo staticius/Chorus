@@ -523,21 +523,21 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         } else {
             val maxTradeTier = namedTag!!.getInt("maxTradeTier")
             this.maxTradeTier = maxTradeTier
-            this.setDataProperty(EntityDataTypes.Companion.MAX_TRADE_TIER, maxTradeTier)
+            this.setDataProperty(EntityDataTypes.MAX_TRADE_TIER, maxTradeTier)
         }
         if (!namedTag!!.contains("tradeExp")) {
             this.tradeExp = (0)
         } else {
             val tradeExp = namedTag!!.getInt("tradeExp")
             this.tradeExp = tradeExp
-            this.setDataProperty(EntityDataTypes.Companion.TRADE_EXPERIENCE, tradeExp)
+            this.setDataProperty(EntityDataTypes.TRADE_EXPERIENCE, tradeExp)
         }
         if (namedTag!!.containsInt("clothing")) {
-            this.setDataProperty(EntityDataTypes.Companion.MARK_VARIANT, namedTag!!.getInt("clothing"))
+            this.setDataProperty(EntityDataTypes.MARK_VARIANT, namedTag!!.getInt("clothing"))
         } else {
             val bv = position.asBlockVector3()
             this.setDataProperty(
-                EntityDataTypes.Companion.MARK_VARIANT, Clothing.getClothing(
+                EntityDataTypes.MARK_VARIANT, Clothing.getClothing(
                     level!!.getBiomeId(bv.x, bv.y, bv.z)
                 ).ordinal
             )
@@ -696,7 +696,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
         namedTag!!.putInt("maxTradeTier", this.maxTradeTier)
         namedTag!!.putInt("tradeExp", this.tradeExp)
         namedTag!!.putInt("tradeSeed", this.tradeSeed)
-        namedTag!!.putInt("clothing", this.getDataProperty<Int>(EntityDataTypes.Companion.MARK_VARIANT))
+        namedTag!!.putInt("clothing", this.getDataProperty<Int>(EntityDataTypes.MARK_VARIANT))
         val gossipTag = CompoundTag()
         for ((key, value) in memoryStorage.get(CoreMemoryTypes.Companion.GOSSIP)!!
             .entries) {
@@ -755,7 +755,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     fun setProfession(profession: Int, apply: Boolean) {
         this.profession = profession
-        this.setDataProperty(EntityDataTypes.Companion.VARIANT, profession)
+        this.setDataProperty(EntityDataTypes.VARIANT, profession)
         if (apply) applyProfession()
     }
 
@@ -775,7 +775,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
      * 这个方法插件一般不用
      */
     fun setTradingPlayer(eid: Long?) {
-        this.setDataProperty(EntityDataTypes.Companion.TRADE_TARGET_EID, eid!!)
+        this.setDataProperty(EntityDataTypes.TRADE_TARGET_EID, eid!!)
     }
 
     /**
@@ -866,7 +866,7 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     fun addExperience(xp: Int) {
         this.tradeExp += xp
-        this.setDataProperty(EntityDataTypes.Companion.TRADE_EXPERIENCE, this.tradeExp)
+        this.setDataProperty(EntityDataTypes.TRADE_EXPERIENCE, this.tradeExp)
         val next = getTradeTier() + 1
         if (next < tierExpRequirement.size) {
             if (tradeExp >= tierExpRequirement[next]) {

@@ -84,9 +84,9 @@ class EntityChestMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbst
             }
         }
 
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_TYPE, 10)
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_SIZE, inventory.size)
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_STRENGTH_MODIFIER, 0)
+        entityDataMap.put(EntityDataTypes.CONTAINER_TYPE, 10)
+        entityDataMap.put(EntityDataTypes.CONTAINER_SIZE, inventory.size)
+        entityDataMap.put(EntityDataTypes.CONTAINER_STRENGTH_MODIFIER, 0)
     }
 
     override fun saveNBT() {

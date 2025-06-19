@@ -47,7 +47,7 @@ abstract class EntityProjectile @JvmOverloads constructor(
 
     init {
         if (shootingEntity != null) {
-            this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, shootingEntity!!.getRuntimeID())
+            this.setDataProperty(EntityDataTypes.OWNER_EID, shootingEntity!!.getRuntimeID())
         }
     }
 

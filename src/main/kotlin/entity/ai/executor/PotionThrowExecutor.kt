@@ -162,11 +162,11 @@ class PotionThrowExecutor(
     }
 
     private fun startShootSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, target!!.getRuntimeID())
     }
 
     private fun endShootSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
     }
 
     fun getPotionEffect(entity: Entity): Int {

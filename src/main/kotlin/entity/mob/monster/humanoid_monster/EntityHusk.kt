@@ -117,12 +117,12 @@ class EntityHusk(chunk: IChunk?, nbt: CompoundTag?) : EntityZombie(chunk, nbt) {
         this.maxHealth = 20
         this.diffHandDamage = floatArrayOf(2.5f, 3f, 4.5f)
         super.initEntity()
-        this.setDataProperty(EntityDataTypes.Companion.AMBIENT_SOUND_INTERVAL, 8)
-        this.setDataProperty(EntityDataTypes.Companion.AMBIENT_SOUND_INTERVAL_RANGE, 16)
-        this.setDataProperty(EntityDataTypes.Companion.AMBIENT_SOUND_EVENT_NAME, LevelSoundEventPacket.SOUND_AMBIENT)
+        this.setDataProperty(EntityDataTypes.AMBIENT_SOUND_INTERVAL, 8)
+        this.setDataProperty(EntityDataTypes.AMBIENT_SOUND_INTERVAL_RANGE, 16)
+        this.setDataProperty(EntityDataTypes.AMBIENT_SOUND_EVENT_NAME, LevelSoundEventPacket.SOUND_AMBIENT)
         if (this.isBaby()) {
             this.setDataProperty(
-                EntityDataTypes.Companion.AMBIENT_SOUND_EVENT_NAME,
+                EntityDataTypes.AMBIENT_SOUND_EVENT_NAME,
                 LevelSoundEventPacket.SOUND_AMBIENT_BABY
             )
         }

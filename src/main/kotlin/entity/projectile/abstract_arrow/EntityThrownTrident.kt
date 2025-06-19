@@ -388,9 +388,9 @@ class EntityThrownTrident @JvmOverloads constructor(chunk: IChunk?, nbt: Compoun
 
     fun setTridentRope(tridentRope: Boolean) {
         if (tridentRope) {
-            this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, shootingEntity!!.getRuntimeID())
+            this.setDataProperty(EntityDataTypes.OWNER_EID, shootingEntity!!.getRuntimeID())
         } else {
-            this.setDataProperty(EntityDataTypes.Companion.OWNER_EID, -1)
+            this.setDataProperty(EntityDataTypes.OWNER_EID, -1)
         }
         this.setDataFlag(EntityFlag.RETURN_TRIDENT, tridentRope)
     }

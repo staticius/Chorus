@@ -212,7 +212,7 @@ class EntitySheep(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), 
 
     fun setColor(color: Int) {
         this.color = color.toByte()
-        this.setDataProperty(EntityDataTypes.Companion.COLOR, color)
+        this.setDataProperty(EntityDataTypes.COLOR, color)
         namedTag!!.putByte("Color", this.color.toInt())
     }
 

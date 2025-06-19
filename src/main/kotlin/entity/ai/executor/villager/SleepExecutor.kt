@@ -42,7 +42,7 @@ class SleepExecutor : EntityControl, IBehaviorExecutor {
                 entity.teleport(sleepingTransform)
                 entity.respawnToAll()
                 entity.setDataFlag(EntityFlag.SLEEPING)
-                entity.setDataProperty(EntityDataTypes.Companion.BED_POSITION, head.position.asBlockVector3())
+                entity.setDataProperty(EntityDataTypes.BED_POSITION, head.position.asBlockVector3())
                 entity.setDataFlag(EntityFlag.BODY_ROTATION_BLOCKED)
             }
         }
@@ -51,7 +51,7 @@ class SleepExecutor : EntityControl, IBehaviorExecutor {
     override fun onStop(entity: EntityMob) {
         entity.setDataFlag(EntityFlag.SLEEPING, false)
         entity.setDataFlag(EntityFlag.BODY_ROTATION_BLOCKED, false)
-        entity.setDataProperty(EntityDataTypes.Companion.BED_POSITION, BlockVector3(0, 0, 0))
+        entity.setDataProperty(EntityDataTypes.BED_POSITION, BlockVector3(0, 0, 0))
         if (!entity.level!!.isNight) {
             if (entity is EntityVillagerV2) {
                 entity.heal(entity.getMaxHealth().toFloat())

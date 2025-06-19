@@ -21,13 +21,15 @@ import org.chorus_oss.chorus.nbt.tag.ListTag
 import org.chorus_oss.chorus.utils.Utils
 
 class EntityHappyGhast(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityFlyable, EntityRideable, InventoryHolder {
-    private val armorInventory: EntityArmorInventory = EntityArmorInventory(this)
+    private lateinit var armorInventory: EntityArmorInventory
 
     override fun getEntityIdentifier(): String {
         return EntityID.HAPPY_GHAST
     }
 
     override fun initEntity() {
+        this.armorInventory = EntityArmorInventory(this)
+
         setMaxHealth(20)
         super.initEntity()
         setDataFlag(EntityFlag.COLLIDABLE, true)

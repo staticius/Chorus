@@ -201,11 +201,11 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
     }
 
     fun setInvulnerable(ticks: Int) {
-        this.setDataProperty(EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS, ticks)
+        this.setDataProperty(EntityDataTypes.WITHER_INVULNERABLE_TICKS, ticks)
     }
 
     fun isInvulnerable(): Boolean {
-        return getDataProperty<Int>(EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS) > 0
+        return getDataProperty<Int>(EntityDataTypes.WITHER_INVULNERABLE_TICKS) > 0
     }
 
     override fun attack(source: EntityDamageEvent): Boolean {
@@ -280,8 +280,8 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
             }
             if (isInvulnerable()) {
                 this.setDataProperty(
-                    EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS, getDataProperty<Int>(
-                        EntityDataTypes.Companion.WITHER_INVULNERABLE_TICKS
+                    EntityDataTypes.WITHER_INVULNERABLE_TICKS, getDataProperty<Int>(
+                        EntityDataTypes.WITHER_INVULNERABLE_TICKS
                     ) - 1
                 )
             }

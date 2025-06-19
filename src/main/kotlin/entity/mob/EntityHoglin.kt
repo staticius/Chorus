@@ -227,7 +227,7 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
             entity.setDataProperty(
-                EntityDataTypes.Companion.TARGET_EID,
+                EntityDataTypes.TARGET_EID,
                 entity.memoryStorage[memory]!!.getRuntimeID()
             )
             entity.setDataFlag(EntityFlag.ANGRY)
@@ -244,13 +244,13 @@ class EntityHoglin(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), En
         override fun onStop(entity: EntityMob) {
             super.onStop(entity)
             entity.setDataFlag(EntityFlag.ANGRY, false)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
+            entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
         }
 
         override fun onInterrupt(entity: EntityMob) {
             super.onInterrupt(entity)
             entity.setDataFlag(EntityFlag.ANGRY, false)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
+            entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
         }
     }
 }

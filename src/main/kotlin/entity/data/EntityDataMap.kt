@@ -159,7 +159,7 @@ class EntityDataMap : MutableMap<EntityDataType<Any>, Any> {
         while (i.hasNext()) {
             val e: Map.Entry<EntityDataType<*>, Any> = i.next()
             val key: EntityDataType<*> = e.key
-            if (key === EntityDataTypes.Companion.FLAGS_2) continue  // We don't want this to be visible.
+            if (key === EntityDataTypes.FLAGS_2) continue  // We don't want this to be visible.
 
             val stringVal: String = e.value.toString()
             sb.append(key.toString()).append('=').append(stringVal)

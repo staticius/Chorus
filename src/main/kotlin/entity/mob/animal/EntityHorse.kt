@@ -359,12 +359,12 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     override fun getOwnerName(): String? {
         val ownerName = super.getOwnerName()
         if (ownerName == null) {
-            this.setDataProperty(EntityDataTypes.Companion.CONTAINER_TYPE, 0)
-            this.setDataProperty(EntityDataTypes.Companion.CONTAINER_SIZE, 0)
+            this.setDataProperty(EntityDataTypes.CONTAINER_TYPE, 0)
+            this.setDataProperty(EntityDataTypes.CONTAINER_SIZE, 0)
         } else {
             //添加两个metadata这个才能交互物品栏
-            this.setDataProperty(EntityDataTypes.Companion.CONTAINER_TYPE, 12)
-            this.setDataProperty(EntityDataTypes.Companion.CONTAINER_SIZE, 2)
+            this.setDataProperty(EntityDataTypes.CONTAINER_TYPE, 12)
+            this.setDataProperty(EntityDataTypes.CONTAINER_SIZE, 2)
         }
         return ownerName
     }

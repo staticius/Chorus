@@ -782,13 +782,13 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         setRollingDirection(1)
 
         if (this.customDisplayTile != null) {
-            setDataProperty(EntityDataTypes.Companion.CUSTOM_DISPLAY, if (customDisplayTile!!) 1 else 0)
+            setDataProperty(EntityDataTypes.CUSTOM_DISPLAY, if (customDisplayTile!!) 1 else 0)
         }
         if (this.displayBlock != null) {
-            setDataProperty(EntityDataTypes.Companion.HORSE_FLAGS, displayBlock!!.runtimeId)
+            setDataProperty(EntityDataTypes.HORSE_FLAGS, displayBlock!!.runtimeId)
         }
         if (this.displayOffset != null) {
-            setDataProperty(EntityDataTypes.Companion.DISPLAY_OFFSET, displayOffset!!)
+            setDataProperty(EntityDataTypes.DISPLAY_OFFSET, displayOffset!!)
         }
     }
 
@@ -806,23 +806,23 @@ abstract class EntityMinecartAbstract(chunk: IChunk?, nbt: CompoundTag) : Entity
         displayBlock = block
         if (displayBlock != null) {
             setCustomDisplayTile(true)
-            setDataProperty(EntityDataTypes.Companion.HORSE_FLAGS, displayBlock!!.runtimeId)
+            setDataProperty(EntityDataTypes.HORSE_FLAGS, displayBlock!!.runtimeId)
             setDisplayBlockOffset(6)
         } else {
             setCustomDisplayTile(false)
-            setDataProperty(EntityDataTypes.Companion.HORSE_FLAGS, 0)
+            setDataProperty(EntityDataTypes.HORSE_FLAGS, 0)
             setDisplayBlockOffset(0)
         }
     }
 
     fun setCustomDisplayTile(customDisplayTile: Boolean) {
         this.customDisplayTile = customDisplayTile
-        setDataProperty(EntityDataTypes.Companion.CUSTOM_DISPLAY, if (customDisplayTile) 1 else 0)
+        setDataProperty(EntityDataTypes.CUSTOM_DISPLAY, if (customDisplayTile) 1 else 0)
     }
 
     fun setDisplayBlockOffset(offset: Int) {
         this.displayOffset = offset
-        setDataProperty(EntityDataTypes.Companion.DISPLAY_OFFSET, offset)
+        setDataProperty(EntityDataTypes.DISPLAY_OFFSET, offset)
     }
 
     /**
