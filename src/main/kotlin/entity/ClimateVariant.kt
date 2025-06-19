@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.tags.BiomeTags
 interface ClimateVariant {
     fun getBiomeVariant(biomeID: Int): Variant {
         val definition = Registries.BIOME[biomeID]
-        val tags = definition?.tags() ?: emptySet()
+        val tags = definition?.tags ?: emptySet()
         if (coldTags.any { it in tags }) return Variant.Cold
         if (warmTags.any { it in tags }) return Variant.Warm
         return Variant.Temperate

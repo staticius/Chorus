@@ -37,7 +37,7 @@ com-github-stateless4j = "2.6.0"
 disruptor = "4.0.0"
 caffeine-ver = "3.2.0"
 
-protocol = "v818.0"
+protocol = "v818.1"
 kotlinx-io = "0.7.0"
 cryptography = "0.4.0"
 jwt = "1.1.0"

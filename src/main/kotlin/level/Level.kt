@@ -927,7 +927,7 @@ class Level(
             )
 
             val biome = this.getBiomeId(vector.floorX, 70, vector.floorZ)
-            if (Registries.BIOME[biome]!!.rain <= 0) {
+            if (Registries.BIOME[biome]!!.data.rain) {
                 return
             }
 

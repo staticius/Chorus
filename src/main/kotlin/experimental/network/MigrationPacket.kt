@@ -10,7 +10,7 @@ import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.core.PacketCodec
 import org.chorus_oss.protocol.core.PacketRegistry
 
-class MigrationPacket<T : Packet>(val packet: T) : DataPacket(), PacketEncoder {
+data class MigrationPacket<T : Packet>(val packet: T) : DataPacket(), PacketEncoder {
     val codec: PacketCodec<T> = requireNotNull(PacketRegistry[packet]) {
         "PacketCodec not registered for $packet"
     }
@@ -21,7 +21,7 @@ class MigrationPacket<T : Packet>(val packet: T) : DataPacket(), PacketEncoder {
 
     override fun encode(byteBuf: HandleByteBuf) {
         val buffer = Buffer()
-        codec.serialize(packet, buffer)
+        codec.serialize(this.packet, buffer)
         byteBuf.writeBytes(buffer.readByteArray())
     }
 }
