@@ -18,7 +18,7 @@ class ContainerCloseProcessor : DataPacketProcessor<ContainerClosePacket>() {
         if (player.windowIndex.containsKey(pk.containerID)) {
             if (pk.containerID == SpecialWindowId.PLAYER.id) {
                 player.closingWindowId = pk.containerID
-//                player.inventory.close(player)
+                player.inventory.close(player)
                 player.inventoryOpen = false
             } else {
                 player.removeWindow(player.windowIndex[pk.containerID]!!)

@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.math.IVector3
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.positiontracking.NamedPosition
 
-open class Locator(@JvmField var position: Vector3, @JvmField var level: Level) : NamedPosition, IVector3, Cloneable {
+open class Locator(var position: Vector3, var level: Level) : NamedPosition, IVector3, Cloneable {
     constructor(level: Level) : this(0.0, 0.0, 0.0, level)
 
     constructor(x: Double, y: Double, z: Double, level: Level) : this(Vector3(x, y, z), level)
