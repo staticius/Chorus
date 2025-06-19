@@ -44,6 +44,7 @@ import org.chorus_oss.chorus.event.inventory.InventoryPickupTridentEvent
 import org.chorus_oss.chorus.event.player.*
 import org.chorus_oss.chorus.event.player.PlayerTeleportEvent.TeleportCause
 import org.chorus_oss.chorus.event.server.DataPacketSendEvent
+import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.form.window.Form
 import org.chorus_oss.chorus.inventory.*
 import org.chorus_oss.chorus.item.*
@@ -92,6 +93,7 @@ import org.chorus_oss.chorus.utils.Binary.Companion.writeUUID
 import org.chorus_oss.chorus.utils.Identifier.Companion.tryParse
 import org.chorus_oss.chorus.utils.PortalHelper.moveToTheEnd
 import org.chorus_oss.chorus.utils.TextFormat.Companion.clean
+import org.chorus_oss.protocol.core.Packet
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
 import java.net.InetSocketAddress
@@ -2365,6 +2367,10 @@ open class Player(
      */
     fun dataPacket(packet: DataPacket) {
         session.sendPacket(packet)
+    }
+
+    fun sendPacket(packet: Packet) {
+        session.sendPacket(MigrationPacket(packet))
     }
 
     val ping: Int
