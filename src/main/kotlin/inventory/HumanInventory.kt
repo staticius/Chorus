@@ -603,7 +603,8 @@ class HumanInventory(human: IHuman) //9+27+4
             }
             pk.inventoryId = id
             pk.fullContainerName = FullContainerName(
-                ContainerSlotType.INVENTORY,
+                this.getSlotType(id),
+                id
             )
             player.dataPacket(pk)
         }
