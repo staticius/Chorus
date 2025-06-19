@@ -20,8 +20,6 @@ Minecraft: Bedrock server software, open source and written in Kotlin
 
 ## 🗺️ Roadmap
 
-
-
 | State | Task                 |
 |:-----:|:---------------------|
 |   ⏳   | Protocol Migration   |
