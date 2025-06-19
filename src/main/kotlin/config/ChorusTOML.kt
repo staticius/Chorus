@@ -143,6 +143,10 @@ class ChorusTOML {
         @SerialName("ignored-packets")
         var ignoredPackets: ArrayList<String> = ArrayList()
 
+        @TomlComments("Packets to always log when logging at any level")
+        @SerialName("logged-packets")
+        var loggedPackets: List<String> = emptyList()
+
         @SerialName("allow-beta")
         var allowBeta: Boolean = false
     }

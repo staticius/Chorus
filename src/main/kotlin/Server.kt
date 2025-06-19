@@ -2347,6 +2347,10 @@ class Server internal constructor(
         return settings.debugSettings.ignoredPackets.contains(clazz.simpleName)
     }
 
+    fun isLoggedPacket(clazz: Class<out DataPacket>): Boolean {
+        return settings.debugSettings.loggedPackets.contains(clazz.simpleName)
+    }
+
     fun getServerAuthoritativeMovement(): Int {
         return serverAuthoritativeMovementMode
     }

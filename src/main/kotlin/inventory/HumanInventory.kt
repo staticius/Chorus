@@ -495,7 +495,7 @@ class HumanInventory(human: IHuman) //9+27+4
                 val pk1 = InventoryContentPacket()
                 val id = SpecialWindowId.ARMOR.id
                 pk1.inventoryId = id
-                pk1.slots = armor
+                pk1.slots = armor.toList()
                 pk1.fullContainerName = FullContainerName(
                     ContainerSlotType.ARMOR,
                     id
@@ -591,7 +591,7 @@ class HumanInventory(human: IHuman) //9+27+4
     override fun sendContents(vararg players: Player) {
         val pk = InventoryContentPacket()
         val inventoryAndHotBarSize = this.size - 4
-        pk.slots = Array(inventoryAndHotBarSize) { i ->
+        pk.slots = List(inventoryAndHotBarSize) { i ->
             this.getItem(i)
         }
 
@@ -603,8 +603,7 @@ class HumanInventory(human: IHuman) //9+27+4
             }
             pk.inventoryId = id
             pk.fullContainerName = FullContainerName(
-                this.getSlotType(id),
-                id
+                ContainerSlotType.INVENTORY,
             )
             player.dataPacket(pk)
         }

@@ -52,7 +52,7 @@ class HumanOffHandInventory(holder: IHuman) : BaseInventory(holder, InventoryTyp
             if (player === this.holder) {
                 val pk2 = InventoryContentPacket()
                 pk2.inventoryId = SpecialWindowId.OFFHAND.id
-                pk2.slots = arrayOf(item)
+                pk2.slots = listOf(item)
                 pk2.fullContainerName = FullContainerName(
                     ContainerSlotType.OFFHAND,
                     0
