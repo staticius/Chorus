@@ -227,12 +227,9 @@ enum class BlockFace(
         }
     }
 
-    enum class Plane : Predicate<BlockFace?>, Iterable<BlockFace> {
-        HORIZONTAL,
-        VERTICAL;
-
-        lateinit var faces: Array<BlockFace>
-
+    enum class Plane(val faces: Array<BlockFace>) : Predicate<BlockFace?>, Iterable<BlockFace> {
+        HORIZONTAL(arrayOf(NORTH, EAST, SOUTH, WEST)),
+        VERTICAL(arrayOf(UP, DOWN));
 
         fun random(): BlockFace {
             return faces[ThreadLocalRandom.current().nextInt(faces.size - 1)]
@@ -248,14 +245,6 @@ enum class BlockFace(
 
         override fun iterator(): MutableIterator<BlockFace> {
             return faces.toMutableList().iterator()
-        }
-
-        companion object {
-            init {
-                //Circular dependency
-                HORIZONTAL.faces = arrayOf(NORTH, EAST, SOUTH, WEST)
-                VERTICAL.faces = arrayOf(UP, DOWN)
-            }
         }
     }
 
