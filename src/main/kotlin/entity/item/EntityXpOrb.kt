@@ -68,7 +68,7 @@ class EntityXpOrb(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
             this.exp = 1
         }
 
-        entityDataMap.put(EntityDataTypes.Companion.VALUE, this.exp)
+        entityDataMap.put(EntityDataTypes.VALUE, this.exp)
 
         //call event item spawn event
     }

@@ -85,11 +85,11 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
     }
 
     fun isPeeking(): Boolean {
-        return getDataProperty<Int>(EntityDataTypes.Companion.SHULKER_PEEK_AMOUNT, 0) == 0
+        return getDataProperty<Int>(EntityDataTypes.SHULKER_PEEK_AMOUNT, 0) == 0
     }
 
     fun setPeeking(height: Int) {
-        setDataProperty(EntityDataTypes.Companion.SHULKER_PEEK_AMOUNT, height)
+        setDataProperty(EntityDataTypes.SHULKER_PEEK_AMOUNT, height)
     }
 
     override fun getAdditionalArmor(): Int {
@@ -137,7 +137,7 @@ class EntityShulker(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt), E
         super.initEntity()
         if (memoryStorage[CoreMemoryTypes.Companion.VARIANT] == null) variant = (16)
         setDataProperty(
-            EntityDataTypes.Companion.SHULKER_ATTACH_POS,
+            EntityDataTypes.SHULKER_ATTACH_POS,
             locator.levelBlock.getSide(BlockFace.UP).position.asBlockVector3()
         )
     }

@@ -4,6 +4,7 @@ import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.item.*
 import org.chorus_oss.chorus.item.customitem.CustomItem
 import org.chorus_oss.chorus.item.customitem.CustomItemDefinition
+import org.chorus_oss.chorus.item.ItemHarnessBlue
 import org.chorus_oss.chorus.nbt.NBTIO.readCompressed
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.plugin.Plugin
@@ -536,6 +537,24 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, KClass<out Item>> {
             register(ItemID.ZOMBIE_PIGMAN_SPAWN_EGG, ItemZombiePigmanSpawnEgg::class)
             register(ItemID.ZOMBIE_SPAWN_EGG, ItemZombieSpawnEgg::class)
             register(ItemID.ZOMBIE_VILLAGER_SPAWN_EGG, ItemZombieVillagerSpawnEgg::class)
+            register(ItemID.MUSIC_DISC_TEARS, ItemMusicDiscTears::class)
+            register(ItemID.HAPPY_GHAST_SPAWN_EGG, ItemHappyGhastSpawnEgg::class)
+            register(ItemID.HARNESS_BLACK, ItemHarnessBlack::class)
+            register(ItemID.HARNESS_BLUE, ItemHarnessBlue::class)
+            register(ItemID.HARNESS_BROWN, ItemHarnessBrown::class)
+            register(ItemID.HARNESS_CYAN, ItemHarnessCyan::class)
+            register(ItemID.HARNESS_GRAY, ItemHarnessGray::class)
+            register(ItemID.HARNESS_GREEN, ItemHarnessGreen::class)
+            register(ItemID.HARNESS_LIGHT_BLUE, ItemHarnessLightBlue::class)
+            register(ItemID.HARNESS_LIGHT_GRAY, ItemHarnessLightGray::class)
+            register(ItemID.HARNESS_LIME, ItemHarnessLime::class)
+            register(ItemID.HARNESS_MAGENTA, ItemHarnessMagenta::class)
+            register(ItemID.HARNESS_ORANGE, ItemHarnessOrange::class)
+            register(ItemID.HARNESS_PINK, ItemHarnessPink::class)
+            register(ItemID.HARNESS_PURPLE, ItemHarnessPurple::class)
+            register(ItemID.HARNESS_RED, ItemHarnessRed::class)
+            register(ItemID.HARNESS_WHITE, ItemHarnessWhite::class)
+            register(ItemID.HARNESS_YELLOW, ItemHarnessYellow::class)
             registerBlockItem()
         } catch (e: RegisterException) {
             throw RuntimeException(e)

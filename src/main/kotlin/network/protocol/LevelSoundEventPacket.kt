@@ -13,7 +13,7 @@ open class LevelSoundEventPacket : DataPacket() {
     var entityIdentifier: String = ""
     var isBabyMob: Boolean = false
     var isGlobal: Boolean = false
-    var entityUniqueID: ActorUniqueID = 0
+    var entityUniqueID: ActorUniqueID = -1
 
     override fun encode(byteBuf: HandleByteBuf) {
         byteBuf.writeVarInt(this.sound)

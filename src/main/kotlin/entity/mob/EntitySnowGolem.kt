@@ -141,12 +141,10 @@ class EntitySnowGolem(chunk: IChunk?, nbt: CompoundTag) : EntityGolem(chunk, nbt
             }
         }
         if (this.waterTicks >= 20) {
-            if ((level!!.isRaining && !this.isUnderBlock()) || locator.levelBlock is BlockLiquid || Registries.BIOME.get(
-                    level!!.getBiomeId(
-                        position.floorX,
-                        position.floorY, position.floorZ
-                    )
-                )!!.temperature > 1.0
+            if ((level!!.isRaining && !this.isUnderBlock()) || locator.levelBlock is BlockLiquid || Registries.BIOME[level!!.getBiomeId(
+                    position.floorX,
+                    position.floorY, position.floorZ
+                )]!!.data.temperature > 1.0
             ) {
                 this.attack(EntityDamageEvent(this, DamageCause.WEATHER, 1f))
             }

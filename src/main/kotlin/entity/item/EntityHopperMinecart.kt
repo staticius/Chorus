@@ -133,9 +133,9 @@ class EntityHopperMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbs
             }
         }
 
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_TYPE, 11)
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_SIZE, inventory.size)
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_STRENGTH_MODIFIER, 0)
+        entityDataMap.put(EntityDataTypes.CONTAINER_TYPE, 11)
+        entityDataMap.put(EntityDataTypes.CONTAINER_SIZE, inventory.size)
+        entityDataMap.put(EntityDataTypes.CONTAINER_STRENGTH_MODIFIER, 0)
 
         this.updatePickupArea()
 

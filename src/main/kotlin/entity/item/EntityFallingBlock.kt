@@ -80,7 +80,7 @@ class EntityFallingBlock(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt)
             this.fireProof = true
             this.setDataFlag(EntityFlag.FIRE_IMMUNE, true)
 
-            setDataProperty(EntityDataTypes.Companion.VARIANT, blockState!!.blockStateHash())
+            setDataProperty(EntityDataTypes.VARIANT, blockState!!.blockStateHash())
         }
     }
 

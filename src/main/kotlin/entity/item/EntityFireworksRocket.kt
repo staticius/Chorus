@@ -75,8 +75,8 @@ open class EntityFireworksRocket(chunk: IChunk?, nbt: CompoundTag) : Entity(chun
         }
 
         //        this.setDataProperty(Entity.HORSE_FLAGS, firework.getNamedTag());//TODO FIXME
-        this.setDataProperty(EntityDataTypes.Companion.DISPLAY_OFFSET, Vector3f(0f, 1f, 0f))
-        this.setDataProperty(EntityDataTypes.Companion.CUSTOM_DISPLAY, -1)
+        this.setDataProperty(EntityDataTypes.DISPLAY_OFFSET, Vector3f(0f, 1f, 0f))
+        this.setDataProperty(EntityDataTypes.CUSTOM_DISPLAY, -1)
     }
 
 

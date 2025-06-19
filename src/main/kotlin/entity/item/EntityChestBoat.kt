@@ -59,9 +59,9 @@ class EntityChestBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityBoat(chunk, nbt
             }
         }
 
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_TYPE, InventoryType.CHEST_BOAT.networkType)
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_SIZE, inventory.size)
-        entityDataMap.put(EntityDataTypes.Companion.CONTAINER_STRENGTH_MODIFIER, 0)
+        entityDataMap.put(EntityDataTypes.CONTAINER_TYPE, InventoryType.CHEST_BOAT.networkType)
+        entityDataMap.put(EntityDataTypes.CONTAINER_SIZE, inventory.size)
+        entityDataMap.put(EntityDataTypes.CONTAINER_STRENGTH_MODIFIER, 0)
     }
 
     override fun saveNBT() {

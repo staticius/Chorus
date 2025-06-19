@@ -29,7 +29,7 @@ class EntityExplosionExecutor @JvmOverloads constructor(
         currentTick++
         if (explodeTime > currentTick) {
             entity.level!!.addSound(entity.position, Sound.RANDOM_FUSE)
-            entity.setDataProperty(EntityDataTypes.Companion.FUSE_TIME, currentTick)
+            entity.setDataProperty(EntityDataTypes.FUSE_TIME, currentTick)
             entity.setDataFlag(EntityFlag.IGNITED, true)
             return true
         } else {

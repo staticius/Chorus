@@ -148,7 +148,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
     }
 
     fun isPowered(): Boolean {
-        return getDataProperty<Byte>(EntityDataTypes.Companion.HORSE_TYPE) > 0
+        return getDataProperty<Byte>(EntityDataTypes.HORSE_TYPE) > 0
     }
 
     fun setPowered(bolt: EntityLightningStrike?) {
@@ -156,7 +156,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         Server.instance.pluginManager.callEvent(ev)
 
         if (!ev.cancelled) {
-            this.setDataProperty(EntityDataTypes.Companion.HORSE_TYPE, 1)
+            this.setDataProperty(EntityDataTypes.HORSE_TYPE, 1)
             namedTag!!.putBoolean("powered", true)
         }
     }
@@ -169,7 +169,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         Server.instance.pluginManager.callEvent(ev)
 
         if (!ev.cancelled) {
-            this.setDataProperty(EntityDataTypes.Companion.HORSE_TYPE, if (powered) 1 else 0)
+            this.setDataProperty(EntityDataTypes.HORSE_TYPE, if (powered) 1 else 0)
             namedTag!!.putBoolean("powered", powered)
         }
     }
@@ -183,7 +183,7 @@ class EntityCreeper(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt
         super.initEntity()
 
         if (namedTag!!.getBoolean("powered") || namedTag!!.getBoolean("IsPowered")) {
-            entityDataMap[EntityDataTypes.Companion.HORSE_TYPE] = 1
+            entityDataMap[EntityDataTypes.HORSE_TYPE] = 1
         }
     }
 

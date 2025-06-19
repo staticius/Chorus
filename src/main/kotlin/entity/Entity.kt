@@ -58,7 +58,7 @@ import kotlin.concurrent.Volatile
 import kotlin.math.*
 import kotlin.random.Random
 
-abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : EntityDataTypes, IVector3 {
+abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
     var chested: Boolean = false
     open var color: Byte = 0
     open var color2: Byte = 0

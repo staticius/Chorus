@@ -108,7 +108,7 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
                 Behavior({ entity: EntityMob? ->
                     //计算心跳间隔
                     this.setDataProperty(
-                        EntityDataTypes.Companion.HEARTBEAT_INTERVAL_TICKS,
+                        EntityDataTypes.HEARTBEAT_INTERVAL_TICKS,
                         calHeartBeatDelay()
                     )
                     false
@@ -186,8 +186,8 @@ class EntityWarden(chunk: IChunk?, nbt: CompoundTag) : EntityMonster(chunk, nbt)
     override fun initEntity() {
         this.maxHealth = 500
         super.initEntity()
-        this.setDataProperty(EntityDataTypes.Companion.HEARTBEAT_INTERVAL_TICKS, 40)
-        this.setDataProperty(EntityDataTypes.Companion.HEARTBEAT_SOUND_EVENT, LevelSoundEventPacket.SOUND_HEARTBEAT)
+        this.setDataProperty(EntityDataTypes.HEARTBEAT_INTERVAL_TICKS, 40)
+        this.setDataProperty(EntityDataTypes.HEARTBEAT_SOUND_EVENT, LevelSoundEventPacket.SOUND_HEARTBEAT)
         //空闲声音
         this.setAmbientSoundEvent(Sound.MOB_WARDEN_IDLE)
         this.setAmbientSoundInterval(8.0f)

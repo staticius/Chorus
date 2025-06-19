@@ -22,7 +22,7 @@ class EndermanBlockExecutor : IBehaviorExecutor {
                 if (optionalBlock.isPresent) {
                     val block = optionalBlock.get()
                     entity.setItemInHand(block.toItem())
-                    entity.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, block)
+                    entity.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, block.blockState)
                     entity.level!!.setBlock(block.position, Block.get(BlockID.AIR))
                 }
             } else {
@@ -36,7 +36,7 @@ class EndermanBlockExecutor : IBehaviorExecutor {
                         val block = optionalBlock.get()
                         block.level.setBlock(block.up().position, entity.itemInHand.getSafeBlockState().toBlock())
                         entity.setItemInHand(Item.AIR)
-                        entity.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, BlockAir())
+                        entity.setDataProperty(EntityDataTypes.CARRY_BLOCK_STATE, BlockAir.STATE)
                     }
                 }
             }

@@ -69,7 +69,7 @@ class GuardianAttackExecutor(
         } else if (tick2 != 0) {
             tick2++
             if (tick2 > attackDelay) {
-                if (entity.getDataProperty<Long>(EntityDataTypes.Companion.TARGET_EID, 0L) == target!!.getRuntimeID()) {
+                if (entity.getDataProperty<Long>(EntityDataTypes.TARGET_EID, 0L) == target!!.getRuntimeID()) {
                     val event = EntityDamageByEntityEvent(
                         entity,
                         target!!,
@@ -116,7 +116,7 @@ class GuardianAttackExecutor(
     }
 
     private fun startSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, target!!.getRuntimeID())
         entity.level!!.addLevelSoundEvent(
             entity.position,
             LevelSoundEventPacket.SOUND_MOB_WARNING,
@@ -128,7 +128,7 @@ class GuardianAttackExecutor(
     }
 
     private fun endSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
         val pk = EntityEventPacket()
         pk.event = EntityEventPacket.GUARDIAN_ATTACK_ANIMATION
         pk.eid = entity.getRuntimeID()

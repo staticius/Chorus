@@ -33,7 +33,7 @@ open class EntitySplashPotion(chunk: IChunk?, nbt: CompoundTag, shootingEntity: 
 
         potionId = namedTag!!.getShort("PotionId").toInt()
 
-        entityDataMap.put(EntityDataTypes.Companion.AUX_VALUE_DATA, this.potionId)
+        entityDataMap.put(EntityDataTypes.AUX_VALUE_DATA, this.potionId)
 
         /*Effect effect = Potion.getEffect(potionId, true); TODO: potion color
 

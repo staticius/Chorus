@@ -176,12 +176,12 @@ class TridentThrowExecutor(
     }
 
     private fun playTridentAnimation(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, target!!.getRuntimeID())
         entity.setDataFlag(EntityFlag.FACING_TARGET_TO_RANGE_ATTACK)
     }
 
     private fun stopTridentAnimation(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
         entity.setDataFlag(EntityFlag.FACING_TARGET_TO_RANGE_ATTACK, false)
     }
 }

@@ -62,7 +62,7 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
             lastUpdate = currentTick
 
             if (fuse % 5 == 0) {
-                setDataProperty(EntityDataTypes.Companion.FUSE_TIME, fuse)
+                setDataProperty(EntityDataTypes.FUSE_TIME, fuse)
             }
 
             fuse -= tickDiff

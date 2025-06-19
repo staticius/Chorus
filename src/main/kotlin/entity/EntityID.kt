@@ -258,4 +258,6 @@ object EntityID {
     const val CHEST_BOAT: String = "minecraft:chest_boat"
 
     const val PLAYER: String = "minecraft:player"
+
+    const val HAPPY_GHAST: String = "minecraft:happy_ghast"
 }

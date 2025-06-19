@@ -54,23 +54,23 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
 
         this.setDataFlag(EntityFlag.HAS_GRAVITY)
         this.setDataFlag(EntityFlag.STACKABLE)
-        entityDataMap.put(EntityDataTypes.Companion.VARIANT, woodID)
-        entityDataMap.put(EntityDataTypes.Companion.IS_BUOYANT, true)
+        entityDataMap.put(EntityDataTypes.VARIANT, woodID)
+        entityDataMap.put(EntityDataTypes.IS_BUOYANT, true)
         entityDataMap.put(
-            EntityDataTypes.Companion.BUOYANCY_DATA,
+            EntityDataTypes.BUOYANCY_DATA,
             "{\"apply_gravity\":true,\"base_buoyancy\":1.0,\"big_wave_probability\":0.02999999932944775,\"big_wave_speed\":10.0,\"drag_down_on_buoyancy_removed\":0.0,\"liquid_blocks\":[\"minecraft:water\",\"minecraft:flowing_water\"],\"simulate_waves\":true}"
         )
-        entityDataMap.put(EntityDataTypes.Companion.AIR_SUPPLY, 300)
-        entityDataMap.put(EntityDataTypes.Companion.OWNER_EID, -1)
-        entityDataMap.put(EntityDataTypes.Companion.ROW_TIME_LEFT, 0)
-        entityDataMap.put(EntityDataTypes.Companion.ROW_TIME_RIGHT, 0)
-        entityDataMap.put(EntityDataTypes.Companion.CONTROLLING_RIDER_SEAT_INDEX, 0)
-        entityDataMap.put(EntityDataTypes.Companion.DATA_LIFETIME_TICKS, -1)
-        entityDataMap.put(EntityDataTypes.Companion.NAMETAG_ALWAYS_SHOW, -1)
-        entityDataMap.put(EntityDataTypes.Companion.AMBIENT_SOUND_INTERVAL, 8f)
-        entityDataMap.put(EntityDataTypes.Companion.AMBIENT_SOUND_INTERVAL_RANGE, 16f)
-        entityDataMap.put(EntityDataTypes.Companion.AMBIENT_SOUND_EVENT_NAME, "ambient")
-        entityDataMap.put(EntityDataTypes.Companion.FALL_DAMAGE_MULTIPLIER, 1f)
+        entityDataMap.put(EntityDataTypes.AIR_SUPPLY, 300)
+        entityDataMap.put(EntityDataTypes.OWNER_EID, -1)
+        entityDataMap.put(EntityDataTypes.ROW_TIME_LEFT, 0)
+        entityDataMap.put(EntityDataTypes.ROW_TIME_RIGHT, 0)
+        entityDataMap.put(EntityDataTypes.CONTROLLING_RIDER_SEAT_INDEX, 0)
+        entityDataMap.put(EntityDataTypes.DATA_LIFETIME_TICKS, -1)
+        entityDataMap.put(EntityDataTypes.NAMETAG_ALWAYS_SHOW, -1)
+        entityDataMap.put(EntityDataTypes.AMBIENT_SOUND_INTERVAL, 8f)
+        entityDataMap.put(EntityDataTypes.AMBIENT_SOUND_INTERVAL_RANGE, 16f)
+        entityDataMap.put(EntityDataTypes.AMBIENT_SOUND_EVENT_NAME, "ambient")
+        entityDataMap.put(EntityDataTypes.FALL_DAMAGE_MULTIPLIER, 1f)
         entityCollisionReduction = -0.5
     }
 
@@ -428,10 +428,10 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         if (entity.riding === this) {
             updatePassengers(true)
 
-            entity.setDataProperty(EntityDataTypes.Companion.SEAT_LOCK_RIDER_ROTATION, true)
-            entity.setDataProperty(EntityDataTypes.Companion.SEAT_LOCK_RIDER_ROTATION_DEGREES, 90)
-            entity.setDataProperty(EntityDataTypes.Companion.SEAT_HAS_ROTATION, passengers.indexOf(entity) != 1)
-            entity.setDataProperty(EntityDataTypes.Companion.SEAT_ROTATION_OFFSET_DEGREES, -90)
+            entity.setDataProperty(EntityDataTypes.SEAT_LOCK_RIDER_ROTATION, true)
+            entity.setDataProperty(EntityDataTypes.SEAT_LOCK_RIDER_ROTATION_DEGREES, 90)
+            entity.setDataProperty(EntityDataTypes.SEAT_HAS_ROTATION, passengers.indexOf(entity) != 1)
+            entity.setDataProperty(EntityDataTypes.SEAT_ROTATION_OFFSET_DEGREES, -90)
             entity.setRotation(rotation.yaw, entity.rotation.pitch)
             entity.updateMovement()
         }
@@ -446,7 +446,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
         val r: Boolean = super.dismountEntity(entity, sendLinks)
 
         updatePassengers()
-        entity.setDataProperty(EntityDataTypes.Companion.SEAT_LOCK_RIDER_ROTATION, false)
+        entity.setDataProperty(EntityDataTypes.SEAT_LOCK_RIDER_ROTATION, false)
         if (entity is EntityHuman) {
             ignoreCollision.add(entity)
         }
@@ -558,7 +558,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
 
     fun setBoatVariant(variant: Int) {
         this.woodID = variant
-        entityDataMap[EntityDataTypes.Companion.VARIANT] = variant
+        entityDataMap[EntityDataTypes.VARIANT] = variant
     }
 
     override fun getOriginalName(): String {

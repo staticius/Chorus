@@ -1027,5 +1027,24 @@ interface ItemID {
         const val ZOMBIE_SPAWN_EGG: String = "minecraft:zombie_spawn_egg"
 
         const val ZOMBIE_VILLAGER_SPAWN_EGG: String = "minecraft:zombie_villager_spawn_egg"
+
+        const val MUSIC_DISC_TEARS: String = "minecraft:music_disc_tears"
+        const val HAPPY_GHAST_SPAWN_EGG: String = "minecraft:happy_ghast_spawn_egg"
+        const val HARNESS_WHITE: String = "minecraft:white_harness"
+        const val HARNESS_ORANGE: String = "minecraft:orange_harness"
+        const val HARNESS_MAGENTA: String = "minecraft:magenta_harness"
+        const val HARNESS_LIGHT_BLUE: String = "minecraft:light_blue_harness"
+        const val HARNESS_YELLOW: String = "minecraft:yellow_harness"
+        const val HARNESS_LIME: String = "minecraft:lime_harness"
+        const val HARNESS_PINK: String = "minecraft:pink_harness"
+        const val HARNESS_GRAY: String = "minecraft:gray_harness"
+        const val HARNESS_LIGHT_GRAY: String = "minecraft:light_gray_harness"
+        const val HARNESS_CYAN: String = "minecraft:cyan_harness"
+        const val HARNESS_PURPLE: String = "minecraft:purple_harness"
+        const val HARNESS_BLUE: String = "minecraft:blue_harness"
+        const val HARNESS_BROWN: String = "minecraft:brown_harness"
+        const val HARNESS_GREEN: String = "minecraft:green_harness"
+        const val HARNESS_RED: String = "minecraft:red_harness"
+        const val HARNESS_BLACK: String = "minecraft:black_harness"
     }
 }

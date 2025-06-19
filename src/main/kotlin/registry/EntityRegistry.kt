@@ -530,6 +530,10 @@ class EntityRegistry : IRegistry<EntityDefinition, KClass<out Entity>?, KClass<o
             EntityDefinition(EntityID.CREAKING, "", 146, hasSpawnegg = true, summonable = true),
             EntityCreaking::class
         )
+        register(
+            EntityDefinition(EntityID.HAPPY_GHAST, "", 147, hasSpawnegg = true, summonable = true),
+            EntityHappyGhast::class
+        )
 
         this.rebuildTag()
     }

@@ -410,7 +410,7 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         MeleeAttackExecutor(memory, speed, maxSenseRange, clearDataWhenLose, coolDown) {
         override fun onStart(entity: EntityMob) {
             super.onStart(entity)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, entity.memoryStorage[memory]!!.getRuntimeID())
+            entity.setDataProperty(EntityDataTypes.TARGET_EID, entity.memoryStorage[memory]!!.getRuntimeID())
             entity.setDataFlag(EntityFlag.ANGRY)
             entity.level!!.addLevelSoundEvent(
                 entity.position,
@@ -435,13 +435,13 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
         override fun onStop(entity: EntityMob) {
             super.onStop(entity)
             entity.setDataFlag(EntityFlag.ANGRY, false)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
+            entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
         }
 
         override fun onInterrupt(entity: EntityMob) {
             super.onInterrupt(entity)
             entity.setDataFlag(EntityFlag.ANGRY, false)
-            entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
+            entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
         }
     }
 

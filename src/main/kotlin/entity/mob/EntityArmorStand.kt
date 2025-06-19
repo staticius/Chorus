@@ -234,11 +234,11 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
     }
 
     private fun getPose(): Int {
-        return entityDataMap.getType<Int>(EntityDataTypes.Companion.ARMOR_STAND_POSE_INDEX)
+        return entityDataMap.getType<Int>(EntityDataTypes.ARMOR_STAND_POSE_INDEX)
     }
 
     private fun setPose(pose: Int) {
-        entityDataMap.put(EntityDataTypes.Companion.ARMOR_STAND_POSE_INDEX, pose)
+        entityDataMap.put(EntityDataTypes.ARMOR_STAND_POSE_INDEX, pose)
         val setEntityDataPacket: SetEntityDataPacket = SetEntityDataPacket()
         setEntityDataPacket.eid = this.getRuntimeID()
         setEntityDataPacket.entityData = this.getEntityDataMap()
@@ -343,7 +343,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
         }
         setLastDamageCause(source)
 
-        if (getDataProperty<Int>(EntityDataTypes.Companion.HURT_TICKS) > 0) {
+        if (getDataProperty<Int>(EntityDataTypes.HURT_TICKS) > 0) {
             setHealthSafe(0f)
             return true
         }
@@ -359,7 +359,7 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
             }
         }
 
-        setDataProperty(EntityDataTypes.Companion.HURT_TICKS, 9, true)
+        setDataProperty(EntityDataTypes.HURT_TICKS, 9, true)
         level!!.addSound(this.position, Sound.MOB_ARMOR_STAND_HIT)
 
         return true
@@ -372,9 +372,9 @@ class EntityArmorStand(chunk: IChunk?, nbt: CompoundTag) : EntityMob(chunk, nbt)
     override fun entityBaseTick(tickDiff: Int): Boolean {
         var hasUpdate: Boolean = super.entityBaseTick(tickDiff)
 
-        var hurtTime: Int = getDataProperty<Int>(EntityDataTypes.Companion.HURT_TICKS)
+        var hurtTime: Int = getDataProperty<Int>(EntityDataTypes.HURT_TICKS)
         if (hurtTime > 0 && age % 2 == 0) {
-            setDataProperty(EntityDataTypes.Companion.HURT_TICKS, hurtTime - 1, true)
+            setDataProperty(EntityDataTypes.HURT_TICKS, hurtTime - 1, true)
             hasUpdate = true
         }
         hurtTime = namedTag!!.getByte("InvulnerableTimer").toInt()

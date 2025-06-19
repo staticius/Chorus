@@ -168,16 +168,16 @@ class GhastShootExecutor(
     }
 
     private fun startShootSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, target!!.getRuntimeID())
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, target!!.getRuntimeID())
         entity.setDataFlag(EntityFlag.CHARGED, true)
-        entity.setDataProperty(EntityDataTypes.Companion.CHARGE_AMOUNT, 0x1)
+        entity.setDataProperty(EntityDataTypes.CHARGE_AMOUNT, 0x1)
         entity.level!!.addLevelEvent(entity.position, LevelEventPacket.EVENT_SOUND_GHAST_WARNING)
     }
 
     private fun endShootSequence(entity: Entity) {
-        entity.setDataProperty(EntityDataTypes.Companion.TARGET_EID, 0L)
+        entity.setDataProperty(EntityDataTypes.TARGET_EID, 0L)
         entity.setDataFlag(EntityFlag.CHARGED, false)
-        entity.setDataProperty(EntityDataTypes.Companion.CHARGE_AMOUNT, 0x0)
+        entity.setDataProperty(EntityDataTypes.CHARGE_AMOUNT, 0x0)
         entity.level!!.addLevelEvent(entity.position, LevelEventPacket.EVENT_SOUND_GHAST_FIREBALL)
     }
 }

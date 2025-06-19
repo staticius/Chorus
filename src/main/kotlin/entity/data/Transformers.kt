@@ -1,11 +1,12 @@
 package org.chorus_oss.chorus.entity.data
 
 import org.chorus_oss.chorus.block.Block
+import org.chorus_oss.chorus.block.BlockState
 import java.util.*
 import java.util.function.Function
 
 object Transformers {
-    val BLOCK: Function<Block, Int> = (Function { block: Block -> block.blockState.blockStateHash() })
+    val BLOCK: Function<BlockState, Int> = (Function { it.blockStateHash() })
     val BOOLEAN_TO_BYTE: Function<Boolean, Byte> = (Function { b: Boolean -> if (b) 1.toByte() else 0.toByte() })
     val FLAGS: Function<EnumSet<EntityFlag>, Long> =
         Function { set: EnumSet<EntityFlag> ->

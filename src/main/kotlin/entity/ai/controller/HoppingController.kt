@@ -54,7 +54,7 @@ class HoppingController(moveCooldown: Int) : WalkController() {
                 val jumpSound =
                     if (entity is EntityRabbit) Sound.MOB_RABBIT_HOP else if (entity is EntitySlime) Sound.JUMP_SLIME else null
                 if (jumpSound != null) entity.level!!.addSound(entity.position, jumpSound)
-                entity.setDataProperty(EntityDataTypes.Companion.CLIENT_EVENT, 2)
+                entity.setDataProperty(EntityDataTypes.CLIENT_EVENT, 2)
                 currentJumpCoolDown = 0
             }
             entity.addTmpMoveMotion(Vector3(dx, dy, dz))

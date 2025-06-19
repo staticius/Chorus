@@ -9,12 +9,12 @@ import org.chorus_oss.chorus.network.protocol.MobArmorEquipmentPacket
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 
-class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, InventoryType.ARMOR, 4) {
+class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, InventoryType.ARMOR, 5) {
     val entity: Entity = holder as Entity
 
 
     override val size: Int
-        get() = 4
+        get() = 5
 
 
     val helmet: Item
@@ -31,6 +31,9 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
 
     val boots: Item
         get() = this.getItem(SLOT_FEET)
+
+    val body: Item
+        get() = this.getItem(SLOT_BODY)
 
 
     fun setHelmet(item: Item?): Boolean {
@@ -52,6 +55,10 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
         return this.setItem(SLOT_FEET, item!!)
     }
 
+    fun setBody(item: Item): Boolean {
+        return this.setItem(SLOT_BODY, item)
+    }
+
     override fun sendSlot(index: Int, vararg players: Player) {
         for (player in players) {
             this.sendSlot(index, player)
@@ -59,15 +66,6 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
     }
 
     override fun sendSlot(index: Int, player: Player) {
-        val mobArmorEquipmentPacket = MobArmorEquipmentPacket()
-        mobArmorEquipmentPacket.eid = entity.getRuntimeID()
-        mobArmorEquipmentPacket.slots = arrayOf(
-            this.helmet,
-            chestplate,
-            leggings,
-            boots
-        )
-
         if (player === this.holder) {
             val inventorySlotPacket = InventorySlotPacket()
             val id = player.getWindowId(this)
@@ -80,6 +78,16 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
             )
             player.dataPacket(inventorySlotPacket)
         } else {
+            val mobArmorEquipmentPacket = MobArmorEquipmentPacket()
+            mobArmorEquipmentPacket.eid = entity.getRuntimeID()
+            mobArmorEquipmentPacket.slots = arrayOf(
+                this.helmet,
+                chestplate,
+                leggings,
+                boots
+            )
+            mobArmorEquipmentPacket.body = this.body
+
             player.dataPacket(mobArmorEquipmentPacket)
         }
     }
@@ -91,15 +99,6 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
     }
 
     override fun sendContents(player: Player) {
-        val mobArmorEquipmentPacket = MobArmorEquipmentPacket()
-        mobArmorEquipmentPacket.eid = entity.getRuntimeID()
-        mobArmorEquipmentPacket.slots = arrayOf(
-            this.helmet,
-            chestplate,
-            leggings,
-            boots
-        )
-
         if (player === this.holder) {
             val inventoryContentPacket = InventoryContentPacket()
             val id = player.getWindowId(this)
@@ -116,6 +115,16 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
             )
             player.dataPacket(inventoryContentPacket)
         } else {
+            val mobArmorEquipmentPacket = MobArmorEquipmentPacket()
+            mobArmorEquipmentPacket.eid = entity.getRuntimeID()
+            mobArmorEquipmentPacket.slots = arrayOf(
+                this.helmet,
+                chestplate,
+                leggings,
+                boots
+            )
+            mobArmorEquipmentPacket.body = this.body
+
             player.dataPacket(mobArmorEquipmentPacket)
         }
     }
@@ -132,5 +141,6 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
         const val SLOT_CHEST: Int = 1
         const val SLOT_LEGS: Int = 2
         const val SLOT_FEET: Int = 3
+        const val SLOT_BODY: Int = 4
     }
 }
