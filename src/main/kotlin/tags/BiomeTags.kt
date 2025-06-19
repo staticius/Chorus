@@ -78,7 +78,7 @@ object BiomeTags {
         val biomeDefinitions: Set<BiomeDefinition> = Registries.BIOME.biomeDefinitions
         val tmpMap = HashMap<String, Set<String>>()
         for (def in biomeDefinitions) {
-            tmpMap[def.nameHash] = HashSet(def.tags)
+            tmpMap[def.name] = HashSet(def.tags)
         }
         for ((key, value) in tmpMap) {
             for (biomeTag in value) {
@@ -91,23 +91,23 @@ object BiomeTags {
     }
 
     fun containTag(biomeId: Int, tag: String?): Boolean {
-        return Registries.BIOME.get(biomeId)!!.tags.contains(tag)
+        return Registries.BIOME[biomeId]!!.tags.contains(tag)
     }
 
     fun containTag(biomeName: String, tag: String): Boolean {
         return Registries.BIOME.get(biomeName)!!.tags.contains(tag)
     }
 
-    fun getTagSet(biomeName: String): @UnmodifiableView MutableSet<String> {
+    fun getTagSet(biomeName: String): Set<String> {
         return Registries.BIOME.get(biomeName)!!.tags
     }
 
-    fun getBiomeSet(tag: String): @UnmodifiableView MutableSet<String> {
-        return Collections.unmodifiableSet(TAG_2_BIOMES.getOrDefault(tag, setOf()))
+    fun getBiomeSet(tag: String): Set<String> {
+        return TAG_2_BIOMES.getOrDefault(tag, setOf())
     }
 
     fun register(definition: BiomeDefinition) {
-        val name = definition.nameHash
+        val name = definition.name
         val tags = definition.tags
         for (tag in tags) {
             val itemSet = TAG_2_BIOMES[tag]
