@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 
 class InventoryContentPacket : DataPacket() {
     var inventoryId: Int = 0
-    var slots: Array<Item> = Item.EMPTY_ARRAY
+    var slots: List<Item> = emptyList()
     var fullContainerName: FullContainerName = FullContainerName(ContainerSlotType.ANVIL_INPUT, null)
     var storageItem: Item = Item.AIR // is air if the item is not a bundle
 
@@ -27,5 +27,9 @@ class InventoryContentPacket : DataPacket() {
 
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
+    }
+
+    override fun toString(): String {
+        return "InventoryContentPacket(inventoryId=$inventoryId, slots=$slots, fullContainerName=$fullContainerName, storageItem=$storageItem)"
     }
 }

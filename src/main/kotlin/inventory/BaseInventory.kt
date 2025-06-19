@@ -435,7 +435,7 @@ abstract class BaseInventory(
 
     override fun sendContents(vararg players: Player) {
         val pk = InventoryContentPacket()
-        pk.slots = Array(this.size) { i ->
+        pk.slots = List(this.size) { i ->
             this.getUnclonedItem(i)
         }
 

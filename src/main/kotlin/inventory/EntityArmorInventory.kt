@@ -103,7 +103,7 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
             val inventoryContentPacket = InventoryContentPacket()
             val id = player.getWindowId(this)
             inventoryContentPacket.inventoryId = id
-            inventoryContentPacket.slots = arrayOf(
+            inventoryContentPacket.slots = listOf(
                 this.helmet,
                 chestplate,
                 leggings,

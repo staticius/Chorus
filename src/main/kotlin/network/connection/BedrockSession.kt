@@ -299,7 +299,12 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
     }
 
     protected fun logOutbound(packet: DataPacket) {
-        if (log.isTraceEnabled && !Server.instance.isIgnoredPacket(packet.javaClass)) {
+        if (Server.instance.isLoggedPacket(packet.javaClass)) {
+            log.info(
+                "Outbound {}({}): {}",
+                socketAddress, this.subClientId, packet
+            )
+        } else if (log.isTraceEnabled && !Server.instance.isIgnoredPacket(packet.javaClass)) {
             log.trace(
                 "Outbound {}({}): {}",
                 socketAddress, this.subClientId, packet
@@ -308,7 +313,12 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
     }
 
     protected fun logInbound(packet: DataPacket) {
-        if (log.isTraceEnabled && !Server.instance.isIgnoredPacket(packet.javaClass)) {
+        if (Server.instance.isLoggedPacket(packet.javaClass)) {
+            log.info(
+                "Inbound {}({}): {}",
+                socketAddress, this.subClientId, packet
+            )
+        } else if (log.isTraceEnabled && !Server.instance.isIgnoredPacket(packet.javaClass)) {
             log.trace(
                 "Inbound {}({}): {}",
                 socketAddress, this.subClientId, packet

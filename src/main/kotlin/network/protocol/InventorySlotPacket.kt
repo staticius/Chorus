@@ -28,4 +28,8 @@ class InventorySlotPacket : DataPacket(), PacketEncoder {
     override fun handle(handler: PacketHandler) {
         handler.handle(this)
     }
+
+    override fun toString(): String {
+        return "InventorySlotPacket(inventoryId=$inventoryId, slot=$slot, fullContainerName=$fullContainerName, storageItem=$storageItem, item=$item)"
+    }
 }
