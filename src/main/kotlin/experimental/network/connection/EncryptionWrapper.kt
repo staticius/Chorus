@@ -1,4 +1,4 @@
-package org.chorus_oss.chorus.network.chorus
+package org.chorus_oss.chorus.experimental.network.connection
 
 import kotlinx.io.Buffer
 import kotlinx.io.Sink
