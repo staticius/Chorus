@@ -44,7 +44,7 @@ Minecraft: Bedrock server software, open source and written in Kotlin
 [protocol_badge_url]: https://img.shields.io/badge/protocol-v818-white?style=flat-square
 [protocol_url]: https://github.com/Mojang/bedrock-protocol-docs
 
-[kotlin_badge_url]: https://img.shields.io/badge/kotlin-white?style=flat-square&logo=kotlin
+[kotlin_badge_url]: https://img.shields.io/badge/kotlin-2.1.10-%237F52FF?style=flat-square&logo=kotlin&labelColor=white
 [kotlin_url]: https://kotlinlang.org/
 
 [license_badge_url]: https://img.shields.io/github/license/Chorus-OSS/Chorus?style=flat-square
