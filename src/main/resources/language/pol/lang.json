@@ -1001,7 +1001,7 @@
   "chorus.level.preparing": "Przygotowywanie poziomu \"{%0}\"",
   "chorus.level.init": "Ładowanie poziomu \"{%0}\" zostało zakończone",
   "chorus.level.tickError": "Nie udalo sie obsluzyc operacji tick w pozomie\"{%0}\": {%1}",
-  "chorus.level.unloading": "Zwalnianie poziomu \"{%0}",
+  "chorus.level.unloading": "Zwalnianie poziomu \"{%0}\"",
   "chorus.level.updating": "Znaleziono informacje o poziomie dla \"{%0}\", zmiana formatu",
   "chorus.player.invalidEntity": "{%0} probowal zaatakowac niepoprawny byt",
   "chorus.player.invalidMove": "{%0} poruszyl sie nieprawidlowo!",

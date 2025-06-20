@@ -2451,7 +2451,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
                 this.previousCurrentMotion.z = 0.0
             }
         }
-        else (this as EntityPhysical).addPreviousLiquidMovement()
+        else if (this is EntityPhysical) this.addPreviousLiquidMovement()
     }
 
     fun setPositionAndRotation(pos: Vector3, yaw: Double, pitch: Double): Boolean {

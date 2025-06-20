@@ -1005,7 +1005,7 @@
   "chorus.level.preparing": "准备世界 \"{%0}\" 中",
   "chorus.level.init": "级别“{%0}”的加载已完成",
   "chorus.level.tickError": "更新世界 \"{%0}\" 时出现错误：{%1}",
-  "chorus.level.unloading": "正在卸载世界 \"{%0}",
+  "chorus.level.unloading": "正在卸载世界 \"{%0}\"",
   "chorus.level.updating": "发现旧的世界 \"{%0}\"，正在转换格式",
   "chorus.player.invalidEntity": "{%0} 尝试攻击一个无效的实体",
   "chorus.player.invalidMove": "{%0} 行动可疑！",

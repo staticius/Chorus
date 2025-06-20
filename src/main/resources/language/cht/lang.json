@@ -1005,7 +1005,7 @@
   "chorus.level.preparing": "正在準備地圖 \"{%0}\"",
   "chorus.level.init": "等級 \"{%0}\" 的加載已完成",
   "chorus.level.tickError": "計算地圖「{%0}」時出現錯誤：{%1}",
-  "chorus.level.unloading": "正在移除地圖 \"{%0}",
+  "chorus.level.unloading": "正在移除地圖 \"{%0}\"",
   "chorus.level.updating": "發現舊的地圖 \"{%0}\"，正在轉換格式",
   "chorus.player.invalidEntity": "{%0} 嘗試攻擊一個無效的實體",
   "chorus.player.invalidMove": "{%0} 行動可疑！",

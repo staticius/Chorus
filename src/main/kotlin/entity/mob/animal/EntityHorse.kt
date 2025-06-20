@@ -207,7 +207,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
                 Behavior(
                     AnimalGrowExecutor(),  //todo：Growth rate
                     all(
-                        PassByTimeEvaluator(CoreMemoryTypes.Companion.ENTITY_SPAWN_TIME, 20 * 60 * 20, Int.MAX_VALUE),
+                        PassByTimeEvaluator(CoreMemoryTypes.ENTITY_SPAWN_TIME, 20 * 60 * 20, Int.MAX_VALUE),
                         IBehaviorEvaluator { entity: EntityMob -> entity is EntityAnimal && entity.isBaby() }
                     ),
                     1, 1, 1200
@@ -216,11 +216,11 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
             setOf<IBehavior>(
                 Behavior(
                     TameHorseExecutor(0.4f, 12, 40, true, 100, true, 10, 35), all(
-                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.RIDER_NAME),
+                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.RIDER_NAME),
                         IBehaviorEvaluator { e: EntityMob? -> !this.hasOwner(false) }
                     ), 4, 1),
                 Behavior(
-                    LookAtTargetExecutor(CoreMemoryTypes.Companion.NEAREST_PLAYER, 100),
+                    LookAtTargetExecutor(CoreMemoryTypes.NEAREST_PLAYER, 100),
                     ProbabilityEvaluator(4, 10),
                     1,
                     1,
@@ -381,7 +381,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     override fun dismountEntity(entity: Entity): Boolean {
-        this.memoryStorage.clear(CoreMemoryTypes.Companion.RIDER_NAME)
+        this.memoryStorage.clear(CoreMemoryTypes.RIDER_NAME)
         return super.dismountEntity(entity)
     }
 
@@ -390,7 +390,7 @@ open class EntityHorse(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, n
     }
 
     fun getRider(): Entity? {
-        val name = memoryStorage.get<String>(CoreMemoryTypes.Companion.RIDER_NAME)
+        val name = memoryStorage.get<String>(CoreMemoryTypes.RIDER_NAME)
         return if (name != null) {
             Server.instance.getPlayerExact(name)
         } else null //todo other entity

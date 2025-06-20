@@ -1001,7 +1001,7 @@
   "chorus.level.preparing": "Préparation du monde \"{%0}\"",
   "chorus.level.init": "Le chargement est terminé pour le monde \"{%0}\"",
   "chorus.level.tickError": "Impossible de cocher le monde \"{%0}\" : {%1}",
-  "chorus.level.unloading": "Déchargement du monde \"{%0}",
+  "chorus.level.unloading": "Déchargement du monde \"{%0}\"",
   "chorus.level.updating": "Données de l\u0027ancien monde trouvées pour \"{%0}\", conversion du format",
   "chorus.player.invalidEntity": "{%0} a essayé d\u0027attaquer une entité non valide",
   "chorus.player.invalidMove": "{%0} s\u0027est mal déplacé !",

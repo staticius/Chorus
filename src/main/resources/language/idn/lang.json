@@ -1001,7 +1001,7 @@
   "chorus.level.preparing": "Mempersiapkan \"{%0}\"",
   "chorus.level.init": "Pemuatan selesai untuk level \"{%0}\"",
   "chorus.level.tickError": "Level tick error \"{%0}\": {%1}",
-  "chorus.level.unloading": "Membongkar level \"{%0}",
+  "chorus.level.unloading": "Membongkar level \"{%0}\"",
   "chorus.level.updating": "Data level lama ditemukan untuk \"{%0}\", converting format",
   "chorus.player.invalidEntity": "{%0} mencoba menyerang entity yang tidak valid",
   "chorus.player.invalidMove": "{%0} salah bergerak!",

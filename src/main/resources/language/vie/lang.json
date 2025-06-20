@@ -1001,7 +1001,7 @@
   "chorus.level.preparing": "Chuẩn bị thế giới \"{%0}\"",
   "chorus.level.init": "Tải cấp độ \"{%0}\" đã hoàn tất",
   "chorus.level.tickError": "Không thể tick level \"{%0}\": {%1}",
-  "chorus.level.unloading": "Unload thế giới \"{%0}",
+  "chorus.level.unloading": "Unload thế giới \"{%0}\"",
   "chorus.level.updating": "Kiểu định dạng thế giỡi cũ \"{%0}\", đang chuyển sang định dạng mới",
   "chorus.player.invalidEntity": "{%0} tried to attack an invalid entity",
   "chorus.player.invalidMove": "{%0} di chuyển sai!",

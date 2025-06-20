@@ -64,27 +64,27 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
             setOf<IBehavior>(
                 Behavior(
                     PerchingExecutor(),
-                    { entity: EntityMob? -> memoryStorage.get<Boolean>(CoreMemoryTypes.Companion.FORCE_PERCHING) },
+                    { entity: EntityMob? -> memoryStorage.get<Boolean>(CoreMemoryTypes.FORCE_PERCHING) },
                     5,
                     1
                 ),
                 Behavior(
                     StrafeExecutor(), all(
-                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
-                        EntityCheckEvaluator(CoreMemoryTypes.Companion.NEAREST_PLAYER),
-                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.LAST_ENDER_CRYSTAL_DESTROY)
+                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.NEAREST_PLAYER),
+                        EntityCheckEvaluator(CoreMemoryTypes.NEAREST_PLAYER),
+                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.LAST_ENDER_CRYSTAL_DESTROY)
                     ), 4, 1
                 ),
                 Behavior(
-                    CircleMovementExecutor(CoreMemoryTypes.Companion.STAY_NEARBY, 1f, true, 82, 12, 5), all(
-                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.STAY_NEARBY),
-                        MemoryCheckEmptyEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY)
+                    CircleMovementExecutor(CoreMemoryTypes.STAY_NEARBY, 1f, true, 82, 12, 5), all(
+                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.STAY_NEARBY),
+                        MemoryCheckEmptyEvaluator(CoreMemoryTypes.NEAREST_SHARED_ENTITY)
                     ), 3, 1
                 ),
                 Behavior(
-                    CircleMovementExecutor(CoreMemoryTypes.Companion.STAY_NEARBY, 1f, true, 48, 8, 4), all(
-                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.STAY_NEARBY),
-                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY)
+                    CircleMovementExecutor(CoreMemoryTypes.STAY_NEARBY, 1f, true, 48, 8, 4), all(
+                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.STAY_NEARBY),
+                        MemoryCheckNotEmptyEvaluator(CoreMemoryTypes.NEAREST_SHARED_ENTITY)
                     ), 2, 1
                 )
             ),
@@ -92,7 +92,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
                 NearestPlayerSensor(512.0, 0.0, 20),
                 NearestEntitySensor(
                     EntityEnderCrystal::class.java,
-                    CoreMemoryTypes.Companion.NEAREST_SHARED_ENTITY,
+                    CoreMemoryTypes.NEAREST_SHARED_ENTITY,
                     192.0,
                     0.0,
                     10
@@ -256,7 +256,7 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         this.diffHandDamage = floatArrayOf(6f, 10f, 15f)
         this.maxHealth = 200
         super.initEntity()
-        memoryStorage[CoreMemoryTypes.Companion.STAY_NEARBY] = Vector3(0.0, 84.0, 0.0)
+        memoryStorage[CoreMemoryTypes.STAY_NEARBY] = Vector3(0.0, 84.0, 0.0)
         isActive = false
         noClip = true
     }
@@ -298,9 +298,9 @@ class EntityEnderDragon(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nb
         SimpleSpaceAStarRouteFinder(blockEvaluator, entity) {
         override fun search(): Boolean {
             val superRes = super.search()
-            if (superRes && memoryStorage.notEmpty(CoreMemoryTypes.Companion.MOVE_TARGET)) {
+            if (superRes && memoryStorage.notEmpty(CoreMemoryTypes.MOVE_TARGET)) {
                 this.nodes = mutableListOf(nodes.first())
-                nodes.add(Node(memoryStorage[CoreMemoryTypes.Companion.MOVE_TARGET]!!, null, 0, 0))
+                nodes.add(Node(memoryStorage[CoreMemoryTypes.MOVE_TARGET]!!, null, 0, 0))
             }
             return superRes
         }

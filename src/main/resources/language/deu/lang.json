@@ -1001,7 +1001,7 @@
   "chorus.level.preparing": "Vorbereiten der Welt \"{%0}\"",
   "chorus.level.init": "Laden ist abgeschlossen für die Ebene \"{%0}\"",
   "chorus.level.tickError": "Welt \"{%0}\" konnte nicht getickt werden: {%1}",
-  "chorus.level.unloading": "Entladen der Welt \"{%0}",
+  "chorus.level.unloading": "Entladen der Welt \"{%0}\"",
   "chorus.level.updating": "\"{%0}\" nutzt noch das alte Weltenformat, konvertiere zum neuen Format...",
   "chorus.player.invalidEntity": "{%0} versuchte ein fehlerhaftes Entity anzugreifen",
   "chorus.player.invalidMove": "{%0} bewegte sich fehlerhaft!",

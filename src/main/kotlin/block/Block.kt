@@ -1286,4 +1286,17 @@ abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.ins
             }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Block
+
+        if (this.blockState != other.blockState) return false
+        if (this.position != other.position) return false
+        if (this.level != other.level) return false
+
+        return true
+    }
 }

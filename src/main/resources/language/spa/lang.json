@@ -1001,7 +1001,7 @@
   "chorus.level.preparing": "Preparando nivel \"{%0}\"",
   "chorus.level.init": "La carga del nivel \"{%0}\" está completa",
   "chorus.level.tickError": "No se puede marcar el nivel \"{%0}\": {%1}",
-  "chorus.level.unloading": "Descargando nivel \"{%0}",
+  "chorus.level.unloading": "Descargando nivel \"{%0}\"",
   "chorus.level.updating": "\"{%0}\" de datos de nivel antiguos encontrados, convirtiendo formato",
   "chorus.player.invalidEntity": "{%0} Intentó atacar una entidad invalida",
   "chorus.player.invalidMove": "{%0} movido incorrectamente!",
