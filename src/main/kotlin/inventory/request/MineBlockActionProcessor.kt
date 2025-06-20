@@ -1,8 +1,9 @@
 package org.chorus_oss.chorus.inventory.request
 
 import org.chorus_oss.chorus.Player
+import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.inventory.SpecialWindowId
-import org.chorus_oss.chorus.network.protocol.InventorySlotPacket
+import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
@@ -10,6 +11,7 @@ import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.Min
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import org.chorus_oss.chorus.utils.Loggable
+import org.chorus_oss.protocol.types.item.ItemStack
 
 
 class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction> {
@@ -31,16 +33,18 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
         }
 
         if (itemInHand.damage != action.predictedDurability) {
-            val inventorySlotPacket = InventorySlotPacket()
             val id = SpecialWindowId.PLAYER.id
-            inventorySlotPacket.inventoryId = id
-            inventorySlotPacket.item = itemInHand
-            inventorySlotPacket.slot = action.hotbarSlot
-            inventorySlotPacket.fullContainerName = FullContainerName(
-                ContainerSlotType.HOTBAR,
-                id
+            val packet = org.chorus_oss.protocol.packets.InventorySlotPacket(
+                windowID = id.toUInt(),
+                slot = action.hotbarSlot.toUInt(),
+                container = org.chorus_oss.protocol.types.inventory.FullContainerName(
+                    org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Hotbar,
+                    id,
+                ),
+                storageItem = ItemStack.from(Item.AIR),
+                newItem = ItemStack.from(itemInHand),
             )
-            player.dataPacket(inventorySlotPacket)
+            player.sendPacket(packet)
         }
         val itemStackResponseSlot =
             ItemStackResponseContainer(

@@ -2,11 +2,13 @@ package org.chorus_oss.chorus.inventory
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.entity.IHuman
+import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.network.protocol.InventoryContentPacket
 import org.chorus_oss.chorus.network.protocol.MobEquipmentPacket
-import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.packets.InventoryContentPacket
+import org.chorus_oss.protocol.types.inventory.FullContainerName
+import org.chorus_oss.protocol.types.item.ItemStack
 
 class HumanOffHandInventory(holder: IHuman) : BaseInventory(holder, InventoryType.INVENTORY, 1) {
     override fun init() {
@@ -50,14 +52,17 @@ class HumanOffHandInventory(holder: IHuman) : BaseInventory(holder, InventoryTyp
 
         for (player in players) {
             if (player === this.holder) {
-                val pk2 = InventoryContentPacket()
-                pk2.inventoryId = SpecialWindowId.OFFHAND.id
-                pk2.slots = listOf(item)
-                pk2.fullContainerName = FullContainerName(
-                    ContainerSlotType.OFFHAND,
-                    0
+                val packet = InventoryContentPacket(
+                    windowID = SpecialWindowId.OFFHAND.id.toUInt(),
+                    content = listOf(item).map { ItemStack.from(it) },
+                    container = FullContainerName(
+                        org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Offhand,
+                        null
+                    ),
+                    storageItem = ItemStack.from(Item.AIR)
                 )
-                player.dataPacket(pk2)
+
+                player.sendPacket(packet)
                 player.dataPacket(pk)
             } else {
                 player.dataPacket(pk)

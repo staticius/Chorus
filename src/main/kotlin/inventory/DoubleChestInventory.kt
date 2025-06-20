@@ -2,12 +2,13 @@ package org.chorus_oss.chorus.inventory
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.blockentity.BlockEntityChest
+import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.network.protocol.BlockEventPacket
-import org.chorus_oss.chorus.network.protocol.InventorySlotPacket
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.types.item.ItemStack
 
 
 class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
@@ -178,23 +179,28 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
     }
 
     fun sendSlot(inv: Inventory, index: Int, vararg players: Player) {
-        val pk = InventorySlotPacket()
         val i = if (inv === this.rightSide) leftSide.size + index else index
-        pk.slot = toNetworkSlot(i)
-        pk.item = inv.getUnclonedItem(index)
-
+        val slot = toNetworkSlot(i)
         for (player in players) {
             val id = player.getWindowId(this)
             if (id == -1) {
                 this.close(player)
                 continue
             }
-            pk.inventoryId = id
-            pk.fullContainerName = FullContainerName(
-                this.getSlotType(pk.slot),
-                id
+
+            val packet = org.chorus_oss.protocol.packets.InventorySlotPacket(
+                windowID = id.toUInt(),
+                slot = slot.toUInt(),
+                container = org.chorus_oss.protocol.types.inventory.FullContainerName.from(
+                    FullContainerName(
+                        this.getSlotType(slot),
+                        id
+                    )
+                ),
+                storageItem = ItemStack.from(Item.AIR),
+                newItem = ItemStack.from(inv.getUnclonedItem(index))
             )
-            player.dataPacket(pk)
+            player.sendPacket(packet)
         }
     }
 }

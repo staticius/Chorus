@@ -10,7 +10,10 @@ import java.nio.ByteOrder
 
 fun ItemInstance.Companion.from(value: Item): ItemInstance {
     return ItemInstance(
-        netID = value.runtimeId,
+        netID = when {
+            value.isNothing -> 0
+            else -> value.runtimeId
+        },
         metadata = value.meta.toUInt(),
         blockRuntimeID = value.blockState?.blockStateHash() ?: 0,
         count = value.count.toUShort(),

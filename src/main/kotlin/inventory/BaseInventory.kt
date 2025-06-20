@@ -12,8 +12,6 @@ import org.chorus_oss.chorus.event.inventory.InventoryOpenEvent
 import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
-import org.chorus_oss.chorus.network.protocol.InventoryContentPacket
-import org.chorus_oss.chorus.network.protocol.InventorySlotPacket
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.protocol.types.item.ItemStack
@@ -436,19 +434,24 @@ abstract class BaseInventory(
     }
 
     override fun sendContents(vararg players: Player) {
-        val pk = InventoryContentPacket()
-        pk.slots = List(this.size) { i ->
-            this.getUnclonedItem(i)
-        }
-
         for (player in players) {
             val id = player.getWindowId(this)
             if (id == -1 || !player.spawned) {
                 this.close(player)
                 continue
             }
-            pk.inventoryId = id
-            player.dataPacket(pk)
+
+            val packet = org.chorus_oss.protocol.packets.InventoryContentPacket(
+                windowID = id.toUInt(),
+                content = List(this.size) { ItemStack.from(this.getUnclonedItem(it)) },
+                container = org.chorus_oss.protocol.types.inventory.FullContainerName(
+                    org.chorus_oss.protocol.types.itemstack.ContainerSlotType.AnvilInput,
+                    null
+                ),
+                storageItem = ItemStack.from(Item.AIR)
+            )
+
+            player.sendPacket(packet)
         }
     }
 

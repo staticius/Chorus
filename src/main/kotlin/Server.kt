@@ -2341,12 +2341,18 @@ class Server internal constructor(
         }
     }
 
-    fun isIgnoredPacket(clazz: Class<out DataPacket?>): Boolean {
-        return settings.debugSettings.ignoredPackets.contains(clazz.simpleName)
+    fun isIgnoredPacket(packet: DataPacket): Boolean {
+        if (packet is MigrationPacket<*>) {
+            return settings.debugSettings.ignoredPackets.contains(packet.packet::class.java.simpleName)
+        }
+        return settings.debugSettings.ignoredPackets.contains(packet::class.java.simpleName)
     }
 
-    fun isLoggedPacket(clazz: Class<out DataPacket>): Boolean {
-        return settings.debugSettings.loggedPackets.contains(clazz.simpleName)
+    fun isLoggedPacket(packet: DataPacket): Boolean {
+        if (packet is MigrationPacket<*>) {
+            return settings.debugSettings.loggedPackets.contains(packet.packet::class.java.simpleName)
+        }
+        return settings.debugSettings.loggedPackets.contains(packet::class.java.simpleName)
     }
 
     fun getServerAuthoritativeMovement(): Int {

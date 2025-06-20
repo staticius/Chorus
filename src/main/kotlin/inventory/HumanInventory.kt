@@ -8,6 +8,7 @@ import org.chorus_oss.chorus.entity.IHuman
 import org.chorus_oss.chorus.event.entity.EntityArmorChangeEvent
 import org.chorus_oss.chorus.event.entity.EntityInventoryChangeEvent
 import org.chorus_oss.chorus.event.player.PlayerItemHeldEvent
+import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemArmor
 import org.chorus_oss.chorus.item.ItemFilledMap
@@ -17,6 +18,7 @@ import org.chorus_oss.chorus.network.protocol.*
 import org.chorus_oss.chorus.network.protocol.PlayerArmorDamagePacket.PlayerArmorDamageFlag
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.types.item.ItemStack
 import org.jetbrains.annotations.Range
 import kotlin.math.min
 
@@ -492,15 +494,17 @@ class HumanInventory(human: IHuman) //9+27+4
 
         for (player in players) {
             if (player == this.holder) {
-                val pk1 = InventoryContentPacket()
                 val id = SpecialWindowId.ARMOR.id
-                pk1.inventoryId = id
-                pk1.slots = armor.toList()
-                pk1.fullContainerName = FullContainerName(
-                    ContainerSlotType.ARMOR,
-                    id
+                val packet = org.chorus_oss.protocol.packets.InventoryContentPacket(
+                    windowID = id.toUInt(),
+                    content = armor.toList().map { ItemStack.from(it) },
+                    container = org.chorus_oss.protocol.types.inventory.FullContainerName(
+                        org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Armor,
+                        id
+                    ),
+                    storageItem = ItemStack.from(Item.AIR)
                 )
-                player.dataPacket(pk1)
+                player.sendPacket(packet)
 
                 val pk2 = PlayerArmorDamagePacket()
                 for (i in 0..3) {
@@ -554,16 +558,18 @@ class HumanInventory(human: IHuman) //9+27+4
 
         for (player in players) {
             if (player == this.holder) {
-                val pk1 = InventorySlotPacket()
                 val id = SpecialWindowId.ARMOR.id
-                pk1.inventoryId = id
-                pk1.slot = index
-                pk1.item = this.getItem(ARMORS_INDEX + index)
-                pk1.fullContainerName = FullContainerName(
-                    ContainerSlotType.ARMOR,
-                    id
+                val packet = org.chorus_oss.protocol.packets.InventorySlotPacket(
+                    windowID = id.toUInt(),
+                    slot = index.toUInt(),
+                    container = org.chorus_oss.protocol.types.inventory.FullContainerName(
+                        org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Armor,
+                        id
+                    ),
+                    storageItem = ItemStack.from(Item.AIR),
+                    newItem = ItemStack.from(this.getItem(ARMORS_INDEX + index))
                 )
-                player.dataPacket(pk1)
+                player.sendPacket(packet)
 
                 val pk2 = PlayerArmorDamagePacket()
                 val item = armor[index]
@@ -589,11 +595,7 @@ class HumanInventory(human: IHuman) //9+27+4
     }
 
     override fun sendContents(vararg players: Player) {
-        val pk = InventoryContentPacket()
         val inventoryAndHotBarSize = this.size - 4
-        pk.slots = List(inventoryAndHotBarSize) { i ->
-            this.getItem(i)
-        }
 
         for (player in players) {
             val id = player.getWindowId(this)
@@ -601,12 +603,20 @@ class HumanInventory(human: IHuman) //9+27+4
                 if (this.holder !== player) this.close(player)
                 continue
             }
-            pk.inventoryId = id
-            pk.fullContainerName = FullContainerName(
-                this.getSlotType(id),
-                id
+
+            val packet = org.chorus_oss.protocol.packets.InventoryContentPacket(
+                windowID = id.toUInt(),
+                content = List(inventoryAndHotBarSize) { ItemStack.from(this.getItem(it)) },
+                container = org.chorus_oss.protocol.types.inventory.FullContainerName.from(
+                    FullContainerName(
+                        this.getSlotType(id),
+                        id
+                    )
+                ),
+                storageItem = ItemStack.from(Item.AIR)
             )
-            player.dataPacket(pk)
+
+            player.sendPacket(packet)
         }
     }
 
@@ -619,31 +629,42 @@ class HumanInventory(human: IHuman) //9+27+4
     }
 
     override fun sendSlot(index: Int, vararg players: Player) {
-        val pk = InventorySlotPacket()
-        pk.slot = index
-        pk.item = getItem(index).clone()
-
         for (player in players) {
             if (player == this.holder) {
                 val id = SpecialWindowId.PLAYER.id
-                pk.inventoryId = id
-                pk.fullContainerName = FullContainerName(
-                    this.getSlotType(index),
-                    id
+                val packet = org.chorus_oss.protocol.packets.InventorySlotPacket(
+                    windowID = id.toUInt(),
+                    slot = index.toUInt(),
+                    container = org.chorus_oss.protocol.types.inventory.FullContainerName.from(
+                        FullContainerName(
+                            this.getSlotType(index),
+                            id
+                        )
+                    ),
+                    storageItem = ItemStack.from(Item.AIR),
+                    newItem = ItemStack.from(this.getItem(index))
                 )
-                player.dataPacket(pk)
+                player.sendPacket(packet)
             } else {
                 val id = player.getWindowId(this)
                 if (id == -1) {
                     this.close(player)
                     continue
                 }
-                pk.inventoryId = id
-                pk.fullContainerName = FullContainerName(
-                    this.getSlotType(index),
-                    id
+
+                val packet = org.chorus_oss.protocol.packets.InventorySlotPacket(
+                    windowID = id.toUInt(),
+                    slot = index.toUInt(),
+                    container = org.chorus_oss.protocol.types.inventory.FullContainerName.from(
+                        FullContainerName(
+                            this.getSlotType(index),
+                            id
+                        )
+                    ),
+                    storageItem = ItemStack.from(Item.AIR),
+                    newItem = ItemStack.from(this.getItem(index))
                 )
-                player.dataPacket(pk)
+                player.sendPacket(packet)
             }
         }
     }
