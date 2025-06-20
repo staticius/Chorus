@@ -17,8 +17,4 @@ data class BlockEventPacket(
     override fun pid(): Int {
         return ProtocolInfo.BLOCK_EVENT_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

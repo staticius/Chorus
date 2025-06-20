@@ -23,8 +23,4 @@ data class AddPaintingPacket(
     override fun pid(): Int {
         return ProtocolInfo.ADD_PAINTING_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

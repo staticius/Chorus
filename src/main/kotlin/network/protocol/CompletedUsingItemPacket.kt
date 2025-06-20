@@ -36,10 +36,6 @@ data class CompletedUsingItemPacket(
         return ProtocolInfo.COMPLETED_USING_ITEM_PACKET
     }
 
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
-
     companion object {
         const val ACTION_EAT: Int = 1
     }

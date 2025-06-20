@@ -1,35 +1,9 @@
 package org.chorus_oss.chorus.network.protocol
 
 interface PacketHandler {
-    fun handle(pk: AddBehaviorTreePacket) {}
-
-    fun handle(pk: AddActorPacket) {}
-
-    fun handle(pk: AddItemActorPacket) {}
-
-    fun handle(pk: AddPaintingPacket) {}
-
-    fun handle(pk: AddPlayerPacket) {}
-
-    fun handle(pk: AddVolumeEntityPacket) {}
-
-    fun handle(pk: AgentActionEventPacket) {}
-
-    fun handle(pk: AgentAnimationPacket) {}
-
-    fun handle(pk: AnimateEntityPacket) {}
-
     fun handle(pk: AnimatePacket) {}
 
     fun handle(pk: AnvilDamagePacket) {}
-
-    fun handle(pk: AvailableCommandsPacket) {}
-
-    fun handle(pk: AvailableActorIdentifiersPacket) {}
-
-    fun handle(pk: BlockActorDataPacket) {}
-
-    fun handle(pk: BlockEventPacket) {}
 
     fun handle(pk: BlockPickRequestPacket) {}
 
@@ -39,65 +13,23 @@ interface PacketHandler {
 
     fun handle(pk: CameraAimAssistPacket) {}
 
-    fun handle(pk: CameraAimAssistPresetsPacket) {}
-
-    fun handle(pk: CameraInstructionPacket) {}
-
-    fun handle(pk: CameraPacket) {}
-
-    fun handle(pk: CameraPresetsPacket) {}
-
-    fun handle(pk: CameraShakePacket) {}
-
-    fun handle(pk: ChangeDimensionPacket) {}
-
     fun handle(pk: ChangeMobPropertyPacket) {}
-
-    fun handle(pk: ChunkRadiusUpdatedPacket) {}
-
-    fun handle(pk: ClientboundCloseFormPacket) {}
 
     fun handle(pk: ClientCacheStatusPacket) {}
 
     fun handle(pk: ClientToServerHandshakePacket) {}
 
-    fun handle(pk: ClientboundMapItemDataPacket) {}
-
-    fun handle(pk: CodeBuilderPacket) {}
-
     fun handle(pk: CodeBuilderSourcePacket) {}
 
     fun handle(pk: CommandBlockUpdatePacket) {}
 
-    fun handle(pk: CommandOutputPacket) {}
-
     fun handle(pk: CommandRequestPacket) {}
 
-    fun handle(pk: CompletedUsingItemPacket) {}
-
     fun handle(pk: ContainerClosePacket) {}
-
-    fun handle(pk: ContainerOpenPacket) {}
-
-    fun handle(pk: ContainerRegistryCleanupPacket) {}
-
-    fun handle(pk: ContainerSetDataPacket) {}
-
-    fun handle(pk: CraftingDataPacket) {}
-
-    fun handle(pk: CreatePhotoPacket) {}
-
-    fun handle(pk: CreativeContentPacket) {}
-
-    fun handle(pk: DeathInfoPacket) {}
 
     fun handle(pk: DebugInfoPacket) {}
 
     fun handle(pk: ServerboundDiagnosticsPacket) {}
-
-    fun handle(pk: DimensionDataPacket) {}
-
-    fun handle(pk: DisconnectPacket) {}
 
     fun handle(pk: EduUriResourcePacket) {}
 
@@ -111,17 +43,9 @@ interface PacketHandler {
 
     fun handle(pk: GUIDataPickItemPacket) {}
 
-    fun handle(pk: GameRulesChangedPacket) {}
-
     fun handle(pk: HurtArmorPacket) {}
 
-    fun handle(pk: InitiateWebSocketConnectionPacket) {}
-
     fun handle(pk: InteractPacket) {}
-
-    fun handle(pk: InventoryContentPacket) {}
-
-    fun handle(pk: InventorySlotPacket) {}
 
     fun handle(pk: InventoryTransactionPacket) {}
 

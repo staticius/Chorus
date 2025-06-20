@@ -15,8 +15,4 @@ data class ContainerRegistryCleanupPacket(
     override fun pid(): Int {
         return ProtocolInfo.CONTAINER_REGISTRY_CLEANUP_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

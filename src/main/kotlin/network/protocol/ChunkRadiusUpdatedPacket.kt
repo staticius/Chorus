@@ -12,8 +12,4 @@ data class ChunkRadiusUpdatedPacket(
     override fun pid(): Int {
         return ProtocolInfo.CHUNK_RADIUS_UPDATED_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

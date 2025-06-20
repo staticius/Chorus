@@ -13,10 +13,6 @@ data class AvailableActorIdentifiersPacket(
         return ProtocolInfo.AVAILABLE_ACTOR_IDENTIFIERS_PACKET
     }
 
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false

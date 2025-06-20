@@ -20,8 +20,4 @@ data class ContainerOpenPacket(
     override fun pid(): Int {
         return ProtocolInfo.CONTAINER_OPEN_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

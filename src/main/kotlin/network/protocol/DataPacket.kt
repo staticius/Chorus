@@ -9,7 +9,7 @@ abstract class DataPacket {
 
     abstract fun pid(): Int
 
-    abstract fun handle(handler: PacketHandler)
+    open fun handle(handler: PacketHandler) {}
 }
 
 interface PacketDecoder<T : DataPacket> {

@@ -25,10 +25,6 @@ class InventoryContentPacket : DataPacket() {
         return ProtocolInfo.INVENTORY_CONTENT_PACKET
     }
 
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
-
     override fun toString(): String {
         return "InventoryContentPacket(inventoryId=$inventoryId, slots=$slots, fullContainerName=$fullContainerName, storageItem=$storageItem)"
     }

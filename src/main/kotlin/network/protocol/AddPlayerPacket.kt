@@ -51,8 +51,4 @@ data class AddPlayerPacket(
     override fun pid(): Int {
         return ProtocolInfo.ADD_PLAYER_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

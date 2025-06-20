@@ -2978,28 +2978,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
     }
 
 
-    fun playAnimation(animation: Animation) {
-        val viewers: HashSet<Player> = HashSet(viewers.values)
-        if (this.isPlayer) viewers.add(this as Player)
-        playAnimation(animation, viewers)
-    }
-
-    /**
-     * Play the animation of this entity to a specified group of players
-     *
-     *
-     * 向指定玩家群体播放此实体的动画
-     *
-     * @param animation 动画对象 Animation objects
-     * @param players   可视玩家 Visible Player
-     */
-    fun playAnimation(animation: Animation, players: Collection<Player>) {
-        val pk = AnimateEntityPacket.fromAnimation(animation)
-        pk.runtimeIDs.add(this.getRuntimeID())
-        Server.broadcastPacket(players, pk)
-    }
-
-
     fun playActionAnimation(action: AnimatePacket.Action, rowingTime: Float) {
         val viewers: HashSet<Player> = HashSet(viewers.values)
         if (this.isPlayer) viewers.add(this as Player)

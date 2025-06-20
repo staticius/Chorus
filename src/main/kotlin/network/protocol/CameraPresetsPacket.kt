@@ -64,8 +64,4 @@ data class CameraPresetsPacket(
     override fun pid(): Int {
         return ProtocolInfo.Companion.CAMERA_PRESETS_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

@@ -16,8 +16,4 @@ data class CreatePhotoPacket(
     override fun pid(): Int {
         return ProtocolInfo.CREATE_PHOTO_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

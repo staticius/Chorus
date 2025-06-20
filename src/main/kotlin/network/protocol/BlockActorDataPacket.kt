@@ -18,8 +18,4 @@ data class BlockActorDataPacket(
     override fun pid(): Int {
         return ProtocolInfo.BLOCK_ACTOR_DATA_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

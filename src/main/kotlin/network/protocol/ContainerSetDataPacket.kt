@@ -17,10 +17,6 @@ class ContainerSetDataPacket(
         return ProtocolInfo.CONTAINER_SET_DATA_PACKET
     }
 
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
-
     companion object {
         const val PROPERTY_FURNACE_TICK_COUNT: Int = 0
         const val PROPERTY_FURNACE_LIT_TIME: Int = 1

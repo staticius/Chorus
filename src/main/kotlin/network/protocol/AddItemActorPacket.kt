@@ -30,8 +30,4 @@ data class AddItemActorPacket(
     override fun pid(): Int {
         return ProtocolInfo.ADD_ITEM_ACTOR_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

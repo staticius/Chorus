@@ -28,8 +28,4 @@ data class CameraShakePacket(
     override fun pid(): Int {
         return ProtocolInfo.CAMERA_SHAKE_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

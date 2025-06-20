@@ -246,10 +246,6 @@ class AvailableCommandsPacket : DataPacket() {
         return ProtocolInfo.AVAILABLE_COMMANDS_PACKET
     }
 
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
-
     companion object {
         private val WRITE_BYTE =
             ObjIntConsumer { s: HandleByteBuf, v: Int -> s.writeByte(v.toByte().toInt()) }

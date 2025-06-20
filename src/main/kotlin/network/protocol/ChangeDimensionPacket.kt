@@ -19,8 +19,4 @@ data class ChangeDimensionPacket(
     override fun pid(): Int {
         return ProtocolInfo.CHANGE_DIMENSION_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

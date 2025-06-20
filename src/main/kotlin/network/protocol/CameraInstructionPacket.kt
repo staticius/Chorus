@@ -74,8 +74,4 @@ data class CameraInstructionPacket(
     override fun pid(): Int {
         return ProtocolInfo.CAMERA_INSTRUCTION_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

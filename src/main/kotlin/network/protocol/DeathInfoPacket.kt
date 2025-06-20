@@ -18,8 +18,4 @@ class DeathInfoPacket : DataPacket() {
     override fun pid(): Int {
         return ProtocolInfo.Companion.DEATH_INFO_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

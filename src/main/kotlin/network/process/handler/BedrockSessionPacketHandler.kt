@@ -7,8 +7,4 @@ import org.chorus_oss.chorus.network.protocol.PacketHandler
 
 open class BedrockSessionPacketHandler(protected val session: BedrockSession) : PacketHandler {
     protected val player: Player? = session.player
-
-    override fun handle(pk: DisconnectPacket) {
-        player?.close(pk.message)
-    }
 }

@@ -14,8 +14,4 @@ data class CodeBuilderPacket(
     override fun pid(): Int {
         return ProtocolInfo.CODE_BUILDER_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

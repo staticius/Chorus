@@ -45,10 +45,6 @@ data class AnimateEntityPacket(
         return ProtocolInfo.ANIMATE_ENTITY_PACKET
     }
 
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
-
     companion object {
         fun fromAnimation(ani: Animation): AnimateEntityPacket {
             return AnimateEntityPacket(

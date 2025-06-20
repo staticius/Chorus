@@ -25,8 +25,4 @@ class DisconnectPacket : DataPacket() {
     override fun pid(): Int {
         return ProtocolInfo.DISCONNECT_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

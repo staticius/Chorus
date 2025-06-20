@@ -15,8 +15,4 @@ class GameRulesChangedPacket : DataPacket() {
     override fun pid(): Int {
         return ProtocolInfo.Companion.GAME_RULES_CHANGED_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }

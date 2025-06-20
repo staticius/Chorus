@@ -195,8 +195,4 @@ data class ClientboundMapItemDataPacket(
     override fun pid(): Int {
         return ProtocolInfo.CLIENTBOUND_MAP_ITEM_DATA_PACKET
     }
-
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
 }
