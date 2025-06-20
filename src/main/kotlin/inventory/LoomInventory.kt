@@ -26,7 +26,7 @@ class LoomInventory(blockLoom: BlockLoom) : BaseInventory(blockLoom, InventoryTy
                 containerID = who.getWindowId(this),
                 containerType = type.networkType,
                 position = holder.vector3.asBlockVector3(),
-                targetActorID = who.getRuntimeID()
+                targetActorID = who.getUniqueID()
             )
         )
         this.sendContents(who)

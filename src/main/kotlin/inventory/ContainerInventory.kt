@@ -20,7 +20,10 @@ abstract class ContainerInventory(holder: InventoryHolder, type: InventoryType, 
                 containerID = who.getWindowId(this),
                 containerType = type.networkType,
                 position = holder.vector3.asBlockVector3(),
-                targetActorID = who.getRuntimeID()
+                targetActorID = when (type) {
+                    InventoryType.CONTAINER -> -1
+                    else -> who.getUniqueID()
+                }
             )
         )
         this.sendContents(who)
