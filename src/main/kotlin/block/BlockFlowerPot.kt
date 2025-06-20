@@ -45,7 +45,7 @@ class BlockFlowerPot(blockState: BlockState = properties.defaultState) : BlockFl
         fz: Double,
         player: Player?
     ): Boolean {
-        if (!BlockLever.isSupportValid(down(), BlockFace.UP)) {
+        if (!BlockLever.isSupportValid(block.down(), BlockFace.UP)) {
             return false
         }
 

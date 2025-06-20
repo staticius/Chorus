@@ -199,7 +199,7 @@ open class ItemBucket : Item {
                     )
 
                     // When water is removed ensure any adjacent still water is replaced with water that can flow.
-                    for (side in BlockFace.Plane.HORIZONTAL) {
+                    for (side in BlockFace.Plane.HORIZONTAL_FACES) {
                         val b = target.getSideAtLayer(0, side)
                         if (b.id == BlockID.WATER) {
                             level.setBlock(b.position, Block.get(BlockID.FLOWING_WATER))

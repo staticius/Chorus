@@ -13,12 +13,10 @@ import java.util.function.Consumer
 abstract class BlockEntitySpawnableContainer(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
 
-    override lateinit var inventory: Inventory
-
+    override var inventory: Inventory = requireContainerInventory()
 
     override fun loadNBT() {
         super.loadNBT()
-        this.inventory = requireContainerInventory()
         if (!namedTag.contains("Items") || namedTag["Items"] !is ListTag<*>) {
             namedTag.putList("Items", ListTag<CompoundTag>())
         }
