@@ -275,13 +275,13 @@ class BlockEntityPistonArm(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
     }
 
     fun updateMovingData(immediately: Boolean) {
-        if (this.closed || this.level == null) {
+        if (this.closed) {
             return
         }
 
         val packet = this.spawnPacket
         if (!immediately) {
-            if (packet != null) level.addChunkPacket(
+            level.addChunkPacket(
                 position.chunkX,
                 position.chunkZ, packet
             )

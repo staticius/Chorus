@@ -25,6 +25,7 @@ import org.chorus_oss.chorus.event.block.BlockUpdateEvent
 import org.chorus_oss.chorus.event.level.*
 import org.chorus_oss.chorus.event.player.PlayerInteractEvent
 import org.chorus_oss.chorus.event.weather.LightningStrikeEvent
+import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.Item.Companion.get
 import org.chorus_oss.chorus.item.ItemBucket
@@ -55,6 +56,7 @@ import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.scheduler.BlockUpdateScheduler
 import org.chorus_oss.chorus.scheduler.ServerScheduler
 import org.chorus_oss.chorus.utils.*
+import org.chorus_oss.protocol.core.Packet
 import java.awt.Color
 import java.io.File
 import java.lang.ref.SoftReference
@@ -579,6 +581,10 @@ class Level(
             index
         ) { ConcurrentLinkedDeque<DataPacket>() }
         packets.add(packet)
+    }
+
+    fun addChunkPacket(x: Int, z: Int, packet: Packet) {
+        addChunkPacket(x, z, MigrationPacket(packet))
     }
 
     @JvmOverloads

@@ -45,6 +45,7 @@ import org.chorus_oss.chorus.event.player.*
 import org.chorus_oss.chorus.event.player.PlayerTeleportEvent.TeleportCause
 import org.chorus_oss.chorus.event.server.DataPacketSendEvent
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
+import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.form.window.Form
 import org.chorus_oss.chorus.inventory.*
 import org.chorus_oss.chorus.item.*
@@ -769,10 +770,10 @@ open class Player(
 
     //todo a lot on dimension
     private fun setDimension(dimension: Int) {
-        this.dataPacket(
-            ChangeDimensionPacket(
+        this.sendPacket(
+            org.chorus_oss.protocol.packets.ChangeDimensionPacket(
                 dimension = dimension,
-                position = position.asVector3f(),
+                position = org.chorus_oss.protocol.types.Vector3f.from(position),
                 respawn = false,
                 loadingScreenID = loadingScreenId++
             )
@@ -3191,8 +3192,8 @@ open class Player(
     fun setViewDistance(distance: Int) {
         this.chunkRadius = distance
 
-        this.dataPacket(
-            ChunkRadiusUpdatedPacket(
+        this.sendPacket(
+            org.chorus_oss.protocol.packets.ChunkRadiusUpdatedPacket(
                 radius = distance
             )
         )
@@ -4889,13 +4890,13 @@ open class Player(
             this.dataPacket(gameRulesChanged)
 
             if (level.dimension == this.level!!.dimension) {
-                this.dataPacket(
-                    ChangeDimensionPacket(
+                this.sendPacket(
+                    org.chorus_oss.protocol.packets.ChangeDimensionPacket(
                         dimension = when (this.level!!.dimension) {
                             Level.DIMENSION_NETHER -> Level.DIMENSION_OVERWORLD
                             else -> Level.DIMENSION_NETHER
                         },
-                        position = Vector3f(),
+                        position = org.chorus_oss.protocol.types.Vector3f(0f, 0f, 0f),
                         respawn = false,
                         loadingScreenID = loadingScreenId++
                     )

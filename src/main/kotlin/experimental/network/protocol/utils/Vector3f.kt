@@ -1,0 +1,20 @@
+package org.chorus_oss.chorus.experimental.network.protocol.utils
+
+import org.chorus_oss.chorus.math.Vector3
+import org.chorus_oss.protocol.types.Vector3f
+
+fun Vector3f.Companion.from(vec: Vector3): Vector3f {
+    return Vector3f(
+        vec.x.toFloat(),
+        vec.y.toFloat(),
+        vec.z.toFloat()
+    )
+}
+
+fun Vector3f.Companion.from(vec: org.chorus_oss.chorus.math.Vector3f): Vector3f {
+    return Vector3f(
+        vec.x,
+        vec.y,
+        vec.z
+    )
+}

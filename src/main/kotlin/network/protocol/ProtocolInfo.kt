@@ -80,7 +80,7 @@ interface ProtocolInfo {
         const val LEVEL_CHUNK_PACKET = 58
         const val SET_COMMANDS_ENABLED_PACKET = 59
         const val SET_DIFFICULTY_PACKET = 60
-        const val CHANGE_DIMENSION_PACKET = 61
+        // MIGRATED = 61
         const val SET_PLAYER_GAME_TYPE_PACKET = 62
         const val PLAYER_LIST_PACKET = 63
         const val SIMPLE_EVENT_PACKET = 64
@@ -90,11 +90,11 @@ interface ProtocolInfo {
         const val CLIENTBOUND_MAP_ITEM_DATA_PACKET = 67
         const val MAP_INFO_REQUEST_PACKET = 68
         const val REQUEST_CHUNK_RADIUS_PACKET = 69
-        const val CHUNK_RADIUS_UPDATED_PACKET = 70
+        // MIGRATED = 70
 
         // UNUSED                                           = 71
         const val GAME_RULES_CHANGED_PACKET = 72
-        const val CAMERA_PACKET = 73
+        // MIGRATED = 73
         const val BOSS_EVENT_PACKET = 74
         const val SHOW_CREDITS_PACKET = 75
         const val AVAILABLE_COMMANDS_PACKET = 76
@@ -110,17 +110,17 @@ interface ProtocolInfo {
         const val PLAY_SOUND_PACKET = 86
         const val STOP_SOUND_PACKET = 87
         const val SET_TITLE_PACKET = 88
-        const val ADD_BEHAVIOR_TREE_PACKET = 89
+        // MIGRATED = 89
         const val STRUCTURE_BLOCK_UPDATE_PACKET = 90
-        const val SHOW_STORE_OFFER_PACKET = 91
-        const val PURCHASE_RECEIPT_PACKET = 92
+        // MIGRATED = 91
+        // MIGRATED = 92
         const val PLAYER_SKIN_PACKET = 93
         const val SUB_CLIENT_LOGIN_PACKET = 94
-        const val INITIATE_WEB_SOCKET_CONNECTION_PACKET = 95
+        // MIGRATED = 95
         const val SET_LAST_HURT_BY_PACKET = 96
         const val BOOK_EDIT_PACKET = 97
         const val NPC_REQUEST_PACKET = 98
-        const val PHOTO_TRANSFER_PACKET = 99
+        // MIGRATED = 99
         const val MODAL_FORM_REQUEST_PACKET = 100
         const val MODAL_FORM_RESPONSE_PACKET = 101
         const val SERVER_SETTINGS_REQUEST_PACKET = 102
@@ -145,7 +145,7 @@ interface ProtocolInfo {
 
         // UNUSED                                           = 120
         const val NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET = 121
-        const val BIOME_DEFINITION_LIST_PACKET = 122
+        // MIGRATED = 122
         const val LEVEL_SOUND_EVENT_PACKET = 123
         const val LEVEL_EVENT_GENERIC_PACKET = 124
         const val LECTERN_UPDATE_PACKET = 125
@@ -156,15 +156,15 @@ interface ProtocolInfo {
         const val CLIENT_CACHE_STATUS_PACKET = 129
         const val ON_SCREEN_TEXTURE_ANIMATION_PACKET = 130
         const val MAP_CREATE_LOCKED_COPY_PACKET = 131
-        const val STRUCTURE_TEMPLATE_DATA_EXPORT_REQUEST = 132
-        const val STRUCTURE_TEMPLATE_DATA_EXPORT_RESPONSE = 133
+        // MIGRATED = 132
+        // MIGRATED = 133
 
         // UNUSED                                           = 134
-        const val CLIENT_CACHE_BLOB_STATUS_PACKET = 135
-        const val CLIENT_CACHE_MISS_RESPONSE_PACKET = 136
-        const val EDUCATION_SETTINGS_PACKET = 137
+        // MIGRATED = 135
+        // MIGRATED = 136
+        // MIGRATED = 137
         const val EMOTE_PACKET = 138
-        const val MULTIPLAYER_SETTINGS_PACKET = 139
+        // MIGRATED = 139
         const val SETTINGS_COMMAND_PACKET = 140
         const val ANVIL_DAMAGE_PACKET = 141
         const val COMPLETED_USING_ITEM_PACKET = 142
@@ -182,17 +182,17 @@ interface ProtocolInfo {
         const val POS_TRACKING_CLIENT_REQUEST_PACKET = 154
         const val DEBUG_INFO_PACKET = 155
         const val PACKET_VIOLATION_WARNING_PACKET = 156
-        const val MOTION_PREDICTION_HINTS_PACKET = 157
+        // MIGRATED = 157
         const val ANIMATE_ENTITY_PACKET = 158
         const val CAMERA_SHAKE_PACKET = 159
         const val PLAYER_FOG_PACKET = 160
-        const val CORRECT_PLAYER_MOVE_PREDICTION_PACKET = 161
+        // MIGRATED = 161
         const val ITEM_REGISTRY_PACKET = 162
 
         // UNUSED                                           = 163
-        const val CLIENTBOUND_DEBUG_RENDERER_PACKET = 164
+        // MIGRATED = 164
         const val SYNC_ENTITY_PROPERTY_PACKET = 165
-        const val ADD_VOLUME_ENTITY_PACKET = 166
+        // MIGRATED = 166
         const val REMOVE_VOLUME_ENTITY_PACKET = 167
         const val SIMULATION_TYPE_PACKET = 168
         const val NPC_DIALOGUE_PACKET = 169
@@ -201,14 +201,14 @@ interface ProtocolInfo {
         const val UPDATE_SUB_CHUNK_BLOCKS_PACKET = 172
 
         // UNUSED                                           = 173
-        const val SUB_CHUNK_PACKET = 174
-        const val SUB_CHUNK_REQUEST_PACKET = 175
+        // MIGRATED = 174
+        // MIGRATED = 175
         const val PLAYER_START_ITEM_COOL_DOWN_PACKET = 176
         const val SCRIPT_MESSAGE_PACKET = 177
         const val CODE_BUILDER_SOURCE_PACKET = 178
         const val TICKING_AREAS_LOAD_STATUS_PACKET = 179
-        const val DIMENSION_DATA_PACKET = 180
-        const val AGENT_ACTION_EVENT_PACKET = 181
+        // MIGRATED = 180
+        // MIGRATED = 181
         const val CHANGE_MOB_PROPERTY_PACKET = 182
         const val LESSON_PROGRESS_PACKET = 183
         const val REQUEST_ABILITY_PACKET = 184
@@ -217,12 +217,12 @@ interface ProtocolInfo {
         const val UPDATE_ABILITIES_PACKET = 187
         const val UPDATE_ADVENTURE_SETTINGS_PACKET = 188
         const val DEATH_INFO_PACKET = 189
-        const val EDITOR_NETWORK_PACKET = 190
-        const val FEATURE_REGISTRY_PACKET = 191
-        const val SERVER_STATS_PACKET = 192
+        // MIGRATED = 190
+        // MIGRATED = 191
+        // MIGRATED = 192
         const val REQUEST_NETWORK_SETTINGS_PACKET = 193
-        const val GAME_TEST_REQUEST_PACKET = 194
-        const val GAME_TEST_RESULTS_PACKET = 195
+        // MIGRATED = 194
+        // MIGRATED = 195
         const val UPDATE_CLIENT_INPUT_LOCKS = 196
 
         // UNUSED                                           = 197
@@ -237,31 +237,31 @@ interface ProtocolInfo {
         // UNUSED                                           = 301
         const val TRIM_DATA = 302
         const val OPEN_SIGN = 303
-        const val AGENT_ANIMATION = 304
-        const val REFRESH_ENTITLEMENTS = 305
+        // MIGRATED = 304
+        // MIGRATED = 305
         const val TOGGLE_CRAFTER_SLOT_REQUEST = 306
         const val SET_PLAYER_INVENTORY_OPTIONS_PACKET = 307
         const val SET_HUD = 308
-        const val AWARD_ACHIEVEMENT_PACKET = 309
+        // MIGRATED = 309
         const val CLIENTBOUND_CLOSE_FORM_PACKET = 310
 
         // UNUSED                                           = 311
         const val SERVERBOUND_LOADING_SCREEN_PACKET = 312
-        const val JIGSAW_STRUCTURE_DATA_PACKET = 313
-        const val CURRENT_STRUCTURE_FEATURE_PACKET = 314
+        // MIGRATED = 313
+        // MIGRATED = 314
         const val SERVERBOUND_DIAGNOSTICS_PACKET = 315
         const val CAMERA_AIM_ASSIST_PACKET = 316
         const val CONTAINER_REGISTRY_CLEANUP_PACKET = 317
         const val MOVEMENT_EFFECT_PACKET = 318
         // UNUSED = 319
-        const val CAMERA_AIM_ASSIST_PRESETS_PACKET = 320
+        // MIGRATED = 320
         const val CLIENT_CAMERA_AIM_ASSIST_PACKET = 321
         const val CLIENT_MOVEMENT_PREDICTION_SYNC_PACKET = 322
-        const val UPDATE_CLIENT_OPTIONS_PACKET = 323
-        const val PLAYER_VIDEO_CAPTURE_PACKET = 324
-        const val PLAYER_UPDATE_ENTITY_OVERRIDES_PACKET = 325
+        // MIGRATED = 323
+        // MIGRATED = 324
+        // MIGRATED = 325
         const val PLAYER_LOCATION_PACKET = 326
-        const val CLIENTBOUND_CONTROL_SCHEME_SET_PACKET = 327
-        const val SERVER_SCRIPT_DEBUG_DRAWER_PACKET = 328
+        // MIGRATED = 327
+        // MIGRATED = 328
     }
 }

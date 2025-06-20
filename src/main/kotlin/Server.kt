@@ -29,6 +29,7 @@ import org.chorus_oss.chorus.event.level.LevelLoadEvent
 import org.chorus_oss.chorus.event.player.PlayerLoginEvent
 import org.chorus_oss.chorus.event.server.ServerStartedEvent
 import org.chorus_oss.chorus.event.server.ServerStopEvent
+import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.lang.Lang
 import org.chorus_oss.chorus.lang.LangCode
@@ -83,6 +84,7 @@ import org.chorus_oss.chorus.utils.JSONUtils.toPretty
 import org.chorus_oss.chorus.utils.Utils.allThreadDumps
 import org.chorus_oss.chorus.utils.Utils.getExceptionMessage
 import org.chorus_oss.chorus.utils.Utils.readFile
+import org.chorus_oss.protocol.core.Packet
 import org.iq80.leveldb.CompressionType
 import org.iq80.leveldb.DB
 import org.iq80.leveldb.Options
@@ -2403,6 +2405,10 @@ class Server internal constructor(
             for (player in players) {
                 player.dataPacket(packet)
             }
+        }
+
+        fun broadcastPacket(players: Iterable<Player>, packet: Packet) {
+            broadcastPacket(players.toList(), MigrationPacket(packet))
         }
 
         const val LEVEL_DIM_PATTERN: String = "^.*Dim[0-9]$"

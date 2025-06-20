@@ -58,7 +58,6 @@ class DataPacketManager {
             StructureBlockUpdateProcessor(),
             TextProcessor(),
             ContainerCloseProcessor(),
-            BlockEntityDataProcessor(),
             SetPlayerGameTypeProcessor(),
             LecternUpdateProcessor(),
             MapInfoRequestProcessor(),

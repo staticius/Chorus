@@ -9,12 +9,14 @@ import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.event.entity.EntityInventoryChangeEvent
 import org.chorus_oss.chorus.event.inventory.InventoryCloseEvent
 import org.chorus_oss.chorus.event.inventory.InventoryOpenEvent
+import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.network.protocol.InventoryContentPacket
 import org.chorus_oss.chorus.network.protocol.InventorySlotPacket
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.types.item.ItemStack
 import org.jetbrains.annotations.ApiStatus
 import java.util.*
 import java.util.function.Consumer
@@ -514,10 +516,7 @@ abstract class BaseInventory(
     }
 
     override fun sendSlot(index: Int, vararg players: Player) {
-        val pk = InventorySlotPacket()
         val slot = toNetworkSlot(index)
-        pk.slot = slot
-        pk.item = this.getUnclonedItem(index)
 
         for (player in players) {
             val id = player.getWindowId(this)
@@ -525,12 +524,21 @@ abstract class BaseInventory(
                 this.close(player)
                 continue
             }
-            pk.inventoryId = id
-            pk.fullContainerName = FullContainerName(
-                this.getSlotType(slot),
-                id
+
+            val packet = org.chorus_oss.protocol.packets.InventorySlotPacket(
+                windowID = id.toUInt(),
+                slot = slot.toUInt(),
+                container = org.chorus_oss.protocol.types.inventory.FullContainerName.from(
+                    FullContainerName(
+                        this.getSlotType(slot),
+                        id
+                    )
+                ),
+                storageItem = ItemStack.from(Item.AIR),
+                newItem = ItemStack.from(this.getUnclonedItem(index))
             )
-            player.dataPacket(pk)
+
+            player.sendPacket(packet)
         }
     }
 

@@ -1232,12 +1232,6 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         this.writeVarInt(itemDescriptor.count)
     }
 
-    private fun extractStringList(item: Item, tagName: String): List<String> {
-        val namedTag = item.namedTag ?: return emptyList()
-        val listTag = namedTag.getList(tagName, StringTag::class.java)
-        return listTag.all.map { it.data }
-    }
-
     fun readSignedBlockPosition(): BlockVector3 {
         return BlockVector3(readVarInt(), readVarInt(), readVarInt())
     }
@@ -1724,6 +1718,12 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         @JvmStatic
         fun of(buf: ByteBuf): HandleByteBuf {
             return HandleByteBuf(buf)
+        }
+
+        fun extractStringList(item: Item, tagName: String): List<String> {
+            val namedTag = item.namedTag ?: return emptyList()
+            val listTag = namedTag.getList(tagName, StringTag::class.java)
+            return listTag.all.map { it.data }
         }
     }
 }
