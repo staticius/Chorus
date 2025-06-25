@@ -18,7 +18,7 @@ import org.chorus_oss.chorus.math.SimpleAxisAlignedBB
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.protocol.AddPaintingPacket
-import org.chorus_oss.chorus.network.protocol.DataPacket
+import org.chorus_oss.protocol.core.Packet
 import java.util.function.Function
 import java.util.function.Predicate
 
@@ -104,7 +104,7 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
         super.initEntity()
     }
 
-    public override fun createAddEntityPacket(): DataPacket {
+    public override fun createAddEntityPacket(): Packet {
         return AddPaintingPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,

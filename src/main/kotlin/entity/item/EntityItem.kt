@@ -15,8 +15,8 @@ import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.protocol.AddItemActorPacket
-import org.chorus_oss.chorus.network.protocol.DataPacket
 import org.chorus_oss.chorus.network.protocol.EntityEventPacket
+import org.chorus_oss.protocol.core.Packet
 import kotlin.math.abs
 
 class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
@@ -294,7 +294,7 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         return false
     }
 
-    public override fun createAddEntityPacket(): DataPacket {
+    public override fun createAddEntityPacket(): Packet {
         return AddItemActorPacket(
             targetActorID = this.uniqueId,
             targetRuntimeID = this.runtimeId,
