@@ -25,8 +25,8 @@ import java.util.function.Consumer
 
 class VersionCommand(name: String) : Command(
     name,
-    "%nukkit.command.version.description",
-    "%nukkit.command.version.usage",
+    "%chorus.command.version.description",
+    "%chorus.command.version.usage",
     arrayOf<String>("ver", "about")
 ), CoreCommand {
     private val queryQueue: MutableList<Query> = LinkedList<Query>()

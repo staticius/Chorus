@@ -19,7 +19,7 @@ import kotlin.math.round
 
 
 class StatusCommand(name: String) :
-    TestCommand(name, "%nukkit.command.status.description", "%nukkit.command.status.usage"),
+    TestCommand(name, "%chorus.command.status.description", "%chorus.command.status.usage"),
     CoreCommand {
     private val systemInfo = SystemInfo()
 
