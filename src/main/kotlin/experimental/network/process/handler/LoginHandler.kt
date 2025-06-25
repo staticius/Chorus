@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.experimental.network.process.handler
 
 
-import experimental.network.process.handler.SessionHandler
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.connection.util.EncryptionUtils.createHandshakeJwt
