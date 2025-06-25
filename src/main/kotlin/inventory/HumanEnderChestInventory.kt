@@ -4,11 +4,12 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.blockentity.BlockEntityEnderChest
 import org.chorus_oss.chorus.blockentity.BlockEntityNameable
 import org.chorus_oss.chorus.entity.IHuman
+import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.level.Sound
-import org.chorus_oss.chorus.network.protocol.BlockEventPacket
 import org.chorus_oss.chorus.network.protocol.ContainerClosePacket
 import org.chorus_oss.chorus.network.protocol.ContainerOpenPacket
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.types.BlockPos
 
 
 class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryType.CONTAINER, 27),
@@ -56,8 +57,8 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
         )
         this.sendContents(who)
 
-        val blockEventPacket = BlockEventPacket(
-            blockPosition = enderChest!!.position.asBlockVector3(),
+        val blockEventPacket = org.chorus_oss.protocol.packets.BlockEventPacket(
+            blockPosition = BlockPos.from(enderChest!!.position),
             eventType = 1,
             eventValue = 2,
         )
@@ -96,8 +97,8 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
             )
         )
 
-        val blockEventPacket = BlockEventPacket(
-            blockPosition = enderChest!!.position.asBlockVector3(),
+        val blockEventPacket = org.chorus_oss.protocol.packets.BlockEventPacket(
+            blockPosition = BlockPos.from(enderChest!!.position),
             eventType = 1,
             eventValue = 0,
         )

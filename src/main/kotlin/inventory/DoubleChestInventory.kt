@@ -5,9 +5,9 @@ import org.chorus_oss.chorus.blockentity.BlockEntityChest
 import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.level.Sound
-import org.chorus_oss.chorus.network.protocol.BlockEventPacket
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.types.BlockPos
 import org.chorus_oss.protocol.types.item.ItemStack
 
 
@@ -109,8 +109,8 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
         rightSide.viewers.add(who)
 
         if (viewers.size == 1) {
-            val pk1 = BlockEventPacket(
-                blockPosition = leftSide.holder.vector3.asBlockVector3(),
+            val pk1 = org.chorus_oss.protocol.packets.BlockEventPacket(
+                blockPosition = BlockPos.from(leftSide.holder.vector3),
                 eventType = 1,
                 eventValue = 2,
             )
@@ -123,8 +123,8 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
                 )
             }
 
-            val pk2 = BlockEventPacket(
-                blockPosition = rightSide.holder.vector3.asBlockVector3(),
+            val pk2 = org.chorus_oss.protocol.packets.BlockEventPacket(
+                blockPosition = BlockPos.from(rightSide.holder.vector3),
                 eventType = 1,
                 eventValue = 2,
             )
@@ -142,8 +142,8 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
 
     override fun onClose(who: Player) {
         if (viewers.size == 1) {
-            val pk1 = BlockEventPacket(
-                blockPosition = rightSide.holder.vector3.asBlockVector3(),
+            val pk1 = org.chorus_oss.protocol.packets.BlockEventPacket(
+                blockPosition = BlockPos.from(rightSide.holder.vector3),
                 eventType = 1,
                 eventValue = 0,
             )
@@ -157,8 +157,8 @@ class DoubleChestInventory(left: BlockEntityChest, right: BlockEntityChest) :
                 )
             }
 
-            val pk2 = BlockEventPacket(
-                blockPosition = leftSide.holder.vector3.asBlockVector3(),
+            val pk2 = org.chorus_oss.protocol.packets.BlockEventPacket(
+                blockPosition = BlockPos.from(leftSide.holder.vector3),
                 eventType = 1,
                 eventValue = 0,
             )
