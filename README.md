@@ -23,12 +23,13 @@ Minecraft: Bedrock server software, open source and written in Kotlin
 | State | Task                                                                               |
 |:-----:|:-----------------------------------------------------------------------------------|
 |   ⏳   | [Protocol Migration](https://github.com/Chorus-OSS/Chorus/tree/protocol-migration) |
-|   ⏳   | [Data-Driven Blocks](https://github.com/Chorus-OSS/Chorus/tree/block-definitions)  |
+|  🚧   | [Data-Driven Blocks](https://github.com/Chorus-OSS/Chorus/tree/block-definitions)  |
 |  ...  | Data-Driven Items                                                                  |
 |  ...  | Data-Driven Entities                                                               |
 
 - [ ... ] Planned
 - [⏳] In Progress
+- [🚧] On Hold
 - [✅] Completed
 
 
