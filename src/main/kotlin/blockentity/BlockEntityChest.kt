@@ -20,7 +20,7 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
     }
 
     override fun requireContainerInventory(): ContainerInventory {
-        return this._inventory as ContainerInventory
+        return ChestInventory(this)
     }
 
     override fun close() {
@@ -48,16 +48,14 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
     val size: Int
         get() = if (this.doubleInventory != null) doubleInventory!!.size else inventory.size
 
-    private val _inventory: Inventory = ChestInventory(this)
-
-    override var inventory: Inventory
+    override var inventory: Inventory = super.inventory
         set(_) = Unit
         get() {
             if (this.doubleInventory == null && this.isPaired) {
                 this.checkPairing()
             }
 
-            return if (this.doubleInventory != null) doubleInventory!! else _inventory
+            return if (this.doubleInventory != null) doubleInventory!! else field
         }
 
     val realInventory: ChestInventory
