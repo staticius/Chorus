@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.utils.ThreadCache
 import kotlin.math.round
 
 class GarbageCollectorCommand(name: String) :
-    TestCommand(name, "%nukkit.command.gc.description", "%nukkit.command.gc.usage"),
+    TestCommand(name, "%chorus.command.gc.description", "%chorus.command.gc.usage"),
     CoreCommand {
     init {
         this.permission = "chorus.command.gc"

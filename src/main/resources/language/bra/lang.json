@@ -1001,7 +1001,7 @@
   "chorus.level.preparing": "Preparando mundo \"{%0}\"",
   "chorus.level.init": "O carregamento está completo para o nível \"{%0}\"",
   "chorus.level.tickError": "Não foi possível fazer tick no mundo \"{%0}\": {%1}",
-  "chorus.level.unloading": "Descarregando mundo \"{%0}",
+  "chorus.level.unloading": "Descarregando mundo \"{%0}\"",
   "chorus.level.updating": "Dados antigos do mundo \"{%0}\" encontrados, convertendo para o novo formato",
   "chorus.player.invalidEntity": "{%0} tentou atacar uma entidade inválida",
   "chorus.player.invalidMove": "{%0} moveu erradamente!",

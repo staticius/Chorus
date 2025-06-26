@@ -8,7 +8,6 @@ data class EntityLink(
     val riderInitiated: Boolean,
     val vehicleAngularVelocity: Float
 ) {
-    @Deprecated("")
     constructor(
         fromEntityUniqueId: Long,
         toEntityUniqueId: Long,

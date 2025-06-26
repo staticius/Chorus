@@ -8,16 +8,28 @@ import org.chorus_oss.chorus.entity.data.Skin
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus_oss.chorus.event.player.EntityFreezeEvent
+import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemShield
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
-import org.chorus_oss.chorus.network.protocol.AddPlayerPacket
 import org.chorus_oss.chorus.network.protocol.MovePlayerPacket
 import org.chorus_oss.chorus.network.protocol.RemoveActorPacket
 import org.chorus_oss.chorus.network.protocol.SetEntityLinkPacket
 import org.chorus_oss.chorus.network.protocol.types.*
+import org.chorus_oss.protocol.types.AbilitiesData
+import org.chorus_oss.protocol.types.ActorLink
+import org.chorus_oss.protocol.types.ActorProperties
+import org.chorus_oss.protocol.types.CommandPermission
+import org.chorus_oss.protocol.types.Platform
+import org.chorus_oss.protocol.types.PlayerPermission
+import org.chorus_oss.protocol.types.Vector2f
+import org.chorus_oss.protocol.types.Vector3f
+import org.chorus_oss.protocol.types.actor_data.ActorDataMap
+import org.chorus_oss.protocol.types.item.ItemStack
 import java.util.*
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
 open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk, nbt) {
@@ -136,6 +148,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
         Server.broadcastPacket(viewers.values, pk)
     }
 
+    @OptIn(ExperimentalUuidApi::class)
     override fun spawnTo(player: Player) {
         if (this !== player && !hasSpawned.containsKey(player.loaderId)) {
             hasSpawned[player.loaderId] = player
@@ -155,36 +168,37 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
                 arrayOf(player)
             )
 
-            player.dataPacket(
-                AddPlayerPacket(
-                    uuid = this.uuid,
+            player.sendPacket(
+                org.chorus_oss.protocol.packets.AddPlayerPacket(
+                    uuid = Uuid.from(this.uuid),
                     playerName = this.getEntityName(),
-                    targetRuntimeID = this.getRuntimeID(),
+                    actorRuntimeID = this.getRuntimeID().toULong(),
                     platformChatID = "", // TODO: platformChatID
-                    position = this.position.asVector3f(),
-                    velocity = this.motion.asVector3f(),
-                    rotation = this.rotation.asVector2f(),
-                    yHeadRotation = this.headYaw.toFloat(),
-                    carriedItem = this.itemInHand,
+                    position = Vector3f.from(this.position),
+                    velocity = Vector3f.from(this.motion),
+                    rotation = Vector2f.from(this.rotation),
+                    headYaw = this.headYaw.toFloat(),
+                    carriedItem = ItemStack.from(this.itemInHand),
                     playerGameType = Server.instance.gamemode,
-                    entityDataMap = this.entityDataMap,
-                    abilitiesData = SerializedAbilitiesData(
+                    actorData = ActorDataMap.from(this.entityDataMap),
+                    abilitiesData = AbilitiesData(
                         this.getUniqueID(),
-                        PlayerPermission.VISITOR,
-                        CommandPermission.ANY,
-                        emptyArray() // TODO: AbilityLayers
+                        PlayerPermission.Visitor,
+                        CommandPermission.Any,
+                        emptyList() // TODO: AbilityLayers
                     ),
                     actorLinks = List(this.passengers.size) { i ->
-                        EntityLink(
+                        ActorLink(
                             this.getUniqueID(),
                             this.passengers[i].uniqueId,
-                            if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
+                            if (i == 0) ActorLink.Companion.Type.Rider else ActorLink.Companion.Type.Passenger,
                             immediate = false,
-                            riderInitiated = false
+                            riderInitiated = false,
+                            vehicleAngularVelocity = 0f,
                         )
                     },
-                    syncedProperties = this.propertySyncData(),
-                    buildPlatform = Platform.UNKNOWN, // TODO: buildPlatform
+                    actorProperties = ActorProperties.from(this.propertySyncData()),
+                    buildPlatform = Platform.Unknown, // TODO: buildPlatform
                     deviceID = "" // TODO: DeviceID
                 )
             )

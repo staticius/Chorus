@@ -1001,7 +1001,7 @@
   "chorus.level.preparing": "Ruošiamas pasaulis \"{%0}\"",
   "chorus.level.init": "Krovimas baigtas lygiui \"{%0}\"",
   "chorus.level.tickError": "Neįmanoma atnaujinti pasaulio \"{%0}\": {%1}",
-  "chorus.level.unloading": "Iškraunamas pasaulis \"{%0}",
+  "chorus.level.unloading": "Iškraunamas pasaulis \"{%0}\"",
   "chorus.level.updating": "Rastas pasenęs pasaulis pavadinimu \"{%0}\", atnaujinamas formatas",
   "chorus.player.invalidEntity": "{%0} bandė atakuoti klaidingą būtybę",
   "chorus.player.invalidMove": "{%0} neteisingai pajudėjo!",

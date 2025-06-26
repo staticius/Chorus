@@ -6,10 +6,13 @@ import org.chorus_oss.chorus.entity.Attribute.Companion.getAttribute
 import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.data.EntityDataMap
 import org.chorus_oss.chorus.entity.data.EntityDataTypes
+import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.math.Vector2f
 import org.chorus_oss.chorus.math.Vector3f
 import org.chorus_oss.chorus.network.protocol.*
 import org.chorus_oss.chorus.network.protocol.types.PropertySyncData
+import org.chorus_oss.protocol.types.ActorProperties
+import org.chorus_oss.protocol.types.actor_data.ActorDataMap
 import java.util.concurrent.ThreadLocalRandom
 
 class DummyBossBar private constructor(builder: Builder) {
@@ -93,17 +96,17 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun createBossEntity() {
-        player.dataPacket(
-            AddActorPacket(
-                targetActorID = this.bossBarId,
-                targetRuntimeID = this.bossBarId,
+        player.sendPacket(
+            org.chorus_oss.protocol.packets.AddActorPacket(
+                actorUniqueID = this.bossBarId,
+                actorRuntimeID = this.bossBarId.toULong(),
                 actorType = EntityID.CREEPER,
-                position = player.position.asVector3f().setY(-74f),
-                velocity = Vector3f(),
-                rotation = Vector2f(),
-                yHeadRotation = 0f,
-                yBodyRotation = 0f,
-                attributeList = emptyList(),
+                position = org.chorus_oss.protocol.types.Vector3f.from(player.position.asVector3f().setY(-74f)),
+                velocity = org.chorus_oss.protocol.types.Vector3f(0f, 0f, 0f),
+                rotation = org.chorus_oss.protocol.types.Vector2f(0f, 0f),
+                headYaw = 0f,
+                bodyYaw = 0f,
+                attributes = emptyList(),
                 actorData = run {
                     val entityDataMap = EntityDataMap()
                     entityDataMap.getOrCreateFlags()
@@ -112,9 +115,9 @@ class DummyBossBar private constructor(builder: Builder) {
                     entityDataMap[EntityDataTypes.LEASH_HOLDER] = -1
                     entityDataMap[EntityDataTypes.NAME] = text
                     entityDataMap[EntityDataTypes.SCALE] = 0
-                    entityDataMap
+                    ActorDataMap.from(entityDataMap)
                 },
-                syncedProperties = PropertySyncData(intArrayOf(), floatArrayOf()),
+                actorProperties = ActorProperties(emptyList(), emptyList()),
                 actorLinks = emptyList()
             )
         )

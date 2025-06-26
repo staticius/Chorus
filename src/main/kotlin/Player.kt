@@ -95,6 +95,7 @@ import org.chorus_oss.chorus.utils.Identifier.Companion.tryParse
 import org.chorus_oss.chorus.utils.PortalHelper.moveToTheEnd
 import org.chorus_oss.chorus.utils.TextFormat.Companion.clean
 import org.chorus_oss.protocol.core.Packet
+import org.chorus_oss.protocol.packets.ClientboundCloseFormPacket
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
 import java.net.InetSocketAddress
@@ -2142,7 +2143,7 @@ open class Player(
      */
     fun closeFormWindows() {
         formWindows.clear()
-        this.dataPacket(ClientboundCloseFormPacket())
+        this.sendPacket(ClientboundCloseFormPacket())
     }
 
     val address: String

@@ -22,6 +22,7 @@ import org.chorus_oss.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus_oss.chorus.event.entity.EntityPortalEnterEvent.PortalType
 import org.chorus_oss.chorus.event.player.PlayerInteractEvent
 import org.chorus_oss.chorus.event.player.PlayerTeleportEvent.TeleportCause
+import org.chorus_oss.chorus.experimental.network.protocol.utils.from
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTotemOfUndying
 import org.chorus_oss.chorus.item.enchantment.Enchantment
@@ -47,6 +48,11 @@ import org.chorus_oss.chorus.utils.Identifier
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.chorus.utils.PortalHelper
 import org.chorus_oss.chorus.utils.TextFormat
+import org.chorus_oss.protocol.core.Packet
+import org.chorus_oss.protocol.types.ActorLink
+import org.chorus_oss.protocol.types.ActorProperties
+import org.chorus_oss.protocol.types.actor_data.ActorDataMap
+import org.chorus_oss.protocol.types.attribute.AttributeValue
 import java.awt.Color
 import java.util.*
 import java.util.Objects.requireNonNull
@@ -926,7 +932,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
             )
         ) {
             hasSpawned[player.loaderId] = player
-            player.dataPacket(createAddEntityPacket())
+            player.sendPacket(createAddEntityPacket())
         }
 
         if (this.riding != null) {
@@ -942,29 +948,30 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
         }
     }
 
-    protected open fun createAddEntityPacket(): DataPacket {
-        return AddActorPacket(
-            targetActorID = this.uniqueId,
-            targetRuntimeID = this.runtimeId,
+    protected open fun createAddEntityPacket(): Packet {
+        return org.chorus_oss.protocol.packets.AddActorPacket(
+            actorUniqueID = this.uniqueId,
+            actorRuntimeID = this.runtimeId.toULong(),
             actorType = this.getEntityIdentifier(),
-            position = this.position.asVector3f(),
-            velocity = this.motion.asVector3f(),
-            rotation = this.rotation.asVector2f(),
-            yHeadRotation = when (this) {
+            position = org.chorus_oss.protocol.types.Vector3f.from(this.position),
+            velocity = org.chorus_oss.protocol.types.Vector3f.from(this.motion),
+            rotation = org.chorus_oss.protocol.types.Vector2f.from(this.rotation),
+            headYaw = when (this) {
                 is EntityMob -> this.headYaw.toFloat()
                 else -> this.rotation.yaw.toFloat()
             },
-            yBodyRotation = this.rotation.yaw.toFloat(),
-            attributeList = this.attributes.values.toList(),
-            actorData = this.entityDataMap,
-            syncedProperties = this.propertySyncData(),
+            bodyYaw = this.rotation.yaw.toFloat(),
+            attributes = this.attributes.values.map(AttributeValue::from),
+            actorData = ActorDataMap.from(this.entityDataMap),
+            actorProperties = ActorProperties.from(this.propertySyncData()),
             actorLinks = List(passengers.size) { i ->
-                EntityLink(
-                    this.uniqueId,
-                    passengers[i].uniqueId,
-                    if (i == 0) EntityLink.Type.RIDER else EntityLink.Type.PASSENGER,
+                ActorLink(
+                    riddenActorUniqueID = this.uniqueId,
+                    riderActorUniqueID = passengers[i].uniqueId,
+                    type = if (i == 0) ActorLink.Companion.Type.Rider else ActorLink.Companion.Type.Passenger,
                     immediate = false,
-                    riderInitiated = false
+                    riderInitiated = false,
+                    vehicleAngularVelocity = 0f
                 )
             }
         )
@@ -2451,7 +2458,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
                 this.previousCurrentMotion.z = 0.0
             }
         }
-        else (this as EntityPhysical).addPreviousLiquidMovement()
+        else if (this is EntityPhysical) this.addPreviousLiquidMovement()
     }
 
     fun setPositionAndRotation(pos: Vector3, yaw: Double, pitch: Double): Boolean {

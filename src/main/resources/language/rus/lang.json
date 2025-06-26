@@ -1001,7 +1001,7 @@
   "chorus.level.preparing": "Подготовка мира \"{%0}\"",
   "chorus.level.init": "Загрузка уровня \"{%0}\" завершена",
   "chorus.level.tickError": "Ошибка прорисовки мира \"{%0}\": {%1}",
-  "chorus.level.unloading": "Выгрузка мира \"{%0}",
+  "chorus.level.unloading": "Выгрузка мира \"{%0}\"",
   "chorus.level.updating": "Мир \"{%0}\" использует старый формат, конвертация",
   "chorus.player.invalidEntity": "{%0} попытался атаковать неправильную сущность",
   "chorus.player.invalidMove": "{%0} некорректно передвинулся!",

@@ -1000,7 +1000,7 @@
   "chorus.level.preparing": "Příprava úrovně \"{%0}\"",
   "chorus.level.init": "Načítání je dokončeno pro úroveň „{%0}\"",
   "chorus.level.tickError": "Nepodařilo se nastavit úroveň \"{%0}\": {%1}",
-  "chorus.level.unloading": "Uvolnění úrovně \"{%0}",
+  "chorus.level.unloading": "Uvolnění úrovně \"{%0}\"",
   "chorus.level.updating": "Byla nalezena stará data o \"{%0}\", převádění formátu",
   "chorus.player.invalidEntity": "{%0} se pokusil zaútočit na neplatnou entitu",
   "chorus.player.invalidMove": "Nesprávný přesun {%0}!",

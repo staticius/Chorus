@@ -1255,7 +1255,7 @@ class Level(
     }
 
     fun updateComparatorOutputLevelSelective(v: Vector3, observer: Boolean) {
-        for (face in BlockFace.Plane.HORIZONTAL) {
+        for (face in BlockFace.Plane.HORIZONTAL_FACES) {
             temporalVector.setComponentsAdding(v, face)
 
             if (!this.isChunkLoaded(temporalVector.x.toInt() shr 4, temporalVector.z.toInt() shr 4)) {
@@ -1282,7 +1282,7 @@ class Level(
             return
         }
 
-        for (face in BlockFace.Plane.VERTICAL) {
+        for (face in BlockFace.Plane.VERTICAL_FACES) {
             val block1 = this.getBlock(temporalVector.setComponentsAdding(v, face))
 
             if (BlockID.OBSERVER == block1.id) {
