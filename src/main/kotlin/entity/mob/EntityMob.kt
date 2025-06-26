@@ -15,6 +15,7 @@ import org.chorus_oss.chorus.entity.ai.evaluator.LogicalUtils
 import org.chorus_oss.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus_oss.chorus.entity.ai.memory.IMemoryStorage
 import org.chorus_oss.chorus.entity.ai.memory.IMemoryType
+import org.chorus_oss.chorus.entity.data.EntityDataTypes
 import org.chorus_oss.chorus.entity.mob.monster.EntityCreeper
 import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
@@ -388,7 +389,6 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
             TAG_ACTIVE_EFFECTS,
             CompoundTag::class.java
         ).all
-        this.setAirTicks(nbt.getShort(TAG_AIR).toInt())
         equipment.setArmor(
             Stream.concat(
                 nbt.getList(
