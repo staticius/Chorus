@@ -90,7 +90,7 @@ import org.chorus_oss.chorus.scoreboard.data.SortOrder
 import org.chorus_oss.chorus.scoreboard.displayer.IScoreboardViewer
 import org.chorus_oss.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus_oss.chorus.utils.*
-import org.chorus_oss.chorus.utils.Binary.Companion.writeUUID
+import org.chorus_oss.chorus.utils.Binary.writeUUID
 import org.chorus_oss.chorus.utils.Identifier.Companion.tryParse
 import org.chorus_oss.chorus.utils.PortalHelper.moveToTheEnd
 import org.chorus_oss.chorus.utils.TextFormat.Companion.clean
