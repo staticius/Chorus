@@ -129,7 +129,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         behaviorGroup.save(this)
 
         if (activeEffects != null) namedTag!!.putList(TAG_ACTIVE_EFFECTS, ListTag(activeEffects!!))
-        namedTag!!.putShort(TAG_AIR, air.toInt())
+        namedTag!!.putShort(TAG_AIR, getAirTicks())
         namedTag!!.putList(
             TAG_ARMOR, ListTag(
                 Tag.TAG_COMPOUND.toInt(),
@@ -388,7 +388,7 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
             TAG_ACTIVE_EFFECTS,
             CompoundTag::class.java
         ).all
-        this.air = nbt.getShort(TAG_AIR)
+        this.setAirTicks(nbt.getShort(TAG_AIR).toInt())
         equipment.setArmor(
             Stream.concat(
                 nbt.getList(

@@ -522,10 +522,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
         this.fireTicks =
             namedTag!!.getShort(TAG_FIRE).toInt()
 
-        if (!namedTag!!.contains("Air")) {
-            namedTag!!.putShort("Air", 300)
-        }
-
         if (!namedTag!!.contains(TAG_ON_GROUND)) {
             namedTag!!.putBoolean(TAG_ON_GROUND, false)
         }
@@ -886,7 +882,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
 
         namedTag!!.putFloat(TAG_FALL_DISTANCE, this.fallDistance)
         namedTag!!.putShort(TAG_FIRE, this.fireTicks)
-        namedTag!!.putShort("Air", this.getDataProperty(EntityDataTypes.AIR_SUPPLY).toInt())
         namedTag!!.putBoolean(TAG_ON_GROUND, this.onGround)
         namedTag!!.putBoolean(TAG_INVULNERABLE, this.invulnerable)
     }
