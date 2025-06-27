@@ -13,7 +13,7 @@ import java.util.function.Consumer
 abstract class BlockEntitySpawnableContainer(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable(chunk, nbt),
     BlockEntityInventoryHolder {
 
-    override var inventory: Inventory = requireContainerInventory()
+    abstract override var inventory: Inventory
 
     override fun loadNBT() {
         super.loadNBT()
@@ -24,7 +24,7 @@ abstract class BlockEntitySpawnableContainer(chunk: IChunk, nbt: CompoundTag) : 
         val list = namedTag.getList("Items") as ListTag<CompoundTag>
         for (compound in list.all) {
             val item = NBTIO.getItemHelper(compound)
-            (inventory as ContainerInventory).setItemInternal(compound.getByte("Slot").toInt(), item)
+            (inventory as? ContainerInventory)?.setItemInternal(compound.getByte("Slot").toInt(), item)
         }
     }
 
@@ -89,11 +89,4 @@ abstract class BlockEntitySpawnableContainer(chunk: IChunk, nbt: CompoundTag) : 
             (namedTag.getList("Items", CompoundTag::class.java)).add(i, d)
         }
     }
-
-    /**
-     * 继承于此类的容器方块实体必须实现此方法
-     *
-     * @return ContainerInventory
-     */
-    protected abstract fun requireContainerInventory(): ContainerInventory
 }

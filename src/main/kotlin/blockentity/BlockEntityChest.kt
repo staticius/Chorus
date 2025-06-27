@@ -15,14 +15,6 @@ import java.util.function.Consumer
 class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableContainer(chunk, nbt) {
     protected var doubleInventory: DoubleChestInventory? = null
 
-    init {
-        isMovable = true
-    }
-
-    override fun requireContainerInventory(): ContainerInventory {
-        return ChestInventory(this)
-    }
-
     override fun close() {
         if (!closed) {
             unpair()
@@ -48,14 +40,14 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
     val size: Int
         get() = if (this.doubleInventory != null) doubleInventory!!.size else inventory.size
 
-    override var inventory: Inventory = super.inventory
+    override var inventory: Inventory = ChestInventory(this)
         set(_) = Unit
         get() {
             if (this.doubleInventory == null && this.isPaired) {
                 this.checkPairing()
             }
 
-            return if (this.doubleInventory != null) doubleInventory!! else field
+            return doubleInventory ?: field
         }
 
     val realInventory: ChestInventory
@@ -202,5 +194,10 @@ class BlockEntityChest(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnableCo
     override fun onBreak(isSilkTouch: Boolean) {
         unpair()
         super.onBreak(isSilkTouch)
+    }
+
+    init {
+        isMovable = true
+        loadNBT()
     }
 }
