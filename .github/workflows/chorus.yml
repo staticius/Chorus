@@ -29,6 +29,12 @@ jobs:
       - name: Build Chorus
         run: ./gradlew build
 
+      - name: Upload Chorus artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: chorus
+          path: build/chorus.jar
+
   release-chorus:
       name: Release Chorus
       timeout-minutes: 10
@@ -36,11 +42,10 @@ jobs:
       needs: build-chorus
       if: github.repository == 'Chorus-OSS/Chorus' && github.ref_name == 'main'
       steps:
-        - name: Upload Chorus artifact
-          uses: actions/upload-artifact@v4
+        - name: Download Chorus artifact
+          uses: actions/download-artifact@v4
           with:
-            name: Chorus
-            path: build/chorus.jar
+            name: chorus
 
         - name: Release Snapshot
           uses: softprops/action-gh-release@v1
@@ -51,6 +56,6 @@ jobs:
               Latest version of Chorus.
               
               **Commit:** https://github.com/Chorus-OSS/Chorus/commit/${{ github.sha }}
-            files: build/chorus.jar
+            files: chorus.jar
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
