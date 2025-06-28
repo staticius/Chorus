@@ -6,10 +6,31 @@ permissions:
   contents: write
 
 jobs:
+  check-changes:
+    name: Check Changes
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.changed-files.outputs.any_modified }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - uses: tj-actions/changed-files@v44
+        id: changed-files
+        with:
+          files: |
+            src/**
+            gradle/**
+            build.gradle.kts
+            settings.gradle.kts
+
   build-chorus:
     name: Build Chorus
     timeout-minutes: 10
     runs-on: ubuntu-latest
+    needs: check-changes
+    if: needs.check-changes.outputs.changed == 'true'
 
     steps:
       - uses: actions/checkout@v4
@@ -68,5 +89,5 @@ jobs:
           run: |
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git tag -f snapshot
+            git tag -fa snapshot "$GITHUB_SHA" -m "Latest snapshot build of Chorus"
             git push -f origin snapshot
