@@ -1,7 +1,6 @@
 name: Chorus
 
-# on: [ push, pull_request ]
-on: [ workflow_dispatch ]
+on: [ push, pull_request ]
 
 jobs:
   move-tag:
@@ -57,52 +56,19 @@ jobs:
           path: 'build/resources/main/git.properties'
           properties: 'git.build.version'
 
-      - name: Rename artifacts
-        run: |
-          cd build
-          ls
-          cd ../
-          mv build/chorus-${{ steps.read_version.outputs.git-build-version }}-all.jar build/chorus-shaded.jar
-          tar -vczf build/libs.tar.gz build/libs
-
       - name: Calculate hashes
         run: |
           cd build
           mkdir -p hash/sha256 hash/md5
-          sha256sum chorus-shaded.jar > hash/sha256/chorus-shaded.jar.sha256
           sha256sum chorus.jar > hash/sha256/chorus.jar.sha256
-          sha256sum libs.tar.gz > hash/sha256/libs.tar.gz.sha256
-          md5sum chorus-shaded.jar > hash/md5/chorus-shaded.jar.md5
           md5sum chorus.jar > hash/md5/chorus.jar.md5
-          md5sum libs.tar.gz > hash/md5/libs.tar.gz.md5
 
-      - name: Archive PNX Core
+      - name: Archive Chorus
         uses: actions/upload-artifact@v4
         if: success()
         with:
           name: Chorus-Core
           path: build/chorus.jar
-
-      - name: Archive Libraries
-        uses: actions/upload-artifact@v4
-        if: success()
-        with:
-          name: Chorus-Libs
-          path: build/libs/
-
-      - name: Archive PNX SHADED
-        uses: actions/upload-artifact@v4
-        if: success()
-        with:
-          name: Chorus-Shaded
-          path: build/chorus-shaded.jar
-
-      - name: Download PNX CLI
-        run: |
-          cd build
-          wget -O cli.jar https://github.com/PowerNukkitX/PNX-CLI/releases/download/0.2.4/PNX-CLI-0.2.4.jar
-          zip -q -r chorus-run.zip chorus.jar cli.jar libs
-          ls -l
 
       - name: Release latest build
         uses: Xotl/cool-github-releases@v1
@@ -126,10 +92,7 @@ jobs:
             1. Download the `chorus.jar` file from the assets below.
             2. Replace the `chorus.jar` file in your server's directory with the new one.
             3. Restart your server.
-            4. Enjoy the latest features and bug fixes !
-
-            Thank you for using Chorus ⭐
-          assets: build/chorus-shaded.jar;build/chorus-run.zip;build/chorus.jar;build/libs.tar.gz;build/hash/sha256/chorus.jar.sha256|text/plain;build/hash/sha256/libs.tar.gz.sha256|text/plain;build/hash/md5/chorus.jar.md5|text/plain;build/hash/md5/libs.tar.gz.md5|text/plain;
+          assets: build/chorus.jar;build/hash/sha256/chorus.jar.sha256|text/plain;build/hash/md5/chorus.jar.md5|text/plain;
           replace_assets: true
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -137,7 +100,7 @@ jobs:
         uses: ncipollo/release-action@v1
         if: success() && contains(github.event.commits[0].message, '+u') && github.repository == 'Chorus-OSS/Chorus' && contains(github.ref_name, 'main')
         with:
-          artifacts: "build/chorus-run.zip,build/chorus.jar,build/libs.tar.gz,build/hash/sha256/chorus.jar.sha256,build/hash/sha256/libs.tar.gz.sha256,build/hash/md5/chorus.jar.md5,build/hash/md5/libs.tar.gz.md5,build/chorus-shaded.jar"
+          artifacts: "build/chorus.jar;build/hash/sha256/chorus.jar.sha256|text/plain;build/hash/md5/chorus.jar.md5|text/plain;"
           tag: ${{ steps.read_version.outputs.git-build-version }}
           body: ${{ steps.read_version.outputs.git-build-version }} - ${{ github.ref_name }} - ${{ github.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
