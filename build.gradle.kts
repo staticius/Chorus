@@ -50,9 +50,7 @@ dependencies {
     implementation(libs.oshi)
     implementation(libs.bundles.compress)
     implementation(libs.bundles.terminal)
-    implementation(libs.graalvm.polyglot)
     implementation(libs.caffeine)
-    runtimeOnly(libs.bundles.graalvm.runtime)
 
     testImplementation(libs.bundles.test)
     testImplementation(libs.commonsio)

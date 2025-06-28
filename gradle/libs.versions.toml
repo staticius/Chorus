@@ -67,9 +67,6 @@ jose4j = { module = "org.bitbucket.b_c:jose4j", version.ref = "org-bitbucket-b-c
 netty-epoll = { module = "io.netty:netty-transport-classes-epoll", version.ref = "io-netty-netty-transport-classes-epoll" }
 netty-kqueue = { module = "io.netty:netty-transport-classes-kqueue", version.ref = "io-netty-netty-transport-classes-kqueue" }
 netty-raknet = { module = "org.cloudburstmc.netty:netty-transport-raknet", version.ref = "org-cloudburstmc-netty-netty-transport-raknet" }
-graalvm-polyglot = { module = "org.graalvm.polyglot:polyglot", version.ref = "graalvm-version" }
-graalvm-js = { module = "org.graalvm.js:js-language", version.ref = "graalvm-version" }
-graalvm-truffle = { module = "org.graalvm.truffle:truffle-runtime", version.ref = "graalvm-version" }
 terminalconsoleappender = { module = "net.minecrell:terminalconsoleappender", version.ref = "net-minecrell-terminalconsoleappender" }
 jline-reader = { module = "org.jline:jline-reader", version.ref = "org-jline-jline-reader" }
 jline-terminal = { module = "org.jline:jline-terminal", version.ref = "org-jline-jline-terminal" }
@@ -94,7 +91,6 @@ jwt-ecdsa = { module = "com.appstractive:jwt-ecdsa-kt", version.ref = "jwt" }
 
 [bundles]
 netty = ["netty-raknet", "netty-epoll", "netty-kqueue"]
-graalvm-runtime = ["graalvm-js", "graalvm-truffle"]
 terminal = ["jline-reader", "jline-terminal", "jline-terminaljna", "terminalconsoleappender"]
 logging = ["log4j-slf4j2-impl", "log4j-core"]
 test = ["junit", "mockito", "jmh-core", "jmh-generator"]
