@@ -44,16 +44,21 @@ jobs:
       steps:
         - name: Download Chorus artifact
           uses: actions/download-artifact@v4
-          id: download
           with:
             name: chorus
 
-        - name: Verify chorus.jar exists
-          run: |
-            if [ ! -f "${{ steps.download.outputs.download-path }}/chorus.jar" ]; then
-              echo "❌ Error: chorus.jar not found at expected location!"
-              exit 1
-            fi
+        - name: Release Snapshot
+          uses: softprops/action-gh-release@v1
+          with:
+            tag_name: snapshot
+            name: "Latest Snapshot"
+            body: |
+              Latest version of Chorus.
+              
+              **Commit:** https://github.com/Chorus-OSS/Chorus/commit/${{ github.sha }}
+            files: chorus.jar
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
         - uses: actions/checkout@v4
           with:
@@ -65,16 +70,3 @@ jobs:
             git config user.email "github-actions[bot]@users.noreply.github.com"
             git tag -f snapshot
             git push -f origin snapshot
-
-        - name: Release Snapshot
-          uses: softprops/action-gh-release@v1
-          with:
-            tag_name: snapshot
-            name: "Latest Snapshot"
-            body: |
-              Latest version of Chorus.
-              
-              **Commit:** https://github.com/Chorus-OSS/Chorus/commit/${{ github.sha }}
-            files: ${{ steps.download.outputs.download-path }}/chorus.jar
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
