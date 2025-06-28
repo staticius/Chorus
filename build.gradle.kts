@@ -137,13 +137,6 @@ tasks.register<DefaultTask>("buildSkipChores") {
     tasks["testClasses"].enabled = false
 }
 
-tasks.register<DefaultTask>("buildForGithubAction") {
-    dependsOn(tasks.build)
-
-    tasks["javadoc"].enabled = false
-    tasks["javadocJar"].enabled = false
-}
-
 publishing {
     publications.create<MavenPublication>("maven") {
         from(components["java"])
