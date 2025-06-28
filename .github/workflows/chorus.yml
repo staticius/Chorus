@@ -1,6 +1,6 @@
 name: Chorus
 
-on: [ push, pull_request, workflow_dispatch ]
+on: [ push, pull_request ]
 
 permissions:
   contents: write
@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       changed: ${{ steps.changed-files.outputs.any_modified }}
-    if: github.event_name != 'workflow_dispatch'
     steps:
       - uses: actions/checkout@v4
         with:
@@ -31,7 +30,7 @@ jobs:
     timeout-minutes: 10
     runs-on: ubuntu-latest
     needs: check-changes
-    if: always() && (github.event_name == 'workflow_dispatch' || needs.check-changes.outputs.changed == 'true')
+    if: needs.check-changes.outputs.changed == 'true'
 
     steps:
       - uses: actions/checkout@v4
