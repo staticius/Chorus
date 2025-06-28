@@ -2,34 +2,18 @@ name: Chorus
 
 on: [ push, pull_request, workflow_dispatch ]
 
-jobs:
-  move-tag:
-    name: Move Tag
-    runs-on: ubuntu-latest
-    if: (github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository) && contains(github.ref_name, 'main')
-    steps:
-      - name: Move ci tag
-        run: |
-          mkdir repo
-          git clone -b "$BRANCH_NAME" "https://github.com/${GITHUB_REPOSITORY}" repo
-          cd repo
-          bash .github/workflows/move-tag.sh "snapshot" "Last commit build by the CI"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+permissions:
+  contents: write
 
+jobs:
   build-chorus:
     name: Build Chorus
     timeout-minutes: 10
     runs-on: ubuntu-latest
-    needs: [ move-tag ]
-    if: ((github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository) || (github.event_name == 'push' && (contains(github.event.commits[0].message, '+b') || contains(github.event.commits[0].message, '+u'))))
 
     steps:
       - uses: actions/checkout@v4
         with:
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-          ref: ${{ github.event.pull_request.head.ref }}
           submodules: true
 
       - uses: actions/setup-java@v4
@@ -45,33 +29,28 @@ jobs:
       - name: Build Chorus
         run: ./gradlew build
 
-      - name: Calculate hashes
-        run: |
-          cd build
-          mkdir -p hash/sha256 hash/md5
-          sha256sum chorus.jar > hash/sha256/chorus.jar.sha256
-          md5sum chorus.jar > hash/md5/chorus.jar.md5
+  release-chorus:
+      name: Release Chorus
+      timeout-minutes: 10
+      runs-on: ubuntu-latest
+      needs: build-chorus
+      if: github.repository == 'Chorus-OSS/Chorus' && github.ref_name == 'main'
+      steps:
+        - name: Upload Chorus artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: Chorus
+            path: build/chorus.jar
 
-      - name: Archive Chorus
-        uses: actions/upload-artifact@v4
-        if: success()
-        with:
-          name: Chorus-Core
-          path: build/chorus.jar
-
-      - name: Release Snapshot
-        uses: softprops/action-gh-release@v1
-        if: success() && github.repository == 'Chorus-OSS/Chorus' && contains(github.ref_name, 'main')
-        with:
-          tag_name: snapshot
-          name: "Latest Snapshot"
-          body: |
-            Latest version of Chorus.
-            
-            **Commit:** https://github.com/Chorus-OSS/Chorus/commit/${{ github.sha }}
-          files: |
-            build/chorus.jar
-            build/hash/sha256/chorus.jar.sha256
-            build/hash/md5/chorus.jar.md5
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: Release Snapshot
+          uses: softprops/action-gh-release@v1
+          with:
+            tag_name: snapshot
+            name: "Latest Snapshot"
+            body: |
+              Latest version of Chorus.
+              
+              **Commit:** https://github.com/Chorus-OSS/Chorus/commit/${{ github.sha }}
+            files: build/chorus.jar
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
