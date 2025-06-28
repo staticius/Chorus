@@ -48,6 +48,13 @@ jobs:
           with:
             name: chorus
 
+        - name: Verify chorus.jar exists
+          run: |
+            if [ ! -f "${{ steps.download.outputs.download-path }}/chorus.jar" ]; then
+              echo "❌ Error: chorus.jar not found at expected location!"
+              exit 1
+            fi
+
         - uses: actions/checkout@v4
           with:
             fetch-tags: true
