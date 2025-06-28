@@ -47,6 +47,13 @@ jobs:
           with:
             name: chorus
 
+        - name: Bump Tag
+          run: |
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git tag -f snapshot
+            git push -f origin snapshot
+
         - name: Release Snapshot
           uses: softprops/action-gh-release@v1
           with:
