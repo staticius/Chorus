@@ -67,6 +67,6 @@ jobs:
               Latest version of Chorus.
               
               **Commit:** https://github.com/Chorus-OSS/Chorus/commit/${{ github.sha }}
-            files: chorus.jar
+            files: ./chorus.jar
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
