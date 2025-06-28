@@ -47,6 +47,10 @@ jobs:
           with:
             name: chorus
 
+        - uses: actions/checkout@v4
+          with:
+            fetch-tags: true
+
         - name: Bump Tag
           run: |
             git config user.name "github-actions[bot]"
