@@ -1034,7 +1034,6 @@
   "chorus.server.defaultGameMode": "Tipe gamemode bawaan: {%0}",
   "chorus.server.info": "Server ini berjalan dengan {%0} versi {%1} (API {%2})",
   "chorus.server.info.extended": "Server ini berjalan dengan versi {%0} {%1} menggunakan versi API {%2} untuk Minecraft: BE {%3} (versi protocol {%4})",
-  "chorus.server.license": "PowerNukkitX didistribusi di bawah lisensi LGPL",
   "chorus.server.networkError": "[Network] Menghentikan antarmuka {%0} karena {%1}",
   "chorus.server.networkStart": "Membuka server pada {%0}:{%1}",
   "chorus.server.query.info": "Mengatur kueri port ke {%0}",

@@ -419,7 +419,6 @@ class Server internal constructor(
                 apiVersion
             )
         )
-        log.info(this.lang.tr("chorus.server.license"))
         this.consoleSender = ConsoleCommandSender()
 
         run {

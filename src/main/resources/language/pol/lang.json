@@ -1034,7 +1034,6 @@
   "chorus.server.defaultGameMode": "Domyslny tryb gry: {%0}",
   "chorus.server.info": "Ten serwer dziala na {%0} w wersji {%1} (API {%2})",
   "chorus.server.info.extended": "Ten serwer dziala na {%0} {%1} na implementacji API {%2} dla Minecraft: BE {%3} (wersja protokolu {%4})",
-  "chorus.server.license": "PowerNukkitX wydawany na licencji LGPL",
   "chorus.server.networkError": "[Network] Zatrzymano interfejs {%0} z powodu {%1}",
   "chorus.server.networkStart": "Otwieranie serwera na {%0}:{%1}",
   "chorus.server.query.info": "Ustawiam query port na {%0}",

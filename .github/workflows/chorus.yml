@@ -40,21 +40,14 @@ jobs:
       - run: chmod +x gradlew
 
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v3
+        uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: wrapper
           cache-overwrite-existing: true
           build-scan-publish: true
-          build-scan-terms-of-service-url: "https://gradle.com/terms-of-service"
-          build-scan-terms-of-service-agree: "yes"
+          build-scan-terms-of-use-url: "https://gradle.com/help/legal-terms-of-use"
+          build-scan-terms-of-use-agree: "yes"
           arguments: buildForGithubAction --scan
-
-      - name: Read version
-        id: read_version
-        uses: christian-draeger/read-properties@1.1.1
-        with:
-          path: 'build/resources/main/git.properties'
-          properties: 'git.build.version'
 
       - name: Calculate hashes
         run: |
@@ -70,39 +63,19 @@ jobs:
           name: Chorus-Core
           path: build/chorus.jar
 
-      - name: Release latest build
-        uses: Xotl/cool-github-releases@v1
+      - name: Release Snapshot
+        uses: softprops/action-gh-release@v1
         if: success() && github.repository == 'Chorus-OSS/Chorus' && contains(github.ref_name, 'main')
         with:
-          mode: update
-          isPrerelease: false
           tag_name: snapshot
-          release_name: "Latest Snapshot"
-          body_mrkdwn: |
-            This is the **latest version of Chorus**, built from the latest source. 
-            (_Please note that the date on GitHub might appear outdated due to certain limitations._)
-            **Corresponding commit:** <https://github.com/Chorus-OSS/Chorus/commit/${{ github.sha }}>_
+          name: "Latest Snapshot"
+          body: |
+            Latest version of Chorus.
             
-            > [!NOTE]
-            > If you encounter any issues, please report them in the [GitHub Issues](https://github.com/Chorus-OSS/Chorus/issues) tab.
-            
-            ### How to Update
-
-            To update to the latest version, follow these steps:
-            1. Download the `chorus.jar` file from the assets below.
-            2. Replace the `chorus.jar` file in your server's directory with the new one.
-            3. Restart your server.
-          assets: build/chorus.jar;build/hash/sha256/chorus.jar.sha256|text/plain;build/hash/md5/chorus.jar.md5|text/plain;
-          replace_assets: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Release new version
-        uses: ncipollo/release-action@v1
-        if: success() && contains(github.event.commits[0].message, '+u') && github.repository == 'Chorus-OSS/Chorus' && contains(github.ref_name, 'main')
-        with:
-          artifacts: "build/chorus.jar;build/hash/sha256/chorus.jar.sha256|text/plain;build/hash/md5/chorus.jar.md5|text/plain;"
-          tag: ${{ steps.read_version.outputs.git-build-version }}
-          body: ${{ steps.read_version.outputs.git-build-version }} - ${{ github.ref_name }} - ${{ github.sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit: ${{ github.ref_name }}
-          allowUpdates: true
+            **Commit:** https://github.com/Chorus-OSS/Chorus/commit/${{ github.sha }}
+          files: |
+            build/chorus.jar
+            build/hash/sha256/chorus.jar.sha256
+            build/hash/md5/chorus.jar.md5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

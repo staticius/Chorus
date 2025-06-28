@@ -1034,7 +1034,6 @@
   "chorus.server.defaultGameMode": "Type de jeu par défaut : {%0}",
   "chorus.server.info": "Ce serveur utilise la version {%0} de {%1}. (API {%2})",
   "chorus.server.info.extended": "Ce serveur exécute {%0} {%1} mettant en œuvre la version de l\u0027API {%2} pour Minecraft : BE {%3} (protocole version {%4})",
-  "chorus.server.license": "PowerNukkitX est distribué sous licence LGPL",
   "chorus.server.networkError": "[Network] Arrêt de l\u0027interface {%0} en raison de {%1}",
   "chorus.server.networkStart": "Ouverture du serveur sur {%0}:{%1}",
   "chorus.server.query.info": "Réglage du port d\u0027interrogation sur {%0}",

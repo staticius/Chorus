@@ -1034,7 +1034,6 @@
   "chorus.server.defaultGameMode": "Oletuspelitila: {%0}",
   "chorus.server.info": "Tämä palvelin käyttää {%0} versiota {%1} (API {%2})",
   "chorus.server.info.extended": "Tämä palvelin ajaa {%0} {%1} sisältäen API version {%2} Minecraft BE versio {%3}:lle (protokollaversio {%4})",
-  "chorus.server.license": "PowerNukkitX jaetaan LGPL-lisenssin alaisena",
   "chorus.server.networkError": "[Network] Pysäytettiin liitäntä {%0} Syy: {%1}",
   "chorus.server.networkStart": "Avataan palvelinta osoitteessa {%0}:{%1}",
   "chorus.server.query.info": "Käynnistetään query portissa {%0}",
