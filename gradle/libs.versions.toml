@@ -44,6 +44,7 @@ jwt = "1.1.0"
 ktoml = "0.7.0"
 json = "1.9.0"
 kotlin = "2.2.0"
+dokka = "2.0.0"
 
 [libraries]
 libdeflate = { module = "cn.powernukkitx:libdeflate-java", version.ref = "cn-powernukkitx-libdeflate-java" }
@@ -108,3 +109,4 @@ leveldb = ["leveldb", "leveldb-api"]
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
