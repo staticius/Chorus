@@ -6,9 +6,12 @@ plugins {
     jacoco
     id("com.gradleup.shadow") version "8.3.7"
     id("com.gorylenko.gradle-git-properties") version "2.4.1"
-    kotlin("jvm") version "2.1.10"
-    kotlin("plugin.serialization") version "2.1.10"
+
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
 }
+
+kotlin.jvmToolchain(21)
 
 group = "org.chorus_oss"
 version = "1.0-SNAPSHOT"
@@ -51,24 +54,19 @@ dependencies {
     testImplementation(libs.commonsio)
     testImplementation(libs.commonslang3)
 
-    implementation("com.akuleshov7:ktoml-core:0.6.0")
-    implementation("com.akuleshov7:ktoml-file:0.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 
     implementation(libs.chorus.protocol)
     implementation(libs.kotlinx.io)
+    implementation(libs.kotlinx.coroutines)
     implementation(libs.cryptography.core)
     implementation(libs.cryptography.random)
     implementation(libs.cryptography.provider.jdk)
     implementation(libs.jwt)
     implementation(libs.jwt.ecdsa)
-
-    implementation(kotlin("stdlib-jdk8"))
-    implementation(kotlin("reflect"))
-}
-
-kotlin {
-    jvmToolchain(21)
+    implementation(libs.ktoml.core)
+    implementation(libs.ktoml.file)
+    implementation(libs.json)
+    implementation(libs.kotlin.reflect)
 }
 
 java {

@@ -72,8 +72,8 @@ class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessi
 
     fun flushSendQueue() {
         if (!packetQueue.isEmpty()) {
-            var packet: BedrockPacketWrapper?
-            while ((packetQueue.poll().also { packet = it }) != null) {
+            while (true) {
+                val packet = packetQueue.poll() ?: break
                 if (this.isConnected) {
                     channel.write(packet)
                 }

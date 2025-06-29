@@ -35,9 +35,8 @@ abstract class IterableThreadLocal<T> : ThreadLocal<T?>(), Iterable<T> {
         fun clean(instance: ThreadLocal<*>?) {
             try {
                 var rootGroup = Thread.currentThread().threadGroup
-                var parentGroup: ThreadGroup
-                while ((rootGroup.parent.also { parentGroup = it }) != null) {
-                    rootGroup = parentGroup
+                while (true) {
+                    rootGroup = rootGroup.parent ?: break
                 }
                 var threads = arrayOfNulls<Thread>(rootGroup.activeCount())
                 if (threads.isNotEmpty()) {

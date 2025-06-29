@@ -460,10 +460,10 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
     }
 
     fun tick() {
-        var packet: DataPacket
         val c = consumer.get()
         if (c != null) {
-            while ((inbound.poll().also { packet = it }) != null) {
+            while (true) {
+                val packet = inbound.poll() ?: break
                 c.accept(packet)
             }
         } else {
