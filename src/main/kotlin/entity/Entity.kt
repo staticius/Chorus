@@ -2461,7 +2461,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
         else if (this is EntityPhysical) this.addPreviousLiquidMovement()
     }
 
-    fun setPositionAndRotation(pos: Vector3, yaw: Double, pitch: Double): Boolean {
+    fun setPositionAndRotation(pos: IVector3, yaw: Double, pitch: Double): Boolean {
         this.setRotation(yaw, pitch)
         return this.setPosition(pos)
     }
@@ -2648,7 +2648,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
 
         this.setMotion(Vector3())
 
-        if (this.setPositionAndRotation(to.position, yaw, pitch)) {
+        if (this.setPositionAndRotation(to.locator, yaw, pitch)) {
             this.resetFallDistance()
             this.onGround = !this.noClip
             this.updateMovement()
