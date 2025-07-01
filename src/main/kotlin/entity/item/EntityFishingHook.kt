@@ -26,7 +26,6 @@ import org.chorus_oss.chorus.math.Vector3f
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.protocol.EntityEventPacket
-import org.chorus_oss.chorus.network.protocol.types.EntityLink
 import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.types.ActorLink
 import org.chorus_oss.protocol.types.ActorProperties

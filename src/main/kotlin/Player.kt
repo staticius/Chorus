@@ -4400,7 +4400,7 @@ open class Player(
 
         clientMovements.clear()
         //switch level, update pos and rotation, update aabb
-        if (setPositionAndRotation(to, to.yaw, to.pitch, to.headYaw)) {
+        if (setPositionAndRotation(to.locator, to.yaw, to.pitch, to.headYaw)) {
             //if switch level or the distance teleported is too far
             if (switchLevel) {
                 playerChunkManager.handleTeleport()

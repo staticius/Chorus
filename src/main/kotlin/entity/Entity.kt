@@ -2461,9 +2461,44 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
         else if (this is EntityPhysical) this.addPreviousLiquidMovement()
     }
 
-    fun setPositionAndRotation(pos: IVector3, yaw: Double, pitch: Double): Boolean {
+    fun setPositionAndRotation(pos: Vector3, yaw: Double, pitch: Double): Boolean {
         this.setRotation(yaw, pitch)
         return this.setPosition(pos)
+    }
+
+    fun setPositionAndRotation(pos: Locator, yaw: Double, pitch: Double): Boolean {
+        this.setRotation(yaw, pitch)
+        return this.setPosition(pos)
+    }
+
+    fun setPosition(pos: Locator): Boolean {
+        if (this.closed) {
+            return false
+        }
+
+        if (pos.level !== this.level) {
+            if (!this.switchLevel(pos.level)) {
+                return false
+            }
+        }
+
+        return setPosition(pos.position)
+    }
+
+    fun setPosition(pos: Vector3): Boolean {
+        if (this.closed) {
+            return false
+        }
+
+        position.x = pos.x
+        position.y = pos.y
+        position.z = pos.z
+
+        this.recalculateBoundingBox(false) // Don't need to send BB height/width to client on position change
+
+        this.checkChunks()
+
+        return true
     }
 
     fun setRotation(yaw: Double, pitch: Double) {
@@ -2518,30 +2553,6 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
 
             chunk!!.addEntity(this)
         }
-    }
-
-    fun setPosition(pos: IVector3): Boolean {
-        if (this.closed) {
-            return false
-        }
-
-        if (pos is Locator && pos.level !== this.level) {
-            if (!this.switchLevel(pos.level)) {
-                return false
-            }
-        }
-
-        val vPos: Vector3 = pos.vector3
-
-        position.x = vPos.x
-        position.y = vPos.y
-        position.z = vPos.z
-
-        this.recalculateBoundingBox(false) // Don't need to send BB height/width to client on position change
-
-        this.checkChunks()
-
-        return true
     }
 
     fun getMotion(): Vector3 {

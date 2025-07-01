@@ -15,7 +15,6 @@ import org.chorus_oss.chorus.entity.ai.evaluator.LogicalUtils
 import org.chorus_oss.chorus.entity.ai.memory.CoreMemoryTypes
 import org.chorus_oss.chorus.entity.ai.memory.IMemoryStorage
 import org.chorus_oss.chorus.entity.ai.memory.IMemoryType
-import org.chorus_oss.chorus.entity.data.EntityDataTypes
 import org.chorus_oss.chorus.entity.mob.monster.EntityCreeper
 import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
@@ -27,9 +26,9 @@ import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.item.enchantment.Enchantment
+import org.chorus_oss.chorus.level.Locator
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.level.format.IChunk
-import org.chorus_oss.chorus.math.IVector3
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
@@ -366,9 +365,14 @@ abstract class EntityMob(chunk: IChunk?, nbt: CompoundTag) : EntityPhysical(chun
         this.scheduleUpdate()
     }
 
-    fun setPositionAndRotation(pos: IVector3?, yaw: Double, pitch: Double, headYaw: Double): Boolean {
+    fun setPositionAndRotation(pos: Vector3, yaw: Double, pitch: Double, headYaw: Double): Boolean {
         this.setRotation(yaw, pitch, headYaw)
-        return this.setPosition(pos!!)
+        return this.setPosition(pos)
+    }
+
+    fun setPositionAndRotation(pos: Locator, yaw: Double, pitch: Double, headYaw: Double): Boolean {
+        this.setRotation(yaw, pitch, headYaw)
+        return this.setPosition(pos)
     }
 
     override fun getExperienceDrops(): Int {
