@@ -105,8 +105,6 @@ tasks {
     }
 
     shadowJar {
-        archiveBaseName.set("chorus")
-        archiveClassifier.set("")
         archiveVersion.set("")
 
         manifest {

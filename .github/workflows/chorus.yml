@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: chorus
-          path: build/chorus.jar
+          path: build/chorus-all.jar
 
   release-chorus:
     name: Release Chorus
@@ -67,6 +67,9 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: chorus
+
+      - name: Rename JAR for release
+        run: mv chorus-all.jar chorus.jar
 
       - name: Release Snapshot
         uses: softprops/action-gh-release@v1
