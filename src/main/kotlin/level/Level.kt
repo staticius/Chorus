@@ -4595,6 +4595,7 @@ class Level(
         const val DIMENSION_OVERWORLD: Int = 0
         const val DIMENSION_NETHER: Int = 1
         const val DIMENSION_THE_END: Int = 2
+        const val DIMENSION_UNDEFINED: Int = 3
         const val MAX_BLOCK_CACHE: Int = 512 // Lower values use less memory
         private const val LCG_CONSTANT = 1013904223
         var COMPRESSION_LEVEL: Int = 8

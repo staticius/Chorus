@@ -4893,10 +4893,7 @@ open class Player(
             if (level.dimension == this.level!!.dimension) {
                 this.sendPacket(
                     org.chorus_oss.protocol.packets.ChangeDimensionPacket(
-                        dimension = when (this.level!!.dimension) {
-                            Level.DIMENSION_NETHER -> Level.DIMENSION_OVERWORLD
-                            else -> Level.DIMENSION_NETHER
-                        },
+                        dimension = Level.DIMENSION_UNDEFINED,
                         position = org.chorus_oss.protocol.types.Vector3f(0f, 0f, 0f),
                         respawn = false,
                         loadingScreenID = loadingScreenId++
