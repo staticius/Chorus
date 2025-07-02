@@ -7,7 +7,11 @@ import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.data.EntityDataMap
 import org.chorus_oss.chorus.entity.data.EntityDataTypes
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
-import org.chorus_oss.chorus.network.protocol.*
+import org.chorus_oss.chorus.network.protocol.MoveEntityAbsolutePacket
+import org.chorus_oss.chorus.network.protocol.RemoveActorPacket
+import org.chorus_oss.chorus.network.protocol.SetEntityDataPacket
+import org.chorus_oss.chorus.network.protocol.UpdateAttributesPacket
+import org.chorus_oss.protocol.packets.BossEventPacket
 import org.chorus_oss.protocol.types.ActorProperties
 import org.chorus_oss.protocol.types.actor_data.ActorDataMap
 import java.util.concurrent.ThreadLocalRandom
@@ -29,8 +33,7 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     class Builder(val player: Player) {
-        val bossBarId: Long =
-            1095216660480L + ThreadLocalRandom.current().nextLong(0, 0x7fffffffL)
+        val bossBarId: Long = 1095216660480L + ThreadLocalRandom.current().nextLong(0, 0x7fffffffL)
 
         var text: String = ""
         var length: Float = 100f
@@ -131,51 +134,51 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun sendShowBossBar() {
-        player.dataPacket(
+        player.sendPacket(
             BossEventPacket(
                 targetActorID = bossBarId,
-                eventType = BossEventPacket.EventType.ADD,
-                eventData = BossEventPacket.EventType.Companion.AddData(
+                eventType = BossEventPacket.Companion.EventType.Add,
+                eventData = BossEventPacket.Companion.EventType.Companion.AddData(
                     name = text,
                     filteredName = text,
                     healthPercent = this.length / 100,
-                    darkenScreen = 0,
-                    color = 0,
-                    overlay = 0
+                    darkenScreen = 0u,
+                    color = 0u,
+                    overlay = 0u
                 )
             )
         )
     }
 
     private fun sendHideBossBar() {
-        player.dataPacket(
+        player.sendPacket(
             BossEventPacket(
                 targetActorID = bossBarId,
-                eventType = BossEventPacket.EventType.REMOVE,
+                eventType = BossEventPacket.Companion.EventType.Remove,
                 eventData = null,
             )
         )
     }
 
     private fun sendSetBossBarTexture() {
-        player.dataPacket(
+        player.sendPacket(
             BossEventPacket(
                 targetActorID = this.bossBarId,
-                eventType = BossEventPacket.EventType.UPDATE_STYLE,
-                eventData = BossEventPacket.EventType.Companion.UpdateStyleData(
-                    color = if (color != null) color!!.ordinal else 0,
-                    overlay = 0,
+                eventType = BossEventPacket.Companion.EventType.UpdateStyle,
+                eventData = BossEventPacket.Companion.EventType.Companion.UpdateStyleData(
+                    color = if (color != null) color!!.ordinal.toUInt() else 0u,
+                    overlay = 0u,
                 )
             )
         )
     }
 
     private fun sendSetBossBarTitle() {
-        player.dataPacket(
+        player.sendPacket(
             BossEventPacket(
                 targetActorID = bossBarId,
-                eventType = BossEventPacket.EventType.UPDATE_NAME,
-                eventData = BossEventPacket.EventType.Companion.UpdateNameData(
+                eventType = BossEventPacket.Companion.EventType.UpdateName,
+                eventData = BossEventPacket.Companion.EventType.Companion.UpdateNameData(
                     name = text,
                     filteredName = text,
                 )
@@ -184,11 +187,11 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun sendSetBossBarLength() {
-        player.dataPacket(
+        player.sendPacket(
             BossEventPacket(
                 targetActorID = bossBarId,
-                eventType = BossEventPacket.EventType.UPDATE_PERCENT,
-                eventData = BossEventPacket.EventType.Companion.UpdatePercentData(
+                eventType = BossEventPacket.Companion.EventType.UpdatePercent,
+                eventData = BossEventPacket.Companion.EventType.Companion.UpdatePercentData(
                     healthPercent = this.length / 100
                 )
             )

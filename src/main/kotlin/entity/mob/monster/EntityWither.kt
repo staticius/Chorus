@@ -42,6 +42,7 @@ import org.chorus_oss.chorus.nbt.tag.FloatTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
 import org.chorus_oss.chorus.network.protocol.*
 import org.chorus_oss.protocol.core.Packet
+import org.chorus_oss.protocol.packets.BossEventPacket
 import org.chorus_oss.protocol.types.ActorLink
 import org.chorus_oss.protocol.types.ActorProperties
 import org.chorus_oss.protocol.types.actor_data.ActorDataMap
@@ -308,17 +309,17 @@ class EntityWither(chunk: IChunk?, nbt: CompoundTag) : EntityBoss(chunk, nbt), E
     }
 
     override fun addBossbar(player: Player) {
-        player.dataPacket(
+        player.sendPacket(
             BossEventPacket(
                 targetActorID = this.runtimeId,
-                eventType = BossEventPacket.EventType.ADD,
-                eventData = BossEventPacket.EventType.Companion.AddData(
+                eventType = BossEventPacket.Companion.EventType.Add,
+                eventData = BossEventPacket.Companion.EventType.Companion.AddData(
                     name = this.getEntityName(),
                     filteredName = this.getEntityName(),
-                    color = 6,
-                    darkenScreen = 1,
+                    color = 6u,
+                    darkenScreen = 1u,
                     healthPercent = 0f,
-                    overlay = 0
+                    overlay = 0u
                 )
             )
         )
