@@ -7,8 +7,6 @@ interface PacketHandler {
 
     fun handle(pk: AnimatePacket) {}
 
-    fun handle(pk: AnvilDamagePacket) {}
-
     fun handle(pk: BlockPickRequestPacket) {}
 
     fun handle(pk: BookEditPacket) {}

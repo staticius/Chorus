@@ -48,7 +48,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.BOSS_EVENT_PACKET, BossEventPacket) // 74
         this.register(ProtocolInfo.COMMAND_REQUEST_PACKET, CommandRequestPacket) // 77
         this.register(ProtocolInfo.BOOK_EDIT_PACKET, BookEditPacket) // 97
-        this.register(ProtocolInfo.ANVIL_DAMAGE_PACKET, AnvilDamagePacket) // 141
 
         this.register(ProtocolInfo.ENTITY_EVENT_PACKET, EntityEventPacket)
 
