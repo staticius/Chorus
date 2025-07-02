@@ -249,7 +249,7 @@ class Level(
         log.info(
             Server.instance.lang.tr(
                 "chorus.level.init",
-                TextFormat.GREEN.toString() + this.folderName + TextFormat.RESET
+                TextFormat.GREEN.toString() + this.name + TextFormat.RESET
             )
         )
     }
@@ -266,8 +266,7 @@ class Level(
     fun requireProvider(): LevelProvider {
         val levelProvider = getProvider()
         if (levelProvider == null) {
-            val levelException: LevelException =
-                LevelException("The level \"$folderPath\" is already closed (have no providers)")
+            val levelException = LevelException("The level \"$folderPath\" is already closed (have no providers)")
             try {
                 close()
             } catch (e: Exception) {
@@ -3171,12 +3170,10 @@ class Level(
             throw LevelException("Constructor of $provider failed", e)
         }
         val levelProvider = requireProvider()
-        //to be changed later as the Dim0 will be deleted to be put in a config.json file of the world
-        val levelNameDim = levelProvider.name.replace(" Dim0", "")
         log.info(
             Server.instance.lang.tr(
                 "chorus.level.preparing",
-                TextFormat.GREEN.toString() + levelNameDim + TextFormat.RESET
+                TextFormat.GREEN.toString() + levelProvider.name + TextFormat.RESET
             )
         )
         levelProvider.updateLevelName(name)
@@ -3212,12 +3209,7 @@ class Level(
         this.currentTick = levelProvider.currentTick
         this.updateQueue = BlockUpdateScheduler(this, currentTick)
 
-        this.chunkTickRadius = Math.min(
-            Server.instance.viewDistance, Math.max(
-                1,
-                Server.instance.settings.chunkSettings.tickRadius
-            )
-        )
+        this.chunkTickRadius = Server.instance.viewDistance.coerceAtMost(1.coerceAtLeast(Server.instance.settings.chunkSettings.tickRadius))
         this.chunkGenerationQueueSize = Server.instance.settings.chunkSettings.generationQueueSize
         this.chunksPerTicks = Server.instance.settings.chunkSettings.chunksPerTicks
         this.clearChunksOnTick = Server.instance.settings.chunkSettings.clearTickList

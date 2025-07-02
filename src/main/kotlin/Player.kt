@@ -802,14 +802,14 @@ open class Player(
         super.initEntity()
         this.uniqueId = this.uuid.leastSignificantBits
 
-        val level = if (namedTag!!.containsString("SpawnLevel")) {
-            Server.instance.getLevelByName(namedTag!!.getString("SpawnLevel"))
+        val level = if (namedTag.containsString("SpawnLevel")) {
+            Server.instance.getLevelByName(namedTag.getString("SpawnLevel")) ?: Server.instance.defaultLevel
         } else Server.instance.defaultLevel
-        if (namedTag!!.containsInt("SpawnX") && namedTag!!.containsInt("SpawnY") && namedTag!!.containsInt("SpawnZ")) {
+        if (namedTag.containsInt("SpawnX") && namedTag.containsInt("SpawnY") && namedTag.containsInt("SpawnZ")) {
             this.spawnPoint = Locator(
-                namedTag!!.getInt("SpawnX").toDouble(),
-                namedTag!!.getInt("SpawnY").toDouble(),
-                namedTag!!.getInt("SpawnZ").toDouble(), level!!
+                namedTag.getInt("SpawnX").toDouble(),
+                namedTag.getInt("SpawnY").toDouble(),
+                namedTag.getInt("SpawnZ").toDouble(), level!!
             )
         } else {
             this.spawnPoint = level!!.safeSpawn

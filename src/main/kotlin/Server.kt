@@ -562,9 +562,7 @@ class Server internal constructor(
                 val levelConfig = LevelConfig("leveldb", true, generatorConfig)
                 this.generateLevel(levelFolder, levelConfig)
             }
-            this.getLevelByName("$levelFolder Dim0").also {
-                if (it != null) this.defaultLevel = it
-            }
+            this.defaultLevel = this.getLevelByName(levelFolder)!!
         }
     }
 
@@ -1877,16 +1875,7 @@ class Server internal constructor(
      * @return 世界是否已经加载<br></br>Is the world already loaded
      */
     fun isLevelLoaded(name: String): Boolean {
-        if (!name.matches(LEVEL_DIM_PATTERN.toRegex())) {
-            for (i in 0..2) {
-                if (this.getLevelByName("$name Dim$i") != null) {
-                    return true
-                }
-            }
-            return false
-        } else {
-            return this.getLevelByName(name) != null
-        }
+        return this.getLevelByName(name) != null
     }
 
     /**
@@ -1915,12 +1904,8 @@ class Server internal constructor(
      * @return level实例<br></br>level instance
      */
     fun getLevelByName(name: String): Level? {
-        var name1 = name
-        if (!name1.matches(LEVEL_DIM_PATTERN.toRegex())) {
-            name1 = "$name1 Dim0"
-        }
         for (level in this.levelArray) {
-            if (level.getLevelName().equals(name1, ignoreCase = true)) {
+            if (level.getLevelName() == name) {
                 return level
             }
         }
@@ -2003,35 +1988,31 @@ class Server internal constructor(
      * @return whether load success
      */
     fun loadLevel(levelFolderName: String): Boolean {
-        var levelFolderName1 = levelFolderName
-        if (levelFolderName1.matches(LEVEL_DIM_PATTERN.toRegex())) {
-            levelFolderName1 = levelFolderName1.replaceFirst("\\sDim\\d$".toRegex(), "")
-        }
-        val levelConfig = getLevelConfig(levelFolderName1) ?: return false
-        val path = if (levelFolderName1.contains("/") || levelFolderName1.contains("\\")) {
-            levelFolderName1
+        val levelConfig = getLevelConfig(levelFolderName) ?: return false
+        val path = if (levelFolderName.contains("/") || levelFolderName.contains("\\")) {
+            levelFolderName
         } else {
-            File(this.dataPath, "worlds/$levelFolderName1").absolutePath
+            File(this.dataPath, "worlds/$levelFolderName").absolutePath
         }
         val pathS = Path.of(path).toString()
 
         val generators: Map<Int, GeneratorConfig> = levelConfig.generators
-        for ((key, value) in generators) {
-            val levelName = "$levelFolderName1 Dim$key"
+        for ((_, value) in generators) {
+            val levelName = levelFolderName + if (generators.size > 1) value.dimensionData.suffix else ""
             if (this.isLevelLoaded(levelName)) {
                 return true
             }
             val level: Level
             try {
                 if (!LevelDBProvider.isValid(pathS)) {
-                    log.error(this.lang.tr("chorus.level.loadError", levelFolderName1, "the level does not exist"))
+                    log.error(this.lang.tr("chorus.level.loadError", levelFolderName, "the level does not exist"))
                     return false
                 }
                 level = Level(
                     levelName, pathS, generators.size, LevelDBProvider::class.java, value
                 )
             } catch (e: Exception) {
-                log.error(this.lang.tr("chorus.level.loadError", levelFolderName1, e.message!!), e)
+                log.error(this.lang.tr("chorus.level.loadError", levelFolderName, e.message!!), e)
                 return false
             }
             levels[level.id] = level
@@ -2085,7 +2066,7 @@ class Server internal constructor(
             val level: Level
             try {
                 LevelDBProvider.generate(path, name, generatorConfig)
-                val levelName = name + " Dim" + entry.key
+                val levelName = name + if (levelConfig1.generators.size > 1) entry.value.dimensionData.suffix else ""
                 if (this.isLevelLoaded(levelName)) {
                     log.warn("level {} has already been loaded!", levelName)
                     continue
@@ -2415,8 +2396,6 @@ class Server internal constructor(
         fun broadcastPacket(players: Iterable<Player>, packet: Packet) {
             broadcastPacket(players.toList(), MigrationPacket(packet))
         }
-
-        const val LEVEL_DIM_PATTERN: String = "^.*Dim[0-9]$"
 
         /**`
          * 默认`direct=false`
