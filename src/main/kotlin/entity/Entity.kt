@@ -37,7 +37,6 @@ import org.chorus_oss.chorus.nbt.tag.FloatTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
 import org.chorus_oss.chorus.nbt.tag.StringTag
 import org.chorus_oss.chorus.network.protocol.*
-import org.chorus_oss.chorus.network.protocol.AnimateEntityPacket.Animation
 import org.chorus_oss.chorus.network.protocol.types.EntityLink
 import org.chorus_oss.chorus.network.protocol.types.PropertySyncData
 import org.chorus_oss.chorus.registry.Registries
@@ -59,7 +58,6 @@ import java.util.Objects.requireNonNull
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ThreadLocalRandom
 import java.util.concurrent.atomic.AtomicLong
-import java.util.function.Consumer
 import kotlin.concurrent.Volatile
 import kotlin.math.*
 import kotlin.random.Random
@@ -3371,34 +3369,9 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
                 )
         }
 
-        /**
-         * Batch play animation on entity groups<br></br>
-         * This method is recommended if you need to play the same animation on a large number of entities at the same time, as it only sends packets once for each player, which greatly reduces bandwidth pressure
-         *
-         *
-         * 在实体群上批量播放动画<br></br>
-         * 若你需要同时在大量实体上播放同一动画，建议使用此方法，因为此方法只会针对每个玩家发送一次包，这能极大地缓解带宽压力
-         *
-         * @param animation 动画对象 Animation objects
-         * @param entities  需要播放动画的实体群 Group of entities that need to play animations
-         * @param players   可视玩家 Visible Player
-         */
-        fun playAnimationOnEntities(animation: Animation, entities: Collection<Entity>, players: Collection<Player>) {
-            val pk = AnimateEntityPacket.fromAnimation(animation)
-            entities.forEach(Consumer { entity: Entity -> pk.runtimeIDs.add(entity.getRuntimeID()) })
-            Server.broadcastPacket(players, pk)
-        }
-
-        /**
-         * @see .playAnimationOnEntities
-         */
-        fun playAnimationOnEntities(animation: Animation, entities: Collection<Entity>) {
-            val viewers: HashSet<Player> = HashSet()
-            entities.forEach(Consumer { entity: Entity ->
-                viewers.addAll(entity.viewers.values)
-                if (entity.isPlayer) viewers.add(entity as Player)
-            })
-            playAnimationOnEntities(animation, entities, viewers)
+        fun playAnimationOnEntities(animation: org.chorus_oss.protocol.packets.AnimateEntityPacket, entities: List<Entity>) {
+            val viewers = entities.flatMap { it.viewers.values + if (it.isPlayer) listOf(it as Player) else emptyList() }.toSet()
+            Server.broadcastPacket(viewers, animation)
         }
     }
 }

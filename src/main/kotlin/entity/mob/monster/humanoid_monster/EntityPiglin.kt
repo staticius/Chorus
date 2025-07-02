@@ -39,7 +39,6 @@ import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.math.IVector3
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
-import org.chorus_oss.chorus.network.protocol.AnimateEntityPacket.Animation
 import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus_oss.chorus.network.protocol.TakeItemEntityPacket
 import org.chorus_oss.chorus.utils.Utils
@@ -320,12 +319,16 @@ open class EntityPiglin(chunk: IChunk?, nbt: CompoundTag?) : EntityHumanoidMonst
                                     this.position
                                 ) < 16
                             }.toList()
-                            val builder = Animation(
+                            val packet = org.chorus_oss.protocol.packets.AnimateEntityPacket(
                                 animation = "animation.piglin.celebrate_hunt_special",
                                 nextState = "r",
-                                blendOutTime = 1f
+                                stopExpression = "query.any_animation_finished",
+                                stopExpressionVersion = 16777216,
+                                controller = "__runtime_controller",
+                                blendOutTime = 1f,
+                                runtimeIDs = entities.map { it.getRuntimeID().toULong() }
                             )
-                            playAnimationOnEntities(builder, entities)
+                            playAnimationOnEntities(packet, entities)
                             entities.forEach(Consumer { entity1: Entity ->
                                 entity1.level!!.addSound(
                                     entity1.position,
