@@ -43,8 +43,6 @@ interface PacketHandler {
 
     fun handle(pk: EntityEventPacket) {}
 
-    fun handle(pk: ActorPickRequestPacket) {}
-
     fun handle(pk: GUIDataPickItemPacket) {}
 
     fun handle(pk: HurtArmorPacket) {}

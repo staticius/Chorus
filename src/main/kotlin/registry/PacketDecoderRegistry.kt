@@ -42,7 +42,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.INVENTORY_TRANSACTION_PACKET, InventoryTransactionPacket) // 30
         this.register(ProtocolInfo.INTERACT_PACKET, InteractPacket) // 33
         this.register(ProtocolInfo.BLOCK_PICK_REQUEST_PACKET, BlockPickRequestPacket) // 34
-        this.register(ProtocolInfo.ACTOR_PICK_REQUEST_PACKET, ActorPickRequestPacket) // 35
         this.register(ProtocolInfo.HURT_ARMOR_PACKET, HurtArmorPacket) // 38
         this.register(ProtocolInfo.ANIMATE_PACKET, AnimatePacket) // 44
         this.register(ProtocolInfo.CONTAINER_CLOSE_PACKET, ContainerClosePacket) // 47
