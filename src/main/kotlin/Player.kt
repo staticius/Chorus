@@ -776,7 +776,7 @@ open class Player(
                 dimension = dimension,
                 position = org.chorus_oss.protocol.types.Vector3f.from(position),
                 respawn = false,
-                loadingScreenID = loadingScreenId++
+                loadingScreenID = null
             )
         )
 
@@ -4868,12 +4868,12 @@ open class Player(
     override val isLoaderActive: Boolean
         get() = this.isConnected()
 
-    public override fun switchLevel(level: Level): Boolean {
-        if (super.switchLevel(level)) {
+    public override fun switchLevel(targetLevel: Level): Boolean {
+        if (super.switchLevel(targetLevel)) {
             clientMovements.clear()
             val spawnPosition = SetSpawnPositionPacket()
             spawnPosition.spawnType = SetSpawnPositionPacket.TYPE_WORLD_SPAWN
-            val spawn = level.spawnLocation
+            val spawn = targetLevel.spawnLocation
             spawnPosition.x = spawn.position.floorX
             spawnPosition.y = spawn.position.floorY
             spawnPosition.z = spawn.position.floorZ
@@ -4884,25 +4884,28 @@ open class Player(
             this.forceSendEmptyChunks()
 
             val setTime = SetTimePacket()
-            setTime.time = level.getTime()
+            setTime.time = targetLevel.getTime()
             this.dataPacket(setTime)
 
             val gameRulesChanged = GameRulesChangedPacket()
-            gameRulesChanged.gameRules = level.gameRules
+            gameRulesChanged.gameRules = targetLevel.gameRules
             this.dataPacket(gameRulesChanged)
 
-            if (level.dimension == this.level!!.dimension) {
+            if (targetLevel.dimension == this.level!!.dimension) {
                 this.sendPacket(
                     org.chorus_oss.protocol.packets.ChangeDimensionPacket(
-                        dimension = Level.DIMENSION_UNDEFINED,
+                        dimension = when (this.level!!.dimension) {
+                            Level.DIMENSION_NETHER -> Level.DIMENSION_OVERWORLD
+                            else -> Level.DIMENSION_NETHER
+                        },
                         position = org.chorus_oss.protocol.types.Vector3f(0f, 0f, 0f),
                         respawn = false,
-                        loadingScreenID = loadingScreenId++
+                        loadingScreenID = null
                     )
                 )
             }
 
-            this.setDimension(level.dimension)
+            this.setDimension(targetLevel.dimension)
 
             updateTrackingPositions(true)
             return true
