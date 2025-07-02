@@ -1,11 +1,10 @@
 package org.chorus_oss.chorus.inventory.request
 
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.inventory.SpecialWindowId
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
-import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.MineBlockAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
@@ -41,8 +40,8 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
                     org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Hotbar,
                     id,
                 ),
-                storageItem = ItemStack.from(Item.AIR),
-                newItem = ItemStack.from(itemInHand),
+                storageItem = ItemStack(Item.AIR),
+                newItem = ItemStack(itemInHand),
             )
             player.sendPacket(packet)
         }

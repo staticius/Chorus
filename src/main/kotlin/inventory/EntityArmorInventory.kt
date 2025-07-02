@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.inventory
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.entity.Entity
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.network.protocol.MobArmorEquipmentPacket
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
@@ -70,14 +70,14 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
             val packet = org.chorus_oss.protocol.packets.InventorySlotPacket(
                 windowID = id.toUInt(),
                 slot = index.toUInt(),
-                container = org.chorus_oss.protocol.types.inventory.FullContainerName.from(
+                container = org.chorus_oss.protocol.types.inventory.FullContainerName(
                     FullContainerName(
                         this.getSlotType(index),
                         id
                     )
                 ),
-                storageItem = ItemStack.from(Item.AIR),
-                newItem = ItemStack.from(this.getItem(index))
+                storageItem = ItemStack(Item.AIR),
+                newItem = ItemStack(this.getItem(index))
             )
             player.sendPacket(packet)
         } else {
@@ -111,12 +111,12 @@ class EntityArmorInventory(holder: InventoryHolder) : BaseInventory(holder, Inve
                     chestplate,
                     leggings,
                     boots
-                ).map { ItemStack.from(it) },
+                ).map { ItemStack(it) },
                 container = org.chorus_oss.protocol.types.inventory.FullContainerName(
                     org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Armor,
                     id
                 ),
-                storageItem = ItemStack.from(Item.AIR)
+                storageItem = ItemStack(Item.AIR)
             )
             player.sendPacket(packet)
         } else {

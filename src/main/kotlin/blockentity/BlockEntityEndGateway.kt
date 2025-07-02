@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.block.*
 import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.entity.projectile.throwable.EntityEnderPearl
 import org.chorus_oss.chorus.event.player.PlayerTeleportEvent.TeleportCause
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.math.BlockVector3
 import org.chorus_oss.chorus.math.Vector2
@@ -215,7 +215,7 @@ class BlockEntityEndGateway(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawna
         }
 
         val pk = org.chorus_oss.protocol.packets.BlockEventPacket(
-            blockPosition = BlockPos.from(this.position),
+            blockPosition = BlockPos(this.position),
             eventType = 1,
             eventValue = eventData,
         )

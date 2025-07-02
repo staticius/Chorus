@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.event.vehicle.VehicleMoveEvent
 import org.chorus_oss.chorus.event.vehicle.VehicleUpdateEvent
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.level.GameRule
@@ -132,14 +132,14 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             actorUniqueID = this.uniqueId,
             actorRuntimeID = this.runtimeId.toULong(),
             actorType = this.getEntityIdentifier(),
-            position = org.chorus_oss.protocol.types.Vector3f.from(this.position.add(0.0, this.getBaseOffset().toDouble(), 0.0)),
-            velocity = org.chorus_oss.protocol.types.Vector3f.from(this.motion),
-            rotation = org.chorus_oss.protocol.types.Vector2f.from(this.rotation),
+            position = org.chorus_oss.protocol.types.Vector3f(this.position.add(0.0, this.getBaseOffset().toDouble(), 0.0)),
+            velocity = org.chorus_oss.protocol.types.Vector3f(this.motion),
+            rotation = org.chorus_oss.protocol.types.Vector2f(this.rotation),
             headYaw = this.rotation.yaw.toFloat(),
             bodyYaw = this.rotation.yaw.toFloat(),
-            attributes = this.attributes.values.map(AttributeValue::from),
-            actorData = ActorDataMap.from(this.entityDataMap),
-            actorProperties = ActorProperties.from(this.propertySyncData()),
+            attributes = this.attributes.values.map(AttributeValue::invoke),
+            actorData = ActorDataMap(this.entityDataMap),
+            actorProperties = ActorProperties(this.propertySyncData()),
             actorLinks = List(passengers.size) { i ->
                 ActorLink(
                     riddenActorUniqueID = this.uniqueId,

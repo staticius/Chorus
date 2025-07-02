@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.blockentity.BlockEntityID
 import org.chorus_oss.chorus.blockentity.BlockEntityMusic
 import org.chorus_oss.chorus.event.player.PlayerInteractEvent
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTool
 import org.chorus_oss.chorus.level.Level
@@ -191,7 +191,7 @@ class BlockNoteblock @JvmOverloads constructor(blockstate: BlockState = properti
         )
 
         val pk = org.chorus_oss.protocol.packets.BlockEventPacket(
-            blockPosition = BlockPos.from(position),
+            blockPosition = BlockPos(position),
             eventType = instrument.ordinal,
             eventValue = this.strength,
         )

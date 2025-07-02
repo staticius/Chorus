@@ -22,7 +22,7 @@ import org.chorus_oss.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus_oss.chorus.event.entity.EntityPortalEnterEvent.PortalType
 import org.chorus_oss.chorus.event.player.PlayerInteractEvent
 import org.chorus_oss.chorus.event.player.PlayerTeleportEvent.TeleportCause
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemTotemOfUndying
 import org.chorus_oss.chorus.item.enchantment.Enchantment
@@ -951,17 +951,17 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
             actorUniqueID = this.uniqueId,
             actorRuntimeID = this.runtimeId.toULong(),
             actorType = this.getEntityIdentifier(),
-            position = org.chorus_oss.protocol.types.Vector3f.from(this.position),
-            velocity = org.chorus_oss.protocol.types.Vector3f.from(this.motion),
-            rotation = org.chorus_oss.protocol.types.Vector2f.from(this.rotation),
+            position = org.chorus_oss.protocol.types.Vector3f(this.position),
+            velocity = org.chorus_oss.protocol.types.Vector3f(this.motion),
+            rotation = org.chorus_oss.protocol.types.Vector2f(this.rotation),
             headYaw = when (this) {
                 is EntityMob -> this.headYaw.toFloat()
                 else -> this.rotation.yaw.toFloat()
             },
             bodyYaw = this.rotation.yaw.toFloat(),
-            attributes = this.attributes.values.map(AttributeValue::from),
-            actorData = ActorDataMap.from(this.entityDataMap),
-            actorProperties = ActorProperties.from(this.propertySyncData()),
+            attributes = this.attributes.values.map(AttributeValue::invoke),
+            actorData = ActorDataMap(this.entityDataMap),
+            actorProperties = ActorProperties(this.propertySyncData()),
             actorLinks = List(passengers.size) { i ->
                 ActorLink(
                     riddenActorUniqueID = this.uniqueId,

@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.registry
 
 import com.google.gson.GsonBuilder
-import org.chorus_oss.chorus.experimental.network.protocol.utils.biome.fromNBT
+import org.chorus_oss.chorus.experimental.network.protocol.utils.biome.invoke
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
@@ -47,7 +47,7 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
                     val biomeID = NAME2ID[BIOME_STRINGS[index.toInt()]]!!
                     val definition = BiomeDefinition(
                         index,
-                        data = BiomeDefinitionData.fromNBT(biomeTag.getCompound("data"))
+                        data = BiomeDefinitionData(biomeTag.getCompound("data"))
                     )
                     register(biomeID, definition)
                 }

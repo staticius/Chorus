@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.entity.data.Skin
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus_oss.chorus.event.player.EntityFreezeEvent
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemShield
 import org.chorus_oss.chorus.level.format.IChunk
@@ -173,17 +173,17 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
 
             player.sendPacket(
                 org.chorus_oss.protocol.packets.AddPlayerPacket(
-                    uuid = Uuid.from(this.uuid),
+                    uuid = Uuid(this.uuid),
                     playerName = this.getEntityName(),
                     actorRuntimeID = this.getRuntimeID().toULong(),
                     platformChatID = "", // TODO: platformChatID
-                    position = Vector3f.from(this.position),
-                    velocity = Vector3f.from(this.motion),
-                    rotation = Vector2f.from(this.rotation),
+                    position = Vector3f(this.position),
+                    velocity = Vector3f(this.motion),
+                    rotation = Vector2f(this.rotation),
                     headYaw = this.headYaw.toFloat(),
-                    carriedItem = ItemStack.from(this.itemInHand),
+                    carriedItem = ItemStack(this.itemInHand),
                     playerGameType = Server.instance.gamemode,
-                    actorData = ActorDataMap.from(this.entityDataMap),
+                    actorData = ActorDataMap(this.entityDataMap),
                     abilitiesData = AbilitiesData(
                         this.getUniqueID(),
                         PlayerPermission.Visitor,
@@ -220,7 +220,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
                             vehicleAngularVelocity = 0f,
                         )
                     },
-                    actorProperties = ActorProperties.from(this.propertySyncData()),
+                    actorProperties = ActorProperties(this.propertySyncData()),
                     buildPlatform = Platform.Unknown, // TODO: buildPlatform
                     deviceID = "" // TODO: DeviceID
                 )

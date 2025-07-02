@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.inventory
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.block.BlockUndyedShulkerBox
 import org.chorus_oss.chorus.blockentity.BlockEntityShulkerBox
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
@@ -22,7 +22,7 @@ class ShulkerBoxInventory(box: BlockEntityShulkerBox) : ContainerInventory(box, 
 
         if (viewers.size == 1) {
             val pk = org.chorus_oss.protocol.packets.BlockEventPacket(
-                blockPosition = BlockPos.from(holder.vector3),
+                blockPosition = BlockPos(holder.vector3),
                 eventType = 1,
                 eventValue = 2,
             )
@@ -41,7 +41,7 @@ class ShulkerBoxInventory(box: BlockEntityShulkerBox) : ContainerInventory(box, 
     override fun onClose(who: Player) {
         if (viewers.size == 1) {
             val pk = org.chorus_oss.protocol.packets.BlockEventPacket(
-                blockPosition = BlockPos.from(holder.vector3),
+                blockPosition = BlockPos(holder.vector3),
                 eventType = 1,
                 eventValue = 0,
             )

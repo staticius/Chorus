@@ -4,7 +4,7 @@ import org.chorus_oss.protocol.types.AbilityLayer
 import org.chorus_oss.protocol.types.PlayerAbility
 import org.chorus_oss.protocol.types.PlayerAbilitySet
 
-fun AbilityLayer.Companion.from(value: org.chorus_oss.chorus.network.protocol.types.AbilityLayer): AbilityLayer {
+operator fun AbilityLayer.Companion.invoke(value: org.chorus_oss.chorus.network.protocol.types.AbilityLayer): AbilityLayer {
     return AbilityLayer(
         AbilityLayer.Companion.Type.entries[value.layerType.ordinal],
         PlayerAbilitySet(value.abilitiesSet.map { PlayerAbility.entries[it.ordinal] }.toMutableSet()),

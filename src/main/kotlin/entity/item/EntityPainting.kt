@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.entity.EntityHanging
 import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.ItemPainting
 import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.Level
@@ -109,9 +109,9 @@ class EntityPainting(chunk: IChunk?, nbt: CompoundTag?) : EntityHanging(chunk, n
         return org.chorus_oss.protocol.packets.AddPaintingPacket(
             actorUniqueID = this.uniqueId,
             actorRuntimeID = this.runtimeId.toULong(),
-            position = Vector3f.from(this.position),
+            position = Vector3f(this.position),
             direction = this.getDirection().horizontalIndex,
-            motif = namedTag!!.getString("Motive"),
+            motif = namedTag.getString("Motive"),
         )
     }
 

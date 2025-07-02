@@ -1,7 +1,7 @@
 package org.chorus_oss.chorus.blockentity
 
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.protocol.core.Packet
@@ -36,8 +36,8 @@ abstract class BlockEntitySpawnable(chunk: IChunk, nbt: CompoundTag) : BlockEnti
         get() {
             val nbt1 = this.spawnCompound
             return org.chorus_oss.protocol.packets.BlockActorDataPacket(
-                blockPosition = BlockPos.from(position),
-                actorDataTags = org.chorus_oss.nbt.tags.CompoundTag.from(nbt1)
+                blockPosition = BlockPos(position),
+                actorDataTags = org.chorus_oss.nbt.tags.CompoundTag(nbt1)
             )
         }
 

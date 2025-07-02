@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.entity.Entity
 import org.chorus_oss.chorus.event.entity.EntityInventoryChangeEvent
 import org.chorus_oss.chorus.event.inventory.InventoryCloseEvent
 import org.chorus_oss.chorus.event.inventory.InventoryOpenEvent
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
@@ -443,12 +443,12 @@ abstract class BaseInventory(
 
             val packet = org.chorus_oss.protocol.packets.InventoryContentPacket(
                 windowID = id.toUInt(),
-                content = List(this.size) { ItemStack.from(this.getUnclonedItem(it)) },
+                content = List(this.size) { ItemStack(this.getUnclonedItem(it)) },
                 container = org.chorus_oss.protocol.types.inventory.FullContainerName(
                     org.chorus_oss.protocol.types.itemstack.ContainerSlotType.AnvilInput,
                     null
                 ),
-                storageItem = ItemStack.from(Item.AIR)
+                storageItem = ItemStack(Item.AIR)
             )
 
             player.sendPacket(packet)
@@ -531,14 +531,14 @@ abstract class BaseInventory(
             val packet = org.chorus_oss.protocol.packets.InventorySlotPacket(
                 windowID = id.toUInt(),
                 slot = slot.toUInt(),
-                container = org.chorus_oss.protocol.types.inventory.FullContainerName.from(
+                container = org.chorus_oss.protocol.types.inventory.FullContainerName.invoke(
                     FullContainerName(
                         this.getSlotType(slot),
                         id
                     )
                 ),
-                storageItem = ItemStack.from(Item.AIR),
-                newItem = ItemStack.from(this.getUnclonedItem(index))
+                storageItem = ItemStack(Item.AIR),
+                newItem = ItemStack(this.getUnclonedItem(index))
             )
 
             player.sendPacket(packet)

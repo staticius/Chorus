@@ -45,7 +45,7 @@ import org.chorus_oss.chorus.event.player.*
 import org.chorus_oss.chorus.event.player.PlayerTeleportEvent.TeleportCause
 import org.chorus_oss.chorus.event.server.DataPacketSendEvent
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.form.window.Form
 import org.chorus_oss.chorus.inventory.*
 import org.chorus_oss.chorus.item.*
@@ -774,7 +774,7 @@ open class Player(
         this.sendPacket(
             org.chorus_oss.protocol.packets.ChangeDimensionPacket(
                 dimension = dimension,
-                position = org.chorus_oss.protocol.types.Vector3f.from(position),
+                position = org.chorus_oss.protocol.types.Vector3f(position),
                 respawn = false,
                 loadingScreenID = null
             )

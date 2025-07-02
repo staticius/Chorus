@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.protocol.types.item.ItemInstance
 import java.nio.ByteOrder
 
-fun ItemInstance.Companion.from(value: Item): ItemInstance {
+operator fun ItemInstance.Companion.invoke(value: Item): ItemInstance {
     return ItemInstance(
         netID = when {
             value.isNothing -> 0
@@ -29,11 +29,11 @@ fun ItemInstance.Companion.from(value: Item): ItemInstance {
                     tag.put("__DamageConflict__", tag.removeAndGet("Damage")!!)
                 }
                 tag.putInt("Damage", value.meta)
-                org.chorus_oss.nbt.tags.CompoundTag.from(tag)
+                org.chorus_oss.nbt.tags.CompoundTag.invoke(tag)
             }
             value.hasCompoundTag() -> {
                 val tag = value.namedTag!!
-                org.chorus_oss.nbt.tags.CompoundTag.from(tag)
+                org.chorus_oss.nbt.tags.CompoundTag.invoke(tag)
             }
             else -> org.chorus_oss.nbt.tags.CompoundTag()
         },

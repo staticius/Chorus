@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.entity.IHuman
 import org.chorus_oss.chorus.event.entity.EntityArmorChangeEvent
 import org.chorus_oss.chorus.event.entity.EntityInventoryChangeEvent
 import org.chorus_oss.chorus.event.player.PlayerItemHeldEvent
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemArmor
 import org.chorus_oss.chorus.item.ItemFilledMap
@@ -497,12 +497,12 @@ class HumanInventory(human: IHuman) //9+27+4
                 val id = SpecialWindowId.ARMOR.id
                 val packet = org.chorus_oss.protocol.packets.InventoryContentPacket(
                     windowID = id.toUInt(),
-                    content = armor.toList().map { ItemStack.from(it) },
+                    content = armor.toList().map { ItemStack(it) },
                     container = org.chorus_oss.protocol.types.inventory.FullContainerName(
                         org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Armor,
                         id
                     ),
-                    storageItem = ItemStack.from(Item.AIR)
+                    storageItem = ItemStack(Item.AIR)
                 )
                 player.sendPacket(packet)
 
@@ -566,8 +566,8 @@ class HumanInventory(human: IHuman) //9+27+4
                         org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Armor,
                         id
                     ),
-                    storageItem = ItemStack.from(Item.AIR),
-                    newItem = ItemStack.from(this.getItem(ARMORS_INDEX + index))
+                    storageItem = ItemStack(Item.AIR),
+                    newItem = ItemStack(this.getItem(ARMORS_INDEX + index))
                 )
                 player.sendPacket(packet)
 
@@ -606,14 +606,14 @@ class HumanInventory(human: IHuman) //9+27+4
 
             val packet = org.chorus_oss.protocol.packets.InventoryContentPacket(
                 windowID = id.toUInt(),
-                content = List(inventoryAndHotBarSize) { ItemStack.from(this.getItem(it)) },
-                container = org.chorus_oss.protocol.types.inventory.FullContainerName.from(
+                content = List(inventoryAndHotBarSize) { ItemStack(this.getItem(it)) },
+                container = org.chorus_oss.protocol.types.inventory.FullContainerName.invoke(
                     FullContainerName(
                         this.getSlotType(id),
                         id
                     )
                 ),
-                storageItem = ItemStack.from(Item.AIR)
+                storageItem = ItemStack(Item.AIR)
             )
 
             player.sendPacket(packet)
@@ -635,14 +635,14 @@ class HumanInventory(human: IHuman) //9+27+4
                 val packet = org.chorus_oss.protocol.packets.InventorySlotPacket(
                     windowID = id.toUInt(),
                     slot = index.toUInt(),
-                    container = org.chorus_oss.protocol.types.inventory.FullContainerName.from(
+                    container = org.chorus_oss.protocol.types.inventory.FullContainerName.invoke(
                         FullContainerName(
                             this.getSlotType(index),
                             id
                         )
                     ),
-                    storageItem = ItemStack.from(Item.AIR),
-                    newItem = ItemStack.from(this.getItem(index))
+                    storageItem = ItemStack(Item.AIR),
+                    newItem = ItemStack(this.getItem(index))
                 )
                 player.sendPacket(packet)
             } else {
@@ -655,14 +655,14 @@ class HumanInventory(human: IHuman) //9+27+4
                 val packet = org.chorus_oss.protocol.packets.InventorySlotPacket(
                     windowID = id.toUInt(),
                     slot = index.toUInt(),
-                    container = org.chorus_oss.protocol.types.inventory.FullContainerName.from(
+                    container = org.chorus_oss.protocol.types.inventory.FullContainerName.invoke(
                         FullContainerName(
                             this.getSlotType(index),
                             id
                         )
                     ),
-                    storageItem = ItemStack.from(Item.AIR),
-                    newItem = ItemStack.from(this.getItem(index))
+                    storageItem = ItemStack(Item.AIR),
+                    newItem = ItemStack(this.getItem(index))
                 )
                 player.sendPacket(packet)
             }

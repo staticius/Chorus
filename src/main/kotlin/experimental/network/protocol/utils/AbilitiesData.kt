@@ -6,11 +6,11 @@ import org.chorus_oss.protocol.types.AbilityLayer
 import org.chorus_oss.protocol.types.CommandPermission
 import org.chorus_oss.protocol.types.PlayerPermission
 
-fun AbilitiesData.Companion.from(value: SerializedAbilitiesData): AbilitiesData {
+operator fun AbilitiesData.Companion.invoke(value: SerializedAbilitiesData): AbilitiesData {
     return AbilitiesData(
         value.targetPlayerRawID,
         PlayerPermission.entries[value.playerPermissions.ordinal],
         CommandPermission.entries[value.commandPermissions.ordinal],
-        value.layers.map(AbilityLayer::from)
+        value.layers.map(AbilityLayer::invoke)
     )
 }

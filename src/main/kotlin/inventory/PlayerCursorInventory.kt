@@ -2,9 +2,8 @@ package org.chorus_oss.chorus.inventory
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.protocol.types.item.ItemStack
 
@@ -28,8 +27,8 @@ class PlayerCursorInventory(player: Player) : BaseInventory(player, InventoryTyp
                     org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Cursor,
                     id,
                 ),
-                storageItem = ItemStack.from(Item.AIR),
-                newItem = ItemStack.from(this.getUnclonedItem(index))
+                storageItem = ItemStack(Item.AIR),
+                newItem = ItemStack(this.getUnclonedItem(index))
             )
             player.sendPacket(packet)
         }
@@ -44,8 +43,8 @@ class PlayerCursorInventory(player: Player) : BaseInventory(player, InventoryTyp
                 org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Cursor,
                 id,
             ),
-            storageItem = ItemStack.from(Item.AIR),
-            newItem = ItemStack.from(this.getUnclonedItem(0))
+            storageItem = ItemStack(Item.AIR),
+            newItem = ItemStack(this.getUnclonedItem(0))
         )
         Server.broadcastPacket(players.toList(), packet)
     }

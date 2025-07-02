@@ -9,7 +9,7 @@ import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent.DamageCause
 import org.chorus_oss.chorus.event.entity.ItemDespawnEvent
 import org.chorus_oss.chorus.event.entity.ItemSpawnEvent
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.level.format.IChunk
@@ -301,10 +301,10 @@ class EntityItem(chunk: IChunk?, nbt: CompoundTag?) : Entity(chunk, nbt) {
         return org.chorus_oss.protocol.packets.AddItemActorPacket(
             actorUniqueID = this.uniqueId,
             actorRuntimeID = this.runtimeId.toULong(),
-            position = Vector3f.from(this.position),
-            velocity = Vector3f.from(this.motion),
-            item = ItemStack.from(this.item),
-            actorData = ActorDataMap.from(this.entityDataMap),
+            position = Vector3f(this.position),
+            velocity = Vector3f(this.motion),
+            item = ItemStack(this.item),
+            actorData = ActorDataMap(this.entityDataMap),
             fromFishing = false
         )
     }

@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.inventory
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.entity.IHuman
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.network.protocol.MobEquipmentPacket
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
@@ -54,12 +54,12 @@ class HumanOffHandInventory(holder: IHuman) : BaseInventory(holder, InventoryTyp
             if (player === this.holder) {
                 val packet = InventoryContentPacket(
                     windowID = SpecialWindowId.OFFHAND.id.toUInt(),
-                    content = listOf(item).map { ItemStack.from(it) },
+                    content = listOf(item).map { ItemStack(it) },
                     container = FullContainerName(
                         org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Offhand,
                         null
                     ),
-                    storageItem = ItemStack.from(Item.AIR)
+                    storageItem = ItemStack(Item.AIR)
                 )
 
                 player.sendPacket(packet)

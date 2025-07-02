@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.block.BlockTrappedChest
 import org.chorus_oss.chorus.blockentity.BlockEntityChest
 import org.chorus_oss.chorus.blockentity.BlockEntityNameable
 import org.chorus_oss.chorus.event.redstone.RedstoneUpdateEvent
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.chorus.utils.LevelException
@@ -37,7 +37,7 @@ class ChestInventory(chest: BlockEntityChest) : ContainerInventory(chest, Invent
 
         if (viewers.size == 1) {
             val pk = org.chorus_oss.protocol.packets.BlockEventPacket(
-                blockPosition = BlockPos.from(holder.vector3),
+                blockPosition = BlockPos(holder.vector3),
                 eventType = 1,
                 eventValue = 2,
             )
@@ -65,7 +65,7 @@ class ChestInventory(chest: BlockEntityChest) : ContainerInventory(chest, Invent
     override fun onClose(who: Player) {
         if (viewers.size == 1) {
             val pk = org.chorus_oss.protocol.packets.BlockEventPacket(
-                blockPosition = BlockPos.from(holder.vector3),
+                blockPosition = BlockPos(holder.vector3),
                 eventType = 1,
                 eventValue = 0,
             )

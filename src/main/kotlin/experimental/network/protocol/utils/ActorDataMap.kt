@@ -6,7 +6,7 @@ import org.chorus_oss.protocol.types.BlockPos
 import org.chorus_oss.protocol.types.actor_data.ActorDataKey
 import org.chorus_oss.protocol.types.actor_data.ActorDataMap
 
-fun ActorDataMap.Companion.from(value: EntityDataMap): ActorDataMap {
+operator fun ActorDataMap.Companion.invoke(value: EntityDataMap): ActorDataMap {
     return ActorDataMap().also {
         val transformed = value.entries.map { (key, data) ->
             var actual = ((key.getTransformer() as? java.util.function.Function<Any, *>?)?.apply(data) ?: data)

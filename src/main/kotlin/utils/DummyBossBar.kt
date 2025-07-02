@@ -6,11 +6,8 @@ import org.chorus_oss.chorus.entity.Attribute.Companion.getAttribute
 import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.data.EntityDataMap
 import org.chorus_oss.chorus.entity.data.EntityDataTypes
-import org.chorus_oss.chorus.experimental.network.protocol.utils.from
-import org.chorus_oss.chorus.math.Vector2f
-import org.chorus_oss.chorus.math.Vector3f
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.network.protocol.*
-import org.chorus_oss.chorus.network.protocol.types.PropertySyncData
 import org.chorus_oss.protocol.types.ActorProperties
 import org.chorus_oss.protocol.types.actor_data.ActorDataMap
 import java.util.concurrent.ThreadLocalRandom
@@ -101,7 +98,7 @@ class DummyBossBar private constructor(builder: Builder) {
                 actorUniqueID = this.bossBarId,
                 actorRuntimeID = this.bossBarId.toULong(),
                 actorType = EntityID.CREEPER,
-                position = org.chorus_oss.protocol.types.Vector3f.from(player.position.asVector3f().setY(-74f)),
+                position = org.chorus_oss.protocol.types.Vector3f(player.position.asVector3f().setY(-74f)),
                 velocity = org.chorus_oss.protocol.types.Vector3f(0f, 0f, 0f),
                 rotation = org.chorus_oss.protocol.types.Vector2f(0f, 0f),
                 headYaw = 0f,
@@ -115,7 +112,7 @@ class DummyBossBar private constructor(builder: Builder) {
                     entityDataMap[EntityDataTypes.LEASH_HOLDER] = -1
                     entityDataMap[EntityDataTypes.NAME] = text
                     entityDataMap[EntityDataTypes.SCALE] = 0
-                    ActorDataMap.from(entityDataMap)
+                    ActorDataMap(entityDataMap)
                 },
                 actorProperties = ActorProperties(emptyList(), emptyList()),
                 actorLinks = emptyList()
