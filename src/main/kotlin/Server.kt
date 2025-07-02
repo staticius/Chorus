@@ -1459,7 +1459,7 @@ class Server internal constructor(
      * @param info the player info
      */
     fun updateName(info: PlayerInfo) {
-        val uniqueId = info.uniqueId
+        val uniqueId = info.uuid
         val name = info.username
 
         val nameBytes: ByteArray = name.lowercase(Locale.ENGLISH).toByteArray(StandardCharsets.UTF_8)

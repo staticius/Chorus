@@ -572,8 +572,8 @@ open class Player(
         this.creationTime = System.currentTimeMillis()
         this.displayName = playerInfo.username
         this.loginChainData = playerInfo.data
-        this.uuid = playerInfo.uniqueId
-        this.rawUUID = writeUUID(playerInfo.uniqueId)
+        this.uuid = playerInfo.uuid
+        this.rawUUID = writeUUID(playerInfo.uuid)
         this.skin = (playerInfo.skin)
     }
 
@@ -800,6 +800,8 @@ open class Player(
 
     public override fun initEntity() {
         super.initEntity()
+        this.uniqueId = this.uuid.leastSignificantBits
+
         val level = if (namedTag!!.containsString("SpawnLevel")) {
             Server.instance.getLevelByName(namedTag!!.getString("SpawnLevel"))
         } else Server.instance.defaultLevel
@@ -1408,7 +1410,7 @@ open class Player(
         var oldPlayer: Player? = null
         for (p in Server.instance.onlinePlayers.values) {
             if (p === this) continue
-            if (p.getEntityName().equals(this.getEntityName(), ignoreCase = true) || this.getUniqueID() == p.getUniqueID()) {
+            if (p.getEntityName() == this.getEntityName() || this.getUniqueID() == p.getUniqueID()) {
                 oldPlayer = p
                 break
             }
@@ -3612,7 +3614,7 @@ open class Player(
             }
         }
         // Close the temporary windows first, so they have chance to change all inventories before being disposed
-        if (ev != null && ev!!.autoSave && namedTag != null) {
+        if (ev != null && ev.autoSave) {
             this.save()
         }
         super.close()
@@ -3627,8 +3629,8 @@ open class Player(
         Server.instance.pluginManager.unsubscribeFromPermission(Server.BROADCAST_CHANNEL_USERS, this)
         Server.instance.pluginManager.unsubscribeFromPermission(Server.BROADCAST_CHANNEL_ADMINISTRATIVE, this)
         // broadcast disconnection message
-        if (ev != null && (this.getEntityName() != "") && this.spawned && (ev!!.quitMessage.toString() != "")) {
-            Server.instance.broadcastMessage(ev!!.quitMessage!!)
+        if (ev != null && (this.getEntityName() != "") && this.spawned && (ev.quitMessage.toString() != "")) {
+            Server.instance.broadcastMessage(ev.quitMessage!!)
         }
 
         hasSpawned.clear()
@@ -5131,11 +5133,11 @@ open class Player(
         return this.hash
     }
 
-    override fun equals(obj: Any?): Boolean {
-        if (obj !is Player) {
+    override fun equals(other: Any?): Boolean {
+        if (other !is Player) {
             return false
         }
-        return this.getUniqueID() == obj.getUniqueID() && this.getRuntimeID() == obj.getRuntimeID()
+        return this.getUniqueID() == other.getUniqueID() && this.getRuntimeID() == other.getRuntimeID()
     }
 
     /**

@@ -18,10 +18,13 @@ import org.chorus_oss.chorus.network.protocol.RemoveActorPacket
 import org.chorus_oss.chorus.network.protocol.SetEntityLinkPacket
 import org.chorus_oss.chorus.network.protocol.types.*
 import org.chorus_oss.protocol.types.AbilitiesData
+import org.chorus_oss.protocol.types.AbilityLayer
 import org.chorus_oss.protocol.types.ActorLink
 import org.chorus_oss.protocol.types.ActorProperties
 import org.chorus_oss.protocol.types.CommandPermission
 import org.chorus_oss.protocol.types.Platform
+import org.chorus_oss.protocol.types.PlayerAbility
+import org.chorus_oss.protocol.types.PlayerAbilitySet
 import org.chorus_oss.protocol.types.PlayerPermission
 import org.chorus_oss.protocol.types.Vector2f
 import org.chorus_oss.protocol.types.Vector3f
@@ -185,7 +188,27 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
                         this.getUniqueID(),
                         PlayerPermission.Visitor,
                         CommandPermission.Any,
-                        emptyList() // TODO: AbilityLayers
+                        listOf(
+                            AbilityLayer(
+                                AbilityLayer.Companion.Type.Base,
+                                PlayerAbilitySet(
+                                    PlayerAbility.entries.toMutableSet()
+                                ),
+                                PlayerAbilitySet(
+                                    mutableSetOf(
+                                        PlayerAbility.Build,
+                                        PlayerAbility.Mine,
+                                        PlayerAbility.DoorsAndSwitches,
+                                        PlayerAbility.OpenContainers,
+                                        PlayerAbility.AttackPlayers,
+                                        PlayerAbility.AttackMobs
+                                    )
+                                ),
+                                0.1f,
+                                0.1f,
+                                0.05f,
+                            )
+                        ) // TODO: AbilityLayers
                     ),
                     actorLinks = List(this.passengers.size) { i ->
                         ActorLink(

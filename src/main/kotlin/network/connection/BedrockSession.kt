@@ -125,7 +125,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
                 this.packetHandler = (SpawnResponseHandler(this))
                 // The reason why teleport player to their position is for gracefully client-side spawn,
                 // although we need some hacks, It is definitely a fairly worthy trade.
-                player!!.setImmobile(true) // TODO: HACK: fix client-side falling pre-spawn
+                player.setImmobile(true) // TODO: HACK: fix client-side falling pre-spawn
             })
             .onExit(Action { this.onClientSpawned() })
             .permit(SessionState.IN_GAME, SessionState.IN_GAME)
