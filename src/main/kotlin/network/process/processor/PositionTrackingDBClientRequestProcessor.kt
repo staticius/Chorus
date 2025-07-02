@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.PositionTrackingDBClientRequestPacket
 import org.chorus_oss.chorus.network.protocol.PositionTrackingDBServerBroadcastPacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.utils.Loggable
 import java.io.IOException
 

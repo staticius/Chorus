@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.network.process
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.network.protocol.DataPacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 
 /**
  * A DataPacketProcessor is used to handle a specific type of DataPacket. <br></br>

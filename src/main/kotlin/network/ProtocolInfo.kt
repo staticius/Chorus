@@ -1,4 +1,4 @@
-package org.chorus_oss.chorus.network.protocol
+package org.chorus_oss.chorus.network
 
 import org.chorus_oss.chorus.utils.SemVersion
 
@@ -25,23 +25,21 @@ interface ProtocolInfo {
         const val TEXT_PACKET = 9
         const val SET_TIME_PACKET = 10
         const val START_GAME_PACKET = 11
-        const val ADD_PLAYER_PACKET = 12
-        const val ADD_ACTOR_PACKET = 13
+        // MIGRATED = 12
+        // MIGRATED = 13
         const val REMOVE_ACTOR_PACKET = 14
-        const val ADD_ITEM_ACTOR_PACKET = 15
+        // MIGRATED = 15
         const val SERVER_POST_MOVE_POSITION = 16
         const val TAKE_ITEM_ENTITY_PACKET = 17
         const val MOVE_ENTITY_ABSOLUTE_PACKET = 18
         const val MOVE_PLAYER_PACKET = 19
-
-        // UNUSED                                           = 20
+        // UNUSED = 20
         const val UPDATE_BLOCK_PACKET = 21
-        const val ADD_PAINTING_PACKET = 22
-
-        // UNUSED                                           = 23
-        // UNUSED                                           = 24
+        // MIGRATED = 22
+        // UNUSED = 23
+        // UNUSED = 24
         const val LEVEL_EVENT_PACKET = 25
-        const val BLOCK_EVENT_PACKET = 26
+        // MIGRATED = 26
         const val ENTITY_EVENT_PACKET = 27
         const val MOB_EFFECT_PACKET = 28
         const val UPDATE_ATTRIBUTES_PACKET = 29
@@ -52,8 +50,7 @@ interface ProtocolInfo {
         const val BLOCK_PICK_REQUEST_PACKET = 34
         const val ACTOR_PICK_REQUEST_PACKET = 35
         const val PLAYER_ACTION_PACKET = 36
-
-        // UNUSED                                           = 37
+        // UNUSED = 37
         const val HURT_ARMOR_PACKET = 38
         const val SET_ENTITY_DATA_PACKET = 39
         const val SET_ENTITY_MOTION_PACKET = 40
@@ -65,18 +62,15 @@ interface ProtocolInfo {
         const val CONTAINER_OPEN_PACKET = 46
         const val CONTAINER_CLOSE_PACKET = 47
         const val PLAYER_HOTBAR_PACKET = 48
-        const val INVENTORY_CONTENT_PACKET = 49
-        const val INVENTORY_SLOT_PACKET = 50
+        // MIGRATED = 49
+        // MIGRATED = 50
         const val CONTAINER_SET_DATA_PACKET = 51
         const val CRAFTING_DATA_PACKET = 52
-
-        // UNUSED                                           = 53
+        // UNUSED = 53
         const val GUI_DATA_PICK_ITEM_PACKET = 54
-
-        // UNUSED                                           = 55
-        const val BLOCK_ACTOR_DATA_PACKET = 56
-
-        // UNUSED                                           = 57
+        // UNUSED = 55
+        // MIGRATED = 56
+        // UNUSED = 57
         const val LEVEL_CHUNK_PACKET = 58
         const val SET_COMMANDS_ENABLED_PACKET = 59
         const val SET_DIFFICULTY_PACKET = 60
@@ -84,15 +78,13 @@ interface ProtocolInfo {
         const val SET_PLAYER_GAME_TYPE_PACKET = 62
         const val PLAYER_LIST_PACKET = 63
         const val SIMPLE_EVENT_PACKET = 64
-
-        // DEPRECATED                                       = 65
-        // DEPRECATED                                       = 66
+        // DEPRECATED = 65
+        // DEPRECATED = 66
         const val CLIENTBOUND_MAP_ITEM_DATA_PACKET = 67
         const val MAP_INFO_REQUEST_PACKET = 68
         const val REQUEST_CHUNK_RADIUS_PACKET = 69
         // MIGRATED = 70
-
-        // UNUSED                                           = 71
+        // UNUSED = 71
         const val GAME_RULES_CHANGED_PACKET = 72
         // MIGRATED = 73
         const val BOSS_EVENT_PACKET = 74
@@ -103,9 +95,9 @@ interface ProtocolInfo {
         const val COMMAND_OUTPUT_PACKET = 79
         const val UPDATE_TRADE_PACKET = 80
         const val UPDATE_EQUIPMENT_PACKET = 81
-        const val RESOURCE_PACK_DATA_INFO_PACKET = 82
-        const val RESOURCE_PACK_CHUNK_DATA_PACKET = 83
-        const val RESOURCE_PACK_CHUNK_REQUEST_PACKET = 84
+        // MIGRATED = 82
+        // MIGRATED = 83
+        // MIGRATED = 84
         const val TRANSFER_PACKET = 85
         const val PLAY_SOUND_PACKET = 86
         const val STOP_SOUND_PACKET = 87
@@ -136,30 +128,26 @@ interface ProtocolInfo {
         const val SET_SCOREBOARD_IDENTITY_PACKET = 112
         const val SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET = 113
         const val UPDATE_SOFT_ENUM_PACKET = 114
-
-        // DEPRECATED                                       = 115
-        // UNUSED                                           = 116
-        // UNUSED                                           = 117
+        // DEPRECATED = 115
+        // UNUSED = 116
+        // UNUSED = 117
         const val SPAWN_PARTICLE_EFFECT_PACKET = 118
         const val AVAILABLE_ACTOR_IDENTIFIERS_PACKET = 119
-
-        // UNUSED                                           = 120
+        // UNUSED = 120
         const val NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET = 121
         // MIGRATED = 122
         const val LEVEL_SOUND_EVENT_PACKET = 123
         const val LEVEL_EVENT_GENERIC_PACKET = 124
         const val LECTERN_UPDATE_PACKET = 125
-
-        // UNUSED                                           = 126
-        // UNUSED                                           = 127
-        // UNUSED                                           = 128
+        // UNUSED = 126
+        // UNUSED = 127
+        // UNUSED = 128
         const val CLIENT_CACHE_STATUS_PACKET = 129
         const val ON_SCREEN_TEXTURE_ANIMATION_PACKET = 130
         const val MAP_CREATE_LOCKED_COPY_PACKET = 131
         // MIGRATED = 132
         // MIGRATED = 133
-
-        // UNUSED                                           = 134
+        // UNUSED = 134
         // MIGRATED = 135
         // MIGRATED = 136
         // MIGRATED = 137
@@ -188,8 +176,7 @@ interface ProtocolInfo {
         const val PLAYER_FOG_PACKET = 160
         // MIGRATED = 161
         const val ITEM_REGISTRY_PACKET = 162
-
-        // UNUSED                                           = 163
+        // UNUSED = 163
         // MIGRATED = 164
         const val SYNC_ENTITY_PROPERTY_PACKET = 165
         // MIGRATED = 166
@@ -199,8 +186,7 @@ interface ProtocolInfo {
         const val EDU_URI_RESOURCE_PACKET = 170
         const val CREATE_PHOTO_PACKET = 171
         const val UPDATE_SUB_CHUNK_BLOCKS_PACKET = 172
-
-        // UNUSED                                           = 173
+        // UNUSED = 173
         // MIGRATED = 174
         // MIGRATED = 175
         const val PLAYER_START_ITEM_COOL_DOWN_PACKET = 176
@@ -224,17 +210,14 @@ interface ProtocolInfo {
         // MIGRATED = 194
         // MIGRATED = 195
         const val UPDATE_CLIENT_INPUT_LOCKS = 196
-
-        // UNUSED                                           = 197
+        // UNUSED = 197
         const val CAMERA_PRESETS_PACKET = 198
         const val UNLOCKED_RECIPES_PACKET = 199
-
-        // UNUSED                                           = 200
-        // UNUSED                                           = ...
-        // UNUSED                                           = 299
+        // UNUSED = 200
+        // ...
+        // UNUSED = 299
         const val CAMERA_INSTRUCTION_PACKET = 300
-
-        // UNUSED                                           = 301
+        // UNUSED = 301
         const val TRIM_DATA = 302
         const val OPEN_SIGN = 303
         // MIGRATED = 304
@@ -243,9 +226,8 @@ interface ProtocolInfo {
         const val SET_PLAYER_INVENTORY_OPTIONS_PACKET = 307
         const val SET_HUD = 308
         // MIGRATED = 309
-        const val CLIENTBOUND_CLOSE_FORM_PACKET = 310
-
-        // UNUSED                                           = 311
+        // MIGRATED = 310
+        // UNUSED = 311
         const val SERVERBOUND_LOADING_SCREEN_PACKET = 312
         // MIGRATED = 313
         // MIGRATED = 314

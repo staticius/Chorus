@@ -3,6 +3,7 @@ package org.chorus_oss.chorus.network.protocol
 import org.chorus_oss.chorus.math.Vector2
 import org.chorus_oss.chorus.math.Vector2f
 import org.chorus_oss.chorus.math.Vector3f
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.*
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.ItemStackRequest

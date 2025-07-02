@@ -17,6 +17,7 @@
  */
 package org.chorus_oss.chorus.network.protocol
 
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 
 class NPCDialoguePacket : DataPacket() {

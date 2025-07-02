@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.item.ItemFood
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.EntityEventPacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 
 class EntityEventProcessor : DataPacketProcessor<EntityEventPacket>() {
     override fun handle(player: Player, pk: EntityEventPacket) {

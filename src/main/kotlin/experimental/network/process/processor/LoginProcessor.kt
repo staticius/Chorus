@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerDuplicatedLoginEvent
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.LoginPacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 
 class LoginProcessor : DataPacketProcessor<LoginPacket>() {
     override fun handle(player: Player, pk: LoginPacket) {

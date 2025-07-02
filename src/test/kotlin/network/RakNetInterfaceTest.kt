@@ -12,7 +12,6 @@ import io.netty.channel.socket.nio.NioDatagramChannel
 import org.chorus_oss.chorus.GameMockExtension
 import org.chorus_oss.chorus.network.connection.netty.initializer.BedrockChannelInitializer
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.RequestNetworkSettingsPacket
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.ByteBufVarInt
@@ -23,7 +22,8 @@ import org.cloudburstmc.netty.channel.raknet.RakClientChannel
 import org.cloudburstmc.netty.channel.raknet.RakConstants
 import org.cloudburstmc.netty.channel.raknet.config.RakChannelOption
 import org.cloudburstmc.netty.channel.raknet.packet.RakMessage
-import org.junit.jupiter.api.*
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Timeout
 import org.junit.jupiter.api.extension.ExtendWith
 import java.net.InetSocketAddress
 import java.nio.charset.StandardCharsets

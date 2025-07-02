@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.command.CommandSender
 import org.chorus_oss.chorus.command.data.CommandParamType
 import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.lang.TranslationContainer
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.utils.TextFormat
 import java.io.IOException
 import java.net.URI

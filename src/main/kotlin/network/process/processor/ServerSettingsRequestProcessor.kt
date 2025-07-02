@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerServerSettingsRequestEvent
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.ServerSettingsRequestPacket
 import org.chorus_oss.chorus.network.protocol.ServerSettingsResponsePacket
 

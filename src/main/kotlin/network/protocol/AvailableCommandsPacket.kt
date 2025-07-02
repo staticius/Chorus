@@ -2,6 +2,7 @@ package org.chorus_oss.chorus.network.protocol
 
 import com.google.common.base.Preconditions
 import org.chorus_oss.chorus.command.data.*
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.CommandEnumConstraintData
 import org.chorus_oss.chorus.utils.SequencedHashSet

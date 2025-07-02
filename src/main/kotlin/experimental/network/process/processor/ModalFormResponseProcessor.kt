@@ -11,7 +11,7 @@ import org.chorus_oss.chorus.form.response.ElementResponse
 import org.chorus_oss.chorus.form.window.CustomForm
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.ModalFormResponsePacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.utils.Loggable
 
 class ModalFormResponseProcessor : DataPacketProcessor<ModalFormResponsePacket>() {

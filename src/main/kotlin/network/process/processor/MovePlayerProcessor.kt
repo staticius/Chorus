@@ -6,7 +6,7 @@ import org.chorus_oss.chorus.level.Transform.Companion.fromObject
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.MovePlayerPacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 
 class MovePlayerProcessor : DataPacketProcessor<MovePlayerPacket>() {
     override fun handle(player: Player, pk: MovePlayerPacket) {

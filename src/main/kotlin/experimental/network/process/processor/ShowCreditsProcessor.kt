@@ -3,7 +3,7 @@ package org.chorus_oss.chorus.experimental.network.process.processor
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.event.player.PlayerTeleportEvent
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.ShowCreditsPacket
 
 class ShowCreditsProcessor : DataPacketProcessor<ShowCreditsPacket>() {

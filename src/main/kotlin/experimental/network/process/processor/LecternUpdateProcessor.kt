@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.blockentity.BlockEntityLectern
 import org.chorus_oss.chorus.event.block.LecternPageChangeEvent
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.LecternUpdatePacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 
 class LecternUpdateProcessor : DataPacketProcessor<LecternUpdatePacket>() {
     override fun handle(player: Player, pk: LecternUpdatePacket) {

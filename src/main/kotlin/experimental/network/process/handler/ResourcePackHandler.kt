@@ -1,11 +1,16 @@
 package org.chorus_oss.chorus.experimental.network.process.handler
 
+import kotlinx.io.bytestring.ByteString
+import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
-import org.chorus_oss.chorus.network.protocol.*
+import org.chorus_oss.chorus.network.protocol.ResourcePackClientResponsePacket
+import org.chorus_oss.chorus.network.protocol.ResourcePackStackPacket
 import org.chorus_oss.chorus.network.protocol.ResourcePackStackPacket.ExperimentData
+import org.chorus_oss.chorus.network.protocol.ResourcePacksInfoPacket
 import org.chorus_oss.chorus.utils.Loggable
-import org.chorus_oss.chorus.utils.Version
+import org.chorus_oss.protocol.packets.ResourcePackChunkDataPacket
+import org.chorus_oss.protocol.packets.ResourcePackDataInfoPacket
 import java.util.*
 import kotlin.math.ceil
 
@@ -37,14 +42,15 @@ class ResourcePackHandler(session: BedrockSession) : SessionHandler(session) {
                         return
                     }
 
-                    val dataInfoPacket = ResourcePackDataInfoPacket()
-                    dataInfoPacket.packId = resourcePack.packId
-                    dataInfoPacket.packVersion = Version(resourcePack.packVersion)
-                    dataInfoPacket.maxChunkSize = server.resourcePackManager.maxChunkSize
-                    dataInfoPacket.chunkCount =
-                        ceil(resourcePack.packSize / dataInfoPacket.maxChunkSize.toDouble()).toInt()
-                    dataInfoPacket.compressedPackSize = resourcePack.packSize.toLong()
-                    dataInfoPacket.sha256 = resourcePack.sha256
+                    val dataInfoPacket = ResourcePackDataInfoPacket(
+                        resourceName = "${resourcePack.packId}_${resourcePack.packVersion}",
+                        chunkSize = server.resourcePackManager.maxChunkSize.toUInt(),
+                        chunkCount = ceil(resourcePack.packSize / server.resourcePackManager.maxChunkSize.toDouble()).toUInt(),
+                        fileSize = resourcePack.packSize.toULong(),
+                        fileHash = ByteString(resourcePack.sha256),
+                        premium = false,
+                        type = ResourcePackDataInfoPacket.Companion.Type.Resource
+                    )
                     session.sendPacket(dataInfoPacket)
                 }
             }
@@ -82,21 +88,25 @@ class ResourcePackHandler(session: BedrockSession) : SessionHandler(session) {
         }
     }
 
-    override fun handle(pk: ResourcePackChunkRequestPacket) {
+    override fun handle(pk: MigrationPacket<*>) {
+        val packet = pk.packet
+        if (packet !is org.chorus_oss.protocol.packets.ResourcePackChunkRequestPacket) return
+
         // TODO: Pack version check
         val mgr = session.server.resourcePackManager
-        val resourcePack = mgr.getPackById(pk.packId)
+        val packID = UUID.fromString(packet.resourceName.split("_", limit = 2)[0])
+        val resourcePack = mgr.getPackById(packID)
         if (resourcePack == null) {
             session.close("disconnectionScreen.resourcePack")
             return
         }
         val maxChunkSize = mgr.maxChunkSize
-        val dataPacket = ResourcePackChunkDataPacket()
-        dataPacket.packId = resourcePack.packId
-        dataPacket.packVersion = Version(resourcePack.packVersion)
-        dataPacket.chunkIndex = pk.chunkIndex
-        dataPacket.data = resourcePack.getPackChunk(maxChunkSize * pk.chunkIndex, maxChunkSize)
-        dataPacket.progress = maxChunkSize * pk.chunkIndex.toLong()
+        val dataPacket = ResourcePackChunkDataPacket(
+            resourceName = "${resourcePack.packId}_${resourcePack.packVersion}",
+            chunkID = packet.chunkID,
+            byteOffset = (maxChunkSize.toUInt() * packet.chunkID).toULong(),
+            chunkData = ByteString(resourcePack.getPackChunk(maxChunkSize * packet.chunkID.toInt(), maxChunkSize)),
+        )
         session.sendPacket(dataPacket)
     }
 

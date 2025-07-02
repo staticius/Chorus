@@ -1,6 +1,7 @@
 package org.chorus_oss.chorus.network.protocol
 
 import org.chorus_oss.chorus.entity.data.EntityDataMap
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.PropertySyncData
 import org.chorus_oss.chorus.utils.Binary

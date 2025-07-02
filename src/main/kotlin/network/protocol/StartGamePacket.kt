@@ -5,6 +5,7 @@ import org.chorus_oss.chorus.level.GameRules
 import org.chorus_oss.chorus.nbt.NBTIO.write
 import org.chorus_oss.chorus.nbt.NBTIO.writeNetwork
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.utils.Loggable
 

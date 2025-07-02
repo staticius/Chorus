@@ -4,7 +4,7 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.inventory.SpecialWindowId
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.ContainerClosePacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.utils.Loggable
 
 class ContainerCloseProcessor : DataPacketProcessor<ContainerClosePacket>() {

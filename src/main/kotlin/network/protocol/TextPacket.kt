@@ -1,6 +1,7 @@
 package org.chorus_oss.chorus.network.protocol
 
 import io.netty.util.internal.EmptyArrays
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import java.util.function.Function
 

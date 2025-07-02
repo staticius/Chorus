@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemFilledMap
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.MapInfoRequestPacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.plugin.InternalPlugin
 import org.chorus_oss.chorus.scheduler.AsyncTask
 

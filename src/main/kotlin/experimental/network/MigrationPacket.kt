@@ -17,7 +17,9 @@ data class MigrationPacket<T : Packet>(val packet: T) : DataPacket(), PacketEnco
 
     override fun pid(): Int = this.packet.id
 
-    override fun handle(handler: PacketHandler) {}
+    override fun handle(handler: PacketHandler) {
+        handler.handle(this)
+    }
 
     override fun encode(byteBuf: HandleByteBuf) {
         val buffer = Buffer()

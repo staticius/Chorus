@@ -2,6 +2,7 @@ package org.chorus_oss.chorus.network.protocol
 
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.entity.data.Skin
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 
 import java.util.*

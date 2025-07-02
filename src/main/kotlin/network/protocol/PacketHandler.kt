@@ -1,6 +1,10 @@
 package org.chorus_oss.chorus.network.protocol
 
+import org.chorus_oss.chorus.experimental.network.MigrationPacket
+
 interface PacketHandler {
+    fun handle(pk: MigrationPacket<*>) {}
+
     fun handle(pk: AnimatePacket) {}
 
     fun handle(pk: AnvilDamagePacket) {}
@@ -149,13 +153,7 @@ interface PacketHandler {
 
     fun handle(pk: RequestPermissionsPacket) {}
 
-    fun handle(pk: ResourcePackChunkDataPacket) {}
-
-    fun handle(pk: ResourcePackChunkRequestPacket) {}
-
     fun handle(pk: ResourcePackClientResponsePacket) {}
-
-    fun handle(pk: ResourcePackDataInfoPacket) {}
 
     fun handle(pk: ResourcePackStackPacket) {}
 

@@ -14,7 +14,7 @@ import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.LinkedCompoundTag
 import org.chorus_oss.chorus.nbt.tag.Tag
 import org.chorus_oss.chorus.nbt.tag.TreeMapCompoundTag
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.HashUtils
 import org.chorus_oss.chorus.utils.ThreadCache

@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.network.process.processor
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.RespawnPacket
 
 class RespawnProcessor : DataPacketProcessor<RespawnPacket>() {

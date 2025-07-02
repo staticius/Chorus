@@ -19,7 +19,7 @@ import org.chorus_oss.chorus.network.connection.BedrockPeer
 import org.chorus_oss.chorus.network.connection.BedrockPong
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.connection.netty.initializer.BedrockServerInitializer
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.plugin.InternalPlugin
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.chorus.utils.Utils

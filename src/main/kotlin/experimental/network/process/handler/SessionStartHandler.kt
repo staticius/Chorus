@@ -5,7 +5,7 @@ import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.NetworkSettingsPacket
 import org.chorus_oss.chorus.network.protocol.PlayStatusPacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.RequestNetworkSettingsPacket
 import org.chorus_oss.chorus.network.protocol.types.PacketCompressionAlgorithm
 

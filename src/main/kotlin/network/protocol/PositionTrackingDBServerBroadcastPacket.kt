@@ -9,6 +9,7 @@ import org.chorus_oss.chorus.nbt.NBTIO.writeNetwork
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.IntTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import java.io.IOException
 

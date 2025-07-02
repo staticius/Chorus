@@ -3,6 +3,7 @@ package org.chorus_oss.chorus.network.protocol
 import io.netty.handler.codec.EncoderException
 import org.chorus_oss.chorus.nbt.NBTIO.writeValue
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import java.io.IOException
 import java.nio.ByteOrder

@@ -1,5 +1,6 @@
 package org.chorus_oss.chorus.registry
 
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.*
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -63,9 +64,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.PLAYER_HOTBAR_PACKET, PlayerHotbarPacket) // 48
         this.register(ProtocolInfo.REQUEST_CHUNK_RADIUS_PACKET, RequestChunkRadiusPacket) // 69
         this.register(ProtocolInfo.RESOURCE_PACK_CLIENT_RESPONSE_PACKET, ResourcePackClientResponsePacket) // 8
-        this.register(ProtocolInfo.RESOURCE_PACK_DATA_INFO_PACKET, ResourcePackDataInfoPacket) // 82
-        this.register(ProtocolInfo.RESOURCE_PACK_CHUNK_DATA_PACKET, ResourcePackChunkDataPacket) // 83
-        this.register(ProtocolInfo.RESOURCE_PACK_CHUNK_REQUEST_PACKET, ResourcePackChunkRequestPacket) // 84
         this.register(ProtocolInfo.PLAYER_SKIN_PACKET, PlayerSkinPacket) // 93
         this.register(ProtocolInfo.RESPAWN_PACKET, RespawnPacket) // 45
         this.register(ProtocolInfo.SET_DIFFICULTY_PACKET, SetDifficultyPacket) // 60

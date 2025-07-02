@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.event.player.PlayerCommandPreprocessEvent
 import org.chorus_oss.chorus.event.player.PlayerHackDetectedEvent
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.CommandRequestPacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import java.util.concurrent.TimeUnit
 
 class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {

@@ -14,6 +14,8 @@ import org.chorus_oss.chorus.event.player.PlayerCreationEvent
 import org.chorus_oss.chorus.event.server.DataPacketDecodeEvent
 import org.chorus_oss.chorus.event.server.DataPacketReceiveEvent
 import org.chorus_oss.chorus.event.server.DataPacketSendEvent
+import org.chorus_oss.chorus.experimental.network.MigrationPacket
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.netty.BedrockBatchWrapper
 import org.chorus_oss.chorus.network.connection.netty.BedrockPacketWrapper
 import org.chorus_oss.chorus.network.connection.netty.codec.packet.BedrockPacketCodec
@@ -28,6 +30,7 @@ import org.chorus_oss.chorus.plugin.InternalPlugin
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.ByteBufVarInt
 import org.chorus_oss.chorus.utils.Loggable
+import org.chorus_oss.protocol.core.Packet
 import org.jetbrains.annotations.ApiStatus
 import java.net.InetSocketAddress
 import java.net.SocketAddress
@@ -173,6 +176,10 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         }
         peer.sendPacket(this.subClientId, 0, packet)
         this.logOutbound(packet)
+    }
+
+    fun sendPacket(packet: Packet) {
+        this.sendPacket(MigrationPacket(packet))
     }
 
     fun sendPlayStatus(status: Int, immediate: Boolean) {

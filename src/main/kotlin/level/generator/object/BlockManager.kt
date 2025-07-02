@@ -8,7 +8,7 @@ import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.level.format.UnsafeChunk
 import org.chorus_oss.chorus.math.BlockVector3
 import org.chorus_oss.chorus.math.Vector3
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.UpdateSubChunkBlocksPacket
 import org.chorus_oss.chorus.network.protocol.types.BlockChangeEntry
 import java.util.function.Consumer

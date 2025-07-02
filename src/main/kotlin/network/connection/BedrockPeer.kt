@@ -17,7 +17,7 @@ import org.chorus_oss.chorus.network.connection.netty.codec.encryption.BedrockEn
 import org.chorus_oss.chorus.network.connection.netty.initializer.BedrockChannelInitializer
 import org.chorus_oss.chorus.network.connection.util.EncryptionUtils
 import org.chorus_oss.chorus.network.protocol.DataPacket
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.types.PacketCompressionAlgorithm
 import org.chorus_oss.chorus.utils.Loggable
 import org.cloudburstmc.netty.channel.raknet.RakDisconnectReason

@@ -2,7 +2,7 @@ package org.chorus_oss.chorus.level.format.leveldb
 
 import org.chorus_oss.chorus.level.GameRules
 import org.chorus_oss.chorus.math.BlockVector3
-import org.chorus_oss.chorus.network.protocol.ProtocolInfo
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.types.GameType
 import org.chorus_oss.chorus.utils.SemVersion
 
