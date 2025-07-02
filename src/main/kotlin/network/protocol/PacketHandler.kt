@@ -7,8 +7,6 @@ interface PacketHandler {
 
     fun handle(pk: AnimatePacket) {}
 
-    fun handle(pk: BookEditPacket) {}
-
     fun handle(pk: BossEventPacket) {}
 
     fun handle(pk: CameraAimAssistPacket) {}
