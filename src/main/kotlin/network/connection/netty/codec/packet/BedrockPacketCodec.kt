@@ -55,7 +55,11 @@ abstract class BedrockPacketCodec : MessageToMessageCodec<ByteBuf, BedrockPacket
                 wrapper.packet = packetDecoder.decode(HandleByteBuf.of(msg))
             } else {
                 wrapper.packet = MigrationPacket(
-                    codec.deserialize(Buffer().apply { write(msg.array()) }) as Packet
+                    codec.deserialize(Buffer().apply {
+                        val bytes = ByteArray(msg.readableBytes())
+                        msg.readBytes(bytes)
+                        write(bytes)
+                    }) as Packet
                 )
             }
             out.add(wrapper.retain())
