@@ -1,5 +1,6 @@
 package org.chorus_oss.chorus.network.process.handler
 
+import kotlinx.io.bytestring.ByteString
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.entity.data.property.EntityProperty.Companion.getPacketCache
@@ -50,9 +51,9 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         player!!.dataPacket(itemRegistryPacket)
 
         log.debug("Sending actor identifiers")
-        player.dataPacket(
-            AvailableActorIdentifiersPacket(
-                Registries.ENTITY.tag
+        player.sendPacket(
+            org.chorus_oss.protocol.packets.AvailableActorIdentifiersPacket(
+                ByteString(Registries.ENTITY.tag)
             )
         )
 
