@@ -256,7 +256,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
     var scale: Float = 1f
 
     @JvmField
-    var namedTag: CompoundTag? = null
+    var namedTag: CompoundTag = CompoundTag()
 
     @JvmField
     var isCollided: Boolean = false
@@ -424,8 +424,8 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
      */
     protected open fun initEntity() {
         if (this !is Player) {
-            if (namedTag!!.contains(TAG_UNIQUE_ID)) {
-                this.uniqueId = namedTag!!.getLong(TAG_UNIQUE_ID)
+            if (namedTag.contains(TAG_UNIQUE_ID)) {
+                this.uniqueId = namedTag.getLong(TAG_UNIQUE_ID)
             } else {
                 this.uniqueId = Random.nextLong()
             }
@@ -465,11 +465,11 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
         }
         this.runtimeId = entityCount.getAndIncrement()
         this.justCreated = true
-        this.namedTag = nbt
+        this.namedTag = nbt ?: CompoundTag()
         this.chunk = chunk
         this.level = (chunk.provider.level)
 
-        this.chested = namedTag!!.getBoolean(TAG_CHESTED)
+        this.chested = namedTag.getBoolean(TAG_CHESTED)
         this.color = namedTag!!.getByte(TAG_COLOR)
         this.color2 = namedTag!!.getByte(TAG_COLOR2)
         this.customName = if (namedTag!!.contains(TAG_CUSTOM_NAME)) namedTag!!.getString(TAG_CUSTOM_NAME) else null

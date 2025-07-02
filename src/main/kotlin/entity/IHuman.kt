@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.entity
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.entity.data.EntityDataTypes
 import org.chorus_oss.chorus.entity.data.EntityFlag
-import org.chorus_oss.chorus.entity.data.PlayerFlag
 import org.chorus_oss.chorus.entity.data.Skin
 import org.chorus_oss.chorus.inventory.*
 import org.chorus_oss.chorus.item.Item

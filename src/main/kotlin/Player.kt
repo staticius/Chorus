@@ -1406,10 +1406,9 @@ open class Player(
         }
 
         var oldPlayer: Player? = null
-        for (p in ArrayList<Player>(Server.instance.onlinePlayers.values)) {
-            if (p !== this && p.getEntityName()
-                    .equals(this.getEntityName(), ignoreCase = true) || this.getUniqueID() == p.getUniqueID()
-            ) {
+        for (p in Server.instance.onlinePlayers.values) {
+            if (p === this) continue
+            if (p.getEntityName().equals(this.getEntityName(), ignoreCase = true) || this.getUniqueID() == p.getUniqueID()) {
                 oldPlayer = p
                 break
             }

@@ -233,7 +233,7 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
 
     override fun close() {
         if (!this.closed) {
-            if (inventory != null && (this !is Player || this.loggedIn)) {
+            if (this !is Player || this.loggedIn) {
                 for (viewer in inventory.viewers) {
                     viewer.removeWindow(this.inventory)
                 }

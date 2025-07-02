@@ -1,7 +1,6 @@
 package org.chorus_oss.chorus.entity.mob.animal
 
 import org.chorus_oss.chorus.Player
-import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.entity.EntityFlyable
 import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.EntityRideable
