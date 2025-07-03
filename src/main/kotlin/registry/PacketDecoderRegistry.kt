@@ -97,7 +97,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.CODE_BUILDER_SOURCE_PACKET, CodeBuilderSourcePacket) // 178
         this.register(ProtocolInfo.REQUEST_PERMISSIONS_PACKET, RequestPermissionsPacket) // 185
         this.register(ProtocolInfo.COMMAND_BLOCK_UPDATE_PACKET, CommandBlockUpdatePacket) // 78
-        this.register(ProtocolInfo.CHANGE_MOB_PROPERTY_PACKET, ChangeMobPropertyPacket) // 182
         this.register(ProtocolInfo.EDU_URI_RESOURCE_PACKET, EduUriResourcePacket) // 170
         this.register(ProtocolInfo.LESSON_PROGRESS_PACKET, LessonProgressPacket) // 183
         this.register(ProtocolInfo.REQUEST_ABILITY_PACKET, RequestAbilityPacket) // 184
