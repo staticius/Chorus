@@ -5,16 +5,18 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerCommandPreprocessEvent
 import org.chorus_oss.chorus.event.player.PlayerHackDetectedEvent
-import org.chorus_oss.chorus.network.process.DataPacketProcessor
-import org.chorus_oss.chorus.network.protocol.CommandRequestPacket
+import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.network.ProtocolInfo
+import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import java.util.concurrent.TimeUnit
 
-class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
+class CommandRequestProcessor : DataPacketProcessor<MigrationPacket<org.chorus_oss.protocol.packets.CommandRequestPacket>>() {
     val rateLimiter: RateLimiter = RateLimiter.create(500.0)
 
-    override fun handle(player: Player, pk: CommandRequestPacket) {
-        val length = pk.command.length
+    override fun handle(player: Player, pk: MigrationPacket<org.chorus_oss.protocol.packets.CommandRequestPacket>) {
+        val packet = pk.packet
+
+        val length = packet.command.length
         if (!rateLimiter.tryAcquire(length, 300, TimeUnit.MILLISECONDS)) {
             val event = PlayerHackDetectedEvent(player.player, PlayerHackDetectedEvent.HackType.COMMAND_SPAM)
             Server.instance.pluginManager.callEvent(event)
@@ -25,7 +27,7 @@ class CommandRequestProcessor : DataPacketProcessor<CommandRequestPacket>() {
         if (!player.player.spawned || !player.player.isAlive()) {
             return
         }
-        val playerCommandPreprocessEvent = PlayerCommandPreprocessEvent(player.player, pk.command)
+        val playerCommandPreprocessEvent = PlayerCommandPreprocessEvent(player.player, packet.command)
         Server.instance.pluginManager.callEvent(playerCommandPreprocessEvent)
         if (playerCommandPreprocessEvent.cancelled) {
             return
