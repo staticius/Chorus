@@ -7,8 +7,6 @@ interface PacketHandler {
 
     fun handle(pk: AnimatePacket) {}
 
-    fun handle(pk: ClientCacheStatusPacket) {}
-
     fun handle(pk: ClientToServerHandshakePacket) {}
 
     fun handle(pk: CodeBuilderSourcePacket) {}
