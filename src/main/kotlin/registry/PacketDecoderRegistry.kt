@@ -38,7 +38,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
 
         // Register all packets that are Client -> Server
 
-        this.register(ProtocolInfo.CLIENT_TO_SERVER_HANDSHAKE_PACKET, ClientToServerHandshakePacket) // 4
         this.register(ProtocolInfo.INVENTORY_TRANSACTION_PACKET, InventoryTransactionPacket) // 30
         this.register(ProtocolInfo.INTERACT_PACKET, InteractPacket) // 33
         this.register(ProtocolInfo.HURT_ARMOR_PACKET, HurtArmorPacket) // 38
