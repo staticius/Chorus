@@ -71,8 +71,6 @@ import org.chorus_oss.chorus.network.connection.BedrockDisconnectReasons
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.*
-import org.chorus_oss.chorus.network.protocol.CameraShakePacket.CameraShakeAction
-import org.chorus_oss.chorus.network.protocol.CameraShakePacket.CameraShakeType
 import org.chorus_oss.chorus.network.protocol.types.*
 import org.chorus_oss.chorus.network.protocol.types.GameType.Companion.from
 import org.chorus_oss.chorus.permission.PermissibleBase
@@ -95,6 +93,7 @@ import org.chorus_oss.chorus.utils.Identifier.Companion.tryParse
 import org.chorus_oss.chorus.utils.PortalHelper.moveToTheEnd
 import org.chorus_oss.chorus.utils.TextFormat.Companion.clean
 import org.chorus_oss.protocol.core.Packet
+import org.chorus_oss.protocol.packets.CameraShakePacket
 import org.chorus_oss.protocol.packets.ClientboundCloseFormPacket
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
@@ -5371,13 +5370,13 @@ open class Player(
      * @param shakeType   the shake type
      * @param shakeAction the shake action
      */
-    fun shakeCamera(intensity: Float, duration: Float, shakeType: CameraShakeType, shakeAction: CameraShakeAction) {
-        this.dataPacket(
+    fun shakeCamera(intensity: Float, duration: Float, shakeType: CameraShakePacket.Companion.Type, shakeAction: CameraShakePacket.Companion.Action) {
+        this.sendPacket(
             CameraShakePacket(
                 intensity = intensity,
-                seconds = duration,
-                shakeType = shakeType,
-                shakeAction = shakeAction
+                duration = duration,
+                type = shakeType,
+                action = shakeAction
             )
         )
     }

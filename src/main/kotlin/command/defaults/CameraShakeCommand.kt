@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.tree.node.PlayersNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import org.chorus_oss.chorus.network.protocol.CameraShakePacket
 import java.util.function.Consumer
 import java.util.stream.Collectors
 
@@ -51,30 +50,30 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
                 val intensity = list.getResult<Float>(2)!!
                 val second = list.getResult<Float>(3)!!
                 val shakeType = when (val type = list.getResult<String>(4)) {
-                    "positional" -> CameraShakePacket.CameraShakeType.POSITIONAL
-                    "rotational" -> CameraShakePacket.CameraShakeType.ROTATIONAL
+                    "positional" -> org.chorus_oss.protocol.packets.CameraShakePacket.Companion.Type.Positional
+                    "rotational" -> org.chorus_oss.protocol.packets.CameraShakePacket.Companion.Type.Rotational
                     else -> throw RuntimeException("Unknown CameraShakeType: $type")
                 }
-                val packet = CameraShakePacket(
+                val packet = org.chorus_oss.protocol.packets.CameraShakePacket(
                     intensity = intensity,
-                    seconds = second,
-                    shakeType = shakeType,
-                    shakeAction = CameraShakePacket.CameraShakeAction.ADD
+                    duration = second,
+                    type = shakeType,
+                    action = org.chorus_oss.protocol.packets.CameraShakePacket.Companion.Action.Add
                 )
-                players.forEach(Consumer { player: Player -> player.dataPacket(packet) })
+                players.forEach { it.sendPacket(packet) }
                 log.addSuccess("commands.screenshake.success", players_str).output()
                 return 1
             }
 
             "stop" -> {
                 val playersStr = players.stream().map { obj: Player -> obj.getEntityName() }.collect(Collectors.joining(" "))
-                val packet = CameraShakePacket(
+                val packet = org.chorus_oss.protocol.packets.CameraShakePacket(
                     intensity = -1f,
-                    seconds = -1f,
-                    shakeType = CameraShakePacket.CameraShakeType.POSITIONAL,
-                    shakeAction = CameraShakePacket.CameraShakeAction.STOP
+                    duration = -1f,
+                    type = org.chorus_oss.protocol.packets.CameraShakePacket.Companion.Type.Positional,
+                    action = org.chorus_oss.protocol.packets.CameraShakePacket.Companion.Action.Stop
                 )
-                players.forEach(Consumer { player: Player -> player.dataPacket(packet) })
+                players.forEach { it.sendPacket(packet) }
                 log.addSuccess("commands.screenshake.successStop", playersStr).output()
                 return 1
             }
