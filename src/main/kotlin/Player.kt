@@ -95,6 +95,9 @@ import org.chorus_oss.chorus.utils.TextFormat.Companion.clean
 import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.packets.CameraShakePacket
 import org.chorus_oss.protocol.packets.ClientboundCloseFormPacket
+import org.chorus_oss.protocol.types.CommandOriginData
+import org.chorus_oss.protocol.types.CommandOutputMessage
+import org.chorus_oss.protocol.types.CommandOutputType
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
 import java.net.InetSocketAddress
@@ -106,6 +109,8 @@ import java.util.concurrent.atomic.AtomicReference
 import java.util.function.Consumer
 import kotlin.concurrent.Volatile
 import kotlin.math.*
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 /**
  * Game player object, representing the controlled character
@@ -3228,18 +3233,19 @@ open class Player(
     }
 
 
+    @OptIn(ExperimentalUuidApi::class)
     override fun sendCommandOutput(container: CommandOutputContainer) {
         if (level!!.gameRules.getBoolean(GameRule.SEND_COMMAND_FEEDBACK)) {
-            val pk = CommandOutputPacket(
+            val pk = org.chorus_oss.protocol.packets.CommandOutputPacket(
                 originData = CommandOriginData(
-                    CommandOriginData.Origin.PLAYER,
-                    getUUID(), "", null
+                    CommandOriginData.Companion.Origin.Player,
+                    Uuid(getUUID()), "", null
                 ),
-                outputType = CommandOutputType.ALL_OUTPUT,
-                successCount = container.successCount,
-                outputMessages = container.messages,
+                outputType = CommandOutputType.AllOutput,
+                successCount = container.successCount.toUInt(),
+                outputMessages = container.messages.map(CommandOutputMessage::invoke),
             )
-            this.dataPacket(pk)
+            this.sendPacket(pk)
         }
     }
 
