@@ -253,7 +253,5 @@ interface PacketHandler {
 
     fun handle(pk: ServerboundLoadingScreenPacket) {}
 
-    fun handle(pk: ClientCameraAimAssistPacket) {}
-
     fun handle(pk: ClientMovementPredictionSyncPacket) {}
 }
