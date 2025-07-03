@@ -7,8 +7,6 @@ interface PacketHandler {
 
     fun handle(pk: AnimatePacket) {}
 
-    fun handle(pk: CodeBuilderSourcePacket) {}
-
     fun handle(pk: CommandBlockUpdatePacket) {}
 
     fun handle(pk: CommandRequestPacket) {}
