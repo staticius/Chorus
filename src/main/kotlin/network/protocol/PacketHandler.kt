@@ -252,6 +252,4 @@ interface PacketHandler {
     fun handle(pk: SettingsCommandPacket) {}
 
     fun handle(pk: ServerboundLoadingScreenPacket) {}
-
-    fun handle(pk: ClientMovementPredictionSyncPacket) {}
 }
