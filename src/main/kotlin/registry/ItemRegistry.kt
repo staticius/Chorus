@@ -555,6 +555,7 @@ class ItemRegistry : ItemID, IRegistry<String, Item?, KClass<out Item>> {
             register(ItemID.HARNESS_RED, ItemHarnessRed::class)
             register(ItemID.HARNESS_WHITE, ItemHarnessWhite::class)
             register(ItemID.HARNESS_YELLOW, ItemHarnessYellow::class)
+            register(ItemID.MUSIC_DISC_LAVA_CHICKEN, ItemMusicDiscLavaChicken::class)
             registerBlockItem()
         } catch (e: RegisterException) {
             throw RuntimeException(e)

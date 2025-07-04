@@ -14,7 +14,7 @@ import java.io.InputStreamReader
 class BlockStateRegistry : IRegistry<Int, BlockState?, BlockState> {
     override fun init() {
         try {
-            javaClass.classLoader.getResourceAsStream("block_states.json").use { stream ->
+            javaClass.classLoader.getResourceAsStream("gamedata/endstone/block_states.json").use { stream ->
                 val reader = BufferedReader(InputStreamReader(stream!!))
                 val blockStateData = JsonParser.parseReader(reader).asJsonArray
                 for (i in 0..<blockStateData.size()) {
