@@ -28,7 +28,7 @@ class SpawnParticleEffectPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SPAWN_PARTICLE_EFFECT_PACKET
+        return ProtocolInfo.SPAWN_PARTICLE_EFFECT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

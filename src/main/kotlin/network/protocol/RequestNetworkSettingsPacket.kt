@@ -8,7 +8,7 @@ class RequestNetworkSettingsPacket : DataPacket() {
     var protocolVersion: Int = 0
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.REQUEST_NETWORK_SETTINGS_PACKET
+        return ProtocolInfo.REQUEST_NETWORK_SETTINGS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

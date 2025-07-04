@@ -22,7 +22,7 @@ class SetPlayerInventoryOptionsPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_PLAYER_INVENTORY_OPTIONS_PACKET
+        return ProtocolInfo.SET_PLAYER_INVENTORY_OPTIONS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

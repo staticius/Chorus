@@ -12,7 +12,7 @@ class SetHealthPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_HEALTH_PACKET
+        return ProtocolInfo.SET_HEALTH_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

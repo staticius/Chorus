@@ -14,7 +14,7 @@ class DebugInfoPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.DEBUG_INFO_PACKET
+        return ProtocolInfo.DEBUG_INFO_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

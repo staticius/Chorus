@@ -23,7 +23,7 @@ class LevelEventGenericPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.LEVEL_EVENT_GENERIC_PACKET
+        return ProtocolInfo.LEVEL_EVENT_GENERIC_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

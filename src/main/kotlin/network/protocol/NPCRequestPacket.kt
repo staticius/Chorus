@@ -30,7 +30,7 @@ class NPCRequestPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.NPC_REQUEST_PACKET
+        return ProtocolInfo.NPC_REQUEST_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

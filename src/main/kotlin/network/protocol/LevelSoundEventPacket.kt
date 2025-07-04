@@ -27,7 +27,7 @@ open class LevelSoundEventPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.LEVEL_SOUND_EVENT_PACKET
+        return ProtocolInfo.LEVEL_SOUND_EVENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

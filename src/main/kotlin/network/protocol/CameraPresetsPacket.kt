@@ -63,6 +63,6 @@ data class CameraPresetsPacket(
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.CAMERA_PRESETS_PACKET
+        return ProtocolInfo.CAMERA_PRESETS_PACKET
     }
 }

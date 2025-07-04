@@ -19,7 +19,7 @@ class LabTablePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.LAB_TABLE_PACKET
+        return ProtocolInfo.LAB_TABLE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

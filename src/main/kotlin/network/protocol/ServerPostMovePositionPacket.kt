@@ -13,7 +13,7 @@ class ServerPostMovePositionPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SERVER_POST_MOVE_POSITION
+        return ProtocolInfo.SERVER_POST_MOVE_POSITION
     }
 
     override fun handle(handler: PacketHandler) {

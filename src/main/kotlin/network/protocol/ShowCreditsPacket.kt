@@ -17,7 +17,7 @@ class ShowCreditsPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SHOW_CREDITS_PACKET
+        return ProtocolInfo.SHOW_CREDITS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

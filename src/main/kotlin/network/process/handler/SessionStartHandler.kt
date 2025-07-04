@@ -5,20 +5,19 @@ import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.NetworkSettingsPacket
 import org.chorus_oss.chorus.network.protocol.PlayStatusPacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.RequestNetworkSettingsPacket
 import org.chorus_oss.chorus.network.protocol.types.PacketCompressionAlgorithm
 
 class SessionStartHandler(session: BedrockSession) : BedrockSessionPacketHandler(session) {
     override fun handle(pk: RequestNetworkSettingsPacket) {
         val protocol = pk.protocolVersion
-        if (protocol != ProtocolInfo.PROTOCOL_VERSION) {
+        if (protocol != org.chorus_oss.protocol.ProtocolInfo.VERSION) {
             session.sendPlayStatus(
-                if (protocol < ProtocolInfo.PROTOCOL_VERSION) PlayStatusPacket.LOGIN_FAILED_CLIENT else PlayStatusPacket.LOGIN_FAILED_SERVER,
+                if (protocol < org.chorus_oss.protocol.ProtocolInfo.VERSION) PlayStatusPacket.LOGIN_FAILED_CLIENT else PlayStatusPacket.LOGIN_FAILED_SERVER,
                 true
             )
             val message =
-                if (protocol < ProtocolInfo.PROTOCOL_VERSION) "disconnectionScreen.outdatedClient" else "disconnectionScreen.outdatedServer"
+                if (protocol < org.chorus_oss.protocol.ProtocolInfo.VERSION) "disconnectionScreen.outdatedClient" else "disconnectionScreen.outdatedServer"
             session.close(message)
             return
         }

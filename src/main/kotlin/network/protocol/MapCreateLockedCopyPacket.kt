@@ -14,7 +14,7 @@ class MapCreateLockedCopyPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.MAP_CREATE_LOCKED_COPY_PACKET
+        return ProtocolInfo.MAP_CREATE_LOCKED_COPY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

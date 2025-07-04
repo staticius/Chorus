@@ -17,7 +17,7 @@ class ToggleCrafterSlotRequestPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.TOGGLE_CRAFTER_SLOT_REQUEST
+        return ProtocolInfo.TOGGLE_CRAFTER_SLOT_REQUEST
     }
 
     override fun handle(handler: PacketHandler) {

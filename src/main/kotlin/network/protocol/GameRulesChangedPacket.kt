@@ -14,6 +14,6 @@ class GameRulesChangedPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.GAME_RULES_CHANGED_PACKET
+        return ProtocolInfo.GAME_RULES_CHANGED_PACKET
     }
 }

@@ -41,7 +41,7 @@ class UpdateTradePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_TRADE_PACKET
+        return ProtocolInfo.UPDATE_TRADE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

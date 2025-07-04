@@ -25,7 +25,7 @@ class TransferPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.TRANSFER_PACKET
+        return ProtocolInfo.TRANSFER_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

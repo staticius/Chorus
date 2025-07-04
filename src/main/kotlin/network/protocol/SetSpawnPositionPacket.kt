@@ -28,7 +28,7 @@ class SetSpawnPositionPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_SPAWN_POSITION_PACKET
+        return ProtocolInfo.SET_SPAWN_POSITION_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

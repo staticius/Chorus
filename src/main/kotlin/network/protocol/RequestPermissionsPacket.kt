@@ -30,7 +30,7 @@ class RequestPermissionsPacket : DataPacket() {
         }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.REQUEST_PERMISSIONS_PACKET
+        return ProtocolInfo.REQUEST_PERMISSIONS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

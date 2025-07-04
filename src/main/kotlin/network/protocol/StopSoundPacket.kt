@@ -19,7 +19,7 @@ class StopSoundPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.STOP_SOUND_PACKET
+        return ProtocolInfo.STOP_SOUND_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

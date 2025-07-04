@@ -17,7 +17,6 @@ import org.chorus_oss.chorus.network.connection.netty.codec.encryption.BedrockEn
 import org.chorus_oss.chorus.network.connection.netty.initializer.BedrockChannelInitializer
 import org.chorus_oss.chorus.network.connection.util.EncryptionUtils
 import org.chorus_oss.chorus.network.protocol.DataPacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.types.PacketCompressionAlgorithm
 import org.chorus_oss.chorus.utils.Loggable
 import org.cloudburstmc.netty.channel.raknet.RakDisconnectReason
@@ -161,7 +160,7 @@ class BedrockPeer(val channel: Channel, private val sessionFactory: BedrockSessi
     }
 
     private fun setCompression(strategy: CompressionStrategy) {
-        val needsPrefix = ProtocolInfo.PROTOCOL_VERSION >= 649 // TODO: do not hardcode
+        val needsPrefix = org.chorus_oss.protocol.ProtocolInfo.VERSION >= 649 // TODO: do not hardcode
 
         val handler = channel.pipeline()[CompressionCodec.NAME]
         if (handler == null) {

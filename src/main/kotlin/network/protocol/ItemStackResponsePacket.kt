@@ -36,7 +36,7 @@ class ItemStackResponsePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.ITEM_STACK_RESPONSE_PACKET
+        return ProtocolInfo.ITEM_STACK_RESPONSE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

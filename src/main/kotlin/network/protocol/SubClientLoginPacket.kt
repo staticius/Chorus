@@ -13,7 +13,7 @@ class SubClientLoginPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SUB_CLIENT_LOGIN_PACKET
+        return ProtocolInfo.SUB_CLIENT_LOGIN_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

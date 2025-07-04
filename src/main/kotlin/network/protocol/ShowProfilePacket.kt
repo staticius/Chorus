@@ -17,7 +17,7 @@ class ShowProfilePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SHOW_PROFILE_PACKET
+        return ProtocolInfo.SHOW_PROFILE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

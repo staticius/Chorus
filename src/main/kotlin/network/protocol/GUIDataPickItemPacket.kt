@@ -16,7 +16,7 @@ class GUIDataPickItemPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.GUI_DATA_PICK_ITEM_PACKET
+        return ProtocolInfo.GUI_DATA_PICK_ITEM_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

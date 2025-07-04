@@ -29,7 +29,7 @@ open class UpdateBlockPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_BLOCK_PACKET
+        return ProtocolInfo.UPDATE_BLOCK_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

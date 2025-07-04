@@ -40,7 +40,7 @@ class MoveEntityDeltaPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.MOVE_ENTITY_DELTA_PACKET
+        return ProtocolInfo.MOVE_ENTITY_DELTA_PACKET
     }
 
     private fun getCoordinate(byteBuf: HandleByteBuf): Float {

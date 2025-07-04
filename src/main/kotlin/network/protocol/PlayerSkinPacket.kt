@@ -23,7 +23,7 @@ class PlayerSkinPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PLAYER_SKIN_PACKET
+        return ProtocolInfo.PLAYER_SKIN_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

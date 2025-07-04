@@ -17,6 +17,6 @@ class DeathInfoPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.DEATH_INFO_PACKET
+        return ProtocolInfo.DEATH_INFO_PACKET
     }
 }

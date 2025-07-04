@@ -16,7 +16,7 @@ class UpdateBlockSyncedPacket : UpdateBlockPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_BLOCK_SYNCED_PACKET
+        return ProtocolInfo.UPDATE_BLOCK_SYNCED_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

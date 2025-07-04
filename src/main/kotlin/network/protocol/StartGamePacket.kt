@@ -225,7 +225,7 @@ class StartGamePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.START_GAME_PACKET
+        return ProtocolInfo.START_GAME_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

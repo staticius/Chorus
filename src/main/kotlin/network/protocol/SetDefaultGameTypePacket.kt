@@ -12,7 +12,7 @@ class SetDefaultGameTypePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_DEFAULT_GAME_TYPE_PACKET
+        return ProtocolInfo.SET_DEFAULT_GAME_TYPE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

@@ -49,7 +49,7 @@ class TextPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.TEXT_PACKET
+        return ProtocolInfo.TEXT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

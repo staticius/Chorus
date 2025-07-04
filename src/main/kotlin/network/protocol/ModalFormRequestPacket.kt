@@ -16,7 +16,7 @@ class ModalFormRequestPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.MODAL_FORM_REQUEST_PACKET
+        return ProtocolInfo.MODAL_FORM_REQUEST_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

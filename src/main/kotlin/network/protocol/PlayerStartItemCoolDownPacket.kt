@@ -17,7 +17,7 @@ class PlayerStartItemCoolDownPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PLAYER_START_ITEM_COOL_DOWN_PACKET
+        return ProtocolInfo.PLAYER_START_ITEM_COOL_DOWN_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

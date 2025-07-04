@@ -13,7 +13,7 @@ class SetLastHurtByPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_LAST_HURT_BY_PACKET
+        return ProtocolInfo.SET_LAST_HURT_BY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

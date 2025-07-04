@@ -17,7 +17,7 @@ class LessonProgressPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.LESSON_PROGRESS_PACKET
+        return ProtocolInfo.LESSON_PROGRESS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

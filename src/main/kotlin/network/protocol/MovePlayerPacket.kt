@@ -55,7 +55,7 @@ class MovePlayerPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.MOVE_PLAYER_PACKET
+        return ProtocolInfo.MOVE_PLAYER_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

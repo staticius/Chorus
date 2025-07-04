@@ -20,7 +20,7 @@ class UpdatePlayerGameTypePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_PLAYER_GAME_TYPE_PACKET
+        return ProtocolInfo.UPDATE_PLAYER_GAME_TYPE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

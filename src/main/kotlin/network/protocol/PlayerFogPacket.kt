@@ -27,7 +27,7 @@ class PlayerFogPacket : DataPacket() {
     )
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PLAYER_FOG_PACKET
+        return ProtocolInfo.PLAYER_FOG_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

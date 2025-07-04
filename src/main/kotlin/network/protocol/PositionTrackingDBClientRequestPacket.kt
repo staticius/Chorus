@@ -13,7 +13,7 @@ class PositionTrackingDBClientRequestPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.POS_TRACKING_CLIENT_REQUEST_PACKET
+        return ProtocolInfo.POS_TRACKING_CLIENT_REQUEST_PACKET
     }
 
     enum class Action {

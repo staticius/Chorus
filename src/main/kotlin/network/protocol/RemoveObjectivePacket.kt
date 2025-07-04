@@ -13,7 +13,7 @@ class RemoveObjectivePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.REMOVE_OBJECTIVE_PACKET
+        return ProtocolInfo.REMOVE_OBJECTIVE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

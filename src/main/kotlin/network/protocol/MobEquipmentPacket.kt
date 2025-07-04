@@ -21,7 +21,7 @@ class MobEquipmentPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.MOB_EQUIPMENT_PACKET
+        return ProtocolInfo.MOB_EQUIPMENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

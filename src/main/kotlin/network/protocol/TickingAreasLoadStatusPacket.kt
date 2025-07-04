@@ -12,7 +12,7 @@ class TickingAreasLoadStatusPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.TICKING_AREAS_LOAD_STATUS_PACKET
+        return ProtocolInfo.TICKING_AREAS_LOAD_STATUS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

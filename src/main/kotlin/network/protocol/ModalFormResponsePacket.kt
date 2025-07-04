@@ -10,7 +10,7 @@ class ModalFormResponsePacket : DataPacket() {
     var cancelReason: Int = 0
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.MODAL_FORM_RESPONSE_PACKET
+        return ProtocolInfo.MODAL_FORM_RESPONSE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

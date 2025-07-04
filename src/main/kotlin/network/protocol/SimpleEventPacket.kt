@@ -15,7 +15,7 @@ class SimpleEventPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SIMPLE_EVENT_PACKET
+        return ProtocolInfo.SIMPLE_EVENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

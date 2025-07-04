@@ -12,7 +12,7 @@ class PlayStatusPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PLAY_STATUS_PACKET
+        return ProtocolInfo.PLAY_STATUS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

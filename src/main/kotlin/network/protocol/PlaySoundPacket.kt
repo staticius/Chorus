@@ -20,7 +20,7 @@ class PlaySoundPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PLAY_SOUND_PACKET
+        return ProtocolInfo.PLAY_SOUND_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

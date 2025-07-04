@@ -29,7 +29,7 @@ class SetScoreboardIdentityPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_SCOREBOARD_IDENTITY_PACKET
+        return ProtocolInfo.SET_SCOREBOARD_IDENTITY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

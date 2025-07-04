@@ -22,7 +22,7 @@ class MovementEffectPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.MOVEMENT_EFFECT_PACKET
+        return ProtocolInfo.MOVEMENT_EFFECT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

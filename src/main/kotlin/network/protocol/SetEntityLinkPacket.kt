@@ -22,7 +22,7 @@ class SetEntityLinkPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_ENTITY_LINK_PACKET
+        return ProtocolInfo.SET_ENTITY_LINK_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

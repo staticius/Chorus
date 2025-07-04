@@ -39,7 +39,7 @@ class PlayerEnchantOptionsPacket : DataPacket() {
     )
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PLAYER_ENCHANT_OPTIONS_PACKET
+        return ProtocolInfo.PLAYER_ENCHANT_OPTIONS_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

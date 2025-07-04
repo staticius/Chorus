@@ -25,7 +25,7 @@ class SetEntityMotionPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_ENTITY_MOTION_PACKET
+        return ProtocolInfo.SET_ENTITY_MOTION_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

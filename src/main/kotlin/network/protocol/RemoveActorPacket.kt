@@ -17,7 +17,7 @@ class RemoveActorPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.REMOVE_ACTOR_PACKET
+        return ProtocolInfo.REMOVE_ACTOR_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

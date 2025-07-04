@@ -30,7 +30,7 @@ class UpdateAttributesPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_ATTRIBUTES_PACKET
+        return ProtocolInfo.UPDATE_ATTRIBUTES_PACKET
     }
 
     override fun toString(): String {

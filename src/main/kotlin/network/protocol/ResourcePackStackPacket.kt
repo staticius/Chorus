@@ -45,7 +45,7 @@ class ResourcePackStackPacket : DataPacket() {
     )
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.RESOURCE_PACK_STACK_PACKET
+        return ProtocolInfo.RESOURCE_PACK_STACK_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

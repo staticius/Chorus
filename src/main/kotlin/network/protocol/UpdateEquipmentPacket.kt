@@ -22,7 +22,7 @@ class UpdateEquipmentPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_EQUIPMENT_PACKET
+        return ProtocolInfo.UPDATE_EQUIPMENT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

@@ -73,7 +73,7 @@ class SetScorePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_SCORE_PACKET
+        return ProtocolInfo.SET_SCORE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

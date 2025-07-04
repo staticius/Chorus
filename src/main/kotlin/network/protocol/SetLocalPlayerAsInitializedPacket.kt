@@ -12,7 +12,7 @@ class SetLocalPlayerAsInitializedPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET
+        return ProtocolInfo.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

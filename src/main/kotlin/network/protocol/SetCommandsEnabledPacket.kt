@@ -12,7 +12,7 @@ class SetCommandsEnabledPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_COMMANDS_ENABLED_PACKET
+        return ProtocolInfo.SET_COMMANDS_ENABLED_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

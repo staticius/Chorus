@@ -17,7 +17,7 @@ class SimulationTypePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SIMULATION_TYPE_PACKET
+        return ProtocolInfo.SIMULATION_TYPE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

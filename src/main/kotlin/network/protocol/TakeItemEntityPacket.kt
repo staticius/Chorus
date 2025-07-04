@@ -16,7 +16,7 @@ class TakeItemEntityPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.TAKE_ITEM_ENTITY_PACKET
+        return ProtocolInfo.TAKE_ITEM_ENTITY_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

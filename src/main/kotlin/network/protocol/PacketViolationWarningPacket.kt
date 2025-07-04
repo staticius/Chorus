@@ -31,7 +31,7 @@ class PacketViolationWarningPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.PACKET_VIOLATION_WARNING_PACKET
+        return ProtocolInfo.PACKET_VIOLATION_WARNING_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

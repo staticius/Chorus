@@ -26,7 +26,7 @@ class UpdateSoftEnumPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.UPDATE_SOFT_ENUM_PACKET
+        return ProtocolInfo.UPDATE_SOFT_ENUM_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

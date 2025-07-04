@@ -32,7 +32,7 @@ class MobEffectPacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.MOB_EFFECT_PACKET
+        return ProtocolInfo.MOB_EFFECT_PACKET
     }
 
     override fun handle(handler: PacketHandler) {

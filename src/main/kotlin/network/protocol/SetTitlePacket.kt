@@ -59,7 +59,7 @@ class SetTitlePacket : DataPacket() {
     }
 
     override fun pid(): Int {
-        return ProtocolInfo.Companion.SET_TITLE_PACKET
+        return ProtocolInfo.SET_TITLE_PACKET
     }
 
     override fun handle(handler: PacketHandler) {
