@@ -5,9 +5,10 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.blockentity.BlockEntityStructBlock
 import org.chorus_oss.chorus.event.inventory.InventoryCloseEvent
 import org.chorus_oss.chorus.event.inventory.InventoryOpenEvent
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.network.protocol.ContainerClosePacket
 import org.chorus_oss.chorus.network.protocol.ContainerOpenPacket
+import org.chorus_oss.protocol.types.ContainerType
 
 class StructBlockInventory(override val holder: BlockEntityStructBlock) : Inventory {
     override val viewers: MutableSet<Player> = HashSet()
@@ -143,10 +144,10 @@ class StructBlockInventory(override val holder: BlockEntityStructBlock) : Invent
 
     override fun onClose(who: Player) {
         val containerId = who.getWindowId(this)
-        who.dataPacket(
-            ContainerClosePacket(
-                containerID = containerId,
-                containerType = type,
+        who.sendPacket(
+            org.chorus_oss.protocol.packets.ContainerClosePacket(
+                containerID = containerId.toByte(),
+                containerType = ContainerType(type),
                 serverInitiatedClose = who.closingWindowId != containerId
             )
         )

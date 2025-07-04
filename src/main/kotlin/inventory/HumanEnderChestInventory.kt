@@ -6,10 +6,10 @@ import org.chorus_oss.chorus.blockentity.BlockEntityNameable
 import org.chorus_oss.chorus.entity.IHuman
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.level.Sound
-import org.chorus_oss.chorus.network.protocol.ContainerClosePacket
 import org.chorus_oss.chorus.network.protocol.ContainerOpenPacket
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.protocol.types.BlockPos
+import org.chorus_oss.protocol.types.ContainerType
 
 
 class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryType.CONTAINER, 27),
@@ -89,10 +89,10 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
         }
 
         val containerId = who.getWindowId(this)
-        who.dataPacket(
-            ContainerClosePacket(
-                containerID = containerId,
-                containerType = type,
+        who.sendPacket(
+            org.chorus_oss.protocol.packets.ContainerClosePacket(
+                containerID = containerId.toByte(),
+                containerType = ContainerType(type),
                 serverInitiatedClose = who.closingWindowId != containerId
             )
         )

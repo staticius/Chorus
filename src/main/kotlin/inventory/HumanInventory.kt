@@ -18,6 +18,7 @@ import org.chorus_oss.chorus.network.protocol.*
 import org.chorus_oss.chorus.network.protocol.PlayerArmorDamagePacket.PlayerArmorDamageFlag
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.types.ContainerType
 import org.chorus_oss.protocol.types.item.ItemStack
 import org.jetbrains.annotations.Range
 import kotlin.math.min
@@ -685,10 +686,10 @@ class HumanInventory(human: IHuman) //9+27+4
 
     override fun onClose(who: Player) {
         val containerId = who.getWindowId(this)
-        who.dataPacket(
-            ContainerClosePacket(
-                containerID = containerId,
-                containerType = type,
+        who.sendPacket(
+            org.chorus_oss.protocol.packets.ContainerClosePacket(
+                containerID = containerId.toByte(),
+                containerType = ContainerType(type),
                 serverInitiatedClose = who.closingWindowId != containerId
             )
         )

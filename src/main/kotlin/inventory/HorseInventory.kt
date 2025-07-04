@@ -4,17 +4,18 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.entity.data.EntityFlag
 import org.chorus_oss.chorus.entity.mob.animal.EntityHorse
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
-import org.chorus_oss.chorus.network.protocol.ContainerClosePacket
 import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus_oss.chorus.network.protocol.MobArmorEquipmentPacket
 import org.chorus_oss.chorus.network.protocol.UpdateEquipmentPacket
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.types.ContainerType
 import java.io.IOException
 
 class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.HORSE, 2) {
@@ -67,10 +68,10 @@ class HorseInventory(holder: EntityHorse) : BaseInventory(holder, InventoryType.
 
     override fun onClose(who: Player) {
         val containerId = who.getWindowId(this)
-        who.dataPacket(
-            ContainerClosePacket(
-                containerID = containerId,
-                containerType = type,
+        who.sendPacket(
+            org.chorus_oss.protocol.packets.ContainerClosePacket(
+                containerID = containerId.toByte(),
+                containerType = ContainerType(type),
                 serverInitiatedClose = who.closingWindowId != containerId
             )
         )
