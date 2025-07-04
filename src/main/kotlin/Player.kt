@@ -5323,9 +5323,9 @@ open class Player(
     }
 
 
-    fun completeUsingItem(itemId: Short, action: CompletedUsingItemPacket.ItemUseMethod) {
-        this.dataPacket(
-            CompletedUsingItemPacket(
+    fun completeUsingItem(itemId: Short, action: org.chorus_oss.protocol.packets.CompletedUsingItemPacket.Companion.ItemUseMethod) {
+        this.sendPacket(
+            org.chorus_oss.protocol.packets.CompletedUsingItemPacket(
                 itemID = itemId,
                 itemUseMethod = action
             )
@@ -5339,7 +5339,7 @@ open class Player(
 
 
     fun showCredits() {
-        this.showingCredits = (true)
+        this.showingCredits = true
     }
 
 
