@@ -18,6 +18,7 @@ import org.chorus_oss.chorus.network.protocol.*
 import org.chorus_oss.chorus.network.protocol.PlayerArmorDamagePacket.PlayerArmorDamageFlag
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.types.BlockPos
 import org.chorus_oss.protocol.types.ContainerType
 import org.chorus_oss.protocol.types.item.ItemStack
 import org.jetbrains.annotations.Range
@@ -673,11 +674,11 @@ class HumanInventory(human: IHuman) //9+27+4
     override fun onOpen(who: Player) {
         super.onOpen(who)
         if (who.spawned) {
-            who.dataPacket(
-                ContainerOpenPacket(
-                    containerID = who.getWindowId(this),
-                    containerType = type.networkType,
-                    position = who.vector3.asBlockVector3(),
+            who.sendPacket(
+                org.chorus_oss.protocol.packets.ContainerOpenPacket(
+                    containerID = who.getWindowId(this).toByte(),
+                    containerType = ContainerType(type),
+                    position = BlockPos(who.vector3),
                     targetActorID = who.getUniqueID()
                 )
             )

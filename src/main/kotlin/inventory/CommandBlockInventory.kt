@@ -7,7 +7,7 @@ import org.chorus_oss.chorus.blockentity.BlockEntityNameable
 import org.chorus_oss.chorus.event.inventory.InventoryOpenEvent
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.network.protocol.ContainerOpenPacket
+import org.chorus_oss.protocol.types.BlockPos
 import org.chorus_oss.protocol.types.ContainerType
 
 // Implement the command block's ui
@@ -112,11 +112,11 @@ class CommandBlockInventory(override val holder: BlockEntityCommandBlock) : Inve
     override fun onOpen(who: Player) {
         if (who.isOp && who.isCreative) {
             viewers.add(who)
-            who.dataPacket(
-                ContainerOpenPacket(
-                    containerID = who.getWindowId(this),
-                    containerType = type.networkType,
-                    position = holder.vector3.asBlockVector3(),
+            who.sendPacket(
+                org.chorus_oss.protocol.packets.ContainerOpenPacket(
+                    containerID = who.getWindowId(this).toByte(),
+                    containerType = ContainerType(type),
+                    position = BlockPos(holder.vector3),
                     targetActorID = who.getUniqueID()
                 )
             )

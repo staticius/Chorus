@@ -6,7 +6,6 @@ import org.chorus_oss.chorus.blockentity.BlockEntityNameable
 import org.chorus_oss.chorus.entity.IHuman
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.level.Sound
-import org.chorus_oss.chorus.network.protocol.ContainerOpenPacket
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.protocol.types.BlockPos
 import org.chorus_oss.protocol.types.ContainerType
@@ -47,11 +46,11 @@ class HumanEnderChestInventory(human: IHuman) : BaseInventory(human, InventoryTy
             return
         }
         super.onOpen(who)
-        who.dataPacket(
-            ContainerOpenPacket(
-                containerID = who.getWindowId(this),
-                containerType = type.networkType,
-                position = holder.vector3.asBlockVector3(),
+        who.sendPacket(
+            org.chorus_oss.protocol.packets.ContainerOpenPacket(
+                containerID = who.getWindowId(this).toByte(),
+                containerType = ContainerType(type),
+                position = BlockPos(holder.vector3),
                 targetActorID = who.getUniqueID()
             )
         )
