@@ -16,7 +16,6 @@ import org.chorus_oss.chorus.network.protocol.RequestNetworkSettingsPacket
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.ByteBufVarInt
 import org.chorus_oss.chorus.utils.Loggable
-import org.chorus_oss.protocol.ProtocolInfo
 import org.cloudburstmc.netty.channel.raknet.RakChannelFactory
 import org.cloudburstmc.netty.channel.raknet.RakChildChannel
 import org.cloudburstmc.netty.channel.raknet.RakClientChannel
@@ -63,7 +62,7 @@ class RakNetInterfaceTest {
                         val dataPacket = Registries.PACKET_DECODER[header]
                         dataPacket!!.decode(HandleByteBuf.of(Unpooled.wrappedBuffer(byteBuf)))
                         val target = dataPacket as RequestNetworkSettingsPacket
-                        assert(target.protocolVersion == ProtocolInfo.VERSION)
+                        assert(target.protocolVersion == org.chorus_oss.protocol.ProtocolInfo.VERSION)
                         gameMockExtension.stopNetworkTickLoop()
                     }
                 })
@@ -89,7 +88,7 @@ class RakNetInterfaceTest {
                                     buf,
                                     ProtocolInfo.REQUEST_NETWORK_SETTINGS_PACKET
                                 ) //packet header
-                                buf.writeInt(ProtocolInfo.VERSION)
+                                buf.writeInt(org.chorus_oss.protocol.ProtocolInfo.VERSION)
                                 //RequestNetworkSettingsPacket
                                 ctx.channel().writeAndFlush(RakMessage(buf))
                             }
