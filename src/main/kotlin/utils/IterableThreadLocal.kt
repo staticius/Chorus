@@ -1,0 +1,72 @@
+package org.chorus_oss.chorus.utils
+
+import java.lang.reflect.Method
+import java.util.*
+import java.util.concurrent.ConcurrentLinkedDeque
+
+abstract class IterableThreadLocal<T> : ThreadLocal<T?>(), Iterable<T> {
+    private val flag: ThreadLocal<T>? = null
+    private val allValues = ConcurrentLinkedDeque<T>()
+
+    override fun initialValue(): T? {
+        val value = init()
+        if (value != null) {
+            allValues.add(value)
+        }
+        return value
+    }
+
+    override fun iterator(): MutableIterator<T> {
+        return all.iterator()
+    }
+
+    open fun init(): T? {
+        return null
+    }
+
+    fun clean() {
+        clean(this)
+    }
+
+    val all: MutableCollection<T>
+        get() = Collections.unmodifiableCollection(allValues)
+
+    companion object : Loggable {
+        fun clean(instance: ThreadLocal<*>?) {
+            try {
+                var rootGroup = Thread.currentThread().threadGroup
+                while (true) {
+                    rootGroup = rootGroup.parent ?: break
+                }
+                var threads = arrayOfNulls<Thread>(rootGroup.activeCount())
+                if (threads.isNotEmpty()) {
+                    while (rootGroup.enumerate(threads, true) == threads.size) {
+                        threads = arrayOfNulls(threads.size * 2)
+                    }
+                }
+                val tl = Thread::class.java.getDeclaredField("threadLocals")
+                tl.isAccessible = true
+                var methodRemove: Method? = null
+                for (thread in threads) {
+                    if (thread != null) {
+                        val tlm = tl[thread]
+                        if (tlm != null) {
+                            if (methodRemove == null) {
+                                methodRemove = tlm.javaClass.getDeclaredMethod("remove", ThreadLocal::class.java)
+                                methodRemove.isAccessible = true
+                            }
+                            if (methodRemove != null) {
+                                try {
+                                    methodRemove.invoke(tlm, instance)
+                                } catch (ignore: Throwable) {
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                log.error("", e)
+            }
+        }
+    }
+}
