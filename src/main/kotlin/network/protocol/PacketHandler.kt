@@ -35,8 +35,6 @@ interface PacketHandler {
 
     fun handle(pk: MobEquipmentPacket) {}
 
-    fun handle(pk: ModalFormRequestPacket) {}
-
     fun handle(pk: ModalFormResponsePacket) {}
 
     fun handle(pk: MoveEntityAbsolutePacket) {}

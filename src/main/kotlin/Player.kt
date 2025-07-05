@@ -4516,13 +4516,13 @@ open class Player(
             form.viewers.add(this)
         }
 
-        val packet = ModalFormRequestPacket()
-        packet.formId = id
-        packet.data = form.toJson()
+        val packet = org.chorus_oss.protocol.packets.ModalFormRequestPacket(
+            formID = id.toUInt(),
+            formData = form.toJson()
+        )
+        formWindows[id] = form
+        this.sendPacket(packet)
 
-        formWindows[packet.formId] = form
-
-        this.dataPacket(packet)
         return id
     }
 
