@@ -34,6 +34,7 @@ import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.ByteBufVarInt
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.protocol.core.Packet
+import org.chorus_oss.protocol.types.DisconnectFailReason
 import org.jetbrains.annotations.ApiStatus
 import java.net.InetSocketAddress
 import java.net.SocketAddress
@@ -226,6 +227,10 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         this.logOutbound(packet)
     }
 
+    fun sendPacketImmediately(packet: Packet) {
+        sendPacketImmediately(MigrationPacket(packet))
+    }
+
     fun sendPacketSync(packet: DataPacket) {
         if (isDisconnected) {
             return
@@ -237,6 +242,10 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         }
         peer.sendPacketSync(this.subClientId, 0, packet)
         this.logOutbound(packet)
+    }
+
+    fun sendPacketSync(packet: Packet) {
+        sendPacketSync(MigrationPacket(packet))
     }
 
     fun sendNetworkSettingsPacket(pk: NetworkSettingsPacket) {
@@ -358,8 +367,12 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
 
         //when a player haven't login,it only hold a BedrockSession,and Player Instance is null
         if (reason != null) {
-            val packet = DisconnectPacket()
-            packet.message = reason
+            val packet = org.chorus_oss.protocol.packets.DisconnectPacket(
+                reason = DisconnectFailReason.Unknown,
+                hideDisconnectionScreen = false,
+                message = reason,
+                filteredMessage = reason,
+            )
             this.sendPacketImmediately(packet)
         }
 

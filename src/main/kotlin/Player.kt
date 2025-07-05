@@ -98,6 +98,7 @@ import org.chorus_oss.protocol.packets.ClientboundCloseFormPacket
 import org.chorus_oss.protocol.types.CommandOriginData
 import org.chorus_oss.protocol.types.CommandOutputMessage
 import org.chorus_oss.protocol.types.CommandOutputType
+import org.chorus_oss.protocol.types.DisconnectFailReason
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
 import java.net.InetSocketAddress
@@ -3602,12 +3603,17 @@ open class Player(
         unloadAllUsedChunk()
 
         //send disconnection packet
-        val packet = DisconnectPacket()
-        if (reason1.isBlank()) {
-            packet.hideDisconnectionScreen = true
+        val hideDisconnectionScreen = reason1.isBlank()
+        if (hideDisconnectionScreen) {
             reason1 = BedrockDisconnectReasons.DISCONNECTED
         }
-        packet.message = reason1
+
+        val packet = org.chorus_oss.protocol.packets.DisconnectPacket(
+            reason = DisconnectFailReason.Unknown,
+            hideDisconnectionScreen,
+            message = reason1,
+            filteredMessage = reason1
+        )
         session.sendPacketSync(packet)
 
         //call quit event
