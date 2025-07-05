@@ -99,8 +99,6 @@ interface PacketHandler {
 
     fun handle(pk: ResourcePackClientResponsePacket) {}
 
-    fun handle(pk: ResourcePackStackPacket) {}
-
     fun handle(pk: RespawnPacket) {}
 
     fun handle(pk: ScriptMessagePacket) {}

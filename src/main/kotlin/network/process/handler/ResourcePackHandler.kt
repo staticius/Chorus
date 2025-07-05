@@ -6,11 +6,10 @@ import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.ResourcePackClientResponsePacket
-import org.chorus_oss.chorus.network.protocol.ResourcePackStackPacket
-import org.chorus_oss.chorus.network.protocol.ResourcePackStackPacket.ExperimentData
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.protocol.packets.ResourcePackChunkDataPacket
 import org.chorus_oss.protocol.packets.ResourcePackDataInfoPacket
+import org.chorus_oss.protocol.types.StackResourcePack
 import org.chorus_oss.protocol.types.TexturePackInfo
 import java.util.*
 import kotlin.math.ceil
@@ -65,26 +64,21 @@ class ResourcePackHandler(session: BedrockSession) : BedrockSessionPacketHandler
 
             ResourcePackClientResponsePacket.STATUS_HAVE_ALL_PACKS -> {
                 log.debug("ResourcePackClientResponsePacket STATUS_HAVE_ALL_PACKS")
-                val stackPacket = ResourcePackStackPacket()
-                stackPacket.mustAccept = server.forceResources && !server.forceResourcesAllowOwnPacks
-                stackPacket.resourcePackStack = server.resourcePackManager.resourceStack
-                stackPacket.experiments.add(
-                    ExperimentData("data_driven_items", true)
-                )
-                stackPacket.experiments.add(
-                    ExperimentData("data_driven_biomes", true)
-                )
-                stackPacket.experiments.add(
-                    ExperimentData("upcoming_creator_features", true)
-                )
-                stackPacket.experiments.add(
-                    ExperimentData("gametest", true)
-                )
-                stackPacket.experiments.add(
-                    ExperimentData("experimental_molang_features", true)
-                )
-                stackPacket.experiments.add(
-                    ExperimentData("cameras", true)
+                val stackPacket = org.chorus_oss.protocol.packets.ResourcePackStackPacket(
+                    texturePackRequired = server.forceResources && !server.forceResourcesAllowOwnPacks,
+                    behaviourPacks = emptyList(),
+                    texturePacks = server.resourcePackManager.resourceStack.map(StackResourcePack::invoke),
+                    baseGameVersion = "*",
+                    experiments = listOf(
+                        org.chorus_oss.protocol.types.ExperimentData("data_driven_items", true),
+                        org.chorus_oss.protocol.types.ExperimentData("data_driven_biomes", true),
+                        org.chorus_oss.protocol.types.ExperimentData("upcoming_creator_features", true),
+                        org.chorus_oss.protocol.types.ExperimentData("gametest", true),
+                        org.chorus_oss.protocol.types.ExperimentData("experimental_molang_features", true),
+                        org.chorus_oss.protocol.types.ExperimentData("cameras", true)
+                    ),
+                    experimentsPreviouslyToggled = true,
+                    includeEditorPacks = false,
                 )
                 session.sendPacket(stackPacket)
             }

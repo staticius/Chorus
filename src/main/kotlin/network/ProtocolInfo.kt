@@ -17,7 +17,7 @@ object ProtocolInfo {
     // MIGRATED = 4
     // MIGRATED = 5
     // MIGRATED = 6
-    const val RESOURCE_PACK_STACK_PACKET = 7
+    // MIGRATED = 7
     const val RESOURCE_PACK_CLIENT_RESPONSE_PACKET = 8
     const val TEXT_PACKET = 9
     const val SET_TIME_PACKET = 10
