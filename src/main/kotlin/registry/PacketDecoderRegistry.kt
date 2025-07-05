@@ -45,7 +45,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.ENTITY_EVENT_PACKET, EntityEventPacket)
 
         this.register(ProtocolInfo.LOGIN_PACKET, LoginPacket) // 1
-        this.register(ProtocolInfo.MAP_INFO_REQUEST_PACKET, MapInfoRequestPacket) // 68
         this.register(ProtocolInfo.MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket) // 32
         this.register(ProtocolInfo.MOB_EQUIPMENT_PACKET, MobEquipmentPacket) // 31
         this.register(ProtocolInfo.MODAL_FORM_RESPONSE_PACKET, ModalFormResponsePacket) // 101

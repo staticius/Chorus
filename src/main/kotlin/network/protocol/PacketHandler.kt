@@ -29,8 +29,6 @@ interface PacketHandler {
 
     fun handle(pk: LoginPacket) {}
 
-    fun handle(pk: MapInfoRequestPacket) {}
-
     fun handle(pk: MobArmorEquipmentPacket) {}
 
     fun handle(pk: MobEffectPacket) {}
