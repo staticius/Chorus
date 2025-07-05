@@ -9,8 +9,6 @@ interface PacketHandler {
 
     fun handle(pk: ServerboundDiagnosticsPacket) {}
 
-    fun handle(pk: EmoteListPacket) {}
-
     fun handle(pk: EmotePacket) {}
 
     fun handle(pk: EntityEventPacket) {}
