@@ -41,8 +41,6 @@ interface PacketHandler {
 
     fun handle(pk: MoveEntityDeltaPacket) {}
 
-    fun handle(pk: MovementEffectPacket) {}
-
     fun handle(pk: MovePlayerPacket) {}
 
     fun handle(pk: NPCDialoguePacket) {}
