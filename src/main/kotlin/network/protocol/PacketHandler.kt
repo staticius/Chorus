@@ -59,8 +59,6 @@ interface PacketHandler {
 
     fun handle(pk: PlaySoundPacket) {}
 
-    fun handle(pk: PlayStatusPacket) {}
-
     fun handle(pk: PlayerActionPacket) {}
 
     fun handle(pk: PlayerArmorDamagePacket) {}

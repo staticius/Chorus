@@ -10,7 +10,6 @@ import org.chorus_oss.chorus.network.connection.util.EncryptionUtils.getSecretKe
 import org.chorus_oss.chorus.network.connection.util.EncryptionUtils.parseKey
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.LoginPacket
-import org.chorus_oss.chorus.network.protocol.PlayStatusPacket
 import org.chorus_oss.chorus.network.protocol.ServerToClientHandshakePacket
 import org.chorus_oss.chorus.network.protocol.types.InputMode
 import org.chorus_oss.chorus.network.protocol.types.Platform
@@ -32,7 +31,7 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         if (pk.issueUnixTime != -1L && Server.instance.checkLoginTime && System.currentTimeMillis() - pk.issueUnixTime > 20000) {
             val message = "disconnectionScreen.noReason"
             log.debug("disconnection due to noReason")
-            session.sendPlayStatus(PlayStatusPacket.LOGIN_FAILED_CLIENT, true)
+            session.sendPlayStatus(org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status.LoginFailedClient, true)
             session.close(message)
             return
         }

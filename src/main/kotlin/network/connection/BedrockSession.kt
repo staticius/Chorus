@@ -185,9 +185,10 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         this.sendPacket(MigrationPacket(packet))
     }
 
-    fun sendPlayStatus(status: Int, immediate: Boolean) {
-        val pk = PlayStatusPacket()
-        pk.status = status
+    fun sendPlayStatus(status: org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status, immediate: Boolean) {
+        val pk = org.chorus_oss.protocol.packets.PlayStatusPacket(
+            status = status
+        )
         if (immediate) {
             this.sendPacketImmediately(pk)
         } else {
@@ -451,7 +452,7 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
 
     private fun onServerLoginSuccess() {
         log.debug("Login completed")
-        this.sendPlayStatus(PlayStatusPacket.LOGIN_SUCCESS, false)
+        this.sendPlayStatus(org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status.LoginSuccess, false)
     }
 
     private fun onClientSpawned() {

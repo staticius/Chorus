@@ -12,7 +12,7 @@ object ProtocolInfo {
         (GAME_VERSION.major shl 24) or (GAME_VERSION.minor shl 16) or (GAME_VERSION.patch shl 8)
 
     const val LOGIN_PACKET = 1
-    const val PLAY_STATUS_PACKET = 2
+    // MIGRATED = 2
     const val SERVER_TO_CLIENT_HANDSHAKE_PACKET = 3
     // MIGRATED = 4
     // MIGRATED = 5

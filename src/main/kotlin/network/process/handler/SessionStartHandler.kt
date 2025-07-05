@@ -4,7 +4,6 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.NetworkSettingsPacket
-import org.chorus_oss.chorus.network.protocol.PlayStatusPacket
 import org.chorus_oss.chorus.network.protocol.RequestNetworkSettingsPacket
 import org.chorus_oss.chorus.network.protocol.types.PacketCompressionAlgorithm
 
@@ -13,7 +12,9 @@ class SessionStartHandler(session: BedrockSession) : BedrockSessionPacketHandler
         val protocol = pk.protocolVersion
         if (protocol != org.chorus_oss.protocol.ProtocolInfo.VERSION) {
             session.sendPlayStatus(
-                if (protocol < org.chorus_oss.protocol.ProtocolInfo.VERSION) PlayStatusPacket.LOGIN_FAILED_CLIENT else PlayStatusPacket.LOGIN_FAILED_SERVER,
+                if (protocol < org.chorus_oss.protocol.ProtocolInfo.VERSION)
+                    org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status.LoginFailedClient
+                else org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status.LoginFailedServer,
                 true
             )
             val message =

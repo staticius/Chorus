@@ -98,6 +98,7 @@ import org.chorus_oss.chorus.utils.TextFormat.Companion.clean
 import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.packets.CameraShakePacket
 import org.chorus_oss.protocol.packets.ClientboundCloseFormPacket
+import org.chorus_oss.protocol.packets.PlayStatusPacket
 import org.chorus_oss.protocol.types.CommandOriginData
 import org.chorus_oss.protocol.types.CommandOutputMessage
 import org.chorus_oss.protocol.types.CommandOutputType
@@ -916,7 +917,7 @@ open class Player(
         this.sendCameraPresets()
 
         log.debug("Send Player Spawn Status Packet to {},wait init packet", getEntityName())
-        this.sendPlayStatus(PlayStatusPacket.PLAYER_SPAWN)
+        this.sendPlayStatus(PlayStatusPacket.Companion.Status.PlayerSpawn)
 
         //客户端初始化完毕再传送玩家，避免下落 (x)
         //已经设置immobile了所以不用管下落了
@@ -1778,14 +1779,14 @@ open class Player(
         }
     }
 
-    protected fun sendPlayStatus(status: Int, immediate: Boolean = false) {
-        val pk = PlayStatusPacket()
-        pk.status = status
-
+    protected fun sendPlayStatus(status: org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status, immediate: Boolean = false) {
+        val pk = org.chorus_oss.protocol.packets.PlayStatusPacket(
+            status = status
+        )
         if (immediate) {
-            this.dataPacketImmediately(pk)
+            this.sendPacketImmediately(pk)
         } else {
-            this.dataPacket(pk)
+            this.sendPacket(pk)
         }
     }
 
@@ -5381,6 +5382,10 @@ open class Player(
         }
         session.sendPacketImmediately(packet)
         return true
+    }
+
+    fun sendPacketImmediately(packet: Packet): Boolean {
+        return dataPacketImmediately(MigrationPacket(packet))
     }
 
     /**
