@@ -49,7 +49,7 @@ object ProtocolInfo {
     const val PLAYER_ACTION_PACKET = 36
     // UNUSED = 37
     // MIGRATED = 38
-    const val SET_ENTITY_DATA_PACKET = 39
+    // MIGRATED = 39
     const val SET_ENTITY_MOTION_PACKET = 40
     const val SET_ENTITY_LINK_PACKET = 41
     const val SET_HEALTH_PACKET = 42

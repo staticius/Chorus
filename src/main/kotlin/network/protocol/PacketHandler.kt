@@ -111,8 +111,6 @@ interface PacketHandler {
 
     fun handle(pk: SetDisplayObjectivePacket) {}
 
-    fun handle(pk: SetEntityDataPacket) {}
-
     fun handle(pk: SetEntityLinkPacket) {}
 
     fun handle(pk: SetEntityMotionPacket) {}

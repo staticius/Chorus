@@ -8,12 +8,14 @@ import org.chorus_oss.chorus.entity.data.EntityDataMap
 import org.chorus_oss.chorus.entity.data.EntityDataTypes
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.network.protocol.MoveEntityAbsolutePacket
-import org.chorus_oss.chorus.network.protocol.SetEntityDataPacket
 import org.chorus_oss.chorus.network.protocol.UpdateAttributesPacket
 import org.chorus_oss.protocol.packets.BossEventPacket
+import org.chorus_oss.protocol.packets.SetActorDataPacket
 import org.chorus_oss.protocol.types.ActorProperties
 import org.chorus_oss.protocol.types.actor_data.ActorDataMap
+import org.chorus_oss.protocol.types.actor_data.ActorDataType
 import java.util.concurrent.ThreadLocalRandom
+import kotlin.apply
 
 class DummyBossBar private constructor(builder: Builder) {
     val player: Player = builder.player
@@ -214,12 +216,13 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun updateBossEntityNameTag() {
-        val pk = SetEntityDataPacket()
-        pk.eid = this.bossBarId
-        val entityDataMap = EntityDataMap()
-        entityDataMap[EntityDataTypes.NAME] = text
-        pk.entityData = entityDataMap
-        player.dataPacket(pk)
+        val pk = SetActorDataPacket(
+            actorRuntimeID = this.bossBarId.toULong(),
+            actorDataMap = ActorDataMap().apply { this.put(ActorDataType.Name, text) },
+            actorProperties = ActorProperties(emptyList(), emptyList()),
+            tick = 0uL
+        )
+        player.sendPacket(pk)
     }
 
     private fun removeBossEntity() {

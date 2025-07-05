@@ -44,6 +44,7 @@ import org.chorus_oss.chorus.scheduler.Task
 import org.chorus_oss.chorus.tags.ItemTags
 import org.chorus_oss.chorus.utils.*
 import org.chorus_oss.protocol.core.Packet
+import org.chorus_oss.protocol.packets.SetActorDataPacket
 import org.chorus_oss.protocol.types.ActorLink
 import org.chorus_oss.protocol.types.ActorProperties
 import org.chorus_oss.protocol.types.actor_data.ActorDataMap
@@ -989,29 +990,31 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
 
     @JvmOverloads
     fun sendData(player: Player, data: EntityDataMap? = null) {
-        val pk = SetEntityDataPacket()
-        pk.eid = this.getRuntimeID()
-        pk.entityData = data ?: this.entityDataMap
-        pk.syncedProperties = this.propertySyncData()
-
-        player.dataPacket(pk)
+        val pk = org.chorus_oss.protocol.packets.SetActorDataPacket(
+            actorRuntimeID = this.getRuntimeID().toULong(),
+            actorDataMap = ActorDataMap(data ?: this.entityDataMap),
+            actorProperties = ActorProperties(this.propertySyncData()),
+            tick = 0uL
+        )
+        player.sendPacket(pk)
     }
 
     @JvmOverloads
     fun sendData(players: Array<Player>, data: EntityDataMap? = null) {
-        val pk = SetEntityDataPacket()
-        pk.eid = this.getRuntimeID()
-        pk.entityData = data ?: this.entityDataMap
-        pk.syncedProperties = this.propertySyncData()
-
+        val pk = SetActorDataPacket(
+            actorRuntimeID = this.getRuntimeID().toULong(),
+            actorDataMap = ActorDataMap(data ?: this.entityDataMap),
+            actorProperties = ActorProperties(this.propertySyncData()),
+            tick = 0uL
+        )
         for (player: Player in players) {
             if (player === this) {
                 continue
             }
-            player.dataPacket(pk)
+            player.sendPacket(pk)
         }
         if (this is Player) {
-            player.dataPacket(pk)
+            player.sendPacket(pk)
         }
     }
 
