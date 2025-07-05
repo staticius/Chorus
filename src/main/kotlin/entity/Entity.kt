@@ -1017,9 +1017,10 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
 
     open fun despawnFrom(player: Player) {
         if (hasSpawned.containsKey(player.loaderId)) {
-            val pk = RemoveActorPacket()
-            pk.actorUniqueID = this.getUniqueID()
-            player.dataPacket(pk)
+            val pk = org.chorus_oss.protocol.packets.RemoveActorPacket(
+                actorUniqueID = this.getUniqueID()
+            )
+            player.sendPacket(pk)
             hasSpawned.remove(player.loaderId)
         }
     }

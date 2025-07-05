@@ -83,8 +83,6 @@ interface PacketHandler {
 
     fun handle(pk: PositionTrackingDBServerBroadcastPacket) {}
 
-    fun handle(pk: RemoveActorPacket) {}
-
     fun handle(pk: RemoveObjectivePacket) {}
 
     fun handle(pk: RemoveVolumeEntityPacket) {}

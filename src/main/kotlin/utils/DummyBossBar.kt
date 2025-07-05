@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.entity.data.EntityDataMap
 import org.chorus_oss.chorus.entity.data.EntityDataTypes
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.network.protocol.MoveEntityAbsolutePacket
-import org.chorus_oss.chorus.network.protocol.RemoveActorPacket
 import org.chorus_oss.chorus.network.protocol.SetEntityDataPacket
 import org.chorus_oss.chorus.network.protocol.UpdateAttributesPacket
 import org.chorus_oss.protocol.packets.BossEventPacket
@@ -224,9 +223,10 @@ class DummyBossBar private constructor(builder: Builder) {
     }
 
     private fun removeBossEntity() {
-        val pkRemove = RemoveActorPacket()
-        pkRemove.actorUniqueID = bossBarId
-        player.dataPacket(pkRemove)
+        val pkRemove = org.chorus_oss.protocol.packets.RemoveActorPacket(
+            actorUniqueID = bossBarId
+        )
+        player.sendPacket(pkRemove)
     }
 
     fun create() {
