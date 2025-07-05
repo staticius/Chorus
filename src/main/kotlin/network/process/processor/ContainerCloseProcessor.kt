@@ -8,7 +8,8 @@ import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.protocol.types.ContainerType
 
-class ContainerCloseProcessor : DataPacketProcessor<MigrationPacket<org.chorus_oss.protocol.packets.ContainerClosePacket>>() {
+class ContainerCloseProcessor :
+    DataPacketProcessor<MigrationPacket<org.chorus_oss.protocol.packets.ContainerClosePacket>>() {
     override fun handle(player: Player, pk: MigrationPacket<org.chorus_oss.protocol.packets.ContainerClosePacket>) {
         val packet = pk.packet
 

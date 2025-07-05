@@ -71,8 +71,11 @@ import org.chorus_oss.chorus.network.connection.BedrockDisconnectReasons
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.*
-import org.chorus_oss.chorus.network.protocol.types.*
+import org.chorus_oss.chorus.network.protocol.types.GameType
 import org.chorus_oss.chorus.network.protocol.types.GameType.Companion.from
+import org.chorus_oss.chorus.network.protocol.types.PlayerBlockActionData
+import org.chorus_oss.chorus.network.protocol.types.PlayerInfo
+import org.chorus_oss.chorus.network.protocol.types.SpawnPointType
 import org.chorus_oss.chorus.permission.PermissibleBase
 import org.chorus_oss.chorus.permission.Permission
 import org.chorus_oss.chorus.permission.PermissionAttachment
@@ -4901,7 +4904,8 @@ open class Player(
             this.dataPacket(setTime)
 
             val gameRulesChanged = org.chorus_oss.protocol.packets.GameRulesChangedPacket(
-                gameRules = targetLevel.gameRules.getGameRules().map { org.chorus_oss.protocol.types.GameRule(it.toPair()) }
+                gameRules = targetLevel.gameRules.getGameRules()
+                    .map { org.chorus_oss.protocol.types.GameRule(it.toPair()) }
             )
             this.sendPacket(gameRulesChanged)
 
@@ -5075,7 +5079,9 @@ open class Player(
                     }
 
                     val ev: InventoryPickupItemEvent
-                    Server.instance.pluginManager.callEvent(InventoryPickupItemEvent(inventory!!, entity).also { ev = it })
+                    Server.instance.pluginManager.callEvent(InventoryPickupItemEvent(inventory!!, entity).also {
+                        ev = it
+                    })
                     if (ev.cancelled) {
                         return false
                     }
@@ -5332,7 +5338,10 @@ open class Player(
     }
 
 
-    fun completeUsingItem(itemId: Short, action: org.chorus_oss.protocol.packets.CompletedUsingItemPacket.Companion.ItemUseMethod) {
+    fun completeUsingItem(
+        itemId: Short,
+        action: org.chorus_oss.protocol.packets.CompletedUsingItemPacket.Companion.ItemUseMethod
+    ) {
         this.sendPacket(
             org.chorus_oss.protocol.packets.CompletedUsingItemPacket(
                 itemID = itemId,
@@ -5385,7 +5394,12 @@ open class Player(
      * @param shakeType   the shake type
      * @param shakeAction the shake action
      */
-    fun shakeCamera(intensity: Float, duration: Float, shakeType: CameraShakePacket.Companion.Type, shakeAction: CameraShakePacket.Companion.Action) {
+    fun shakeCamera(
+        intensity: Float,
+        duration: Float,
+        shakeType: CameraShakePacket.Companion.Type,
+        shakeAction: CameraShakePacket.Companion.Action
+    ) {
         this.sendPacket(
             CameraShakePacket(
                 intensity = intensity,

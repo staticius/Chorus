@@ -3,7 +3,10 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.OxidizationLevel
 
-open class BlockWeatheredCutCopperSlab(blockState: BlockState = properties.defaultState, doubleSlabID: String = BlockID.WEATHERED_DOUBLE_CUT_COPPER_SLAB) : BlockCutCopperSlab(blockState, doubleSlabID) {
+open class BlockWeatheredCutCopperSlab(
+    blockState: BlockState = properties.defaultState,
+    doubleSlabID: String = BlockID.WEATHERED_DOUBLE_CUT_COPPER_SLAB
+) : BlockCutCopperSlab(blockState, doubleSlabID) {
     override val oxidizationLevel
         get(): OxidizationLevel {
             return OxidizationLevel.WEATHERED

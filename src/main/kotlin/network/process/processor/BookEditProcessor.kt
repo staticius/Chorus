@@ -10,7 +10,6 @@ import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.item.ItemWritableBook
 import org.chorus_oss.chorus.item.ItemWrittenBook
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.utils.Loggable
 
 

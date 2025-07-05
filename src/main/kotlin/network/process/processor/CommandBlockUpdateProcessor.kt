@@ -12,13 +12,15 @@ import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import java.util.function.Consumer
 
-class CommandBlockUpdateProcessor : DataPacketProcessor<MigrationPacket<org.chorus_oss.protocol.packets.CommandBlockUpdatePacket>>() {
+class CommandBlockUpdateProcessor :
+    DataPacketProcessor<MigrationPacket<org.chorus_oss.protocol.packets.CommandBlockUpdatePacket>>() {
     override fun handle(player: Player, pk: MigrationPacket<org.chorus_oss.protocol.packets.CommandBlockUpdatePacket>) {
         val packet = pk.packet
 
         if (player.player.isOp && player.player.isCreative) {
             if (packet.isBlock) {
-                val commandBlockData = packet.commandBlockHolderData as org.chorus_oss.protocol.packets.CommandBlockUpdatePacket.Companion.CommandBlockData
+                val commandBlockData =
+                    packet.commandBlockHolderData as org.chorus_oss.protocol.packets.CommandBlockUpdatePacket.Companion.CommandBlockData
 
                 val blockEntity = player.player.level!!.getBlockEntity(
                     Vector3(commandBlockData.blockPosition)

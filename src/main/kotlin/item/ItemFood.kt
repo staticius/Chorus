@@ -53,7 +53,10 @@ abstract class ItemFood : Item {
 
         if (this.onEaten(player)) {
             player.foodData?.addFood(this)
-            player.completeUsingItem(this.runtimeId.toShort(), org.chorus_oss.protocol.packets.CompletedUsingItemPacket.Companion.ItemUseMethod.Eat)
+            player.completeUsingItem(
+                this.runtimeId.toShort(),
+                org.chorus_oss.protocol.packets.CompletedUsingItemPacket.Companion.ItemUseMethod.Eat
+            )
 
             if (player.isAdventure || player.isSurvival) {
                 --this.count

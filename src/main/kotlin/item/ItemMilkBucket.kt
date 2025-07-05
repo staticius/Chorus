@@ -29,7 +29,10 @@ class ItemMilkBucket : ItemBucket(ItemID.Companion.MILK_BUCKET) {
 
         player.removeAllEffects()
 
-        player.completeUsingItem(this.runtimeId.toShort(), org.chorus_oss.protocol.packets.CompletedUsingItemPacket.Companion.ItemUseMethod.Eat)
+        player.completeUsingItem(
+            this.runtimeId.toShort(),
+            org.chorus_oss.protocol.packets.CompletedUsingItemPacket.Companion.ItemUseMethod.Eat
+        )
 
         if (player.isAdventure || player.isSurvival) {
             --this.count

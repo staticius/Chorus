@@ -19,7 +19,8 @@ import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
 import org.chorus_oss.chorus.utils.Utils
 
-class EntityHappyGhast(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityFlyable, EntityRideable, InventoryHolder {
+class EntityHappyGhast(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt), EntityFlyable, EntityRideable,
+    InventoryHolder {
     private lateinit var armorInventory: EntityArmorInventory
 
     override fun getEntityIdentifier(): String {

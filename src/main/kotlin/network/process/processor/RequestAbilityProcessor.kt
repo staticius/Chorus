@@ -6,8 +6,8 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerIllegalFlightEvent
 import org.chorus_oss.chorus.event.player.PlayerKickEvent
 import org.chorus_oss.chorus.event.player.PlayerToggleFlightEvent
-import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.ProtocolInfo
+import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.RequestAbilityPacket
 import org.chorus_oss.chorus.network.protocol.types.PlayerAbility
 import org.chorus_oss.chorus.utils.Loggable

@@ -1,6 +1,6 @@
 package org.chorus_oss.chorus.experimental.network.protocol.utils
 
-import java.util.UUID
+import java.util.*
 import kotlin.uuid.ExperimentalUuidApi
 import kotlin.uuid.Uuid
 

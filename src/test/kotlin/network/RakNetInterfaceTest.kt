@@ -48,7 +48,7 @@ class RakNetInterfaceTest {
                         val content = msg.content()
                         val id = content.readUnsignedByte().toInt() //frame id
                         if (id != BedrockChannelInitializer.RAKNET_MINECRAFT_ID) {
-                            RakNetInterfaceTest.log.error("Client receive a Invalid packet for frame ID!")
+                            log.error("Client receive a Invalid packet for frame ID!")
                             System.exit(1)
                         }
 

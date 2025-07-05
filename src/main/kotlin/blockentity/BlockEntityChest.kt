@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.blockentity
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.inventory.ChestInventory
-import org.chorus_oss.chorus.inventory.ContainerInventory
 import org.chorus_oss.chorus.inventory.DoubleChestInventory
 import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.level.format.IChunk

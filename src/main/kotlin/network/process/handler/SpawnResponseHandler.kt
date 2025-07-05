@@ -8,7 +8,10 @@ import org.chorus_oss.chorus.entity.data.property.EntityProperty.Companion.getPl
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.connection.BedrockSession
-import org.chorus_oss.chorus.network.protocol.*
+import org.chorus_oss.chorus.network.protocol.RequestChunkRadiusPacket
+import org.chorus_oss.chorus.network.protocol.SetLocalPlayerAsInitializedPacket
+import org.chorus_oss.chorus.network.protocol.StartGamePacket
+import org.chorus_oss.chorus.network.protocol.TrimDataPacket
 import org.chorus_oss.chorus.network.protocol.types.TrimData
 import org.chorus_oss.chorus.registry.ItemRegistry
 import org.chorus_oss.chorus.registry.ItemRuntimeIdRegistry

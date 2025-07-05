@@ -154,7 +154,13 @@ class EntityChicken(chunk: IChunk?, nbt: CompoundTag) : EntityAnimal(chunk, nbt)
         if (namedTag!!.contains("variant")) {
             this.climateVariant = ClimateVariant.Companion.Variant.get(namedTag!!.getString("variant"))
         } else {
-            this.climateVariant = this.getBiomeVariant(this.level!!.getBiomeId(this.position.x.toInt(), this.position.y.toInt(), this.position.z.toInt()))
+            this.climateVariant = this.getBiomeVariant(
+                this.level!!.getBiomeId(
+                    this.position.x.toInt(),
+                    this.position.y.toInt(),
+                    this.position.z.toInt()
+                )
+            )
         }
     }
 

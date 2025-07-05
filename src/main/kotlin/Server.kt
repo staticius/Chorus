@@ -55,9 +55,9 @@ import org.chorus_oss.chorus.nbt.tag.FloatTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
 import org.chorus_oss.chorus.nbt.tag.Tag
 import org.chorus_oss.chorus.network.Network
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.DataPacket
 import org.chorus_oss.chorus.network.protocol.PlayerListPacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.types.PlayerInfo
 import org.chorus_oss.chorus.network.protocol.types.XboxLivePlayerInfo
 import org.chorus_oss.chorus.permission.BanList

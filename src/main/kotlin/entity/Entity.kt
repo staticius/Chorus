@@ -42,11 +42,7 @@ import org.chorus_oss.chorus.network.protocol.types.PropertySyncData
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.scheduler.Task
 import org.chorus_oss.chorus.tags.ItemTags
-import org.chorus_oss.chorus.utils.ChunkException
-import org.chorus_oss.chorus.utils.Identifier
-import org.chorus_oss.chorus.utils.Loggable
-import org.chorus_oss.chorus.utils.PortalHelper
-import org.chorus_oss.chorus.utils.TextFormat
+import org.chorus_oss.chorus.utils.*
 import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.types.ActorLink
 import org.chorus_oss.protocol.types.ActorProperties
@@ -3369,8 +3365,12 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
                 )
         }
 
-        fun playAnimationOnEntities(animation: org.chorus_oss.protocol.packets.AnimateEntityPacket, entities: List<Entity>) {
-            val viewers = entities.flatMap { it.viewers.values + if (it.isPlayer) listOf(it as Player) else emptyList() }.toSet()
+        fun playAnimationOnEntities(
+            animation: org.chorus_oss.protocol.packets.AnimateEntityPacket,
+            entities: List<Entity>
+        ) {
+            val viewers =
+                entities.flatMap { it.viewers.values + if (it.isPlayer) listOf(it as Player) else emptyList() }.toSet()
             Server.broadcastPacket(viewers, animation)
         }
     }

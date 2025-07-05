@@ -11,7 +11,6 @@ import org.chorus_oss.protocol.packets.BiomeDefinitionListPacket
 import org.chorus_oss.protocol.types.biome.BiomeDefinitionData
 import java.io.IOException
 import java.io.InputStreamReader
-import java.util.*
 import java.util.concurrent.atomic.AtomicBoolean
 
 class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
@@ -35,23 +34,24 @@ class BiomeRegistry : IRegistry<Int, BiomeDefinition?, BiomeDefinition> {
         }
 
         try {
-            BiomeRegistry::class.java.classLoader.getResourceAsStream("gamedata/kaooot/biome_definitions.nbt").use { stream ->
-                requireNotNull(stream) { "Couldn't load \"gamedata/kaooot/biome_definitions.nbt\"" }
+            BiomeRegistry::class.java.classLoader.getResourceAsStream("gamedata/kaooot/biome_definitions.nbt")
+                .use { stream ->
+                    requireNotNull(stream) { "Couldn't load \"gamedata/kaooot/biome_definitions.nbt\"" }
 
-                val root = NBTIO.readCompressed(stream)
-                BIOME_STRINGS.addAll(root.getList("biomeStringList", StringTag::class.java).all.map { it.data })
+                    val root = NBTIO.readCompressed(stream)
+                    BIOME_STRINGS.addAll(root.getList("biomeStringList", StringTag::class.java).all.map { it.data })
 
-                val biomeData: ListTag<CompoundTag> = root.getList("biomeData", CompoundTag::class.java)
-                for (biomeTag in biomeData.all) {
-                    val index = biomeTag.getShort("index")
-                    val biomeID = NAME2ID[BIOME_STRINGS[index.toInt()]]!!
-                    val definition = BiomeDefinition(
-                        index,
-                        data = BiomeDefinitionData(biomeTag.getCompound("data"))
-                    )
-                    register(biomeID, definition)
+                    val biomeData: ListTag<CompoundTag> = root.getList("biomeData", CompoundTag::class.java)
+                    for (biomeTag in biomeData.all) {
+                        val index = biomeTag.getShort("index")
+                        val biomeID = NAME2ID[BIOME_STRINGS[index.toInt()]]!!
+                        val definition = BiomeDefinition(
+                            index,
+                            data = BiomeDefinitionData(biomeTag.getCompound("data"))
+                        )
+                        register(biomeID, definition)
+                    }
                 }
-            }
         } catch (e: IOException) {
             throw RuntimeException(e)
         }

@@ -18,9 +18,9 @@ import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.level.vibration.VibrationEvent
 import org.chorus_oss.chorus.level.vibration.VibrationType
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.InventoryTransactionPacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.UpdateBlockPacket
 import org.chorus_oss.chorus.network.protocol.types.inventory.transaction.InventorySource
 import org.chorus_oss.chorus.network.protocol.types.inventory.transaction.ReleaseItemData

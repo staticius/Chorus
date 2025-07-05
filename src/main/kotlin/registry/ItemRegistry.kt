@@ -4,7 +4,6 @@ import org.chorus_oss.chorus.block.BlockID
 import org.chorus_oss.chorus.item.*
 import org.chorus_oss.chorus.item.customitem.CustomItem
 import org.chorus_oss.chorus.item.customitem.CustomItemDefinition
-import org.chorus_oss.chorus.item.ItemHarnessBlue
 import org.chorus_oss.chorus.nbt.NBTIO.readCompressed
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.plugin.Plugin

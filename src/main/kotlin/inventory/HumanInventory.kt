@@ -14,7 +14,9 @@ import org.chorus_oss.chorus.item.ItemArmor
 import org.chorus_oss.chorus.item.ItemFilledMap
 import org.chorus_oss.chorus.level.vibration.VibrationEvent
 import org.chorus_oss.chorus.level.vibration.VibrationType
-import org.chorus_oss.chorus.network.protocol.*
+import org.chorus_oss.chorus.network.protocol.MobArmorEquipmentPacket
+import org.chorus_oss.chorus.network.protocol.MobEquipmentPacket
+import org.chorus_oss.chorus.network.protocol.PlayerArmorDamagePacket
 import org.chorus_oss.chorus.network.protocol.PlayerArmorDamagePacket.PlayerArmorDamageFlag
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType

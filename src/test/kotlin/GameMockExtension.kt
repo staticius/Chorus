@@ -17,7 +17,8 @@ import org.chorus_oss.chorus.inventory.HumanOffHandInventory
 import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.lang.Lang
-import org.chorus_oss.chorus.level.*
+import org.chorus_oss.chorus.level.DimensionEnum
+import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.format.LevelConfig
 import org.chorus_oss.chorus.level.format.LevelConfig.GeneratorConfig
 import org.chorus_oss.chorus.level.format.LevelProvider
@@ -44,7 +45,9 @@ import org.mockito.MockedStatic
 import org.mockito.MockedStatic.Verification
 import org.mockito.Mockito
 import org.mockito.junit.jupiter.MockitoExtension
-import java.io.*
+import java.io.File
+import java.io.FileNotFoundException
+import java.io.IOException
 import java.net.InetSocketAddress
 import java.nio.file.Path
 import java.util.*

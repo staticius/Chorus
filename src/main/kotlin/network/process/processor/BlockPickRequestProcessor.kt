@@ -8,11 +8,11 @@ import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.inventory.HumanInventory
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.utils.Loggable
 
 
-class BlockPickRequestProcessor : DataPacketProcessor<MigrationPacket<org.chorus_oss.protocol.packets.BlockPickRequestPacket>>() {
+class BlockPickRequestProcessor :
+    DataPacketProcessor<MigrationPacket<org.chorus_oss.protocol.packets.BlockPickRequestPacket>>() {
     override fun handle(player: Player, pk: MigrationPacket<org.chorus_oss.protocol.packets.BlockPickRequestPacket>) {
         val packet = pk.packet
 

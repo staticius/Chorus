@@ -44,7 +44,8 @@ import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector2
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
-import org.chorus_oss.chorus.network.protocol.*
+import org.chorus_oss.chorus.network.protocol.EntityEventPacket
+import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus_oss.chorus.plugin.InternalPlugin
 import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.packets.BossEventPacket

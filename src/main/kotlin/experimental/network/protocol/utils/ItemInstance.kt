@@ -31,10 +31,12 @@ operator fun ItemInstance.Companion.invoke(value: Item): ItemInstance {
                 tag.putInt("Damage", value.meta)
                 org.chorus_oss.nbt.tags.CompoundTag.invoke(tag)
             }
+
             value.hasCompoundTag() -> {
                 val tag = value.namedTag!!
                 org.chorus_oss.nbt.tags.CompoundTag.invoke(tag)
             }
+
             else -> org.chorus_oss.nbt.tags.CompoundTag()
         },
         canBePlacedOn = HandleByteBuf.extractStringList(value, "CanPlaceOn"),

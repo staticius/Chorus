@@ -4,8 +4,8 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.blockentity.BlockEntityStructBlock
 import org.chorus_oss.chorus.math.Vector3
-import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.ProtocolInfo
+import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.StructureBlockUpdatePacket
 
 class StructureBlockUpdateProcessor : DataPacketProcessor<StructureBlockUpdatePacket>() {

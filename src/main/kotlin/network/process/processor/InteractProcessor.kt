@@ -12,9 +12,9 @@ import org.chorus_oss.chorus.entity.projectile.abstract_arrow.EntityArrow
 import org.chorus_oss.chorus.event.player.PlayerHackDetectedEvent
 import org.chorus_oss.chorus.event.player.PlayerKickEvent
 import org.chorus_oss.chorus.event.player.PlayerMouseOverEntityEvent
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.InteractPacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.utils.Loggable
 
 class InteractProcessor : DataPacketProcessor<InteractPacket>() {

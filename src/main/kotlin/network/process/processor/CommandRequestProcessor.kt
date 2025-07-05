@@ -10,7 +10,8 @@ import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import java.util.concurrent.TimeUnit
 
-class CommandRequestProcessor : DataPacketProcessor<MigrationPacket<org.chorus_oss.protocol.packets.CommandRequestPacket>>() {
+class CommandRequestProcessor :
+    DataPacketProcessor<MigrationPacket<org.chorus_oss.protocol.packets.CommandRequestPacket>>() {
     val rateLimiter: RateLimiter = RateLimiter.create(500.0)
 
     override fun handle(player: Player, pk: MigrationPacket<org.chorus_oss.protocol.packets.CommandRequestPacket>) {

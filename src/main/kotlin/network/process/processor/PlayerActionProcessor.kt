@@ -12,10 +12,10 @@ import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus_oss.chorus.math.BlockVector3
 import org.chorus_oss.chorus.math.Vector3
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.MovePlayerPacket
 import org.chorus_oss.chorus.network.protocol.PlayerActionPacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.utils.Loggable
 
 

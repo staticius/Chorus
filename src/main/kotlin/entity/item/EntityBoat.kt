@@ -132,7 +132,13 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             actorUniqueID = this.uniqueId,
             actorRuntimeID = this.runtimeId.toULong(),
             actorType = this.getEntityIdentifier(),
-            position = org.chorus_oss.protocol.types.Vector3f(this.position.add(0.0, this.getBaseOffset().toDouble(), 0.0)),
+            position = org.chorus_oss.protocol.types.Vector3f(
+                this.position.add(
+                    0.0,
+                    this.getBaseOffset().toDouble(),
+                    0.0
+                )
+            ),
             velocity = org.chorus_oss.protocol.types.Vector3f(this.motion),
             rotation = org.chorus_oss.protocol.types.Vector2f(this.rotation),
             headYaw = this.rotation.yaw.toFloat(),

@@ -35,7 +35,8 @@ import java.util.function.Predicate
 import kotlin.math.pow
 
 
-abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!), AxisAlignedBB, IVector3, Loggable {
+abstract class Block(blockState: BlockState) : Locator(0.0, 0.0, 0.0, Server.instance.defaultLevel!!), AxisAlignedBB,
+    IVector3, Loggable {
 
     var color: BlockColor = BlockColor.VOID_BLOCK_COLOR
         get() {

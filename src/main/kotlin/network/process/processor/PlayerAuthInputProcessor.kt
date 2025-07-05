@@ -10,10 +10,10 @@ import org.chorus_oss.chorus.event.player.*
 import org.chorus_oss.chorus.level.Transform
 import org.chorus_oss.chorus.level.Transform.Companion.fromObject
 import org.chorus_oss.chorus.math.BlockFace.Companion.fromIndex
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.ItemStackRequestPacket
 import org.chorus_oss.chorus.network.protocol.PlayerAuthInputPacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.types.AuthInputAction
 import org.chorus_oss.chorus.network.protocol.types.PlayerActionType
 import kotlin.math.abs

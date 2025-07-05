@@ -6,10 +6,10 @@ import org.chorus_oss.chorus.event.inventory.ItemStackRequestActionEvent
 import org.chorus_oss.chorus.event.player.PlayerTransferItemEvent
 import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.inventory.request.*
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.ItemStackRequestPacket
 import org.chorus_oss.chorus.network.protocol.ItemStackResponsePacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.*

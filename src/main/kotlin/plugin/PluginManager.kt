@@ -618,7 +618,14 @@ open class PluginManager(private val server: Server, private val commandMap: Sim
                 }
                 clazz = clazz.superclass
             }
-            this.registerEvent(eventClass, listener, eh.priority, MethodEventExecutor(method), plugin, eh.ignoreCancelled)
+            this.registerEvent(
+                eventClass,
+                listener,
+                eh.priority,
+                MethodEventExecutor(method),
+                plugin,
+                eh.ignoreCancelled
+            )
         }
     }
 

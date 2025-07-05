@@ -335,7 +335,8 @@ open class BlockEntitySign(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnab
                 }
             }
             if (count == 4) {
-                namedTag.getCompound(TAG_FRONT_TEXT).putString(TAG_TEXT_BLOB, frontText.filterNotNull().joinToString("\n"))
+                namedTag.getCompound(TAG_FRONT_TEXT)
+                    .putString(TAG_TEXT_BLOB, frontText.filterNotNull().joinToString("\n"))
             }
         }
         if (namedTag.contains(TAG_GLOWING_TEXT)) {

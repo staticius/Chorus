@@ -3,7 +3,10 @@ package org.chorus_oss.chorus.block
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
 import org.chorus_oss.chorus.block.property.enums.OxidizationLevel
 
-open class BlockExposedCutCopperSlab(blockState: BlockState = properties.defaultState, doubleSlabID: String = BlockID.EXPOSED_DOUBLE_CUT_COPPER_SLAB) : BlockCutCopperSlab(blockState, doubleSlabID) {
+open class BlockExposedCutCopperSlab(
+    blockState: BlockState = properties.defaultState,
+    doubleSlabID: String = BlockID.EXPOSED_DOUBLE_CUT_COPPER_SLAB
+) : BlockCutCopperSlab(blockState, doubleSlabID) {
     override val oxidizationLevel: OxidizationLevel
         get() = OxidizationLevel.EXPOSED
 

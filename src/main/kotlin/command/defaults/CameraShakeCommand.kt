@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.tree.node.PlayersNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import java.util.function.Consumer
 import java.util.stream.Collectors
 
 class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screenshake.description") {
@@ -46,7 +45,8 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
         }
         when (result.key) {
             "add" -> {
-                val players_str = players.stream().map { obj: Player -> obj.getEntityName() }.collect(Collectors.joining(" "))
+                val players_str =
+                    players.stream().map { obj: Player -> obj.getEntityName() }.collect(Collectors.joining(" "))
                 val intensity = list.getResult<Float>(2)!!
                 val second = list.getResult<Float>(3)!!
                 val shakeType = when (val type = list.getResult<String>(4)) {
@@ -66,7 +66,8 @@ class CameraShakeCommand(name: String) : VanillaCommand(name, "commands.screensh
             }
 
             "stop" -> {
-                val playersStr = players.stream().map { obj: Player -> obj.getEntityName() }.collect(Collectors.joining(" "))
+                val playersStr =
+                    players.stream().map { obj: Player -> obj.getEntityName() }.collect(Collectors.joining(" "))
                 val packet = org.chorus_oss.protocol.packets.CameraShakePacket(
                     intensity = -1f,
                     duration = -1f,

@@ -70,7 +70,10 @@ import java.util.function.Function
 import java.util.function.Predicate
 import java.util.stream.IntStream
 import java.util.stream.Stream
-import kotlin.math.*
+import kotlin.math.ceil
+import kotlin.math.cos
+import kotlin.math.floor
+import kotlin.math.sin
 
 
 class Level(
@@ -3211,7 +3214,8 @@ class Level(
         this.currentTick = levelProvider.currentTick
         this.updateQueue = BlockUpdateScheduler(this, currentTick)
 
-        this.chunkTickRadius = Server.instance.viewDistance.coerceAtMost(1.coerceAtLeast(Server.instance.settings.chunkSettings.tickRadius))
+        this.chunkTickRadius =
+            Server.instance.viewDistance.coerceAtMost(1.coerceAtLeast(Server.instance.settings.chunkSettings.tickRadius))
         this.chunkGenerationQueueSize = Server.instance.settings.chunkSettings.generationQueueSize
         this.chunksPerTicks = Server.instance.settings.chunkSettings.chunksPerTicks
         this.clearChunksOnTick = Server.instance.settings.chunkSettings.clearTickList

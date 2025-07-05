@@ -16,7 +16,6 @@ import org.chorus_oss.chorus.event.server.DataPacketReceiveEvent
 import org.chorus_oss.chorus.event.server.DataPacketSendEvent
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
-import org.chorus_oss.chorus.item.customitem.data.CreativeGroup
 import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.netty.BedrockBatchWrapper
 import org.chorus_oss.chorus.network.connection.netty.BedrockPacketWrapper

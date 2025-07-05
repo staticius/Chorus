@@ -2,9 +2,9 @@ package org.chorus_oss.chorus.network.process.processor
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.inventory.SpecialWindowId
+import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.PlayerHotbarPacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 
 class PlayerHotbarProcessor : DataPacketProcessor<PlayerHotbarPacket>() {
     override fun handle(player: Player, pk: PlayerHotbarPacket) {
