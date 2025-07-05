@@ -13,7 +13,7 @@ object ProtocolInfo {
 
     const val LOGIN_PACKET = 1
     // MIGRATED = 2
-    const val SERVER_TO_CLIENT_HANDSHAKE_PACKET = 3
+    // MIGRATED = 3
     // MIGRATED = 4
     // MIGRATED = 5
     const val RESOURCE_PACKS_INFO_PACKET = 6

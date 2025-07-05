@@ -10,7 +10,6 @@ import org.chorus_oss.chorus.network.connection.util.EncryptionUtils.getSecretKe
 import org.chorus_oss.chorus.network.connection.util.EncryptionUtils.parseKey
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.LoginPacket
-import org.chorus_oss.chorus.network.protocol.ServerToClientHandshakePacket
 import org.chorus_oss.chorus.network.protocol.types.InputMode
 import org.chorus_oss.chorus.network.protocol.types.Platform
 import org.chorus_oss.chorus.network.protocol.types.PlayerInfo
@@ -210,8 +209,9 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
             if (session.isDisconnected) {
                 return
             }
-            val pk = ServerToClientHandshakePacket()
-            pk.jwt = handshakeJwt
+            val pk = org.chorus_oss.protocol.packets.ServerToClientHandshakePacket(
+                jwt = handshakeJwt
+            )
             session.sendPacketImmediately(pk)
             session.enableEncryption(encryptionKey)
 

@@ -113,8 +113,6 @@ interface PacketHandler {
 
     fun handle(pk: ServerSettingsResponsePacket) {}
 
-    fun handle(pk: ServerToClientHandshakePacket) {}
-
     fun handle(pk: SetCommandsEnabledPacket) {}
 
     fun handle(pk: SetDefaultGameTypePacket) {}
