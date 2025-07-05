@@ -5,9 +5,9 @@ import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
-import org.chorus_oss.chorus.network.protocol.ResourcePackClientResponsePacket
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.protocol.packets.ResourcePackChunkDataPacket
+import org.chorus_oss.protocol.packets.ResourcePackChunkRequestPacket
 import org.chorus_oss.protocol.packets.ResourcePackDataInfoPacket
 import org.chorus_oss.protocol.types.StackResourcePack
 import org.chorus_oss.protocol.types.TexturePackInfo
@@ -32,18 +32,26 @@ class ResourcePackHandler(session: BedrockSession) : BedrockSessionPacketHandler
         session.sendPacket(infoPacket)
     }
 
-    override fun handle(pk: ResourcePackClientResponsePacket) {
+    override fun handle(pk: MigrationPacket<*>) {
+        when (pk.packet) {
+            is ResourcePackChunkRequestPacket -> handleRequest(pk.packet)
+            is org.chorus_oss.protocol.packets.ResourcePackClientResponsePacket -> handleResponse(pk.packet)
+        }
+    }
+
+    fun handleResponse(packet: org.chorus_oss.protocol.packets.ResourcePackClientResponsePacket) {
         val server = session.server
-        when (pk.responseStatus) {
-            ResourcePackClientResponsePacket.STATUS_REFUSED -> {
+        when (packet.response) {
+            org.chorus_oss.protocol.packets.ResourcePackClientResponsePacket.Companion.Response.Refused -> {
                 log.debug("ResourcePackClientResponsePacket STATUS_REFUSED")
                 session.close("disconnectionScreen.noReason")
             }
 
-            ResourcePackClientResponsePacket.STATUS_SEND_PACKS -> {
+            org.chorus_oss.protocol.packets.ResourcePackClientResponsePacket.Companion.Response.SendPacks -> {
                 log.debug("ResourcePackClientResponsePacket STATUS_SEND_PACKS")
-                for (entry in pk.packEntries) {
-                    val resourcePack = server.resourcePackManager.getPackById(entry.uuid)
+                for (entry in packet.packsToDownload) {
+                    val packID = UUID.fromString(entry.split("_")[0])
+                    val resourcePack = server.resourcePackManager.getPackById(packID)
                     if (resourcePack == null) {
                         session.close("disconnectionScreen.resourcePack")
                         return
@@ -62,7 +70,7 @@ class ResourcePackHandler(session: BedrockSession) : BedrockSessionPacketHandler
                 }
             }
 
-            ResourcePackClientResponsePacket.STATUS_HAVE_ALL_PACKS -> {
+            org.chorus_oss.protocol.packets.ResourcePackClientResponsePacket.Companion.Response.AllPacksDownloaded -> {
                 log.debug("ResourcePackClientResponsePacket STATUS_HAVE_ALL_PACKS")
                 val stackPacket = org.chorus_oss.protocol.packets.ResourcePackStackPacket(
                     texturePackRequired = server.forceResources && !server.forceResourcesAllowOwnPacks,
@@ -83,17 +91,14 @@ class ResourcePackHandler(session: BedrockSession) : BedrockSessionPacketHandler
                 session.sendPacket(stackPacket)
             }
 
-            ResourcePackClientResponsePacket.STATUS_COMPLETED -> {
+            org.chorus_oss.protocol.packets.ResourcePackClientResponsePacket.Companion.Response.Completed -> {
                 log.debug("ResourcePackClientResponsePacket STATUS_COMPLETED")
                 session.machine.fire(SessionState.PRE_SPAWN)
             }
         }
     }
 
-    override fun handle(pk: MigrationPacket<*>) {
-        val packet = pk.packet
-        if (packet !is org.chorus_oss.protocol.packets.ResourcePackChunkRequestPacket) return
-
+    fun handleRequest(packet: ResourcePackChunkRequestPacket) {
         // TODO: Pack version check
         val mgr = session.server.resourcePackManager
         val packID = UUID.fromString(packet.resourceName.split("_", limit = 2)[0])

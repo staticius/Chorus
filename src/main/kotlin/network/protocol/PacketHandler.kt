@@ -97,8 +97,6 @@ interface PacketHandler {
 
     fun handle(pk: RequestPermissionsPacket) {}
 
-    fun handle(pk: ResourcePackClientResponsePacket) {}
-
     fun handle(pk: RespawnPacket) {}
 
     fun handle(pk: ScriptMessagePacket) {}
