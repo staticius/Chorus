@@ -4,8 +4,6 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.command.CommandSender
 import org.chorus_oss.chorus.math.round
 import org.chorus_oss.chorus.utils.TextFormat
-import org.chorus_oss.chorus.utils.ThreadCache
-import kotlin.math.round
 
 class GarbageCollectorCommand(name: String) :
     TestCommand(name, "%chorus.command.gc.description", "%chorus.command.gc.usage"),
