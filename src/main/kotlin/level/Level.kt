@@ -26,6 +26,7 @@ import org.chorus_oss.chorus.event.level.*
 import org.chorus_oss.chorus.event.player.PlayerInteractEvent
 import org.chorus_oss.chorus.event.weather.LightningStrikeEvent
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.Item.Companion.get
 import org.chorus_oss.chorus.item.ItemBucket
@@ -831,9 +832,10 @@ class Level(
             chunkPackets.clear()
 
             if (gameRules.isStale) {
-                val packet: GameRulesChangedPacket = GameRulesChangedPacket()
-                packet.gameRules = gameRules
-                Server.broadcastPacket(players.values.toTypedArray(), packet)
+                val packet = org.chorus_oss.protocol.packets.GameRulesChangedPacket(
+                    gameRules = gameRules.getGameRules().map { org.chorus_oss.protocol.types.GameRule(it.toPair()) }
+                )
+                Server.broadcastPacket(players.values, packet)
                 gameRules.refresh()
             }
         } catch (e: Exception) {

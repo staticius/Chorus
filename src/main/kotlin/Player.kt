@@ -4900,9 +4900,10 @@ open class Player(
             setTime.time = targetLevel.getTime()
             this.dataPacket(setTime)
 
-            val gameRulesChanged = GameRulesChangedPacket()
-            gameRulesChanged.gameRules = targetLevel.gameRules
-            this.dataPacket(gameRulesChanged)
+            val gameRulesChanged = org.chorus_oss.protocol.packets.GameRulesChangedPacket(
+                gameRules = targetLevel.gameRules.getGameRules().map { org.chorus_oss.protocol.types.GameRule(it.toPair()) }
+            )
+            this.sendPacket(gameRulesChanged)
 
             if (targetLevel.dimension == this.level!!.dimension) {
                 this.sendPacket(
