@@ -99,10 +99,12 @@ import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.packets.CameraShakePacket
 import org.chorus_oss.protocol.packets.ClientboundCloseFormPacket
 import org.chorus_oss.protocol.packets.PlayStatusPacket
+import org.chorus_oss.protocol.packets.SetActorMotionPacket
 import org.chorus_oss.protocol.types.CommandOriginData
 import org.chorus_oss.protocol.types.CommandOutputMessage
 import org.chorus_oss.protocol.types.CommandOutputType
 import org.chorus_oss.protocol.types.DisconnectFailReason
+import org.chorus_oss.protocol.types.Vector3f
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
 import java.net.InetSocketAddress
@@ -2698,12 +2700,12 @@ open class Player(
         if (super.setMotion(motion)) {
             if (this.chunk != null) {
                 this.addMotion(this.motion.x, this.motion.y, this.motion.z) //Send to others
-                val pk = SetEntityMotionPacket()
-                pk.eid = this.getRuntimeID()
-                pk.motionX = motion.x.toFloat()
-                pk.motionY = motion.y.toFloat()
-                pk.motionZ = motion.z.toFloat()
-                this.dataPacket(pk) //Send to self
+                val pk = SetActorMotionPacket(
+                    actorRuntimeID = this.getRuntimeID().toULong(),
+                    motion = Vector3f(motion),
+                    tick = 0uL,
+                )
+                this.sendPacket(pk) //Send to self
             }
             if (this.motion.y > 0) {
                 // TODO: check this

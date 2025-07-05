@@ -113,8 +113,6 @@ interface PacketHandler {
 
     fun handle(pk: SetEntityLinkPacket) {}
 
-    fun handle(pk: SetEntityMotionPacket) {}
-
     fun handle(pk: SetHealthPacket) {}
 
     fun handle(pk: SetHudPacket) {}

@@ -45,6 +45,7 @@ import org.chorus_oss.chorus.tags.ItemTags
 import org.chorus_oss.chorus.utils.*
 import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.packets.SetActorDataPacket
+import org.chorus_oss.protocol.packets.SetActorMotionPacket
 import org.chorus_oss.protocol.types.ActorLink
 import org.chorus_oss.protocol.types.ActorProperties
 import org.chorus_oss.protocol.types.actor_data.ActorDataMap
@@ -1572,12 +1573,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
      * 对于玩家实体，你不应该使用此方法！
      */
     fun addMotion(motionX: Double, motionY: Double, motionZ: Double) {
-        val pk = SetEntityMotionPacket()
-        pk.eid = this.getRuntimeID()
-        pk.motionX = motionX.toFloat()
-        pk.motionY = motionY.toFloat()
-        pk.motionZ = motionZ.toFloat()
-
+        val pk = SetActorMotionPacket(
+            actorRuntimeID = this.getRuntimeID().toULong(),
+            motion = org.chorus_oss.protocol.types.Vector3f(
+                motionX.toFloat(),
+                motionY.toFloat(),
+                motionZ.toFloat()
+            ),
+            tick = 0uL,
+        )
         Server.broadcastPacket(hasSpawned.values, pk)
     }
 
