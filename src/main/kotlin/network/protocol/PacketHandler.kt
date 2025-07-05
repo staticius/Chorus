@@ -19,8 +19,6 @@ interface PacketHandler {
 
     fun handle(pk: ItemStackResponsePacket) {}
 
-    fun handle(pk: LabTablePacket) {}
-
     fun handle(pk: LecternUpdatePacket) {}
 
     fun handle(pk: LessonProgressPacket) {}
