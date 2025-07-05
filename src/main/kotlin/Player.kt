@@ -3939,9 +3939,11 @@ open class Player(
 
             this.timeSinceRest = 0
 
-            val deathInfo = DeathInfoPacket()
-            deathInfo.translation = ev.translationDeathMessage
-            this.dataPacket(deathInfo)
+            val deathInfo = org.chorus_oss.protocol.packets.DeathInfoPacket(
+                cause = ev.translationDeathMessage.text,
+                messages = ev.translationDeathMessage.parameters.toList()
+            )
+            this.sendPacket(deathInfo)
 
             if (showMessages && ev.deathMessage.toString().isNotEmpty()) {
                 Server.instance.broadcast(ev.deathMessage, Server.BROADCAST_CHANNEL_USERS)
