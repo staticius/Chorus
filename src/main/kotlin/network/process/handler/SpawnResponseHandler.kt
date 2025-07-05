@@ -5,6 +5,7 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.entity.data.property.EntityProperty.Companion.getPacketCache
 import org.chorus_oss.chorus.entity.data.property.EntityProperty.Companion.getPlayerPropertyCache
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.protocol.*
@@ -13,6 +14,7 @@ import org.chorus_oss.chorus.registry.ItemRegistry
 import org.chorus_oss.chorus.registry.ItemRuntimeIdRegistry
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.Loggable
+import org.chorus_oss.protocol.types.item.ItemEntry
 import kotlin.math.max
 import kotlin.math.min
 
@@ -23,8 +25,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         this.startGame()
 
         log.debug("Sending item components")
-        val itemRegistryPacket = ItemRegistryPacket()
-        val entries = mutableSetOf<ItemRegistryPacket.Entry>()
+        val entries = mutableSetOf<ItemEntry>()
 
         for (data in ItemRuntimeIdRegistry.ITEM_DATA) {
             var tag = CompoundTag()
@@ -37,18 +38,21 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
             }
 
             entries.add(
-                ItemRegistryPacket.Entry(
+                ItemEntry(
                     data.identifier,
-                    data.runtimeId,
-                    data.version,
+                    data.runtimeId.toShort(),
                     data.componentBased,
-                    tag
+                    data.version,
+                    org.chorus_oss.nbt.tags.CompoundTag(tag)
                 )
             )
         }
 
-        itemRegistryPacket.entries = entries.toTypedArray()
-        player!!.dataPacket(itemRegistryPacket)
+        player!!.sendPacket(
+            org.chorus_oss.protocol.packets.ItemRegistryPacket(
+                items = entries.toList()
+            )
+        )
 
         log.debug("Sending actor identifiers")
         player.sendPacket(
