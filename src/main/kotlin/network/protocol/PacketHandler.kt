@@ -139,8 +139,6 @@ interface PacketHandler {
 
     fun handle(pk: SetSpawnPositionPacket) {}
 
-    fun handle(pk: SetTimePacket) {}
-
     fun handle(pk: SetTitlePacket) {}
 
     fun handle(pk: ShowCreditsPacket) {}

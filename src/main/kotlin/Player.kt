@@ -862,9 +862,10 @@ open class Player(
 
         this.enableClientCommand = true
 
-        val setTimePacket = SetTimePacket()
-        setTimePacket.time = level!!.getTime()
-        this.dataPacket(setTimePacket)
+        val setTimePacket = org.chorus_oss.protocol.packets.SetTimePacket(
+            time = level!!.getTime()
+        )
+        this.sendPacket(setTimePacket)
 
         this.noDamageTicks = 60
 
@@ -4900,9 +4901,10 @@ open class Player(
             // Remove old chunks
             this.forceSendEmptyChunks()
 
-            val setTime = SetTimePacket()
-            setTime.time = targetLevel.getTime()
-            this.dataPacket(setTime)
+            val setTime = org.chorus_oss.protocol.packets.SetTimePacket(
+                time = targetLevel.getTime()
+            )
+            this.sendPacket(setTime)
 
             val gameRulesChanged = org.chorus_oss.protocol.packets.GameRulesChangedPacket(
                 gameRules = targetLevel.gameRules.getGameRules()

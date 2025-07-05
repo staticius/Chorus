@@ -650,10 +650,10 @@ class Level(
     }
 
     fun sendTime(vararg players: Player) {
-        val pk: SetTimePacket = SetTimePacket()
-        pk.time = time.toInt()
-
-        Server.broadcastPacket(players.toList().toTypedArray(), pk)
+        val pk = org.chorus_oss.protocol.packets.SetTimePacket(
+            time = time.toInt()
+        )
+        Server.broadcastPacket(players.toList(), pk)
     }
 
     fun sendTime() {

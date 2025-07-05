@@ -20,7 +20,7 @@ object ProtocolInfo {
     // MIGRATED = 7
     // MIGRATED = 8
     const val TEXT_PACKET = 9
-    const val SET_TIME_PACKET = 10
+    // MIGRATED = 10
     const val START_GAME_PACKET = 11
     // MIGRATED = 12
     // MIGRATED = 13
@@ -78,7 +78,6 @@ object ProtocolInfo {
     // DEPRECATED = 65
     // DEPRECATED = 66
     const val CLIENTBOUND_MAP_ITEM_DATA_PACKET = 67
-
     // MIGRATED = 68
     const val REQUEST_CHUNK_RADIUS_PACKET = 69
     // MIGRATED = 70
@@ -120,7 +119,6 @@ object ProtocolInfo {
     const val REMOVE_OBJECTIVE_PACKET = 106
     const val SET_DISPLAY_OBJECTIVE_PACKET = 107
     const val SET_SCORE_PACKET = 108
-
     // MIGRATED = 109
     const val UPDATE_BLOCK_SYNCED_PACKET = 110
     const val MOVE_ENTITY_DELTA_PACKET = 111
@@ -137,14 +135,12 @@ object ProtocolInfo {
     // MIGRATED = 122
     const val LEVEL_SOUND_EVENT_PACKET = 123
     const val LEVEL_EVENT_GENERIC_PACKET = 124
-
     // MIGRATED = 125
     // UNUSED = 126
     // UNUSED = 127
     // UNUSED = 128
     // MIGRATED = 129
     const val ON_SCREEN_TEXTURE_ANIMATION_PACKET = 130
-
     // MIGRATED = 131
     // MIGRATED = 132
     // MIGRATED = 133
@@ -159,7 +155,6 @@ object ProtocolInfo {
     // MIGRATED = 142
     const val NETWORK_SETTINGS_PACKET = 143
     const val PLAYER_AUTH_INPUT_PACKET = 144
-
     // MIGRATED = 145
     const val PLAYER_ENCHANT_OPTIONS_PACKET = 146
     const val ITEM_STACK_REQUEST_PACKET = 147
@@ -167,11 +162,9 @@ object ProtocolInfo {
     const val PLAYER_ARMOR_DAMAGE_PACKET = 149
     // MIGRATED = 150
     const val UPDATE_PLAYER_GAME_TYPE_PACKET = 151
-
     // MIGRATED = 152
     const val POS_TRACKING_SERVER_BROADCAST_PACKET = 153
     const val POS_TRACKING_CLIENT_REQUEST_PACKET = 154
-
     // MIGRATED = 155
     const val PACKET_VIOLATION_WARNING_PACKET = 156
     // MIGRATED = 157
@@ -187,7 +180,6 @@ object ProtocolInfo {
     const val REMOVE_VOLUME_ENTITY_PACKET = 167
     const val SIMULATION_TYPE_PACKET = 168
     const val NPC_DIALOGUE_PACKET = 169
-
     // MIGRATED = 170
     // MIGRATED = 171
     const val UPDATE_SUB_CHUNK_BLOCKS_PACKET = 172
@@ -207,7 +199,6 @@ object ProtocolInfo {
     const val TOAST_REQUEST_PACKET = 186
     const val UPDATE_ABILITIES_PACKET = 187
     const val UPDATE_ADVENTURE_SETTINGS_PACKET = 188
-
     // MIGRATED = 189
     // MIGRATED = 190
     // MIGRATED = 191
