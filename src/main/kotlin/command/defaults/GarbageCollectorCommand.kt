@@ -36,7 +36,6 @@ class GarbageCollectorCommand(name: String) :
             tilesCollected += tilesCount - level.blockEntities.size
         }
 
-        ThreadCache.clean()
         System.gc()
 
         val freedMemory = usedMemory - (runtime.totalMemory() - runtime.freeMemory())
