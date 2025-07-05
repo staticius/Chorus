@@ -26,7 +26,7 @@ object ProtocolInfo {
     // MIGRATED = 13
     // MIGRATED = 14
     // MIGRATED = 15
-    const val SERVER_POST_MOVE_POSITION = 16
+    // MIGRATED = 16
     const val TAKE_ITEM_ENTITY_PACKET = 17
     const val MOVE_ENTITY_ABSOLUTE_PACKET = 18
     const val MOVE_PLAYER_PACKET = 19

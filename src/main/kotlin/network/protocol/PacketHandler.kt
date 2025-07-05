@@ -99,8 +99,6 @@ interface PacketHandler {
 
     fun handle(pk: ScriptMessagePacket) {}
 
-    fun handle(pk: ServerPostMovePositionPacket) {}
-
     fun handle(pk: ServerSettingsRequestPacket) {}
 
     fun handle(pk: ServerSettingsResponsePacket) {}
