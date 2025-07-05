@@ -11,8 +11,6 @@ interface PacketHandler {
 
     fun handle(pk: EntityEventPacket) {}
 
-    fun handle(pk: HurtArmorPacket) {}
-
     fun handle(pk: InteractPacket) {}
 
     fun handle(pk: InventoryTransactionPacket) {}
