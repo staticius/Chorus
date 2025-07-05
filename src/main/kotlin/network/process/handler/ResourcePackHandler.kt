@@ -2,26 +2,34 @@ package org.chorus_oss.chorus.network.process.handler
 
 import kotlinx.io.bytestring.ByteString
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.ResourcePackClientResponsePacket
 import org.chorus_oss.chorus.network.protocol.ResourcePackStackPacket
 import org.chorus_oss.chorus.network.protocol.ResourcePackStackPacket.ExperimentData
-import org.chorus_oss.chorus.network.protocol.ResourcePacksInfoPacket
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.protocol.packets.ResourcePackChunkDataPacket
 import org.chorus_oss.protocol.packets.ResourcePackDataInfoPacket
+import org.chorus_oss.protocol.types.TexturePackInfo
 import java.util.*
 import kotlin.math.ceil
+import kotlin.uuid.ExperimentalUuidApi
+import kotlin.uuid.Uuid
 
 
+@OptIn(ExperimentalUuidApi::class)
 class ResourcePackHandler(session: BedrockSession) : BedrockSessionPacketHandler(session) {
     init {
-        val infoPacket = ResourcePacksInfoPacket()
-        infoPacket.resourcePackEntries = session.server.resourcePackManager.resourceStack
-        infoPacket.isForcedToAccept = session.server.forceResources
-        infoPacket.worldTemplateId = UUID.randomUUID()
-        infoPacket.worldTemplateVersion = ""
+        val infoPacket = org.chorus_oss.protocol.packets.ResourcePacksInfoPacket(
+            texturePackRequired = session.server.forceResources,
+            hasAddons = false,
+            hasScripts = false,
+            forceDisableVibrantVisuals = false,
+            worldTemplateUuid = Uuid.random(),
+            worldTemplateVersion = "",
+            texturePacks = session.server.resourcePackManager.resourceStack.map(TexturePackInfo::invoke)
+        )
         session.sendPacket(infoPacket)
     }
 

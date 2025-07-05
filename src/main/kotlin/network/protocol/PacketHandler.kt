@@ -101,8 +101,6 @@ interface PacketHandler {
 
     fun handle(pk: ResourcePackStackPacket) {}
 
-    fun handle(pk: ResourcePacksInfoPacket) {}
-
     fun handle(pk: RespawnPacket) {}
 
     fun handle(pk: ScriptMessagePacket) {}
