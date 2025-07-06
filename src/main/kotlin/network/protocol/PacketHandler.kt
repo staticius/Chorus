@@ -125,8 +125,6 @@ interface PacketHandler {
 
     fun handle(pk: TextPacket) {}
 
-    fun handle(pk: TickingAreasLoadStatusPacket) {}
-
     fun handle(pk: UpdateAbilitiesPacket) {}
 
     fun handle(pk: UpdateAttributesPacket) {}

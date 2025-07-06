@@ -189,7 +189,7 @@ object ProtocolInfo {
     const val PLAYER_START_ITEM_COOL_DOWN_PACKET = 176
     const val SCRIPT_MESSAGE_PACKET = 177
     // MIGRATED = 178
-    const val TICKING_AREAS_LOAD_STATUS_PACKET = 179
+    // MIGRATED = 179
     // MIGRATED = 180
     // MIGRATED = 181
     // MIGRATED = 182
