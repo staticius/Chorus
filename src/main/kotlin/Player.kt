@@ -1960,10 +1960,12 @@ open class Player(
 
             if (this.isSpectator) {
                 //发送旁观者的游戏模式给对方，使得对方客户端正确渲染玩家实体
-                val pk = UpdatePlayerGameTypePacket()
-                pk.gameType = GameType.SPECTATOR
-                pk.entityId = this.getRuntimeID()
-                player.dataPacket(pk)
+                val pk = org.chorus_oss.protocol.packets.UpdatePlayerGameTypePacket(
+                    gameType = org.chorus_oss.protocol.types.GameType.Spectator,
+                    playerUniqueID = this.getUniqueID(),
+                    tick = 0uL
+                )
+                player.sendPacket(pk)
             }
         }
     }
@@ -2571,15 +2573,17 @@ open class Player(
             this.setDataFlag(EntityFlag.HAS_COLLISION, true)
         }
 
-        namedTag!!.putInt("playerGameType", this.gamemode)
+        namedTag.putInt("playerGameType", this.gamemode)
 
         this.adventureSettings = (ev.newAdventureSettings)
 
         if (!serverSide) {
-            val pk = UpdatePlayerGameTypePacket()
             val networkGamemode = toNetworkGamemode(gamemode)
-            pk.gameType = from(networkGamemode)
-            pk.entityId = this.getRuntimeID()
+            val pk = org.chorus_oss.protocol.packets.UpdatePlayerGameTypePacket(
+                gameType = org.chorus_oss.protocol.types.GameType.entries[networkGamemode],
+                playerUniqueID = this.getUniqueID(),
+                tick = 0uL,
+            )
             val players: HashSet<Player> =
                 Sets.newHashSet<Player>(Server.instance.onlinePlayers.values)
             //不向自身发送UpdatePlayerGameTypePacket，我们将使用SetPlayerGameTypePacket

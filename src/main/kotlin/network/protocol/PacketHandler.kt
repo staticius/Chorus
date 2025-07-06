@@ -121,8 +121,6 @@ interface PacketHandler {
 
     fun handle(pk: UpdateBlockSyncedPacket) {}
 
-    fun handle(pk: UpdatePlayerGameTypePacket) {}
-
     fun handle(pk: UpdateSoftEnumPacket) {}
 
     fun handle(pk: UpdateSubChunkBlocksPacket) {}

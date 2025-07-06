@@ -161,7 +161,7 @@ object ProtocolInfo {
     const val ITEM_STACK_RESPONSE_PACKET = 148
     const val PLAYER_ARMOR_DAMAGE_PACKET = 149
     // MIGRATED = 150
-    const val UPDATE_PLAYER_GAME_TYPE_PACKET = 151
+    // MIGRATED = 151
     // MIGRATED = 152
     // MIGRATED = 153
     // MIGRATED = 154
