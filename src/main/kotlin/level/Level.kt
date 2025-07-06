@@ -318,18 +318,17 @@ class Level(
         Preconditions.checkArgument(volume in 0.0..1.0, "Sound volume must be between 0 and 1")
         Preconditions.checkArgument(pitch >= 0, "Sound pitch must be higher than 0")
 
-        val packet: PlaySoundPacket = PlaySoundPacket()
-        packet.name = sound.sound
-        packet.volume = volume
-        packet.pitch = pitch
-        packet.x = pos.floorX
-        packet.y = pos.floorY
-        packet.z = pos.floorZ
+        val packet = org.chorus_oss.protocol.packets.PlaySoundPacket(
+            soundName = sound.sound,
+            position = org.chorus_oss.protocol.types.Vector3f(pos),
+            volume = volume,
+            pitch = pitch,
+        )
 
         if (players.isEmpty()) {
             addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, packet)
         } else {
-            Server.broadcastPacket(players.toList().toTypedArray(), packet)
+            Server.broadcastPacket(players.toList(), packet)
         }
     }
 
