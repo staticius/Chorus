@@ -74,7 +74,7 @@ object ProtocolInfo {
     // MIGRATED = 61
     const val SET_PLAYER_GAME_TYPE_PACKET = 62
     const val PLAYER_LIST_PACKET = 63
-    const val SIMPLE_EVENT_PACKET = 64
+    // MIGRATED = 64
     // DEPRECATED = 65
     // DEPRECATED = 66
     const val CLIENTBOUND_MAP_ITEM_DATA_PACKET = 67
