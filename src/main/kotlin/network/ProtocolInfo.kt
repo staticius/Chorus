@@ -206,7 +206,7 @@ object ProtocolInfo {
     const val REQUEST_NETWORK_SETTINGS_PACKET = 193
     // MIGRATED = 194
     // MIGRATED = 195
-    const val UPDATE_CLIENT_INPUT_LOCKS = 196
+    // MIGRATED = 196
     // UNUSED = 197
     const val CAMERA_PRESETS_PACKET = 198
     // MIGRATED = 199
