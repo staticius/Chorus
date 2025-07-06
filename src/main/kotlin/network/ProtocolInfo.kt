@@ -219,8 +219,8 @@ object ProtocolInfo {
     const val OPEN_SIGN = 303
     // MIGRATED = 304
     // MIGRATED = 305
-    const val TOGGLE_CRAFTER_SLOT_REQUEST = 306
-    const val SET_PLAYER_INVENTORY_OPTIONS_PACKET = 307
+    // MIGRATED = 306
+    // MIGRATED = 307
     // MIGRATED = 308
     // MIGRATED = 309
     // MIGRATED = 310

@@ -105,8 +105,6 @@ interface PacketHandler {
 
     fun handle(pk: SetPlayerGameTypePacket) {}
 
-    fun handle(pk: SetPlayerInventoryOptionsPacket) {}
-
     fun handle(pk: SetScorePacket) {}
 
     fun handle(pk: SetScoreboardIdentityPacket) {}
@@ -132,8 +130,6 @@ interface PacketHandler {
     fun handle(pk: TickingAreasLoadStatusPacket) {}
 
     fun handle(pk: ToastRequestPacket) {}
-
-    fun handle(pk: ToggleCrafterSlotRequestPacket) {}
 
     fun handle(pk: TrimDataPacket) {}
 

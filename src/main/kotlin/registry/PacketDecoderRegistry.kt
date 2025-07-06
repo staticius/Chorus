@@ -90,8 +90,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.UNLOCKED_RECIPES_PACKET, UnlockedRecipesPacket) // 199
         this.register(ProtocolInfo.TRIM_DATA, TrimDataPacket) // 302
         this.register(ProtocolInfo.OPEN_SIGN, OpenSignPacket) // 303
-        this.register(ProtocolInfo.TOGGLE_CRAFTER_SLOT_REQUEST, ToggleCrafterSlotRequestPacket) // 306
-        this.register(ProtocolInfo.SET_PLAYER_INVENTORY_OPTIONS_PACKET, SetPlayerInventoryOptionsPacket) // 307
         this.register(ProtocolInfo.SETTINGS_COMMAND_PACKET, SettingsCommandPacket) // 140
     }
 
