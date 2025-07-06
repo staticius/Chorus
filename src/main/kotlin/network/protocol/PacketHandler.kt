@@ -131,8 +131,6 @@ interface PacketHandler {
 
     fun handle(pk: UpdateAbilitiesPacket) {}
 
-    fun handle(pk: UpdateAdventureSettingsPacket) {}
-
     fun handle(pk: UpdateAttributesPacket) {}
 
     fun handle(pk: UpdateBlockPacket) {}

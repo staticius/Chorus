@@ -4,7 +4,6 @@ import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.IntTag
 import org.chorus_oss.chorus.network.protocol.RequestPermissionsPacket
 import org.chorus_oss.chorus.network.protocol.UpdateAbilitiesPacket
-import org.chorus_oss.chorus.network.protocol.UpdateAdventureSettingsPacket
 import org.chorus_oss.chorus.network.protocol.types.AbilityLayer
 import org.chorus_oss.chorus.network.protocol.types.CommandPermission
 import org.chorus_oss.chorus.network.protocol.types.PlayerAbility
@@ -198,13 +197,14 @@ class AdventureSettings : Cloneable {
     }
 
     fun updateAdventureSettings() {
-        val adventurePacket = UpdateAdventureSettingsPacket()
-        adventurePacket.autoJump = get(Type.AUTO_JUMP)
-        adventurePacket.immutableWorld = get(Type.WORLD_IMMUTABLE)
-        adventurePacket.noMvP = get(Type.NO_MVP)
-        adventurePacket.noPvM = get(Type.NO_PVM)
-        adventurePacket.showNameTags = get(Type.SHOW_NAME_TAGS)
-        player.dataPacket(adventurePacket)
+        val adventurePacket = org.chorus_oss.protocol.packets.UpdateAdventureSettingsPacket(
+            noPvM = get(Type.NO_PVM),
+            noMvP = get(Type.NO_MVP),
+            immutableWorld = get(Type.WORLD_IMMUTABLE),
+            showNameTags = get(Type.SHOW_NAME_TAGS),
+            autoJump = get(Type.AUTO_JUMP)
+        )
+        player.sendPacket(adventurePacket)
         player.resetInAirTicks()
     }
 
