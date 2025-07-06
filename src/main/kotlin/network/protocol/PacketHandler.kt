@@ -107,8 +107,6 @@ interface PacketHandler {
 
     fun handle(pk: SetHudPacket) {}
 
-    fun handle(pk: SetLastHurtByPacket) {}
-
     fun handle(pk: SetLocalPlayerAsInitializedPacket) {}
 
     fun handle(pk: SetPlayerGameTypePacket) {}
