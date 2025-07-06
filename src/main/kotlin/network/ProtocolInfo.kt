@@ -159,7 +159,7 @@ object ProtocolInfo {
     const val PLAYER_ENCHANT_OPTIONS_PACKET = 146
     const val ITEM_STACK_REQUEST_PACKET = 147
     const val ITEM_STACK_RESPONSE_PACKET = 148
-    const val PLAYER_ARMOR_DAMAGE_PACKET = 149
+    // MIGRATED = 149
     // MIGRATED = 150
     // MIGRATED = 151
     // MIGRATED = 152

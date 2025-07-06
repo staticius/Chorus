@@ -16,14 +16,17 @@ import org.chorus_oss.chorus.level.vibration.VibrationEvent
 import org.chorus_oss.chorus.level.vibration.VibrationType
 import org.chorus_oss.chorus.network.protocol.MobArmorEquipmentPacket
 import org.chorus_oss.chorus.network.protocol.MobEquipmentPacket
-import org.chorus_oss.chorus.network.protocol.PlayerArmorDamagePacket
-import org.chorus_oss.chorus.network.protocol.PlayerArmorDamagePacket.PlayerArmorDamageFlag
 import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.packets.PlayerArmorDamagePacket.Companion.FLAG_BOOTS
+import org.chorus_oss.protocol.packets.PlayerArmorDamagePacket.Companion.FLAG_CHESTPLATE
+import org.chorus_oss.protocol.packets.PlayerArmorDamagePacket.Companion.FLAG_HELMET
+import org.chorus_oss.protocol.packets.PlayerArmorDamagePacket.Companion.FLAG_LEGGINGS
 import org.chorus_oss.protocol.types.BlockPos
 import org.chorus_oss.protocol.types.ContainerType
 import org.chorus_oss.protocol.types.item.ItemStack
 import org.jetbrains.annotations.Range
+import kotlin.experimental.or
 import kotlin.math.min
 
 /**
@@ -510,17 +513,44 @@ class HumanInventory(human: IHuman) //9+27+4
                 )
                 player.sendPacket(packet)
 
-                val pk2 = PlayerArmorDamagePacket()
-                for (i in 0..3) {
-                    val item = armor[i]
-                    if (item.isNothing) {
-                        pk2.damage[i] = 0
-                    } else {
-                        pk2.flags.add(PlayerArmorDamageFlag.entries.toTypedArray()[i])
-                        pk2.damage[i] = item.damage
-                    }
+                var pk2 = org.chorus_oss.protocol.packets.PlayerArmorDamagePacket(
+                    bitset = 0,
+                    helmetDamage = 0,
+                    chestplateDamage = 0,
+                    leggingsDamage = 0,
+                    bootsDamage = 0,
+                    bodyDamage = 0,
+                )
+
+                if (!armor[0].isNothing) {
+                    pk2 = pk2.copy(
+                        bitset = pk2.bitset or FLAG_HELMET,
+                        helmetDamage = armor[0].damage
+                    )
                 }
-                player.dataPacket(pk2)
+
+                if (!armor[1].isNothing) {
+                    pk2 = pk2.copy(
+                        bitset = pk2.bitset or FLAG_CHESTPLATE,
+                        chestplateDamage = armor[1].damage
+                    )
+                }
+
+                if (!armor[2].isNothing) {
+                    pk2 = pk2.copy(
+                        bitset = pk2.bitset or FLAG_LEGGINGS,
+                        leggingsDamage = armor[2].damage
+                    )
+                }
+
+                if (!armor[3].isNothing) {
+                    pk2 = pk2.copy(
+                        bitset = pk2.bitset or FLAG_BOOTS,
+                        bootsDamage = armor[3].damage
+                    )
+                }
+
+                player.sendPacket(pk2)
             } else {
                 player.dataPacket(pk)
             }
@@ -530,7 +560,7 @@ class HumanInventory(human: IHuman) //9+27+4
     /**
      * Send armor slot.
      *
-     * @param index  the index 0~3 [PlayerArmorDamagePacket.PlayerArmorDamageFlag]
+     * @param index  the index 0~3
      * @param player the player
      */
     fun sendArmorSlot(index: Int, player: Player) {
@@ -540,7 +570,7 @@ class HumanInventory(human: IHuman) //9+27+4
     /**
      * Send armor slot.
      *
-     * @param index   the index 0~3 [PlayerArmorDamagePacket.PlayerArmorDamageFlag]
+     * @param index   the index 0~3
      * @param players the players
      */
     fun sendArmorSlot(index: Int, players: Collection<Player>) {
@@ -550,7 +580,7 @@ class HumanInventory(human: IHuman) //9+27+4
     /**
      * Send armor slot.
      *
-     * @param index   the index 0~3 [PlayerArmorDamagePacket.PlayerArmorDamageFlag]
+     * @param index   the index 0~3
      * @param players the players
      */
     fun sendArmorSlot(index: Int, players: Array<Player>) {
@@ -575,15 +605,21 @@ class HumanInventory(human: IHuman) //9+27+4
                 )
                 player.sendPacket(packet)
 
-                val pk2 = PlayerArmorDamagePacket()
-                val item = armor[index]
-                if (item.isNothing) {
-                    pk2.damage[index] = 0
-                } else {
-                    pk2.flags.add(PlayerArmorDamageFlag.entries.toTypedArray()[index])
-                    pk2.damage[index] = item.damage
-                }
-                player.dataPacket(pk2)
+                val pk2 = org.chorus_oss.protocol.packets.PlayerArmorDamagePacket(
+                    bitset = when (index) {
+                        0 -> FLAG_HELMET
+                        1 -> FLAG_CHESTPLATE
+                        2 -> FLAG_LEGGINGS
+                        3 -> FLAG_BOOTS
+                        else -> 0
+                    },
+                    helmetDamage = if (!armor[0].isNothing) armor[0].damage else 0,
+                    chestplateDamage = if (!armor[1].isNothing) armor[1].damage else 0,
+                    leggingsDamage = if (!armor[2].isNothing) armor[2].damage else 0,
+                    bootsDamage = if (!armor[3].isNothing) armor[3].damage else 0,
+                    bodyDamage = 0,
+                )
+                player.sendPacket(pk2)
             } else {
                 player.dataPacket(pk)
             }

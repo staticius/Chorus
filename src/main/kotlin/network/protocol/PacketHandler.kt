@@ -53,8 +53,6 @@ interface PacketHandler {
 
     fun handle(pk: PlayerActionPacket) {}
 
-    fun handle(pk: PlayerArmorDamagePacket) {}
-
     fun handle(pk: PlayerAuthInputPacket) {}
 
     fun handle(pk: PlayerEnchantOptionsPacket) {}
