@@ -96,7 +96,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.SETTINGS_COMMAND_PACKET, SettingsCommandPacket) // 140
         this.register(ProtocolInfo.SERVERBOUND_LOADING_SCREEN_PACKET, ServerboundLoadingScreenPacket) // 312
         this.register(ProtocolInfo.SERVERBOUND_DIAGNOSTICS_PACKET, ServerboundDiagnosticsPacket) // 315
-        this.register(ProtocolInfo.PLAYER_LOCATION_PACKET, PlayerLocationPacket) // 326
     }
 
     companion object {

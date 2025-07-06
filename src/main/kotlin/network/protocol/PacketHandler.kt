@@ -71,8 +71,6 @@ interface PacketHandler {
 
     fun handle(pk: PlayerListPacket) {}
 
-    fun handle(pk: PlayerLocationPacket) {}
-
     fun handle(pk: PlayerSkinPacket) {}
 
     fun handle(pk: PlayerStartItemCoolDownPacket) {}

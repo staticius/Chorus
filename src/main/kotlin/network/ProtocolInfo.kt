@@ -239,7 +239,7 @@ object ProtocolInfo {
     // MIGRATED = 323
     // MIGRATED = 324
     // MIGRATED = 325
-    const val PLAYER_LOCATION_PACKET = 326
+    // MIGRATED = 326
     // MIGRATED = 327
     // MIGRATED = 328
 }
