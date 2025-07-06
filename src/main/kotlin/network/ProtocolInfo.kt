@@ -104,7 +104,7 @@ object ProtocolInfo {
     // MIGRATED = 91
     // MIGRATED = 92
     const val PLAYER_SKIN_PACKET = 93
-    const val SUB_CLIENT_LOGIN_PACKET = 94
+    // MIGRATED = 94
     // MIGRATED = 95
     const val SET_LAST_HURT_BY_PACKET = 96
     // MIGRATED = 97

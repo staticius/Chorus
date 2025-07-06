@@ -131,8 +131,6 @@ interface PacketHandler {
 
     fun handle(pk: StructureBlockUpdatePacket) {}
 
-    fun handle(pk: SubClientLoginPacket) {}
-
     fun handle(pk: SyncEntityPropertyPacket) {}
 
     fun handle(pk: TakeItemEntityPacket) {}
