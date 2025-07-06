@@ -22,6 +22,7 @@ import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.protocol.types.EntityLink
 import org.chorus_oss.chorus.utils.MinecartType
+import org.chorus_oss.protocol.types.ActorLink
 import java.util.concurrent.ThreadLocalRandom
 import kotlin.math.sqrt
 
@@ -160,7 +161,7 @@ class EntityTntMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstra
         return interact
     }
 
-    override fun mountEntity(entity: Entity, mode: EntityLink.Type): Boolean {
+    override fun mountEntity(entity: Entity, mode: ActorLink.Companion.Type): Boolean {
         return false
     }
 }

@@ -51,7 +51,7 @@ object ProtocolInfo {
     // MIGRATED = 38
     // MIGRATED = 39
     // MIGRATED = 40
-    const val SET_ENTITY_LINK_PACKET = 41
+    // MIGRATED = 41
     const val SET_HEALTH_PACKET = 42
     const val SET_SPAWN_POSITION_PACKET = 43
     const val ANIMATE_PACKET = 44

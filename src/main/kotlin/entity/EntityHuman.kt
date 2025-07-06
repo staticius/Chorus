@@ -14,8 +14,7 @@ import org.chorus_oss.chorus.item.ItemShield
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.protocol.MovePlayerPacket
-import org.chorus_oss.chorus.network.protocol.SetEntityLinkPacket
-import org.chorus_oss.chorus.network.protocol.types.EntityLink
+import org.chorus_oss.protocol.packets.SetActorLinkPacket
 import org.chorus_oss.protocol.types.*
 import org.chorus_oss.protocol.types.actor_data.ActorDataMap
 import org.chorus_oss.protocol.types.item.ItemStack
@@ -219,13 +218,17 @@ open class EntityHuman(chunk: IChunk?, nbt: CompoundTag) : EntityHumanType(chunk
             offhandInventory.sendContents(player)
 
             if (this.riding != null) {
-                val pkk: SetEntityLinkPacket = SetEntityLinkPacket()
-                pkk.vehicleUniqueId = riding!!.getRuntimeID()
-                pkk.riderUniqueId = this.getRuntimeID()
-                pkk.type = EntityLink.Type.RIDER
-                pkk.immediate = 1
-
-                player.dataPacket(pkk)
+                val packet = SetActorLinkPacket(
+                    actorLink = ActorLink(
+                        riddenActorUniqueID = riding!!.getUniqueID(),
+                        riderActorUniqueID = this.getUniqueID(),
+                        type = ActorLink.Companion.Type.Rider,
+                        immediate = true,
+                        riderInitiated = false,
+                        vehicleAngularVelocity = 0f,
+                    )
+                )
+                player.sendPacket(packet)
             }
 
             if (this !is Player) {

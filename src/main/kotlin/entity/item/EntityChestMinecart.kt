@@ -18,6 +18,7 @@ import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
 import org.chorus_oss.chorus.network.protocol.types.EntityLink
 import org.chorus_oss.chorus.utils.MinecartType
+import org.chorus_oss.protocol.types.ActorLink
 
 class EntityChestMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbstract(chunk, nbt), InventoryHolder {
     override fun getEntityIdentifier(): String {
@@ -62,7 +63,7 @@ class EntityChestMinecart(chunk: IChunk?, nbt: CompoundTag) : EntityMinecartAbst
         inventory.clearAll()
     }
 
-    override fun mountEntity(entity: Entity, mode: EntityLink.Type): Boolean {
+    override fun mountEntity(entity: Entity, mode: ActorLink.Companion.Type): Boolean {
         return false
     }
 

@@ -357,7 +357,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             super.updatePassengerPosition(ent)
 
             if (sendLinks) {
-                broadcastLinkPacket(ent, EntityLink.Type.RIDER)
+                broadcastLinkPacket(ent, ActorLink.Companion.Type.Rider)
             }
         } else if (passengers.size == 2) {
             if ((passengers.get(0).also { ent = it }) !is Player) { //swap
@@ -374,7 +374,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             ent.setSeatPosition(getMountedOffset(ent).add(RIDER_PASSENGER_OFFSET))
             super.updatePassengerPosition(ent)
             if (sendLinks) {
-                broadcastLinkPacket(ent, EntityLink.Type.RIDER)
+                broadcastLinkPacket(ent, ActorLink.Companion.Type.Rider)
             }
 
             (passengers.get(1).also { ent = it }).setSeatPosition(getMountedOffset(ent).add(PASSENGER_OFFSET))
@@ -382,7 +382,7 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
             super.updatePassengerPosition(ent)
 
             if (sendLinks) {
-                broadcastLinkPacket(ent, EntityLink.Type.PASSENGER)
+                broadcastLinkPacket(ent, ActorLink.Companion.Type.Passenger)
             }
 
             //float yawDiff = ent.getId() % 2 == 0 ? 90 : 270;
@@ -425,16 +425,16 @@ open class EntityBoat(chunk: IChunk?, nbt: CompoundTag?) : EntityVehicle(chunk, 
 
     override fun mountEntity(entity: Entity): Boolean {
         val player: Boolean = !passengers.isEmpty() && passengers.get(0) is Player
-        var mode: EntityLink.Type = EntityLink.Type.PASSENGER
+        var mode = ActorLink.Companion.Type.Passenger
 
         if (!player && (entity is Player || passengers.isEmpty())) {
-            mode = EntityLink.Type.RIDER
+            mode = ActorLink.Companion.Type.Rider
         }
 
         return super.mountEntity(entity, mode)
     }
 
-    override fun mountEntity(entity: Entity, mode: EntityLink.Type): Boolean {
+    override fun mountEntity(entity: Entity, mode: ActorLink.Companion.Type): Boolean {
         val r: Boolean = super.mountEntity(entity, mode)
         if (entity.riding === this) {
             updatePassengers(true)

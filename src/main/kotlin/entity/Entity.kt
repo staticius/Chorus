@@ -934,13 +934,17 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
         if (this.riding != null) {
             riding!!.spawnTo(player)
 
-            val pkk = SetEntityLinkPacket()
-            pkk.vehicleUniqueId = riding!!.getRuntimeID()
-            pkk.riderUniqueId = this.getRuntimeID()
-            pkk.type = EntityLink.Type.RIDER
-            pkk.immediate = 1
-
-            player.dataPacket(pkk)
+            val packet = org.chorus_oss.protocol.packets.SetActorLinkPacket(
+                actorLink = ActorLink(
+                    riddenActorUniqueID = riding!!.getUniqueID(),
+                    riderActorUniqueID = this.getUniqueID(),
+                    type = ActorLink.Companion.Type.Rider,
+                    immediate = true,
+                    riderInitiated = false,
+                    vehicleAngularVelocity = 0f,
+                )
+            )
+            player.sendPacket(packet)
         }
     }
 
@@ -1644,7 +1648,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
     }
 
     open fun mountEntity(entity: Entity): Boolean {
-        return mountEntity(entity, EntityLink.Type.RIDER)
+        return mountEntity(entity, ActorLink.Companion.Type.Rider)
     }
 
     /**
@@ -1653,7 +1657,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
      * @param entity The target Entity
      * @return `true` if the mounting successful
      */
-    open fun mountEntity(entity: Entity, mode: EntityLink.Type): Boolean {
+    open fun mountEntity(entity: Entity, mode: ActorLink.Companion.Type): Boolean {
         requireNonNull(entity, "The target of the mounting entity can't be null")
 
         if (isPassenger(entity) || entity.riding != null && !entity.riding!!.dismountEntity(entity, false)) {
@@ -1690,15 +1694,15 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
         if (ev.cancelled) {
             val seatIndex: Int = passengers.indexOf(entity)
             if (seatIndex == 0) {
-                this.broadcastLinkPacket(entity, EntityLink.Type.RIDER)
+                this.broadcastLinkPacket(entity, ActorLink.Companion.Type.Rider)
             } else if (seatIndex != -1) {
-                this.broadcastLinkPacket(entity, EntityLink.Type.PASSENGER)
+                this.broadcastLinkPacket(entity, ActorLink.Companion.Type.Passenger)
             }
             return false
         }
 
         if (sendLinks) {
-            broadcastLinkPacket(entity, EntityLink.Type.REMOVE)
+            broadcastLinkPacket(entity, ActorLink.Companion.Type.Remove)
         }
 
         // refresh the entity
@@ -1715,12 +1719,17 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
         return true
     }
 
-    protected fun broadcastLinkPacket(rider: Entity, type: EntityLink.Type) {
-        val pk = SetEntityLinkPacket()
-        pk.vehicleUniqueId = getRuntimeID() // To what?
-        pk.riderUniqueId = rider.getRuntimeID() // From who?
-        pk.type = type
-        pk.riderInitiated = type != EntityLink.Type.REMOVE
+    protected fun broadcastLinkPacket(rider: Entity, type: ActorLink.Companion.Type) {
+        val pk = org.chorus_oss.protocol.packets.SetActorLinkPacket(
+            actorLink = ActorLink(
+                riddenActorUniqueID = this.getUniqueID(),
+                riderActorUniqueID = rider.getUniqueID(),
+                type = type,
+                immediate = false,
+                riderInitiated = type != ActorLink.Companion.Type.Remove,
+                vehicleAngularVelocity = 0f,
+            )
+        )
         Server.broadcastPacket(hasSpawned.values, pk)
     }
 
