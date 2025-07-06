@@ -150,7 +150,7 @@ object ProtocolInfo {
     // MIGRATED = 137
     // MIGRATED = 138
     // MIGRATED = 139
-    const val SETTINGS_COMMAND_PACKET = 140
+    // MIGRATED = 140
     // MIGRATED = 141
     // MIGRATED = 142
     const val NETWORK_SETTINGS_PACKET = 143

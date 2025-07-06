@@ -122,6 +122,4 @@ interface PacketHandler {
     fun handle(pk: UpdateSoftEnumPacket) {}
 
     fun handle(pk: UpdateSubChunkBlocksPacket) {}
-
-    fun handle(pk: SettingsCommandPacket) {}
 }
