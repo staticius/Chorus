@@ -94,7 +94,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.SET_PLAYER_INVENTORY_OPTIONS_PACKET, SetPlayerInventoryOptionsPacket) // 307
         this.register(ProtocolInfo.SET_HUD, SetHudPacket) // 308
         this.register(ProtocolInfo.SETTINGS_COMMAND_PACKET, SettingsCommandPacket) // 140
-        this.register(ProtocolInfo.SERVERBOUND_LOADING_SCREEN_PACKET, ServerboundLoadingScreenPacket) // 312
     }
 
     companion object {

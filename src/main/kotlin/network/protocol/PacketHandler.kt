@@ -160,6 +160,4 @@ interface PacketHandler {
     fun handle(pk: UpdateSubChunkBlocksPacket) {}
 
     fun handle(pk: SettingsCommandPacket) {}
-
-    fun handle(pk: ServerboundLoadingScreenPacket) {}
 }

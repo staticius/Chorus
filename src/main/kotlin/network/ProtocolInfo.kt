@@ -225,7 +225,7 @@ object ProtocolInfo {
     // MIGRATED = 309
     // MIGRATED = 310
     // UNUSED = 311
-    const val SERVERBOUND_LOADING_SCREEN_PACKET = 312
+    // MIGRATED = 312
     // MIGRATED = 313
     // MIGRATED = 314
     // MIGRATED = 315
