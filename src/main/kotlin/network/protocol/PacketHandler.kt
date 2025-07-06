@@ -149,8 +149,6 @@ interface PacketHandler {
 
     fun handle(pk: ToggleCrafterSlotRequestPacket) {}
 
-    fun handle(pk: TransferPacket) {}
-
     fun handle(pk: TrimDataPacket) {}
 
     fun handle(pk: UnlockedRecipesPacket) {}

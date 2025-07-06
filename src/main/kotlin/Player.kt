@@ -4977,10 +4977,12 @@ open class Player(
     fun transfer(address: InetSocketAddress) {
         val hostName = address.address.hostAddress
         val port = address.port
-        val pk = TransferPacket()
-        pk.address = hostName
-        pk.port = port
-        this.dataPacket(pk)
+        val packet = org.chorus_oss.protocol.packets.TransferPacket(
+            address = hostName,
+            port = port.toUShort(),
+            reloadWorld = false,
+        )
+        this.sendPosition(packet)
     }
 
     @ApiStatus.Internal
