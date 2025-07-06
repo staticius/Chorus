@@ -5,10 +5,10 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.entity.data.property.EntityProperty.Companion.getPacketCache
 import org.chorus_oss.chorus.entity.data.property.EntityProperty.Companion.getPlayerPropertyCache
+import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.connection.BedrockSession
-import org.chorus_oss.chorus.network.protocol.RequestChunkRadiusPacket
 import org.chorus_oss.chorus.network.protocol.SetLocalPlayerAsInitializedPacket
 import org.chorus_oss.chorus.network.protocol.StartGamePacket
 import org.chorus_oss.chorus.network.protocol.TrimDataPacket
@@ -167,9 +167,11 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         player.dataPacketImmediately(startPk)
     }
 
-    override fun handle(pk: RequestChunkRadiusPacket) {
-        player!!.viewDistance =
-            max(2.0, min(pk.radius.toDouble(), player.viewDistance.toDouble())).toInt()
+    override fun handle(pk: MigrationPacket<*>) {
+        val packet = pk.packet
+        if (packet !is org.chorus_oss.protocol.packets.RequestChunkRadiusPacket) return
+
+        player!!.viewDistance = max(2.0, min(packet.chunkRadius.toDouble(), player.viewDistance.toDouble())).toInt()
     }
 
     override fun handle(pk: SetLocalPlayerAsInitializedPacket) {

@@ -89,8 +89,6 @@ interface PacketHandler {
 
     fun handle(pk: RequestAbilityPacket) {}
 
-    fun handle(pk: RequestChunkRadiusPacket) {}
-
     fun handle(pk: RequestNetworkSettingsPacket) {}
 
     fun handle(pk: RequestPermissionsPacket) {}

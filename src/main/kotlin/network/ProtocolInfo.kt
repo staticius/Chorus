@@ -79,7 +79,7 @@ object ProtocolInfo {
     // DEPRECATED = 66
     const val CLIENTBOUND_MAP_ITEM_DATA_PACKET = 67
     // MIGRATED = 68
-    const val REQUEST_CHUNK_RADIUS_PACKET = 69
+    // MIGRATED = 69
     // MIGRATED = 70
     // UNUSED = 71
     // MIGRATED = 72
