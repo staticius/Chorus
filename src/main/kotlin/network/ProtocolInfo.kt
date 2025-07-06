@@ -163,7 +163,7 @@ object ProtocolInfo {
     // MIGRATED = 150
     const val UPDATE_PLAYER_GAME_TYPE_PACKET = 151
     // MIGRATED = 152
-    const val POS_TRACKING_SERVER_BROADCAST_PACKET = 153
+    // MIGRATED = 153
     // MIGRATED = 154
     // MIGRATED = 155
     // MIGRATED = 156

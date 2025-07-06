@@ -69,8 +69,6 @@ interface PacketHandler {
 
     fun handle(pk: PlayerStartItemCoolDownPacket) {}
 
-    fun handle(pk: PositionTrackingDBServerBroadcastPacket) {}
-
     fun handle(pk: RemoveObjectivePacket) {}
 
     fun handle(pk: RequestAbilityPacket) {}
