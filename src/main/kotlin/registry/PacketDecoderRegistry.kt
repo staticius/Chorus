@@ -67,7 +67,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.ON_SCREEN_TEXTURE_ANIMATION_PACKET, OnScreenTextureAnimationPacket) // 130
         this.register(ProtocolInfo.PLAYER_AUTH_INPUT_PACKET, PlayerAuthInputPacket) // 144
         this.register(ProtocolInfo.ITEM_STACK_REQUEST_PACKET, ItemStackRequestPacket) // 147
-        this.register(ProtocolInfo.PACKET_VIOLATION_WARNING_PACKET, PacketViolationWarningPacket) // 156
         this.register(ProtocolInfo.PLAYER_ARMOR_DAMAGE_PACKET, PlayerArmorDamagePacket) // 149
         this.register(ProtocolInfo.POS_TRACKING_CLIENT_REQUEST_PACKET, PositionTrackingDBClientRequestPacket) // 154
         this.register(ProtocolInfo.POS_TRACKING_SERVER_BROADCAST_PACKET, PositionTrackingDBServerBroadcastPacket) // 153
