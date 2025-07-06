@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.item.ItemMusicDisc
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
-import org.chorus_oss.chorus.network.protocol.StopSoundPacket
 import org.chorus_oss.protocol.types.Vector3f
 import java.util.*
 
@@ -58,9 +57,11 @@ class BlockEntityJukebox(chunk: IChunk, nbt: CompoundTag) : BlockEntitySpawnable
     fun stop() {
         if (recordItem is ItemMusicDisc) {
             val disc = recordItem as ItemMusicDisc
-            val packet = StopSoundPacket()
-            packet.name = disc.soundId
-            packet.stopAll = false
+            val packet = org.chorus_oss.protocol.packets.StopSoundPacket(
+                soundName = disc.soundId,
+                stopAll = false,
+                stopLegacyMusic = false,
+            )
             level.addChunkPacket(
                 position.floorX shr 4,
                 position.floorZ shr 4, packet

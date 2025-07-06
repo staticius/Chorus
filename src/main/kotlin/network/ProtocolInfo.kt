@@ -97,7 +97,7 @@ object ProtocolInfo {
     // MIGRATED = 84
     // MIGRATED = 85
     // MIGRATED = 86
-    const val STOP_SOUND_PACKET = 87
+    // MIGRATED = 87
     const val SET_TITLE_PACKET = 88
     // MIGRATED = 89
     const val STRUCTURE_BLOCK_UPDATE_PACKET = 90

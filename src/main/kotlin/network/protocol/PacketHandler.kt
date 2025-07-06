@@ -129,8 +129,6 @@ interface PacketHandler {
 
     fun handle(pk: StartGamePacket) {}
 
-    fun handle(pk: StopSoundPacket) {}
-
     fun handle(pk: StructureBlockUpdatePacket) {}
 
     fun handle(pk: SubClientLoginPacket) {}
