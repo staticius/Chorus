@@ -228,7 +228,7 @@ object ProtocolInfo {
     const val SERVERBOUND_LOADING_SCREEN_PACKET = 312
     // MIGRATED = 313
     // MIGRATED = 314
-    const val SERVERBOUND_DIAGNOSTICS_PACKET = 315
+    // MIGRATED = 315
     // MIGRATED = 316
     // MIGRATED = 317
     // MIGRATED = 318
