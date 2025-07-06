@@ -1,5 +1,7 @@
 package org.chorus_oss.chorus.entity.mob.villagers
 
+import kotlinx.io.Buffer
+import kotlinx.io.readByteString
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.Block
@@ -34,6 +36,7 @@ import org.chorus_oss.chorus.entity.mob.animal.EntityAnimal
 import org.chorus_oss.chorus.entity.mob.monster.humanoid_monster.EntityZombie
 import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.inventory.EntityEquipmentInventory
 import org.chorus_oss.chorus.inventory.InventoryHolder
 import org.chorus_oss.chorus.inventory.InventorySlice
@@ -49,11 +52,11 @@ import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.*
 import org.chorus_oss.chorus.network.protocol.EntityEventPacket
 import org.chorus_oss.chorus.network.protocol.TakeItemEntityPacket
-import org.chorus_oss.chorus.network.protocol.UpdateTradePacket
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.ChorusRandom
 import org.chorus_oss.chorus.utils.TradeRecipeBuildUtils
 import org.chorus_oss.chorus.utils.Utils
+import org.chorus_oss.nbt.TagSerialization
 import java.util.function.Consumer
 import kotlin.math.max
 import kotlin.math.min
@@ -808,12 +811,6 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
 
     fun updateTrades(player: Player) {
         if (player.topWindow.isEmpty || player.topWindow.get() !== tradeInventory) return
-        val pk1 = UpdateTradePacket()
-        pk1.containerId = player.getWindowId(tradeInventory!!).toByte()
-        pk1.tradeTier = getTradeTier()
-        pk1.traderUniqueEntityId = getUniqueID()
-        pk1.playerUniqueEntityId = player.getUniqueID()
-        pk1.displayName = displayName
         val tierExpRequirements = ListTag<CompoundTag>()
         var i = 0
         val len = tierExpRequirement.size
@@ -843,12 +840,30 @@ class EntityVillagerV2(chunk: IChunk?, nbt: CompoundTag?) : EntityMob(chunk, nbt
                 )
             }
         }
-        pk1.offers = CompoundTag()
-            .putList("Recipes", recipes)
-            .putList("TierExpRequirements", tierExpRequirements)
-        pk1.newTradingUi = true
-        pk1.usingEconomyTrade = true
-        player.dataPacket(pk1)
+
+        val packet = org.chorus_oss.protocol.packets.UpdateTradePacket(
+            windowID = player.getWindowId(tradeInventory!!).toByte(),
+            windowType = 15,
+            size = 0,
+            tradeTier = getTradeTier(),
+            villagerUniqueID = getUniqueID(),
+            entityUniqueID = player.getUniqueID(),
+            displayName = displayName,
+            newTradeUI = true,
+            demandBasedPrices = true,
+            serializedOffers = Buffer().apply {
+                org.chorus_oss.nbt.Tag.serialize(
+                    org.chorus_oss.nbt.tags.CompoundTag(
+                        CompoundTag()
+                            .putList("Recipes", recipes)
+                            .putList("TierExpRequirements", tierExpRequirements)
+                    ),
+                    this,
+                    type = TagSerialization.NetLE
+                )
+            }.readByteString()
+        )
+        player.sendPacket(packet)
     }
 
     override fun close() {
