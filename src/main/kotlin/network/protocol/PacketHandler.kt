@@ -51,8 +51,6 @@ interface PacketHandler {
 
     fun handle(pk: OnScreenTextureAnimationPacket) {}
 
-    fun handle(pk: OpenSignPacket) {}
-
     fun handle(pk: PacketViolationWarningPacket) {}
 
     fun handle(pk: PlayerActionPacket) {}

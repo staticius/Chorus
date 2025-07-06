@@ -5517,10 +5517,11 @@ open class Player(
             if (blockEntity is BlockEntitySign) {
                 if (blockEntity.editorEntityRuntimeId == -1L) {
                     blockEntity.editorEntityRuntimeId = this.getRuntimeID()
-                    val openSignPacket = OpenSignPacket()
-                    openSignPacket.position = position.asBlockVector3()
-                    openSignPacket.frontSide = frontSide
-                    this.dataPacket(openSignPacket)
+                    val openSignPacket = org.chorus_oss.protocol.packets.OpenSignPacket(
+                        position = BlockPos(position),
+                        frontSide = frontSide,
+                    )
+                    this.sendPacket(openSignPacket)
                     isOpenSignFront = frontSide
                 }
             } else {
