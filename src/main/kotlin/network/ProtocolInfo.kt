@@ -221,7 +221,7 @@ object ProtocolInfo {
     // MIGRATED = 305
     const val TOGGLE_CRAFTER_SLOT_REQUEST = 306
     const val SET_PLAYER_INVENTORY_OPTIONS_PACKET = 307
-    const val SET_HUD = 308
+    // MIGRATED = 308
     // MIGRATED = 309
     // MIGRATED = 310
     // UNUSED = 311
