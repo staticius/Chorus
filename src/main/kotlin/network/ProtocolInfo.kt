@@ -170,7 +170,7 @@ object ProtocolInfo {
     // MIGRATED = 157
     // MIGRATED = 158
     // MIGRATED = 159
-    const val PLAYER_FOG_PACKET = 160
+    // MIGRATED = 160
     // MIGRATED = 161
     // MIGRATED = 162
     // UNUSED = 163

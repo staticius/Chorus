@@ -474,7 +474,7 @@ open class Player(
      *
      * Player Fog Settings
      */
-    var fogStack: MutableList<PlayerFogPacket.Fog> = ArrayList()
+    var fogStack: MutableMap<String, String> = mutableMapOf()
     /**
      * @return [.lastBeAttackEntity]
      */
@@ -1548,22 +1548,16 @@ open class Player(
         if (!namedTag!!.contains("userProvidedFogIds")) {
             namedTag!!.putList("userProvidedFogIds", ListTag<StringTag>())
         }
-        val fogIdentifiers = namedTag!!.getList(
+        val fogIdentifiers = namedTag.getList(
             "fogIdentifiers",
             StringTag::class.java
         )
-        val userProvidedFogIds = namedTag!!.getList(
+        val userProvidedFogIds = namedTag.getList(
             "userProvidedFogIds",
             StringTag::class.java
         )
         for (i in 0..<fogIdentifiers.size()) {
-            fogStack.add(
-                i, PlayerFogPacket.Fog(
-                    tryParse(
-                        fogIdentifiers[i].data
-                    )!!, userProvidedFogIds[i].data
-                )
-            )
+            fogStack.put(userProvidedFogIds[i].data, fogIdentifiers[i].data)
         }
 
         if (!Server.instance.settings.playerSettings.checkMovement) {
@@ -2754,9 +2748,10 @@ open class Player(
      * Send the fog settings to the client
      */
     fun sendFogStack() {
-        val pk = PlayerFogPacket()
-        pk.fogStack = this.fogStack
-        this.dataPacket(pk)
+        val pk = org.chorus_oss.protocol.packets.PlayerFogPacket(
+            stack = this.fogStack.values.toList()
+        )
+        this.sendPacket(pk)
     }
 
     /**
@@ -3754,8 +3749,8 @@ open class Player(
             val fogIdentifiers = ListTag<StringTag>()
             val userProvidedFogIds = ListTag<StringTag>()
             fogStack.forEach { fog ->
-                fogIdentifiers.add(StringTag(fog.identifier.toString()))
-                userProvidedFogIds.add(StringTag(fog.userProvidedId))
+                fogIdentifiers.add(StringTag(fog.value))
+                userProvidedFogIds.add(StringTag(fog.key))
             }
             namedTag!!.putList("fogIdentifiers", fogIdentifiers)
             namedTag!!.putList("userProvidedFogIds", userProvidedFogIds)

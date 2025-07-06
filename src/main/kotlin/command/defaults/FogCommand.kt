@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.tree.node.PlayersNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import org.chorus_oss.chorus.network.protocol.PlayerFogPacket
 import org.chorus_oss.chorus.utils.Identifier
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.function.Consumer
@@ -46,15 +45,13 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
         when (result.key) {
             "push" -> {
                 val fogIdStr = list.getResult<String>(2)!!
-                val fogId = Identifier.tryParse(fogIdStr)
-                if (fogId == null) {
+                if (!Identifier.isValid(fogIdStr)) {
                     log.addError("commands.fog.invalidFogId", fogIdStr).output()
                     return 0
                 }
                 val userProvidedId = list.getResult<String>(3)!!
-                val fog = PlayerFogPacket.Fog(fogId, userProvidedId)
                 targets.forEach(Consumer<Player> { player: Player ->
-                    player.fogStack.add(fog)
+                    player.fogStack.put(userProvidedId, fogIdStr)
                     player.sendFogStack() //刷新到客户端
                 })
                 log.addSuccess("commands.fog.success.push", userProvidedId, fogIdStr).output()
@@ -69,15 +66,14 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
                     "pop" -> {
                         targets.forEach(Consumer forEach@{ player: Player ->
                             val fogStack = player.fogStack
-                            for (i in fogStack.indices.reversed()) {
-                                val fog = fogStack[i]
-                                if (fog.userProvidedId == userProvidedId) {
-                                    fogStack.removeAt(i)
+                            for (fog in fogStack.entries.reversed()) {
+                                if (fog.key == userProvidedId) {
+                                    fogStack.remove(fog.key)
                                     player.sendFogStack() //刷新到客户端
                                     log.addSuccess(
                                         "commands.fog.success.pop",
                                         userProvidedId,
-                                        fog.identifier.toString()
+                                        fog.value
                                     ).output()
                                     return@forEach
                                 }
@@ -89,27 +85,26 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
                     }
 
                     "remove" -> {
-                        targets.forEach(Consumer<Player> { player: Player ->
+                        targets.forEach { player: Player ->
                             val fogStack = player.fogStack
-                            val shouldRemoved: MutableList<PlayerFogPacket.Fog> = ArrayList()
-                            for (i in fogStack.indices) {
-                                val fog = fogStack[i]
-                                if (fog.userProvidedId == userProvidedId) {
-                                    shouldRemoved.add(fog)
+                            val shouldRemoved: MutableList<String> = ArrayList()
+                            for (fog in fogStack) {
+                                if (fog.key == userProvidedId) {
+                                    shouldRemoved.add(fog.key)
                                     log.addSuccess(
                                         "commands.fog.success.remove",
                                         userProvidedId,
-                                        fog.identifier.toString()
+                                        fog.value
                                     ).output()
                                 }
                             }
-                            fogStack.removeAll(shouldRemoved)
+                            shouldRemoved.forEach { fogStack.remove(it) }
                             player.sendFogStack() //刷新到客户端
-                            if (shouldRemoved.size == 0) {
+                            if (shouldRemoved.isEmpty()) {
                                 log.addError("commands.fog.invalidUserId", userProvidedId).output()
                                 success.set(0)
                             }
-                        })
+                        }
                         return success.get()
                     }
 
