@@ -87,8 +87,6 @@ interface PacketHandler {
 
     fun handle(pk: RespawnPacket) {}
 
-    fun handle(pk: ScriptMessagePacket) {}
-
     fun handle(pk: ServerSettingsRequestPacket) {}
 
     fun handle(pk: ServerSettingsResponsePacket) {}

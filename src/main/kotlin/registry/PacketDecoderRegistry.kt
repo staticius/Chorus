@@ -77,7 +77,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.NPC_DIALOGUE_PACKET, NPCDialoguePacket) // 169
         this.register(ProtocolInfo.NPC_REQUEST_PACKET, NPCRequestPacket) // 98
         this.register(ProtocolInfo.SIMULATION_TYPE_PACKET, SimulationTypePacket) // 168
-        this.register(ProtocolInfo.SCRIPT_MESSAGE_PACKET, ScriptMessagePacket) // 177
         this.register(ProtocolInfo.PLAYER_START_ITEM_COOL_DOWN_PACKET, PlayerStartItemCoolDownPacket) // 176
         this.register(ProtocolInfo.REQUEST_PERMISSIONS_PACKET, RequestPermissionsPacket) // 185
         this.register(ProtocolInfo.REQUEST_ABILITY_PACKET, RequestAbilityPacket) // 184
