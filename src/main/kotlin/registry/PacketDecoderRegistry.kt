@@ -88,7 +88,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.SET_DEFAULT_GAME_TYPE_PACKET, SetDefaultGameTypePacket) // 105
         this.register(ProtocolInfo.STRUCTURE_BLOCK_UPDATE_PACKET, StructureBlockUpdatePacket) // 90
         this.register(ProtocolInfo.UNLOCKED_RECIPES_PACKET, UnlockedRecipesPacket) // 199
-        this.register(ProtocolInfo.TRIM_DATA, TrimDataPacket) // 302
         this.register(ProtocolInfo.SETTINGS_COMMAND_PACKET, SettingsCommandPacket) // 140
     }
 

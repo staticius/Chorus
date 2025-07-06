@@ -11,12 +11,13 @@ import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.protocol.SetLocalPlayerAsInitializedPacket
 import org.chorus_oss.chorus.network.protocol.StartGamePacket
-import org.chorus_oss.chorus.network.protocol.TrimDataPacket
 import org.chorus_oss.chorus.network.protocol.types.TrimData
 import org.chorus_oss.chorus.registry.ItemRegistry
 import org.chorus_oss.chorus.registry.ItemRuntimeIdRegistry
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.Loggable
+import org.chorus_oss.protocol.types.TrimMaterial
+import org.chorus_oss.protocol.types.TrimPattern
 import org.chorus_oss.protocol.types.item.ItemEntry
 import kotlin.math.max
 import kotlin.math.min
@@ -106,9 +107,10 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
         this.session.syncCreativeContent()
 
         log.debug("Sending trim data")
-        val trimDataPacket = TrimDataPacket()
-        trimDataPacket.materials.addAll(TrimData.trimMaterials)
-        trimDataPacket.patterns.addAll(TrimData.trimPatterns)
+        val trimDataPacket = org.chorus_oss.protocol.packets.TrimDataPacket(
+            patterns = TrimData.trimPatterns.map(TrimPattern::invoke),
+            materials = TrimData.trimMaterials.map(TrimMaterial::invoke),
+        )
         this.session.sendPacket(trimDataPacket)
 
         player.setNameTagVisible(true)

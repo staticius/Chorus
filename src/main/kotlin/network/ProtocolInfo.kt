@@ -215,7 +215,7 @@ object ProtocolInfo {
     // UNUSED = 299
     const val CAMERA_INSTRUCTION_PACKET = 300
     // UNUSED = 301
-    const val TRIM_DATA = 302
+    // MIGRATED = 302
     // MIGRATED = 303
     // MIGRATED = 304
     // MIGRATED = 305
