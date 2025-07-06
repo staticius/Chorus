@@ -53,7 +53,7 @@ object ProtocolInfo {
     // MIGRATED = 40
     // MIGRATED = 41
     // MIGRATED = 42
-    const val SET_SPAWN_POSITION_PACKET = 43
+    // MIGRATED = 43
     const val ANIMATE_PACKET = 44
     const val RESPAWN_PACKET = 45
     // MIGRATED = 46

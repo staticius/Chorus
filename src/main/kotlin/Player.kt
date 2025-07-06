@@ -100,6 +100,7 @@ import org.chorus_oss.protocol.packets.CameraShakePacket
 import org.chorus_oss.protocol.packets.ClientboundCloseFormPacket
 import org.chorus_oss.protocol.packets.PlayStatusPacket
 import org.chorus_oss.protocol.packets.SetActorMotionPacket
+import org.chorus_oss.protocol.types.BlockPos
 import org.chorus_oss.protocol.types.CommandOriginData
 import org.chorus_oss.protocol.types.CommandOutputMessage
 import org.chorus_oss.protocol.types.CommandOutputType
@@ -907,13 +908,13 @@ open class Player(
             this.setSpawn(this.level!!.safeSpawn, SpawnPointType.WORLD)
         } else {
             //update compass
-            val pk = SetSpawnPositionPacket()
-            pk.spawnType = SetSpawnPositionPacket.TYPE_WORLD_SPAWN
-            pk.x = spawn.first!!.position.floorX
-            pk.y = spawn.first!!.position.floorY
-            pk.z = spawn.first!!.position.floorZ
-            pk.dimension = spawn.first!!.level.dimension
-            this.dataPacket(pk)
+            val pk = org.chorus_oss.protocol.packets.SetSpawnPositionPacket(
+                spawnType = org.chorus_oss.protocol.packets.SetSpawnPositionPacket.Companion.SpawnType.World,
+                position = BlockPos(spawn.first!!.position),
+                dimension = spawn.first!!.level.dimension,
+                spawnPosition = BlockPos(spawn.first!!.position)
+            )
+            this.sendPacket(pk)
         }
 
         this.sendFogStack()
@@ -2330,13 +2331,13 @@ open class Player(
             level!!
         )
         this.spawnPointType = spawnPointType
-        val pk = SetSpawnPositionPacket()
-        pk.spawnType = SetSpawnPositionPacket.TYPE_PLAYER_SPAWN
-        pk.x = spawnPoint!!.position.x.toInt()
-        pk.y = spawnPoint!!.position.y.toInt()
-        pk.z = spawnPoint!!.position.z.toInt()
-        pk.dimension = spawnPoint!!.level.dimension
-        this.dataPacket(pk)
+        val pk = org.chorus_oss.protocol.packets.SetSpawnPositionPacket(
+            spawnType = org.chorus_oss.protocol.packets.SetSpawnPositionPacket.Companion.SpawnType.Player,
+            position = BlockPos(spawnPoint!!.position),
+            dimension = spawnPoint!!.level.dimension,
+            spawnPosition = BlockPos(spawnPoint!!.position),
+        )
+        this.sendPacket(pk)
     }
 
     fun sendChunk(x: Int, z: Int, packet: DataPacket) {
@@ -4891,14 +4892,13 @@ open class Player(
     public override fun switchLevel(targetLevel: Level): Boolean {
         if (super.switchLevel(targetLevel)) {
             clientMovements.clear()
-            val spawnPosition = SetSpawnPositionPacket()
-            spawnPosition.spawnType = SetSpawnPositionPacket.TYPE_WORLD_SPAWN
-            val spawn = targetLevel.spawnLocation
-            spawnPosition.x = spawn.position.floorX
-            spawnPosition.y = spawn.position.floorY
-            spawnPosition.z = spawn.position.floorZ
-            spawnPosition.dimension = spawn.level.dimension
-            this.dataPacket(spawnPosition)
+            val spawnPosition = org.chorus_oss.protocol.packets.SetSpawnPositionPacket(
+                spawnType = org.chorus_oss.protocol.packets.SetSpawnPositionPacket.Companion.SpawnType.World,
+                position = BlockPos(targetLevel.spawnLocation.position),
+                dimension = targetLevel.dimension,
+                spawnPosition = BlockPos(targetLevel.spawnLocation.position),
+            )
+            this.sendPacket(spawnPosition)
 
             // Remove old chunks
             this.forceSendEmptyChunks()

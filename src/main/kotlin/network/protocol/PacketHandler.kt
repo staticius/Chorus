@@ -125,8 +125,6 @@ interface PacketHandler {
 
     fun handle(pk: SetScoreboardIdentityPacket) {}
 
-    fun handle(pk: SetSpawnPositionPacket) {}
-
     fun handle(pk: SetTitlePacket) {}
 
     fun handle(pk: ShowCreditsPacket) {}
