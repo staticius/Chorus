@@ -167,8 +167,6 @@ interface PacketHandler {
 
     fun handle(pk: UpdateClientInputLocksPacket) {}
 
-    fun handle(pk: UpdateEquipmentPacket) {}
-
     fun handle(pk: UpdatePlayerGameTypePacket) {}
 
     fun handle(pk: UpdateSoftEnumPacket) {}

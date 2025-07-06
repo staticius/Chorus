@@ -91,7 +91,7 @@ object ProtocolInfo {
     // MIGRATED = 78
     // MIGRATED = 79
     // MIGRATED = 80
-    const val UPDATE_EQUIPMENT_PACKET = 81
+    // MIGRATED = 81
     // MIGRATED = 82
     // MIGRATED = 83
     // MIGRATED = 84
