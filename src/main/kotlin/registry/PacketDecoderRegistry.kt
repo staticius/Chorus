@@ -64,7 +64,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET, SetLocalPlayerAsInitializedPacket) // 113
         this.register(ProtocolInfo.NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET, NetworkChunkPublisherUpdatePacket) // 121
         this.register(ProtocolInfo.LEVEL_SOUND_EVENT_PACKET, LevelSoundEventPacket) // 123
-        this.register(ProtocolInfo.ON_SCREEN_TEXTURE_ANIMATION_PACKET, OnScreenTextureAnimationPacket) // 130
         this.register(ProtocolInfo.PLAYER_AUTH_INPUT_PACKET, PlayerAuthInputPacket) // 144
         this.register(ProtocolInfo.ITEM_STACK_REQUEST_PACKET, ItemStackRequestPacket) // 147
         this.register(ProtocolInfo.SYNC_ENTITY_PROPERTY_PACKET, SyncEntityPropertyPacket) // 165

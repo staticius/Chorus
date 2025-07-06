@@ -49,8 +49,6 @@ interface PacketHandler {
 
     fun handle(pk: NetworkSettingsPacket) {}
 
-    fun handle(pk: OnScreenTextureAnimationPacket) {}
-
     fun handle(pk: PlayerActionPacket) {}
 
     fun handle(pk: PlayerAuthInputPacket) {}

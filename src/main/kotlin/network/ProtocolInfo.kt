@@ -140,7 +140,7 @@ object ProtocolInfo {
     // UNUSED = 127
     // UNUSED = 128
     // MIGRATED = 129
-    const val ON_SCREEN_TEXTURE_ANIMATION_PACKET = 130
+    // MIGRATED = 130
     // MIGRATED = 131
     // MIGRATED = 132
     // MIGRATED = 133
