@@ -70,7 +70,7 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
 
         log.debug("Sending actor properties")
         for (pk in getPacketCache()) {
-            player.dataPacket(pk)
+            player.sendPacket(pk)
         }
 
         log.debug("Sending biome definitions")

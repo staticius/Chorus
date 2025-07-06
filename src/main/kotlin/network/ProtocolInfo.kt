@@ -175,7 +175,7 @@ object ProtocolInfo {
     // MIGRATED = 162
     // UNUSED = 163
     // MIGRATED = 164
-    const val SYNC_ENTITY_PROPERTY_PACKET = 165
+    // MIGRATED = 165
     // MIGRATED = 166
     // MIGRATED = 167
     // MIGRATED = 168
