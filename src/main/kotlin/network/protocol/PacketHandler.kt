@@ -109,8 +109,6 @@ interface PacketHandler {
 
     fun handle(pk: ShowProfilePacket) {}
 
-    fun handle(pk: SimulationTypePacket) {}
-
     fun handle(pk: SpawnParticleEffectPacket) {}
 
     fun handle(pk: StartGamePacket) {}

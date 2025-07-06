@@ -178,7 +178,7 @@ object ProtocolInfo {
     const val SYNC_ENTITY_PROPERTY_PACKET = 165
     // MIGRATED = 166
     const val REMOVE_VOLUME_ENTITY_PACKET = 167
-    const val SIMULATION_TYPE_PACKET = 168
+    // MIGRATED = 168
     const val NPC_DIALOGUE_PACKET = 169
     // MIGRATED = 170
     // MIGRATED = 171
