@@ -209,7 +209,7 @@ object ProtocolInfo {
     const val UPDATE_CLIENT_INPUT_LOCKS = 196
     // UNUSED = 197
     const val CAMERA_PRESETS_PACKET = 198
-    const val UNLOCKED_RECIPES_PACKET = 199
+    // MIGRATED = 199
     // UNUSED = 200
     // ...
     // UNUSED = 299
