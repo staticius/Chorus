@@ -85,7 +85,7 @@ object ProtocolInfo {
     // MIGRATED = 72
     // MIGRATED = 73
     // MIGRATED = 74
-    const val SHOW_CREDITS_PACKET = 75
+    // MIGRATED = 75
     const val AVAILABLE_COMMANDS_PACKET = 76
     const val COMMAND_REQUEST_PACKET = 77
     // MIGRATED = 78

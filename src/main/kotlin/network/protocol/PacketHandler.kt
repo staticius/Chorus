@@ -123,8 +123,6 @@ interface PacketHandler {
 
     fun handle(pk: SetTitlePacket) {}
 
-    fun handle(pk: ShowCreditsPacket) {}
-
     fun handle(pk: ShowProfilePacket) {}
 
     fun handle(pk: SimulationTypePacket) {}

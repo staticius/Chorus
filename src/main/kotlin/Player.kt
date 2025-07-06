@@ -422,10 +422,11 @@ open class Player(
         set(value) {
             field = value
             if (value) {
-                val pk = ShowCreditsPacket()
-                pk.eid = this.getRuntimeID()
-                pk.status = ShowCreditsPacket.STATUS_START_CREDITS
-                this.dataPacket(pk)
+                val pk = org.chorus_oss.protocol.packets.ShowCreditsPacket(
+                    playerRuntimeID = this.getRuntimeID().toULong(),
+                    statusType = org.chorus_oss.protocol.packets.ShowCreditsPacket.Companion.StatusType.Start
+                )
+                this.sendPacket(pk)
             }
         }
     var lastBlockAction: PlayerBlockActionData? = null
