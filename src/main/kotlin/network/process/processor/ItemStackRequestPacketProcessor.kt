@@ -4,19 +4,17 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.inventory.ItemStackRequestActionEvent
 import org.chorus_oss.chorus.event.player.PlayerTransferItemEvent
+import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.inventory.request.*
 import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.ItemStackRequestPacket
-import org.chorus_oss.chorus.network.protocol.ItemStackResponsePacket
 import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.*
-import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponse
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
-import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseStatus
 import org.chorus_oss.chorus.utils.Loggable
 import java.util.*
 
@@ -24,11 +22,10 @@ import java.util.*
 class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPacket>() {
     override fun handle(player: Player, pk: ItemStackRequestPacket) {
         val player = player.player
-        val responses: MutableList<ItemStackResponse> = ArrayList()
+        val responses: MutableList<org.chorus_oss.protocol.types.itemstack.response.ItemStackResponse> = mutableListOf()
         for (request in pk.requests) {
             val actions = request.actions
             val context = ItemStackRequestContext(request)
-            val itemStackResponse = ItemStackResponse(ItemStackResponseStatus.OK, request.requestId, ArrayList())
             val responseContainerMap: MutableMap<ContainerSlotType, ItemStackResponseContainer> = LinkedHashMap()
             for (index in actions.indices) {
                 val action = actions[index]
@@ -52,8 +49,11 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
                 }
                 if (response != null) {
                     if (!response.ok) {
-                        itemStackResponse.result = ItemStackResponseStatus.ERROR
-                        itemStackResponse.containers.clear()
+                        val itemStackResponse = org.chorus_oss.protocol.types.itemstack.response.ItemStackResponse(
+                            org.chorus_oss.protocol.types.itemstack.response.ItemStackResponseStatus.Error,
+                            request.requestId,
+                            listOf()
+                        )
                         responses.add(itemStackResponse)
                         break
                     }
@@ -72,24 +72,18 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<ItemStackRequestPack
                     }
                 }
             }
-            itemStackResponse.containers.addAll(responseContainerMap.values)
+            val itemStackResponse = org.chorus_oss.protocol.types.itemstack.response.ItemStackResponse(
+                result = org.chorus_oss.protocol.types.itemstack.response.ItemStackResponseStatus.OK,
+                requestID = request.requestId,
+                containers = responseContainerMap.values.map(org.chorus_oss.protocol.types.itemstack.response.ItemStackResponseContainer::invoke)
+            )
             responses.add(itemStackResponse)
         }
 
-        for (r in responses) {
-            for (c in r.containers) {
-                val newItems = LinkedHashMap<Int, ItemStackResponseSlot>()
-                for (i in c.items) {
-                    newItems[Objects.hash(i.slot, i.hotbarSlot)] = i
-                }
-                c.items.clear()
-                c.items.addAll(newItems.values)
-            }
-        }
-
-        val itemStackResponsePacket = ItemStackResponsePacket()
-        itemStackResponsePacket.entries.addAll(responses)
-        player.dataPacket(itemStackResponsePacket)
+        val itemStackResponsePacket = org.chorus_oss.protocol.packets.ItemStackResponsePacket(
+            responses = responses
+        )
+        player.sendPacket(itemStackResponsePacket)
     }
 
     override val packetId: Int
