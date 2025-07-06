@@ -4982,7 +4982,7 @@ open class Player(
             port = port.toUShort(),
             reloadWorld = false,
         )
-        this.sendPosition(packet)
+        this.sendPacket(packet)
     }
 
     @ApiStatus.Internal
