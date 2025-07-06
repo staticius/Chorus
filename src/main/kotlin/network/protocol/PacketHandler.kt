@@ -77,8 +77,6 @@ interface PacketHandler {
 
     fun handle(pk: RemoveObjectivePacket) {}
 
-    fun handle(pk: RemoveVolumeEntityPacket) {}
-
     fun handle(pk: RequestAbilityPacket) {}
 
     fun handle(pk: RequestNetworkSettingsPacket) {}
