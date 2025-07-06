@@ -5432,10 +5432,11 @@ open class Player(
      * @param content the content
      */
     fun sendToast(title: String, content: String) {
-        val pk = ToastRequestPacket()
-        pk.title = title
-        pk.content = content
-        this.dataPacket(pk)
+        val pk = org.chorus_oss.protocol.packets.ToastRequestPacket(
+            title = title,
+            message = content,
+        )
+        this.sendPacket(pk)
     }
 
     override fun removeLine(line: IScoreboardLine) {

@@ -72,7 +72,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.POS_TRACKING_CLIENT_REQUEST_PACKET, PositionTrackingDBClientRequestPacket) // 154
         this.register(ProtocolInfo.POS_TRACKING_SERVER_BROADCAST_PACKET, PositionTrackingDBServerBroadcastPacket) // 153
         this.register(ProtocolInfo.UPDATE_PLAYER_GAME_TYPE_PACKET, UpdatePlayerGameTypePacket) // 151
-        this.register(ProtocolInfo.TOAST_REQUEST_PACKET, ToastRequestPacket) // 186
         this.register(ProtocolInfo.REMOVE_VOLUME_ENTITY_PACKET, RemoveVolumeEntityPacket) // 167
         this.register(ProtocolInfo.SYNC_ENTITY_PROPERTY_PACKET, SyncEntityPropertyPacket) // 165
         this.register(ProtocolInfo.NPC_DIALOGUE_PACKET, NPCDialoguePacket) // 169
