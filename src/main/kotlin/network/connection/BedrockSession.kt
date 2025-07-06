@@ -544,8 +544,9 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
     }
 
     fun setEnableClientCommand(enable: Boolean) {
-        val pk = SetCommandsEnabledPacket()
-        pk.enabled = enable
+        val pk = org.chorus_oss.protocol.packets.SetCommandsEnabledPacket(
+            enabled = enable
+        )
         this.sendPacket(pk)
         if (enable) {
             this.syncAvailableCommands()
