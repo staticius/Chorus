@@ -75,8 +75,6 @@ interface PacketHandler {
 
     fun handle(pk: SetScorePacket) {}
 
-    fun handle(pk: SetScoreboardIdentityPacket) {}
-
     fun handle(pk: SetTitlePacket) {}
 
     fun handle(pk: ShowProfilePacket) {}
