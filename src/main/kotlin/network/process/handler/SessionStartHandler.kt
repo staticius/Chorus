@@ -1,24 +1,30 @@
 package org.chorus_oss.chorus.network.process.handler
 
 import org.chorus_oss.chorus.Server
+import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.NetworkSettingsPacket
-import org.chorus_oss.chorus.network.protocol.RequestNetworkSettingsPacket
 import org.chorus_oss.chorus.network.protocol.types.PacketCompressionAlgorithm
+import org.chorus_oss.protocol.ProtocolInfo
+import org.chorus_oss.protocol.packets.PlayStatusPacket
+import org.chorus_oss.protocol.packets.RequestNetworkSettingsPacket
 
 class SessionStartHandler(session: BedrockSession) : BedrockSessionPacketHandler(session) {
-    override fun handle(pk: RequestNetworkSettingsPacket) {
-        val protocol = pk.protocolVersion
-        if (protocol != org.chorus_oss.protocol.ProtocolInfo.VERSION) {
+    override fun handle(pk: MigrationPacket<*>) {
+        val packet = pk.packet
+        if (packet !is RequestNetworkSettingsPacket) return
+
+        val protocol = packet.clientProtocol
+        if (protocol != ProtocolInfo.VERSION) {
             session.sendPlayStatus(
-                if (protocol < org.chorus_oss.protocol.ProtocolInfo.VERSION)
-                    org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status.LoginFailedClient
-                else org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status.LoginFailedServer,
+                if (protocol < ProtocolInfo.VERSION)
+                    PlayStatusPacket.Companion.Status.LoginFailedClient
+                else PlayStatusPacket.Companion.Status.LoginFailedServer,
                 true
             )
             val message =
-                if (protocol < org.chorus_oss.protocol.ProtocolInfo.VERSION) "disconnectionScreen.outdatedClient" else "disconnectionScreen.outdatedServer"
+                if (protocol < ProtocolInfo.VERSION) "disconnectionScreen.outdatedClient" else "disconnectionScreen.outdatedServer"
             session.close(message)
             return
         }

@@ -65,8 +65,6 @@ interface PacketHandler {
 
     fun handle(pk: RequestAbilityPacket) {}
 
-    fun handle(pk: RequestNetworkSettingsPacket) {}
-
     fun handle(pk: RequestPermissionsPacket) {}
 
     fun handle(pk: RespawnPacket) {}

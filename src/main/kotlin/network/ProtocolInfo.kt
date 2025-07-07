@@ -203,7 +203,7 @@ object ProtocolInfo {
     // MIGRATED = 190
     // MIGRATED = 191
     // MIGRATED = 192
-    const val REQUEST_NETWORK_SETTINGS_PACKET = 193
+    // MIGRATED = 193
     // MIGRATED = 194
     // MIGRATED = 195
     // MIGRATED = 196
