@@ -3,11 +3,11 @@ package org.chorus_oss.chorus
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.IntTag
 import org.chorus_oss.chorus.network.protocol.RequestPermissionsPacket
-import org.chorus_oss.chorus.network.protocol.UpdateAbilitiesPacket
-import org.chorus_oss.chorus.network.protocol.types.AbilityLayer
 import org.chorus_oss.chorus.network.protocol.types.CommandPermission
 import org.chorus_oss.chorus.network.protocol.types.PlayerAbility
 import org.chorus_oss.chorus.network.protocol.types.PlayerPermission
+import org.chorus_oss.protocol.types.AbilitiesData
+import org.chorus_oss.protocol.types.PlayerAbilitySet
 import java.util.*
 
 class AdventureSettings : Cloneable {
@@ -133,34 +133,39 @@ class AdventureSettings : Cloneable {
     }
 
     fun sendAbilities(players: Collection<Player>) {
-        val packet = UpdateAbilitiesPacket()
-        packet.entityId = player.getRuntimeID()
-        packet.commandPermission = commandPermission
-        packet.playerPermission = playerPermission
-
-        val layer = AbilityLayer()
-        layer.verticalFlySpeed = 1f
-        layer.layerType = AbilityLayer.Type.BASE
-        layer.abilitiesSet.addAll(PlayerAbility.VALUES)
-
-        for (type in Type.entries) {
-            if (type.isAbility() && get(type)) {
-                layer.abilityValues.add(type.ability!!)
-            }
-        }
-
-        if (player.isCreative) {
-            layer.abilityValues.add(PlayerAbility.INSTABUILD)
-        }
-
-        layer.abilityValues.add(PlayerAbility.WALK_SPEED)
-        layer.abilityValues.add(PlayerAbility.FLY_SPEED)
-
-        layer.walkSpeed = Player.DEFAULT_SPEED
-        layer.flySpeed = Player.DEFAULT_FLY_SPEED
-
-        packet.abilityLayers.add(layer)
-
+        val packet = org.chorus_oss.protocol.packets.UpdateAbilitiesPacket(
+            abilitiesData = AbilitiesData(
+                targetPlayerRawID = player.getUniqueID(),
+                playerPermissions = org.chorus_oss.protocol.types.PlayerPermission.entries[playerPermission!!.ordinal],
+                commandPermissions = org.chorus_oss.protocol.types.CommandPermission.entries[commandPermission!!.ordinal],
+                layers = listOf(
+                    org.chorus_oss.protocol.types.AbilityLayer(
+                        layerType = org.chorus_oss.protocol.types.AbilityLayer.Companion.Type.Base,
+                        abilitiesSet = PlayerAbilitySet(
+                            flags = org.chorus_oss.protocol.types.PlayerAbility.entries.toMutableSet()
+                        ),
+                        abilityValues = PlayerAbilitySet(
+                            flags = listOf(
+                                Type.entries
+                                    .filter { it.isAbility() && get(it) }
+                                    .map { org.chorus_oss.protocol.types.PlayerAbility.entries[it.ability!!.ordinal] },
+                                when (player.isCreative) {
+                                    true -> listOf(org.chorus_oss.protocol.types.PlayerAbility.Instabuild)
+                                    false -> emptyList()
+                                },
+                                listOf(
+                                    org.chorus_oss.protocol.types.PlayerAbility.WalkSpeed,
+                                    org.chorus_oss.protocol.types.PlayerAbility.FlySpeed,
+                                )
+                            ).flatten().toMutableSet()
+                        ),
+                        flySpeed = Player.DEFAULT_FLY_SPEED,
+                        verticalFlySpeed = 1f,
+                        walkSpeed = Player.DEFAULT_SPEED,
+                    )
+                )
+            )
+        )
         Server.broadcastPacket(players, packet)
     }
 

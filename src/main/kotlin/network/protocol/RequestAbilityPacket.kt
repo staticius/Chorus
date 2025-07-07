@@ -32,7 +32,7 @@ class RequestAbilityPacket : DataPacket() {
             return packet
         }
 
-        val ABILITIES: Array<PlayerAbility> = UpdateAbilitiesPacket.Companion.VALID_FLAGS
+        val ABILITIES: Array<PlayerAbility> = PlayerAbility.entries.toTypedArray()
         val ABILITY_TYPES: Array<AbilityType> = AbilityType.entries.toTypedArray()
     }
 }

@@ -14,7 +14,6 @@ import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.*
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
-import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import org.chorus_oss.chorus.utils.Loggable
 import java.util.*
 

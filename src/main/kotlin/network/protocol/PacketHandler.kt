@@ -103,8 +103,6 @@ interface PacketHandler {
 
     fun handle(pk: TextPacket) {}
 
-    fun handle(pk: UpdateAbilitiesPacket) {}
-
     fun handle(pk: UpdateAttributesPacket) {}
 
     fun handle(pk: UpdateBlockPacket) {}

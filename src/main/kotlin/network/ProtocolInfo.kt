@@ -197,7 +197,7 @@ object ProtocolInfo {
     const val REQUEST_ABILITY_PACKET = 184
     const val REQUEST_PERMISSIONS_PACKET = 185
     // MIGRATED = 186
-    const val UPDATE_ABILITIES_PACKET = 187
+    // MIGRATED = 187
     // MIGRATED = 188
     // MIGRATED = 189
     // MIGRATED = 190
