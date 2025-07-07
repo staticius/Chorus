@@ -106,6 +106,7 @@ import org.chorus_oss.protocol.types.CommandOutputMessage
 import org.chorus_oss.protocol.types.CommandOutputType
 import org.chorus_oss.protocol.types.DisconnectFailReason
 import org.chorus_oss.protocol.types.Vector3f
+import org.chorus_oss.protocol.types.camera.preset.CameraPreset
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
 import java.net.InetSocketAddress
@@ -2758,9 +2759,9 @@ open class Player(
      * Send camera presets to cilent
      */
     fun sendCameraPresets() {
-        dataPacket(
-            CameraPresetsPacket(
-                presets = presets.values.toMutableList()
+        sendPacket(
+            org.chorus_oss.protocol.packets.CameraPresetsPacket(
+                presets = presets.values.map(CameraPreset::invoke)
             )
         )
     }

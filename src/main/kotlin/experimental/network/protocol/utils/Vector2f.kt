@@ -9,3 +9,10 @@ operator fun Vector2f.Companion.invoke(value: Rotator2): Vector2f {
         y = value.yaw.toFloat(),
     )
 }
+
+operator fun Vector2f.Companion.invoke(from: org.chorus_oss.chorus.math.Vector2f): Vector2f {
+    return Vector2f(
+        x = from.x,
+        y = from.y,
+    )
+}
