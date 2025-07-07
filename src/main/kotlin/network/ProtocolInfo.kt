@@ -179,7 +179,7 @@ object ProtocolInfo {
     // MIGRATED = 166
     // MIGRATED = 167
     // MIGRATED = 168
-    const val NPC_DIALOGUE_PACKET = 169
+    // MIGRATED = 169
     // MIGRATED = 170
     // MIGRATED = 171
     const val UPDATE_SUB_CHUNK_BLOCKS_PACKET = 172

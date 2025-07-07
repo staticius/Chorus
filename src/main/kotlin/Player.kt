@@ -4588,15 +4588,19 @@ open class Player(
         dialog.bindEntity!!.setDataProperty(EntityDataTypes.ACTIONS, actionJson!!)
         dialog.bindEntity!!.setDataProperty(EntityDataTypes.INTERACT_TEXT, dialog.content!!)
 
-        val packet = NPCDialoguePacket()
-        packet.runtimeEntityId = dialog.entityId
-        packet.action = NPCDialoguePacket.NPCDialogAction.OPEN
-        packet.dialogue = dialog.content!!
-        packet.npcName = dialog.title!!
-        if (book) packet.sceneName = dialog.sceneName
-        packet.actionJson = dialog.buttonJSONData!!
+        val packet = org.chorus_oss.protocol.packets.NPCDialoguePacket(
+            entityUniqueID = dialog.entityId,
+            actionType = org.chorus_oss.protocol.packets.NPCDialoguePacket.Companion.ActionType.Open,
+            dialogue = dialog.content ?: "",
+            sceneName = when (book) {
+                true -> dialog.sceneName
+                false -> ""
+            },
+            npcName = dialog.title ?: "",
+            actionJSON = dialog.buttonJSONData ?: ""
+        )
         if (book) dialogWindows.put(dialog.sceneName, dialog)
-        this.dataPacket(packet)
+        this.sendPacket(packet)
     }
 
     /**
