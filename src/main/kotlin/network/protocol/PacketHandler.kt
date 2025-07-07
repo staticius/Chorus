@@ -96,6 +96,4 @@ interface PacketHandler {
     fun handle(pk: UpdateBlockPacket) {}
 
     fun handle(pk: UpdateBlockSyncedPacket) {}
-
-    fun handle(pk: UpdateSoftEnumPacket) {}
 }
