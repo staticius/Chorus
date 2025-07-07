@@ -4,7 +4,6 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
-import org.chorus_oss.chorus.network.protocol.NetworkSettingsPacket
 import org.chorus_oss.chorus.network.protocol.types.PacketCompressionAlgorithm
 import org.chorus_oss.protocol.ProtocolInfo
 import org.chorus_oss.protocol.packets.PlayStatusPacket
@@ -36,18 +35,25 @@ class SessionStartHandler(session: BedrockSession) : BedrockSessionPacketHandler
             return
         }
 
-        val settingsPacket = NetworkSettingsPacket()
-        //FIXME there is no way out there to disable compression
-        val algorithm = if (Server.instance.settings.networkSettings.snappy) {
-            PacketCompressionAlgorithm.SNAPPY
-        } else {
-            PacketCompressionAlgorithm.ZLIB
-        }
-        settingsPacket.compressionAlgorithm = algorithm
-        settingsPacket.compressionThreshold = 1 // compress everything
+        val settingsPacket = org.chorus_oss.protocol.packets.NetworkSettingsPacket(
+            compressionThreshold = 1u, // compress everything
+            compressionAlgorithm = when (Server.instance.settings.networkSettings.snappy) {
+                true -> org.chorus_oss.protocol.types.PacketCompressionAlgorithm.Snappy
+                false -> org.chorus_oss.protocol.types.PacketCompressionAlgorithm.Zlib
+            },
+            clientThrottle = false,
+            clientThrottleThreshold = 0,
+            clientThrottleScalar = 0f,
+        )
         //In raknet version 11, the client does not enable packet compression by default,but the server will tell client what the
         //compression algorithm through NetworkSettingsPacket
         session.sendNetworkSettingsPacket(settingsPacket)
+
+        val algorithm = when (Server.instance.settings.networkSettings.snappy) {
+            true -> PacketCompressionAlgorithm.SNAPPY
+            false -> PacketCompressionAlgorithm.ZLIB
+        }
+
         session.setCompression(algorithm) //so send the NetworkSettingsPacket packet before set the session compression
         session.machine.fire(SessionState.LOGIN)
     }

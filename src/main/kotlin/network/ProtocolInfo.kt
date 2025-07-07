@@ -153,7 +153,7 @@ object ProtocolInfo {
     // MIGRATED = 140
     // MIGRATED = 141
     // MIGRATED = 142
-    const val NETWORK_SETTINGS_PACKET = 143
+    // MIGRATED = 143
     const val PLAYER_AUTH_INPUT_PACKET = 144
     // MIGRATED = 145
     const val PLAYER_ENCHANT_OPTIONS_PACKET = 146

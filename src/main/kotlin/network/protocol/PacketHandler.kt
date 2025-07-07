@@ -43,8 +43,6 @@ interface PacketHandler {
 
     fun handle(pk: NetworkChunkPublisherUpdatePacket) {}
 
-    fun handle(pk: NetworkSettingsPacket) {}
-
     fun handle(pk: PlayerActionPacket) {}
 
     fun handle(pk: PlayerAuthInputPacket) {}

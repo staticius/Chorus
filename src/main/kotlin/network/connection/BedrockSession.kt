@@ -248,11 +248,11 @@ class BedrockSession(val peer: BedrockPeer, val subClientId: Int) : Loggable {
         sendPacketSync(MigrationPacket(packet))
     }
 
-    fun sendNetworkSettingsPacket(pk: NetworkSettingsPacket) {
+    fun sendNetworkSettingsPacket(pk: org.chorus_oss.protocol.packets.NetworkSettingsPacket) {
         val alloc = peer.channel.alloc()
         val buf1 = alloc.buffer(16)
         val header = alloc.ioBuffer(5)
-        val msg = BedrockPacketWrapper(0, subClientId, 0, pk, null)
+        val msg = BedrockPacketWrapper(0, subClientId, 0, MigrationPacket(pk), null)
         try {
             val bedrockPacketCodec = peer.channel.pipeline().get(BedrockPacketCodec.NAME) as BedrockPacketCodec
             val packet = msg.packet
