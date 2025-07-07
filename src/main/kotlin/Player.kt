@@ -4549,12 +4549,12 @@ open class Player(
             .filter { f: Map.Entry<Int, Form<*>> -> f.value == form }
             .map { it.key }
             .findFirst()
-            .ifPresent { id: Int? ->
-                val packet =
-                    ServerSettingsResponsePacket() // Exploiting some (probably unintended) protocol features here
-                packet.formId = id!!
-                packet.data = form.toJson()
-                this.dataPacket(packet)
+            .ifPresent { id ->
+                val packet = org.chorus_oss.protocol.packets.ServerSettingsResponsePacket(
+                    formID = id,
+                    formData = form.toJson(),
+                ) // Exploiting some (probably unintended) protocol features here
+                this.sendPacket(packet)
             }
     }
 

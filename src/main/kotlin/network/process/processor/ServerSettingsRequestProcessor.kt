@@ -6,7 +6,6 @@ import org.chorus_oss.chorus.event.player.PlayerServerSettingsRequestEvent
 import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.ServerSettingsRequestPacket
-import org.chorus_oss.chorus.network.protocol.ServerSettingsResponsePacket
 
 class ServerSettingsRequestProcessor : DataPacketProcessor<ServerSettingsRequestPacket>() {
     override fun handle(player: Player, pk: ServerSettingsRequestPacket) {
@@ -16,10 +15,11 @@ class ServerSettingsRequestProcessor : DataPacketProcessor<ServerSettingsRequest
 
         if (!settingsRequestEvent.cancelled) {
             settingsRequestEvent.getSettings().forEach { (id, window) ->
-                val re = ServerSettingsResponsePacket()
-                re.formId = id
-                re.data = window.toJson()
-                player.player.dataPacket(re)
+                val re = org.chorus_oss.protocol.packets.ServerSettingsResponsePacket(
+                    formID = id,
+                    formData = window.toJson(),
+                )
+                player.sendPacket(re)
             }
         }
     }

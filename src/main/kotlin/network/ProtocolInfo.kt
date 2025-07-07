@@ -113,7 +113,7 @@ object ProtocolInfo {
     // MIGRATED = 100
     const val MODAL_FORM_RESPONSE_PACKET = 101
     const val SERVER_SETTINGS_REQUEST_PACKET = 102
-    const val SERVER_SETTINGS_RESPONSE_PACKET = 103
+    // MIGRATED = 103
     // MIGRATED = 104
     // MIGRATED = 105
     // MIGRATED = 106
