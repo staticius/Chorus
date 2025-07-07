@@ -5513,10 +5513,10 @@ open class Player(
     }
 
     override fun removeScoreboard(scoreboard: IScoreboard) {
-        val pk = RemoveObjectivePacket()
-        pk.objectiveName = scoreboard.objectiveName
-
-        this.dataPacket(pk)
+        val pk = org.chorus_oss.protocol.packets.RemoveObjectivePacket(
+            objectiveName = scoreboard.objectiveName,
+        )
+        this.sendPacket(pk)
     }
 
     /**
