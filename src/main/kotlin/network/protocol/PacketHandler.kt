@@ -59,8 +59,6 @@ interface PacketHandler {
 
     fun handle(pk: RespawnPacket) {}
 
-    fun handle(pk: ServerSettingsRequestPacket) {}
-
     fun handle(pk: SetDifficultyPacket) {}
 
     fun handle(pk: SetPlayerGameTypePacket) {}

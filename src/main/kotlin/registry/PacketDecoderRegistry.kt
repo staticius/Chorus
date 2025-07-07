@@ -57,7 +57,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.SET_DIFFICULTY_PACKET, SetDifficultyPacket) // 60
         this.register(ProtocolInfo.SET_PLAYER_GAME_TYPE_PACKET, SetPlayerGameTypePacket) // 62
         this.register(ProtocolInfo.SET_TITLE_PACKET, SetTitlePacket) // 88
-        this.register(ProtocolInfo.SERVER_SETTINGS_REQUEST_PACKET, ServerSettingsRequestPacket) // 102
         this.register(ProtocolInfo.TAKE_ITEM_ENTITY_PACKET, TakeItemEntityPacket) // 17
         this.register(ProtocolInfo.TEXT_PACKET, TextPacket) // 9
         this.register(ProtocolInfo.MOVE_ENTITY_DELTA_PACKET, MoveEntityDeltaPacket) // 111
