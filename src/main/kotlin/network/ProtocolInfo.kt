@@ -131,7 +131,7 @@ object ProtocolInfo {
     const val SPAWN_PARTICLE_EFFECT_PACKET = 118
     // MIGRATED = 119
     // UNUSED = 120
-    const val NETWORK_CHUNK_PUBLISHER_UPDATE_PACKET = 121
+    // MIGRATED = 121
     // MIGRATED = 122
     const val LEVEL_SOUND_EVENT_PACKET = 123
     const val LEVEL_EVENT_GENERIC_PACKET = 124

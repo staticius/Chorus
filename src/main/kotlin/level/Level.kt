@@ -58,6 +58,7 @@ import org.chorus_oss.chorus.scheduler.BlockUpdateScheduler
 import org.chorus_oss.chorus.scheduler.ServerScheduler
 import org.chorus_oss.chorus.utils.*
 import org.chorus_oss.protocol.core.Packet
+import org.chorus_oss.protocol.types.BlockPos
 import java.awt.Color
 import java.io.File
 import java.lang.ref.SoftReference
@@ -3445,10 +3446,12 @@ class Level(
                 val pair = requireProvider().requestChunkData(x, z)
                 for (player in players.values) {
                     if (player.isConnected()) {
-                        val ncp = NetworkChunkPublisherUpdatePacket()
-                        ncp.position = player.position.asBlockVector3()
-                        ncp.radius = player.viewDistance shl 4
-                        player.dataPacket(ncp)
+                        val ncp = org.chorus_oss.protocol.packets.NetworkChunkPublisherUpdatePacket(
+                            position = BlockPos(player.position),
+                            radius = (player.viewDistance shl 4).toUInt(),
+                            savedChunks = emptyList(),
+                        )
+                        player.sendPacket(ncp)
 
                         val pk = LevelChunkPacket()
                         pk.chunkX = x
@@ -3469,10 +3472,12 @@ class Level(
         val chunkPositionZ = player.position.chunkZ
         val chunkRadius = player.viewDistance
 
-        val ncp = NetworkChunkPublisherUpdatePacket()
-        ncp.position = player.position.asBlockVector3()
-        ncp.radius = player.viewDistance shl 4
-        player.dataPacket(ncp)
+        val ncp = org.chorus_oss.protocol.packets.NetworkChunkPublisherUpdatePacket(
+            position = BlockPos(player.position),
+            radius = (player.viewDistance shl 4).toUInt(),
+            savedChunks = emptyList(),
+        )
+        player.sendPacket(ncp)
 
         for (x in -chunkRadius..<chunkRadius) {
             for (z in -chunkRadius..<chunkRadius) {

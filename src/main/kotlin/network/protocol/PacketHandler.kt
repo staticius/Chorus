@@ -41,8 +41,6 @@ interface PacketHandler {
 
     fun handle(pk: NPCRequestPacket) {}
 
-    fun handle(pk: NetworkChunkPublisherUpdatePacket) {}
-
     fun handle(pk: PlayerActionPacket) {}
 
     fun handle(pk: PlayerAuthInputPacket) {}
