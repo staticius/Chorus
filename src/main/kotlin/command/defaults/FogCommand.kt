@@ -45,13 +45,13 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
         when (result.key) {
             "push" -> {
                 val fogIdStr = list.getResult<String>(2)!!
-                if (!Identifier.isValid(fogIdStr)) {
+                if (Identifier.tryParse(fogIdStr) == null) {
                     log.addError("commands.fog.invalidFogId", fogIdStr).output()
                     return 0
                 }
                 val userProvidedId = list.getResult<String>(3)!!
                 targets.forEach(Consumer<Player> { player: Player ->
-                    player.fogStack.put(userProvidedId, fogIdStr)
+                    player.fogStack.add(Pair(userProvidedId, fogIdStr))
                     player.sendFogStack() //刷新到客户端
                 })
                 log.addSuccess("commands.fog.success.push", userProvidedId, fogIdStr).output()
@@ -66,14 +66,15 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
                     "pop" -> {
                         targets.forEach(Consumer forEach@{ player: Player ->
                             val fogStack = player.fogStack
-                            for (fog in fogStack.entries.reversed()) {
-                                if (fog.key == userProvidedId) {
-                                    fogStack.remove(fog.key)
+                            for (i in fogStack.indices.reversed()) {
+                                val fog = fogStack[i]
+                                if (fog.first == userProvidedId) {
+                                    fogStack.removeAt(i)
                                     player.sendFogStack() //刷新到客户端
                                     log.addSuccess(
                                         "commands.fog.success.pop",
                                         userProvidedId,
-                                        fog.value
+                                        fog.second
                                     ).output()
                                     return@forEach
                                 }
@@ -87,18 +88,18 @@ class FogCommand(name: String) : VanillaCommand(name, "commands.fog.description"
                     "remove" -> {
                         targets.forEach { player: Player ->
                             val fogStack = player.fogStack
-                            val shouldRemoved: MutableList<String> = ArrayList()
+                            val shouldRemoved: MutableList<Pair<String, String>> = mutableListOf()
                             for (fog in fogStack) {
-                                if (fog.key == userProvidedId) {
-                                    shouldRemoved.add(fog.key)
+                                if (fog.first == userProvidedId) {
+                                    shouldRemoved.add(fog)
                                     log.addSuccess(
                                         "commands.fog.success.remove",
                                         userProvidedId,
-                                        fog.value
+                                        fog.second
                                     ).output()
                                 }
                             }
-                            shouldRemoved.forEach { fogStack.remove(it) }
+                            fogStack.removeAll(shouldRemoved)
                             player.sendFogStack() //刷新到客户端
                             if (shouldRemoved.isEmpty()) {
                                 log.addError("commands.fog.invalidUserId", userProvidedId).output()

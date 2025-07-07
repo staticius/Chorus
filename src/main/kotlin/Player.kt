@@ -474,7 +474,7 @@ open class Player(
      *
      * Player Fog Settings
      */
-    var fogStack: MutableMap<String, String> = mutableMapOf()
+    var fogStack: MutableList<Pair<String, String>> = mutableListOf()
     /**
      * @return [.lastBeAttackEntity]
      */
@@ -1557,7 +1557,7 @@ open class Player(
             StringTag::class.java
         )
         for (i in 0..<fogIdentifiers.size()) {
-            fogStack.put(userProvidedFogIds[i].data, fogIdentifiers[i].data)
+            fogStack.add(i, Pair(userProvidedFogIds[i].data, fogIdentifiers[i].data))
         }
 
         if (!Server.instance.settings.playerSettings.checkMovement) {
@@ -1778,8 +1778,8 @@ open class Player(
         }
     }
 
-    protected fun sendPlayStatus(status: org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status, immediate: Boolean = false) {
-        val pk = org.chorus_oss.protocol.packets.PlayStatusPacket(
+    protected fun sendPlayStatus(status: PlayStatusPacket.Companion.Status, immediate: Boolean = false) {
+        val pk = PlayStatusPacket(
             status = status
         )
         if (immediate) {
@@ -2749,7 +2749,7 @@ open class Player(
      */
     fun sendFogStack() {
         val pk = org.chorus_oss.protocol.packets.PlayerFogPacket(
-            stack = this.fogStack.values.toList()
+            stack = this.fogStack.map { it.second }
         )
         this.sendPacket(pk)
     }
@@ -3749,8 +3749,8 @@ open class Player(
             val fogIdentifiers = ListTag<StringTag>()
             val userProvidedFogIds = ListTag<StringTag>()
             fogStack.forEach { fog ->
-                fogIdentifiers.add(StringTag(fog.value))
-                userProvidedFogIds.add(StringTag(fog.key))
+                userProvidedFogIds.add(StringTag(fog.first))
+                fogIdentifiers.add(StringTag(fog.second))
             }
             namedTag!!.putList("fogIdentifiers", fogIdentifiers)
             namedTag!!.putList("userProvidedFogIds", userProvidedFogIds)
