@@ -9,13 +9,14 @@ import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.network.connection.BedrockSession
-import org.chorus_oss.chorus.network.protocol.SetLocalPlayerAsInitializedPacket
 import org.chorus_oss.chorus.network.protocol.StartGamePacket
 import org.chorus_oss.chorus.network.protocol.types.TrimData
 import org.chorus_oss.chorus.registry.ItemRegistry
 import org.chorus_oss.chorus.registry.ItemRuntimeIdRegistry
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.Loggable
+import org.chorus_oss.protocol.packets.RequestChunkRadiusPacket
+import org.chorus_oss.protocol.packets.SetLocalPlayerAsInitializedPacket
 import org.chorus_oss.protocol.types.TrimMaterial
 import org.chorus_oss.protocol.types.TrimPattern
 import org.chorus_oss.protocol.types.item.ItemEntry
@@ -171,12 +172,17 @@ class SpawnResponseHandler(session: BedrockSession) : BedrockSessionPacketHandle
 
     override fun handle(pk: MigrationPacket<*>) {
         val packet = pk.packet
-        if (packet !is org.chorus_oss.protocol.packets.RequestChunkRadiusPacket) return
+        when (packet) {
+            is RequestChunkRadiusPacket -> handleRadius(packet)
+            is SetLocalPlayerAsInitializedPacket -> handleInitialized(packet)
+        }
+    }
 
+    fun handleRadius(packet: RequestChunkRadiusPacket) {
         player!!.viewDistance = max(2.0, min(packet.chunkRadius.toDouble(), player.viewDistance.toDouble())).toInt()
     }
 
-    override fun handle(pk: SetLocalPlayerAsInitializedPacket) {
+    fun handleInitialized(packet: SetLocalPlayerAsInitializedPacket) {
         log.debug(
             "receive SetLocalPlayerAsInitializedPacket for {}",
             player?.playerInfo?.username

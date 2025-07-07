@@ -71,8 +71,6 @@ interface PacketHandler {
 
     fun handle(pk: SetDisplayObjectivePacket) {}
 
-    fun handle(pk: SetLocalPlayerAsInitializedPacket) {}
-
     fun handle(pk: SetPlayerGameTypePacket) {}
 
     fun handle(pk: SetScorePacket) {}

@@ -123,7 +123,7 @@ object ProtocolInfo {
     const val UPDATE_BLOCK_SYNCED_PACKET = 110
     const val MOVE_ENTITY_DELTA_PACKET = 111
     const val SET_SCOREBOARD_IDENTITY_PACKET = 112
-    const val SET_LOCAL_PLAYER_AS_INITIALIZED_PACKET = 113
+    // MIGRATED = 113
     // MIGRATED = 114
     // DEPRECATED = 115
     // UNUSED = 116
