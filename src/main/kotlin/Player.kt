@@ -9,6 +9,7 @@ import com.google.common.collect.HashBiMap
 import com.google.common.collect.Sets
 import io.netty.util.internal.EmptyArrays
 import io.netty.util.internal.PlatformDependent
+import kotlinx.io.bytestring.ByteString
 import org.chorus_oss.chorus.block.*
 import org.chorus_oss.chorus.block.customblock.CustomBlock
 import org.chorus_oss.chorus.block.property.CommonBlockProperties
@@ -101,6 +102,7 @@ import org.chorus_oss.protocol.packets.ClientboundCloseFormPacket
 import org.chorus_oss.protocol.packets.PlayStatusPacket
 import org.chorus_oss.protocol.packets.SetActorMotionPacket
 import org.chorus_oss.protocol.types.BlockPos
+import org.chorus_oss.protocol.types.ChunkPos
 import org.chorus_oss.protocol.types.CommandOriginData
 import org.chorus_oss.protocol.types.CommandOutputMessage
 import org.chorus_oss.protocol.types.CommandOutputType
@@ -1797,11 +1799,19 @@ open class Player(
         val chunkPositionZ = position.floorZ shr 4
         for (x in -chunkRadius..<chunkRadius) {
             for (z in -chunkRadius..<chunkRadius) {
-                val chunk = LevelChunkPacket()
-                chunk.chunkX = chunkPositionX + x
-                chunk.chunkZ = chunkPositionZ + z
-                chunk.data = EmptyArrays.EMPTY_BYTES
-                this.dataPacket(chunk)
+                val chunk = org.chorus_oss.protocol.packets.LevelChunkPacket(
+                    position = ChunkPos(
+                        chunkPositionX + x,
+                        chunkPositionZ + z
+                    ),
+                    dimension = this.level!!.dimension,
+                    subChunkCount = 0u,
+                    subChunkLimit = 0u,
+                    cacheEnabled = false,
+                    blobHashes = emptyList(),
+                    data = ByteString(),
+                )
+                this.sendPacket(chunk)
             }
         }
     }
@@ -2358,6 +2368,10 @@ open class Player(
                 }
             }
         }
+    }
+
+    fun sendChunk(x: Int, z: Int, packet: Packet) {
+        sendChunk(x, z, MigrationPacket(packet))
     }
 
 
@@ -3686,12 +3700,18 @@ open class Player(
                 val chunkX = getHashX(l)
                 val chunkZ = getHashZ(l)
                 if (level!!.unregisterChunkLoader(this, chunkX, chunkZ, false)) {
-                    val pk = LevelChunkPacket()
-                    pk.chunkX = chunkX
-                    pk.chunkZ = chunkZ
-                    pk.dimension = level!!.dimension
-                    pk.subChunkCount = 0
-                    pk.data = ByteArray(0)
+                    val pk = org.chorus_oss.protocol.packets.LevelChunkPacket(
+                        position = ChunkPos(
+                            chunkX,
+                            chunkZ,
+                        ),
+                        dimension = level!!.dimension,
+                        subChunkCount = 0u,
+                        subChunkLimit = 0u,
+                        cacheEnabled = false,
+                        blobHashes = emptyList(),
+                        data = ByteString(),
+                    )
                     this.sendChunk(chunkX, chunkZ, pk)
                     for (entity in level!!.getChunkEntities(chunkX, chunkZ).values) {
                         if (entity !== this) {

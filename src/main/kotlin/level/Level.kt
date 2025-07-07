@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import kotlinx.io.bytestring.ByteString
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.block.*
@@ -59,6 +60,7 @@ import org.chorus_oss.chorus.scheduler.ServerScheduler
 import org.chorus_oss.chorus.utils.*
 import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.types.BlockPos
+import org.chorus_oss.protocol.types.ChunkPos
 import java.awt.Color
 import java.io.File
 import java.lang.ref.SoftReference
@@ -3455,12 +3457,15 @@ class Level(
                         )
                         player.sendPacket(ncp)
 
-                        val pk = LevelChunkPacket()
-                        pk.chunkX = x
-                        pk.chunkZ = z
-                        pk.dimension = dimensionData.dimensionId
-                        pk.data = pair.first
-                        pk.subChunkCount = pair.second
+                        val pk = org.chorus_oss.protocol.packets.LevelChunkPacket(
+                            position = ChunkPos(x, z),
+                            dimension = dimensionData.dimensionId,
+                            subChunkCount = pair.second.toUInt(),
+                            subChunkLimit = 0u,
+                            cacheEnabled = false,
+                            blobHashes = emptyList(),
+                            data = ByteString(pair.first)
+                        )
                         player.sendChunk(x, z, pk)
                     }
                 }
@@ -3488,12 +3493,15 @@ class Level(
 
                 val pair = requireProvider().requestChunkData(chunkX, chunkZ)
 
-                val pk = LevelChunkPacket()
-                pk.chunkX = chunkX
-                pk.chunkZ = chunkZ
-                pk.dimension = dimensionData.dimensionId
-                pk.data = pair.first
-                pk.subChunkCount = pair.second
+                val pk = org.chorus_oss.protocol.packets.LevelChunkPacket(
+                    position = ChunkPos(chunkX, chunkZ),
+                    dimension = dimensionData.dimensionId,
+                    subChunkCount = pair.second.toUInt(),
+                    subChunkLimit = 0u,
+                    cacheEnabled = false,
+                    blobHashes = emptyList(),
+                    data = ByteString(pair.first)
+                )
                 player.sendChunk(chunkX, chunkZ, pk)
             }
         }
