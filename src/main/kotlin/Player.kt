@@ -5199,10 +5199,11 @@ open class Player(
      *
      * @param xuid XUID
      */
-    fun showXboxProfile(xuid: String?) {
-        val pk = ShowProfilePacket()
-        pk.xuid = xuid
-        this.dataPacket(pk)
+    fun showXboxProfile(xuid: String) {
+        val pk = org.chorus_oss.protocol.packets.ShowProfilePacket(
+            xuid = xuid
+        )
+        this.sendPacket(pk)
     }
 
     /**

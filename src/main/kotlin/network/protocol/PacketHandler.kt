@@ -71,8 +71,6 @@ interface PacketHandler {
 
     fun handle(pk: SetTitlePacket) {}
 
-    fun handle(pk: ShowProfilePacket) {}
-
     fun handle(pk: StartGamePacket) {}
 
     fun handle(pk: StructureBlockUpdatePacket) {}
