@@ -107,6 +107,8 @@ import org.chorus_oss.protocol.types.CommandOutputType
 import org.chorus_oss.protocol.types.DisconnectFailReason
 import org.chorus_oss.protocol.types.Vector3f
 import org.chorus_oss.protocol.types.camera.preset.CameraPreset
+import org.chorus_oss.protocol.types.scoreboard.ScoreboardSlot
+import org.chorus_oss.protocol.types.scoreboard.ScoreboardSlotOrder
 import org.jetbrains.annotations.ApiStatus
 import org.jetbrains.annotations.UnmodifiableView
 import java.net.InetSocketAddress
@@ -5472,13 +5474,14 @@ open class Player(
     }
 
     override fun display(scoreboard: IScoreboard, slot: DisplaySlot?) {
-        val pk = SetDisplayObjectivePacket()
-        pk.displaySlot = slot
-        pk.objectiveName = scoreboard.objectiveName
-        pk.displayName = scoreboard.displayName
-        pk.criteriaName = scoreboard.criteriaName
-        pk.sortOrder = scoreboard.sortOrder
-        this.dataPacket(pk)
+        val pk = org.chorus_oss.protocol.packets.SetDisplayObjectivePacket(
+            displaySlot = ScoreboardSlot.entries[slot!!.ordinal],
+            objectiveName = scoreboard.objectiveName,
+            displayName = scoreboard.displayName ?: "",
+            criteriaName = scoreboard.criteriaName ?: "",
+            sortOrder = ScoreboardSlotOrder.entries[scoreboard.sortOrder!!.ordinal],
+        )
+        this.sendPacket(pk)
 
         //client won't storage the score of a scoreboard,so we should send the score to client
         val pk2 = SetScorePacket()
@@ -5495,13 +5498,14 @@ open class Player(
     }
 
     override fun hide(slot: DisplaySlot?) {
-        val pk = SetDisplayObjectivePacket()
-        pk.displaySlot = slot
-        pk.objectiveName = ""
-        pk.displayName = ""
-        pk.criteriaName = ""
-        pk.sortOrder = SortOrder.ASCENDING
-        this.dataPacket(pk)
+        val pk = org.chorus_oss.protocol.packets.SetDisplayObjectivePacket(
+            displaySlot = ScoreboardSlot.entries[slot!!.ordinal],
+            objectiveName = "",
+            displayName = "",
+            criteriaName = "",
+            sortOrder = ScoreboardSlotOrder.Ascending,
+        )
+        this.sendPacket(pk)
 
         if (slot == DisplaySlot.BELOW_NAME) {
             this.setScoreTag("")

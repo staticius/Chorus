@@ -117,7 +117,7 @@ object ProtocolInfo {
     const val SHOW_PROFILE_PACKET = 104
     const val SET_DEFAULT_GAME_TYPE_PACKET = 105
     const val REMOVE_OBJECTIVE_PACKET = 106
-    const val SET_DISPLAY_OBJECTIVE_PACKET = 107
+    // MIGRATED = 107
     const val SET_SCORE_PACKET = 108
     // MIGRATED = 109
     const val UPDATE_BLOCK_SYNCED_PACKET = 110
