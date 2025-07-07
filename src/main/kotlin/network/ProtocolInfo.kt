@@ -128,7 +128,7 @@ object ProtocolInfo {
     // DEPRECATED = 115
     // UNUSED = 116
     // UNUSED = 117
-    const val SPAWN_PARTICLE_EFFECT_PACKET = 118
+    // MIGRATED = 118
     // MIGRATED = 119
     // UNUSED = 120
     // MIGRATED = 121

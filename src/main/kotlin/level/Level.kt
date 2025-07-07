@@ -494,16 +494,18 @@ class Level(
         dimensionId: Int,
         vararg players: Player
     ) {
-        val pk: SpawnParticleEffectPacket = SpawnParticleEffectPacket()
-        pk.identifier = identifier
-        pk.uniqueEntityId = uniqueEntityId
-        pk.dimensionId = dimensionId
-        pk.position = pos
+        val pk = org.chorus_oss.protocol.packets.SpawnParticleEffectPacket(
+            dimension = dimensionId.toByte(),
+            entityUniqueID = uniqueEntityId,
+            position = org.chorus_oss.protocol.types.Vector3f(pos),
+            identifier = identifier,
+            moLangVariablesJSON = null
+        )
 
         if (players.isEmpty()) {
             addChunkPacket(pos.floorX shr 4, pos.floorZ shr 4, pk)
         } else {
-            Server.broadcastPacket(players.toList().toTypedArray(), pk)
+            Server.broadcastPacket(players.toList(), pk)
         }
     }
 

@@ -83,8 +83,6 @@ interface PacketHandler {
 
     fun handle(pk: ShowProfilePacket) {}
 
-    fun handle(pk: SpawnParticleEffectPacket) {}
-
     fun handle(pk: StartGamePacket) {}
 
     fun handle(pk: StructureBlockUpdatePacket) {}
