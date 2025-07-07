@@ -2221,11 +2221,12 @@ open class Player(
      * @param itemId       the item id
      */
     fun setItemCoolDown(coolDownTick: Int, itemId: Identifier) {
-        val pk = PlayerStartItemCoolDownPacket()
-        pk.coolDownDuration = coolDownTick
-        pk.itemCategory = itemId.toString()
+        val pk = org.chorus_oss.protocol.packets.PlayerStartItemCoolDownPacket(
+            category = itemId.toString(),
+            duration = coolDownTick,
+        )
         cooldownTickMap[itemId.toString()] = level!!.tick + coolDownTick
-        this.dataPacket(pk)
+        this.sendPacket(pk)
     }
 
     /**
@@ -2244,11 +2245,12 @@ open class Player(
     }
 
     fun setItemCoolDown(coolDown: Int, category: String) {
-        val pk = PlayerStartItemCoolDownPacket()
-        pk.coolDownDuration = coolDown
-        pk.itemCategory = category
+        val pk = org.chorus_oss.protocol.packets.PlayerStartItemCoolDownPacket(
+            category = category,
+            duration = coolDown,
+        )
         cooldownTickMap[category] = level!!.tick + coolDown
-        this.dataPacket(pk)
+        this.sendPacket(pk)
     }
 
     fun isItemCoolDownEnd(category: String): Boolean {

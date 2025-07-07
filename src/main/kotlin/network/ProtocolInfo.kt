@@ -186,7 +186,7 @@ object ProtocolInfo {
     // UNUSED = 173
     // MIGRATED = 174
     // MIGRATED = 175
-    const val PLAYER_START_ITEM_COOL_DOWN_PACKET = 176
+    // MIGRATED = 176
     // MIGRATED = 177
     // MIGRATED = 178
     // MIGRATED = 179
