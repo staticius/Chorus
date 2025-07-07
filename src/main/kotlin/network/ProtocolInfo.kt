@@ -182,7 +182,7 @@ object ProtocolInfo {
     // MIGRATED = 169
     // MIGRATED = 170
     // MIGRATED = 171
-    const val UPDATE_SUB_CHUNK_BLOCKS_PACKET = 172
+    // MIGRATED = 172
     // UNUSED = 173
     // MIGRATED = 174
     // MIGRATED = 175
