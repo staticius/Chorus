@@ -5,7 +5,6 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.command.Command
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.lang.TranslationContainer
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.protocol.packets.SetPlayerGameTypePacket
 import org.chorus_oss.protocol.types.GameType

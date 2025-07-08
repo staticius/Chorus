@@ -30,7 +30,10 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
             return false
         }
         scoreboards[scoreboard.objectiveName] = scoreboard
-        CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(org.chorus_oss.protocol.packets.UpdateSoftEnumPacket.Companion.ActionType.Add, scoreboard.objectiveName)
+        CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(
+            org.chorus_oss.protocol.packets.UpdateSoftEnumPacket.Companion.ActionType.Add,
+            scoreboard.objectiveName
+        )
         return true
     }
 
@@ -46,7 +49,10 @@ class ScoreboardManager(override var storage: IScoreboardStorage) : IScoreboardM
             return false
         }
         scoreboards.remove(objectiveName)
-        CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(org.chorus_oss.protocol.packets.UpdateSoftEnumPacket.Companion.ActionType.Remove, objectiveName)
+        CommandEnum.SCOREBOARD_OBJECTIVES.updateSoftEnum(
+            org.chorus_oss.protocol.packets.UpdateSoftEnumPacket.Companion.ActionType.Remove,
+            objectiveName
+        )
         viewers.forEach(Consumer { viewer: IScoreboardViewer -> viewer.removeScoreboard(removed) })
         display.forEach { (slot, scoreboard) ->
             if (scoreboard != null && scoreboard.objectiveName == objectiveName) {

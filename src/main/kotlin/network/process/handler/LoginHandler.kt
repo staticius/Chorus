@@ -30,7 +30,10 @@ class LoginHandler(session: BedrockSession, private val consumer: Consumer<Playe
         if (pk.issueUnixTime != -1L && Server.instance.checkLoginTime && System.currentTimeMillis() - pk.issueUnixTime > 20000) {
             val message = "disconnectionScreen.noReason"
             log.debug("disconnection due to noReason")
-            session.sendPlayStatus(org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status.LoginFailedClient, true)
+            session.sendPlayStatus(
+                org.chorus_oss.protocol.packets.PlayStatusPacket.Companion.Status.LoginFailedClient,
+                true
+            )
             session.close(message)
             return
         }

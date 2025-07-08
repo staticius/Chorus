@@ -15,7 +15,6 @@ import org.chorus_oss.protocol.types.ActorProperties
 import org.chorus_oss.protocol.types.actor_data.ActorDataMap
 import org.chorus_oss.protocol.types.actor_data.ActorDataType
 import java.util.concurrent.ThreadLocalRandom
-import kotlin.apply
 
 class DummyBossBar private constructor(builder: Builder) {
     val player: Player = builder.player

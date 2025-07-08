@@ -7,7 +7,8 @@ import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.protocol.packets.SetLocalPlayerAsInitializedPacket
 
 
-class SetLocalPlayerAsInitializedPacketProcessor : DataPacketProcessor<MigrationPacket<SetLocalPlayerAsInitializedPacket>>() {
+class SetLocalPlayerAsInitializedPacketProcessor :
+    DataPacketProcessor<MigrationPacket<SetLocalPlayerAsInitializedPacket>>() {
     override fun handle(player: Player, pk: MigrationPacket<SetLocalPlayerAsInitializedPacket>) {
         val player = player.player
         log.debug(

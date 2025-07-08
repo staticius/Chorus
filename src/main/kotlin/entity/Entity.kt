@@ -37,7 +37,6 @@ import org.chorus_oss.chorus.nbt.tag.FloatTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
 import org.chorus_oss.chorus.nbt.tag.StringTag
 import org.chorus_oss.chorus.network.protocol.*
-import org.chorus_oss.chorus.network.protocol.types.EntityLink
 import org.chorus_oss.chorus.network.protocol.types.PropertySyncData
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.scheduler.Task
@@ -995,7 +994,7 @@ abstract class Entity(chunk: IChunk?, nbt: CompoundTag?) : IVector3 {
 
     @JvmOverloads
     fun sendData(player: Player, data: EntityDataMap? = null) {
-        val pk = org.chorus_oss.protocol.packets.SetActorDataPacket(
+        val pk = SetActorDataPacket(
             actorRuntimeID = this.getRuntimeID().toULong(),
             actorDataMap = ActorDataMap(data ?: this.entityDataMap),
             actorProperties = ActorProperties(this.propertySyncData()),

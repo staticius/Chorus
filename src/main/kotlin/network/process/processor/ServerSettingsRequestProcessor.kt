@@ -4,13 +4,12 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerServerSettingsRequestEvent
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.protocol.packets.ServerSettingsRequestPacket
 
 class ServerSettingsRequestProcessor : DataPacketProcessor<MigrationPacket<ServerSettingsRequestPacket>>() {
     override fun handle(player: Player, pk: MigrationPacket<ServerSettingsRequestPacket>) {
-        val packet = pk.packet
+        pk.packet
 
         val settingsRequestEvent =
             PlayerServerSettingsRequestEvent(player.player, HashMap(player.player.serverSettings))

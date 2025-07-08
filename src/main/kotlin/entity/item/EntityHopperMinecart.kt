@@ -21,7 +21,6 @@ import org.chorus_oss.chorus.math.*
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
-import org.chorus_oss.chorus.network.protocol.types.EntityLink
 import org.chorus_oss.chorus.utils.MinecartType
 import org.chorus_oss.protocol.types.ActorLink
 

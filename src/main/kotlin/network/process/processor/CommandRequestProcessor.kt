@@ -6,13 +6,12 @@ import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerCommandPreprocessEvent
 import org.chorus_oss.chorus.event.player.PlayerHackDetectedEvent
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.protocol.packets.CommandRequestPacket
 import java.util.concurrent.TimeUnit
 
 class CommandRequestProcessor :
-    DataPacketProcessor<MigrationPacket<org.chorus_oss.protocol.packets.CommandRequestPacket>>() {
+    DataPacketProcessor<MigrationPacket<CommandRequestPacket>>() {
     val rateLimiter: RateLimiter = RateLimiter.create(500.0)
 
     override fun handle(player: Player, pk: MigrationPacket<CommandRequestPacket>) {

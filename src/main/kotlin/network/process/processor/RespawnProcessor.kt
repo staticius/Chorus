@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.network.process.processor
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.protocol.packets.RespawnPacket
 import org.chorus_oss.protocol.types.Vector3f

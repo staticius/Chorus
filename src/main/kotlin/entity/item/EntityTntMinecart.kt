@@ -20,7 +20,6 @@ import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.level.format.IChunk
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
-import org.chorus_oss.chorus.network.protocol.types.EntityLink
 import org.chorus_oss.chorus.utils.MinecartType
 import org.chorus_oss.protocol.types.ActorLink
 import java.util.concurrent.ThreadLocalRandom

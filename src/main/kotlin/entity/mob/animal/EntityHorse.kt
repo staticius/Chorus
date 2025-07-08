@@ -52,7 +52,6 @@ import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.ListTag
 import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
 import org.chorus_oss.chorus.network.protocol.UpdateAttributesPacket
-import org.chorus_oss.chorus.network.protocol.types.EntityLink
 import org.chorus_oss.chorus.utils.Utils
 import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.types.ActorLink

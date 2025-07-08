@@ -60,7 +60,10 @@ class CommandEnum {
         return name.hashCode()
     }
 
-    fun updateSoftEnum(mode: org.chorus_oss.protocol.packets.UpdateSoftEnumPacket.Companion.ActionType, vararg value: String) {
+    fun updateSoftEnum(
+        mode: org.chorus_oss.protocol.packets.UpdateSoftEnumPacket.Companion.ActionType,
+        vararg value: String
+    ) {
         if (!this.isSoft) return
         val packet = org.chorus_oss.protocol.packets.UpdateSoftEnumPacket(
             enumType = this.name,

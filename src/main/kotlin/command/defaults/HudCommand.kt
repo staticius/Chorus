@@ -7,8 +7,6 @@ import org.chorus_oss.chorus.command.data.CommandParameter
 import org.chorus_oss.chorus.command.tree.ParamList
 import org.chorus_oss.chorus.command.tree.node.PlayersNode
 import org.chorus_oss.chorus.command.utils.CommandLogger
-import org.chorus_oss.chorus.network.protocol.types.hud.HudElement
-import org.chorus_oss.chorus.network.protocol.types.hud.HudVisibility
 
 class HudCommand(name: String) : VanillaCommand(name, "commands.hud.description", "%commands.hud.usage") {
     init {

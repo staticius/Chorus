@@ -104,7 +104,10 @@ class CameraPreset @JvmOverloads constructor(
             for (preset in presets) {
                 require(!PRESETS.containsKey(preset.identifier)) { "Camera preset " + preset.identifier + " already exists!" }
                 PRESETS[preset.identifier] = preset
-                CommandEnum.CAMERA_PRESETS.updateSoftEnum(org.chorus_oss.protocol.packets.UpdateSoftEnumPacket.Companion.ActionType.Add, preset.identifier)
+                CommandEnum.CAMERA_PRESETS.updateSoftEnum(
+                    org.chorus_oss.protocol.packets.UpdateSoftEnumPacket.Companion.ActionType.Add,
+                    preset.identifier
+                )
             }
             var id = 0
             //重新分配id

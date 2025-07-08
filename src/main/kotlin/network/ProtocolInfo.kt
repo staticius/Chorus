@@ -12,6 +12,7 @@ object ProtocolInfo {
         (GAME_VERSION.major shl 24) or (GAME_VERSION.minor shl 16) or (GAME_VERSION.patch shl 8)
 
     const val LOGIN_PACKET = 1
+
     // MIGRATED = 2
     // MIGRATED = 3
     // MIGRATED = 4
@@ -20,8 +21,10 @@ object ProtocolInfo {
     // MIGRATED = 7
     // MIGRATED = 8
     const val TEXT_PACKET = 9
+
     // MIGRATED = 10
     const val START_GAME_PACKET = 11
+
     // MIGRATED = 12
     // MIGRATED = 13
     // MIGRATED = 14
@@ -30,12 +33,15 @@ object ProtocolInfo {
     const val TAKE_ITEM_ENTITY_PACKET = 17
     const val MOVE_ENTITY_ABSOLUTE_PACKET = 18
     const val MOVE_PLAYER_PACKET = 19
+
     // UNUSED = 20
     const val UPDATE_BLOCK_PACKET = 21
+
     // MIGRATED = 22
     // UNUSED = 23
     // UNUSED = 24
     const val LEVEL_EVENT_PACKET = 25
+
     // MIGRATED = 26
     const val ENTITY_EVENT_PACKET = 27
     const val MOB_EFFECT_PACKET = 28
@@ -44,9 +50,11 @@ object ProtocolInfo {
     const val MOB_EQUIPMENT_PACKET = 31
     const val MOB_ARMOR_EQUIPMENT_PACKET = 32
     const val INTERACT_PACKET = 33
+
     // MIGRATED = 34
     // MIGRATED = 35
     const val PLAYER_ACTION_PACKET = 36
+
     // UNUSED = 37
     // MIGRATED = 38
     // MIGRATED = 39
@@ -55,6 +63,7 @@ object ProtocolInfo {
     // MIGRATED = 42
     // MIGRATED = 43
     const val ANIMATE_PACKET = 44
+
     // MIGRATED = 45
     // MIGRATED = 46
     // MIGRATED = 47
@@ -63,6 +72,7 @@ object ProtocolInfo {
     // MIGRATED = 50
     // MIGRATED = 51
     const val CRAFTING_DATA_PACKET = 52
+
     // UNUSED = 53
     // MIGRATED = 54
     // UNUSED = 55
@@ -74,6 +84,7 @@ object ProtocolInfo {
     // MIGRATED = 61
     // MIGRATED = 62
     const val PLAYER_LIST_PACKET = 63
+
     // MIGRATED = 64
     // DEPRECATED = 65
     // DEPRECATED = 66
@@ -87,6 +98,7 @@ object ProtocolInfo {
     // MIGRATED = 74
     // MIGRATED = 75
     const val AVAILABLE_COMMANDS_PACKET = 76
+
     // MIGRATED = 77
     // MIGRATED = 78
     // MIGRATED = 79
@@ -99,19 +111,24 @@ object ProtocolInfo {
     // MIGRATED = 86
     // MIGRATED = 87
     const val SET_TITLE_PACKET = 88
+
     // MIGRATED = 89
     const val STRUCTURE_BLOCK_UPDATE_PACKET = 90
+
     // MIGRATED = 91
     // MIGRATED = 92
     const val PLAYER_SKIN_PACKET = 93
+
     // MIGRATED = 94
     // MIGRATED = 95
     // MIGRATED = 96
     // MIGRATED = 97
     const val NPC_REQUEST_PACKET = 98
+
     // MIGRATED = 99
     // MIGRATED = 100
     const val MODAL_FORM_RESPONSE_PACKET = 101
+
     // MIGRATED = 102
     // MIGRATED = 103
     // MIGRATED = 104
@@ -119,9 +136,11 @@ object ProtocolInfo {
     // MIGRATED = 106
     // MIGRATED = 107
     const val SET_SCORE_PACKET = 108
+
     // MIGRATED = 109
     // MIGRATED = 110
     const val MOVE_ENTITY_DELTA_PACKET = 111
+
     // MIGRATED = 112
     // MIGRATED = 113
     // MIGRATED = 114
@@ -135,6 +154,7 @@ object ProtocolInfo {
     // MIGRATED = 122
     const val LEVEL_SOUND_EVENT_PACKET = 123
     const val LEVEL_EVENT_GENERIC_PACKET = 124
+
     // MIGRATED = 125
     // UNUSED = 126
     // UNUSED = 127
@@ -155,9 +175,11 @@ object ProtocolInfo {
     // MIGRATED = 142
     // MIGRATED = 143
     const val PLAYER_AUTH_INPUT_PACKET = 144
+
     // MIGRATED = 145
     const val PLAYER_ENCHANT_OPTIONS_PACKET = 146
     const val ITEM_STACK_REQUEST_PACKET = 147
+
     // MIGRATED = 148
     // MIGRATED = 149
     // MIGRATED = 150
@@ -196,6 +218,7 @@ object ProtocolInfo {
     // MIGRATED = 183
     // MIGRATED = 184
     const val REQUEST_PERMISSIONS_PACKET = 185
+
     // MIGRATED = 186
     // MIGRATED = 187
     // MIGRATED = 188
