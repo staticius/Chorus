@@ -70,7 +70,7 @@ object ProtocolInfo {
     // UNUSED = 57
     // MIGRATED = 58
     // MIGRATED = 59
-    const val SET_DIFFICULTY_PACKET = 60
+    // MIGRATED = 60
     // MIGRATED = 61
     const val SET_PLAYER_GAME_TYPE_PACKET = 62
     const val PLAYER_LIST_PACKET = 63
