@@ -57,6 +57,7 @@ import org.chorus_oss.chorus.lang.LangCode.Companion.from
 import org.chorus_oss.chorus.lang.TextContainer
 import org.chorus_oss.chorus.lang.TranslationContainer
 import org.chorus_oss.chorus.level.*
+import org.chorus_oss.chorus.level.GameRule
 import org.chorus_oss.chorus.level.Level.Companion.chunkHash
 import org.chorus_oss.chorus.level.Level.Companion.generateChunkLoaderId
 import org.chorus_oss.chorus.level.Level.Companion.getHashX
@@ -68,12 +69,12 @@ import org.chorus_oss.chorus.level.vibration.VibrationEvent
 import org.chorus_oss.chorus.level.vibration.VibrationType
 import org.chorus_oss.chorus.math.*
 import org.chorus_oss.chorus.nbt.tag.*
+import org.chorus_oss.chorus.network.DataPacket
 import org.chorus_oss.chorus.network.connection.BedrockDisconnectReasons
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.*
 import org.chorus_oss.chorus.network.protocol.types.GameType
-import org.chorus_oss.chorus.network.protocol.types.GameType.Companion.from
 import org.chorus_oss.chorus.network.protocol.types.PlayerBlockActionData
 import org.chorus_oss.chorus.network.protocol.types.PlayerInfo
 import org.chorus_oss.chorus.network.protocol.types.SpawnPointType
@@ -88,12 +89,10 @@ import org.chorus_oss.chorus.scheduler.TaskHandler
 import org.chorus_oss.chorus.scoreboard.IScoreboard
 import org.chorus_oss.chorus.scoreboard.IScoreboardLine
 import org.chorus_oss.chorus.scoreboard.data.DisplaySlot
-import org.chorus_oss.chorus.scoreboard.data.SortOrder
 import org.chorus_oss.chorus.scoreboard.displayer.IScoreboardViewer
 import org.chorus_oss.chorus.scoreboard.scorer.PlayerScorer
 import org.chorus_oss.chorus.utils.*
 import org.chorus_oss.chorus.utils.Binary.writeUUID
-import org.chorus_oss.chorus.utils.Identifier.Companion.tryParse
 import org.chorus_oss.chorus.utils.PortalHelper.moveToTheEnd
 import org.chorus_oss.chorus.utils.TextFormat.Companion.clean
 import org.chorus_oss.protocol.core.Packet
@@ -101,12 +100,7 @@ import org.chorus_oss.protocol.packets.CameraShakePacket
 import org.chorus_oss.protocol.packets.ClientboundCloseFormPacket
 import org.chorus_oss.protocol.packets.PlayStatusPacket
 import org.chorus_oss.protocol.packets.SetActorMotionPacket
-import org.chorus_oss.protocol.types.BlockPos
-import org.chorus_oss.protocol.types.ChunkPos
-import org.chorus_oss.protocol.types.CommandOriginData
-import org.chorus_oss.protocol.types.CommandOutputMessage
-import org.chorus_oss.protocol.types.CommandOutputType
-import org.chorus_oss.protocol.types.DisconnectFailReason
+import org.chorus_oss.protocol.types.*
 import org.chorus_oss.protocol.types.Vector3f
 import org.chorus_oss.protocol.types.camera.preset.CameraPreset
 import org.chorus_oss.protocol.types.scoreboard.ScoreboardSlot
@@ -792,7 +786,7 @@ open class Player(
         this.sendPacket(
             org.chorus_oss.protocol.packets.ChangeDimensionPacket(
                 dimension = dimension,
-                position = org.chorus_oss.protocol.types.Vector3f(position),
+                position = Vector3f(position),
                 respawn = false,
                 loadingScreenID = null
             )
@@ -4949,7 +4943,7 @@ open class Player(
                             Level.DIMENSION_NETHER -> Level.DIMENSION_OVERWORLD
                             else -> Level.DIMENSION_NETHER
                         },
-                        position = org.chorus_oss.protocol.types.Vector3f(0f, 0f, 0f),
+                        position = Vector3f(0f, 0f, 0f),
                         respawn = false,
                         loadingScreenID = null
                     )

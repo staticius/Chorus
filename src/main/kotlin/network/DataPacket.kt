@@ -1,4 +1,4 @@
-package org.chorus_oss.chorus.network.protocol
+package org.chorus_oss.chorus.network
 
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 

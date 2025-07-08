@@ -7,6 +7,7 @@ import io.netty.handler.codec.DecoderException
 import io.netty.util.ReferenceCountUtil
 import io.netty.util.concurrent.ScheduledFuture
 import io.netty.util.internal.PlatformDependent
+import org.chorus_oss.chorus.network.DataPacket
 import org.chorus_oss.chorus.network.connection.netty.BedrockPacketWrapper
 import org.chorus_oss.chorus.network.connection.netty.codec.FrameIdCodec
 import org.chorus_oss.chorus.network.connection.netty.codec.batch.BedrockBatchDecoder
@@ -16,7 +17,6 @@ import org.chorus_oss.chorus.network.connection.netty.codec.encryption.BedrockEn
 import org.chorus_oss.chorus.network.connection.netty.codec.encryption.BedrockEncryptionEncoder
 import org.chorus_oss.chorus.network.connection.netty.initializer.BedrockChannelInitializer
 import org.chorus_oss.chorus.network.connection.util.EncryptionUtils
-import org.chorus_oss.chorus.network.protocol.DataPacket
 import org.chorus_oss.chorus.network.protocol.types.PacketCompressionAlgorithm
 import org.chorus_oss.chorus.utils.Loggable
 import org.cloudburstmc.netty.channel.raknet.RakDisconnectReason

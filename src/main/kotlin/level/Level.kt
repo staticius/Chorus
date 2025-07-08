@@ -51,7 +51,11 @@ import org.chorus_oss.chorus.level.vibration.VibrationType
 import org.chorus_oss.chorus.math.*
 import org.chorus_oss.chorus.nbt.NBTIO
 import org.chorus_oss.chorus.nbt.tag.*
-import org.chorus_oss.chorus.network.protocol.*
+import org.chorus_oss.chorus.network.DataPacket
+import org.chorus_oss.chorus.network.protocol.LevelEventGenericPacket
+import org.chorus_oss.chorus.network.protocol.LevelEventPacket
+import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
+import org.chorus_oss.chorus.network.protocol.UpdateBlockPacket
 import org.chorus_oss.chorus.network.protocol.types.PlayerAbility
 import org.chorus_oss.chorus.network.protocol.types.SpawnPointType
 import org.chorus_oss.chorus.registry.Registries

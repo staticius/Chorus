@@ -130,6 +130,7 @@ class BlockManager(val level: Level) {
                                 syncedUpdateType = org.chorus_oss.protocol.types.BlockChangeEntry.Companion.MessageType.None,
                             )
                         )
+
                         else -> emptyList()
                     },
                     extra = when (b.layer) {

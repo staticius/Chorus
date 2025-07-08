@@ -3,12 +3,10 @@ package org.chorus_oss.chorus.item
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.level.Level
-import org.chorus_oss.chorus.math.BlockVector3
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.plugin.InternalPlugin
 import org.chorus_oss.chorus.utils.Loggable
-import org.chorus_oss.chorus.utils.Utils
 import org.chorus_oss.protocol.types.BlockPos
 import org.chorus_oss.protocol.types.Color
 import java.awt.image.BufferedImage

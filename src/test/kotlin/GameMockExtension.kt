@@ -27,7 +27,7 @@ import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.network.Network
 import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.DataPacketManager
-import org.chorus_oss.chorus.network.protocol.DataPacket
+import org.chorus_oss.chorus.network.DataPacket
 import org.chorus_oss.chorus.network.protocol.types.PlayerInfo
 import org.chorus_oss.chorus.permission.BanList
 import org.chorus_oss.chorus.plugin.JavaPluginLoader

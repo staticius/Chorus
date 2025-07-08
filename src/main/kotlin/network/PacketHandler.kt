@@ -1,6 +1,7 @@
-package org.chorus_oss.chorus.network.protocol
+package org.chorus_oss.chorus.network
 
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
+import org.chorus_oss.chorus.network.protocol.*
 
 interface PacketHandler {
     fun handle(pk: MigrationPacket<*>) {}

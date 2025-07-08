@@ -2,6 +2,9 @@ package org.chorus_oss.chorus.network.protocol
 
 import org.chorus_oss.chorus.block.property.enums.StructureBlockType
 import org.chorus_oss.chorus.math.BlockVector3
+import org.chorus_oss.chorus.network.DataPacket
+import org.chorus_oss.chorus.network.PacketDecoder
+import org.chorus_oss.chorus.network.PacketHandler
 import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
 import org.chorus_oss.chorus.network.protocol.types.*
