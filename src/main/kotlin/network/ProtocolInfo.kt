@@ -77,7 +77,7 @@ object ProtocolInfo {
     // MIGRATED = 64
     // DEPRECATED = 65
     // DEPRECATED = 66
-    const val CLIENTBOUND_MAP_ITEM_DATA_PACKET = 67
+    // MIGRATED = 67
     // MIGRATED = 68
     // MIGRATED = 69
     // MIGRATED = 70
