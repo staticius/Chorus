@@ -51,7 +51,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.MOVE_ENTITY_ABSOLUTE_PACKET, MoveEntityAbsolutePacket) // 18
         this.register(ProtocolInfo.MOVE_PLAYER_PACKET, MovePlayerPacket) // 19
         this.register(ProtocolInfo.PLAYER_ACTION_PACKET, PlayerActionPacket) // 36
-        this.register(ProtocolInfo.PLAYER_HOTBAR_PACKET, PlayerHotbarPacket) // 48
         this.register(ProtocolInfo.PLAYER_SKIN_PACKET, PlayerSkinPacket) // 93
         this.register(ProtocolInfo.RESPAWN_PACKET, RespawnPacket) // 45
         this.register(ProtocolInfo.SET_TITLE_PACKET, SetTitlePacket) // 88

@@ -58,7 +58,7 @@ object ProtocolInfo {
     const val RESPAWN_PACKET = 45
     // MIGRATED = 46
     // MIGRATED = 47
-    const val PLAYER_HOTBAR_PACKET = 48
+    // MIGRATED = 48
     // MIGRATED = 49
     // MIGRATED = 50
     // MIGRATED = 51

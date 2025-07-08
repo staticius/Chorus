@@ -45,8 +45,6 @@ interface PacketHandler {
 
     fun handle(pk: PlayerEnchantOptionsPacket) {}
 
-    fun handle(pk: PlayerHotbarPacket) {}
-
     fun handle(pk: PlayerListPacket) {}
 
     fun handle(pk: PlayerSkinPacket) {}
