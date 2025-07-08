@@ -49,8 +49,6 @@ interface PacketHandler {
 
     fun handle(pk: PlayerSkinPacket) {}
 
-    fun handle(pk: RequestAbilityPacket) {}
-
     fun handle(pk: RequestPermissionsPacket) {}
 
     fun handle(pk: SetScorePacket) {}

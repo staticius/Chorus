@@ -61,7 +61,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.ITEM_STACK_REQUEST_PACKET, ItemStackRequestPacket) // 147
         this.register(ProtocolInfo.NPC_REQUEST_PACKET, NPCRequestPacket) // 98
         this.register(ProtocolInfo.REQUEST_PERMISSIONS_PACKET, RequestPermissionsPacket) // 185
-        this.register(ProtocolInfo.REQUEST_ABILITY_PACKET, RequestAbilityPacket) // 184
         this.register(ProtocolInfo.STRUCTURE_BLOCK_UPDATE_PACKET, StructureBlockUpdatePacket) // 90
     }
 
