@@ -2605,9 +2605,10 @@ open class Player(
             //eg: 观察者模式玩家对于gm 0 1 2的玩家不可见
             Server.broadcastPacket(players, pk)
             //对于自身，我们使用SetPlayerGameTypePacket来确保与WaterDog的兼容
-            val pk2 = SetPlayerGameTypePacket()
-            pk2.gamemode = networkGamemode
-            this.dataPacket(pk2)
+            val pk2 = org.chorus_oss.protocol.packets.SetPlayerGameTypePacket(
+                gameType = org.chorus_oss.protocol.types.GameType.entries[networkGamemode],
+            )
+            this.sendPacket(pk2)
         }
 
         this.resetFallDistance()
