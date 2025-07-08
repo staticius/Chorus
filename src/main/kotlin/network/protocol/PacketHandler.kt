@@ -68,6 +68,4 @@ interface PacketHandler {
     fun handle(pk: UpdateAttributesPacket) {}
 
     fun handle(pk: UpdateBlockPacket) {}
-
-    fun handle(pk: UpdateBlockSyncedPacket) {}
 }

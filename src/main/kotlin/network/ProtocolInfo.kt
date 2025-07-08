@@ -120,7 +120,7 @@ object ProtocolInfo {
     // MIGRATED = 107
     const val SET_SCORE_PACKET = 108
     // MIGRATED = 109
-    const val UPDATE_BLOCK_SYNCED_PACKET = 110
+    // MIGRATED = 110
     const val MOVE_ENTITY_DELTA_PACKET = 111
     // MIGRATED = 112
     // MIGRATED = 113
