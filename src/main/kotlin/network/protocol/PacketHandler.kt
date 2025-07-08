@@ -53,8 +53,6 @@ interface PacketHandler {
 
     fun handle(pk: RequestPermissionsPacket) {}
 
-    fun handle(pk: RespawnPacket) {}
-
     fun handle(pk: SetScorePacket) {}
 
     fun handle(pk: SetTitlePacket) {}

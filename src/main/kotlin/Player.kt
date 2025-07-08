@@ -3994,14 +3994,12 @@ open class Player(
                 )
             )
 
-            val pk = RespawnPacket()
-            val pos = spawn.first
-            pk.x = pos!!.position.x.toFloat()
-            pk.y = pos.position.y.toFloat()
-            pk.z = pos.position.z.toFloat()
-            pk.respawnState = RespawnPacket.STATE_SEARCHING_FOR_SPAWN
-            pk.runtimeEntityId = this.getRuntimeID()
-            this.dataPacket(pk)
+            val pk = org.chorus_oss.protocol.packets.RespawnPacket(
+                position = Vector3f(spawn.first!!.position),
+                state = org.chorus_oss.protocol.packets.RespawnPacket.Companion.State.SearchingForSpawn,
+                entityRuntimeID = this.getRuntimeID().toULong(),
+            )
+            this.sendPacket(pk)
         }
     }
 
