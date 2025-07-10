@@ -8,6 +8,7 @@ import org.chorus_oss.chorus.entity.EntityID
 import org.chorus_oss.chorus.entity.EntityVariant
 import org.chorus_oss.chorus.event.player.PlayerBucketEmptyEvent
 import org.chorus_oss.chorus.event.player.PlayerBucketFillEvent
+import org.chorus_oss.chorus.experimental.network.protocol.utils.FLAG_ALL_PRIORITY
 import org.chorus_oss.chorus.level.Level
 import org.chorus_oss.chorus.level.Locator
 import org.chorus_oss.chorus.level.Sound
@@ -17,7 +18,6 @@ import org.chorus_oss.chorus.level.vibration.VibrationType
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.Vector3
 import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
-import org.chorus_oss.chorus.network.protocol.UpdateBlockPacket
 import org.chorus_oss.chorus.utils.Identifier
 
 
@@ -273,7 +273,7 @@ open class ItemBucket : Item {
                 player.level!!.sendBlocks(
                     arrayOf(player),
                     arrayOf(target.getLevelBlockAtLayer(1)),
-                    UpdateBlockPacket.FLAG_ALL_PRIORITY,
+                    org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(),
                     1
                 )
                 target.level.vibrationManager.callVibrationEvent(
@@ -299,7 +299,7 @@ open class ItemBucket : Item {
                 player.level!!.sendBlocks(
                     arrayOf(player),
                     arrayOf(block.getLevelBlockAtLayer(1)),
-                    UpdateBlockPacket.FLAG_ALL_PRIORITY,
+                    org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(),
                     1
                 )
                 player.inventory.sendContents(player)

@@ -12,6 +12,7 @@ import org.chorus_oss.chorus.event.entity.EntityDamageByEntityEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent
 import org.chorus_oss.chorus.event.entity.EntityDamageEvent.DamageModifier
 import org.chorus_oss.chorus.event.player.*
+import org.chorus_oss.chorus.experimental.network.protocol.utils.FLAG_ALL_PRIORITY
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.level.GameRule
@@ -21,7 +22,6 @@ import org.chorus_oss.chorus.level.vibration.VibrationType
 import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.InventoryTransactionPacket
-import org.chorus_oss.chorus.network.protocol.UpdateBlockPacket
 import org.chorus_oss.chorus.network.protocol.types.inventory.transaction.InventorySource
 import org.chorus_oss.chorus.network.protocol.types.inventory.transaction.ReleaseItemData
 import org.chorus_oss.chorus.network.protocol.types.inventory.transaction.UseItemData
@@ -311,12 +311,12 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                 player.level!!.sendBlocks(
                     arrayOf(player),
                     arrayOf<Block?>(target, block),
-                    UpdateBlockPacket.FLAG_NOGRAPHIC
+                    org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_NO_GRAPHICS.toInt()
                 )
                 player.level!!.sendBlocks(
                     arrayOf(player), arrayOf(
                         target.getLevelBlockAtLayer(1), block.getLevelBlockAtLayer(1)
-                    ), UpdateBlockPacket.FLAG_NOGRAPHIC, 1
+                    ), org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_NO_GRAPHICS.toInt(), 1
                 )
             }
 
@@ -356,7 +356,8 @@ class InventoryTransactionProcessor : DataPacketProcessor<InventoryTransactionPa
                     player.level!!.sendBlocks(
                         arrayOf(player), arrayOf(
                             target.position
-                        ), UpdateBlockPacket.FLAG_ALL_PRIORITY, 0
+                        ),
+                        org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(), 0
                     )
 
                     val blockEntity = player.level!!.getBlockEntity(blockVector.asVector3())

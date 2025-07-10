@@ -34,10 +34,6 @@ open class UpdateBlockPacket : DataPacket() {
         return ProtocolInfo.UPDATE_BLOCK_PACKET
     }
 
-    override fun handle(handler: PacketHandler) {
-        handler.handle(this)
-    }
-
     override fun toString(): String {
         return "UpdateBlockPacket(x=$x, y=$y, z=$z, blockRuntimeId=$blockRuntimeId, flags=$flags, dataLayer=$dataLayer)"
     }

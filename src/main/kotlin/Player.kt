@@ -4493,13 +4493,13 @@ open class Player(
         level!!.scheduler.scheduleDelayedTask(InternalPlugin.INSTANCE, {
             for (b in level!!.getBlockEntities().values) {
                 if (b is BlockEntitySpawnable) {
-                    val setAir = UpdateBlockPacket()
-                    setAir.blockRuntimeId = BlockAir.STATE.blockStateHash()
-                    setAir.flags = UpdateBlockPacket.FLAG_NETWORK
-                    setAir.x = b.position.floorX
-                    setAir.y = b.position.floorY
-                    setAir.z = b.position.floorZ
-                    this.dataPacket(setAir)
+                    val setAir = org.chorus_oss.protocol.packets.UpdateBlockPacket(
+                        position = BlockPos(b.position),
+                        newBlockRuntimeID = BlockAir.STATE.blockStateHash().toUInt(),
+                        flags = org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_NETWORK,
+                        layer = 0u
+                    )
+                    this.sendPacket(setAir)
 
                     val revertAir = UpdateBlockPacket()
                     revertAir.blockRuntimeId = b.block.runtimeId
