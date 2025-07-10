@@ -27,6 +27,8 @@ import org.chorus_oss.chorus.event.level.*
 import org.chorus_oss.chorus.event.player.PlayerInteractEvent
 import org.chorus_oss.chorus.event.weather.LightningStrikeEvent
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
+import org.chorus_oss.chorus.experimental.network.protocol.utils.FLAG_ALL
+import org.chorus_oss.chorus.experimental.network.protocol.utils.FLAG_ALL_PRIORITY
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.Item.Companion.get
@@ -55,7 +57,6 @@ import org.chorus_oss.chorus.network.DataPacket
 import org.chorus_oss.chorus.network.protocol.LevelEventGenericPacket
 import org.chorus_oss.chorus.network.protocol.LevelEventPacket
 import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
-import org.chorus_oss.chorus.network.protocol.UpdateBlockPacket
 import org.chorus_oss.chorus.network.protocol.types.PlayerAbility
 import org.chorus_oss.chorus.network.protocol.types.SpawnPointType
 import org.chorus_oss.chorus.registry.Registries
@@ -817,7 +818,7 @@ class Level(
                                         val hash = getBlockXYZ(index, blockHash, this)
                                         blocksArray[i++] = hash
                                     }
-                                    this.sendBlocks(playerArray, blocksArray, UpdateBlockPacket.FLAG_ALL)
+                                    this.sendBlocks(playerArray, blocksArray, org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL.toInt())
                                 }
                             }
                         }
@@ -1070,8 +1071,8 @@ class Level(
     }
 
     fun sendBlocks(target: Array<Player>, blocks: Array<out IVector3>) {
-        this.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_NONE, 0)
-        this.sendBlocks(target, blocks, UpdateBlockPacket.FLAG_NONE, 1)
+        this.sendBlocks(target, blocks, 0, 0)
+        this.sendBlocks(target, blocks, 0, 1)
     }
 
     fun sendBlocks(target: Array<Player>, blocks: Array<out IVector3?>, flags: Int) {
@@ -1096,7 +1097,7 @@ class Level(
         for (block in blocks) {
             if (block != null) size++
         }
-        val packets: ArrayList<UpdateBlockPacket> = ArrayList<UpdateBlockPacket>(size)
+        val packets: MutableList<org.chorus_oss.protocol.packets.UpdateBlockPacket> = mutableListOf()
         var chunks: MutableSet<Long>? = null
         if (optimizeRebuilds) {
             chunks = mutableSetOf()
@@ -1117,33 +1118,30 @@ class Level(
             }
 
             val bPos = pos.asBlockVector3()
-            val updateBlockPacket = UpdateBlockPacket()
-            updateBlockPacket.x = bPos.x
-            updateBlockPacket.y = bPos.y
-            updateBlockPacket.z = bPos.z
-            updateBlockPacket.flags = if (first) flags else UpdateBlockPacket.FLAG_NONE
-            updateBlockPacket.dataLayer = dataLayer
-            val runtimeId: Int
-            if (b is Block) {
-                runtimeId = b.runtimeId
-            } else if (b is Vector3WithRuntimeId) {
-                runtimeId = if (dataLayer == 0) {
-                    b.runtimeIdLayer0
+            val updateBlockPacket = org.chorus_oss.protocol.packets.UpdateBlockPacket(
+                position = BlockPos(pos),
+                newBlockRuntimeID = (if (b is Block) {
+                    b.runtimeId
+                } else if (b is Vector3WithRuntimeId) {
+                    if (dataLayer == 0) {
+                        b.runtimeIdLayer0
+                    } else {
+                        b.runtimeIdLayer1
+                    }
                 } else {
-                    b.runtimeIdLayer1
-                }
-            } else {
-                val hash = getBlockRuntimeId(bPos.x, bPos.y, bPos.z, dataLayer)
-                if (hash == Integer.MIN_VALUE) {
-                    continue
-                }
-                runtimeId = hash
-            }
-            updateBlockPacket.blockRuntimeId = runtimeId
+                    val hash = getBlockRuntimeId(bPos.x, bPos.y, bPos.z, dataLayer)
+                    if (hash == Integer.MIN_VALUE) {
+                        continue
+                    }
+                    hash
+                }).toUInt(),
+                flags = if (first) flags.toUInt() else 0u,
+                layer = dataLayer.toUInt(),
+            )
             packets.add(updateBlockPacket)
         }
         for (p in packets) {
-            Server.broadcastPacket(target, p)
+            Server.broadcastPacket(target.toList(), p)
         }
     }
 
@@ -2201,13 +2199,13 @@ class Level(
                         block.position.add(0.0, 0.0, 1.0),
                         block.position.add(0.0, 0.0, -1.0)
                     ),
-                    UpdateBlockPacket.FLAG_ALL_PRIORITY
+                    org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt()
                 )
             }
             this.sendBlocks(
                 getChunkPlayers(cx, cz).values.toTypedArray(),
                 arrayOf<Block?>(block),
-                UpdateBlockPacket.FLAG_ALL_PRIORITY,
+                org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(),
                 block.layer
             )
         } else {
@@ -2695,7 +2693,7 @@ class Level(
                     player.level!!.sendBlocks(
                         arrayOf<Player>(player),
                         arrayOf<Block?>(Block.get(BlockID.AIR, target)),
-                        UpdateBlockPacket.FLAG_ALL_PRIORITY,
+                        org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(),
                         1
                     )
                 }

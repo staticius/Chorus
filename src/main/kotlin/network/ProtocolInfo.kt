@@ -35,7 +35,7 @@ object ProtocolInfo {
     const val MOVE_PLAYER_PACKET = 19
 
     // UNUSED = 20
-    const val UPDATE_BLOCK_PACKET = 21
+    // MIGRATED = 21
 
     // MIGRATED = 22
     // UNUSED = 23

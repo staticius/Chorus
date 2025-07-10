@@ -46,6 +46,7 @@ import org.chorus_oss.chorus.event.player.*
 import org.chorus_oss.chorus.event.player.PlayerTeleportEvent.TeleportCause
 import org.chorus_oss.chorus.event.server.DataPacketSendEvent
 import org.chorus_oss.chorus.experimental.network.MigrationPacket
+import org.chorus_oss.chorus.experimental.network.protocol.utils.FLAG_ALL_PRIORITY
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.form.window.Form
 import org.chorus_oss.chorus.inventory.*
@@ -644,12 +645,12 @@ open class Player(
         Server.instance.pluginManager.callEvent(playerInteractEvent)
         if (playerInteractEvent.cancelled) {
             inventory.sendHeldItem(this)
-            level!!.sendBlocks(arrayOf(this), arrayOf<Block?>(target), UpdateBlockPacket.FLAG_ALL_PRIORITY, false)
+            level!!.sendBlocks(arrayOf(this), arrayOf<Block?>(target), org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(), false)
             if (target.getLevelBlockAtLayer(1) is BlockLiquid) {
                 level!!.sendBlocks(
                     arrayOf(this), arrayOf(
                         target.getLevelBlockAtLayer(1)
-                    ), UpdateBlockPacket.FLAG_ALL_PRIORITY, 1
+                    ), org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(), 1
                 )
             }
             return
@@ -755,7 +756,7 @@ open class Player(
             } else if (handItem == null) level!!.sendBlocks(
                 arrayOf(this), arrayOf(
                     level!!.getBlock(blockPos.asVector3())
-                ), UpdateBlockPacket.FLAG_ALL_PRIORITY, 0
+                ), org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(), 0
             )
             return
         }
@@ -765,7 +766,7 @@ open class Player(
 
         if (blockPos.distanceSquared(this.position) < 100) {
             val target = level!!.getBlock(blockPos.asVector3())
-            level!!.sendBlocks(arrayOf(this), arrayOf<Block?>(target), UpdateBlockPacket.FLAG_ALL_PRIORITY)
+            level!!.sendBlocks(arrayOf(this), arrayOf<Block?>(target), org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt())
 
             val blockEntity = level!!.getBlockEntity(blockPos.asVector3())
             if (blockEntity is BlockEntitySpawnable) {
@@ -4501,13 +4502,13 @@ open class Player(
                     )
                     this.sendPacket(setAir)
 
-                    val revertAir = UpdateBlockPacket()
-                    revertAir.blockRuntimeId = b.block.runtimeId
-                    revertAir.flags = UpdateBlockPacket.FLAG_NETWORK
-                    revertAir.x = b.position.floorX
-                    revertAir.y = b.position.floorY
-                    revertAir.z = b.position.floorZ
-                    this.dataPacket(revertAir)
+                    val revertAir = org.chorus_oss.protocol.packets.UpdateBlockPacket(
+                        position = BlockPos(b.position),
+                        newBlockRuntimeID = b.block.runtimeId.toUInt(),
+                        flags = org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_NETWORK,
+                        layer = 0u
+                    )
+                    this.sendPacket(revertAir)
                     b.spawnTo(this)
                 }
             }
