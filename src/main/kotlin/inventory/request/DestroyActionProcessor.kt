@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.inventory.request
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.inventory.Inventory
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.DestroyAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
@@ -13,7 +12,11 @@ class DestroyActionProcessor : ItemStackRequestActionProcessor<DestroyRequestAct
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.DESTROY
 
-    override fun handle(action: DestroyRequestAction, player: Player, context: ItemStackRequestContext): ActionResponse? {
+    override fun handle(
+        action: DestroyRequestAction,
+        player: Player,
+        context: ItemStackRequestContext
+    ): ActionResponse? {
         val noResponseForDestroyAction =
             context.get<Boolean>(CraftResultDeprecatedActionProcessor.Companion.NO_RESPONSE_DESTROY_KEY)
         if (noResponseForDestroyAction != null && noResponseForDestroyAction) {

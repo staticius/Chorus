@@ -41,7 +41,8 @@ class CraftRecipeAutoProcessor : ItemStackRequestActionProcessor<AutoCraftRecipe
                 val descriptor = serverExpect.descriptor
                 when (descriptor) {
                     is ItemTagItemDescriptor -> match = ItemTags.getTagSet(clientInputItem.id).contains(descriptor.tag)
-                    is DefaultItemDescriptor -> match = clientInputItem.getNetId() == descriptor.networkID.toInt() && clientInputItem.meta == descriptor.metadataValue?.toInt()
+                    is DefaultItemDescriptor -> match =
+                        clientInputItem.getNetId() == descriptor.networkID.toInt() && clientInputItem.meta == descriptor.metadataValue?.toInt()
                 }
                 if (match) {
                     success++

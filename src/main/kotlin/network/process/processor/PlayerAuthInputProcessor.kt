@@ -34,7 +34,8 @@ class PlayerAuthInputProcessor : DataPacketProcessor<MigrationPacket<PlayerAuthI
                 val blockPos = action.position!!
                 val blockFace = fromIndex(action.facing!!)
 
-                val lastBreakPos = if (player.player.lastBlockAction == null) null else player.player.lastBlockAction!!.position
+                val lastBreakPos =
+                    if (player.player.lastBlockAction == null) null else player.player.lastBlockAction!!.position
                 if (lastBreakPos != null && (lastBreakPos.x != blockPos.x || lastBreakPos.y != blockPos.y || lastBreakPos.z != blockPos.z)) {
                     player.onBlockBreakAbort(Vector3(lastBreakPos))
                     player.onBlockBreakStart(Vector3(blockPos), blockFace)

@@ -817,7 +817,11 @@ class Level(
                                         val hash = getBlockXYZ(index, blockHash, this)
                                         blocksArray[i++] = hash
                                     }
-                                    this.sendBlocks(playerArray, blocksArray, org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL.toInt())
+                                    this.sendBlocks(
+                                        playerArray,
+                                        blocksArray,
+                                        org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL.toInt()
+                                    )
                                 }
                             }
                         }

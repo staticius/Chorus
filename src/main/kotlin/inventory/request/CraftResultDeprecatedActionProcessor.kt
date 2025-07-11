@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.inventory.request
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.CraftResultsDeprecatedAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus_oss.chorus.recipe.Recipe
 import org.chorus_oss.chorus.recipe.RecipeType

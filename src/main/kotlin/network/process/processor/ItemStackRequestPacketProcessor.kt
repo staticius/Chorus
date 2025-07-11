@@ -8,7 +8,6 @@ import org.chorus_oss.chorus.experimental.network.MigrationPacket
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.inventory.request.*
-import org.chorus_oss.chorus.network.ProtocolInfo
 import org.chorus_oss.chorus.network.process.DataPacketProcessor
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.utils.Loggable
@@ -25,12 +24,14 @@ class ItemStackRequestPacketProcessor : DataPacketProcessor<MigrationPacket<Item
         for (request in packet.requests) {
             val actions = request.actions
             val context = ItemStackRequestContext(request)
-            val responseContainerMap: MutableMap<org.chorus_oss.protocol.types.itemstack.ContainerSlotType, ItemStackResponseContainer> = LinkedHashMap()
+            val responseContainerMap: MutableMap<org.chorus_oss.protocol.types.itemstack.ContainerSlotType, ItemStackResponseContainer> =
+                LinkedHashMap()
             for (index in actions.indices) {
                 val action = actions[index]
                 context.currentActionIndex = (index)
                 @Suppress("UNCHECKED_CAST")
-                val processor = PROCESSORS[action.type] as ItemStackRequestActionProcessor<org.chorus_oss.protocol.types.itemstack.request.action.ItemStackRequestAction>?
+                val processor =
+                    PROCESSORS[action.type] as ItemStackRequestActionProcessor<ItemStackRequestAction>?
                 if (processor == null) {
                     log.warn("Unhandled inventory action type {}", action.type)
                     continue

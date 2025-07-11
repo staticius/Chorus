@@ -16,9 +16,6 @@ import org.chorus_oss.chorus.network.protocol.PlayerEnchantOptionsPacket
 import org.chorus_oss.chorus.network.protocol.types.TrimData
 import org.chorus_oss.chorus.network.protocol.types.TrimMaterial
 import org.chorus_oss.chorus.network.protocol.types.TrimPattern
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ConsumeAction
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.CraftRecipeAction
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus_oss.chorus.recipe.SmithingTransformRecipe
 import org.chorus_oss.chorus.recipe.SmithingTrimRecipe
@@ -62,7 +59,11 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeRe
         return false
     }
 
-    override fun handle(action: CraftRecipeRequestAction, player: Player, context: ItemStackRequestContext): ActionResponse? {
+    override fun handle(
+        action: CraftRecipeRequestAction,
+        player: Player,
+        context: ItemStackRequestContext
+    ): ActionResponse? {
         val inventory = player.topWindow.orElseGet { player.craftingGrid }
         if (action.recipeNetworkId.toInt() >= PlayerEnchantOptionsPacket.ENCH_RECIPEID) {  //handle ench recipe
             val enchantOptionData = PlayerEnchantOptionsPacket.RECIPE_MAP[action.recipeNetworkId.toInt()]
@@ -309,7 +310,10 @@ class CraftRecipeActionProcessor : ItemStackRequestActionProcessor<CraftRecipeRe
         const val RECIPE_DATA_KEY: String = "recipe"
         const val ENCH_RECIPE_KEY: String = "ench_recipe"
 
-        fun findAllConsumeActions(actions: List<org.chorus_oss.protocol.types.itemstack.request.action.ItemStackRequestAction>, startIndex: Int): List<ConsumeRequestAction> {
+        fun findAllConsumeActions(
+            actions: List<org.chorus_oss.protocol.types.itemstack.request.action.ItemStackRequestAction>,
+            startIndex: Int
+        ): List<ConsumeRequestAction> {
             val found = mutableListOf<ConsumeRequestAction>()
             for (i in startIndex..<actions.size) {
                 val action = actions[i]

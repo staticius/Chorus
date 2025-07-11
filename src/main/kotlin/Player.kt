@@ -76,7 +76,6 @@ import org.chorus_oss.chorus.network.connection.BedrockSession
 import org.chorus_oss.chorus.network.process.SessionState
 import org.chorus_oss.chorus.network.protocol.*
 import org.chorus_oss.chorus.network.protocol.types.GameType
-import org.chorus_oss.chorus.network.protocol.types.PlayerBlockActionData
 import org.chorus_oss.chorus.network.protocol.types.PlayerInfo
 import org.chorus_oss.chorus.network.protocol.types.SpawnPointType
 import org.chorus_oss.chorus.permission.PermissibleBase
@@ -429,7 +428,7 @@ open class Player(
                 this.sendPacket(pk)
             }
         }
-    var lastBlockAction: org.chorus_oss.protocol.types.PlayerBlockActionData? = null
+    var lastBlockAction: PlayerBlockActionData? = null
     var preLoginEventTask: AsyncTask? = null
 
     /**
@@ -645,7 +644,12 @@ open class Player(
         Server.instance.pluginManager.callEvent(playerInteractEvent)
         if (playerInteractEvent.cancelled) {
             inventory.sendHeldItem(this)
-            level!!.sendBlocks(arrayOf(this), arrayOf<Block?>(target), org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(), false)
+            level!!.sendBlocks(
+                arrayOf(this),
+                arrayOf<Block?>(target),
+                org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(),
+                false
+            )
             if (target.getLevelBlockAtLayer(1) is BlockLiquid) {
                 level!!.sendBlocks(
                     arrayOf(this), arrayOf(
@@ -766,7 +770,11 @@ open class Player(
 
         if (blockPos.distanceSquared(this.position) < 100) {
             val target = level!!.getBlock(blockPos.asVector3())
-            level!!.sendBlocks(arrayOf(this), arrayOf<Block?>(target), org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt())
+            level!!.sendBlocks(
+                arrayOf(this),
+                arrayOf<Block?>(target),
+                org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt()
+            )
 
             val blockEntity = level!!.getBlockEntity(blockPos.asVector3())
             if (blockEntity is BlockEntitySpawnable) {

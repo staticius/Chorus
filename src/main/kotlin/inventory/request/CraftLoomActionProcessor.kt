@@ -7,7 +7,6 @@ import org.chorus_oss.chorus.item.ItemBannerPattern
 import org.chorus_oss.chorus.item.ItemDye
 import org.chorus_oss.chorus.network.protocol.types.BannerPattern
 import org.chorus_oss.chorus.network.protocol.types.BannerPatternType
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.CraftLoomAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus_oss.chorus.utils.DyeColor
 import org.chorus_oss.chorus.utils.Loggable
@@ -17,7 +16,11 @@ class CraftLoomActionProcessor : ItemStackRequestActionProcessor<CraftLoomReques
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.CRAFT_LOOM
 
-    override fun handle(action: CraftLoomRequestAction, player: Player, context: ItemStackRequestContext): ActionResponse? {
+    override fun handle(
+        action: CraftLoomRequestAction,
+        player: Player,
+        context: ItemStackRequestContext
+    ): ActionResponse? {
         val topWindow = player.topWindow
         if (topWindow.isEmpty) {
             log.error("the player's haven't open any inventory!")

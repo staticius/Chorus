@@ -4,7 +4,6 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.Server
 import org.chorus_oss.chorus.event.player.PlayerDropItemEvent
 import org.chorus_oss.chorus.inventory.Inventory
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.DropAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot

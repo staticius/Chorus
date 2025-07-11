@@ -12,7 +12,6 @@ import org.chorus_oss.chorus.item.ItemID
 import org.chorus_oss.chorus.item.enchantment.Enchantment
 import org.chorus_oss.chorus.level.Sound
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.CraftRecipeOptionalAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.protocol.types.itemstack.request.action.CraftRecipeOptionalRequestAction

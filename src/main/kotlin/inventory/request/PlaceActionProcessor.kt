@@ -6,7 +6,6 @@ import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.inventory.SoleInventory
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.PlaceAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import org.chorus_oss.chorus.utils.Loggable

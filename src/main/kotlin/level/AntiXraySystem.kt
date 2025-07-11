@@ -179,7 +179,11 @@ class AntiXraySystem(private val level: Level) {
                 }
             }
         }
-        level.sendBlocks(playerArray, vRidList.toTypedArray(), org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL.toInt())
+        level.sendBlocks(
+            playerArray,
+            vRidList.toTypedArray(),
+            org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL.toInt()
+        )
     }
 
     fun deObfuscateBlock(player: Player, face: BlockFace, target: Block) {

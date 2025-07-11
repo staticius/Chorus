@@ -12,6 +12,7 @@ fun ItemDescriptor.toItem(): Item {
             Registries.ITEM_RUNTIMEID.getIdentifier(this.networkID.toInt()),
             (this.metadataValue ?: 0).toInt()
         )
+
         else -> throw UnsupportedOperationException()
     }
 }

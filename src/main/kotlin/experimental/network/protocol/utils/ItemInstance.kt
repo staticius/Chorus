@@ -6,9 +6,7 @@ import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemDurable
 import org.chorus_oss.chorus.nbt.NBTIO.read
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
-import org.chorus_oss.chorus.nbt.tag.Tag
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
-import org.chorus_oss.chorus.registry.ItemRegistry
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.nbt.TagSerialization
 import org.chorus_oss.protocol.types.item.ItemInstance

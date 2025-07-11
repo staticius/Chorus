@@ -24,7 +24,8 @@ class RequestPermissionsProcessor : DataPacketProcessor<MigrationPacket<RequestP
         val player = Server.instance.onlinePlayers.values.find { it.getUniqueID() == packet.entityUniqueID }
         if (player != null && player.isOnline) {
             for (controllableAbility in org.chorus_oss.protocol.types.PlayerAbility.Controllable) {
-                player.adventureSettings[controllableAbility] = (packet.requestedPermissions and controllableAbility.bit) != 0.toUShort()
+                player.adventureSettings[controllableAbility] =
+                    (packet.requestedPermissions and controllableAbility.bit) != 0.toUShort()
             }
             player.adventureSettings.playerPermission = packet.permissionLevel
             player.adventureSettings.update()

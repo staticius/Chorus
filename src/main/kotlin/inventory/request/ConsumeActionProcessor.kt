@@ -2,7 +2,6 @@ package org.chorus_oss.chorus.inventory.request
 
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.inventory.Inventory
-import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
@@ -10,7 +9,11 @@ import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.protocol.types.itemstack.request.action.ConsumeRequestAction
 
 class ConsumeActionProcessor : ItemStackRequestActionProcessor<ConsumeRequestAction> {
-    override fun handle(action: ConsumeRequestAction, player: Player, context: ItemStackRequestContext): ActionResponse? {
+    override fun handle(
+        action: ConsumeRequestAction,
+        player: Player,
+        context: ItemStackRequestContext
+    ): ActionResponse? {
         // We have validated the recipe in CraftRecipeActionProcessor, so here we can believe the client directly
         val count = action.count
         if (count == 0.toByte()) {

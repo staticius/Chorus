@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.inventory.request
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.inventory.Inventory
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.SwapAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import org.chorus_oss.chorus.utils.Loggable

@@ -4,9 +4,7 @@ import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.experimental.network.protocol.utils.invoke
 import org.chorus_oss.chorus.inventory.SpecialWindowId
 import org.chorus_oss.chorus.item.Item
-import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.MineBlockAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseContainer
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import org.chorus_oss.chorus.utils.Loggable
@@ -19,7 +17,11 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockReques
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.MINE_BLOCK
 
-    override fun handle(action: MineBlockRequestAction, player: Player, context: ItemStackRequestContext): ActionResponse {
+    override fun handle(
+        action: MineBlockRequestAction,
+        player: Player,
+        context: ItemStackRequestContext
+    ): ActionResponse {
         val inventory = player.inventory
         val heldItemIndex = inventory.heldItemIndex
         if (heldItemIndex != action.hotbarSlot) {
@@ -39,7 +41,7 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockReques
                 windowID = id.toUInt(),
                 slot = action.hotbarSlot.toUInt(),
                 container = org.chorus_oss.protocol.types.inventory.FullContainerName(
-                    org.chorus_oss.protocol.types.itemstack.ContainerSlotType.Hotbar,
+                    ContainerSlotType.Hotbar,
                     id,
                 ),
                 storageItem = ItemStack(Item.AIR),

@@ -38,7 +38,8 @@ class AdventureSettings : Cloneable {
             set(Type.TELEPORT, player.isOp)
 
             commandPermission = if (player.isOp) CommandPermission.GAME_DIRECTOR else CommandPermission.ANY
-            playerPermission = if (player.isOp) org.chorus_oss.protocol.types.PlayerPermission.Operator else org.chorus_oss.protocol.types.PlayerPermission.Member
+            playerPermission =
+                if (player.isOp) org.chorus_oss.protocol.types.PlayerPermission.Operator else org.chorus_oss.protocol.types.PlayerPermission.Member
         } else {
             readNBT(nbt)
         }

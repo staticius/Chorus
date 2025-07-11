@@ -3,7 +3,6 @@ package org.chorus_oss.chorus.inventory.request
 import org.chorus_oss.chorus.Player
 import org.chorus_oss.chorus.blockentity.BlockEntityBeacon
 import org.chorus_oss.chorus.inventory.BeaconInventory
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.BeaconPaymentAction
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestActionType
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.protocol.types.itemstack.request.action.BeaconPaymentRequestAction
