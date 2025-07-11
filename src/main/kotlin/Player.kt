@@ -429,7 +429,7 @@ open class Player(
                 this.sendPacket(pk)
             }
         }
-    var lastBlockAction: PlayerBlockActionData? = null
+    var lastBlockAction: org.chorus_oss.protocol.types.PlayerBlockActionData? = null
     var preLoginEventTask: AsyncTask? = null
 
     /**

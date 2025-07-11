@@ -1,12 +1,10 @@
 package org.chorus_oss.chorus.network.protocol.types.itemstack.request
 
-import org.chorus_oss.chorus.network.protocol.ItemStackRequestPacket
-import org.chorus_oss.chorus.network.protocol.PlayerAuthInputPacket
 import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.ItemStackRequestAction
 
 /**
- * Request represents a single request present in an [ItemStackRequestPacket] or
- * [PlayerAuthInputPacket] sent by the client to
+ * Request represents a single request present in an ItemStackRequestPacket or
+ * PlayerAuthInputPacket sent by the client to
  * change an item in an inventory.
  * Item stack requests are either approved or rejected by the server using the ItemStackResponse packet.
  */

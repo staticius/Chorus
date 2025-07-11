@@ -18,3 +18,11 @@ operator fun Vector3f.Companion.invoke(vec: org.chorus_oss.chorus.math.Vector3f)
         vec.z
     )
 }
+
+operator fun Vector3.Companion.invoke(from: Vector3f): Vector3 {
+    return Vector3(
+        from.x.toDouble(),
+        from.y.toDouble(),
+        from.z.toDouble()
+    )
+}
