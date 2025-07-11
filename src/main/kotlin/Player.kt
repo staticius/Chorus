@@ -99,8 +99,10 @@ import org.chorus_oss.chorus.utils.TextFormat.Companion.clean
 import org.chorus_oss.protocol.core.Packet
 import org.chorus_oss.protocol.packets.CameraShakePacket
 import org.chorus_oss.protocol.packets.ClientboundCloseFormPacket
+import org.chorus_oss.protocol.packets.CompletedUsingItemPacket
 import org.chorus_oss.protocol.packets.PlayStatusPacket
 import org.chorus_oss.protocol.packets.SetActorMotionPacket
+import org.chorus_oss.protocol.packets.TextPacket
 import org.chorus_oss.protocol.types.*
 import org.chorus_oss.protocol.types.Vector3f
 import org.chorus_oss.protocol.types.camera.preset.CameraPreset
@@ -3241,11 +3243,22 @@ open class Player(
         return this.chunkRadius
     }
 
-    override fun sendMessage(message: String) {
-        val pk = TextPacket()
-        pk.type = TextPacket.TYPE_RAW
-        pk.message = Server.instance.lang.tr(message)
-        this.dataPacket(pk)
+    override fun sendMessage(message: String){
+        sendMessage(message, isLocal = false)
+    }
+
+    fun sendMessage(message: String, isLocal: Boolean) {
+        val pk = TextPacket(
+            textType = TextPacket.Companion.TextType.Raw,
+            needsTranslation = isLocal,
+            sourceName = null,
+            message = Server.instance.lang.tr(message),
+            parameters = emptyList(),
+            xuid = this.loginChainData.xuid.toString().orEmpty(),
+            platformChatID = "",
+            filteredMessage = ""
+        )
+        this.sendPacket(pk)
     }
 
     override fun sendMessage(message: TextContainer) {
@@ -3282,10 +3295,17 @@ open class Player(
      * @param text JSON文本<br></br>Json text
      */
     fun sendRawTextMessage(text: RawText) {
-        val pk = TextPacket()
-        pk.type = TextPacket.TYPE_OBJECT
-        pk.message = text.toRawText()
-        this.dataPacket(pk)
+        val pk = TextPacket(
+            textType = TextPacket.Companion.TextType.Raw,
+            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            sourceName = null,
+            message = text.toRawText(),
+            parameters = EmptyArrays.EMPTY_STRINGS.toList(),
+            xuid = "",
+            platformChatID = "",
+            filteredMessage = ""
+        )
+        this.sendPacket(pk)
     }
 
     /**
@@ -3304,26 +3324,38 @@ open class Player(
      */
     @JvmOverloads
     fun sendTranslation(message: String, parameters: Array<String> = EmptyArrays.EMPTY_STRINGS) {
-        val pk = TextPacket()
-        if (Server.instance.settings.baseSettings.forceServerTranslate) {
-            pk.type = TextPacket.TYPE_RAW
-            pk.message = Server.instance.lang.tr(message, *parameters)
-        } else {
-            pk.type = TextPacket.TYPE_TRANSLATION
-            pk.message = Server.instance.lang.tr(message, parameters, "nukkit.", true)
-            for (i in parameters.indices) {
-                parameters[i] = Server.instance.lang.tr(parameters[i], parameters, "nukkit.", true)
-            }
-            pk.parameters = parameters
-        }
-        this.dataPacket(pk)
+        val packet = TextPacket(
+
+            textType = when (Server.instance.settings.baseSettings.forceServerTranslate) {
+                true -> TextPacket.Companion.TextType.Raw
+                false -> TextPacket.Companion.TextType.Translation
+            },
+
+            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            sourceName = null,
+            message = when (Server.instance.settings.baseSettings.forceServerTranslate) {
+                true -> Server.instance.lang.tr(message, *parameters)
+                false -> Server.instance.lang.tr(message, parameters, "nukkit.", true)
+            },
+
+            parameters = when (Server.instance.settings.baseSettings.forceServerTranslate) {
+                true -> null
+                false -> parameters.map { Server.instance.lang.tr(it, parameters, "nukkit.", true) }
+            },
+
+            xuid = "",
+            platformChatID = "",
+            filteredMessage = ""
+        )
+
+        this.sendPacket(packet)
     }
 
     /**
      * @see .sendChat
      */
     fun sendChat(message: String) {
-        this.sendChat("", message)
+        this.sendChat(source = "", message)
     }
 
     /**
@@ -3335,11 +3367,18 @@ open class Player(
      * @param message 消息
      */
     fun sendChat(source: String, message: String) {
-        val pk = TextPacket()
-        pk.type = TextPacket.TYPE_CHAT
-        pk.source = source
-        pk.message = Server.instance.lang.tr(message)
-        this.dataPacket(pk)
+
+        val pk = TextPacket(
+            textType = TextPacket.Companion.TextType.Chat,
+            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            sourceName = source,
+            message = Server.instance.lang.tr(message),
+            parameters = EmptyArrays.EMPTY_STRINGS.toList(),
+            xuid = player.loginChainData.xuid.orEmpty(),
+            platformChatID = "",
+            filteredMessage = ""
+        )
+        this.sendPacket(packet = pk)
     }
 
     /**
@@ -3356,10 +3395,19 @@ open class Player(
      */
     @JvmOverloads
     fun sendPopup(message: String, subtitle: String? = "") {
-        val pk = TextPacket()
-        pk.type = TextPacket.TYPE_POPUP
-        pk.message = message
-        this.dataPacket(pk)
+
+        val pk = TextPacket(
+            textType = TextPacket.Companion.TextType.Popup,
+            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            sourceName = "",
+            message = Server.instance.lang.tr(message),
+            parameters = EmptyArrays.EMPTY_STRINGS.toList(),
+            xuid = player.loginChainData.xuid.orEmpty(),
+            platformChatID = "",
+            filteredMessage = ""
+        )
+
+        this.sendPacket(pk)
     }
 
     /**
@@ -3371,11 +3419,21 @@ open class Player(
      * @param message 消息
      */
     fun sendTip(message: String) {
-        val pk = TextPacket()
-        pk.type = TextPacket.TYPE_TIP
-        pk.message = message
-        this.dataPacket(pk)
+
+        val pk = TextPacket(
+            textType = TextPacket.Companion.TextType.Tip,
+            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            sourceName = "",
+            message = Server.instance.lang.tr(message),
+            parameters = emptyList(),
+            xuid = player.loginChainData.xuid.orEmpty(),
+            platformChatID = "",
+            filteredMessage = ""
+        )
+
+        this.sendPacket(pk)
     }
+
 
     /**
      * 清除掉玩家身上正在显示的标题信息。
@@ -5330,17 +5388,32 @@ open class Player(
 
     // TODO: Support Translation Parameters
     fun sendPopupJukebox(message: String) {
-        val pk = TextPacket()
-        pk.type = TextPacket.TYPE_JUKEBOX_POPUP
-        pk.message = message
-        this.dataPacket(pk)
+
+        val pk = TextPacket(
+            textType = TextPacket.Companion.TextType.JukeboxPopup,
+            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            sourceName = "",
+            message = Server.instance.lang.tr(message),
+            parameters = emptyList(),
+            xuid = "",
+            platformChatID = "",
+            filteredMessage = ""
+        )
+        this.sendPacket(pk)
     }
 
     fun sendSystem(message: String) {
-        val pk = TextPacket()
-        pk.type = TextPacket.TYPE_SYSTEM
-        pk.message = message
-        this.dataPacket(pk)
+        val pk = TextPacket(
+            textType = TextPacket.Companion.TextType.System,
+            needsTranslation = false,
+            sourceName = "",
+            message = message,
+            parameters = emptyList(),
+            xuid = "",
+            platformChatID = "",
+            filteredMessage = ""
+        )
+        this.sendPacket(pk)
     }
 
 
@@ -5350,11 +5423,17 @@ open class Player(
 
 
     fun sendWhisper(source: String, message: String) {
-        val pk = TextPacket()
-        pk.type = TextPacket.TYPE_WHISPER
-        pk.source = source
-        pk.message = message
-        this.dataPacket(pk)
+        val pk = TextPacket(
+            textType = TextPacket.Companion.TextType.Whisper,
+            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            sourceName = source,
+            message = message,
+            parameters = emptyList(),
+            xuid = "",
+            platformChatID = "",
+            filteredMessage = ""
+        )
+        this.sendPacket(pk)
     }
 
 
@@ -5364,20 +5443,26 @@ open class Player(
 
 
     fun sendAnnouncement(source: String, message: String) {
-        val pk = TextPacket()
-        pk.type = TextPacket.TYPE_ANNOUNCEMENT
-        pk.source = source
-        pk.message = message
-        this.dataPacket(pk)
+        val pk = TextPacket(
+            textType = TextPacket.Companion.TextType.Announcement,
+            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            sourceName = source,
+            message = Server.instance.lang.tr(message),
+            parameters = emptyList(),
+            xuid = "",
+            platformChatID = "",
+            filteredMessage = ""
+        )
+        this.sendPacket(pk)
     }
 
 
     fun completeUsingItem(
         itemId: Short,
-        action: org.chorus_oss.protocol.packets.CompletedUsingItemPacket.Companion.ItemUseMethod
+        action: CompletedUsingItemPacket.Companion.ItemUseMethod
     ) {
         this.sendPacket(
-            org.chorus_oss.protocol.packets.CompletedUsingItemPacket(
+            packet = CompletedUsingItemPacket(
                 itemID = itemId,
                 itemUseMethod = action
             )

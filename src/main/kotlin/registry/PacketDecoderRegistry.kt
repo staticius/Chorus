@@ -41,11 +41,8 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         // Register all packets that are Client -> Server
 
         this.register(ProtocolInfo.INVENTORY_TRANSACTION_PACKET, InventoryTransactionPacket) // 30
-        this.register(ProtocolInfo.INTERACT_PACKET, InteractPacket) // 33
         this.register(ProtocolInfo.ANIMATE_PACKET, AnimatePacket) // 44
-
         this.register(ProtocolInfo.ENTITY_EVENT_PACKET, EntityEventPacket)
-
         this.register(ProtocolInfo.LOGIN_PACKET, LoginPacket) // 1
         this.register(ProtocolInfo.MOB_ARMOR_EQUIPMENT_PACKET, MobArmorEquipmentPacket) // 32
         this.register(ProtocolInfo.MOB_EQUIPMENT_PACKET, MobEquipmentPacket) // 31
@@ -55,7 +52,6 @@ class PacketDecoderRegistry : IRegistry<Int, PacketDecoder<out DataPacket>?, Pac
         this.register(ProtocolInfo.PLAYER_ACTION_PACKET, PlayerActionPacket) // 36
         this.register(ProtocolInfo.PLAYER_SKIN_PACKET, PlayerSkinPacket) // 93
         this.register(ProtocolInfo.SET_TITLE_PACKET, SetTitlePacket) // 88
-        this.register(ProtocolInfo.TEXT_PACKET, TextPacket) // 9
         this.register(ProtocolInfo.MOVE_ENTITY_DELTA_PACKET, MoveEntityDeltaPacket) // 111
         this.register(ProtocolInfo.LEVEL_SOUND_EVENT_PACKET, LevelSoundEventPacket) // 123
         this.register(ProtocolInfo.PLAYER_AUTH_INPUT_PACKET, PlayerAuthInputPacket) // 144
