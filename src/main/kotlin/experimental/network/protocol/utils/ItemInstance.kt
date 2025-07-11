@@ -1,10 +1,16 @@
 package org.chorus_oss.chorus.experimental.network.protocol.utils
 
+import kotlinx.io.Buffer
+import kotlinx.io.readByteArray
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.ItemDurable
 import org.chorus_oss.chorus.nbt.NBTIO.read
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
+import org.chorus_oss.chorus.nbt.tag.Tag
 import org.chorus_oss.chorus.network.connection.util.HandleByteBuf
+import org.chorus_oss.chorus.registry.ItemRegistry
+import org.chorus_oss.chorus.registry.Registries
+import org.chorus_oss.nbt.TagSerialization
 import org.chorus_oss.protocol.types.item.ItemInstance
 import java.nio.ByteOrder
 
@@ -42,4 +48,17 @@ operator fun ItemInstance.Companion.invoke(value: Item): ItemInstance {
         canBePlacedOn = HandleByteBuf.extractStringList(value, "CanPlaceOn"),
         canBreak = HandleByteBuf.extractStringList(value, "CanDestroy"),
     )
+}
+
+operator fun Item.Companion.invoke(from: ItemInstance): Item {
+    return if (from.netID == 0) Item.AIR else {
+        Item.get(
+            Registries.ITEM_RUNTIMEID.getIdentifier(from.netID),
+            from.metadata.toInt(),
+            from.count.toInt(),
+            Buffer().apply {
+                org.chorus_oss.nbt.Tag.serialize(from.nbtData, this, TagSerialization.LE)
+            }.readByteArray()
+        )
+    }
 }

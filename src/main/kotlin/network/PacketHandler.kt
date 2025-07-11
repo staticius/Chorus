@@ -14,8 +14,6 @@ interface PacketHandler {
 
     fun handle(pk: InventoryTransactionPacket) {}
 
-    fun handle(pk: ItemStackRequestPacket) {}
-
     fun handle(pk: LevelEventGenericPacket) {}
 
     fun handle(pk: LevelEventPacket) {}

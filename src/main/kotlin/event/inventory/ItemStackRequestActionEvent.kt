@@ -10,7 +10,7 @@ import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.Ite
 
 class ItemStackRequestActionEvent(
     @JvmField val player: Player,
-    @JvmField val action: ItemStackRequestAction,
+    @JvmField val action: org.chorus_oss.protocol.types.itemstack.request.action.ItemStackRequestAction,
     val context: ItemStackRequestContext
 ) :
     Event(), Cancellable {

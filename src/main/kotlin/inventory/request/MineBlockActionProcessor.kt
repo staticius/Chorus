@@ -11,13 +11,15 @@ import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStack
 import org.chorus_oss.chorus.network.protocol.types.itemstack.response.ItemStackResponseSlot
 import org.chorus_oss.chorus.utils.Loggable
 import org.chorus_oss.protocol.types.item.ItemStack
+import org.chorus_oss.protocol.types.itemstack.ContainerSlotType
+import org.chorus_oss.protocol.types.itemstack.request.action.MineBlockRequestAction
 
 
-class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction> {
+class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockRequestAction> {
     override val type: ItemStackRequestActionType
         get() = ItemStackRequestActionType.MINE_BLOCK
 
-    override fun handle(action: MineBlockAction, player: Player, context: ItemStackRequestContext): ActionResponse {
+    override fun handle(action: MineBlockRequestAction, player: Player, context: ItemStackRequestContext): ActionResponse {
         val inventory = player.inventory
         val heldItemIndex = inventory.heldItemIndex
         if (heldItemIndex != action.hotbarSlot) {
@@ -26,7 +28,7 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
         }
 
         val itemInHand = inventory.itemInHand
-        if (validateStackNetworkId(itemInHand.getNetId(), action.stackNetworkId)) {
+        if (validateStackNetworkId(itemInHand.getNetId(), action.stackNetworkID)) {
             log.warn("mismatch source stack network id!")
             return context.error()
         }
@@ -47,7 +49,6 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
         }
         val itemStackResponseSlot =
             ItemStackResponseContainer(
-                inventory.getSlotType(heldItemIndex),
                 mutableListOf(
                     ItemStackResponseSlot(
                         inventory.toNetworkSlot(heldItemIndex),
@@ -58,8 +59,8 @@ class MineBlockActionProcessor : ItemStackRequestActionProcessor<MineBlockAction
                         itemInHand.damage
                     )
                 ),
-                FullContainerName(
-                    inventory.getSlotType(heldItemIndex),
+                org.chorus_oss.protocol.types.inventory.FullContainerName(
+                    ContainerSlotType.entries[(inventory.getSlotType(heldItemIndex)).ordinal],
                     0 // I don't know the purpose of the dynamicId yet, this is why I leave it at 0 for the MineBlockAction
                 )
             )
