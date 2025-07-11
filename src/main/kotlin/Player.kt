@@ -5041,11 +5041,12 @@ open class Player(
                     return false
                 }
 
-                val pk = TakeItemEntityPacket()
-                pk.entityId = this.getRuntimeID()
-                pk.target = entity.getRuntimeID()
+                val pk = org.chorus_oss.protocol.packets.TakeItemEntityPacket(
+                    itemEntityRuntimeID = entity.getRuntimeID().toULong(),
+                    takerEntityRuntimeID = this.getRuntimeID().toULong(),
+                )
                 Server.broadcastPacket(entity.viewers.values, pk)
-                this.dataPacket(pk)
+                this.sendPacket(pk)
 
                 if (!this.isCreative) {
                     inventory.addItem(item.clone())
@@ -5085,11 +5086,12 @@ open class Player(
                     return false
                 }
 
-                val pk = TakeItemEntityPacket()
-                pk.entityId = this.getRuntimeID()
-                pk.target = entity.getRuntimeID()
+                val pk = org.chorus_oss.protocol.packets.TakeItemEntityPacket(
+                    itemEntityRuntimeID = entity.getRuntimeID().toULong(),
+                    takerEntityRuntimeID = this.getRuntimeID().toULong(),
+                )
                 Server.broadcastPacket(entity.viewers.values, pk)
-                this.dataPacket(pk)
+                this.sendPacket(pk)
 
                 if (!entity.isCreative) {
                     if (inventory!!.getItem(entity.getFavoredSlot()).isNothing) {
@@ -5122,11 +5124,12 @@ open class Player(
                         this.awardAchievement("diamond")
                     }
 
-                    val pk = TakeItemEntityPacket()
-                    pk.entityId = this.getRuntimeID()
-                    pk.target = entity.getRuntimeID()
+                    val pk = org.chorus_oss.protocol.packets.TakeItemEntityPacket(
+                        itemEntityRuntimeID = entity.getRuntimeID().toULong(),
+                        takerEntityRuntimeID = this.getRuntimeID().toULong(),
+                    )
                     Server.broadcastPacket(entity.viewers.values, pk)
-                    this.dataPacket(pk)
+                    this.sendPacket(pk)
 
                     this.inventory.addItem(item.clone())
                     entity.close()
