@@ -20,7 +20,7 @@ object ProtocolInfo {
     // MIGRATED = 6
     // MIGRATED = 7
     // MIGRATED = 8
-    // MIGRATED = 9
+    const val TEXT_PACKET = 9
 
     // MIGRATED = 10
     const val START_GAME_PACKET = 11
@@ -49,7 +49,7 @@ object ProtocolInfo {
     const val INVENTORY_TRANSACTION_PACKET = 30
     const val MOB_EQUIPMENT_PACKET = 31
     const val MOB_ARMOR_EQUIPMENT_PACKET = 32
-    // MIGRATED = 33
+    const val INTERACT_PACKET = 33
 
     // MIGRATED = 34
     // MIGRATED = 35

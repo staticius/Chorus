@@ -12,8 +12,6 @@ interface PacketHandler {
 
     fun handle(pk: InventoryTransactionPacket) {}
 
-    fun handle(pk: ItemStackRequestPacket) {}
-
     fun handle(pk: LevelEventGenericPacket) {}
 
     fun handle(pk: LevelEventPacket) {}
@@ -40,15 +38,11 @@ interface PacketHandler {
 
     fun handle(pk: PlayerActionPacket) {}
 
-    fun handle(pk: PlayerAuthInputPacket) {}
-
     fun handle(pk: PlayerEnchantOptionsPacket) {}
 
     fun handle(pk: PlayerListPacket) {}
 
     fun handle(pk: PlayerSkinPacket) {}
-
-    fun handle(pk: RequestPermissionsPacket) {}
 
     fun handle(pk: SetScorePacket) {}
 

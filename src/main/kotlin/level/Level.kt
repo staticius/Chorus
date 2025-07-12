@@ -57,7 +57,6 @@ import org.chorus_oss.chorus.network.DataPacket
 import org.chorus_oss.chorus.network.protocol.LevelEventGenericPacket
 import org.chorus_oss.chorus.network.protocol.LevelEventPacket
 import org.chorus_oss.chorus.network.protocol.LevelSoundEventPacket
-import org.chorus_oss.chorus.network.protocol.types.PlayerAbility
 import org.chorus_oss.chorus.network.protocol.types.SpawnPointType
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.scheduler.BlockUpdateScheduler
@@ -818,7 +817,11 @@ class Level(
                                         val hash = getBlockXYZ(index, blockHash, this)
                                         blocksArray[i++] = hash
                                     }
-                                    this.sendBlocks(playerArray, blocksArray, org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL.toInt())
+                                    this.sendBlocks(
+                                        playerArray,
+                                        blocksArray,
+                                        org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL.toInt()
+                                    )
                                 }
                             }
                         }
@@ -2453,7 +2456,7 @@ class Level(
             if (immediateDestroy) {
                 drops = eventDrops
             } else {
-                if (!player.adventureSettings.get(PlayerAbility.MINE)) return null
+                if (!player.adventureSettings.get(org.chorus_oss.protocol.types.PlayerAbility.Mine)) return null
 
                 //使用calculateBreakTimeNotInAir目的是获取玩家在陆地上的挖掘时间，如果挖掘时间小于这个时间才认为玩家作弊。
                 var breakTime = target.calculateBreakTimeNotInAir(item, player)
@@ -2791,7 +2794,7 @@ class Level(
 
         if (player != null) {
             val canChangeBlock = block.isBlockChangeAllowed(player)
-            if ((!player.adventureSettings.get(PlayerAbility.BUILD) && !canChangeBlock) || !canChangeBlock) return null
+            if ((!player.adventureSettings.get(org.chorus_oss.protocol.types.PlayerAbility.Build) && !canChangeBlock) || !canChangeBlock) return null
 
             val event: BlockPlaceEvent = BlockPlaceEvent(player, hand, block, target, item1)
             if (player.isAdventure) {

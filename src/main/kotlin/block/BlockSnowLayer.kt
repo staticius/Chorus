@@ -163,14 +163,38 @@ class BlockSnowLayer @JvmOverloads constructor(blockstate: BlockState = properti
             val target =
                 level.getChunkPlayers(position.chunkX, position.chunkZ).values.toTypedArray()
             val blocks = arrayOf<Vector3?>(this.position)
-            level.sendBlocks(target, blocks, org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(), 0, false)
-            level.sendBlocks(target, blocks, org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(), 1, false)
+            level.sendBlocks(
+                target,
+                blocks,
+                org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(),
+                0,
+                false
+            )
+            level.sendBlocks(
+                target,
+                blocks,
+                org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(),
+                1,
+                false
+            )
         }, 10)
 
         val target = level.getChunkPlayers(position.chunkX, position.chunkZ).values.toTypedArray()
         val blocks = arrayOf<Vector3?>(this.position)
-        level.sendBlocks(target, blocks, org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(), 0, false)
-        level.sendBlocks(target, blocks, org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(), 1, false)
+        level.sendBlocks(
+            target,
+            blocks,
+            org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(),
+            0,
+            false
+        )
+        level.sendBlocks(
+            target,
+            blocks,
+            org.chorus_oss.protocol.packets.UpdateBlockPacket.FLAG_ALL_PRIORITY.toInt(),
+            1,
+            false
+        )
     }
 
     override fun onUpdate(type: Int): Int {

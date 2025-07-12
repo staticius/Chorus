@@ -2,12 +2,10 @@ package org.chorus_oss.chorus.network.connection.util
 
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.ByteBufAllocator
-import io.netty.buffer.ByteBufInputStream
 import io.netty.util.ByteProcessor
 import io.netty.util.internal.ObjectUtil
 import io.netty.util.internal.StringUtil
 import org.chorus_oss.chorus.block.Block
-import org.chorus_oss.chorus.entity.Attribute
 import org.chorus_oss.chorus.entity.data.Skin
 import org.chorus_oss.chorus.item.Item
 import org.chorus_oss.chorus.item.Item.Companion.get
@@ -18,30 +16,18 @@ import org.chorus_oss.chorus.level.GameRules
 import org.chorus_oss.chorus.math.BlockFace
 import org.chorus_oss.chorus.math.BlockFace.Companion.fromIndex
 import org.chorus_oss.chorus.math.BlockVector3
-import org.chorus_oss.chorus.math.Vector2f
 import org.chorus_oss.chorus.math.Vector3f
 import org.chorus_oss.chorus.nbt.NBTIO.read
 import org.chorus_oss.chorus.nbt.NBTIO.write
 import org.chorus_oss.chorus.nbt.stream.LittleEndianByteBufInputStreamNBTInputStream
 import org.chorus_oss.chorus.nbt.tag.CompoundTag
 import org.chorus_oss.chorus.nbt.tag.StringTag
-import org.chorus_oss.chorus.network.protocol.types.CommandOriginData
-import org.chorus_oss.chorus.network.protocol.types.EntityLink
-import org.chorus_oss.chorus.network.protocol.types.PlayerInputTick
-import org.chorus_oss.chorus.network.protocol.types.PropertySyncData
-import org.chorus_oss.chorus.network.protocol.types.inventory.FullContainerName
-import org.chorus_oss.chorus.network.protocol.types.itemstack.ContainerSlotType
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.ItemStackRequest
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.ItemStackRequestSlotData
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.TextProcessingEventOrigin
-import org.chorus_oss.chorus.network.protocol.types.itemstack.request.action.*
 import org.chorus_oss.chorus.recipe.descriptor.*
 import org.chorus_oss.chorus.registry.Registries
 import org.chorus_oss.chorus.utils.*
 import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.math.BigInteger
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.nio.channels.FileChannel
@@ -50,7 +36,7 @@ import java.nio.channels.ScatteringByteChannel
 import java.nio.charset.Charset
 import java.nio.charset.StandardCharsets
 import java.util.*
-import java.util.function.*
+import java.util.function.BiConsumer
 import java.util.function.Function
 
 class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
@@ -731,43 +717,6 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         return buf.writeBytes(bytes)
     }
 
-    fun <T> writeNotNull(data: T?, consumer: Consumer<T>) {
-        val present = data != null
-        writeBoolean(present)
-        if (present) {
-            consumer.accept(data!!)
-        }
-    }
-
-    fun <T> writeOptional(data: OptionalValue<T>, consumer: Consumer<T>) {
-        val present = data.isPresent
-        writeBoolean(present)
-        if (present) {
-            consumer.accept(data.get()!!)
-        }
-    }
-
-    fun <T> readOptional(nonPresentValue: T, valueReader: Supplier<T>): T {
-        val isPresent = this.readBoolean()
-        if (isPresent) {
-            return valueReader.get()
-        }
-        return nonPresentValue
-    }
-
-    /**
-     * Writes a list of Attributes to the packet buffer using the standard format.
-     */
-    fun writeAttributeList(attributes: List<Attribute>) {
-        this.writeUnsignedVarInt(attributes.size)
-        for (attribute in attributes) {
-            this.writeString(attribute.name)
-            this.writeFloatLE(attribute.minValue)
-            this.writeFloatLE(attribute.getValue())
-            this.writeFloatLE(attribute.maxValue)
-        }
-    }
-
     fun writeUUID(uuid: UUID) {
         this.writeBytes(Binary.writeUUID(uuid))
     }
@@ -776,50 +725,6 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         val bytes = ByteArray(16)
         this.readBytes(bytes)
         return Binary.readUUID(bytes)
-    }
-
-    fun writeFullContainerName(fullContainerName: FullContainerName) {
-        this.writeByte(fullContainerName.container.id)
-        this.writeOptional(
-            OptionalValue.ofNullable(fullContainerName.dynamicId)
-        ) { value: Int -> this.writeIntLE(value) }
-    }
-
-    fun readFullContainerName(): FullContainerName {
-        return FullContainerName(
-            ContainerSlotType.fromId(readByte().toInt()),
-            this.readOptional(null) { this.readIntLE() }
-        )
-    }
-
-    fun writeCommandOriginData(commandOrigin: CommandOriginData) {
-        this.writeUnsignedVarInt(commandOrigin.commandType.ordinal)
-        this.writeUUID(commandOrigin.commandUUID)
-        this.writeString(commandOrigin.requestId)
-        when (commandOrigin.commandType) {
-            CommandOriginData.Origin.TEST, CommandOriginData.Origin.DEV_CONSOLE -> {
-                val commandData = commandOrigin.commandData as CommandOriginData.Origin.PlayerIDData
-                this.writeVarLong(commandData.playerID)
-            }
-
-            else -> Unit
-        }
-    }
-
-    fun readCommandOriginData(): CommandOriginData {
-        val type = CommandOriginData.Origin.fromOrdinal(this.readVarInt())
-        return CommandOriginData(
-            commandType = type,
-            commandUUID = this.readUUID(),
-            requestId = this.readString(),
-            commandData = when (type) {
-                CommandOriginData.Origin.TEST, CommandOriginData.Origin.DEV_CONSOLE -> CommandOriginData.Origin.PlayerIDData(
-                    playerID = this.readVarLong()
-                )
-
-                else -> null
-            }
-        )
     }
 
     fun writeImage(image: SerializedImage) {
@@ -975,14 +880,6 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
 
     fun readUnsignedVarLong(): Long {
         return ByteBufVarInt.readUnsignedLong(this)
-    }
-
-    fun writeUnsignedBigVarInt(value: BigInteger) {
-        ByteBufVarInt.writeUnsignedBigVarInt(this, value)
-    }
-
-    fun readUnsignedBigVarInt(length: Int): BigInteger {
-        return ByteBufVarInt.readUnsignedBigVarInt(this, length)
     }
 
     fun writeVarLong(value: Long) {
@@ -1160,33 +1057,6 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         }
     }
 
-    fun readRecipeIngredient(): ItemDescriptor {
-        val type = ItemDescriptorType.entries[readUnsignedByte().toInt()]
-        val descriptor: ItemDescriptor
-        when (type) {
-            ItemDescriptorType.DEFAULT -> {
-                val itemId = readShortLE().toInt()
-                val auxValue = (if (itemId != 0) readShortLE() else 0).toInt()
-                val item = if (itemId == 0) Item.AIR else get(
-                    Registries.ITEM_RUNTIMEID.getIdentifier(itemId),
-                    auxValue,
-                    readVarInt()
-                )
-                descriptor = DefaultDescriptor(item)
-            }
-
-            ItemDescriptorType.MOLANG -> descriptor =
-                MolangDescriptor(this.readString(), readUnsignedByte().toInt(), readVarInt())
-
-            ItemDescriptorType.ITEM_TAG -> descriptor = ItemTagDescriptor(this.readString(), readVarInt())
-            ItemDescriptorType.DEFERRED -> descriptor =
-                DeferredDescriptor(this.readString(), readShortLE().toInt(), readVarInt())
-
-            else -> descriptor = InvalidDescriptor.INSTANCE
-        }
-        return descriptor
-    }
-
     fun writeRecipeIngredient(itemDescriptor: ItemDescriptor) {
         val type = itemDescriptor.type
         this.writeByte(type.ordinal.toByte().toInt())
@@ -1232,16 +1102,6 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         this.writeVarInt(itemDescriptor.count)
     }
 
-    fun readSignedBlockPosition(): BlockVector3 {
-        return BlockVector3(readVarInt(), readVarInt(), readVarInt())
-    }
-
-    fun writeSignedBlockPosition(v: BlockVector3) {
-        writeVarInt(v.x)
-        writeVarInt(v.y)
-        writeVarInt(v.z)
-    }
-
     fun readBlockVector3(): BlockVector3 {
         return BlockVector3(this.readVarInt(), this.readUnsignedVarInt(), this.readVarInt())
     }
@@ -1270,19 +1130,6 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         this.writeFloatLE(z)
     }
 
-    fun readVector2f(): Vector2f {
-        return Vector2f(this.readFloatLE(), this.readFloatLE())
-    }
-
-    fun writeVector2f(v: Vector2f) {
-        this.writeVector2f(v.x, v.y)
-    }
-
-    fun writeVector2f(x: Float, y: Float) {
-        this.writeFloatLE(x)
-        this.writeFloatLE(y)
-    }
-
     fun writeGameRules(gameRules: GameRules) {
         // LinkedHashMap gives mutability and is faster in iteration
         val rules = gameRules.getGameRules().toMutableMap()
@@ -1293,10 +1140,6 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
             this.writeString(gameRule.gameRuleName.lowercase())
             value.write(this)
         }
-    }
-
-    fun readActorUniqueID(): Long {
-        return this.readVarLong()
     }
 
     fun writeActorUniqueID(actorUniqueID: Long) {
@@ -1319,70 +1162,10 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
         this.writeVarInt(face.index)
     }
 
-    fun writeEntityLink(link: EntityLink) {
-        writeActorUniqueID(link.fromEntityUniqueId)
-        writeActorUniqueID(link.toEntityUniqueId)
-        writeByte(link.type.ordinal)
-        writeBoolean(link.immediate)
-        writeBoolean(link.riderInitiated)
-        writeFloatLE(0f)
-    }
-
-    fun readEntityLink(): EntityLink {
-        return EntityLink(
-            readActorUniqueID(),
-            readActorUniqueID(),
-            EntityLink.Type.entries.toTypedArray()[readByte().toInt()],
-            readBoolean(),
-            readBoolean()
-        )
-    }
-
-    fun readPlayerInputTick(): PlayerInputTick {
-        return PlayerInputTick(readUnsignedVarLong())
-    }
-
-    fun writePlayerInputTick(value: PlayerInputTick) {
-        writeUnsignedVarLong(value.inputTick)
-    }
-
-    fun <T> writeArray(collection: Collection<T>?, writer: Consumer<T>?) {
-        if (collection.isNullOrEmpty()) {
-            writeUnsignedVarInt(0)
-            return
-        }
-        writeUnsignedVarInt(collection.size)
-        collection.forEach(writer)
-    }
-
-    fun <T> writeArray(collection: Array<T>?, writer: Consumer<T>) {
-        if (collection.isNullOrEmpty()) {
-            writeUnsignedVarInt(0)
-            return
-        }
-        writeUnsignedVarInt(collection.size)
-        for (t in collection) {
-            writer.accept(t)
-        }
-    }
-
     fun <T> writeArray(array: Collection<T>, biConsumer: BiConsumer<HandleByteBuf, T>) {
         this.writeUnsignedVarInt(array.size)
         for (`val` in array) {
             biConsumer.accept(this, `val`)
-        }
-    }
-
-    fun writePropertySyncData(data: PropertySyncData) {
-        writeUnsignedVarInt(data.intProperties.size)
-        for (i in data.intProperties.indices) {
-            writeUnsignedVarInt(i)
-            writeVarInt(data.intProperties[i])
-        }
-        writeUnsignedVarInt(data.floatProperties.size)
-        for (i in data.floatProperties.indices) {
-            writeUnsignedVarInt(i)
-            writeFloatLE(data.floatProperties[i])
         }
     }
 
@@ -1393,160 +1176,6 @@ class HandleByteBuf private constructor(buf: ByteBuf) : ByteBuf() {
             deque.add(function.apply(this))
         }
         return deque.toArray(java.lang.reflect.Array.newInstance(clazz, 0) as Array<T>)
-    }
-
-    fun <T> readArray(array: MutableCollection<T>, function: Function<HandleByteBuf, T>) {
-        readArray(
-            array,
-            { it.readUnsignedVarInt().toLong() }, function
-        )
-    }
-
-    fun <T> readArray(
-        array: MutableCollection<T>,
-        lengthReader: ToLongFunction<HandleByteBuf>,
-        function: Function<HandleByteBuf, T>
-    ) {
-        val length = lengthReader.applyAsLong(this)
-        for (i in 0..<length) {
-            array.add(function.apply(this))
-        }
-    }
-
-    @Throws(IOException::class)
-    fun readTag(): CompoundTag {
-        ByteBufInputStream(this).use { `is` ->
-            return read(`is`)
-        }
-    }
-
-    @Throws(IOException::class)
-    fun writeTag(tag: CompoundTag) {
-        writeBytes(write(tag))
-    }
-
-
-    fun readItemStackRequest(): ItemStackRequest {
-        val requestId = readVarInt()
-        val actions: Array<ItemStackRequestAction> = readArray(
-            ItemStackRequestAction::class.java
-        ) { s: HandleByteBuf ->
-            val itemStackRequestActionType = ItemStackRequestActionType.fromId(s.readByte().toInt())
-            readRequestActionData(itemStackRequestActionType)
-        }
-        val filteredStrings: Array<String> = readArray(String::class.java) { it.readString() }
-
-        val originVal = readIntLE()
-        val origin = if (originVal == -1) null else TextProcessingEventOrigin.fromId(originVal) // new for v552
-        return ItemStackRequest(requestId, actions, filteredStrings, origin)
-    }
-
-    protected fun readRequestActionData(type: ItemStackRequestActionType): ItemStackRequestAction {
-        return when (type) {
-            ItemStackRequestActionType.CRAFT_REPAIR_AND_DISENCHANT -> CraftGrindstoneAction(
-                readUnsignedVarInt(),
-                readByte().toInt(),
-                readVarInt()
-            )
-
-            ItemStackRequestActionType.CRAFT_LOOM -> CraftLoomAction(readString())
-            ItemStackRequestActionType.CRAFT_RECIPE_AUTO -> {
-                val recipeId = readUnsignedVarInt()
-                val numberOfRequestedCrafts = readUnsignedByte().toInt()
-                val timesCrafted = readUnsignedByte().toInt()
-                val ingredients: MutableList<ItemDescriptor> = mutableListOf()
-                readArray(
-                    ingredients,
-                    { obj: HandleByteBuf ->
-                        obj.readUnsignedByte().toLong()
-                            .toLong()
-                    },
-                    { obj: HandleByteBuf -> obj.readRecipeIngredient() })
-                AutoCraftRecipeAction(
-                    recipeId,
-                    numberOfRequestedCrafts,
-                    timesCrafted,
-                    ingredients
-                )
-            }
-
-            ItemStackRequestActionType.CRAFT_RESULTS_DEPRECATED -> CraftResultsDeprecatedAction(
-                readArray(Item::class.java) { s: HandleByteBuf -> s.readSlot(true) },
-                readUnsignedByte().toInt()
-            )
-
-            ItemStackRequestActionType.MINE_BLOCK -> MineBlockAction(readVarInt(), readVarInt(), readVarInt())
-            ItemStackRequestActionType.CRAFT_RECIPE_OPTIONAL -> CraftRecipeOptionalAction(
-                readUnsignedVarInt(),
-                readIntLE()
-            )
-
-            ItemStackRequestActionType.TAKE -> TakeAction(
-                readUnsignedByte().toInt(),
-                readStackRequestSlotInfo(),
-                readStackRequestSlotInfo()
-            )
-
-            ItemStackRequestActionType.PLACE -> PlaceAction(
-                readUnsignedByte().toInt(),
-                readStackRequestSlotInfo(),
-                readStackRequestSlotInfo()
-            )
-
-            ItemStackRequestActionType.SWAP -> SwapAction(
-                readStackRequestSlotInfo(),
-                readStackRequestSlotInfo()
-            )
-
-            ItemStackRequestActionType.DROP -> DropAction(
-                readUnsignedByte().toInt(),
-                readStackRequestSlotInfo(),
-                readBoolean()
-            )
-
-            ItemStackRequestActionType.DESTROY -> DestroyAction(
-                readUnsignedByte().toInt(),
-                readStackRequestSlotInfo()
-            )
-
-            ItemStackRequestActionType.CONSUME -> ConsumeAction(
-                readUnsignedByte().toInt(),
-                readStackRequestSlotInfo()
-            )
-
-            ItemStackRequestActionType.CREATE -> CreateAction(
-                readUnsignedByte().toInt()
-            )
-
-            ItemStackRequestActionType.LAB_TABLE_COMBINE -> LabTableCombineAction()
-            ItemStackRequestActionType.BEACON_PAYMENT -> BeaconPaymentAction(
-                readVarInt(),
-                readVarInt()
-            )
-
-            ItemStackRequestActionType.CRAFT_RECIPE -> CraftRecipeAction(
-                readUnsignedVarInt(),
-                readUnsignedVarInt()
-            )
-
-            ItemStackRequestActionType.CRAFT_CREATIVE -> CraftCreativeAction(
-                readUnsignedVarInt(),
-                readUnsignedVarInt()
-            )
-
-            ItemStackRequestActionType.CRAFT_NON_IMPLEMENTED_DEPRECATED -> CraftNonImplementedAction()
-            else -> throw UnsupportedOperationException("Unhandled stack request action type: $type")
-        }
-    }
-
-    private fun readStackRequestSlotInfo(): ItemStackRequestSlotData {
-        val containerName = readFullContainerName()
-        return ItemStackRequestSlotData(
-            containerName.container,
-            readUnsignedByte().toInt(),
-            readVarInt(),
-            containerName
-        )
     }
 
 
