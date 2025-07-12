@@ -3243,18 +3243,14 @@ open class Player(
         return this.chunkRadius
     }
 
-    override fun sendMessage(message: String){
-        sendMessage(message, isLocal = false)
-    }
-
-    fun sendMessage(message: String, isLocal: Boolean) {
+    override fun sendMessage(message: String) {
         val pk = TextPacket(
             textType = TextPacket.Companion.TextType.Raw,
-            needsTranslation = isLocal,
+            needsTranslation = false,
             sourceName = null,
             message = Server.instance.lang.tr(message),
             parameters = emptyList(),
-            xuid = this.loginChainData.xuid.toString().orEmpty(),
+            xuid = "",
             platformChatID = "",
             filteredMessage = ""
         )
@@ -3296,11 +3292,11 @@ open class Player(
      */
     fun sendRawTextMessage(text: RawText) {
         val pk = TextPacket(
-            textType = TextPacket.Companion.TextType.Raw,
-            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            textType = TextPacket.Companion.TextType.Object,
+            needsTranslation = false,
             sourceName = null,
             message = text.toRawText(),
-            parameters = EmptyArrays.EMPTY_STRINGS.toList(),
+            parameters = emptyList(),
             xuid = "",
             platformChatID = "",
             filteredMessage = ""
@@ -3370,11 +3366,11 @@ open class Player(
 
         val pk = TextPacket(
             textType = TextPacket.Companion.TextType.Chat,
-            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            needsTranslation = false,
             sourceName = source,
             message = Server.instance.lang.tr(message),
-            parameters = EmptyArrays.EMPTY_STRINGS.toList(),
-            xuid = player.loginChainData.xuid.orEmpty(),
+            parameters = emptyList(),
+            xuid = "",
             platformChatID = "",
             filteredMessage = ""
         )
@@ -3398,11 +3394,11 @@ open class Player(
 
         val pk = TextPacket(
             textType = TextPacket.Companion.TextType.Popup,
-            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
-            sourceName = "",
-            message = Server.instance.lang.tr(message),
-            parameters = EmptyArrays.EMPTY_STRINGS.toList(),
-            xuid = player.loginChainData.xuid.orEmpty(),
+            needsTranslation = false,
+            sourceName = null,
+            message = message,
+            parameters = emptyList(),
+            xuid = "",
             platformChatID = "",
             filteredMessage = ""
         )
@@ -3422,11 +3418,11 @@ open class Player(
 
         val pk = TextPacket(
             textType = TextPacket.Companion.TextType.Tip,
-            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
-            sourceName = "",
-            message = Server.instance.lang.tr(message),
+            needsTranslation = false,
+            sourceName = null,
+            message = message,
             parameters = emptyList(),
-            xuid = player.loginChainData.xuid.orEmpty(),
+            xuid = "",
             platformChatID = "",
             filteredMessage = ""
         )
@@ -5391,9 +5387,9 @@ open class Player(
 
         val pk = TextPacket(
             textType = TextPacket.Companion.TextType.JukeboxPopup,
-            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
-            sourceName = "",
-            message = Server.instance.lang.tr(message),
+            needsTranslation = false,
+            sourceName = null,
+            message = message,
             parameters = emptyList(),
             xuid = "",
             platformChatID = "",
@@ -5425,7 +5421,7 @@ open class Player(
     fun sendWhisper(source: String, message: String) {
         val pk = TextPacket(
             textType = TextPacket.Companion.TextType.Whisper,
-            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            needsTranslation = false,
             sourceName = source,
             message = message,
             parameters = emptyList(),
@@ -5445,9 +5441,9 @@ open class Player(
     fun sendAnnouncement(source: String, message: String) {
         val pk = TextPacket(
             textType = TextPacket.Companion.TextType.Announcement,
-            needsTranslation = !Server.instance.settings.baseSettings.forceServerTranslate,
+            needsTranslation = false,
             sourceName = source,
-            message = Server.instance.lang.tr(message),
+            message = message,
             parameters = emptyList(),
             xuid = "",
             platformChatID = "",
